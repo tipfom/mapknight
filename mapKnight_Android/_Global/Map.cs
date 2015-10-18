@@ -56,11 +56,6 @@ namespace mapKnight_Android
 					else
 						lOverlay = Overlay.None;
 
-					if (lTile == null)
-						lTile = Tile.Error;
-					if (lOverlay == null)
-						lOverlay = Overlay.None;
-
 					DataValueIndex.Add (Value.Split (new char[]{ '=' }, StringSplitOptions.RemoveEmptyEntries) [0], new ushort[] {
 						(ushort)lTile,
 						(ushort)lOverlay

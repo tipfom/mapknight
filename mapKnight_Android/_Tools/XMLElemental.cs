@@ -64,14 +64,14 @@ namespace mapKnight_Android
 				return new XMLElemental (rootname);
 			}
 
-			public static XMLElemental Load(Stream FileStream, bool LoadComments)
+			public static XMLElemental Load(Stream FileStream, bool LoadComments = true)
 			{
 				using (StreamReader streamreader = new StreamReader (FileStream)) {
 					return Load (streamreader.ReadToEnd (), LoadComments);
 				}
 			}
 
-			public static XMLElemental Load(string XMLData, bool LoadComments)
+			public static XMLElemental Load(string XMLData, bool LoadComments = true)
 			{
 
 				XMLElemental LoadedElemetal = null;

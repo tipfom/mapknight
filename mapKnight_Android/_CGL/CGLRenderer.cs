@@ -48,7 +48,7 @@ namespace mapKnight_Android{
 				ratio = (float) width / height;
 				screenHeight = height;
 				Android.Opengl.Matrix.FrustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
-				testsquaremap = new CGLMap (22, 20, textures[0], ratio, Utils.XMLElemental.Load(context.Assets.Open("Maps/testMap.xml")));
+				testsquaremap = new CGLMap (22, ratio, Utils.XMLElemental.Load(context.Assets.Open("Maps/testMap.xml")));
 				GL.GlViewport (0, 0, width, height);
 				GL.GlClearColor (0f, 0f, 0f, 1.0f);
 

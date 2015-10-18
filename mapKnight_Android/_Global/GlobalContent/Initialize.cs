@@ -12,7 +12,7 @@ namespace mapKnight_Android
 {
 	public static partial class GlobalContent
 	{
-		private delegate void HandleInitCompleted(Context GameContext);
+		public delegate void HandleInitCompleted(Context GameContext);
 		public static event HandleInitCompleted OnInitCompleted;
 
 		public static void Initialize(XMLElemental configfile, Context GameContext)
@@ -66,7 +66,7 @@ namespace mapKnight_Android
 				Log.All (typeof(GlobalContent), "error while loading mainimage (errorcode => " + error.ToString () + ")", MessageType.Debug);
 				throw new FileLoadException ("error while loading mainimage (errorcode => " + error.ToString () + ")");
 			}
-			if (loadedtexture == 0) {
+			if (loadedtexture[0] == 0) {
 				Log.All (typeof(GlobalContent), "loaded mainimage is zero", MessageType.Debug);
 				throw new FileLoadException ("loaded mainimage is zero");
 			}
