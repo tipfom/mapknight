@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<Map Author="tipfom" Name="0$testMap" Spawn="3;11">
+	<Def>st=Stone,,;stg=Stone,Grass,;stgd=Stone,Grass,Destroyed;stgdn=2,1,1</Def>
+	<Data Width="200" Height="100">923~st,24~stgd,93~stgdn</Data>
+	<Background>
+		<layer image=""/>
+	</Background>
+</Map>
