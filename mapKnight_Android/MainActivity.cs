@@ -14,10 +14,7 @@ using mapKnight_Android.Utils;
 namespace mapKnight_Android
 {
 
-	[Activity (Label = "map Knight",
-		#if __ANDROID_11__
-		HardwareAccelerated=false,
-		#endif
+	[Activity (Label = "mapKnight",
 		ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden,
 		MainLauncher = true,
 		ScreenOrientation = ScreenOrientation.SensorLandscape,
