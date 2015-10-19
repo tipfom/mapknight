@@ -68,6 +68,7 @@
     <Compile Include="_Global\GlobalContent\Initialize.cs" />
     <Compile Include="_Global\GlobalContent\Variables.cs" />
     <Compile Include="_Global\GlobalContent\LoadTexCoordManager.cs" />
+    <Compile Include="_Tools\ArrayOperations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -75,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
-    <AndroidResource Include="Resources\drawable\content.png" />
     <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />

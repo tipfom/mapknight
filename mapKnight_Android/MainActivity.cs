@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Content.PM;
 
 using mapKnight_Android.CGL;
+using mapKnight_Android.Utils;
 
 namespace mapKnight_Android
 {
@@ -32,7 +33,8 @@ namespace mapKnight_Android
 			base.OnCreate (bundle);
 
 			// Create our OpenGL view, and display it
-			view = new CGLView (this, Resource.Drawable.content);
+			view = new CGLView (this);
+
 			SetContentView (view);
 
 			HideNavBar ();

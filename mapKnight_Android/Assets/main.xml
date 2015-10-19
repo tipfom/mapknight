@@ -5,6 +5,7 @@
 	<map drawwidth="22"/>
 	<tiles>
 		<entry id="65535" x="652" y="0"/> 	<!-- ERROR -->
+		<entry id="0" x="652" y="652"/>		<!-- AIR -->
 		<entry id="1" x="0" y="0"/> 		<!-- DIRT -->
 		<entry id="2" x="42" y="21"/>		<!-- COMPRESSED DIRT -->
 		<entry id="11" x="21" y="0"/>		<!-- SAND -->
@@ -17,6 +18,7 @@
 		<entry id="10003" x="42" y="84"/> 	<!-- GLOWING ROOT -->
 	</tiles>
 	<overlay>
+		<entry id="0" x="652" y="652"/> 	<!-- NONE -->
 		<entry id="1" x="0" y="105"/>		<!-- EMERALD ORE -->
 		<entry id="2" x="21" y="105"/> 		<!-- EMERALD ORE -->
 		<entry id="11" x="147" y="105"/>	<!-- SAND -->

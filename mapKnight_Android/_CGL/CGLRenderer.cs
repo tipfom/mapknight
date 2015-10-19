@@ -1,11 +1,12 @@
 ﻿using System;
 
 using Android.Opengl;
+using Android.Graphics;
 using GL = Android.Opengl.GLES20;
 
-using Android.Graphics;
-
 using Javax.Microedition.Khronos.Opengles;
+
+using mapKnight_Android.Utils;
 
 namespace mapKnight_Android{
 	namespace CGL
@@ -18,15 +19,13 @@ namespace mapKnight_Android{
 			private float[] mProjectionMatrix = new float[16];
 			private float[] mViewMatrix = new float[16];
 			float ratio;
-			int[] textures;
-			Android.Content.Context context;
-			int testtexid;
 			int screenHeight;
+			XMLElemental mapElemental;
+			Android.Content.Context context;
 
-			public CGLRenderer (Android.Content.Context texturecontent, int testtextureid)
+			public CGLRenderer (Android.Content.Context Context)
 			{
-				context = texturecontent;
-				testtexid = testtextureid;
+				context = Context;
 			}
 
 			#region IRenderer implementation
@@ -36,6 +35,7 @@ namespace mapKnight_Android{
 				GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
 
 				Android.Opengl.Matrix.SetLookAtM (mViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1f, 0f);
+				Android.Opengl.Matrix.TranslateM (mViewMatrix, 0, 0f, 0f, 0f);
 				Android.Opengl.Matrix.MultiplyMM (mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
 				testsquaremap.Render(mMVPMatrix);
@@ -48,34 +48,18 @@ namespace mapKnight_Android{
 				ratio = (float) width / height;
 				screenHeight = height;
 				Android.Opengl.Matrix.FrustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
-				testsquaremap = new CGLMap (22, ratio, Utils.XMLElemental.Load(context.Assets.Open("Maps/testMap.xml")));
+				GL.GlViewport (0, 0, width, height);
+				testsquaremap = new CGLMap (22, ratio, mapElemental);
 				GL.GlViewport (0, 0, width, height);
 				GL.GlClearColor (0f, 0f, 0f, 1.0f);
-
 			}
 
 			public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 			{
-				textures = new int[1];
-				GL.GlGenTextures (1, textures, 0);
-				BitmapFactory.Options bo = new BitmapFactory.Options ();
-				bo.InScaled = false;
-				Bitmap bitmap = BitmapFactory.DecodeResource (context.Resources, testtexid, bo);
-				GL.GlBindTexture (GL.GlTexture2d, textures [0]);
-				GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMinFilter, GL.GlNearest);
-				GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMagFilter, GL.GlNearest);
-				//GL.GlGenerateMipmap (GL.GlTexture2d);
-				GL.GlTexParameteri(GL.GlTexture2d, GL.GlTextureWrapS, GL.GlClampToEdge);
-				GL.GlTexParameteri(GL.GlTexture2d, GL.GlTextureWrapT, GL.GlClampToEdge);
-
-				GLUtils.TexImage2D (GL.GlTexture2d, 0, bitmap, 0);
-				int error = GL.GlGetError ();
-				bitmap.Recycle ();
-				GL.GlBindTexture (GL.GlTexture2d, 0);
-				if (textures [0] == 0)
-					throw new ArgumentNullException ("loaded texture is 0");
-
 				GL.GlClearColor (1f, 0f, 1f, 1.0f);
+
+				GlobalContent.OnInitCompleted += (Android.Content.Context GameContext) => { mapElemental = XMLElemental.Load(GameContext.Assets.Open("Maps/testMap.xml")); };
+				GlobalContent.Initialize (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
 			}
 
 			#endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Android.Opengl;
 using GL = Android.Opengl.GLES20;
@@ -17,6 +18,7 @@ namespace mapKnight_Android
 			FloatBuffer VertexBuffer;
 			IntBuffer IndexBuffer;
 			FloatBuffer TextureBuffer;
+			private float[] lastTTextureCoors;
 
 			FloatBuffer fboVertexBuffer;
 			ShortBuffer fboIndexBuffer;
@@ -68,13 +70,6 @@ namespace mapKnight_Android
 			private static int CoordsPerVertex = 3;
 			private float[] VertexCoords;
 
-			private static float[] TextureCoords = {
-				0f, 1f,
-				0f, 0f,
-				1f, 0f,
-				1f, 1f
-			};
-
 			private int[] VertexIndices = {
 				0,
 				1,
@@ -91,11 +86,21 @@ namespace mapKnight_Android
 			Dictionary<int, float[]> LineTileTextureCoords;
 			Dictionary<int, float[]> LineOvrlTextureCoords;
 
-			public CGLMap(int mapDrawWidth, float screenRatio, Utils.XMLElemental MapXML) : base(MapXML){
+			private readonly int mapDrawWidth;
+			private readonly int mapDrawHeight;
+			private readonly float vertexSize;
+
+			private int currentTileX;
+			private int currentTileY;
+
+			public CGLMap(int MapDrawWidth, float screenRatio, Utils.XMLElemental MapXML) : base(MapXML){
 				int tileSizeInPXL = GlobalContent.TileSize;
 
-				int mapDrawHeight = (int)((float)mapDrawWidth / screenRatio) + 1;
-				float VertexSize = 2 / (float)(mapDrawWidth);
+				mapDrawWidth = (int)MapDrawWidth;
+				mapDrawHeight = (int)((float)mapDrawWidth / screenRatio) + 1;
+				vertexSize = 2 / (float)(mapDrawWidth);
+				currentTileX = mapDrawWidth / 2;
+				currentTileY = mapDrawHeight / 2;
 
 				fboVertexShader = CGLTools.LoadShader (GL.GlVertexShader, fboVertexShaderCode);
 				VertexShader = CGLTools.LoadShader (GL.GlVertexShader, VertexShaderCode);
@@ -125,15 +130,15 @@ namespace mapKnight_Android
 				VertexCoords [9] = screenRatio;
 				VertexCoords [10] = 1f ;
 
-				TextureCoords = new float[8];
+				float[] TextureCoords = new float[8];
 				TextureCoords [0] = 0;
-				TextureCoords [1] = 1 / screenRatio;
+				TextureCoords [1] = 1f;
 				TextureCoords [2] = 0;
-				TextureCoords [3] = 0;
+				TextureCoords [3] = 1f - mapDrawHeight * vertexSize * .5f;
 				TextureCoords [4] = 1;
-				TextureCoords [5] = 0;
+				TextureCoords [5] = 1f - mapDrawHeight * vertexSize * .5f;
 				TextureCoords [6] = 1;
-				TextureCoords [7] = 1 / screenRatio;
+				TextureCoords [7] = 1f;
 
 				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (VertexCoords.Length * sizeof(float));
 				bytebuffer.Order (ByteOrder.NativeOrder());
@@ -144,8 +149,7 @@ namespace mapKnight_Android
 				bytebuffer = ByteBuffer.AllocateDirect(VertexIndices.Length * sizeof(short));
 				bytebuffer.Order (ByteOrder.NativeOrder ());
 				fboIndexBuffer = bytebuffer.AsShortBuffer ();
-				short[] fboVertexIndices = { 0, 1, 2, 0, 2, 3 };
-				fboIndexBuffer.Put (fboVertexIndices);
+				fboIndexBuffer.Put (new short[] { 0, 1, 2, 0, 2, 3 });
 				fboIndexBuffer.Position (0);
 
 				bytebuffer = ByteBuffer.AllocateDirect (TextureCoords.Length * sizeof(float));
@@ -190,39 +194,31 @@ namespace mapKnight_Android
 				// draw to fbo
 				VertexCoords = new float[mapDrawWidth * mapDrawHeight * 12];
 				VertexIndices = new int[mapDrawWidth * mapDrawHeight * 6];
-				TextureCoords = new float[mapDrawWidth * mapDrawHeight * 8];
 
-				for (int x = 0; x < mapDrawWidth; x++) {
-					for (int y = 0; y < mapDrawHeight; y++) {
+				int multiplier = mapDrawWidth;
+
+				for (int y = 0; y < mapDrawHeight; y++) {
+					for (int x = 0; x < mapDrawWidth; x++) {
 						
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  0] = -1f + (x * VertexSize);
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  1] = -1f + y * VertexSize;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  2] = 0f;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  3] = -1f + (x * VertexSize);
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  4] = -1f + y * VertexSize + VertexSize;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  5] = 0f;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  6] = -1f + (x * VertexSize) + VertexSize;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  7] = -1f + y * VertexSize + VertexSize;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  8] = 0f;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 +  9] = -1f + (x * VertexSize) + VertexSize;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 + 10] = -1f + y * VertexSize;
-						VertexCoords [x * mapDrawHeight * 12 + y * 12 + 11] = 0f;
+						VertexCoords [x * 12 + y * multiplier * 12 +  0] = -1f + (x * vertexSize);
+						VertexCoords [x * 12 + y * multiplier * 12 +  1] = 1f - (y * vertexSize);//(.25f * mapDrawHeight * vertexSize / screenRatio) - (y * vertexSize) + vertexSize / 2;
+						VertexCoords [x * 12 + y * multiplier * 12 +  2] = 0f;
+						VertexCoords [x * 12 + y * multiplier * 12 +  3] = -1f + (x * vertexSize);
+						VertexCoords [x * 12 + y * multiplier * 12 +  4] = 1f - ((y + 1) * vertexSize);//(.25f * mapDrawHeight * vertexSize / screenRatio) - (y * vertexSize) - vertexSize / 2;
+						VertexCoords [x * 12 + y * multiplier * 12 +  5] = 0f;
+						VertexCoords [x * 12 + y * multiplier * 12 +  6] = -1f + (x * vertexSize) + vertexSize;
+						VertexCoords [x * 12 + y * multiplier * 12 +  7] = 1f - ((y + 1) * vertexSize);//(.25f * mapDrawHeight * vertexSize / screenRatio) - (y * vertexSize) - vertexSize / 2;
+						VertexCoords [x * 12 + y * multiplier * 12 +  8] = 0f;
+						VertexCoords [x * 12 + y * multiplier * 12 +  9] = -1f + (x * vertexSize) + vertexSize;
+						VertexCoords [x * 12 + y * multiplier * 12 + 10] = 1f - (y * vertexSize);//(.25f * mapDrawHeight * vertexSize / screenRatio) - (y * vertexSize) + vertexSize / 2;
+						VertexCoords [x * 12 + y * multiplier * 12 + 11] = 0f;
 
-						VertexIndices [x * mapDrawHeight * 6 + y * 6 + 0] = x * mapDrawHeight * 4 + y * 4 + 0;
-						VertexIndices [x * mapDrawHeight * 6 + y * 6 + 1] = x * mapDrawHeight * 4 + y * 4 + 1;
-						VertexIndices [x * mapDrawHeight * 6 + y * 6 + 2] = x * mapDrawHeight * 4 + y * 4 + 2;
-						VertexIndices [x * mapDrawHeight * 6 + y * 6 + 3] = x * mapDrawHeight * 4 + y * 4 + 0;
-						VertexIndices [x * mapDrawHeight * 6 + y * 6 + 4] = x * mapDrawHeight * 4 + y * 4 + 2;
-						VertexIndices [x * mapDrawHeight * 6 + y * 6 + 5] = x * mapDrawHeight * 4 + y * 4 + 3;
-
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 0] = 0f;
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 1] = 1f;
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 2] = 0f;
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 3] = 0f;
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 4] = 1f;
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 5] = 0f;
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 6] = 1f;
-						TextureCoords [x * mapDrawHeight * 8 + y * 8 + 7] = 1f;
+						VertexIndices [x * 6 + y * multiplier * 6 + 0] = x * 4 + y * multiplier * 4 + 0;
+						VertexIndices [x * 6 + y * multiplier * 6 + 1] = x * 4 + y * multiplier * 4 + 1;
+						VertexIndices [x * 6 + y * multiplier * 6 + 2] = x * 4 + y * multiplier * 4 + 2;
+						VertexIndices [x * 6 + y * multiplier * 6 + 3] = x * 4 + y * multiplier * 4 + 0;
+						VertexIndices [x * 6 + y * multiplier * 6 + 4] = x * 4 + y * multiplier * 4 + 2;
+						VertexIndices [x * 6 + y * multiplier * 6 + 5] = x * 4 + y * multiplier * 4 + 3;
 
 					}
 				}
@@ -241,15 +237,12 @@ namespace mapKnight_Android
 				IndexBuffer.Put (VertexIndices);
 				IndexBuffer.Position (0);
 
-				bytebuffer = ByteBuffer.AllocateDirect (TextureCoords.Length * sizeof(float));
-				bytebuffer.Order (ByteOrder.NativeOrder ());
-				TextureBuffer = bytebuffer.AsFloatBuffer ();
-				TextureBuffer.Put (TextureCoords);
-				TextureBuffer.Position (0);
+				initTextureCoords ();
+				updateTextureBuffer (Orientation.East);
 
 				GL.GlBindFramebuffer(GL.GlFramebuffer,framebufferID);
 				GL.GlViewport (0, 0, tileSizeInPXL * mapDrawWidth, tileSizeInPXL * mapDrawHeight);
-				GL.GlClearColor (1.0f, 1.0f, 1.0f, 1.0f);
+				GL.GlClearColor (1.0f, 1.0f, .0f, 1.0f);
 				GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
 
 				GL.GlUseProgram (RenderProgram);
@@ -284,20 +277,60 @@ namespace mapKnight_Android
 				LineTileTextureCoords = new Dictionary<int, float[]> ();
 				LineOvrlTextureCoords = new Dictionary<int, float[]> ();
 
-				for (int y = 0; y < Height; y++) {
+				for (uint y = 0; y < Height; y++) {
 					float[] BufferedTileTexCoords = new float[Width * 8];
 					float[] BufferedOvrlTexCoords = new float[Width * 8];
 
-					for (int x = 0; x < Width; x++) {
-						for (int c = 0; c < 8; c++) {
-							BufferedTileTexCoords [x * 8 + c] = GC.TileTexCoordManager [(short)GC.Map.GetTile (x, y)] [c];
-							BufferedOvrlTexCoords [x * 8 + c] = GC.OverlayTexCoordManager [(short)GC.Map.GetOverlay (x, y)] [c];
+					for (uint x = 0; x < Width; x++) {
+						for (uint c = 0; c < 8; c++) {
+							BufferedTileTexCoords [x * 8 + c] = GC.TileTexCoordManager [(short)GetTile (x, y)] [c];
+							BufferedOvrlTexCoords [x * 8 + c] = GC.OverlayTexCoordManager [(short)GetOverlay (x, y)] [c];
 						}
 					}
 
-					LineTileTextureCoords.Add (y, BufferedTileTexCoords);
-					LineOvrlTextureCoords.Add (y, BufferedOvrlTexCoords);
+					LineTileTextureCoords.Add ((int)y, BufferedTileTexCoords);
+					LineOvrlTextureCoords.Add ((int)y, BufferedOvrlTexCoords);
 				}
+			}
+
+			private bool updateTextureBuffer(Orientation updatedOrientation)
+			{
+				FloatBuffer TileTexBuffer;
+				float[] texturecoords = new float[mapDrawWidth * mapDrawHeight * 8];
+				switch (updatedOrientation) {
+				case Orientation.Up:	// Just add a new line at the top
+					float[] topline = AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
+					Array.Copy (topline, texturecoords, 0);
+					Array.Copy (AO.Cut (lastTTextureCoors, mapDrawWidth * 8, mapDrawWidth * (mapDrawHeight - 1) * 8), 0, texturecoords, topline.Length, mapDrawWidth * (mapDrawHeight - 1) * 8 - topline.Length);
+					break;
+				case Orientation.Down:	// Just add a new line at the bottom
+					float[] bottomline = AO.Cut (LineTileTextureCoords [currentTileY + mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
+					Array.Copy (AO.Cut (lastTTextureCoors, mapDrawWidth * 8, mapDrawWidth * (mapDrawHeight - 1) * 8), texturecoords, 0);
+					Array.Copy (bottomline, 0, texturecoords, texturecoords.Length - bottomline.Length, bottomline.Length);
+					break;
+				case Orientation.West:	// Complete full rework
+					for (int y = 0; y < mapDrawHeight; y++) {
+						Array.Copy (AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2 + y], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8), 0, texturecoords, y * mapDrawWidth * 8, mapDrawWidth * 8);
+					}
+					break;
+				case Orientation.East:
+					for (int y = 0; y < mapDrawHeight; y++) {
+						Array.Copy (AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2 + y], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8), 0, texturecoords, y * mapDrawWidth * 8, mapDrawWidth * 8);
+					}
+					break;
+				}
+
+				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (texturecoords.Length * sizeof(float));
+				bytebuffer.Order (ByteOrder.NativeOrder ());
+				TileTexBuffer = bytebuffer.AsFloatBuffer ();
+				TileTexBuffer.Put (texturecoords);
+				TileTexBuffer.Position (0);
+
+				lastTTextureCoors = texturecoords;
+
+				TextureBuffer = TileTexBuffer;
+
+				return true;
 			}
 
 			public void Render(float[] _mvpMatrix){

@@ -9,18 +9,15 @@ namespace mapKnight_Android{
 		public class TextureCoordinateManager<T>
 		{
 			Dictionary<T,float[]> Container;
-			readonly float[] NullValue;
 
 			public TextureCoordinateManager ()
 			{
-				NullValue = new float[] { 0, 1, 0, 0, 1, 0, 1, 1 };
-
 				Container = new Dictionary<T, float[]>();
 			}
 
 			public float[] this [T ID] {
 				get {
-					return (Container [ID] != null) ? Container [ID] : NullValue;
+					return Container [ID];
 				}
 				set {
 					if (Container.ContainsKey (ID)) {

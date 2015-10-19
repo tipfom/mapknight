@@ -15,7 +15,7 @@ namespace mapKnight_Android
 			{
 				short id = (short)Convert.ToInt32 (entry.Attributes ["id"]);
 				float x = (float)Convert.ToInt32 (entry.Attributes ["x"]) / ImageWidth;
-				float y = (float)(GlobalContent.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
+				float y = 1f - (float)(GlobalContent.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
 
 				float[] parsedCoordinates = new float[] { 
 					x, y + TextureVertexHeight,

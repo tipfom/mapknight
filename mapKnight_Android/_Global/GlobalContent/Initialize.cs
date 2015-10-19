@@ -19,9 +19,7 @@ namespace mapKnight_Android
 		{
 			TileSize = Convert.ToInt32 (configfile ["image"].Attributes ["tilesize"]);
 
-			int[] ImageBounds = LoadImage (GameContext.Assets.Open (configfile ["image"].Attributes ["source"]));
-			ImageWidth = ImageBounds [0];
-			ImageHeight = ImageBounds [1];
+			LoadImage (GameContext.Assets.Open (configfile ["image"].Attributes ["source"]));
 
 			TextureVertexWidth = TileSize / (float)ImageWidth;
 			TextureVertexHeight = TileSize / (float)ImageHeight;
@@ -33,11 +31,8 @@ namespace mapKnight_Android
 				OnInitCompleted (GameContext);
 		}
 
-		private static int[] LoadImage(Stream ImageStream)
+		private static void LoadImage(Stream ImageStream)
 		{
-			int Height;
-			int Width;
-
 			int[] loadedtexture = new int[1];
 			GL.GlGenTextures (1, loadedtexture, 0);
 
@@ -54,8 +49,8 @@ namespace mapKnight_Android
 
 			GLUtils.TexImage2D (GL.GlTexture2d, 0, bitmap, 0);
 
-			Height = bitmap.Height;
-			Width = bitmap.Width;
+			ImageHeight = bitmap.Height;
+			ImageWidth = bitmap.Width;
 
 			bitmap.Recycle ();
 			GL.GlBindTexture (GL.GlTexture2d, 0);
@@ -73,8 +68,6 @@ namespace mapKnight_Android
 
 			// set MainTexture to the loaded texture
 			MainTexture = loadedtexture[0];
-
-			return new int[] { ImageHeight, ImageWidth };
 		}
 	}
 }

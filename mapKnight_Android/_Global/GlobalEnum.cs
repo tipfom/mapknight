@@ -15,4 +15,12 @@ namespace mapKnight_Android{
 		Error = 3,
 		WTF = 1337
 	}
+
+	public enum Orientation
+	{
+		Up,
+		Down,
+		East,
+		West
+	}
 }

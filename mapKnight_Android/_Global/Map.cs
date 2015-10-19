@@ -71,6 +71,9 @@ namespace mapKnight_Android
 					int Amount;
 					if (int.TryParse (AmountData [0], out Amount)) {
 						for (int i = 0; i < Amount; i++) {
+							MapData [cX, cY, 0] = DataValueIndex [AmountData[1]] [0];
+							MapData [cX, cY, 1] = DataValueIndex [AmountData[1]] [1];
+
 							cX++;
 							if (cX == Width) {
 								cX = 0;
@@ -79,21 +82,21 @@ namespace mapKnight_Android
 									break;
 								}
 							}
-
-							MapData [cX, cY, 0] = DataValueIndex [AmountData[1]] [0];
-							MapData [cX, cY, 1] = DataValueIndex [AmountData[1]] [1];
+						}
+						if (cY == Height) {
+							break;
 						}
 					}
 				}
 			}
 		}
 
-		public Tile GetTile(int x, int y)
+		public Tile GetTile(uint x, uint y)
 		{
-			return (Width > x && Height > y) ? (Tile)MapData [x, y, 0] : Tile.Error;
+			return (Tile)MapData [x, y, 0];
 		}
 
-		public Overlay GetOverlay(int x, int y)
+		public Overlay GetOverlay(uint x, uint y)
 		{
 			return (Width > x && Height > y) ? (Overlay)MapData [x, y, 1] : Overlay.None;
 		}

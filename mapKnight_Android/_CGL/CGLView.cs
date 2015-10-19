@@ -17,11 +17,11 @@ namespace mapKnight_Android{
 		{
 			Android.Opengl.GLSurfaceView.IRenderer Renderer;
 
-			public CGLView (Context context, int testtextureid) : base(context)
+			public CGLView (Context context) : base(context)
 			{
 				this.SetEGLContextClientVersion (2);
 
-				Renderer = new CGLRenderer (context, testtextureid);
+				Renderer = new CGLRenderer (context);
 				this.SetRenderer (Renderer);
 				this.RenderMode = Android.Opengl.Rendermode.Continuously;
 			}
