@@ -27,6 +27,8 @@ namespace mapKnight_Android
 			TileTexCoordManager = LoadTileManager (configfile ["tiles"].GetAll ());
 			OverlayTexCoordManager = LoadOverlayManager (configfile ["overlay"].GetAll ());
 
+			LoadShader ();
+
 			if (OnInitCompleted != null)
 				OnInitCompleted (GameContext);
 		}

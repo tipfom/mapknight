@@ -3,16 +3,20 @@
 <config>
 	<image source="main.png" tilesize="20"/>
 	<map drawwidth="22"/>
+	<interface>
+		<button src="button.png"/>
+	</interface>
 	<tiles>
 		<entry id="65535" x="652" y="0"/> 	<!-- ERROR -->
-		<entry id="0" x="652" y="652"/>		<!-- AIR -->
+		<entry id="0" x="60" y="20"/>		<!-- AIR -->
 		<entry id="1" x="0" y="0"/> 		<!-- DIRT -->
-		<entry id="2" x="42" y="21"/>		<!-- COMPRESSED DIRT -->
-		<entry id="11" x="21" y="0"/>		<!-- SAND -->
-		<entry id="12" x="42" y="0"/>		<!-- RED SAND -->
-		<entry id="13" x="21" y="21"/>		<!-- SANDSTONE -->
-		<entry id="21" x="63" y="0"/>		<!-- RUIN -->
+		<entry id="2" x="40" y="20"/>		<!-- COMPRESSED DIRT -->
+		<entry id="11" x="20" y="0"/>		<!-- SAND -->
+		<entry id="12" x="40" y="0"/>		<!-- RED SAND -->
+		<entry id="13" x="20" y="20"/>		<!-- SANDSTONE -->
+		<entry id="21" x="60" y="0"/>		<!-- RUIN -->
 		<entry id="22" x="0" y="21"/>		<!-- DESTROYED RUIN -->
+
 		<entry id="10001" x="0" y="84"/>	<!-- GLOWING GRASS -->
 		<entry id="10002" x="21" y="84"/>	<!-- GLOWING TENDILL -->
 		<entry id="10003" x="42" y="84"/> 	<!-- GLOWING ROOT -->

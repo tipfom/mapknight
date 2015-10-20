@@ -69,6 +69,10 @@
     <Compile Include="_Global\GlobalContent\LoadTexCoordManager.cs" />
     <Compile Include="_Tools\ArrayOperations.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="_Values\Size.cs" />
+    <Compile Include="_Values\Point.cs" />
+    <Compile Include="_CGL\CGLInterface.cs" />
+    <Compile Include="_Global\GlobalContent\Shader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -87,6 +91,7 @@
     <Folder Include="_Global\" />
     <Folder Include="Assets\Maps\" />
     <Folder Include="_Global\GlobalContent\" />
+    <Folder Include="_Values\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
@@ -101,5 +106,6 @@
     <AndroidAsset Include="Assets\Maps\testMap.xml" />
     <AndroidAsset Include="Assets\main.xml" />
     <AndroidAsset Include="Assets\main.png" />
+    <AndroidAsset Include="Assets\button.png" />
   </ItemGroup>
 </Project>

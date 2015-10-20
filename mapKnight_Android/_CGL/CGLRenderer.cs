@@ -22,6 +22,7 @@ namespace mapKnight_Android{
 			int screenHeight;
 			XMLElemental mapElemental;
 			Android.Content.Context context;
+			Random x = new Random (123456789);
 
 			public CGLRenderer (Android.Content.Context Context)
 			{
@@ -49,7 +50,7 @@ namespace mapKnight_Android{
 				screenHeight = height;
 				Android.Opengl.Matrix.FrustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
 				GL.GlViewport (0, 0, width, height);
-				testsquaremap = new CGLMap (22, ratio, mapElemental);
+				testsquaremap = new CGLMap (22, ratio, mapElemental, new Size (width, height));
 				GL.GlViewport (0, 0, width, height);
 				GL.GlClearColor (0f, 0f, 0f, 1.0f);
 			}
