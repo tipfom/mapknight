@@ -45,9 +45,10 @@ namespace mapKnight_Android
 		protected override void OnResume ()
 		{
 			base.OnResume ();
+			HideNavBar ();
 		}
 
-		public void HideNavBar()
+		public void HideNavBar ()
 		{
 			//versteckt die Navigationsleiste
 			View decorView = Window.DecorView;

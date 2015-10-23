@@ -63,10 +63,11 @@ namespace mapKnight_Android
 				GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
 				GlobalContent.OnInitCompleted += (Android.Content.Context GameContext) => {
-					mapElemental = XMLElemental.Load (GameContext.Assets.Open ("testMap.xml"));
+					mapElemental = XMLElemental.Load (GameContext.Assets.Open ("maps/testMap.xml"));
 					CGLText test = new CGLText ("hallo", 50, Font.Tahoma);//, new Point (1920, 1080), new Color ("#1053FF", 1.0f));
 					test.Position = new Point (1920 - test.Width, 1080);
 					test.Color = new Color ("#1053FF", 1.0f);
+					test.FontStyle = FontStyle.Italic;
 					CGLText test2 = new CGLText ("hallo welt, wie gehts?", 12, Font.Tahoma, new Point (200, 200), Color.White);
 					CGLText newtext = new CGLText ("mein popo kann schreiben", 90, Font.Tahoma);
 					newtext.Position = new Point (1920 - newtext.Width, GlobalContent.ScreenSize.Height);

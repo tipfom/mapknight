@@ -5,12 +5,12 @@ using Android.App;
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle ("mapKnight_Android")]
+[assembly: AssemblyTitle ("mapKnight")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("Tim")]
+[assembly: AssemblyProduct ("mapKnight Android")]
+[assembly: AssemblyCopyright ("tipfom")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 

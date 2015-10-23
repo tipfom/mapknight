@@ -69,30 +69,44 @@ namespace mapKnight_Android
 				}
 			}
 
+			private FontStyle iFontStyle;
+
+			public FontStyle FontStyle {
+				get{ return iFontStyle; }
+				set {
+					iFontStyle = value;
+					Refresh ();
+				}
+			}
+
 			public int Width{ get; private set; }
 
 			public int Height{ get; private set; }
 
-			public CGLText (string text, int fontsize, Font font)
+			public CGLText (string text, int fontsize, Font font) : this (text, fontsize, font, new Point (GlobalContent.ScreenSize), Color.Black, FontStyle.Normal)
 			{
-				this.iText = text;
-				this.iFontsize = fontsize;
-				this.iFont = font;
-				this.iColor = Color.Black;
-				this.Position = new Point (GlobalContent.ScreenSize);
-
-				Refresh ();
-
-				CGLTextContainer.Subscribe (this);
 			}
 
-			public CGLText (string text, int fontsize, Font font, Point position, Color color)
+			public CGLText (string text, int fontsize, Font font, Point position) : this (text, fontsize, font, position, Color.Black, FontStyle.Normal)
+			{
+			}
+
+			public CGLText (string text, int fontsize, Font font, Point position, Color color) : this (text, fontsize, font, position, color, FontStyle.Normal)
+			{
+			}
+
+			public CGLText (string text, int fontsize, Font font, Point position, FontStyle fontstyle) : this (text, fontsize, font, position, Color.Black, fontstyle)
+			{
+			}
+
+			public CGLText (string text, int fontsize, Font font, Point position, Color color, FontStyle fontstyle)
 			{
 				this.iText = text;
 				this.iFontsize = fontsize;
 				this.iFont = font;
 				this.iPosition = position;
 				this.iColor = color;
+				this.iFontStyle = fontstyle;
 
 				Refresh ();
 
@@ -101,11 +115,30 @@ namespace mapKnight_Android
 
 			private void Refresh ()
 			{
-				TextPaint = new Paint ();
+				if (GlobalContent.AntialiasText)
+					TextPaint = new Paint (PaintFlags.AntiAlias);
+				else
+					TextPaint = new Paint ();
 				TextPaint.TextSize = this.Fontsize;
 				TextPaint.TextAlign = Paint.Align.Left;
 				TextPaint.Color = new Android.Graphics.Color (this.Color.AlphaByte, this.Color.RedByte, this.Color.GreenByte, this.Color.BlueByte);
-				TextPaint.SetTypeface (GlobalContent.Fonts [this.Font]);
+				switch (FontStyle) {
+				case FontStyle.Normal:
+					TextPaint.SetTypeface (GlobalContent.Fonts [this.Font]);
+					break;
+				case FontStyle.Bold:
+					TextPaint.SetTypeface (Typeface.Create (GlobalContent.Fonts [this.Font], TypefaceStyle.Bold));
+					break;
+				case FontStyle.Italic:
+					TextPaint.SetTypeface (Typeface.Create (GlobalContent.Fonts [this.Font], TypefaceStyle.Italic));
+					break;
+				case FontStyle.BoldItalic:
+					TextPaint.SetTypeface (Typeface.Create (GlobalContent.Fonts [this.Font], TypefaceStyle.BoldItalic));
+					break;
+				default:
+					TextPaint.SetTypeface (GlobalContent.Fonts [this.Font]);
+					break;
+				}
 				TextPaint.TextLocale = new Java.Util.Locale ("de", "de");
 
 				Rect textbounds = new Rect ();
