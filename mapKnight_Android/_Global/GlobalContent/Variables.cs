@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using Android.Graphics;
 
 namespace mapKnight_Android
 {
@@ -13,11 +16,15 @@ namespace mapKnight_Android
 		private static float TextureVertexWidth{ get; set; }
 		private static float TextureVertexHeight{ get; set; }
 
-		// current map
-		public static CGL.CGLMap Map { get; private set; }
-
 		// TextureCoordinateManager for tiles and overlays
 		public static TextureCoordinateManager<short> TileTexCoordManager { get; private set; }
 		public static TextureCoordinateManager<short> OverlayTexCoordManager { get; private set; }
+
+		// screen bounds
+		public static Size ScreenSize{ get; private set; }
+		public static float ScreenRatio{ get; private set; }
+
+		// fonts
+		public static Dictionary<Font, Typeface> Fonts{ get; private set; }
 	}
 }

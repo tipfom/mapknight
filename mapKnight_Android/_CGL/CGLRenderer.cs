@@ -8,10 +8,11 @@ using Javax.Microedition.Khronos.Opengles;
 
 using mapKnight_Android.Utils;
 
-namespace mapKnight_Android{
+namespace mapKnight_Android
+{
 	namespace CGL
 	{
-		public class CGLRenderer : Java.Lang.Object, GLSurfaceView.IRenderer 
+		public class CGLRenderer : Java.Lang.Object, GLSurfaceView.IRenderer
 		{
 			CGLMap testsquaremap;
 
@@ -39,28 +40,37 @@ namespace mapKnight_Android{
 				Android.Opengl.Matrix.TranslateM (mViewMatrix, 0, 0f, 0f, 0f);
 				Android.Opengl.Matrix.MultiplyMM (mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
-				testsquaremap.Render(mMVPMatrix);
+				testsquaremap.Draw (mMVPMatrix);
+				CGLText.CGLTextContainer.Draw ();
 				CalculateFrameRate ();
 			}
 
 			public void OnSurfaceChanged (IGL10 gl, int width, int height)
 			{
-
-				ratio = (float) width / height;
+				ratio = (float)width / height;
 				screenHeight = height;
-				Android.Opengl.Matrix.FrustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+				Android.Opengl.Matrix.FrustumM (mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
 				GL.GlViewport (0, 0, width, height);
 				testsquaremap = new CGLMap (22, ratio, mapElemental, new Size (width, height));
 				GL.GlViewport (0, 0, width, height);
 				GL.GlClearColor (0f, 0f, 0f, 1.0f);
+
+				GlobalContent.Update (new Size (width, height));
 			}
 
 			public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 			{
 				GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
-				GlobalContent.OnInitCompleted += (Android.Content.Context GameContext) => { mapElemental = XMLElemental.Load(GameContext.Assets.Open("Maps/testMap.xml")); };
-				GlobalContent.Initialize (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
+				GlobalContent.OnInitCompleted += (Android.Content.Context GameContext) => {
+					mapElemental = XMLElemental.Load (GameContext.Assets.Open ("testMap.xml"));
+					CGLText test = new CGLText ("hallo", 50, Font.Tahoma, new Point (1800, 1080), new Color ("#1053FF", 1.0f));
+					CGLText test2 = new CGLText ("hallo welt, wie gehts?", 12, Font.Tahoma, new Point (200, 200), Color.White);
+					CGLText newtext = new CGLText ("mein popo kann schreiben", 90, Font.Tahoma);
+					newtext.Position = new Point (1920 - newtext.Width, GlobalContent.ScreenSize.Height - newtext.Height);
+					newtext.Color = Color.White;
+				};
+				GlobalContent.Init (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
 			}
 
 			#endregion
@@ -69,12 +79,11 @@ namespace mapKnight_Android{
 			private static int lastFrameRate;
 			private static int frameRate;
 
-			public static int CalculateFrameRate()
+			public static int CalculateFrameRate ()
 			{
-				if (System.Environment.TickCount - lastTick >= 1000)
-				{
+				if (System.Environment.TickCount - lastTick >= 1000) {
 					lastFrameRate = frameRate;
-					Android.Util.Log.Debug ("fps", lastFrameRate.ToString());
+					Android.Util.Log.Debug ("fps", lastFrameRate.ToString ());
 					frameRate = 0;
 					lastTick = System.Environment.TickCount;
 				}

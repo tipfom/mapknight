@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -15,6 +14,8 @@ namespace mapKnight_Editor
 
         private static int minImageSize = 20;
         private static int maxImageSize = 60;
+
+        private static int maxUndoCacheEntrys = 10;
 
         private enum Tool
         {
@@ -77,12 +78,17 @@ namespace mapKnight_Editor
 
         private string currentMapPath;
 
+        private Stack<ushort[,,]> UndoCache;
+        private ushort[,,] UndoLast;
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         static extern IntPtr LoadCursorFromFile(string lpFileName);
 
         public Form1()
         {
             InitializeComponent();
+
+            UndoCache = new Stack<ushort[,,]>();
 
             cursor_brush = new Cursor(LoadCursorFromFile("content/cursor_brush.cur"));
             cursor_bucket = new Cursor(LoadCursorFromFile("content/cursor_bucket.cur"));
@@ -96,12 +102,12 @@ namespace mapKnight_Editor
             tileRenderWidth = (int)((hScrollBar1.ClientSize.Width) / tileSize) + 1;
             tileRenderHeight = (int)((vScrollBar1.ClientSize.Height) / tileSize) + 1;
 
-            hScrollBar1.Maximum = mapWidth - tileRenderWidth + 10;
+            hScrollBar1.Maximum = Math.Max(mapWidth - tileRenderWidth + 10, 0);
             hScrollBar1.Minimum = 0;
             if (hScrollBar1.Value < 0)
                 hScrollBar1.Value = 0;
 
-            vScrollBar1.Maximum = mapHeight - tileRenderHeight + 10;
+            vScrollBar1.Maximum = Math.Max(mapHeight - tileRenderHeight + 10, 0);
             vScrollBar1.Minimum = 0;
             if (vScrollBar1.Value < 0)
                 vScrollBar1.Value = 0;
@@ -120,7 +126,7 @@ namespace mapKnight_Editor
 
                 using (BufferedGraphics g = bgc.Allocate(this.CreateGraphics(), new Rectangle(new Point(splitter1.Left, toolStrip1.Bottom), new Size(vScrollBar1.Right - splitter1.Left, hScrollBar1.Top - toolStrip1.Bottom))))
                 {
-                    g.Graphics.Clear(Color.White);
+                    g.Graphics.Clear(Color.Black);
                     g.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                     for (int x = 0; x < tileRenderWidth; x++)
                     {
@@ -128,7 +134,7 @@ namespace mapKnight_Editor
                         {
                             if (x + hScrollBar1.Value  < mapWidth && y + vScrollBar1.Value < mapHeight)
                             {
-                                g.Graphics.DrawRectangle(Pens.Black, new Rectangle(x * tileSize + splitter1.Right, y * tileSize + toolStrip1.Bottom, tileSize, tileSize));
+								g.Graphics.DrawRectangle(Pens.White, new Rectangle(x * tileSize + splitter1.Right, y * tileSize + toolStrip1.Bottom, tileSize, tileSize));
                                 g.Graphics.DrawImage(TileImages[(int)Map[x + hScrollBar1.Value, y + vScrollBar1.Value, 0]], x * tileSize + splitter1.Right, y * tileSize + toolStrip1.Bottom, tileSize, tileSize);
                                 g.Graphics.DrawImage(OverlayImages[(int)Map[x + hScrollBar1.Value, y + vScrollBar1.Value, 1]], x * tileSize + splitter1.Right, y * tileSize + toolStrip1.Bottom, tileSize, tileSize);
                             }
@@ -218,7 +224,7 @@ namespace mapKnight_Editor
                 Point locationOnMap = new Point(e.X - splitter1.Right, e.Y - toolStrip1.Bottom);
                 Point clickedTile = new Point((int)(locationOnMap.X / tileSize) + hScrollBar1.Value, (int)(locationOnMap.Y / tileSize) + vScrollBar1.Value);
 
-                if (e.Button == MouseButtons.Left)
+                if (e.Button == MouseButtons.Left && clickedTile.X < mapWidth && clickedTile.Y < mapHeight)
                 {
                     switch (selectedTool)
                     {
@@ -345,7 +351,7 @@ namespace mapKnight_Editor
                     Point locationOnMap = new Point(e.X - splitter1.Right, e.Y - toolStrip1.Bottom);
                     Point clickedTile = new Point((int)locationOnMap.X / tileSize + hScrollBar1.Value, (int)locationOnMap.Y / tileSize + vScrollBar1.Value);
 
-                    if (e.Button == MouseButtons.Left)
+                    if (e.Button == MouseButtons.Left && clickedTile.X < mapWidth && clickedTile.Y < mapHeight)
                     {
                         switch (selectedTool)
                         {
@@ -384,9 +390,14 @@ namespace mapKnight_Editor
         }
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
-        {
-            clicked = false;
-        }
+		{
+			clicked = false;
+
+			UndoCache.Push (UndoLast);
+			UndoLast = (ushort[,,])Map.Clone ();
+			if (UndoCache.Count > maxUndoCacheEntrys)
+				UndoCache.Pop ();
+		}
 
         private void lv_tile_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -544,6 +555,7 @@ namespace mapKnight_Editor
                 }
 
                 initmap = true;
+                UndoLast = (ushort[,,])Map.Clone();
                 Render();
                 this.OnResize(EventArgs.Empty);
             }
@@ -567,6 +579,7 @@ namespace mapKnight_Editor
                 mapName = infoform.tb_mapname.Text;
 
                 initmap = true;
+                UndoLast = (ushort[,,])Map.Clone();
                 Render();
                 this.OnResize(EventArgs.Empty);
             }
@@ -682,6 +695,22 @@ namespace mapKnight_Editor
 
             lv_tile.LargeImageList = TileImageList;
             lv_overlay.LargeImageList = OverlayImageList;
+        }
+
+        private void revertToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(UndoCache.Count > 0)
+            {
+                Map = UndoCache.Pop();
+                Render();
+				UndoLast = (ushort[,,])Map.Clone ();
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == (Keys.Control | Keys.Z))
+                revertToolStripMenuItem_Click(this, EventArgs.Empty);
         }
     }
 }

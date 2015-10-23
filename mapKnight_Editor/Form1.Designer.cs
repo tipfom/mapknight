@@ -35,6 +35,8 @@
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.overwriteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.revertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.mapKnightMapEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.version01AToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +73,7 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
+            this.toolStripDropDownButton1,
             this.toolStripLabel3,
             this.toolStripSeparator1,
             this.toolStripLabel4,
@@ -129,6 +132,24 @@
             this.overwriteToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.overwriteToolStripMenuItem.Text = "Save";
             this.overwriteToolStripMenuItem.Click += new System.EventHandler(this.overwriteToolStripMenuItem_Click);
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.revertToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(40, 19);
+            this.toolStripDropDownButton1.Text = "Edit";
+            // 
+            // revertToolStripMenuItem
+            // 
+            this.revertToolStripMenuItem.Name = "revertToolStripMenuItem";
+            this.revertToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.revertToolStripMenuItem.Text = "Undo";
+            this.revertToolStripMenuItem.Click += new System.EventHandler(this.revertToolStripMenuItem_Click);
             // 
             // toolStripLabel3
             // 
@@ -352,12 +373,14 @@
             this.Controls.Add(this.hScrollBar1);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.toolStrip1);
+            this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(750, 441);
             this.Name = "Form1";
             this.ShowIcon = false;
             this.Text = "mapKnight Map Editor";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
@@ -403,6 +426,8 @@
         private System.Windows.Forms.TrackBar trb_imagesize;
         private System.Windows.Forms.Label lbl_zoom;
         private System.Windows.Forms.Label lbl_imgsize;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem revertToolStripMenuItem;
     }
 }
 

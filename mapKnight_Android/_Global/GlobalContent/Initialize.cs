@@ -12,14 +12,20 @@ namespace mapKnight_Android
 {
 	public static partial class GlobalContent
 	{
-		public delegate void HandleInitCompleted(Context GameContext);
+		public delegate void HandleInitCompleted (Context GameContext);
+
 		public static event HandleInitCompleted OnInitCompleted;
 
-		public static void Initialize(XMLElemental configfile, Context GameContext)
+		public delegate void HandleUpdate ();
+
+		public static event HandleUpdate OnUpdate;
+
+		public static void Init (XMLElemental configfile, Context GameContext)
 		{
 			TileSize = Convert.ToInt32 (configfile ["image"].Attributes ["tilesize"]);
 
 			LoadImage (GameContext.Assets.Open (configfile ["image"].Attributes ["source"]));
+			LoadFonts (GameContext);
 
 			TextureVertexWidth = TileSize / (float)ImageWidth;
 			TextureVertexHeight = TileSize / (float)ImageHeight;
@@ -27,13 +33,27 @@ namespace mapKnight_Android
 			TileTexCoordManager = LoadTileManager (configfile ["tiles"].GetAll ());
 			OverlayTexCoordManager = LoadOverlayManager (configfile ["overlay"].GetAll ());
 
+			ScreenSize = new Size (GameContext.Resources.DisplayMetrics.WidthPixels, GameContext.Resources.DisplayMetrics.HeightPixels);
+			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
+
 			LoadShader ();
+
+			CGL.CGLText.CGLTextContainer.Init ();
 
 			if (OnInitCompleted != null)
 				OnInitCompleted (GameContext);
 		}
 
-		private static void LoadImage(Stream ImageStream)
+		public static void Update (Size screensize)
+		{
+			ScreenSize = screensize;
+			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
+
+			if (OnUpdate != null)
+				OnUpdate ();
+		}
+
+		private static void LoadImage (Stream ImageStream)
 		{
 			int[] loadedtexture = new int[1];
 			GL.GlGenTextures (1, loadedtexture, 0);
@@ -46,8 +66,8 @@ namespace mapKnight_Android
 
 			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMinFilter, GL.GlNearest);
 			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMagFilter, GL.GlNearest);
-			GL.GlTexParameteri(GL.GlTexture2d, GL.GlTextureWrapS, GL.GlClampToEdge);
-			GL.GlTexParameteri(GL.GlTexture2d, GL.GlTextureWrapT, GL.GlClampToEdge);
+			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureWrapS, GL.GlClampToEdge);
+			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureWrapT, GL.GlClampToEdge);
 
 			GLUtils.TexImage2D (GL.GlTexture2d, 0, bitmap, 0);
 
@@ -63,13 +83,19 @@ namespace mapKnight_Android
 				Log.All (typeof(GlobalContent), "error while loading mainimage (errorcode => " + error.ToString () + ")", MessageType.Debug);
 				throw new FileLoadException ("error while loading mainimage (errorcode => " + error.ToString () + ")");
 			}
-			if (loadedtexture[0] == 0) {
+			if (loadedtexture [0] == 0) {
 				Log.All (typeof(GlobalContent), "loaded mainimage is zero", MessageType.Debug);
 				throw new FileLoadException ("loaded mainimage is zero");
 			}
 
 			// set MainTexture to the loaded texture
-			MainTexture = loadedtexture[0];
+			MainTexture = loadedtexture [0];
+		}
+
+		private static void LoadFonts (Context GameContext)
+		{
+			Fonts = new System.Collections.Generic.Dictionary<Font, Typeface> ();
+			Fonts.Add (Font.Tahoma, Typeface.CreateFromAsset (GameContext.Assets, "fonts/tahoma.ttf"));
 		}
 	}
 }

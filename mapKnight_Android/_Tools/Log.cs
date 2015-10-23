@@ -76,7 +76,8 @@ namespace mapKnight_Android
 				{ typeof(SQLDataManager), "SQLDataManager" },
 				{ typeof(XMLElemental), "XMLElemental" },
 				{ typeof(GlobalContent),"GlobalContent" },
-				{ typeof(CGL.CGLMap),"CGLMap" }
+				{ typeof(CGL.CGLMap),"CGLMap" },
+				{ typeof(CGL.CGLTools),"CGLTools" }
 			};
 		}
 	}

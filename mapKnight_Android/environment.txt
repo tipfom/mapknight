@@ -2,13 +2,7 @@
 # Blank lines are ignored
 # http://developer.xamarin.com/guides/android/advanced_topics/environment/
 
-# Deaktiviert die automatische Mono Garbage Collection
-GC_DONT_GC=1
-
 # Lässt nur Fehlermeldungen von Mono zu
 MONO_LOG_LEVEL=error
-
-# Setzt den GC "Aussuch" Algorythmus auf "tarjan" (siehe http://developer.xamarin.com/guides/android/advanced_topics/garbage_collection/)
-# MONO_GC_PARAMS=bridge-implementation=tarjan
 
 # Follow me on GitHub

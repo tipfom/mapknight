@@ -23,4 +23,9 @@ namespace mapKnight_Android{
 		East,
 		West
 	}
+
+	public enum Font
+	{
+		Tahoma
+	}
 }

@@ -73,6 +73,9 @@
     <Compile Include="_Values\Point.cs" />
     <Compile Include="_CGL\CGLInterface.cs" />
     <Compile Include="_Global\GlobalContent\Shader.cs" />
+    <Compile Include="_CGL\CGLText.cs" />
+    <Compile Include="_Values\Color.cs" />
+    <Compile Include="_Values\HexValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -89,9 +92,10 @@
     <Folder Include="_CGL\" />
     <Folder Include="_Tools\" />
     <Folder Include="_Global\" />
-    <Folder Include="Assets\Maps\" />
     <Folder Include="_Global\GlobalContent\" />
     <Folder Include="_Values\" />
+    <Folder Include="Assets\fonts\" />
+    <Folder Include="Assets\maps\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
@@ -103,9 +107,10 @@
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Maps\testMap.xml" />
     <AndroidAsset Include="Assets\main.xml" />
     <AndroidAsset Include="Assets\main.png" />
-    <AndroidAsset Include="Assets\button.png" />
+    <AndroidAsset Include="Assets\interface.png" />
+    <AndroidAsset Include="Assets\fonts\tahoma.ttf" />
+    <AndroidAsset Include="Assets\testMap.xml" />
   </ItemGroup>
 </Project>

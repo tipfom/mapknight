@@ -75,16 +75,19 @@ namespace mapKnight_Android
 				currentTileX = mapDrawWidth / 2;
 				currentTileY = mapDrawHeight / 2;
 
+				initFBOBuffer (screenRatio);
+			
+				initFrameBuffer ();
 
-				fboRenderProgram = GL.GlCreateProgram ();
-				GL.GlAttachShader (fboRenderProgram, GlobalContent.VertexShaderM);
-				GL.GlAttachShader (fboRenderProgram, GlobalContent.FragmentShaderN);
-				GL.GlLinkProgram (fboRenderProgram);
+				initVertexCoords ();
+				initTextureCoords ();
+				updateTextureBuffer (UpdateType.Complete);
+			}
 
-				RenderProgram = GL.GlCreateProgram ();
-				GL.GlAttachShader (RenderProgram, GlobalContent.VertexShaderN);
-				GL.GlAttachShader (RenderProgram, GlobalContent.FragmentShaderN);
-				GL.GlLinkProgram (RenderProgram);
+			private void initFBOBuffer(float screenRatio)
+			{
+				fboRenderProgram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
+				RenderProgram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderN);
 
 				VertexCoords = new float[12];
 
@@ -129,8 +132,10 @@ namespace mapKnight_Android
 				fboTextureBuffer.Position (0);
 
 				fboVertexCount = VertexCoords.Length / CoordsPerVertex;
+			}
 
-				// init FrameBuffer
+			private void initFrameBuffer()
+			{
 				int[] temp = new int[1];
 				GL.GlGenFramebuffers (1, temp, 0);
 				framebufferID = temp [0];
@@ -142,7 +147,7 @@ namespace mapKnight_Android
 				renderbufferID = temp [0];
 
 				GL.GlBindTexture (GL.GlTexture2d, framebufferTexture);
-				GL.GlTexImage2D (GL.GlTexture2d, 0, GL.GlRgba, tileSizeInPXL * mapDrawWidth, tileSizeInPXL * mapDrawHeight, 0, GL.GlRgba, GL.GlUnsignedByte, null);
+				GL.GlTexImage2D (GL.GlTexture2d, 0, GL.GlRgba, GlobalContent.TileSize * mapDrawWidth, GlobalContent.TileSize * mapDrawHeight, 0, GL.GlRgba, GL.GlUnsignedByte, null);
 
 				GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMinFilter, GL.GlNearest);
 				GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMagFilter, GL.GlNearest);
@@ -150,7 +155,7 @@ namespace mapKnight_Android
 				GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureWrapT, GL.GlClampToEdge);
 
 				GL.GlBindRenderbuffer (GL.GlRenderbuffer, renderbufferID);
-				GL.GlRenderbufferStorage (GL.GlRenderbuffer, GL.GlDepthComponent16, tileSizeInPXL * mapDrawWidth, tileSizeInPXL * mapDrawHeight);
+				GL.GlRenderbufferStorage (GL.GlRenderbuffer, GL.GlDepthComponent16, GlobalContent.TileSize * mapDrawWidth, GlobalContent.TileSize * mapDrawHeight);
 
 				GL.GlBindFramebuffer (GL.GlFramebuffer, framebufferID);
 
@@ -160,14 +165,16 @@ namespace mapKnight_Android
 				GL.GlBindTexture (GL.GlTexture2d, 0);
 				GL.GlBindRenderbuffer (GL.GlRenderbuffer, 0);
 				GL.GlBindFramebuffer (GL.GlFramebuffer, 0);
+			}
 
-				// draw to fbo
+			private void initVertexCoords()
+			{	
 				VertexCoords = new float[(mapDrawWidth) * (mapDrawHeight) * 8];
 				VertexIndices = new int[mapDrawWidth * mapDrawHeight * 6];
 
 				for (int y = 0; y < mapDrawHeight; y++) {
 					for (int x = 0; x < mapDrawWidth; x++) {
-						
+
 						VertexCoords [x * 8 + y * mapDrawWidth * 8 + 0] = -1f + (x * vertexSize);
 						VertexCoords [x * 8 + y * mapDrawWidth * 8 + 1] = 1f - (y * vertexSize);
 						VertexCoords [x * 8 + y * mapDrawWidth * 8 + 2] = -1f + (x * vertexSize);
@@ -189,7 +196,7 @@ namespace mapKnight_Android
 
 				VertexStride = CoordsPerVertex * sizeof(float);
 
-				bytebuffer = ByteBuffer.AllocateDirect (VertexCoords.Length * sizeof(float));
+				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (VertexCoords.Length * sizeof(float));
 				bytebuffer.Order (ByteOrder.NativeOrder ());
 				VertexBuffer = bytebuffer.AsFloatBuffer ();
 				VertexBuffer.Put (VertexCoords);
@@ -200,11 +207,6 @@ namespace mapKnight_Android
 				IndexBuffer = bytebuffer.AsIntBuffer ();
 				IndexBuffer.Put (VertexIndices);
 				IndexBuffer.Position (0);
-
-				initTextureCoords ();
-				updateTextureBuffer (UpdateType.Complete);
-
-				renderFrameBuffer ();
 			}
 
 			private void initTextureCoords()
@@ -271,7 +273,7 @@ namespace mapKnight_Android
 			{
 				GL.GlBindFramebuffer (GL.GlFramebuffer, framebufferID);
 				GL.GlViewport (0, 0, GlobalContent.TileSize * mapDrawWidth, GlobalContent.TileSize * mapDrawHeight);
-				GL.GlClearColor (1.0f, 1.0f, .0f, 1.0f);
+				GL.GlClearColor (1.0f, 1.0f, 1.0f, 1.0f);
 				GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
 
 				GL.GlUseProgram (RenderProgram);
@@ -362,7 +364,7 @@ namespace mapKnight_Android
 				}
 			}
 
-			public void Render(float[] _mvpMatrix){
+			public void Draw(float[] _mvpMatrix){
 				GL.GlUseProgram (fboRenderProgram);
 
 				// Set the active texture unit to texture unit 0.

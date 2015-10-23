@@ -68,7 +68,7 @@
             0,
             0});
             this.nud_Width.Minimum = new decimal(new int[] {
-            150,
+            30,
             0,
             0,
             0});
@@ -77,7 +77,7 @@
             this.nud_Width.TabIndex = 2;
             this.nud_Width.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nud_Width.Value = new decimal(new int[] {
-            150,
+            30,
             0,
             0,
             0});
@@ -91,7 +91,7 @@
             0,
             0});
             this.nud_Height.Minimum = new decimal(new int[] {
-            150,
+            20,
             0,
             0,
             0});
@@ -100,7 +100,7 @@
             this.nud_Height.TabIndex = 3;
             this.nud_Height.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nud_Height.Value = new decimal(new int[] {
-            150,
+            20,
             0,
             0,
             0});
