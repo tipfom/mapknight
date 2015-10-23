@@ -47,12 +47,14 @@ namespace mapKnight_Android
 				}
 			}
 
+			private Point iPositionCorrection;
+
 			private Point iPosition;
 
 			public Point Position {
 				get { return iPosition; }
 				set {
-					iPosition = value;
+					iPosition = value + iPositionCorrection;
 					Refresh ();
 				}
 			}
@@ -111,6 +113,9 @@ namespace mapKnight_Android
 				this.Height = textbounds.Height ();
 				this.Width = textbounds.Width ();
 
+				this.iPositionCorrection = new Point (0, 0);
+				this.iPosition += this.iPositionCorrection;
+
 				if (OnRefresh != null)
 					OnRefresh (this, EventArgs.Empty);
 			}
@@ -131,19 +136,19 @@ namespace mapKnight_Android
 				private static int texture;
 				private static int renderprogram;
 
-				private static int CoordsPerVertex = 2;
+				private static int CoordsPerVertex = 3;
 				private static int VertexStride = CGLTextContainer.CoordsPerVertex * sizeof(float);
 
 				public static void Init ()
 				{
 					subscribedItems = new List<CGLText> ();
 
-					renderprogram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderN);
+					renderprogram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
 					initTexture ();
 					updateTexture ();
 				}
 
-				public static void Draw ()
+				public static void Draw (float[] mvpMatrix)
 				{
 					GL.GlUseProgram (renderprogram);
 
@@ -151,7 +156,10 @@ namespace mapKnight_Android
 
 					int PositionHandle = GL.GlGetAttribLocation (renderprogram, "vPosition");
 					GL.GlEnableVertexAttribArray (PositionHandle);
-					GL.GlVertexAttribPointer (PositionHandle, 3, GL.GlFloat, false, 3 * sizeof(float), fVertexBuffer);
+					GL.GlVertexAttribPointer (PositionHandle, CoordsPerVertex, GL.GlFloat, false, VertexStride, fVertexBuffer);
+
+					int MVPMatrixHandle = GL.GlGetUniformLocation (renderprogram, "uMVPMatrix");
+					GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, mvpMatrix, 0);
 
 					GL.GlEnable (GL.GlBlend);
 					GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);
@@ -234,7 +242,7 @@ namespace mapKnight_Android
 					fIndexBuffer.Put (Indicies);
 					fIndexBuffer.Position (0);
 
-					float[] TextureCoords = new float[]{ 0, 1, 0, 0, 1, 0, 1, 1 };
+					float[] TextureCoords = new float[]{ 1, 0, 1, 1, 0, 1, 0, 0 };
 					bytebuffer = ByteBuffer.AllocateDirect (TextureCoords.Length * sizeof(float));
 					bytebuffer.Order (ByteOrder.NativeOrder ());
 					fTextureBuffer = bytebuffer.AsFloatBuffer ();
@@ -294,6 +302,8 @@ namespace mapKnight_Android
 
 					GL.GlDeleteTextures (1, new int[]{ texture }, 0);
 					texture = generatedtexture [0];
+
+					int error = GL.GlGetError ();
 				}
 			}
 		}

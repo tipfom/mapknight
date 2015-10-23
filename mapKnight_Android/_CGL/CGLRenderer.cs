@@ -41,7 +41,7 @@ namespace mapKnight_Android
 				Android.Opengl.Matrix.MultiplyMM (mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
 				testsquaremap.Draw (mMVPMatrix);
-				CGLText.CGLTextContainer.Draw ();
+				CGLText.CGLTextContainer.Draw (mMVPMatrix);
 				CalculateFrameRate ();
 			}
 
@@ -64,10 +64,12 @@ namespace mapKnight_Android
 
 				GlobalContent.OnInitCompleted += (Android.Content.Context GameContext) => {
 					mapElemental = XMLElemental.Load (GameContext.Assets.Open ("testMap.xml"));
-					CGLText test = new CGLText ("hallo", 50, Font.Tahoma, new Point (1800, 1080), new Color ("#1053FF", 1.0f));
+					CGLText test = new CGLText ("hallo", 50, Font.Tahoma);//, new Point (1920, 1080), new Color ("#1053FF", 1.0f));
+					test.Position = new Point (1920 - test.Width, 1080);
+					test.Color = new Color ("#1053FF", 1.0f);
 					CGLText test2 = new CGLText ("hallo welt, wie gehts?", 12, Font.Tahoma, new Point (200, 200), Color.White);
 					CGLText newtext = new CGLText ("mein popo kann schreiben", 90, Font.Tahoma);
-					newtext.Position = new Point (1920 - newtext.Width, GlobalContent.ScreenSize.Height - newtext.Height);
+					newtext.Position = new Point (1920 - newtext.Width, GlobalContent.ScreenSize.Height);
 					newtext.Color = Color.White;
 				};
 				GlobalContent.Init (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
