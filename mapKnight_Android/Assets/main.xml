@@ -1,12 +1,19 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 
 <config>
-	<image source="main.png" tilesize="20"/>
+	<images>
+		<image name="tiles" src="main.png" tilesize="20"/>
+		<image name="interface" src="interface.png">
+			<sprite id="0" x="0" y="0" width="40" height="40"/>
+			<sprite id="1" x="40" y="0" width="40" height="40"/>
+		</image>
+	</images>
 	<map drawwidth="22"/>
-	<interface src="interface.png">
-		<button state="normal" x="0" y="0" width="40" height="40"/>
-		<button state="pressed" x="40" y="0" width="40" height="40"/>
-	</interface>
+	<fonts>
+		<font name="Tahoma" src="fonts/tahoma.ttf"/>
+		<font name="ArcadeClassic" src="fonts/ARCADECLASSIC.TTF"/>
+		<font name="ArcadeDotted" src="fonts/ARCADE.TTF"/>
+	</fonts>
 	<tiles>
 		<entry id="65535" x="652" y="0"/> 	<!-- ERROR -->
 		<entry id="0" x="60" y="20"/>		<!-- AIR -->

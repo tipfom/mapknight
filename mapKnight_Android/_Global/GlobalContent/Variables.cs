@@ -9,7 +9,9 @@ namespace mapKnight_Android
 	public static partial class GlobalContent
 	{
 		public static int MainTexture { get; private set; }
-	
+
+		public static Sprite<int> InterfaceSprite{ get; private set; }
+
 		// texture variables
 		public static int TileSize{ get; private set; }
 
@@ -38,5 +40,8 @@ namespace mapKnight_Android
 		private static bool iAntialiasText = true;
 
 		public static bool AntialiasText{ get { return iAntialiasText; } set { iAntialiasText = value; } }
+
+		// version string
+		public static Version Version;
 	}
 }

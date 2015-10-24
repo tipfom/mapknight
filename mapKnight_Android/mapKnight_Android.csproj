@@ -25,9 +25,9 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
     <AndroidLinkMode>None</AndroidLinkMode>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -77,6 +77,13 @@
     <Compile Include="_CGL\CGLText.cs" />
     <Compile Include="_Values\Color.cs" />
     <Compile Include="_Values\HexValue.cs" />
+    <Compile Include="_Values\Version.cs" />
+    <Compile Include="_Values\Sprite.cs" />
+    <Compile Include="_Values\Rectangle.cs" />
+    <Compile Include="_Values\fRectangle.cs" />
+    <Compile Include="_Values\fPoint.cs" />
+    <Compile Include="_Values\fSize.cs" />
+    <Compile Include="_Values\BufferData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -112,5 +119,7 @@
     <AndroidAsset Include="Assets\interface.png" />
     <AndroidAsset Include="Assets\fonts\tahoma.ttf" />
     <AndroidAsset Include="Assets\maps\testMap.xml" />
+    <AndroidAsset Include="Assets\fonts\ARCADE.TTF" />
+    <AndroidAsset Include="Assets\fonts\ARCADECLASSIC.TTF" />
   </ItemGroup>
 </Project>

@@ -22,6 +22,7 @@ namespace mapKnight_Android
 			float ratio;
 			int screenHeight;
 			XMLElemental mapElemental;
+			CGLInterface hallo;
 			Android.Content.Context context;
 			Random x = new Random (123456789);
 
@@ -41,6 +42,7 @@ namespace mapKnight_Android
 				Android.Opengl.Matrix.MultiplyMM (mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
 				testsquaremap.Draw (mMVPMatrix);
+				hallo.Draw (mMVPMatrix);
 				CGLText.CGLTextContainer.Draw (mMVPMatrix);
 				CalculateFrameRate ();
 			}
@@ -68,10 +70,11 @@ namespace mapKnight_Android
 					test.Position = new Point (1920 - test.Width, 1080);
 					test.Color = new Color ("#1053FF", 1.0f);
 					test.FontStyle = FontStyle.Italic;
-					CGLText test2 = new CGLText ("hallo welt, wie gehts?", 12, Font.Tahoma, new Point (200, 200), Color.White);
-					CGLText newtext = new CGLText ("mein popo kann schreiben", 90, Font.Tahoma);
+					CGLText test2 = new CGLText ("hallo welt, wie gehts?", 120, Font.ArcadeClassic, new Point (200, 200), Color.White);
+					CGLText newtext = new CGLText ("mein popo kann schreiben", 90, Font.ArcadeDotted);
 					newtext.Position = new Point (1920 - newtext.Width, GlobalContent.ScreenSize.Height);
 					newtext.Color = Color.White;
+					hallo = new CGLInterface ();
 				};
 				GlobalContent.Init (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
 			}

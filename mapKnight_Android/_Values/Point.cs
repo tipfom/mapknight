@@ -14,16 +14,17 @@ namespace mapKnight_Android
 			return new Point (point1.X - point2.X, point1.Y - point2.Y);
 		}
 
-		public int X;
-		public int Y;
+		public int X{ get; set; }
 
-		public Point (int x, int y)
+		public int Y{ get; set; }
+
+		public Point (int x, int y) : this ()
 		{
 			X = x;
 			Y = y;
 		}
 
-		public Point (Size size)
+		public Point (Size size) : this ()
 		{
 			X = size.Width;
 			Y = size.Height;

@@ -19,9 +19,13 @@ namespace mapKnight_Android
 			public XMLElemental Parent { get; private set; }
 
 			public Dictionary<string,string> Attributes { get; private set; }
+
 			public string Value { get; set; }
+
 			public string Name { get; set; }
+
 			public string Root { get; private set; }
+
 			public int Depth { get; private set; }
 
 			public XMLElemental (XMLElemental parent, string name, string value, Dictionary<string,string> attributes)
@@ -30,15 +34,18 @@ namespace mapKnight_Android
 				Parent = parent;
 				Value = value;
 				Attributes = attributes;
-				Root = Parent.Root+ "?" + Parent.GetAll (((XMLElemental elemental) => elemental.Root.StartsWith (Parent.Root + name))).Count.ToString () + "~";;
+				Root = Parent.Root + "?" + Parent.GetAll (((XMLElemental elemental) => elemental.Root.StartsWith (Parent.Root + name))).Count.ToString () + "~";
+				;
 
 				Depth = Parent.Depth + 1;
 
 				Childs = new List<XMLElemental> ();
 				Comments = new List<string> ();
 			}
-		
-			public XMLElemental (XMLElemental parent, string name) : this (parent, name, "", new Dictionary<string,string> ()) { }
+
+			public XMLElemental (XMLElemental parent, string name) : this (parent, name, "", new Dictionary<string,string> ())
+			{
+			}
 
 			protected XMLElemental (string name)
 			{
@@ -54,24 +61,24 @@ namespace mapKnight_Android
 				Comments = new List<string> ();
 			}
 
-			public static XMLElemental EmptyRootElemental()
+			public static XMLElemental EmptyRootElemental ()
 			{
 				return new XMLElemental ("root");
 			}
 
-			public static XMLElemental EmptyRootElemental(string rootname)
+			public static XMLElemental EmptyRootElemental (string rootname)
 			{
 				return new XMLElemental (rootname);
 			}
 
-			public static XMLElemental Load(Stream FileStream, bool LoadComments = true)
+			public static XMLElemental Load (Stream FileStream, bool LoadComments = true)
 			{
 				using (StreamReader streamreader = new StreamReader (FileStream)) {
 					return Load (streamreader.ReadToEnd (), LoadComments);
 				}
 			}
 
-			public static XMLElemental Load(string XMLData, bool LoadComments = true)
+			public static XMLElemental Load (string XMLData, bool LoadComments = true)
 			{
 
 				XMLElemental LoadedElemetal = null;
@@ -120,43 +127,46 @@ namespace mapKnight_Android
 				return LoadedElemetal;
 			}
 
-			public XMLElemental this[string name] 
-			{
+			public XMLElemental this [string name] {
 				get {
 					return Childs.Find ((XMLElemental elemental) => elemental.Name == name);
 				}
 			}
 
-			public XMLElemental this[Predicate<XMLElemental> predicate] 
-			{
+			public XMLElemental this [Predicate<XMLElemental> predicate] {
 				get {
 					return Childs.Find (predicate);
 				}
 			}
 
-			public List<XMLElemental> GetAll()
+			public List<XMLElemental> GetAll ()
 			{
 				return Childs;	
 			}
 
-			public List<XMLElemental> GetAll(string name)
+			public List<XMLElemental> GetAll (string name)
 			{
 				return Childs.FindAll ((XMLElemental elemental) => elemental.Name == name);
 			}
 
-			public List<XMLElemental> GetAll(Predicate<XMLElemental> predicate)
+			public List<XMLElemental> GetAll (Predicate<XMLElemental> predicate)
 			{
 				return Childs.FindAll (predicate);
 			}
 
-			public XMLElemental Get(string name)
+			public XMLElemental Get (string name)
 			{
 				return Childs.Find ((XMLElemental elemental) => elemental.Name == name);
 			}
 
-			public XMLElemental Get(Predicate<XMLElemental> predicate)
+			public XMLElemental Get (Predicate<XMLElemental> predicate)
 			{
 				return Childs.Find (predicate);
+			}
+
+			public XMLElemental Find (string attributename, string attributevalue)
+			{
+				return Childs.Find (((XMLElemental obj) => obj.Attributes.ContainsKey (attributename) && obj.Attributes [attributename] == attributevalue));
 			}
 
 			public XMLElemental GetLastChild ()
@@ -168,99 +178,99 @@ namespace mapKnight_Android
 				}
 			}
 
-			public bool HasChild(string name)
+			public bool HasChild (string name)
 			{
 				return Childs.Find ((XMLElemental elemental) => elemental.Name == name) != null;
 			}
 
-			public bool HasChild(Predicate<XMLElemental> predicate)
+			public bool HasChild (Predicate<XMLElemental> predicate)
 			{
 				return Childs.Find (predicate) != null;
 			}
 
-			public bool HasChild(XMLElemental child)
+			public bool HasChild (XMLElemental child)
 			{
 				return Childs.Contains (child);
 			}
 
-			public XMLElemental AddChild(XMLElemental child)
+			public XMLElemental AddChild (XMLElemental child)
 			{
 				Childs.Add (child);
 				return child;
 			}
 
-			public XMLElemental AddChild(string name)
+			public XMLElemental AddChild (string name)
 			{
 				Childs.Add (new XMLElemental (this, name));
 				return GetLastChild ();
 			}
 
-			public void AddChilds(IEnumerable<XMLElemental> childs)
+			public void AddChilds (IEnumerable<XMLElemental> childs)
 			{
 				Childs.AddRange (childs);
 			}
 
-			public void ClearChilds()
+			public void ClearChilds ()
 			{
 				Childs.Clear ();	
 			}
 
-			public void RemoveChild(string name)
+			public void RemoveChild (string name)
 			{
 				Childs.Remove (Childs.Find ((XMLElemental elemental) => elemental.Name == name));
 			}
 
-			public void RemoveChild(Predicate<XMLElemental> predicate)
+			public void RemoveChild (Predicate<XMLElemental> predicate)
 			{
 				Childs.Remove (Childs.Find (predicate));
 			}
 
-			public void RemoveChild(XMLElemental elemental)
+			public void RemoveChild (XMLElemental elemental)
 			{
 				if (Childs.Contains (elemental))
 					Childs.Remove (elemental);
 			}
 
-			public void RemoveChild(int index)
+			public void RemoveChild (int index)
 			{
 				if (Childs.Count > index)
 					Childs.RemoveAt (index);
 			}
 
-			public void RemoveLastChild()
+			public void RemoveLastChild ()
 			{
 				RemoveChild (this.GetLastChild ());
 			}
 
-			public void RemoveChilds(string name)
+			public void RemoveChilds (string name)
 			{
 				Childs.RemoveAll ((XMLElemental elemental) => elemental.Name == name);
 			}
 
-			public void RemoveChilds(Predicate<XMLElemental> predicate)
+			public void RemoveChilds (Predicate<XMLElemental> predicate)
 			{
 				Childs.RemoveAll (predicate);
 			}
 
-			public int ChildCount { get{ return Childs.Count; } }
+			public int ChildCount { get { return Childs.Count; } }
 
-			public void AddComment(string content)
+			public void AddComment (string content)
 			{
 				Comments.Add (content);
 			}
 
-			public void RemoveComment(string content)
+			public void RemoveComment (string content)
 			{
 				if (Comments.Contains (content))
 					Comments.Remove (content);
 			}
 
-			public void RemoveComment(int index)
+			public void RemoveComment (int index)
 			{
 				Comments.RemoveAt (index);
 			}
 
-			public string Flush()
+			public string Flush ()
 			{
 				XmlWriterSettings settings = new XmlWriterSettings ();
 				settings.Indent = true;
@@ -292,7 +302,7 @@ namespace mapKnight_Android
 				return builder.ToString ();
 			}
 
-			protected void Flush(XmlWriter xmlwriter)
+			protected void Flush (XmlWriter xmlwriter)
 			{
 				xmlwriter.WriteStartElement (this.Name);
 
@@ -314,7 +324,7 @@ namespace mapKnight_Android
 
 			public override string ToString ()
 			{
-				string ReturnedValue = Name + "@" + Root + " : " + Value + " with " +"{" + string.Join(",", Attributes.Select(kv => kv.Key.ToString() + "=" + kv.Value.ToString()).ToArray()) + "}" + "\n";
+				string ReturnedValue = Name + "@" + Root + " : " + Value + " with " + "{" + string.Join (",", Attributes.Select (kv => kv.Key.ToString () + "=" + kv.Value.ToString ()).ToArray ()) + "}" + "\n";
 				foreach (XMLElemental Child in Childs) {
 					for (int i = 0; i < Depth + 1; i++) {
 						ReturnedValue += "\t";

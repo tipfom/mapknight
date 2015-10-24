@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 using Android.Graphics;
 using Android.Content;
@@ -22,10 +23,15 @@ namespace mapKnight_Android
 
 		public static void Init (XMLElemental configfile, Context GameContext)
 		{
-			TileSize = Convert.ToInt32 (configfile ["image"].Attributes ["tilesize"]);
+			Version = new Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
+			Log.All (typeof(GlobalContent), "Current Version : " + Version.ToString (), MessageType.Info);
 
-			LoadImage (GameContext.Assets.Open (configfile ["image"].Attributes ["source"]));
-			LoadFonts (GameContext);
+			TileSize = Convert.ToInt32 (configfile ["images"].Find ("name", "tiles").Attributes ["tilesize"]);
+
+			LoadImage (GameContext.Assets.Open (configfile ["images"].Find ("name", "tiles").Attributes ["src"]));
+			InterfaceSprite = new Sprite<int> (GameContext.Assets.Open (configfile ["images"].Find ("name", "interface").Attributes ["src"]), configfile ["images"].Find ("name", "interface").GetAll ());
+
+			LoadFonts (configfile, GameContext);
 
 			TextureVertexWidth = TileSize / (float)ImageWidth;
 			TextureVertexHeight = TileSize / (float)ImageHeight;
@@ -92,10 +98,12 @@ namespace mapKnight_Android
 			MainTexture = loadedtexture [0];
 		}
 
-		private static void LoadFonts (Context GameContext)
+		private static void LoadFonts (XMLElemental configfile, Context GameContext)
 		{
 			Fonts = new System.Collections.Generic.Dictionary<Font, Typeface> ();
-			Fonts.Add (Font.Tahoma, Typeface.CreateFromAsset (GameContext.Assets, "fonts/tahoma.ttf"));
+			Fonts.Add (Font.Tahoma, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "Tahoma")).Attributes ["src"]));
+			Fonts.Add (Font.ArcadeClassic, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeClassic")).Attributes ["src"]));
+			Fonts.Add (Font.ArcadeDotted, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeDotted")).Attributes ["src"]));
 		}
 	}
 }

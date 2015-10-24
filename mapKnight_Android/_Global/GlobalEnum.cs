@@ -29,7 +29,9 @@ namespace mapKnight_Android
 
 	public enum Font
 	{
-		Tahoma
+		Tahoma,
+		ArcadeClassic,
+		ArcadeDotted
 	}
 
 	public enum FontStyle
