@@ -24,7 +24,7 @@ namespace mapKnight_Android
 			XMLElemental mapElemental;
 			CGLInterface hallo;
 			Android.Content.Context context;
-			Random x = new Random (123456789);
+			CGLText versionText;
 
 			public CGLRenderer (Android.Content.Context Context)
 			{
@@ -75,6 +75,7 @@ namespace mapKnight_Android
 					newtext.Position = new Point (1920 - newtext.Width, GlobalContent.ScreenSize.Height);
 					newtext.Color = Color.White;
 					hallo = new CGLInterface ();
+					versionText = new CGLText ("Version : " + GlobalContent.Version.ToString (), 40, Font.Tahoma, new Point (0, 40), new Color ("#00CCCC", 1.0f));
 				};
 				GlobalContent.Init (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
 			}

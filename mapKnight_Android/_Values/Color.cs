@@ -93,4 +93,3 @@ namespace mapKnight_Android
 		public static Color Black { get { return new Color ("#000000", 255); } }
 	}
 }
-

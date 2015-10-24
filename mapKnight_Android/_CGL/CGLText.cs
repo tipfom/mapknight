@@ -121,7 +121,8 @@ namespace mapKnight_Android
 					TextPaint = new Paint ();
 				TextPaint.TextSize = this.Fontsize;
 				TextPaint.TextAlign = Paint.Align.Left;
-				TextPaint.Color = new Android.Graphics.Color (this.Color.AlphaByte, this.Color.RedByte, this.Color.GreenByte, this.Color.BlueByte);
+				TextPaint.SetARGB (this.Color.AlphaByte, this.Color.RedByte, this.Color.GreenByte, this.Color.BlueByte);
+				TextPaint.SetStyle (Paint.Style.Fill);
 				switch (FontStyle) {
 				case FontStyle.Normal:
 					TextPaint.SetTypeface (GlobalContent.Fonts [this.Font]);
