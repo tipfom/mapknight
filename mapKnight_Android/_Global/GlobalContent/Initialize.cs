@@ -44,16 +44,31 @@ namespace mapKnight_Android
 
 			LoadShader ();
 
+			UpdateMatrix ();
+
 			CGL.CGLText.CGLTextContainer.Init ();
 
 			if (OnInitCompleted != null)
 				OnInitCompleted (GameContext);
 		}
 
+		private static void UpdateMatrix ()
+		{
+			ProjectionMatrix = new float[16];
+			ViewMatrix = new float[16];
+			MVPMatrix = new float[16];
+
+			Android.Opengl.Matrix.FrustumM (ProjectionMatrix, 0, -ScreenRatio, ScreenRatio, -1, 1, 3, 7);
+			Android.Opengl.Matrix.SetLookAtM (ViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1f, 0f);
+			Android.Opengl.Matrix.MultiplyMM (MVPMatrix, 0, ProjectionMatrix, 0, ViewMatrix, 0);
+		}
+
 		public static void Update (Size screensize)
 		{
 			ScreenSize = screensize;
 			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
+
+			UpdateMatrix ();
 
 			if (OnUpdate != null)
 				OnUpdate ();

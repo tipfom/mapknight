@@ -2,7 +2,7 @@
 
 namespace mapKnight_Android
 {
-	public struct Point
+	public struct Point : ICloneable
 	{
 		public static Point operator + (Point point1, Point point2)
 		{
@@ -28,6 +28,12 @@ namespace mapKnight_Android
 		{
 			X = size.Width;
 			Y = size.Height;
+		}
+
+
+		public object Clone ()
+		{
+			return (object)new Point (this.X, this.Y);
 		}
 
 		public override string ToString ()

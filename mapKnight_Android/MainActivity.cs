@@ -35,6 +35,9 @@ namespace mapKnight_Android
 			SetContentView (view);
 
 			HideNavBar ();
+
+			TouchManager test = new TouchManager ();
+			view.SetOnTouchListener (test);
 		}
 
 		protected override void OnPause ()

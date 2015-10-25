@@ -20,13 +20,13 @@ namespace mapKnight_Android
 				int.TryParse (versionparts [2], out Build);
 				int.TryParse (versionparts [3], out Revision);
 
-				BuildDate = new DateTime (2000, 1, 1, 0, 0, 0).AddDays (Build).AddSeconds (Revision * 2).AddHours (1);
+				BuildDate = new DateTime (2000, 1, 1, 0, 0, 0).AddDays (Build).AddSeconds (Revision * 2).ToUniversalTime ();
 			}
 		}
 
 		public override string ToString ()
 		{
-			return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString () + "-" + Revision.ToString () + " updated " + BuildDate.ToString ("dd/MM/yyyy HH:mm:ss");
+			return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString () + "-" + Revision.ToString () + " updated " + BuildDate.ToString ("dd/MM/yyyy HH:mm:ss") + " UTC+00";
 		}
 	}
 }

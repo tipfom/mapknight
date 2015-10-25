@@ -43,5 +43,12 @@ namespace mapKnight_Android
 
 		// version string
 		public static Version Version;
+
+		// draw variables
+		public static float[] ViewMatrix{ get; private set; }
+
+		public static float[] ProjectionMatrix{ get; private set; }
+
+		public static float[] MVPMatrix{ get; private set; }
 	}
 }

@@ -84,6 +84,8 @@
     <Compile Include="_Values\fPoint.cs" />
     <Compile Include="_Values\fSize.cs" />
     <Compile Include="_Values\BufferData.cs" />
+    <Compile Include="_Tools\TouchManager.cs" />
+    <Compile Include="_Values\Touch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

@@ -10,11 +10,17 @@ namespace mapKnight_Android
 	{
 		public class CGLInterface
 		{
+			FloatBuffer fVertexBuffer;
+			ShortBuffer fIndexBuffer;
+			FloatBuffer fTextureBuffer;
+
 			FloatBuffer VertexBuffer;
 			ShortBuffer IndexBuffer;
 			FloatBuffer TextureBuffer;
 
 			int fRenderProgram;
+
+			BufferData framebuffer;
 
 			public bool LeftButtonPressed{ get; private set; }
 
@@ -28,6 +34,8 @@ namespace mapKnight_Android
 
 				GlobalContent.OnUpdate += () => {
 					updateVertexBuffer ();
+					updateFramebuffer ();
+					drawFramebuffer ();
 				};
 
 				short[] Indicies = new short[]{ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11 };
@@ -37,8 +45,17 @@ namespace mapKnight_Android
 				IndexBuffer.Put (Indicies);
 				IndexBuffer.Position (0);
 
+				Indicies = new short[]{ 0, 1, 2, 0, 2, 3 };
+				bytebuffer = ByteBuffer.AllocateDirect (Indicies.Length * sizeof(short));
+				bytebuffer.Order (ByteOrder.NativeOrder ());
+				fIndexBuffer = bytebuffer.AsShortBuffer ();
+				fIndexBuffer.Put (Indicies);
+				fIndexBuffer.Position (0);
+
 				updateVertexBuffer ();
 				updateTextureBuffer ();
+				updateFramebuffer ();
+				drawFramebuffer ();
 			}
 
 			private void updateVertexBuffer ()
@@ -48,20 +65,20 @@ namespace mapKnight_Android
 
 				float[] verticies = new float[] {
 					//button 1
+					-GlobalContent.ScreenRatio + movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
 					-GlobalContent.ScreenRatio, -1f + movebuttonsize.Height, 0f,
 					-GlobalContent.ScreenRatio, -1f, 0f,
 					-GlobalContent.ScreenRatio + movebuttonsize.Width, -1f, 0f,
-					-GlobalContent.ScreenRatio + movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
 					//button 2
-					-GlobalContent.ScreenRatio + movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
 					-GlobalContent.ScreenRatio + movebuttonsize.Width, -1f, 0f,
 					-GlobalContent.ScreenRatio + movebuttonsize.Width + movebuttonsize.Width, -1f, 0f,
 					-GlobalContent.ScreenRatio + movebuttonsize.Width + movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
+					-GlobalContent.ScreenRatio + movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
 					//jump button
-					GlobalContent.ScreenRatio - jumpbuttonsize.Width, -1f + jumpbuttonsize.Height, 0f,
-					GlobalContent.ScreenRatio - jumpbuttonsize.Width, -1f, 0f,
 					GlobalContent.ScreenRatio, -1f, 0f,
-					GlobalContent.ScreenRatio, -1f + jumpbuttonsize.Height, 0f
+					GlobalContent.ScreenRatio, -1f + jumpbuttonsize.Height, 0f,
+					GlobalContent.ScreenRatio - jumpbuttonsize.Width, -1f + jumpbuttonsize.Height, 0f,
+					GlobalContent.ScreenRatio - jumpbuttonsize.Width, -1f, 0f
 				};
 				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (verticies.Length * sizeof(float));
 				bytebuffer.Order (ByteOrder.NativeOrder ());
@@ -97,8 +114,43 @@ namespace mapKnight_Android
 				TextureBuffer.Position (0);
 			}
 
-			public void Draw (float[] mvpMatrix)
+			private void updateFramebuffer ()
 			{
+				framebuffer = CGLTools.GenerateFramebuffer ();
+
+				float[] verticies = new float[] {
+					-GlobalContent.ScreenRatio, 1f, 0f,
+					-GlobalContent.ScreenRatio, -1f, 0f,
+					GlobalContent.ScreenRatio, -1f, 0f,
+					GlobalContent.ScreenRatio, 1f, 0f
+				};
+				float[] textureCoords = new float[] {
+					0f, 1f,
+					0f, 0f,
+					1f, 0f,
+					1f, 1f
+				};
+
+
+				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (verticies.Length * sizeof(float));
+				bytebuffer.Order (ByteOrder.NativeOrder ());
+				fVertexBuffer = bytebuffer.AsFloatBuffer ();
+				fVertexBuffer.Put (verticies);
+				fVertexBuffer.Position (0);
+
+				bytebuffer = ByteBuffer.AllocateDirect (textureCoords.Length * sizeof(float));
+				bytebuffer.Order (ByteOrder.NativeOrder ());
+				fTextureBuffer = bytebuffer.AsFloatBuffer ();
+				fTextureBuffer.Put (textureCoords);
+				fTextureBuffer.Position (0);
+			}
+
+			private void drawFramebuffer ()
+			{
+				GL.GlBindFramebuffer (GL.GlFramebuffer, framebuffer.FrameBuffer);
+				GL.GlClearColor (1.0f, 1.0f, 1.0f, 0.0f);
+				GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
+
 				GL.GlUseProgram (fRenderProgram);
 
 				// Set the active texture unit to texture unit 0.
@@ -108,7 +160,7 @@ namespace mapKnight_Android
 				GL.GlVertexAttribPointer (PositionHandle, 3, GL.GlFloat, false, 3 * sizeof(float), VertexBuffer);
 
 				int MVPMatrixHandle = GL.GlGetUniformLocation (fRenderProgram, "uMVPMatrix");
-				GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, mvpMatrix, 0);
+				GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, GlobalContent.MVPMatrix, 0);
 
 				GL.GlEnable (GL.GlBlend);
 				GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);
@@ -125,8 +177,39 @@ namespace mapKnight_Android
 				GL.GlDrawElements (GL.GlTriangles, 18, GL.GlUnsignedShort, IndexBuffer);
 				GL.GlDisableVertexAttribArray (PositionHandle);
 				GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
+
+				GL.GlBindFramebuffer (GL.GlFramebuffer, 0);
+			}
+
+			public void Draw (float[] mvpMatrix)
+			{
+				GL.GlUseProgram (fRenderProgram);
+
+				// Set the active texture unit to texture unit 0.
+
+				int PositionHandle = GL.GlGetAttribLocation (fRenderProgram, "vPosition");
+				GL.GlEnableVertexAttribArray (PositionHandle);
+				GL.GlVertexAttribPointer (PositionHandle, 3, GL.GlFloat, false, 3 * sizeof(float), fVertexBuffer);
+
+				int MVPMatrixHandle = GL.GlGetUniformLocation (fRenderProgram, "uMVPMatrix");
+				GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, mvpMatrix, 0);
+
+				GL.GlEnable (GL.GlBlend);
+				GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);
+
+				int mTextureUniformHandle = GL.GlGetUniformLocation (fRenderProgram, "u_Texture");
+				int mTextureCoordinateHandle = GL.GlGetAttribLocation (fRenderProgram, "a_TexCoordinate");
+				GL.GlVertexAttribPointer (mTextureCoordinateHandle, 2, GL.GlFloat, false, 0, fTextureBuffer);
+				GL.GlEnableVertexAttribArray (mTextureCoordinateHandle);
+
+				GL.GlActiveTexture (GL.GlTexture1);
+				GL.GlBindTexture (GL.GlTexture2d, framebuffer.FrameBufferTexture);
+				GL.GlUniform1i (mTextureUniformHandle, 1);
+
+				GL.GlDrawElements (GL.GlTriangles, 6, GL.GlUnsignedShort, fIndexBuffer);
+				GL.GlDisableVertexAttribArray (PositionHandle);
+				GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
 			}
 		}
 	}
 }
-

@@ -173,9 +173,15 @@ namespace mapKnight_Android
 				private static int CoordsPerVertex = 3;
 				private static int VertexStride = CGLTextContainer.CoordsPerVertex * sizeof(float);
 
+				private static Bitmap textbitmap;
+				private static Canvas textcanvas;
+
 				public static void Init ()
 				{
 					subscribedItems = new List<CGLText> ();
+				
+					textbitmap = Bitmap.CreateBitmap (GlobalContent.ScreenSize.Width, GlobalContent.ScreenSize.Height, Bitmap.Config.Argb8888);
+					textcanvas = new Canvas (textbitmap);
 
 					renderprogram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
 					initTexture ();
@@ -219,6 +225,24 @@ namespace mapKnight_Android
 							updateTexture ();
 						};
 						subscribedItems.Add (Item);
+						updateTexture ();
+					}
+				}
+
+				public static void RequestForeground (CGLText item)
+				{
+					if (subscribedItems.Contains (item)) {
+						subscribedItems.Remove (item);
+						subscribedItems.Insert (subscribedItems.Count, item);
+						updateTexture ();
+					}
+				}
+
+				public static void RequestBackground (CGLText item)
+				{
+					if (subscribedItems.Contains (item)) {
+						subscribedItems.Remove (item);
+						subscribedItems.Insert (0, item);
 						updateTexture ();
 					}
 				}
@@ -305,18 +329,19 @@ namespace mapKnight_Android
 						fVertexBuffer.Put (UpdatedVerticies);
 						fVertexBuffer.Position (0);
 
+						textbitmap = Bitmap.CreateBitmap (GlobalContent.ScreenSize.Width, GlobalContent.ScreenSize.Height, Bitmap.Config.Argb8888);
+						textcanvas = new Canvas (textbitmap);
+
 						updateTexture ();
 					};
 				}
 
 				private static void updateTexture ()
 				{
-					Bitmap bitmap = Bitmap.CreateBitmap (GlobalContent.ScreenSize.Width, GlobalContent.ScreenSize.Height, Bitmap.Config.Argb8888);
-					bitmap.EraseColor (0);
-					Canvas canvas = new Canvas (bitmap);
+					textbitmap.EraseColor (0);
 									
 					foreach (CGLText item in subscribedItems) {
-						canvas.DrawText (item.Text, item.Position.X, item.Position.Y, item.TextPaint);
+						textcanvas.DrawText (item.Text, item.Position.X, item.Position.Y, item.TextPaint);
 					}
 
 					int[] generatedtexture = new int[1];
@@ -329,15 +354,12 @@ namespace mapKnight_Android
 					GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureWrapS, GL.GlClampToEdge);
 					GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureWrapT, GL.GlClampToEdge);
 					
-					GLUtils.TexImage2D (GL.GlTexture2d, 0, bitmap, 0);
-					
-					bitmap.Recycle ();
+					GLUtils.TexImage2D (GL.GlTexture2d, 0, textbitmap, 0);
+				
 					GL.GlBindTexture (GL.GlTexture2d, 0);
 
 					GL.GlDeleteTextures (1, new int[]{ texture }, 0);
 					texture = generatedtexture [0];
-
-					int error = GL.GlGetError ();
 				}
 			}
 		}
