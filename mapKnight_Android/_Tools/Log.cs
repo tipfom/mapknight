@@ -81,7 +81,8 @@ namespace mapKnight_Android
 				{ typeof(CGL.CGLTools),"CGLTools" },
 				{ typeof(CGL.CGLRenderer),"CGLRenderer" },
 				{ typeof(Touch),"Touch" },
-				{ typeof(TouchManager),"TouchManager" }
+				{ typeof(TouchManager),"TouchManager" },
+				{ typeof(CGL.CGLInterface),"CGLInterface" }
 			};
 		}
 	}

@@ -10,14 +10,15 @@ using Android.Views;
 using Android.Content;
 using Android.Util;
 
-namespace mapKnight_Android{
+namespace mapKnight_Android
+{
 	namespace CGL
 	{
 		public class CGLView : Android.Opengl.GLSurfaceView
 		{
 			Android.Opengl.GLSurfaceView.IRenderer Renderer;
 
-			public CGLView (Context context) : base(context)
+			public CGLView (Context context) : base (context)
 			{
 				this.SetEGLContextClientVersion (2);
 

@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;LOGTOUCH</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
@@ -63,29 +63,33 @@
     <Compile Include="_Tools\XMLElemental.cs" />
     <Compile Include="_Global\GlobalEnum.cs" />
     <Compile Include="_Global\Tiles.cs" />
-    <Compile Include="_Global\Map.cs" />
     <Compile Include="_Global\GlobalContent\TextureCoordinateManager.cs" />
     <Compile Include="_Global\GlobalContent\Initialize.cs" />
     <Compile Include="_Global\GlobalContent\Variables.cs" />
     <Compile Include="_Global\GlobalContent\LoadTexCoordManager.cs" />
     <Compile Include="_Tools\ArrayOperations.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="_Values\Size.cs" />
-    <Compile Include="_Values\Point.cs" />
     <Compile Include="_CGL\CGLInterface.cs" />
     <Compile Include="_Global\GlobalContent\Shader.cs" />
     <Compile Include="_CGL\CGLText.cs" />
-    <Compile Include="_Values\Color.cs" />
-    <Compile Include="_Values\HexValue.cs" />
-    <Compile Include="_Values\Version.cs" />
-    <Compile Include="_Values\Sprite.cs" />
-    <Compile Include="_Values\Rectangle.cs" />
-    <Compile Include="_Values\fRectangle.cs" />
-    <Compile Include="_Values\fPoint.cs" />
-    <Compile Include="_Values\fSize.cs" />
-    <Compile Include="_Values\BufferData.cs" />
     <Compile Include="_Tools\TouchManager.cs" />
-    <Compile Include="_Values\Touch.cs" />
+    <Compile Include="_Net\Client.cs" />
+    <Compile Include="_Tools\StringManager.cs" />
+    <Compile Include="_Global\Map.cs" />
+    <Compile Include="_ValuesAndTypes\Size.cs" />
+    <Compile Include="_ValuesAndTypes\Point.cs" />
+    <Compile Include="_ValuesAndTypes\Color.cs" />
+    <Compile Include="_ValuesAndTypes\HexValue.cs" />
+    <Compile Include="_ValuesAndTypes\Version.cs" />
+    <Compile Include="_ValuesAndTypes\Sprite.cs" />
+    <Compile Include="_ValuesAndTypes\Rectangle.cs" />
+    <Compile Include="_ValuesAndTypes\fRectangle.cs" />
+    <Compile Include="_ValuesAndTypes\fPoint.cs" />
+    <Compile Include="_ValuesAndTypes\fSize.cs" />
+    <Compile Include="_ValuesAndTypes\BufferData.cs" />
+    <Compile Include="_ValuesAndTypes\Touch.cs" />
+    <Compile Include="_ValuesAndTypes\Reference.cs" />
+    <Compile Include="_Tools\ButtonManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -102,9 +106,10 @@
     <Folder Include="_Tools\" />
     <Folder Include="_Global\" />
     <Folder Include="_Global\GlobalContent\" />
-    <Folder Include="_Values\" />
     <Folder Include="Assets\fonts\" />
     <Folder Include="Assets\maps\" />
+    <Folder Include="_Net\" />
+    <Folder Include="_ValuesAndTypes\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />

@@ -14,15 +14,15 @@ namespace mapKnight_Android
 		public event HandleOnTouchEvent OnTouchBegan;
 		public event HandleOnTouchEvent OnTouchEnded;
 
-		private const int MaximumTouchCount = 4;
+		public const int MaximumTouchCount = 4;
 
-		Touch[] Touches;
-		List<int> activeTouches;
+		public Touch[] Touches;
+		public List<int> ActiveTouches;
 
 		public TouchManager ()
 		{
 			Touches = new Touch[MaximumTouchCount];
-			activeTouches = new List<int> ();
+			ActiveTouches = new List<int> ();
 		}
 
 		public bool OnTouch (View v, MotionEvent e)
@@ -37,7 +37,7 @@ namespace mapKnight_Android
 			case MotionEventActions.PointerDown:
 				if (e.PointerCount <= MaximumTouchCount) {
 					Touches [pointerId] = new Touch (pointerId, (int)e.GetX (pointerId), (int)e.GetY (pointerId));
-					activeTouches.Add (pointerId);
+					ActiveTouches.Add (pointerId);
 
 					// handle events
 					if (OnTouchBegan != null)
@@ -53,16 +53,16 @@ namespace mapKnight_Android
 				}
 				break;
 			case MotionEventActions.Move:
-				foreach (int index in activeTouches) {
-					Touches [index].Update ((int)e.GetX (activeTouches.IndexOf (index)), (int)e.GetY (activeTouches.IndexOf (index)));
+				foreach (int index in ActiveTouches) {
+					Touches [index].Update ((int)e.GetX (ActiveTouches.IndexOf (index)), (int)e.GetY (ActiveTouches.IndexOf (index)));
 				}
 				break;
 			case MotionEventActions.Up:
 			case MotionEventActions.Cancel:
 			case MotionEventActions.PointerUp:
-				Utils.Log.All (this, pointerId.ToString (), MessageType.Debug);
+//				Utils.Log.All (this, pointerId.ToString (), MessageType.Debug);
+				ActiveTouches.Remove (pointerId);
 				Touches [pointerId].Dispose ();
-				activeTouches.Remove (pointerId);
 				break;
 			}
 		

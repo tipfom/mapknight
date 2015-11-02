@@ -4,6 +4,7 @@ using System.Reflection;
 
 using Android.Graphics;
 using Android.Content;
+using Android.Views;
 using Android.Opengl;
 using GL = Android.Opengl.GLES20;
 
@@ -41,6 +42,8 @@ namespace mapKnight_Android
 
 			ScreenSize = new Size (GameContext.Resources.DisplayMetrics.WidthPixels, GameContext.Resources.DisplayMetrics.HeightPixels);
 			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
+
+			TouchManager = new ButtonManager ();
 
 			LoadShader ();
 

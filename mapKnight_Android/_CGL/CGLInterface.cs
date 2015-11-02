@@ -28,15 +28,13 @@ namespace mapKnight_Android
 
 			public bool JumpButtonPressed{ get; private set; }
 
+			private Rectangle JumpButtonRectangle;
+			private Rectangle LeftButtonRectangle;
+			private Rectangle RightButtonRectangle;
+
 			public CGLInterface ()
 			{
 				fRenderProgram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
-
-				GlobalContent.OnUpdate += () => {
-					updateVertexBuffer ();
-					updateFramebuffer ();
-					drawFramebuffer ();
-				};
 
 				short[] Indicies = new short[]{ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11 };
 				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (Indicies.Length * sizeof(short));
@@ -56,6 +54,30 @@ namespace mapKnight_Android
 				updateTextureBuffer ();
 				updateFramebuffer ();
 				drawFramebuffer ();
+
+				GlobalContent.OnUpdate += () => {
+					updateVertexBuffer ();
+					updateFramebuffer ();
+					drawFramebuffer ();
+
+					Size jumpbuttonsize = new Size (GlobalContent.ScreenSize.Height * 9 / 20, GlobalContent.ScreenSize.Height * 9 / 20);
+					JumpButtonRectangle = new Rectangle (new Point (GlobalContent.ScreenSize - jumpbuttonsize), jumpbuttonsize);
+					ButtonManager.Button jumpbutton = GlobalContent.TouchManager.Create (JumpButtonRectangle);
+					jumpbutton.OnClick += () => {
+						Utils.Log.All (this, "jumpbutton clicked", MessageType.Debug);
+						JumpButtonPressed = true;
+						updateTextureBuffer ();
+						updateFramebuffer ();
+						drawFramebuffer ();
+					};
+					jumpbutton.OnLeave += () => {
+						Utils.Log.All (this, "jumpbutton left", MessageType.Debug);
+						JumpButtonPressed = false;
+						updateTextureBuffer ();
+						updateFramebuffer ();
+						drawFramebuffer ();
+					};
+				};
 			}
 
 			private void updateVertexBuffer ()
@@ -130,7 +152,6 @@ namespace mapKnight_Android
 					1f, 0f,
 					1f, 1f
 				};
-
 
 				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (verticies.Length * sizeof(float));
 				bytebuffer.Order (ByteOrder.NativeOrder ());

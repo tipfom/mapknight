@@ -16,8 +16,6 @@ namespace mapKnight_Editor
 		private static int minImageSize = 20;
 		private static int maxImageSize = 60;
 
-		private static int maxUndoCacheEntrys = 10;
-
 		private enum Tool
 		{
 			Brush,
@@ -365,8 +363,6 @@ namespace mapKnight_Editor
 
 			UndoCache.Push (UndoLast);
 			UndoLast = (ushort[,,])Map.Clone ();
-			if (UndoCache.Count > maxUndoCacheEntrys)
-				UndoCache.Pop ();
 		}
 
 		private void lv_tile_SelectedIndexChanged (object sender, EventArgs e)
@@ -451,7 +447,12 @@ namespace mapKnight_Editor
 			}
 			parsedelemental.AddChild ("Background");
 
-			string elementalstring = parsedelemental.Flush ();
+			string elementalstring = "";
+			if (Path.GetExtension (path) == ".tmsl3") {
+				elementalstring = StringManager.ZipString (parsedelemental.Flush ());
+			} else {
+				elementalstring = parsedelemental.Flush ();
+			}
 
 			using (StreamWriter writer = new StreamWriter (File.OpenWrite (path))) {
 				writer.WriteLine (elementalstring);

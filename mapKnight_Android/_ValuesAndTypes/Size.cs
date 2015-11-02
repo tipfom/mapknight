@@ -9,6 +9,16 @@ namespace mapKnight_Android
 			return new Size (-size.Width, -size.Height);
 		}
 
+		public static Size operator / (Size size, int integer)
+		{
+			return new Size (size.Width / integer, size.Height / integer);
+		}
+
+		public static Size operator - (Size size1, Size size2)
+		{
+			return new Size (size1.Width - size2.Width, size1.Height - size2.Height);
+		}
+
 		public int Width;
 		public int Height;
 
@@ -30,4 +40,3 @@ namespace mapKnight_Android
 		}
 	}
 }
-

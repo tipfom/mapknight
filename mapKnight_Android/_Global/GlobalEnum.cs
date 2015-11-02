@@ -41,4 +41,10 @@ namespace mapKnight_Android
 		Bold,
 		BoldItalic
 	}
+
+	public enum Compression
+	{
+		Uncompressed,
+		Zip
+	}
 }

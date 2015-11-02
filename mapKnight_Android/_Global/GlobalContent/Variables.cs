@@ -50,5 +50,8 @@ namespace mapKnight_Android
 		public static float[] ProjectionMatrix{ get; private set; }
 
 		public static float[] MVPMatrix{ get; private set; }
+
+		// current touch manager
+		public static ButtonManager TouchManager{ get; private set; }
 	}
 }

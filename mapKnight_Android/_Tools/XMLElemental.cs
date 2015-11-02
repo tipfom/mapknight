@@ -71,15 +71,20 @@ namespace mapKnight_Android
 				return new XMLElemental (rootname);
 			}
 
-			public static XMLElemental Load (Stream FileStream, bool LoadComments = true)
+			public static XMLElemental Load (Stream FileStream, bool LoadComments = true, Compression Compression = Compression.Uncompressed)
 			{
 				using (StreamReader streamreader = new StreamReader (FileStream)) {
-					return Load (streamreader.ReadToEnd (), LoadComments);
+					return Load (streamreader.ReadToEnd (), LoadComments, Compression);
 				}
 			}
 
-			public static XMLElemental Load (string XMLData, bool LoadComments = true)
+			public static XMLElemental Load (string XMLData, bool LoadComments = true, Compression Compression = Compression.Uncompressed)
 			{
+				switch (Compression) {
+				case Compression.Zip:
+					XMLData = StringManager.UnZipString (XMLData);
+					break;
+				}
 
 				XMLElemental LoadedElemetal = null;
 

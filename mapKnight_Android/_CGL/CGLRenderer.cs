@@ -59,7 +59,7 @@ namespace mapKnight_Android
 				GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
 				GlobalContent.OnInitCompleted += (Android.Content.Context GameContext) => {
-					mapElemental = XMLElemental.Load (GameContext.Assets.Open ("maps/testMap.xml"));
+					mapElemental = XMLElemental.Load (GameContext.Assets.Open ("maps/testMap.xml"), false, Compression.Uncompressed);
 					gameInterface = new CGLInterface ();
 					versionText = new CGLText ("Version : " + GlobalContent.Version.ToString (), 60, Font.Tahoma, new Point (0, 120), new Color ("#00CCCC", 1.0f));
 					fpsText = new CGLText ("fps", 20, Font.Tahoma, new Point (0, 20), Color.Black);
