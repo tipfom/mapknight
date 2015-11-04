@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Android.Opengl;
 using GL = Android.Opengl.GLES20;
@@ -34,10 +35,23 @@ namespace mapKnight_Android
 
 				GL.GlLinkProgram (program);
 
-				Log.All (typeof(CGLTools), "Loaded new shader (id = " + program.ToString () + ")", MessageType.Info);
+				Log.All (typeof(CGLTools), "Loaded new program (id = " + program.ToString () + ")", MessageType.Info);
 				Log.All (typeof(CGLTools), "Log = " + GL.GlGetProgramInfoLog (program), MessageType.Info);
 
 				return program;
+			}
+
+			private static Dictionary<int[], int> loadedPrograms = new Dictionary<int[], int> (new IntArrayComparer ());
+
+			public static int GetProgram (params int[] shader)
+			{
+				Array.Sort (shader);
+				if (loadedPrograms.ContainsKey (shader)) {
+					return loadedPrograms [shader];
+				} else {
+					loadedPrograms.Add (shader, LoadProgram (shader));
+					return loadedPrograms [shader];
+				}
 			}
 
 			public static BufferData GenerateFramebuffer (int width, int height)

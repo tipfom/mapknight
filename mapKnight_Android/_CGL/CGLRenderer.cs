@@ -56,16 +56,15 @@ namespace mapKnight_Android
 
 			public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 			{
+				GlobalContent.Init (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
+
 				GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
-				GlobalContent.OnInitCompleted += (Android.Content.Context GameContext) => {
-					mapElemental = XMLElemental.Load (GameContext.Assets.Open ("maps/testMap.xml"), false, Compression.Uncompressed);
-					gameInterface = new CGLInterface ();
-					versionText = new CGLText ("Version : " + GlobalContent.Version.ToString (), 60, Font.Tahoma, new Point (0, 120), new Color ("#00CCCC", 1.0f));
-					fpsText = new CGLText ("fps", 20, Font.Tahoma, new Point (0, 20), Color.Black);
-					CGLText.CGLTextContainer.RequestForeground (versionText);
-				};
-				GlobalContent.Init (Utils.XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
+				mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"), false, Compression.Uncompressed);
+				gameInterface = new CGLInterface ();
+				versionText = new CGLText ("Version : " + GlobalContent.Version.ToString (), 60, Font.Tahoma, new Point (0, 120), new Color ("#00CCCC", 1.0f));
+				fpsText = new CGLText ("fps", 20, Font.Tahoma, new Point (0, 20), Color.Black);
+				CGLText.CGLTextContainer.RequestForeground (versionText);
 			}
 
 			#endregion

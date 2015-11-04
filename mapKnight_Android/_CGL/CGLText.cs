@@ -183,7 +183,7 @@ namespace mapKnight_Android
 					textbitmap = Bitmap.CreateBitmap (GlobalContent.ScreenSize.Width, GlobalContent.ScreenSize.Height, Bitmap.Config.Argb8888);
 					textcanvas = new Canvas (textbitmap);
 
-					renderprogram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
+					renderprogram = CGLTools.GetProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
 					initTexture ();
 					updateTexture ();
 				}

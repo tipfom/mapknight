@@ -90,6 +90,7 @@
     <Compile Include="_ValuesAndTypes\Touch.cs" />
     <Compile Include="_ValuesAndTypes\Reference.cs" />
     <Compile Include="_Tools\ButtonManager.cs" />
+    <Compile Include="_ValuesAndTypes\IntArrayComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

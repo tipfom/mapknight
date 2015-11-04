@@ -36,7 +36,7 @@ namespace mapKnight_Android
 			case MotionEventActions.Down:
 			case MotionEventActions.PointerDown:
 				if (e.PointerCount <= MaximumTouchCount) {
-					Touches [pointerId] = new Touch (pointerId, (int)e.GetX (pointerId), (int)e.GetY (pointerId));
+					Touches [pointerId] = new Touch (pointerId, (int)e.GetX (pointerIndex), (int)e.GetY (pointerIndex));
 					ActiveTouches.Add (pointerId);
 
 					// handle events

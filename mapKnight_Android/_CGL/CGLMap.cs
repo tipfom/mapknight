@@ -85,8 +85,8 @@ namespace mapKnight_Android
 
 			private void initFBOBuffer (float screenRatio)
 			{
-				fboRenderProgram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
-				RenderProgram = CGLTools.LoadProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderN);
+				fboRenderProgram = CGLTools.GetProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
+				RenderProgram = CGLTools.GetProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderN);
 
 				VertexCoords = new float[12];
 
