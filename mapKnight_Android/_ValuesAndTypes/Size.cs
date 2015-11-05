@@ -34,6 +34,12 @@ namespace mapKnight_Android
 			Height = point.Y;
 		}
 
+		public Size (int sqrsidelength)
+		{
+			Width = sqrsidelength;
+			Height = sqrsidelength;
+		}
+
 		public override string ToString ()
 		{
 			return String.Format ("Width = {0}; Height = {1}", Width.ToString (), Height.ToString ());

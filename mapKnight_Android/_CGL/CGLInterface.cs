@@ -1,7 +1,8 @@
 ﻿using System;
 
 using GL = Android.Opengl.GLES20;
-
+using Button = mapKnight_Android.ButtonManager.Button;
+	
 using Java.Nio;
 
 namespace mapKnight_Android
@@ -17,20 +18,16 @@ namespace mapKnight_Android
 			FloatBuffer VertexBuffer;
 			ShortBuffer IndexBuffer;
 			FloatBuffer TextureBuffer;
+			ByteBuffer TextureByteBuffer;
+			float[] TextureCoords = new float[24];
 
 			int fRenderProgram;
 
 			BufferData framebuffer;
 
-			public bool LeftButtonPressed{ get; private set; }
-
-			public bool RightButtonPressed{ get; private set; }
-
-			public bool JumpButtonPressed{ get; private set; }
-
-			private Rectangle JumpButtonRectangle;
-			private Rectangle LeftButtonRectangle;
-			private Rectangle RightButtonRectangle;
+			public Button JumpButton;
+			public Button LeftButton;
+			public Button RightButton;
 
 			private bool FrameBufferUpdateRequired = false;
 
@@ -53,47 +50,15 @@ namespace mapKnight_Android
 				fIndexBuffer.Position (0);
 
 				updateVertexBuffer ();
-				updateTextureBuffer ();
+				initTextureBuffer ();
+				initButtons ();
 				updateFramebuffer ();
 				drawFramebuffer ();
-
-				Size jumpbuttonsize = new Size (GlobalContent.ScreenSize.Height * 9 / 20, GlobalContent.ScreenSize.Height * 9 / 20);
-				JumpButtonRectangle = new Rectangle (new Point (GlobalContent.ScreenSize - jumpbuttonsize), jumpbuttonsize);
-				ButtonManager.Button jumpbutton = GlobalContent.TouchManager.Create (JumpButtonRectangle);
-				jumpbutton.OnClick += () => {
-					Utils.Log.All (this, "jumpbutton clicked", MessageType.Debug);
-					JumpButtonPressed = true;
-					updateTextureBuffer ();
-					FrameBufferUpdateRequired = true;
-				};
-				jumpbutton.OnLeave += () => {
-					Utils.Log.All (this, "jumpbutton left", MessageType.Debug);
-					JumpButtonPressed = false;
-					updateTextureBuffer ();
-					FrameBufferUpdateRequired = true;
-				};
 
 				GlobalContent.OnUpdate += () => {
 					updateVertexBuffer ();
 					updateFramebuffer ();
 					drawFramebuffer ();
-
-					jumpbuttonsize = new Size (GlobalContent.ScreenSize.Height * 9 / 20, GlobalContent.ScreenSize.Height * 9 / 20);
-					JumpButtonRectangle = new Rectangle (new Point (GlobalContent.ScreenSize - jumpbuttonsize), jumpbuttonsize);
-					jumpbutton.Dispose ();
-					jumpbutton = GlobalContent.TouchManager.Create (JumpButtonRectangle);
-					jumpbutton.OnClick += () => {
-						Utils.Log.All (this, "jumpbutton clicked", MessageType.Debug);
-						JumpButtonPressed = true;
-						updateTextureBuffer ();
-						FrameBufferUpdateRequired = true;
-					};
-					jumpbutton.OnLeave += () => {
-						Utils.Log.All (this, "jumpbutton left", MessageType.Debug);
-						JumpButtonPressed = false;
-						updateTextureBuffer ();
-						FrameBufferUpdateRequired = true;
-					};
 				};
 			}
 
@@ -126,32 +91,128 @@ namespace mapKnight_Android
 				VertexBuffer.Position (0);
 			}
 
-			private void updateTextureBuffer ()
+			private void initButtons ()
 			{
-				float[] TextureCoords = new float[24];
+				Size jumpButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.45f));
+				Size moveButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.325f));
 
-				if (LeftButtonPressed) {
-					Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 0, 8);
-				} else {
-					Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 0, 8);
-				}
-				if (RightButtonPressed) {
-					Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 8, 8);
-				} else {
-					Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 8, 8);
-				}
-				if (JumpButtonPressed) {
-					Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 16, 8);
-				} else {
-					Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
-				}
+				JumpButton = GlobalContent.TouchManager.Create (new Point (GlobalContent.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
+				RightButton = GlobalContent.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
+				LeftButton = GlobalContent.TouchManager.Create (new Point (0, 0), moveButtonSize);
 
-				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (TextureCoords.Length * sizeof(float));
-				bytebuffer.Order (ByteOrder.NativeOrder ());
-				TextureBuffer = bytebuffer.AsFloatBuffer ();
+				JumpButton.OnClick += handleJumpButtonClick;
+				RightButton.OnClick += handleRightButtonClick;
+				LeftButton.OnClick += handleLeftButtonClick;
+
+				JumpButton.OnLeave += handleJumpButtonLeave;
+				RightButton.OnLeave += handleRightButtonLeave;
+				LeftButton.OnLeave += handleLeftButtonLeave;
+
+				GlobalContent.OnUpdate += () => {
+					JumpButton.Dispose ();
+					RightButton.Dispose ();
+					LeftButton.Dispose ();
+
+					jumpButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.45f));
+					moveButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.325f));
+
+					JumpButton = GlobalContent.TouchManager.Create (new Point (GlobalContent.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
+					RightButton = GlobalContent.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
+					LeftButton = GlobalContent.TouchManager.Create (new Point (0, 0), moveButtonSize);
+
+					JumpButton.OnClick += handleJumpButtonClick;
+					RightButton.OnClick += handleRightButtonClick;
+					LeftButton.OnClick += handleLeftButtonClick;
+
+					JumpButton.OnLeave += handleJumpButtonLeave;
+					RightButton.OnLeave += handleRightButtonLeave;
+					LeftButton.OnLeave += handleLeftButtonLeave;
+				};
+			}
+
+			private void handleJumpButtonClick ()
+			{
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 16, 8);
+				updateTextureBuffer ();
+			}
+
+			private void handleJumpButtonLeave ()
+			{
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
+				updateTextureBuffer ();
+			}
+
+			private void handleLeftButtonClick ()
+			{
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 0, 8);
+				updateTextureBuffer ();
+			}
+
+			private void handleLeftButtonLeave ()
+			{
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 0, 8);
+				updateTextureBuffer ();
+			}
+
+			private void handleRightButtonClick ()
+			{
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 8, 8);
+				updateTextureBuffer ();
+			}
+
+			private void handleRightButtonLeave ()
+			{
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 8, 8);
+				updateTextureBuffer ();
+			}
+
+			private void initTextureBuffer ()
+			{
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 0, 8);
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 8, 8);
+				Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
+
+				TextureByteBuffer = ByteBuffer.AllocateDirect (24 * sizeof(float));
+				TextureByteBuffer.Order (ByteOrder.NativeOrder ());
+				TextureBuffer = TextureByteBuffer.AsFloatBuffer ();
 				TextureBuffer.Put (TextureCoords);
 				TextureBuffer.Position (0);
 			}
+
+			private void updateTextureBuffer ()
+			{
+				TextureBuffer = TextureByteBuffer.AsFloatBuffer ();
+				TextureBuffer.Put (TextureCoords);
+				TextureBuffer.Position (0);
+				FrameBufferUpdateRequired = true;
+			}
+
+			//			private void updateTextureBuffer ()
+			//			{
+			//				float[] TextureCoords = new float[24];
+			//
+			//				if (LeftButton.Clicked) {
+			//					Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 0, 8);
+			//				} else {
+			//					Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 0, 8);
+			//				}
+			//				if (RightButton.Clicked) {
+			//					Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 8, 8);
+			//				} else {
+			//					Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 8, 8);
+			//				}
+			//				if (JumpButton.Clicked) {
+			//					Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 16, 8);
+			//				} else {
+			//					Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
+			//				}
+			//
+			//				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (TextureCoords.Length * sizeof(float));
+			//				bytebuffer.Order (ByteOrder.NativeOrder ());
+			//				TextureBuffer = bytebuffer.AsFloatBuffer ();
+			//				TextureBuffer.Put (TextureCoords);
+			//				TextureBuffer.Position (0);
+			//			}
 
 			private void updateFramebuffer ()
 			{

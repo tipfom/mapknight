@@ -56,7 +56,7 @@ namespace mapKnight_Android
 
 			private void HandleOnTouchBegan (TouchManager manager, Touch touch)
 			{
-				if (Hitbox.Collides (touch.Position)) {
+				if (Hitbox.Collides (new Point (touch.Position.X, GlobalContent.ScreenSize.Height - touch.Position.Y))) {
 					connectedTouches.Add (touch.TouchID);
 					if (!Clicked) {
 						Clicked = true;
@@ -90,7 +90,7 @@ namespace mapKnight_Android
 
 			private void HandleOnTouchMoved (TouchManager manager, Touch touch)
 			{
-				if (Hitbox.Collides (touch.Position)) {
+				if (Hitbox.Collides (new Point (touch.Position.X, GlobalContent.ScreenSize.Height - touch.Position.Y))) {
 					if (!connectedTouches.Contains (touch.TouchID)) {
 						connectedTouches.Add (touch.TouchID);
 					}
