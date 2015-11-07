@@ -1,0 +1,14 @@
+mapKnight.userprefs
+Components/*
+.vs/*
+packages/*
+mapKnight_Android/Assets/Thumbs.db
+mapKnight_Android/Resources/drawable/Thumbs.db
+mapKnight_Android/bin/*
+mapKnight_Android/obj/*
+mapKnight_Editor/mapKnight_Editor.csproj.user
+mapKnight_Editor/Resources/Thumbs.db
+mapKnight_Editor/.vs/*
+mapKnight_Editor/bin/*
+mapKnight_Editor/obj/*
+mapKnight_Editor/content/Thumbs.db
