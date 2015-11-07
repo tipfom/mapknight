@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using mapKnight_Android.Utils;
-
-namespace mapKnight_Android{
+namespace mapKnight_Android
+{
 	public static partial class GlobalContent
 	{
 		public class TextureCoordinateManager<T>
@@ -12,7 +11,7 @@ namespace mapKnight_Android{
 
 			public TextureCoordinateManager ()
 			{
-				Container = new Dictionary<T, float[]>();
+				Container = new Dictionary<T, float[]> ();
 			}
 
 			public float[] this [T ID] {
@@ -28,18 +27,18 @@ namespace mapKnight_Android{
 				}
 			}
 
-			public float[] Get(T ID)
+			public float[] Get (T ID)
 			{
 				return this [ID];	
 			}
 
-			public void Add(T ID, float[] value)
+			public void Add (T ID, float[] value)
 			{
 				if (!Container.ContainsKey (ID))
 					Container.Add (ID, value);
 			}
 
-			public void Set(T ID,float[] value)
+			public void Set (T ID, float[] value)
 			{
 				if (Container.ContainsKey (ID))
 					Container [ID] = value;

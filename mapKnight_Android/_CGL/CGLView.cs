@@ -10,22 +10,20 @@ using Android.Views;
 using Android.Content;
 using Android.Util;
 
-namespace mapKnight_Android
+namespace mapKnight_Android.CGL
 {
-	namespace CGL
+	public class CGLView : Android.Opengl.GLSurfaceView
 	{
-		public class CGLView : Android.Opengl.GLSurfaceView
+		Android.Opengl.GLSurfaceView.IRenderer Renderer;
+
+		public CGLView (Context context) : base (context)
 		{
-			Android.Opengl.GLSurfaceView.IRenderer Renderer;
+			this.SetEGLContextClientVersion (2);
 
-			public CGLView (Context context) : base (context)
-			{
-				this.SetEGLContextClientVersion (2);
-
-				Renderer = new CGLRenderer (context);
-				this.SetRenderer (Renderer);
-				this.RenderMode = Android.Opengl.Rendermode.Continuously;
-			}
+			Renderer = new CGLRenderer (context);
+			this.SetRenderer (Renderer);
+			this.RenderMode = Android.Opengl.Rendermode.Continuously;
 		}
 	}
+
 }

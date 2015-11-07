@@ -4,13 +4,15 @@ using System.ComponentModel;
 
 using Android.Graphics;
 
+using mapKnight_Android.CGL;
+
 namespace mapKnight_Android
 {
 	public static partial class GlobalContent
 	{
 		public static int MainTexture { get; private set; }
 
-		public static Sprite<int> InterfaceSprite{ get; private set; }
+		public static CGLSprite<int> InterfaceSprite{ get; private set; }
 
 		// texture variables
 		public static int TileSize{ get; private set; }

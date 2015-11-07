@@ -8,7 +8,7 @@ using Android.Views;
 using Android.Opengl;
 using GL = Android.Opengl.GLES20;
 
-using mapKnight_Android.Utils;
+using mapKnight_Android.CGL;
 
 namespace mapKnight_Android
 {
@@ -30,7 +30,7 @@ namespace mapKnight_Android
 			TileSize = Convert.ToInt32 (configfile ["images"].Find ("name", "tiles").Attributes ["tilesize"]);
 
 			LoadImage (GameContext.Assets.Open (configfile ["images"].Find ("name", "tiles").Attributes ["src"]));
-			InterfaceSprite = new Sprite<int> (GameContext.Assets.Open (configfile ["images"].Find ("name", "interface").Attributes ["src"]), configfile ["images"].Find ("name", "interface").GetAll ());
+			InterfaceSprite = new CGLSprite<int> (GameContext.Assets.Open (configfile ["images"].Find ("name", "interface").Attributes ["src"]), configfile ["images"].Find ("name", "interface").GetAll ());
 
 			LoadFonts (configfile, GameContext);
 

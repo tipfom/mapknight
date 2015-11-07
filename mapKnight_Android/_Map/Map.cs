@@ -30,7 +30,7 @@ namespace mapKnight_Android
 			}
 		}
 
-		public Map(Utils.XMLElemental Map)
+		public Map (XMLElemental Map)
 		{
 			if (IsMapXML (Map)) {
 				Author = Map.Attributes ["Author"];
@@ -49,7 +49,7 @@ namespace mapKnight_Android
 
 				foreach (string Value in Map["Def"].Value.Split(new char[]{';'},StringSplitOptions.RemoveEmptyEntries)) {
 					string[] Data = Value.Split (new char[]{ '=' }, StringSplitOptions.RemoveEmptyEntries) [1].Split (new char[]{ ',' }, StringSplitOptions.None);
-					Tile lTile = (Tile)Enum.Parse (typeof(Tile), Data[0]);
+					Tile lTile = (Tile)Enum.Parse (typeof(Tile), Data [0]);
 					Overlay lOverlay;
 					if (Data [1] != "")
 						lOverlay = (Overlay)Enum.Parse (typeof(Overlay), Data [1]);
@@ -71,8 +71,8 @@ namespace mapKnight_Android
 					int Amount;
 					if (int.TryParse (AmountData [0], out Amount)) {
 						for (int i = 0; i < Amount; i++) {
-							MapData [cX, cY, 0] = DataValueIndex [AmountData[1]] [0];
-							MapData [cX, cY, 1] = DataValueIndex [AmountData[1]] [1];
+							MapData [cX, cY, 0] = DataValueIndex [AmountData [1]] [0];
+							MapData [cX, cY, 1] = DataValueIndex [AmountData [1]] [1];
 
 							cX++;
 							if (cX == Width) {
@@ -91,22 +91,22 @@ namespace mapKnight_Android
 			}
 		}
 
-		public Tile GetTile(uint x, uint y)
+		public Tile GetTile (uint x, uint y)
 		{
 			return (Tile)MapData [x, y, 0];
 		}
 
-		public Overlay GetOverlay(uint x, uint y)
+		public Overlay GetOverlay (uint x, uint y)
 		{
 			return (Width > x && Height > y) ? (Overlay)MapData [x, y, 1] : Overlay.None;
 		}
 
-		private static bool IsMapXML(Utils.XMLElemental MapXML)
+		private static bool IsMapXML (XMLElemental MapXML)
 		{
 			if (MapXML ["Data"] != null &&
 			    MapXML ["Data"].Attributes.ContainsKey ("Height") &&
 			    MapXML ["Data"].Attributes.ContainsKey ("Width") &&
-				MapXML ["Def"] != null &&
+			    MapXML ["Def"] != null &&
 			    MapXML ["Background"] != null &&
 			    MapXML.Attributes.ContainsKey ("Author") &&
 			    MapXML.Attributes.ContainsKey ("Name") &&

@@ -5,8 +5,15 @@ using System.Text;
 
 namespace mapKnight_Android
 {
-	public static class StringManager
+	public static class AO
 	{
+		public static T[] Cut<T> (T[] array, int index, int length)
+		{
+			T[] result = new T[length];
+			Array.Copy (array, index, result, 0, length);
+			return result;
+		}
+
 		public static string ZipString (string text)
 		{
 			byte[] buffer = Encoding.UTF8.GetBytes (text);
@@ -45,4 +52,3 @@ namespace mapKnight_Android
 		}
 	}
 }
-

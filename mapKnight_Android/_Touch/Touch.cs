@@ -36,7 +36,7 @@ namespace mapKnight_Android
 				Position = new Point (x, y);
 				Delta = -new Size (LastPosition - Position);
 				#if LOGTOUCH
-				Utils.Log.All (this, "touch (id=" + TouchID.ToString () + ") moved to " + Position.ToString () + " from " + LastPosition.ToString () + " delta " + Delta.ToString (), MessageType.Debug);
+				Log.All (this, "touch (id=" + TouchID.ToString () + ") moved to " + Position.ToString () + " from " + LastPosition.ToString () + " delta " + Delta.ToString (), MessageType.Debug);
 				#endif
 
 				if (OnMove != null)
@@ -47,7 +47,7 @@ namespace mapKnight_Android
 		public void Dispose ()
 		{
 			#if LOGTOUCH
-			Utils.Log.All (this, "touch (id=" + TouchID.ToString () + ") disposed", MessageType.Debug);
+			Log.All (this, "touch (id=" + TouchID.ToString () + ") disposed", MessageType.Debug);
 			#endif
 			if (OnDispose != null) {
 				OnDispose (this);

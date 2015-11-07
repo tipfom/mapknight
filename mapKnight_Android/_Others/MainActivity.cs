@@ -9,7 +9,6 @@ using Android.OS;
 using Android.Content.PM;
 
 using mapKnight_Android.CGL;
-using mapKnight_Android.Utils;
 
 namespace mapKnight_Android
 {
