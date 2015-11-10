@@ -42,11 +42,13 @@ namespace mapKnight_Android
 
 		protected override void OnPause ()
 		{
+			view.OnPause ();
 			base.OnPause ();
 		}
 
 		protected override void OnResume ()
 		{
+			view.OnResume ();
 			base.OnResume ();
 			HideNavBar ();
 		}

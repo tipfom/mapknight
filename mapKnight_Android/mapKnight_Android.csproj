@@ -95,6 +95,16 @@
     <Compile Include="_Utils\ArrayOperations.cs" />
     <Compile Include="_Touch\Touch.cs" />
     <Compile Include="_Touch\Button.cs" />
+    <Compile Include="_Character\Boner.cs" />
+    <Compile Include="_Character\Set.cs" />
+    <Compile Include="_Character\Animation.cs" />
+    <Compile Include="_Character\ArmorPiece.cs" />
+    <Compile Include="_Enum\Attribute.cs" />
+    <Compile Include="_Character\ArmorSlot.cs" />
+    <Compile Include="_Character\CharacterInfo.cs" />
+    <Compile Include="_Character\DefinitionPoint.cs" />
+    <Compile Include="_Character\AnimationStep.cs" />
+    <Compile Include="_Others\Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -118,6 +128,7 @@
     <Folder Include="_Others\" />
     <Folder Include="_Values\" />
     <Folder Include="_Utils\" />
+    <Folder Include="_Character\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
