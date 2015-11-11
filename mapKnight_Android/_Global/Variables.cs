@@ -55,5 +55,10 @@ namespace mapKnight_Android
 
 		// current touch manager
 		public static ButtonManager TouchManager{ get; private set; }
+
+		//character
+		public static Character Character{ get; private set; }
+
+		public static List<CharacterInfo> LoadedCharacterInfos{ get; private set; }
 	}
 }

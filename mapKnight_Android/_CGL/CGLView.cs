@@ -1,11 +1,5 @@
 ﻿using System;
 
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.ES20;
-using OpenTK.Platform;
-using OpenTK.Platform.Android;
-
 using Android.Views;
 using Android.Content;
 using Android.Util;

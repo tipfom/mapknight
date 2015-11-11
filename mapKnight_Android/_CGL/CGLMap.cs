@@ -20,10 +20,12 @@ namespace mapKnight_Android.CGL
 			RemoveBottom = 1
 		}
 
-		FloatBuffer VertexBuffer;
-		IntBuffer IndexBuffer;
-		FloatBuffer TextureBuffer;
-		private float[] lastTTextureCoors;
+		FloatBuffer iVertexBuffer;
+		IntBuffer iIndexBuffer;
+		FloatBuffer iTileTextureBuffer;
+		private float[] iLastTileTextureCoors;
+		FloatBuffer iOverlayTextureBuffer;
+		private float[] iLastOverlayTextureCoords;
 
 		FloatBuffer fboVertexBuffer;
 		ShortBuffer fboIndexBuffer;
@@ -162,15 +164,15 @@ namespace mapKnight_Android.CGL
 
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (VertexCoords.Length * sizeof(float));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
-			VertexBuffer = bytebuffer.AsFloatBuffer ();
-			VertexBuffer.Put (VertexCoords);
-			VertexBuffer.Position (0);
+			iVertexBuffer = bytebuffer.AsFloatBuffer ();
+			iVertexBuffer.Put (VertexCoords);
+			iVertexBuffer.Position (0);
 
 			bytebuffer = ByteBuffer.AllocateDirect (VertexIndices.Length * sizeof(int));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
-			IndexBuffer = bytebuffer.AsIntBuffer ();
-			IndexBuffer.Put (VertexIndices);
-			IndexBuffer.Position (0);
+			iIndexBuffer = bytebuffer.AsIntBuffer ();
+			iIndexBuffer.Put (VertexIndices);
+			iIndexBuffer.Position (0);
 		}
 
 		private void initTextureCoords ()
@@ -202,13 +204,13 @@ namespace mapKnight_Android.CGL
 			switch (updateType) {
 			case UpdateType.RemoveBottom:	// Just add a new line at the top
 				float[] topline = AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
-				float[] bottomrest = AO.Cut (lastTTextureCoors, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
+				float[] bottomrest = AO.Cut (iLastTileTextureCoors, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
 				Array.Copy (topline, texturecoords, topline.Length);
 				Array.Copy (bottomrest, 0, texturecoords, topline.Length, bottomrest.Length);
 				break;
 			case UpdateType.RemoveTop:	// Just add a new line at the bottom
 				float[] bottomline = AO.Cut (LineTileTextureCoords [currentTileY + mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
-				float[] toprest = AO.Cut (lastTTextureCoors, mapDrawWidth * 8, mapDrawWidth * (mapDrawHeight - 1) * 8);
+				float[] toprest = AO.Cut (iLastTileTextureCoors, mapDrawWidth * 8, mapDrawWidth * (mapDrawHeight - 1) * 8);
 				Array.Copy (toprest, texturecoords, toprest.Length);
 				Array.Copy (bottomline, 0, texturecoords, toprest.Length, bottomline.Length);
 				break;
@@ -219,15 +221,21 @@ namespace mapKnight_Android.CGL
 				break;
 			}
 
-			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (texturecoords.Length * sizeof(float));
-			bytebuffer.Order (ByteOrder.NativeOrder ());
-			TileTexBuffer = bytebuffer.AsFloatBuffer ();
-			TileTexBuffer.Put (texturecoords);
-			TileTexBuffer.Position (0);
+			if (iTileTextureBuffer == null || iTileTextureBuffer.Limit () <= texturecoords.Length) {
+				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (texturecoords.Length * sizeof(float));
+				bytebuffer.Order (ByteOrder.NativeOrder ());
+				TileTexBuffer = bytebuffer.AsFloatBuffer ();
+				TileTexBuffer.Put (texturecoords);
+				TileTexBuffer.Position (0);
+			
+				iTileTextureBuffer = TileTexBuffer;
+			} else {
+				iTileTextureBuffer.Flip ();
+//				iTileTextureBuffer.Position (0);
+				iTileTextureBuffer.Put (texturecoords, 0, texturecoords.Length);
+			}
 
-			lastTTextureCoors = texturecoords;
-
-			TextureBuffer = TileTexBuffer;
+			iLastTileTextureCoors = texturecoords;
 
 			renderFrameBuffer ();
 			return true;
@@ -247,7 +255,7 @@ namespace mapKnight_Android.CGL
 
 			int PositionHandle = GL.GlGetAttribLocation (RenderProgram, "vPosition");
 			GL.GlEnableVertexAttribArray (PositionHandle);
-			GL.GlVertexAttribPointer (PositionHandle, CoordsPerVertex, GL.GlFloat, false, VertexStride, VertexBuffer);
+			GL.GlVertexAttribPointer (PositionHandle, CoordsPerVertex, GL.GlFloat, false, VertexStride, iVertexBuffer);
 
 			GL.GlEnable (GL.GlBlend);
 			GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);
@@ -256,10 +264,10 @@ namespace mapKnight_Android.CGL
 			GL.GlUniform1i (mTextureUniformHandle, 0);
 
 			int mTextureCoordinateHandle = GL.GlGetAttribLocation (RenderProgram, "a_TexCoordinate");
-			GL.GlVertexAttribPointer (mTextureCoordinateHandle, 2, GL.GlFloat, false, 0, TextureBuffer);
+			GL.GlVertexAttribPointer (mTextureCoordinateHandle, 2, GL.GlFloat, false, 0, iTileTextureBuffer);
 			GL.GlEnableVertexAttribArray (mTextureCoordinateHandle);
 
-			GL.GlDrawElements (GL.GlTriangles, VertexIndices.Length, GL.GlUnsignedInt, IndexBuffer);
+			GL.GlDrawElements (GL.GlTriangles, VertexIndices.Length, GL.GlUnsignedInt, iIndexBuffer);
 			GL.GlDisableVertexAttribArray (PositionHandle);
 			GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
 
@@ -290,7 +298,10 @@ namespace mapKnight_Android.CGL
 				updateTextureBuffer (UpdateType.RemoveTop);
 				return;
 			} else {
-				
+				currentTileX = x;
+				currentTileY = y;
+				updateTextureBuffer (UpdateType.Complete);
+				return;
 			}
 		}
 

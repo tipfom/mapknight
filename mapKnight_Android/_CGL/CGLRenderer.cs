@@ -20,6 +20,8 @@ namespace mapKnight_Android.CGL
 		CGLText versionText;
 		CGLText fpsText;
 
+		int Ticks = 0;
+
 		public CGLRenderer (Android.Content.Context Context)
 		{
 			context = Context;
@@ -36,6 +38,7 @@ namespace mapKnight_Android.CGL
 			CGLText.CGLTextContainer.Draw (GlobalContent.MVPMatrix);
 			CalculateFrameRate ();
 		}
+
 
 		public void OnSurfaceChanged (IGL10 gl, int width, int height)
 		{

@@ -20,12 +20,12 @@
 	<!-- all animations and other character specific data (sets for example) -->
 	<character name="robot" id="0">
 		<def>
-			<point id="0" texture="0" name="head"/>
-			<point id="1" texture="1" name="body"/>
-			<point id="2" texture="2" name="hand_left"/>
-			<point id="3" texture="2" name="hand_right"/>
-			<point id="4" texture="3" name="foot_left"/>
-			<point id="5" texture="3" name="foot_right"/>
+			<point texture="0" name="head"/>
+			<point texture="1" name="body"/>
+			<point texture="2" name="hand_left"/>
+			<point texture="2" name="hand_right"/>
+			<point texture="3" name="foot_left"/>
+			<point texture="3" name="foot_right"/>
 		</def>
 
 		<set name="futuristic">
@@ -47,10 +47,10 @@
 
 		<anim name="walk" abortable="true">
 			<step time="200">
-				<move point="head" x="20" y="0"/>
+				<move point="head" rotation="0" x="20" y="0"/>
 			</step>
 			<step time="200">
-				<move point="head" x="-20" y="0"/>
+				<move point="head" rotation="0" x="-20" y="0"/>
 			</step>
 		</anim>
 

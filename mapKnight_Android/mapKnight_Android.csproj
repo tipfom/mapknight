@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
-    <Reference Include="OpenTK-1.0" />
     <Reference Include="SQLite">
       <HintPath>..\Components\sqlite-net-1.0.8.3\lib\android\SQLite.dll</HintPath>
     </Reference>
@@ -105,6 +104,9 @@
     <Compile Include="_Character\DefinitionPoint.cs" />
     <Compile Include="_Character\AnimationStep.cs" />
     <Compile Include="_Others\Extensions.cs" />
+    <Compile Include="_Values\Vector2D.cs" />
+    <Compile Include="_Character\Character.cs" />
+    <Compile Include="_Values\fVector2D.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
