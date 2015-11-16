@@ -165,6 +165,7 @@
             this.MinimumSize = new System.Drawing.Size(279, 193);
             this.Name = "DialogForm";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Map Creation Window";
             ((System.ComponentModel.ISupportInitialize)(this.nud_Width)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_Height)).EndInit();

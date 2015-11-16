@@ -7,12 +7,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mapKnight_Android", "mapKni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mapKnight_Editor", "mapKnight_Editor\mapKnight_Editor.csproj", "{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mapKnight_Test", "mapKnight_Test\mapKnight_Test.csproj", "{B4B6B767-E0FC-4DBB-84C0-6C2698E92D6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4B6B767-E0FC-4DBB-84C0-6C2698E92D6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B6B767-E0FC-4DBB-84C0-6C2698E92D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B6B767-E0FC-4DBB-84C0-6C2698E92D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B6B767-E0FC-4DBB-84C0-6C2698E92D6B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
