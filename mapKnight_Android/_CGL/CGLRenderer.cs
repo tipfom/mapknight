@@ -20,8 +20,6 @@ namespace mapKnight_Android.CGL
 		CGLText versionText;
 		CGLText fpsText;
 
-		int Ticks = 0;
-
 		public CGLRenderer (Android.Content.Context Context)
 		{
 			context = Context;
