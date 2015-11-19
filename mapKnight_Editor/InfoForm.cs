@@ -10,19 +10,13 @@ using System.Windows.Forms;
 
 namespace mapKnight_Editor
 {
-    public partial class DialogForm : Form
+    public partial class InfoWindow : Form
     {
-        public bool Finished = false;
-
-        public DialogForm()
+        public InfoWindow(XML.Version version)
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Finished = true;
-            this.Close();
+            this.versionlabel.Text += version.ToString();
+            this.compiledonlabel.Text += version.BuildDate.ToString("dd/MM/yyyy HH:mm:ss") + " UTC+00";
         }
     }
 }
