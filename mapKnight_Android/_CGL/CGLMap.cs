@@ -21,7 +21,7 @@ namespace mapKnight_Android.CGL
 		FloatBuffer iVertexBuffer;
 		IntBuffer iIndexBuffer;
 		FloatBuffer iTextureBuffer;
-		private float[] iLastTextureCoors;
+		// private float[] iLastTextureCoors;
 
 		FloatBuffer fboVertexBuffer;
 		ShortBuffer fboIndexBuffer;
@@ -133,7 +133,7 @@ namespace mapKnight_Android.CGL
 			VertexCoords = new float[iTileCount * 8 * 2];
 			VertexIndices = new int[iTileCount * 6 * 2];
 
-			for (int i = 0; i < 1; i++) { // tile and overlay vertex
+			for (int i = 0; i < 2; i++) { // tile and overlay vertex
 				for (int y = 0; y < mapDrawHeight; y++) {
 					for (int x = 0; x < mapDrawWidth; x++) {
 
@@ -172,6 +172,12 @@ namespace mapKnight_Android.CGL
 
 		private void initTextureCoords ()
 		{
+			//init Texture Buffer
+			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (mapDrawWidth * mapDrawHeight * 8 * 2 * sizeof(float));
+			bytebuffer.Order (ByteOrder.NativeOrder ());
+			iTextureBuffer = bytebuffer.AsFloatBuffer ();
+			iTextureBuffer.Position (0);
+
 			LineTileTextureCoords = new Dictionary<int, float[]> ();
 			LineOvrlTextureCoords = new Dictionary<int, float[]> ();
 
@@ -193,48 +199,37 @@ namespace mapKnight_Android.CGL
 
 		private bool updateTextureBuffer (UpdateType updateType)
 		{
-			float[] texturecoords = new float[mapDrawWidth * mapDrawHeight * 8];
-
-			if (iTextureBuffer == null || iTextureBuffer.Limit () <= texturecoords.Length) {
-				
-			}
-
-
 			switch (updateType) {
 			case UpdateType.RemoveBottom:	// Just add a new line at the top
-				float[] ttopline = AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
-				float[] tbottomrest = AO.Cut (iLastTextureCoors, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
+				float[] copiedpart = new float[mapDrawWidth * (mapDrawHeight - 1) * 8];
+				iTextureBuffer.Position (0);
+				iTextureBuffer.Get (copiedpart, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
 
-				Array.Copy (topline, texturecoords, topline.Length);
-				Array.Copy (bottomrest, 0, texturecoords, topline.Length, bottomrest.Length);
+				iTextureBuffer.Position (0);
+				iTextureBuffer.Put (AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
+				iTextureBuffer.Put (copiedpart);
 				break;
 			case UpdateType.RemoveTop:	// Just add a new line at the bottom
-				float[] bottomline = AO.Cut (LineTileTextureCoords [currentTileY + mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
-				float[] toprest = AO.Cut (iLastTextureCoors, mapDrawWidth * 8, mapDrawWidth * (mapDrawHeight - 1) * 8);
-				Array.Copy (toprest, texturecoords, toprest.Length);
-				Array.Copy (bottomline, 0, texturecoords, toprest.Length, bottomline.Length);
+				copiedpart = new float[mapDrawWidth * (mapDrawHeight - 1) * 8];
+				iTextureBuffer.Position (mapDrawWidth * 8);
+				iTextureBuffer.Get (copiedpart, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
+
+				iTextureBuffer.Position (0);
+				iTextureBuffer.Put (copiedpart);
+				iTextureBuffer.Put (AO.Cut (LineTileTextureCoords [currentTileY + mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
 				break;
 			case UpdateType.Complete:
+				iTextureBuffer.Position (0);
+				for (int y = 0; y < mapDrawHeight; y++) { // tiles
+					iTextureBuffer.Put (AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2 + y], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
+				}
+
 				for (int y = 0; y < mapDrawHeight; y++) {
-					Array.Copy (AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2 + y], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8), 0, texturecoords, y * mapDrawWidth * 8, mapDrawWidth * 8);
+					iTextureBuffer.Put (AO.Cut (LineOvrlTextureCoords [currentTileY - mapDrawHeight / 2 + y], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
 				}
 				break;
 			}
-
-			if (iTextureBuffer == null || iTextureBuffer.Limit () <= texturecoords.Length) {
-				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (texturecoords.Length * sizeof(float));
-				bytebuffer.Order (ByteOrder.NativeOrder ());
-				TileTexBuffer = bytebuffer.AsFloatBuffer ();
-				TileTexBuffer.Put (texturecoords);
-				TileTexBuffer.Position (0);
-			
-				iTextureBuffer = TileTexBuffer;
-			} else {
-				iTextureBuffer.Put (texturecoords, 0, texturecoords.Length);
-				iTextureBuffer.Position (0);
-			}
-
-			iLastTextureCoors = texturecoords;
+			iTextureBuffer.Position (0);
 
 			renderFrameBuffer ();
 			return true;
@@ -266,7 +261,7 @@ namespace mapKnight_Android.CGL
 			GL.GlVertexAttribPointer (mTextureCoordinateHandle, 2, GL.GlFloat, false, 0, iTextureBuffer);
 			GL.GlEnableVertexAttribArray (mTextureCoordinateHandle);
 
-			GL.GlDrawElements (GL.GlTriangles, iIndexBuffer.Limit () / 2, GL.GlUnsignedInt, iIndexBuffer);
+			GL.GlDrawElements (GL.GlTriangles, VertexIndices.Length, GL.GlUnsignedInt, iIndexBuffer);
 			GL.GlDisableVertexAttribArray (PositionHandle);
 			GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
 

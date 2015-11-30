@@ -5,7 +5,7 @@ namespace mapKnight_Android
 {
 	public static partial class Content
 	{
-		private static TextureCoordinateManager<short> LoadTileManager (List<XMLElemental> Tiles)
+		private static TextureCoordinateManager<short> LoadManager (List<XMLElemental> Tiles)
 		{
 			TextureCoordinateManager<short> LoadedInstance = new TextureCoordinateManager<short> ();
 
@@ -15,32 +15,10 @@ namespace mapKnight_Android
 				float y = 1f - (float)(Content.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
 
 				float[] parsedCoordinates = new float[] { 
-					x, y + TextureVertexHeight,
-					x, y,
 					x + TextureVertexWidth, y,
-					x + TextureVertexWidth, y + TextureVertexHeight
-				};
-
-				LoadedInstance [id] = parsedCoordinates;
-			}
-
-			return LoadedInstance;
-		}
-
-		private static TextureCoordinateManager<short> LoadOverlayManager (List<XMLElemental> Overlays)
-		{
-			TextureCoordinateManager<short> LoadedInstance = new TextureCoordinateManager<short> ();
-
-			foreach (XMLElemental entry in Overlays) {
-				short id = (short)Convert.ToInt32 (entry.Attributes ["id"]);
-				float x = (float)Convert.ToInt32 (entry.Attributes ["x"]) / ImageWidth;
-				float y = (float)(Content.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
-
-				float[] parsedCoordinates = new float[] { 
+					x + TextureVertexWidth, y + TextureVertexHeight,
 					x, y + TextureVertexHeight,
-					x, y,
-					x + TextureVertexWidth, y,
-					x + TextureVertexWidth, y + TextureVertexHeight
+					x, y
 				};
 
 				LoadedInstance [id] = parsedCoordinates;

@@ -37,8 +37,8 @@ namespace mapKnight_Android
 			TextureVertexWidth = TileSize / (float)ImageWidth;
 			TextureVertexHeight = TileSize / (float)ImageHeight;
 
-			TileTexCoordManager = LoadTileManager (configfile ["tiles"].GetAll ());
-			OverlayTexCoordManager = LoadOverlayManager (configfile ["overlay"].GetAll ());
+			TileTexCoordManager = LoadManager (configfile ["tiles"].GetAll ());
+			OverlayTexCoordManager = LoadManager (configfile ["overlay"].GetAll ());
 
 			ScreenSize = new Size (GameContext.Resources.DisplayMetrics.WidthPixels, GameContext.Resources.DisplayMetrics.HeightPixels);
 			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;

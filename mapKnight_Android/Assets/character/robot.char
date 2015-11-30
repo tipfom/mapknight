@@ -1,0 +1,37 @@
+﻿
+<character name="robot" id="0">
+    <def>
+        <point texture="0" name="head" />
+        <point texture="1" name="body" />
+        <point texture="2" name="hand_left" />
+        <point texture="2" name="hand_right" />
+        <point texture="3" name="foot_left" />
+        <point texture="3" name="foot_right" />
+    </def>
+    <set name="futuristic">
+        <part slot="helmet" name="futuristic helmet">
+            <texture x="000" y="000" width="000" height="000" />
+            <attribute name="strength">20</attribute>
+        </part>
+        <part slot="chestplate" name="futuristic chestplate">
+            <texture x="000" y="000" width="000" height="000" />
+            <attribute name="armor">90</attribute>
+        </part>
+        <part slot="glove" name="futuristic glove">
+            <texture x="000" y="000" width="000" height="000" />
+        </part>
+        <part slot="shoe" name="futuristic shoe">
+            <texture x="000" y="000" width="000" height="000" />
+        </part>
+    </set>
+    <anim name="walk" abortable="true">
+        <step time="200">
+            <move point="head" rotation="0" x="20" y="0" />
+        </step>
+        <step time="200">
+            <move point="head" rotation="0" x="-20" y="0" />
+        </step>
+    </anim>
+    <anim name="jump" abortable="false">
+    </anim>
+</character>
