@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace mapKnight_Android
+﻿namespace mapKnight_Android
 {
 	public enum Attribute
 	{

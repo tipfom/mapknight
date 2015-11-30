@@ -4,9 +4,12 @@ using GL = Android.Opengl.GLES20;
 
 namespace mapKnight_Android
 {
-	public static partial class GlobalContent{
+	public static partial class Content
+	{
 		public static int VertexShaderM { get; private set; }
+
 		public static int VertexShaderN { get; private set; }
+
 		public static int FragmentShaderN { get; private set; }
 
 		private static string VertexShaderMCode =
@@ -36,13 +39,13 @@ namespace mapKnight_Android
 			"precision mediump float;" +
 			"uniform sampler2D u_Texture;" +
 			"varying vec2 v_TexCoordinate; " +
-			""+
+			"" +
 			"void main()" +
 			"{" +
 			"  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
 			"}";
 
-		private static void LoadShader()
+		private static void LoadShader ()
 		{
 			VertexShaderN = CGL.CGLTools.LoadShader (GL.GlVertexShader, VertexShaderNCode);
 			VertexShaderM = CGL.CGLTools.LoadShader (GL.GlVertexShader, VertexShaderMCode);

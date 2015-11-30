@@ -12,7 +12,7 @@ using mapKnight_Android.CGL;
 
 namespace mapKnight_Android
 {
-	public static partial class GlobalContent
+	public static partial class Content
 	{
 		public delegate void HandleInitCompleted (Context GameContext);
 
@@ -25,7 +25,7 @@ namespace mapKnight_Android
 		public static void Init (XMLElemental configfile, Context GameContext)
 		{
 			Version = new Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
-			Log.All (typeof(GlobalContent), "Current Version : " + Version.ToString (), MessageType.Info);
+			Log.All (typeof(Content), "Current Version : " + Version.ToString (), MessageType.Info);
 
 			TileSize = Convert.ToInt32 (configfile ["images"].Find ("name", "tiles").Attributes ["tilesize"]);
 
@@ -104,11 +104,11 @@ namespace mapKnight_Android
 			// Error Check
 			int error = GL.GlGetError ();
 			if (error != 0) {
-				Log.All (typeof(GlobalContent), "error while loading mainimage (errorcode => " + error.ToString () + ")", MessageType.Debug);
+				Log.All (typeof(Content), "error while loading mainimage (errorcode => " + error.ToString () + ")", MessageType.Debug);
 				throw new FileLoadException ("error while loading mainimage (errorcode => " + error.ToString () + ")");
 			}
 			if (loadedtexture [0] == 0) {
-				Log.All (typeof(GlobalContent), "loaded mainimage is zero", MessageType.Debug);
+				Log.All (typeof(Content), "loaded mainimage is zero", MessageType.Debug);
 				throw new FileLoadException ("loaded mainimage is zero");
 			}
 

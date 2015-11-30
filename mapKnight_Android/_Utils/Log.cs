@@ -74,7 +74,7 @@ namespace mapKnight_Android
 		private static Dictionary<Type, string> tagRegister = new Dictionary<Type, string> () {
 			{ typeof(SQLManager), "SQLDataManager" },
 			{ typeof(XMLElemental), "XMLElemental" },
-			{ typeof(GlobalContent),"GlobalContent" },
+			{ typeof(Content),"GlobalContent" },
 			{ typeof(CGL.CGLMap),"CGLMap" },
 			{ typeof(CGL.CGLTools),"CGLTools" },
 			{ typeof(CGL.CGLRenderer),"CGLRenderer" },

@@ -57,11 +57,11 @@ namespace mapKnight_Android.CGL
 			// Error Check
 			int error = GL.GlGetError ();
 			if (error != 0) {
-				Log.All (typeof(GlobalContent), "error while loading mainimage (errorcode => " + error.ToString () + ")", MessageType.Debug);
+				Log.All (typeof(Content), "error while loading mainimage (errorcode => " + error.ToString () + ")", MessageType.Debug);
 				throw new FileLoadException ("error while loading mainimage (errorcode => " + error.ToString () + ")");
 			}
 			if (loadedtexture [0] == 0) {
-				Log.All (typeof(GlobalContent), "loaded mainimage is zero", MessageType.Debug);
+				Log.All (typeof(Content), "loaded mainimage is zero", MessageType.Debug);
 				throw new FileLoadException ("loaded mainimage is zero");
 			}
 

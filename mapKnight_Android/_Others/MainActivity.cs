@@ -35,8 +35,8 @@ namespace mapKnight_Android
 			SetContentView (view);
 
 			HideNavBar ();
-			GlobalContent.OnInitCompleted += (Context GameContext) => {
-				view.SetOnTouchListener (GlobalContent.TouchManager);
+			Content.OnInitCompleted += (Context GameContext) => {
+				view.SetOnTouchListener (Content.TouchManager);
 			};
 		}
 

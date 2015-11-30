@@ -35,6 +35,10 @@
   <PropertyGroup>
     <StartupObject>mapKnight_Editor.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attribute.cs" />
+    <Compile Include="AttributeListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CustomToolStripRenderer.cs" />
     <Compile Include="DialogForm.cs">
       <SubType>Form</SubType>
@@ -76,6 +84,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SlotEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SlotEditForm.Designer.cs">
+      <DependentUpon>SlotEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolStripTextTrackbar.cs" />
     <Compile Include="ToolStripTraceBarItem.cs">
       <SubType>Component</SubType>
@@ -96,6 +110,12 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="SlotEditForm.resx">
+      <DependentUpon>SlotEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -171,6 +191,7 @@
     <Content Include="content\Schleimkante.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="icon.ico" />
     <None Include="Resources\file_add.png" />
     <None Include="Resources\Magic-wand-icon.png" />
     <None Include="Resources\Paint-bucket-tool-icon.png" />
@@ -184,10 +205,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="content\config.xml">
+    <None Include="content\.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
-    </Content>
+    </None>
     <Content Include="content\Erde.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

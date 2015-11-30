@@ -89,7 +89,7 @@ namespace mapKnight_Android.CGL
 
 		public static BufferData GenerateFramebuffer ()
 		{
-			return GenerateFramebuffer (GlobalContent.ScreenSize);
+			return GenerateFramebuffer (Content.ScreenSize);
 		}
 
 		public static BufferData GenerateFramebuffer (Size size)

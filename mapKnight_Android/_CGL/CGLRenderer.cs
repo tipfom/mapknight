@@ -31,9 +31,9 @@ namespace mapKnight_Android.CGL
 		{
 			GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
 
-			testsquaremap.Draw (GlobalContent.MVPMatrix);
-			gameInterface.Draw (GlobalContent.MVPMatrix);
-			CGLText.CGLTextContainer.Draw (GlobalContent.MVPMatrix);
+			testsquaremap.Draw (Content.MVPMatrix);
+			gameInterface.Draw (Content.MVPMatrix);
+			CGLText.CGLTextContainer.Draw (Content.MVPMatrix);
 			CalculateFrameRate ();
 		}
 
@@ -48,18 +48,18 @@ namespace mapKnight_Android.CGL
 			GL.GlViewport (0, 0, width, height);
 			GL.GlClearColor (0f, 0f, 0f, 1.0f);
 
-			GlobalContent.Update (new Size (width, height));
+			Content.Update (new Size (width, height));
 		}
 
 		public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 		{
-			GlobalContent.Init (XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
+			Content.Init (XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
 
 			GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
 			mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"), false, Compression.Uncompressed);
 			gameInterface = new CGLInterface ();
-			versionText = new CGLText ("Version : " + GlobalContent.Version.ToString (), 40, Font.Tahoma, new Point (0, 120), new Color ("#00CCCC", 1.0f));
+			versionText = new CGLText ("Version : " + Content.Version.ToString (), 40, Font.Tahoma, new Point (0, 120), new Color ("#00CCCC", 1.0f));
 			fpsText = new CGLText ("fps", 20, Font.Tahoma, new Point (0, 20), Color.Black);
 			CGLText.CGLTextContainer.RequestForeground (versionText);
 		}

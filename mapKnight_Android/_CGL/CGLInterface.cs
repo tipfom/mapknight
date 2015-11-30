@@ -21,7 +21,7 @@ namespace mapKnight_Android.CGL
 
 		public CGLInterface ()
 		{
-			RenderProgram = CGLTools.GetProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
+			RenderProgram = CGLTools.GetProgram (Content.FragmentShaderN, Content.VertexShaderM);
 
 			short[] Indicies = new short[]{ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11 };
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (Indicies.Length * sizeof(short));
@@ -34,7 +34,7 @@ namespace mapKnight_Android.CGL
 			initTextureBuffer ();
 			initButtons ();
 
-			GlobalContent.OnUpdate += () => {
+			Content.OnUpdate += () => {
 				updateVertexBuffer ();
 			};
 		}
@@ -46,20 +46,20 @@ namespace mapKnight_Android.CGL
 
 			float[] verticies = new float[] {
 				//button 1
-				GlobalContent.ScreenRatio - movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
-				GlobalContent.ScreenRatio, -1f + movebuttonsize.Height, 0f,
-				GlobalContent.ScreenRatio, -1f, 0f,
-				GlobalContent.ScreenRatio - movebuttonsize.Width, -1f, 0f,
+				Content.ScreenRatio - movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
+				Content.ScreenRatio, -1f + movebuttonsize.Height, 0f,
+				Content.ScreenRatio, -1f, 0f,
+				Content.ScreenRatio - movebuttonsize.Width, -1f, 0f,
 				//button 2
-				GlobalContent.ScreenRatio - movebuttonsize.Width, -1f, 0f,
-				GlobalContent.ScreenRatio - movebuttonsize.Width - movebuttonsize.Width, -1f, 0f,
-				GlobalContent.ScreenRatio - movebuttonsize.Width - movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
-				GlobalContent.ScreenRatio - movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
+				Content.ScreenRatio - movebuttonsize.Width, -1f, 0f,
+				Content.ScreenRatio - movebuttonsize.Width - movebuttonsize.Width, -1f, 0f,
+				Content.ScreenRatio - movebuttonsize.Width - movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
+				Content.ScreenRatio - movebuttonsize.Width, -1f + movebuttonsize.Height, 0f,
 				//jump button
-				-GlobalContent.ScreenRatio, -1f, 0f,
-				-GlobalContent.ScreenRatio, -1f + jumpbuttonsize.Height, 0f,
-				-GlobalContent.ScreenRatio + jumpbuttonsize.Width, -1f + jumpbuttonsize.Height, 0f,
-				-GlobalContent.ScreenRatio + jumpbuttonsize.Width, -1f, 0f
+				-Content.ScreenRatio, -1f, 0f,
+				-Content.ScreenRatio, -1f + jumpbuttonsize.Height, 0f,
+				-Content.ScreenRatio + jumpbuttonsize.Width, -1f + jumpbuttonsize.Height, 0f,
+				-Content.ScreenRatio + jumpbuttonsize.Width, -1f, 0f
 			};
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (verticies.Length * sizeof(float));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
@@ -70,12 +70,12 @@ namespace mapKnight_Android.CGL
 
 		private void initButtons ()
 		{
-			Size jumpButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.45f));
-			Size moveButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.325f));
+			Size jumpButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.45f));
+			Size moveButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.325f));
 
-			JumpButton = GlobalContent.TouchManager.Create (new Point (GlobalContent.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
-			RightButton = GlobalContent.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
-			LeftButton = GlobalContent.TouchManager.Create (new Point (0, 0), moveButtonSize);
+			JumpButton = Content.TouchManager.Create (new Point (Content.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
+			RightButton = Content.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
+			LeftButton = Content.TouchManager.Create (new Point (0, 0), moveButtonSize);
 
 			JumpButton.OnClick += handleJumpButtonClick;
 			RightButton.OnClick += handleRightButtonClick;
@@ -85,17 +85,17 @@ namespace mapKnight_Android.CGL
 			RightButton.OnLeave += handleRightButtonLeave;
 			LeftButton.OnLeave += handleLeftButtonLeave;
 
-			GlobalContent.OnUpdate += () => {
+			Content.OnUpdate += () => {
 				JumpButton.Dispose ();
 				RightButton.Dispose ();
 				LeftButton.Dispose ();
 
-				jumpButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.45f));
-				moveButtonSize = new Size ((int)(GlobalContent.ScreenSize.Height * 0.325f));
+				jumpButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.45f));
+				moveButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.325f));
 
-				JumpButton = GlobalContent.TouchManager.Create (new Point (GlobalContent.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
-				RightButton = GlobalContent.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
-				LeftButton = GlobalContent.TouchManager.Create (new Point (0, 0), moveButtonSize);
+				JumpButton = Content.TouchManager.Create (new Point (Content.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
+				RightButton = Content.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
+				LeftButton = Content.TouchManager.Create (new Point (0, 0), moveButtonSize);
 
 				JumpButton.OnClick += handleJumpButtonClick;
 				RightButton.OnClick += handleRightButtonClick;
@@ -109,37 +109,37 @@ namespace mapKnight_Android.CGL
 
 		private void handleJumpButtonClick ()
 		{
-			Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 16, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 16, 8);
 			updateTextureBuffer ();
 		}
 
 		private void handleJumpButtonLeave ()
 		{
-			Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
 			updateTextureBuffer ();
 		}
 
 		private void handleLeftButtonClick ()
 		{
-			Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 0, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 0, 8);
 			updateTextureBuffer ();
 		}
 
 		private void handleLeftButtonLeave ()
 		{
-			Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 0, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 0, 8);
 			updateTextureBuffer ();
 		}
 
 		private void handleRightButtonClick ()
 		{
-			Array.Copy (GlobalContent.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 8, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 8, 8);
 			updateTextureBuffer ();
 		}
 
 		private void handleRightButtonLeave ()
 		{
-			Array.Copy (GlobalContent.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 8, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 8, 8);
 			updateTextureBuffer ();
 		}
 
@@ -169,7 +169,7 @@ namespace mapKnight_Android.CGL
 			GL.GlVertexAttribPointer (PositionHandle, 3, GL.GlFloat, false, 3 * sizeof(float), VertexBuffer);
 
 			int MVPMatrixHandle = GL.GlGetUniformLocation (RenderProgram, "uMVPMatrix");
-			GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, GlobalContent.MVPMatrix, 0);
+			GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, Content.MVPMatrix, 0);
 
 			GL.GlEnable (GL.GlBlend);
 			GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);
@@ -180,7 +180,7 @@ namespace mapKnight_Android.CGL
 			GL.GlEnableVertexAttribArray (mTextureCoordinateHandle);
 
 			GL.GlActiveTexture (GL.GlTexture0);
-			GL.GlBindTexture (GL.GlTexture2d, GlobalContent.InterfaceSprite.Texture);
+			GL.GlBindTexture (GL.GlTexture2d, Content.InterfaceSprite.Texture);
 			GL.GlUniform1i (mTextureUniformHandle, 0);
 
 			GL.GlDrawElements (GL.GlTriangles, 18, GL.GlUnsignedShort, IndexBuffer);

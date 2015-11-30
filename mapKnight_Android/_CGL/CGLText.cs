@@ -81,7 +81,7 @@ namespace mapKnight_Android.CGL
 
 		public int Height{ get; private set; }
 
-		public CGLText (string text, int fontsize, Font font) : this (text, fontsize, font, new Point (GlobalContent.ScreenSize), Color.Black, FontStyle.Normal)
+		public CGLText (string text, int fontsize, Font font) : this (text, fontsize, font, new Point (Content.ScreenSize), Color.Black, FontStyle.Normal)
 		{
 		}
 
@@ -113,7 +113,7 @@ namespace mapKnight_Android.CGL
 
 		private void Refresh ()
 		{
-			if (GlobalContent.AntialiasText)
+			if (Content.AntialiasText)
 				TextPaint = new Paint (PaintFlags.AntiAlias);
 			else
 				TextPaint = new Paint ();
@@ -123,19 +123,19 @@ namespace mapKnight_Android.CGL
 			TextPaint.SetStyle (Paint.Style.Fill);
 			switch (FontStyle) {
 			case FontStyle.Normal:
-				TextPaint.SetTypeface (GlobalContent.Fonts [this.Font]);
+				TextPaint.SetTypeface (Content.Fonts [this.Font]);
 				break;
 			case FontStyle.Bold:
-				TextPaint.SetTypeface (Typeface.Create (GlobalContent.Fonts [this.Font], TypefaceStyle.Bold));
+				TextPaint.SetTypeface (Typeface.Create (Content.Fonts [this.Font], TypefaceStyle.Bold));
 				break;
 			case FontStyle.Italic:
-				TextPaint.SetTypeface (Typeface.Create (GlobalContent.Fonts [this.Font], TypefaceStyle.Italic));
+				TextPaint.SetTypeface (Typeface.Create (Content.Fonts [this.Font], TypefaceStyle.Italic));
 				break;
 			case FontStyle.BoldItalic:
-				TextPaint.SetTypeface (Typeface.Create (GlobalContent.Fonts [this.Font], TypefaceStyle.BoldItalic));
+				TextPaint.SetTypeface (Typeface.Create (Content.Fonts [this.Font], TypefaceStyle.BoldItalic));
 				break;
 			default:
-				TextPaint.SetTypeface (GlobalContent.Fonts [this.Font]);
+				TextPaint.SetTypeface (Content.Fonts [this.Font]);
 				break;
 			}
 			TextPaint.TextLocale = new Java.Util.Locale ("de", "de");
@@ -178,10 +178,10 @@ namespace mapKnight_Android.CGL
 			{
 				subscribedItems = new List<CGLText> ();
 				
-				textbitmap = Bitmap.CreateBitmap (GlobalContent.ScreenSize.Width, GlobalContent.ScreenSize.Height, Bitmap.Config.Argb8888);
+				textbitmap = Bitmap.CreateBitmap (Content.ScreenSize.Width, Content.ScreenSize.Height, Bitmap.Config.Argb8888);
 				textcanvas = new Canvas (textbitmap);
 
-				renderprogram = CGLTools.GetProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
+				renderprogram = CGLTools.GetProgram (Content.FragmentShaderN, Content.VertexShaderM);
 				initTexture ();
 				updateTexture ();
 			}
@@ -260,7 +260,7 @@ namespace mapKnight_Android.CGL
 				texture = temp [0];
 
 				GL.GlBindTexture (GL.GlTexture2d, texture);
-				GL.GlTexImage2D (GL.GlTexture2d, 0, GL.GlRgba, GlobalContent.ScreenSize.Width, GlobalContent.ScreenSize.Height, 0, GL.GlRgba, GL.GlUnsignedByte, null);
+				GL.GlTexImage2D (GL.GlTexture2d, 0, GL.GlRgba, Content.ScreenSize.Width, Content.ScreenSize.Height, 0, GL.GlRgba, GL.GlUnsignedByte, null);
 
 				GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMinFilter, GL.GlNearest);
 				GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMagFilter, GL.GlNearest);
@@ -271,16 +271,16 @@ namespace mapKnight_Android.CGL
 
 				// init render buffer
 				float[] Verticies = new float[] {
-					-GlobalContent.ScreenRatio,
+					-Content.ScreenRatio,
 					1f,
 					0f,
-					-GlobalContent.ScreenRatio,
+					-Content.ScreenRatio,
 					-1f,
 					0f,
-					GlobalContent.ScreenRatio,
+					Content.ScreenRatio,
 					-1f,
 					0f,
-					GlobalContent.ScreenRatio,
+					Content.ScreenRatio,
 					1f,
 					0f
 				};
@@ -305,18 +305,18 @@ namespace mapKnight_Android.CGL
 				fTextureBuffer.Put (TextureCoords);
 				fTextureBuffer.Position (0);
 
-				GlobalContent.OnUpdate += () => {	
+				Content.OnUpdate += () => {	
 					float[] UpdatedVerticies = new float[] {
-						-GlobalContent.ScreenRatio,
+						-Content.ScreenRatio,
 						1f,
 						0f,
-						-GlobalContent.ScreenRatio,
+						-Content.ScreenRatio,
 						-1f,
 						0f,
-						GlobalContent.ScreenRatio,
+						Content.ScreenRatio,
 						-1f,
 						0f,
-						GlobalContent.ScreenRatio,
+						Content.ScreenRatio,
 						1f,
 						0f
 					};
@@ -327,7 +327,7 @@ namespace mapKnight_Android.CGL
 					fVertexBuffer.Put (UpdatedVerticies);
 					fVertexBuffer.Position (0);
 
-					textbitmap = Bitmap.CreateBitmap (GlobalContent.ScreenSize.Width, GlobalContent.ScreenSize.Height, Bitmap.Config.Argb8888);
+					textbitmap = Bitmap.CreateBitmap (Content.ScreenSize.Width, Content.ScreenSize.Height, Bitmap.Config.Argb8888);
 					textcanvas = new Canvas (textbitmap);
 
 					updateTexture ();

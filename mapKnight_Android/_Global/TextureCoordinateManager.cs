@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace mapKnight_Android
 {
-	public static partial class GlobalContent
+	public static partial class Content
 	{
 		public class TextureCoordinateManager<T>
 		{

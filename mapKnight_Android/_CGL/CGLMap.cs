@@ -7,8 +7,6 @@ using GL = Android.Opengl.GLES20;
 
 using Java.Nio;
 
-using GC = mapKnight_Android.GlobalContent;
-
 namespace mapKnight_Android.CGL
 {
 	public class CGLMap : Map
@@ -22,10 +20,8 @@ namespace mapKnight_Android.CGL
 
 		FloatBuffer iVertexBuffer;
 		IntBuffer iIndexBuffer;
-		FloatBuffer iTileTextureBuffer;
-		private float[] iLastTileTextureCoors;
-		FloatBuffer iOverlayTextureBuffer;
-		private float[] iLastOverlayTextureCoords;
+		FloatBuffer iTextureBuffer;
+		private float[] iLastTextureCoors;
 
 		FloatBuffer fboVertexBuffer;
 		ShortBuffer fboIndexBuffer;
@@ -34,10 +30,9 @@ namespace mapKnight_Android.CGL
 		private int fboRenderProgram;
 		private int RenderProgram;
 
-		private int fboVertexCount;
-		private int VertexStride;
-
 		private static int CoordsPerVertex = 2;
+		private static int VertexStride = CoordsPerVertex * sizeof(float);
+
 		private float[] VertexCoords;
 
 		private int[] VertexIndices = {
@@ -59,13 +54,14 @@ namespace mapKnight_Android.CGL
 		private readonly float vertexSize;
 
 		private int currentTileX;
+		// left top
 		private int currentTileY;
 
 		private Size screenBounds;
 
 		public CGLMap (int MapDrawWidth, float screenRatio, XMLElemental MapXML, Size ScreenSize) : base (MapXML)
 		{
-			int tileSizeInPXL = GlobalContent.TileSize;
+			int tileSizeInPXL = Content.TileSize;
 			screenBounds = ScreenSize;
 
 			mapDrawWidth = (int)MapDrawWidth;
@@ -85,8 +81,8 @@ namespace mapKnight_Android.CGL
 
 		private void initFBOBuffer (float screenRatio)
 		{
-			fboRenderProgram = CGLTools.GetProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderM);
-			RenderProgram = CGLTools.GetProgram (GlobalContent.FragmentShaderN, GlobalContent.VertexShaderN);
+			fboRenderProgram = CGLTools.GetProgram (Content.FragmentShaderN, Content.VertexShaderM);
+			RenderProgram = CGLTools.GetProgram (Content.FragmentShaderN, Content.VertexShaderN);
 
 			VertexCoords = new float[12];
 
@@ -129,38 +125,37 @@ namespace mapKnight_Android.CGL
 			fboTextureBuffer = bytebuffer.AsFloatBuffer ();
 			fboTextureBuffer.Put (TextureCoords);
 			fboTextureBuffer.Position (0);
-
-			fboVertexCount = VertexCoords.Length / CoordsPerVertex;
 		}
 
 		private void initVertexCoords ()
 		{	
-			VertexCoords = new float[(mapDrawWidth) * (mapDrawHeight) * 8];
-			VertexIndices = new int[mapDrawWidth * mapDrawHeight * 6];
+			int iTileCount = mapDrawWidth * mapDrawHeight;
+			VertexCoords = new float[iTileCount * 8 * 2];
+			VertexIndices = new int[iTileCount * 6 * 2];
 
-			for (int y = 0; y < mapDrawHeight; y++) {
-				for (int x = 0; x < mapDrawWidth; x++) {
+			for (int i = 0; i < 1; i++) { // tile and overlay vertex
+				for (int y = 0; y < mapDrawHeight; y++) {
+					for (int x = 0; x < mapDrawWidth; x++) {
 
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 0] = -1f + (x * vertexSize);
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 1] = 1f - (y * vertexSize);
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 2] = -1f + (x * vertexSize);
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 3] = 1f - ((y + 1) * vertexSize);
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 4] = -1f + (x * vertexSize) + vertexSize;
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 5] = 1f - ((y + 1) * vertexSize);
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 6] = -1f + (x * vertexSize) + vertexSize;
-					VertexCoords [x * 8 + y * mapDrawWidth * 8 + 7] = 1f - (y * vertexSize);
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 0] = -1f + (x * vertexSize);
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 1] = 1f - (y * vertexSize);
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 2] = -1f + (x * vertexSize);
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 3] = 1f - ((y + 1) * vertexSize);
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 4] = -1f + (x * vertexSize) + vertexSize;
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 5] = 1f - ((y + 1) * vertexSize);
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 6] = -1f + (x * vertexSize) + vertexSize;
+						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 7] = 1f - (y * vertexSize);
 
-					VertexIndices [x * 6 + y * mapDrawWidth * 6 + 0] = x * 4 + y * mapDrawWidth * 4 + 0;
-					VertexIndices [x * 6 + y * mapDrawWidth * 6 + 1] = x * 4 + y * mapDrawWidth * 4 + 1;
-					VertexIndices [x * 6 + y * mapDrawWidth * 6 + 2] = x * 4 + y * mapDrawWidth * 4 + 2;
-					VertexIndices [x * 6 + y * mapDrawWidth * 6 + 3] = x * 4 + y * mapDrawWidth * 4 + 0;
-					VertexIndices [x * 6 + y * mapDrawWidth * 6 + 4] = x * 4 + y * mapDrawWidth * 4 + 2;
-					VertexIndices [x * 6 + y * mapDrawWidth * 6 + 5] = x * 4 + y * mapDrawWidth * 4 + 3;
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 0] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 0;
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 1] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 1;
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 2] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 2;
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 3] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 0;
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 4] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 2;
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 5] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 3;
 
+					}
 				}
 			}
-
-			VertexStride = CoordsPerVertex * sizeof(float);
 
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (VertexCoords.Length * sizeof(float));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
@@ -186,8 +181,8 @@ namespace mapKnight_Android.CGL
 
 				for (uint x = 0; x < Width; x++) {
 					for (uint c = 0; c < 8; c++) {
-						BufferedTileTexCoords [x * 8 + c] = GC.TileTexCoordManager [(short)GetTile (x, y)] [c];
-						BufferedOvrlTexCoords [x * 8 + c] = GC.OverlayTexCoordManager [(short)GetOverlay (x, y)] [c];
+						BufferedTileTexCoords [x * 8 + c] = Content.TileTexCoordManager [(short)GetTile (x, y)] [c];
+						BufferedOvrlTexCoords [x * 8 + c] = Content.OverlayTexCoordManager [(short)GetOverlay (x, y)] [c];
 					}
 				}
 
@@ -198,19 +193,24 @@ namespace mapKnight_Android.CGL
 
 		private bool updateTextureBuffer (UpdateType updateType)
 		{
-			FloatBuffer TileTexBuffer;
 			float[] texturecoords = new float[mapDrawWidth * mapDrawHeight * 8];
+
+			if (iTextureBuffer == null || iTextureBuffer.Limit () <= texturecoords.Length) {
+				
+			}
+
 
 			switch (updateType) {
 			case UpdateType.RemoveBottom:	// Just add a new line at the top
-				float[] topline = AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
-				float[] bottomrest = AO.Cut (iLastTileTextureCoors, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
+				float[] ttopline = AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
+				float[] tbottomrest = AO.Cut (iLastTextureCoors, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
+
 				Array.Copy (topline, texturecoords, topline.Length);
 				Array.Copy (bottomrest, 0, texturecoords, topline.Length, bottomrest.Length);
 				break;
 			case UpdateType.RemoveTop:	// Just add a new line at the bottom
 				float[] bottomline = AO.Cut (LineTileTextureCoords [currentTileY + mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8);
-				float[] toprest = AO.Cut (iLastTileTextureCoors, mapDrawWidth * 8, mapDrawWidth * (mapDrawHeight - 1) * 8);
+				float[] toprest = AO.Cut (iLastTextureCoors, mapDrawWidth * 8, mapDrawWidth * (mapDrawHeight - 1) * 8);
 				Array.Copy (toprest, texturecoords, toprest.Length);
 				Array.Copy (bottomline, 0, texturecoords, toprest.Length, bottomline.Length);
 				break;
@@ -221,21 +221,20 @@ namespace mapKnight_Android.CGL
 				break;
 			}
 
-			if (iTileTextureBuffer == null || iTileTextureBuffer.Limit () <= texturecoords.Length) {
+			if (iTextureBuffer == null || iTextureBuffer.Limit () <= texturecoords.Length) {
 				ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (texturecoords.Length * sizeof(float));
 				bytebuffer.Order (ByteOrder.NativeOrder ());
 				TileTexBuffer = bytebuffer.AsFloatBuffer ();
 				TileTexBuffer.Put (texturecoords);
 				TileTexBuffer.Position (0);
 			
-				iTileTextureBuffer = TileTexBuffer;
+				iTextureBuffer = TileTexBuffer;
 			} else {
-				iTileTextureBuffer.Flip ();
-//				iTileTextureBuffer.Position (0);
-				iTileTextureBuffer.Put (texturecoords, 0, texturecoords.Length);
+				iTextureBuffer.Put (texturecoords, 0, texturecoords.Length);
+				iTextureBuffer.Position (0);
 			}
 
-			iLastTileTextureCoors = texturecoords;
+			iLastTextureCoors = texturecoords;
 
 			renderFrameBuffer ();
 			return true;
@@ -244,14 +243,14 @@ namespace mapKnight_Android.CGL
 		private void renderFrameBuffer ()
 		{
 			GL.GlBindFramebuffer (GL.GlFramebuffer, framebuffer.FrameBuffer);
-			GL.GlViewport (0, 0, GlobalContent.TileSize * mapDrawWidth, GlobalContent.TileSize * mapDrawHeight);
+			GL.GlViewport (0, 0, Content.TileSize * mapDrawWidth, Content.TileSize * mapDrawHeight);
 			GL.GlClearColor (1.0f, 1.0f, 1.0f, 1.0f);
 			GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
 
 			GL.GlUseProgram (RenderProgram);
 
 			GL.GlActiveTexture (GL.GlTexture0);
-			GL.GlBindTexture (GL.GlTexture2d, GlobalContent.MainTexture);
+			GL.GlBindTexture (GL.GlTexture2d, Content.MainTexture);
 
 			int PositionHandle = GL.GlGetAttribLocation (RenderProgram, "vPosition");
 			GL.GlEnableVertexAttribArray (PositionHandle);
@@ -264,10 +263,10 @@ namespace mapKnight_Android.CGL
 			GL.GlUniform1i (mTextureUniformHandle, 0);
 
 			int mTextureCoordinateHandle = GL.GlGetAttribLocation (RenderProgram, "a_TexCoordinate");
-			GL.GlVertexAttribPointer (mTextureCoordinateHandle, 2, GL.GlFloat, false, 0, iTileTextureBuffer);
+			GL.GlVertexAttribPointer (mTextureCoordinateHandle, 2, GL.GlFloat, false, 0, iTextureBuffer);
 			GL.GlEnableVertexAttribArray (mTextureCoordinateHandle);
 
-			GL.GlDrawElements (GL.GlTriangles, VertexIndices.Length, GL.GlUnsignedInt, iIndexBuffer);
+			GL.GlDrawElements (GL.GlTriangles, iIndexBuffer.Limit () / 2, GL.GlUnsignedInt, iIndexBuffer);
 			GL.GlDisableVertexAttribArray (PositionHandle);
 			GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
 

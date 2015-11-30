@@ -8,7 +8,7 @@ using mapKnight_Android.CGL;
 
 namespace mapKnight_Android
 {
-	public static partial class GlobalContent
+	public static partial class Content
 	{
 		public static int MainTexture { get; private set; }
 

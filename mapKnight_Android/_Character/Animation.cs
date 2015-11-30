@@ -26,8 +26,8 @@ namespace mapKnight_Android
 				iAnimationSteps.Add (new AnimationStep (step));
 			}
 
-			iTranslations = new Vector2D[GlobalContent.Character.BodyParts];
-			iMovement = new fVector2D[GlobalContent.Character.BodyParts];
+			iTranslations = new Vector2D[Content.Character.BodyParts];
+			iMovement = new fVector2D[Content.Character.BodyParts];
 		}
 
 		protected Animation (bool abortable, List<AnimationStep> animationsteps)
@@ -80,7 +80,7 @@ namespace mapKnight_Android
 						return;
 					}
 
-					for (int i = 0; i < GlobalContent.Character.BodyParts; i++) {
+					for (int i = 0; i < Content.Character.BodyParts; i++) {
 						if (iAnimationSteps [iCurrentAnimation].Movements.ContainsKey (i)) {
 							//wenn sich das körperteil bewegt
 							float moveX = (float)iAnimationSteps [iCurrentAnimation].Movements [i].X / (float)iAnimationSteps [iCurrentAnimation].Time;
@@ -99,7 +99,7 @@ namespace mapKnight_Android
 
 		public Vector2D? GetTranslation (string name)
 		{
-			return GetTranslation (GlobalContent.Character.GetID (name));
+			return GetTranslation (Content.Character.GetID (name));
 		}
 
 		public Vector2D? GetTranslation (int id)

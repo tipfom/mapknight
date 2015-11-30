@@ -14,7 +14,7 @@ namespace mapKnight_Android
 			Movements = new Dictionary<int, Point> ();
 
 			foreach (XMLElemental move in config.GetAll("move")) {
-				Movements.Add (GlobalContent.Character.GetID (move.Attributes ["point"].ToUpper ()), new Point (Convert.ToInt32 (move.Attributes ["x"]), Convert.ToInt32 (move.Attributes ["y"])));
+				Movements.Add (Content.Character.GetID (move.Attributes ["point"].ToUpper ()), new Point (Convert.ToInt32 (move.Attributes ["x"]), Convert.ToInt32 (move.Attributes ["y"])));
 			}
 		}
 
@@ -26,9 +26,9 @@ namespace mapKnight_Android
 
 		public Vector2D[] GetFinalPosition ()
 		{
-			Vector2D[] result = new Vector2D[GlobalContent.Character.BodyParts];
+			Vector2D[] result = new Vector2D[Content.Character.BodyParts];
 
-			for (int i = 0; i < GlobalContent.Character.BodyParts; i++) {
+			for (int i = 0; i < Content.Character.BodyParts; i++) {
 				if (Movements.ContainsKey (i)) {
 					result [i] = new Vector2D (Movements [i].X, Movements [i].Y);
 				} else {
@@ -41,9 +41,9 @@ namespace mapKnight_Android
 
 		public Vector2D[] GetFinalPosition (Vector2D[] last)
 		{
-			Vector2D[] result = new Vector2D[GlobalContent.Character.BodyParts];
+			Vector2D[] result = new Vector2D[Content.Character.BodyParts];
 
-			for (int i = 0; i < GlobalContent.Character.BodyParts; i++) {
+			for (int i = 0; i < Content.Character.BodyParts; i++) {
 				if (Movements.ContainsKey (i)) {
 					result [i] = new Vector2D (Movements [i].X, Movements [i].Y) + last [i];
 				} else {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace mapKnight_Editor
@@ -12,11 +9,18 @@ namespace mapKnight_Editor
         /// Der Haupteinstiegspunkt für die Anwendung.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            if(args.Length > 0)
+            {
+                Application.Run(new Main(args[0]));
+            }
+            else
+            {
+                Application.Run(new Main(null));
+            }
         }
     }
 }

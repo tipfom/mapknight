@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace mapKnight_Android
 {
-	public static partial class GlobalContent
+	public static partial class Content
 	{
 		private static TextureCoordinateManager<short> LoadTileManager (List<XMLElemental> Tiles)
 		{
@@ -12,7 +12,7 @@ namespace mapKnight_Android
 			foreach (XMLElemental entry in Tiles) {
 				short id = (short)Convert.ToInt32 (entry.Attributes ["id"]);
 				float x = (float)Convert.ToInt32 (entry.Attributes ["x"]) / ImageWidth;
-				float y = 1f - (float)(GlobalContent.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
+				float y = 1f - (float)(Content.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
 
 				float[] parsedCoordinates = new float[] { 
 					x, y + TextureVertexHeight,
@@ -34,7 +34,7 @@ namespace mapKnight_Android
 			foreach (XMLElemental entry in Overlays) {
 				short id = (short)Convert.ToInt32 (entry.Attributes ["id"]);
 				float x = (float)Convert.ToInt32 (entry.Attributes ["x"]) / ImageWidth;
-				float y = (float)(GlobalContent.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
+				float y = (float)(Content.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
 
 				float[] parsedCoordinates = new float[] { 
 					x, y + TextureVertexHeight,
