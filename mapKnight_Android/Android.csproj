@@ -131,6 +131,8 @@
     <Folder Include="_Utils\" />
     <Folder Include="_Character\" />
     <Folder Include="Assets\character\" />
+    <Folder Include="Assets\entitys\" />
+    <Folder Include="Assets\animations\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
@@ -142,14 +144,14 @@
     </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\main.xml" />
     <AndroidAsset Include="Assets\main.png" />
     <AndroidAsset Include="Assets\interface.png" />
     <AndroidAsset Include="Assets\fonts\tahoma.ttf" />
     <AndroidAsset Include="Assets\maps\testMap.xml" />
     <AndroidAsset Include="Assets\fonts\ARCADE.TTF" />
     <AndroidAsset Include="Assets\fonts\ARCADECLASSIC.TTF" />
-    <AndroidAsset Include="Assets\character\robot.char" />
+    <AndroidAsset Include="Assets\.main" />
+    <AndroidAsset Include="Assets\character\robot.character" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

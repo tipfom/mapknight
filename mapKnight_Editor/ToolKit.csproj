@@ -53,21 +53,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attribute.cs" />
-    <Compile Include="AttributeListView.cs">
+    <Compile Include="_CharacterEditor\Attribute.cs" />
+    <Compile Include="_CharacterEditor\AttributeListView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CustomToolStripRenderer.cs" />
-    <Compile Include="DialogForm.cs">
+    <Compile Include="_Others\CustomToolStripRenderer.cs" />
+    <Compile Include="_MapEditor\DialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DialogForm.Designer.cs">
+    <Compile Include="_MapEditor\DialogForm.Designer.cs">
       <DependentUpon>DialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="InfoForm.cs">
+    <Compile Include="_Others\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InfoForm.Designer.cs">
+    <Compile Include="_Others\InfoForm.Designer.cs">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
@@ -76,7 +76,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Map.cs" />
+    <Compile Include="_MapEditor\Map.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -84,22 +84,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SlotEditForm.cs">
+    <Compile Include="_CharacterEditor\SlotEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SlotEditForm.Designer.cs">
+    <Compile Include="_CharacterEditor\SlotEditForm.Designer.cs">
       <DependentUpon>SlotEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToolStripTextTrackbar.cs" />
-    <Compile Include="ToolStripTraceBarItem.cs">
+    <Compile Include="_Others\ToolStripTextTrackbar.cs" />
+    <Compile Include="_Others\ToolStripTraceBarItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Version.cs" />
-    <Compile Include="XMLElemental.cs" />
-    <EmbeddedResource Include="DialogForm.resx">
+    <Compile Include="_Others\Version.cs" />
+    <Compile Include="_Others\XMLElemental.cs" />
+    <Compile Include="_Update\Updater.cs" />
+    <EmbeddedResource Include="_MapEditor\DialogForm.resx">
       <DependentUpon>DialogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoForm.resx">
+    <EmbeddedResource Include="_Others\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
@@ -110,7 +111,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SlotEditForm.resx">
+    <EmbeddedResource Include="_CharacterEditor\SlotEditForm.resx">
       <DependentUpon>SlotEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest">
@@ -125,7 +126,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="StringManager.cs" />
+    <Compile Include="_Others\StringManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -192,6 +193,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="icon.ico" />
+    <None Include="Resources\mapKnight_Installer.exe" />
     <None Include="Resources\file_add.png" />
     <None Include="Resources\Magic-wand-icon.png" />
     <None Include="Resources\Paint-bucket-tool-icon.png" />

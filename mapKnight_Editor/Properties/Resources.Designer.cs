@@ -111,6 +111,16 @@ namespace mapKnight_Editor.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+        /// </summary>
+        internal static byte[] mapKnight_Installer {
+            get {
+                object obj = ResourceManager.GetObject("mapKnight_Installer", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Paint_bucket_tool_icon {

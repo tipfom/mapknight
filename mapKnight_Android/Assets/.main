@@ -1,4 +1,6 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿
+
+<?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<images>
 		<image name="tiles" src="main.png" tilesize="20" />
@@ -15,7 +17,6 @@
 		<font name="ArcadeClassic" src="fonts/ARCADECLASSIC.TTF" />
 		<font name="ArcadeDotted" src="fonts/ARCADE.TTF" />
 	</fonts>
-	<!-- all animations and other character specific data (sets for example) -->
 	<tiles>
 		<entry id="65535" x="652" y="0" />
 		<!-- ERROR -->

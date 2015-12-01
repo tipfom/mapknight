@@ -53,7 +53,7 @@ namespace mapKnight_Android.CGL
 
 		public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 		{
-			Content.Init (XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
+			Content.Init (XMLElemental.Load (context.Assets.Open (".main"), false), context);
 
 			GL.GlClearColor (1f, 0f, 1f, 1.0f);
 

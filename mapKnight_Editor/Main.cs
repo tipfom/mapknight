@@ -516,5 +516,33 @@ namespace mapKnight_Editor
 				tscb_map_mapselect.SelectedIndex = iMaps.Count - 1;
 			}
 		}
+
+        private void tsmmi_exportraw_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog.ShowDialog();
+            string path = folderBrowserDialog.SelectedPath;
+
+            string mappath = Path.Combine(path, "maps");
+            string characterpath = Path.Combine(path, "character");
+            string animationpath = Path.Combine(path, "animations");
+            string entitypath = Path.Combine(path, "entitys");
+
+            if (!Directory.Exists(mappath)) Directory.CreateDirectory(mappath);
+            if (!Directory.Exists(characterpath)) Directory.CreateDirectory(characterpath);
+            if (!Directory.Exists(animationpath)) Directory.CreateDirectory(animationpath);
+            if (!Directory.Exists(entitypath)) Directory.CreateDirectory(entitypath);
+
+            // convert all saved maps to the mapfiles
+            foreach (Map map in iMaps)
+            {
+                XMLElemental mapelement = map.Save(iTileIDIndex, iOverlayIDIndex);
+                File.Create(Path.Combine(mappath, map.Name + ".devmap")).Close();
+                File.WriteAllText(Path.Combine(mappath, map.Name + ".devmap"), mapelement.Flush());
+                File.Create(Path.Combine(mappath, map.Name + ".map")).Close();
+                File.WriteAllText(Path.Combine(mappath, map.Name + ".map"), StringManager.ZipString(mapelement.Flush()));
+            }
+
+            MessageBox.Show("Export successful");
+        }
     }
 }

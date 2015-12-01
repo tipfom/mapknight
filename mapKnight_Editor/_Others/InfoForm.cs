@@ -18,5 +18,10 @@ namespace mapKnight_Editor
             this.versionlabel.Text += version.ToString();
             this.compiledonlabel.Text += version.BuildDate.ToString("dd/MM/yyyy HH:mm:ss") + " UTC+00";
         }
+
+        private void InfoWindow_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

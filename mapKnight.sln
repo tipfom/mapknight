@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "mapKnight_Android\Android.csproj", "{D7E142F8-7BDF-4AB3-8A0B-CB0F585CAFE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "mapKnight_Editor\Editor.csproj", "{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit", "mapKnight_Editor\ToolKit.csproj", "{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "mapKnight_Test\Test.csproj", "{B4B6B767-E0FC-4DBB-84C0-6C2698E92D6B}"
 EndProject
