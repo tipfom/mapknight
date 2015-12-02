@@ -544,5 +544,21 @@ namespace mapKnight_Editor
 
             MessageBox.Show("Export successful");
         }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            switch(MessageBox.Show("Do you want to save the current state?","Save",MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+            {
+                case DialogResult.Yes:
+                    tsmi_save_Click(this, EventArgs.Empty);
+                    break;
+                case DialogResult.No:
+
+                    break;
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    break;
+            }
+        }
     }
 }
