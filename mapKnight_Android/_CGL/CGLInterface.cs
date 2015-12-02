@@ -11,7 +11,7 @@ namespace mapKnight_Android.CGL
 		FloatBuffer VertexBuffer;
 		ShortBuffer IndexBuffer;
 		FloatBuffer TextureBuffer;
-		float[] TextureCoords = new float[24];
+		float[] TextureCoords = new float[40];
 
 		int RenderProgram;
 
@@ -23,7 +23,19 @@ namespace mapKnight_Android.CGL
 		{
 			RenderProgram = CGLTools.GetProgram (Content.FragmentShaderN, Content.VertexShaderM);
 
-			short[] Indicies = new short[]{ 0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11 };
+			short[] Indicies = new short[] {
+				0, 1, 2,
+				0, 2, 3, 
+				4, 5, 6,
+				4, 6, 7,
+				8, 9, 10,
+				8, 10, 11,
+				12, 13, 14,
+				12, 14, 15,
+				16, 17, 18,
+				16, 18, 19
+			};
+
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (Indicies.Length * sizeof(short));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
 			IndexBuffer = bytebuffer.AsShortBuffer ();
@@ -59,7 +71,17 @@ namespace mapKnight_Android.CGL
 				-Content.ScreenRatio, -1f, 0f,
 				-Content.ScreenRatio, -1f + jumpbuttonsize.Height, 0f,
 				-Content.ScreenRatio + jumpbuttonsize.Width, -1f + jumpbuttonsize.Height, 0f,
-				-Content.ScreenRatio + jumpbuttonsize.Width, -1f, 0f
+				-Content.ScreenRatio + jumpbuttonsize.Width, -1f, 0f,
+				//health bar
+				-Content.ScreenRatio, 1f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Life / Content.Character.MaxLife, 1f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Life / Content.Character.MaxLife, 0.97f, 0f,
+				-Content.ScreenRatio, 0.97f, 0f,
+				//energie bar
+				-Content.ScreenRatio, 0.97f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Mana / Content.Character.MaxMana, 0.97f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Mana / Content.Character.MaxMana, 0.94f, 0f,
+				-Content.ScreenRatio, 0.94f, 0f
 			};
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (verticies.Length * sizeof(float));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
@@ -145,10 +167,17 @@ namespace mapKnight_Android.CGL
 
 		private void initTextureBuffer ()
 		{
-			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (24 * sizeof(float));
+			// set textures of buttons first time
+			Array.Copy (Content.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 0, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 8, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [2].Verticies, 0, TextureCoords, 24, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [3].Verticies, 0, TextureCoords, 32, 8);
+
+			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (40 * sizeof(float));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
 			TextureBuffer = bytebuffer.AsFloatBuffer ();
-			TextureBuffer.Put (new float[24]);
+			TextureBuffer.Put (TextureCoords);
 			TextureBuffer.Position (0);
 		}
 
@@ -156,6 +185,11 @@ namespace mapKnight_Android.CGL
 		{
 			TextureBuffer.Put (TextureCoords);
 			TextureBuffer.Position (0);
+		}
+
+		private void updateStatBars ()
+		{
+			
 		}
 
 		public void Draw (float[] mvpMatrix)
@@ -183,7 +217,7 @@ namespace mapKnight_Android.CGL
 			GL.GlBindTexture (GL.GlTexture2d, Content.InterfaceSprite.Texture);
 			GL.GlUniform1i (mTextureUniformHandle, 0);
 
-			GL.GlDrawElements (GL.GlTriangles, 18, GL.GlUnsignedShort, IndexBuffer);
+			GL.GlDrawElements (GL.GlTriangles, IndexBuffer.Limit (), GL.GlUnsignedShort, IndexBuffer);
 			GL.GlDisableVertexAttribArray (PositionHandle);
 			GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
 		}

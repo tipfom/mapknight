@@ -20,6 +20,11 @@ namespace mapKnight_Android
 		{
 			return "";
 		}
+
+		public int Life = 120;
+		public int MaxLife = 120;
+		public int Mana = 43;
+		public int MaxMana = 100;
 	}
 }
 

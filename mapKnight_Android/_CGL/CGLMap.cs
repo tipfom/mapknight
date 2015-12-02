@@ -19,9 +19,8 @@ namespace mapKnight_Android.CGL
 		}
 
 		FloatBuffer iVertexBuffer;
-		IntBuffer iIndexBuffer;
+		ShortBuffer iIndexBuffer;
 		FloatBuffer iTextureBuffer;
-		// private float[] iLastTextureCoors;
 
 		FloatBuffer fboVertexBuffer;
 		ShortBuffer fboIndexBuffer;
@@ -35,7 +34,7 @@ namespace mapKnight_Android.CGL
 
 		private float[] VertexCoords;
 
-		private int[] VertexIndices = {
+		private short[] VertexIndices = {
 			0,
 			1,
 			2,
@@ -131,7 +130,7 @@ namespace mapKnight_Android.CGL
 		{	
 			int iTileCount = mapDrawWidth * mapDrawHeight;
 			VertexCoords = new float[iTileCount * 8 * 2];
-			VertexIndices = new int[iTileCount * 6 * 2];
+			VertexIndices = new short[iTileCount * 6 * 2];
 
 			for (int i = 0; i < 2; i++) { // tile and overlay vertex
 				for (int y = 0; y < mapDrawHeight; y++) {
@@ -146,12 +145,12 @@ namespace mapKnight_Android.CGL
 						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 6] = -1f + (x * vertexSize) + vertexSize;
 						VertexCoords [x * 8 + y * mapDrawWidth * 8 + i * iTileCount * 8 + 7] = 1f - (y * vertexSize);
 
-						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 0] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 0;
-						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 1] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 1;
-						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 2] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 2;
-						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 3] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 0;
-						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 4] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 2;
-						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 5] = x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 3;
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 0] = (short)(x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 0);
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 1] = (short)(x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 1);
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 2] = (short)(x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 2);
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 3] = (short)(x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 0);
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 4] = (short)(x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 2);
+						VertexIndices [x * 6 + y * mapDrawWidth * 6 + i * iTileCount * 6 + 5] = (short)(x * 4 + y * mapDrawWidth * 4 + i * iTileCount * 4 + 3);
 
 					}
 				}
@@ -163,9 +162,9 @@ namespace mapKnight_Android.CGL
 			iVertexBuffer.Put (VertexCoords);
 			iVertexBuffer.Position (0);
 
-			bytebuffer = ByteBuffer.AllocateDirect (VertexIndices.Length * sizeof(int));
+			bytebuffer = ByteBuffer.AllocateDirect (VertexIndices.Length * sizeof(short));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
-			iIndexBuffer = bytebuffer.AsIntBuffer ();
+			iIndexBuffer = bytebuffer.AsShortBuffer ();
 			iIndexBuffer.Put (VertexIndices);
 			iIndexBuffer.Position (0);
 		}
@@ -261,7 +260,7 @@ namespace mapKnight_Android.CGL
 			GL.GlVertexAttribPointer (mTextureCoordinateHandle, 2, GL.GlFloat, false, 0, iTextureBuffer);
 			GL.GlEnableVertexAttribArray (mTextureCoordinateHandle);
 
-			GL.GlDrawElements (GL.GlTriangles, VertexIndices.Length, GL.GlUnsignedInt, iIndexBuffer);
+			GL.GlDrawElements (GL.GlTriangles, VertexIndices.Length, GL.GlUnsignedShort, iIndexBuffer);
 			GL.GlDisableVertexAttribArray (PositionHandle);
 			GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
 

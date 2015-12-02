@@ -49,6 +49,8 @@ namespace mapKnight_Android
 
 			UpdateMatrix ();
 
+			Character = new Character ();
+
 			CGL.CGLText.CGLTextContainer.Init ();
 
 			if (OnInitCompleted != null)

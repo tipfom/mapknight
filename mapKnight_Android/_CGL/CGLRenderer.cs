@@ -17,8 +17,7 @@ namespace mapKnight_Android.CGL
 		XMLElemental mapElemental;
 		CGLInterface gameInterface;
 		Android.Content.Context context;
-		CGLText versionText;
-		CGLText fpsText;
+		CGLText infoText;
 
 		public CGLRenderer (Android.Content.Context Context)
 		{
@@ -53,33 +52,23 @@ namespace mapKnight_Android.CGL
 
 		public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 		{
-			Content.Init (XMLElemental.Load (context.Assets.Open (".main"), false), context);
+			Content.Init (XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
 
 			GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
 			mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"), false, Compression.Uncompressed);
 			gameInterface = new CGLInterface ();
-			versionText = new CGLText ("Version : " + Content.Version.ToString (), 40, Font.Tahoma, new Point (0, 120), new Color ("#00CCCC", 1.0f));
-			fpsText = new CGLText ("fps", 20, Font.Tahoma, new Point (0, 20), Color.Black);
-			CGLText.CGLTextContainer.RequestForeground (versionText);
+			infoText = new CGLText ("fps", 20, Font.Tahoma, new Point (0, 20), Color.Black);
 		}
 
 		#endregion
 
-		private static int lastTick;
-		private static int lastFrameRate;
-		private static int frameRate;
+		private int lastTick;
 
-		public int CalculateFrameRate ()
+		private void CalculateFrameRate ()
 		{
-			if (System.Environment.TickCount - lastTick >= 1000) {
-				lastFrameRate = frameRate;
-				fpsText.Text = "fps = " + lastFrameRate.ToString ();
-				frameRate = 0;
-				lastTick = System.Environment.TickCount;
-			}
-			frameRate++;
-			return lastFrameRate;
+			infoText.Text = " frametime = " + (System.Environment.TickCount - lastTick).ToString () + " ms ( " + (1000 / (System.Environment.TickCount - lastTick)).ToString () + " fps ) version = " + Content.Version.ToString (false);
+			lastTick = System.Environment.TickCount;
 		}
 
 	}
