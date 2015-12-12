@@ -8,126 +8,159 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace mapKnight_Editor.Properties {
-    using System;
+namespace mapKnight.ToolKit.Properties
+{
+	using System;
+
     
-    
-    /// <summary>
-    ///   Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
-    /// </summary>
-    // Diese Klasse wurde von der StronglyTypedResourceBuilder automatisch generiert
-    // -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
-    // Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
-    // mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+	/// <summary>
+	///   Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
+	/// </summary>
+	// Diese Klasse wurde von der StronglyTypedResourceBuilder automatisch generiert
+	// -Klasse über ein Tool wie ResGen oder Visual Studio automatisch generiert.
+	// Um einen Member hinzuzufügen oder zu entfernen, bearbeiten Sie die .ResX-Datei und führen dann ResGen
+	// mit der /str-Option erneut aus, oder Sie erstellen Ihr VS-Projekt neu.
+	[global::System.CodeDom.Compiler.GeneratedCodeAttribute ("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+	[global::System.Diagnostics.DebuggerNonUserCodeAttribute ()]
+	[global::System.Runtime.CompilerServices.CompilerGeneratedAttribute ()]
+	internal class Resources
+	{
         
-        private static global::System.Resources.ResourceManager resourceMan;
+		private static global::System.Resources.ResourceManager resourceMan;
         
-        private static global::System.Globalization.CultureInfo resourceCulture;
-        
-        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
-        }
-        
-        /// <summary>
-        ///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
-        /// </summary>
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("mapKnight_Editor.Properties.Resources", typeof(Resources).Assembly);
-                    resourceMan = temp;
-                }
-                return resourceMan;
-            }
-        }
-        
-        /// <summary>
-        ///   Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
-        ///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
-        /// </summary>
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
-            get {
-                return resourceCulture;
-            }
-            set {
-                resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Brush_tool_icon {
-            get {
-                object obj = ResourceManager.GetObject("Brush_tool_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Eraser_icon {
-            get {
-                object obj = ResourceManager.GetObject("Eraser_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Eyedropper_icon {
-            get {
-                object obj = ResourceManager.GetObject("Eyedropper_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap file_add {
-            get {
-                object obj = ResourceManager.GetObject("file_add", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Magic_wand_icon {
-            get {
-                object obj = ResourceManager.GetObject("Magic_wand_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] mapKnight_Installer {
-            get {
-                object obj = ResourceManager.GetObject("mapKnight_Installer", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Paint_bucket_tool_icon {
-            get {
-                object obj = ResourceManager.GetObject("Paint_bucket_tool_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-    }
+		private static global::System.Globalization.CultureInfo resourceCulture;
+
+		[global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute ("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+		internal Resources ()
+		{
+		}
+
+		/// <summary>
+		///   Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
+		/// </summary>
+		[global::System.ComponentModel.EditorBrowsableAttribute (global::System.ComponentModel.EditorBrowsableState.Advanced)]
+		internal static global::System.Resources.ResourceManager ResourceManager {
+			get {
+				if (object.ReferenceEquals (resourceMan, null)) {
+					global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager ("mapKnight.ToolKit.Properties.Resources", typeof(Resources).Assembly);
+					resourceMan = temp;
+				}
+				return resourceMan;
+			}
+		}
+
+		/// <summary>
+		///   Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
+		///   Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
+		/// </summary>
+		[global::System.ComponentModel.EditorBrowsableAttribute (global::System.ComponentModel.EditorBrowsableState.Advanced)]
+		internal static global::System.Globalization.CultureInfo Culture {
+			get {
+				return resourceCulture;
+			}
+			set {
+				resourceCulture = value;
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_brush {
+			get {
+				object obj = ResourceManager.GetObject ("icon_brush", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_bucket {
+			get {
+				object obj = ResourceManager.GetObject ("icon_bucket", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_eraser {
+			get {
+				object obj = ResourceManager.GetObject ("icon_eraser", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_finger {
+			get {
+				object obj = ResourceManager.GetObject ("icon_finger", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_flag {
+			get {
+				object obj = ResourceManager.GetObject ("icon_flag", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_minus {
+			get {
+				object obj = ResourceManager.GetObject ("icon_minus", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_pipette {
+			get {
+				object obj = ResourceManager.GetObject ("icon_pipette", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_plus {
+			get {
+				object obj = ResourceManager.GetObject ("icon_plus", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap icon_unselected {
+			get {
+				object obj = ResourceManager.GetObject ("icon_unselected", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+		/// <summary>
+		///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
+		/// </summary>
+		internal static byte[] mapKnight_Installer {
+			get {
+				object obj = ResourceManager.GetObject ("mapKnight_Installer", resourceCulture);
+				return ((byte[])(obj));
+			}
+		}
+	}
 }

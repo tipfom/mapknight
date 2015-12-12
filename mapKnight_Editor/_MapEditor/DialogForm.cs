@@ -8,21 +8,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace mapKnight_Editor
+namespace mapKnight.ToolKit
 {
-    public partial class DialogForm : Form
-    {
-        public bool Finished = false;
+	public partial class DialogForm : Form
+	{
+		public bool Finished = false;
 
-        public DialogForm()
-        {
-            InitializeComponent();
-        }
+		public DialogForm ()
+		{
+			InitializeComponent ();
+		}
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Finished = true;
-            this.Close();
-        }
-    }
+		private void button1_Click (object sender, EventArgs e)
+		{
+			Finished = true;
+			this.Close ();
+		}
+	}
 }

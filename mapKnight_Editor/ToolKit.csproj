@@ -7,14 +7,30 @@
     <ProjectGuid>{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>mapKnight_Editor</RootNamespace>
-    <AssemblyName>mapKnight_Editor</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>mapKnight.ToolKit</RootNamespace>
+    <AssemblyName>mapKnight.ToolKit</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,13 +50,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>mapKnight_Editor.Program</StartupObject>
+    <StartupObject>mapKnight.ToolKit.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <Optimize>false</Optimize>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,10 +83,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_Others\ArrayOperations.cs" />
     <Compile Include="_CharacterEditor\Attribute.cs" />
     <Compile Include="_CharacterEditor\AttributeListView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="_CharacterEditor\Character.cs" />
+    <Compile Include="_CharacterEditor\ItemPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_CharacterEditor\Set.cs" />
+    <Compile Include="_CharacterEditor\Slot.cs" />
     <Compile Include="_Others\CustomToolStripRenderer.cs" />
     <Compile Include="_MapEditor\DialogForm.cs">
       <SubType>Form</SubType>
@@ -84,18 +121,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="_CharacterEditor\SlotEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="_CharacterEditor\SlotEditForm.Designer.cs">
-      <DependentUpon>SlotEditForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="_Others\ToolStripTextTrackbar.cs" />
     <Compile Include="_Others\ToolStripTraceBarItem.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="_Others\Version.cs" />
-    <Compile Include="_Others\XMLElemental.cs" />
+    <Compile Include="_Update\LoadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Update\LoadForm.Designer.cs">
+      <DependentUpon>LoadForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Update\Updater.cs" />
     <EmbeddedResource Include="_MapEditor\DialogForm.resx">
       <DependentUpon>DialogForm.cs</DependentUpon>
@@ -111,8 +146,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="_CharacterEditor\SlotEditForm.resx">
-      <DependentUpon>SlotEditForm.cs</DependentUpon>
+    <EmbeddedResource Include="_Update\LoadForm.resx">
+      <DependentUpon>LoadForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
@@ -126,7 +161,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="_Others\StringManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -192,14 +226,18 @@
     <Content Include="content\Schleimkante.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="files.ico" />
     <Content Include="icon.ico" />
+    <None Include="Resources\^4D12E7BC91AB945A344A9423F0403DE9E303CE9D5BB4EB4862^pimgpsh_fullsize_distr.jpg" />
+    <None Include="Resources\Plus.png" />
+    <None Include="Resources\Pipette.png" />
+    <None Include="Resources\Pinsel.png" />
+    <None Include="Resources\Minus.png" />
+    <None Include="Resources\Finger.png" />
+    <None Include="Resources\Fahne.png" />
+    <None Include="Resources\Eraser.png" />
+    <None Include="Resources\Eimer.png" />
     <None Include="Resources\mapKnight_Installer.exe" />
-    <None Include="Resources\file_add.png" />
-    <None Include="Resources\Magic-wand-icon.png" />
-    <None Include="Resources\Paint-bucket-tool-icon.png" />
-    <None Include="Resources\Eyedropper-icon.png" />
-    <None Include="Resources\Eraser-icon.png" />
-    <None Include="Resources\Brush-tool-icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="content\emerald2.png">
@@ -218,6 +256,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -226,4 +276,14 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\mapKnight_Values\Values.csproj">
+      <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
+      <Name>Values</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mapKnight_Utils\Utils.csproj">
+      <Project>{F4435F77-DE56-45E4-B4CB-87C9F71CA088}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

@@ -118,25 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Brush_tool_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Brush-tool-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Eraser_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Eraser-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Eyedropper_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Eyedropper-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="file_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\file_add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Magic_wand_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Magic-wand-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Paint_bucket_tool_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Paint-bucket-tool-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="mapKnight_Installer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\mapKnight_Installer.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="icon_brush" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pinsel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_bucket" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Eimer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_finger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Finger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_flag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Fahne.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_minus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Minus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_pipette" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pipette.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_plus" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Plus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_eraser" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Eraser.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="icon_unselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\^4D12E7BC91AB945A344A9423F0403DE9E303CE9D5BB4EB4862^pimgpsh_fullsize_distr.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

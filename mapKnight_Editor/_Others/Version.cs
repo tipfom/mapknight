@@ -1,28 +1,26 @@
 ﻿using System;
 
-namespace XML
+namespace mapKnight.ToolKit
 {
 	public struct Version
 	{
-        public static bool operator <(Version version1, Version version2)
-        {
-            if (version1.Major < version2.Major || (version1.Major == version2.Major && version1.Minor < version2.Minor) || (version1.Major == version2.Major && version1.Minor == version2.Minor && version1.Build < version2.Build))
-            {
-                return true;
-            }
-            return false;
-        }
+		public static bool operator < (Version version1, Version version2)
+		{
+			if (version1.Major < version2.Major || (version1.Major == version2.Major && version1.Minor < version2.Minor) || (version1.Major == version2.Major && version1.Minor == version2.Minor && version1.Build < version2.Build) || (version1.Major == version2.Major && version1.Minor == version2.Minor && version1.Build == version2.Build && version1.Revision < version2.Revision)) {
+				return true;
+			}
+			return false;
+		}
 
-        public static bool operator >(Version version1, Version version2)
-        {
-            if (version1.Major > version2.Major || (version1.Major == version2.Major && version1.Minor > version2.Minor) || (version1.Major == version2.Major && version1.Minor == version2.Minor && version1.Build > version2.Build))
-            {
-                return true;
-            }
-            return false;
-        }
+		public static bool operator > (Version version1, Version version2)
+		{
+			if (version1.Major > version2.Major || (version1.Major == version2.Major && version1.Minor > version2.Minor) || (version1.Major == version2.Major && version1.Minor == version2.Minor && version1.Build > version2.Build) || (version1.Major == version2.Major && version1.Minor == version2.Minor && version1.Build == version2.Build && version1.Revision > version2.Revision)) {
+				return true;
+			}
+			return false;
+		}
 
-        public DateTime BuildDate;
+		public DateTime BuildDate;
 
 		public int Major;
 		public int Minor;

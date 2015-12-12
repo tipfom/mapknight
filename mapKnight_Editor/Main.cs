@@ -7,10 +7,11 @@ using System.Windows.Forms;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.VisualBasic;
 
-using XML;
+using mapKnight.Utils;
 
-namespace mapKnight_Editor
+namespace mapKnight.ToolKit
 {
 	public partial class Main : Form
 	{
@@ -25,7 +26,12 @@ namespace mapKnight_Editor
 		private static Color iSelectionColor = Color.DimGray;
 		private static Color iMapColor = Color.DimGray;
 
-        private static string iContentDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), @"mapKnight ToolKit\content");
+		private static string iContentDirectory = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), @"mapKnight ToolKit\content");
+
+		private static Dictionary<Character, List<Slot>> supportedSlots = new Dictionary<Character, List<Slot>> () {
+			{ Character.Robot, new List<Slot> () { Slot.Chestplate, Slot.Gloves, Slot.Helmet, Slot.Shoes } }
+		};
+		private static int unselected = -1;
 
 		#endregion
 
@@ -84,16 +90,31 @@ namespace mapKnight_Editor
 		private int iSelectedTile;
 		private int iSelectedOverlay;
 
+		private Dictionary<Character, List<Set>> iSets = new Dictionary<Character, List<Set>> ();
+		private Character iSelectedCharacter;
+		private int iSelectedSet = -1;
+		private int selectedPart = -1;
+
+		private AttributeListView attributelistview_item = new AttributeListView ();
+		private ItemPictureBox picturebox_itempreview = new ItemPictureBox ();
+
 		#endregion
 
 		public Main (string filepath)
 		{
 			InitializeComponent ();
-            
-            iCurrentFilePath = filepath;
+
+			this.attributelistview_item.Dock = DockStyle.Fill;
+			this.splitContainer4.Panel2.Controls.Add (this.attributelistview_item);
+			this.picturebox_itempreview.Dock = DockStyle.Fill;
+			this.splitContainer4.Panel1.Controls.Add (this.picturebox_itempreview);
+			this.picturebox_itempreview.SendToBack ();
+
+			iCurrentFilePath = filepath;
 
 			this.tlstrp_map.Renderer = new CustomToolStripRenderer (true);
 			this.tlstrp_main.Renderer = new CustomToolStripRenderer (false);
+			this.attributelistview_item.AttributeChanged += Attributelistview_item_AttributeChanged;
 		}
 
 		private void tbctrl_main_SelectedIndexChanged (object sender, EventArgs e)
@@ -107,6 +128,11 @@ namespace mapKnight_Editor
 
 		private void Main_Load (object sender, EventArgs e)
 		{
+			listview_slot.SmallImageList = new ImageList () {
+				ColorDepth = ColorDepth.Depth32Bit,
+				ImageSize = new Size (20, 20)
+			};
+
 			zoombar = new ToolStripTextTrackbar (tlstrp_map, 0, 20, "Zoom");
 			zoombar.TrackBar.TrackBar.ValueChanged += (object tsender, EventArgs te) => {
 				iTileSize = Convert.ToInt32 ((iMaxTileSize - iMinTileSize) * zoombar.TrackBar.TrackBar.Value / 2 / 10 + iMinTileSize);
@@ -126,14 +152,14 @@ namespace mapKnight_Editor
 			};
 
 			initMapListView ();
+			initCharacterEdit ();
 
 			lvw_tiles.SelectedIndices.Add (0);
 			lvw_overlays.SelectedIndices.Add (0);
 
-            if(iCurrentFilePath != null)
-            {
-                load();
-            }
+			if (iCurrentFilePath != null) {
+				load ();
+			}
 		}
 
 		private void Main_Resize (object sender, EventArgs e)
@@ -213,9 +239,9 @@ namespace mapKnight_Editor
 			lvw_overlays.Items.Add (new ListViewItem ("None") { ImageIndex = 0 });
 			lvw_overlays.LargeImageList.Images.Add (new Bitmap (20, 20));
 
-			XMLElemental contentconfig = XMLElemental.Load (File.OpenRead (Path.Combine(iContentDirectory, ".config")));
-            XMLElemental additionalcontentconfig = XMLElemental.Load(File.OpenRead(Path.Combine(iContentDirectory, "additional.config")));
-            foreach (XMLElemental child in contentconfig.GetAll().Concat(additionalcontentconfig.GetAll())) {
+			XMLElemental contentconfig = XMLElemental.Load (File.OpenRead (Path.Combine (iContentDirectory, ".config")));
+			XMLElemental additionalcontentconfig = XMLElemental.Load (File.OpenRead (Path.Combine (iContentDirectory, "additional.config")));
+			foreach (XMLElemental child in contentconfig.GetAll().Concat(additionalcontentconfig.GetAll())) {
 				switch (child.Attributes ["Type"]) {
 				case "Tile":
 					iTileNameIndex.Add (child.Attributes ["TextID"], (ushort)lvw_tiles.LargeImageList.Images.Count);
@@ -224,7 +250,7 @@ namespace mapKnight_Editor
 					iTileIDIndex.Add (lvw_tiles.LargeImageList.Images.Count, (ushort)Convert.ToInt32 (child.Attributes ["NumID"]));
 
 					lvw_tiles.Items.Add (new ListViewItem (child.Attributes ["Name"]) { ImageIndex = lvw_tiles.LargeImageList.Images.Count });
-					lvw_tiles.LargeImageList.Images.Add (child.Attributes ["NumID"], new Bitmap (Path.Combine(iContentDirectory,child.Attributes ["Source"])));
+					lvw_tiles.LargeImageList.Images.Add (child.Attributes ["NumID"], new Bitmap (Path.Combine (iContentDirectory, child.Attributes ["Source"])));
 					break;
 				case "Overlay":
 					iOverlayNameIndex.Add (child.Attributes ["TextID"], (ushort)lvw_overlays.LargeImageList.Images.Count);
@@ -233,7 +259,7 @@ namespace mapKnight_Editor
 					iOverlayIDIndex.Add (lvw_overlays.LargeImageList.Images.Count, (ushort)Convert.ToInt32 (child.Attributes ["NumID"]));
 
 					lvw_overlays.Items.Add (new ListViewItem (child.Attributes ["Name"]) { ImageKey = child.Attributes ["NumID"] });
-					lvw_overlays.LargeImageList.Images.Add (child.Attributes ["NumID"], new Bitmap (Path.Combine(iContentDirectory,child.Attributes ["Source"])));
+					lvw_overlays.LargeImageList.Images.Add (child.Attributes ["NumID"], new Bitmap (Path.Combine (iContentDirectory, child.Attributes ["Source"])));
 					break;
 				}
 			}
@@ -437,7 +463,7 @@ namespace mapKnight_Editor
 
 		private void tsb_info_Click (object sender, EventArgs e)
 		{
-			InfoWindow infowinfow = new InfoWindow (new XML.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ()));
+			InfoWindow infowinfow = new InfoWindow (new Values.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ()));
 			infowinfow.ShowDialog ();
 		}
 
@@ -446,11 +472,37 @@ namespace mapKnight_Editor
 		private void save ()
 		{
 			XMLElemental savefile = XMLElemental.EmptyRootElemental ("workfile");
+
+			// save the maps
 			foreach (Map map in iMaps) {
 				savefile.AddChild (map.Save (iTileIDIndex, iOverlayIDIndex));
 			}
 
-			using (StreamWriter writer = new StreamWriter (File.OpenWrite (iCurrentFilePath))) {
+			// save the character sets
+			foreach (Character character in Enum.GetValues(typeof(Character))) {
+				foreach (Set set in iSets[character]) {
+					string refid = "___implementedimage" + (savefile.GetAll ((XMLElemental obj) => obj.Name.StartsWith ("___implementedimage")).Count / 4).ToString ();
+
+					XMLElemental setElemental = new XMLElemental ("set");
+					setElemental.Attributes.Add ("name", set.Name);
+					setElemental.Attributes.Add ("character", character.ToString ());
+					setElemental.Attributes.Add ("images", refid);
+					setElemental.Attributes.Add ("description", set.Description);
+
+					foreach (var kvpair in set.Parts) {
+						setElemental.Attributes.Add ("name_" + kvpair.Key.ToString ().ToLower (), kvpair.Value.Name);
+						setElemental.AddChild (kvpair.Key.ToString ().ToLower ()).Attributes = kvpair.Value.Attributes.ToDictionary (k => k.Key.ToString (), k => k.Value.ToString ());
+						// save image in workfile
+						savefile.AddChild (refid + "_" + kvpair.Key.ToString ().ToLower ()).Value = PrepareImage (kvpair.Value.Bitmap);
+					}
+
+					savefile.AddChild (setElemental);
+				}
+			}
+
+			savefile.Sort ();
+
+			using (StreamWriter writer = new StreamWriter (iCurrentFilePath, false)) {
 				writer.WriteLine (savefile.Flush ());
 				writer.Flush ();
 			}
@@ -460,12 +512,27 @@ namespace mapKnight_Editor
 
 		private void load ()
 		{
+			iSets.Clear ();
+			iMaps.Clear ();
+			treeview_character.Nodes.Clear ();
+
+			initCharacterEdit ();
+
 			XMLElemental loadfile = XMLElemental.Load (File.OpenRead (iCurrentFilePath));
 
 			foreach (XMLElemental child in loadfile.GetAll()) {
 				if (child.Name == "map") {
 					iMaps.Add (new Map (child, iTileNameIndex, iOverlayNameIndex));
 					tscb_map_mapselect.Items.Add (iMaps [iMaps.Count - 1].Name);
+				} else if (child.Name == "set") {
+					Set loadedSet = new Set (child.Attributes ["name"]);
+					loadedSet.Description = child.Attributes ["description"];
+					foreach (XMLElemental part in child.GetAll()) {
+						loadedSet.Parts.Add ((Slot)Enum.Parse (typeof(Slot), part.Name, true), new Set.Part (child.Attributes ["name_" + part.Name], part.Attributes.ToDictionary (k => (Attribute)Enum.Parse (typeof(Attribute), k.Key), k => k.Value), LoadBitmap (loadfile [child.Attributes ["images"] + "_" + part.Name].Value)));
+					}
+					iSets [(Character)Enum.Parse (typeof(Character), child.Attributes ["character"])].Add (loadedSet);
+
+					treeview_character.Nodes [treeview_character.Nodes.IndexOfKey (Enum.Parse (typeof(Character), child.Attributes ["character"]).ToString ())].Nodes.Add (loadedSet.Name);
 				}
 			}
 
@@ -517,48 +584,206 @@ namespace mapKnight_Editor
 			}
 		}
 
-        private void tsmmi_exportraw_Click(object sender, EventArgs e)
-        {
-            folderBrowserDialog.ShowDialog();
-            string path = folderBrowserDialog.SelectedPath;
+		private void tsmmi_exportraw_Click (object sender, EventArgs e)
+		{
+			folderBrowserDialog.ShowDialog ();
+			string path = folderBrowserDialog.SelectedPath;
 
-            string mappath = Path.Combine(path, "maps");
-            string characterpath = Path.Combine(path, "character");
-            string animationpath = Path.Combine(path, "animations");
-            string entitypath = Path.Combine(path, "entitys");
+			string mappath = Path.Combine (path, "maps");
+			string characterpath = Path.Combine (path, "character");
+			string animationpath = Path.Combine (path, "animations");
+			string entitypath = Path.Combine (path, "entitys");
 
-            if (!Directory.Exists(mappath)) Directory.CreateDirectory(mappath);
-            if (!Directory.Exists(characterpath)) Directory.CreateDirectory(characterpath);
-            if (!Directory.Exists(animationpath)) Directory.CreateDirectory(animationpath);
-            if (!Directory.Exists(entitypath)) Directory.CreateDirectory(entitypath);
+			if (!Directory.Exists (mappath))
+				Directory.CreateDirectory (mappath);
+			if (!Directory.Exists (characterpath))
+				Directory.CreateDirectory (characterpath);
+			if (!Directory.Exists (animationpath))
+				Directory.CreateDirectory (animationpath);
+			if (!Directory.Exists (entitypath))
+				Directory.CreateDirectory (entitypath);
 
-            // convert all saved maps to the mapfiles
-            foreach (Map map in iMaps)
-            {
-                XMLElemental mapelement = map.Save(iTileIDIndex, iOverlayIDIndex);
-                File.Create(Path.Combine(mappath, map.Name + ".devmap")).Close();
-                File.WriteAllText(Path.Combine(mappath, map.Name + ".devmap"), mapelement.Flush());
-                File.Create(Path.Combine(mappath, map.Name + ".map")).Close();
-                File.WriteAllText(Path.Combine(mappath, map.Name + ".map"), StringManager.ZipString(mapelement.Flush()));
-            }
+			// convert all saved maps to the mapfiles
+			foreach (Map map in iMaps) {
+				XMLElemental mapelement = map.Save (iTileIDIndex, iOverlayIDIndex);
+				File.Create (Path.Combine (mappath, map.Name + ".devmap")).Close ();
+				File.WriteAllText (Path.Combine (mappath, map.Name + ".devmap"), mapelement.Flush ());
+				File.Create (Path.Combine (mappath, map.Name + ".map")).Close ();
+				File.WriteAllText (Path.Combine (mappath, map.Name + ".map"), AO.ZipString (mapelement.Flush ()));
+			}
 
-            MessageBox.Show("Export successful");
-        }
+			MessageBox.Show ("Export successful");
+		}
 
-        private void Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            switch(MessageBox.Show("Do you want to save the current state?","Save",MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
-            {
-                case DialogResult.Yes:
-                    tsmi_save_Click(this, EventArgs.Empty);
-                    break;
-                case DialogResult.No:
+		private void Main_FormClosing (object sender, FormClosingEventArgs e)
+		{
+			switch (MessageBox.Show ("Do you want to save the current state?", "Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)) {
+			case DialogResult.Yes:
+				tsmi_save_Click (this, EventArgs.Empty);
+				break;
+			case DialogResult.No:
 
-                    break;
-                case DialogResult.Cancel:
-                    e.Cancel = true;
-                    break;
-            }
-        }
-    }
+				break;
+			case DialogResult.Cancel:
+				e.Cancel = true;
+				break;
+			}
+		}
+
+		#region characteredit
+
+		private void initCharacterEdit ()
+		{
+			foreach (string name in Enum.GetNames(typeof(Character))) {
+				treeview_character.Nodes.Add (name, name);
+				iSets.Add ((Character)Enum.Parse (typeof(Character), name), new List<Set> ());
+			}
+
+			treeview_character.SelectedNode = treeview_character.Nodes [0];
+		}
+
+		public static string PrepareImage (Bitmap bitmap)
+		{
+			using (MemoryStream stream = new MemoryStream ()) {
+				bitmap.Save (stream, System.Drawing.Imaging.ImageFormat.Png);
+				stream.Close ();
+
+				return Convert.ToBase64String (stream.ToArray ());
+			}
+		}
+
+		public static Bitmap LoadBitmap (string imgstring)
+		{
+			using (MemoryStream stream = new MemoryStream (Convert.FromBase64String (imgstring))) {
+				return (Bitmap)Bitmap.FromStream (stream);
+			}
+		}
+
+		private void button_itembitmap_Click (object sender, EventArgs e)
+		{
+			if (selectedPart != unselected && ofd_imageedit.ShowDialog () == DialogResult.OK) {
+				iSets [iSelectedCharacter] [iSelectedSet].Parts [supportedSlots [iSelectedCharacter] [selectedPart]].Bitmap = new Bitmap (ofd_imageedit.FileName);
+				listview_slot.SmallImageList.Images [selectedPart] = new Bitmap (iSets [iSelectedCharacter] [iSelectedSet].Parts [supportedSlots [iSelectedCharacter] [selectedPart]].Bitmap, listview_slot.SmallImageList.ImageSize);
+				listview_slot.Refresh ();
+				updateSetInterface ();
+			}
+		}
+
+		private void tsbutton_addset_Click (object sender, EventArgs e)
+		{
+			if (treeview_character.SelectedNode != null && treeview_character.Nodes.Contains (treeview_character.SelectedNode)) {
+				iSets [iSelectedCharacter].Add (new Set (Interaction.InputBox ("Name?", "Add Set", "Name")));
+				treeview_character.SelectedNode.Nodes.Add (iSets [iSelectedCharacter] [iSets [iSelectedCharacter].Count - 1].Name);
+				switch (iSelectedCharacter) {
+				case Character.Robot:
+					iSets [iSelectedCharacter] [iSets [iSelectedCharacter].Count - 1].Parts.Add (Slot.Helmet, new Set.Part ("default_helmet"));
+					iSets [iSelectedCharacter] [iSets [iSelectedCharacter].Count - 1].Parts.Add (Slot.Chestplate, new Set.Part ("default_chestplate"));
+					iSets [iSelectedCharacter] [iSets [iSelectedCharacter].Count - 1].Parts.Add (Slot.Gloves, new Set.Part ("default_gloves"));
+					iSets [iSelectedCharacter] [iSets [iSelectedCharacter].Count - 1].Parts.Add (Slot.Shoes, new Set.Part ("default_shoes"));
+					break;
+				}
+			}
+		}
+
+		private void tsbutton_removeset_Click (object sender, EventArgs e)
+		{
+			if (treeview_character.SelectedNode != null && !treeview_character.Nodes.Contains (treeview_character.SelectedNode)) {
+				iSets [iSelectedCharacter].RemoveAt (treeview_character.SelectedNode.Parent.Nodes.IndexOf (treeview_character.SelectedNode));
+				treeview_character.SelectedNode.Parent.Nodes.RemoveAt (treeview_character.SelectedNode.Parent.Nodes.IndexOf (treeview_character.SelectedNode));
+			}
+		}
+
+		private void updateSetInterface ()
+		{
+			if (iSelectedSet != unselected) {
+				tstextbox_setname.Text = iSets [iSelectedCharacter] [iSelectedSet].Name;
+				tstextbox_setname.Enabled = true;
+				textbox_itemname.Text = iSets [iSelectedCharacter] [iSelectedSet].Parts [(Slot)Enum.Parse (typeof(Slot), listview_slot.SelectedItems [0].Text)].Name;
+				textbox_itemname.Enabled = true;
+				textbox_itemdescription.Text = iSets [iSelectedCharacter] [iSelectedSet].Description;
+				textbox_itemdescription.Enabled = true;
+				button_itembitmap.Enabled = true;
+				attributelistview_item.Enabled = true;
+				attributelistview_item.UpdateAttributes (iSets [iSelectedCharacter] [iSelectedSet].Parts [(Slot)Enum.Parse (typeof(Slot), listview_slot.SelectedItems [0].Text)].Attributes);
+				picturebox_itempreview.BackgroundImage = iSets [iSelectedCharacter] [iSelectedSet].Parts [(Slot)Enum.Parse (typeof(Slot), listview_slot.SelectedItems [0].Text)].Bitmap;
+				picturebox_itempreview.Enabled = true;
+				listview_slot.Enabled = true;
+			} else {
+				tstextbox_setname.Text = iSelectedCharacter.ToString ();
+				tstextbox_setname.Enabled = false;
+				tstextbox_setname.Text = "";
+				tstextbox_setname.Enabled = false;
+				textbox_itemname.Text = "";
+				textbox_itemname.Enabled = false;
+				textbox_itemdescription.Text = "";
+				textbox_itemdescription.Enabled = false;
+				button_itembitmap.Enabled = false;
+				attributelistview_item.Enabled = false;
+				picturebox_itempreview.BackgroundImage = new Bitmap (1, 1);
+				picturebox_itempreview.Enabled = false;
+				listview_slot.Enabled = false;
+			}
+		}
+
+		private void treeview_character_NodeMouseClick (object sender, TreeNodeMouseClickEventArgs e)
+		{
+			if (!treeview_character.Nodes.Contains (e.Node)) {
+				iSelectedCharacter = (Character)Enum.Parse (typeof(Character), e.Node.Parent.Text);
+				iSelectedSet = e.Node.Parent.Nodes.IndexOf (e.Node);
+				listview_slot.Items.Clear ();
+				listview_slot.SmallImageList.Images.Clear ();
+				foreach (Slot slot in supportedSlots[iSelectedCharacter]) {
+					if (iSets [iSelectedCharacter] [iSelectedSet].Parts.ContainsKey (slot)) {
+						listview_slot.SmallImageList.Images.Add (new Bitmap (iSets [iSelectedCharacter] [iSelectedSet].Parts [slot].Bitmap, listview_slot.SmallImageList.ImageSize));
+						listview_slot.Items.Add (slot.ToString (), listview_slot.SmallImageList.Images.Count - 1);
+					} else {
+						listview_slot.Items.Add (slot.ToString ());
+					}
+				}
+				listview_slot.SelectedIndices.Add (0);
+				listview_slot_SelectedIndexChanged (this, EventArgs.Empty);
+			} else {
+				iSelectedCharacter = (Character)Enum.Parse (typeof(Character), e.Node.Text);
+				iSelectedSet = unselected;
+			}
+
+			updateSetInterface ();
+		}
+
+		private void Attributelistview_item_AttributeChanged (object sender, Dictionary<Attribute, string> e)
+		{
+			iSets [iSelectedCharacter] [iSelectedSet].Parts [(Slot)selectedPart].Attributes = e;
+		}
+
+		private void tstextbox_setname_KeyUp (object sender, KeyEventArgs e)
+		{
+			iSets [iSelectedCharacter] [iSelectedSet].Name = tstextbox_setname.Text;
+			treeview_character.Nodes [treeview_character.Nodes.IndexOfKey (iSelectedCharacter.ToString ())].Nodes [iSelectedSet].Text = tstextbox_setname.Text;
+		}
+
+		private void textbox_itemname_KeyUp (object sender, KeyEventArgs e)
+		{
+			iSets [iSelectedCharacter] [iSelectedSet].Parts [(Slot)selectedPart].Name = tstextbox_setname.Text;
+		}
+
+		private void listview_slot_SelectedIndexChanged (object sender, EventArgs e)
+		{
+			if (listview_slot.SelectedIndices.Count > 0) {
+				selectedPart = listview_slot.SelectedIndices [0];
+				updateSetInterface ();
+			}
+		}
+
+		private void listview_slot_EnabledChanged (object sender, EventArgs e)
+		{
+			selectedPart = unselected;
+		}
+
+		#endregion
+
+		private void textbox_itemdescription_KeyUp (object sender, KeyEventArgs e)
+		{
+			iSets [iSelectedCharacter] [iSelectedSet].Description = textbox_itemdescription.Text;
+		}
+	}
 }

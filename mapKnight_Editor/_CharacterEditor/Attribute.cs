@@ -1,8 +1,8 @@
-﻿namespace mapKnight_Editor
+﻿namespace mapKnight.ToolKit
 {
-    public enum Attribute
-    {
-        Armor,
-        Strength
-    }
+	public enum Attribute
+	{
+		Armor,
+		Strength
+	}
 }
