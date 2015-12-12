@@ -6,9 +6,9 @@ using System.Net;
 
 using Microsoft.Win32;
 
-using XML;
+using mapKnight.Utils;
 
-namespace mapKnight_Installer
+namespace mapKnight.ToolKit.Installer
 {
     class Program
     {
@@ -31,7 +31,7 @@ namespace mapKnight_Installer
             Console.WriteLine("> creating registry entries");
             Registry.ClassesRoot.CreateSubKey(".workfile").SetValue("", "mapknight_toolkit");
             Registry.ClassesRoot.CreateSubKey(@"mapknight_toolkit\shell\open\command").SetValue("", "\"" + path + @"\mapKnightToolKit.exe" + "\" \"%L\"");
-            Registry.ClassesRoot.CreateSubKey(@"mapknight_toolkit\DefaultIcon").SetValue("", path + @"\icon.ico");
+            Registry.ClassesRoot.CreateSubKey(@"mapknight_toolkit\DefaultIcon").SetValue("", path + @"\files.ico");
 
             UpdateTKData("https://drive.google.com/uc?export=download&id=" + config["file"].Attributes["link"], path);
 
