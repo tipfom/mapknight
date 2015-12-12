@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("mapKnight_Android.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("mapKnight.Android.Resource", IsApplication=true)]
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 	
 	
@@ -26,8 +26,6 @@ namespace mapKnight_Android
 		
 		public static void UpdateIdValues()
 		{
-			global::SQLite.Resource.String.ApplicationName = global::mapKnight_Android.Resource.String.ApplicationName;
-			global::SQLite.Resource.String.Hello = global::mapKnight_Android.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
@@ -62,14 +60,8 @@ namespace mapKnight_Android
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f030001
-			public const int ApplicationName = 2130903041;
-			
 			// aapt resource value: 0x7f030000
-			public const int Hello = 2130903040;
-			
-			// aapt resource value: 0x7f030002
-			public const int app_name = 2130903042;
+			public const int app_name = 2130903040;
 			
 			static String()
 			{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 	internal class IntArrayComparer : IEqualityComparer<int[]>
 	{

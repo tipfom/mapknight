@@ -2,11 +2,15 @@
 
 using Android.Opengl;
 using Android.Graphics;
+using Android.Content;
 using GL = Android.Opengl.GLES20;
 
 using Javax.Microedition.Khronos.Opengles;
 
-namespace mapKnight_Android.CGL
+using mapKnight.Utils;
+using mapKnight.Values;
+
+namespace mapKnight.Android.CGL
 {
 	public class CGLRenderer : Java.Lang.Object, GLSurfaceView.IRenderer
 	{
@@ -16,10 +20,10 @@ namespace mapKnight_Android.CGL
 		int screenHeight;
 		XMLElemental mapElemental;
 		CGLInterface gameInterface;
-		Android.Content.Context context;
+		Context context;
 		CGLText infoText;
 
-		public CGLRenderer (Android.Content.Context Context)
+		public CGLRenderer (Context Context)
 		{
 			context = Context;
 		}
@@ -52,13 +56,13 @@ namespace mapKnight_Android.CGL
 
 		public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 		{
-			Content.Init (XMLElemental.Load (context.Assets.Open ("main.xml"), false), context);
+			Content.Init (XMLElemental.Load (context.Assets.Open ("main.xml")), context);
 
 			GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
-			mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"), false, Compression.Uncompressed);
+			mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"));
 			gameInterface = new CGLInterface ();
-			infoText = new CGLText ("fps", 20, Font.Tahoma, new Point (0, 20), Color.Black);
+			infoText = new CGLText ("fps", 20, Font.Tahoma, new Values.Point (0, 20), Values.Color.Black);
 		}
 
 		#endregion

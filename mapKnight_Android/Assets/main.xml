@@ -4,8 +4,9 @@
 		<image name="interface" src="interface.png">
 			<sprite id="0" x="0" y="0" width="40" height="40" />
 			<sprite id="1" x="40" y="0" width="40" height="40" />
-			<sprite id="2" x="80" y="0" width="1" height="1"/>
-			<sprite id="3" x="81" y="0" width="1" height="1"/>
+			<sprite id="2" x="80" y="0" width="1" height="1" />
+			<sprite id="3" x="81" y="0" width="1" height="1" />
+			<sprite id="4" x="82" y="0" width="6" height="6" />
 		</image>
 	</images>
 	<map drawwidth="22" />

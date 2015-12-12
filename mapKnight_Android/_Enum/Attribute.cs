@@ -1,6 +1,6 @@
-﻿namespace mapKnight_Android
+﻿namespace mapKnight.Android
 {
-	public enum Attribute
+	public enum Attributes
 	{
 		Armor,
 		Strength

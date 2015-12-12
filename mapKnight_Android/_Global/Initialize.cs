@@ -7,10 +7,13 @@ using Android.Content;
 using Android.Views;
 using Android.Opengl;
 using GL = Android.Opengl.GLES20;
+using Matrix = Android.Opengl.Matrix;
 
-using mapKnight_Android.CGL;
+using mapKnight.Android.CGL;
+using mapKnight.Utils;
+using mapKnight.Values;
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 	public static partial class Content
 	{
@@ -24,7 +27,7 @@ namespace mapKnight_Android
 
 		public static void Init (XMLElemental configfile, Context GameContext)
 		{
-			Version = new Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
+			Version = new Values.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
 			Log.All (typeof(Content), "Current Version : " + Version.ToString (), MessageType.Info);
 
 			TileSize = Convert.ToInt32 (configfile ["images"].Find ("name", "tiles").Attributes ["tilesize"]);
@@ -50,6 +53,7 @@ namespace mapKnight_Android
 			UpdateMatrix ();
 
 			Character = new Character ();
+			Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
 
 			CGL.CGLText.CGLTextContainer.Init ();
 
@@ -63,9 +67,9 @@ namespace mapKnight_Android
 			ViewMatrix = new float[16];
 			MVPMatrix = new float[16];
 
-			Android.Opengl.Matrix.FrustumM (ProjectionMatrix, 0, -ScreenRatio, ScreenRatio, -1, 1, 3, 7);
-			Android.Opengl.Matrix.SetLookAtM (ViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1f, 0f);
-			Android.Opengl.Matrix.MultiplyMM (MVPMatrix, 0, ProjectionMatrix, 0, ViewMatrix, 0);
+			Matrix.FrustumM (ProjectionMatrix, 0, -ScreenRatio, ScreenRatio, -1, 1, 3, 7);
+			Matrix.SetLookAtM (ViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1f, 0f);
+			Matrix.MultiplyMM (MVPMatrix, 0, ProjectionMatrix, 0, ViewMatrix, 0);
 		}
 
 		public static void Update (Size screensize)

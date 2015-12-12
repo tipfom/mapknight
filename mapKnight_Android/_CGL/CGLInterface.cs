@@ -4,14 +4,16 @@ using GL = Android.Opengl.GLES20;
 	
 using Java.Nio;
 
-namespace mapKnight_Android.CGL
+using mapKnight.Values;
+
+namespace mapKnight.Android.CGL
 {
 	public class CGLInterface
 	{
 		FloatBuffer VertexBuffer;
 		ShortBuffer IndexBuffer;
 		FloatBuffer TextureBuffer;
-		float[] TextureCoords = new float[40];
+		float[] TextureCoords = new float[48];
 
 		int RenderProgram;
 
@@ -33,7 +35,9 @@ namespace mapKnight_Android.CGL
 				12, 13, 14,
 				12, 14, 15,
 				16, 17, 18,
-				16, 18, 19
+				16, 18, 19,
+				20, 21, 22,
+				20, 22, 23
 			};
 
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (Indicies.Length * sizeof(short));
@@ -81,7 +85,12 @@ namespace mapKnight_Android.CGL
 				-Content.ScreenRatio, 0.97f, 0f,
 				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Mana / Content.Character.MaxMana, 0.97f, 0f,
 				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Mana / Content.Character.MaxMana, 0.94f, 0f,
-				-Content.ScreenRatio, 0.94f, 0f
+				-Content.ScreenRatio, 0.94f, 0f,
+				// back button
+				Content.ScreenRatio, 0.8f, 0f,
+				Content.ScreenRatio, 1f, 0f,
+				Content.ScreenRatio - 0.2f, 1f, 0f,
+				Content.ScreenRatio - 0.2f, 0.8f, 0f
 			};
 			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (verticies.Length * sizeof(float));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
@@ -173,8 +182,9 @@ namespace mapKnight_Android.CGL
 			Array.Copy (Content.InterfaceSprite.Sprites [0].Verticies, 0, TextureCoords, 16, 8);
 			Array.Copy (Content.InterfaceSprite.Sprites [2].Verticies, 0, TextureCoords, 24, 8);
 			Array.Copy (Content.InterfaceSprite.Sprites [3].Verticies, 0, TextureCoords, 32, 8);
+			Array.Copy (Content.InterfaceSprite.Sprites [4].Verticies, 0, TextureCoords, 40, 8);
 
-			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (40 * sizeof(float));
+			ByteBuffer bytebuffer = ByteBuffer.AllocateDirect (TextureCoords.Length * sizeof(float));
 			bytebuffer.Order (ByteOrder.NativeOrder ());
 			TextureBuffer = bytebuffer.AsFloatBuffer ();
 			TextureBuffer.Put (TextureCoords);

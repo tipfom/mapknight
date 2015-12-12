@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace mapKnight_Android
+using mapKnight.Utils;
+using mapKnight.Values;
+
+namespace mapKnight.Android
 {
 	public class AnimationStep : ICloneable
 	{
@@ -56,7 +59,7 @@ namespace mapKnight_Android
 
 		public object Clone ()
 		{
-			return (object)new AnimationStep (Time, Movements.Clone ());
+			return (object)new AnimationStep (Time, Movements);
 		}
 	}
 }

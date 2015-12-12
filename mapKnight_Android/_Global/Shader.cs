@@ -2,7 +2,7 @@
 
 using GL = Android.Opengl.GLES20;
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 	public static partial class Content
 	{

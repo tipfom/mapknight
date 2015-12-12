@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace mapKnight_Android
+using mapKnight.Values;
+using mapKnight.Utils;
+
+namespace mapKnight.Android
 {
 	public class Animation : ICloneable
 	{

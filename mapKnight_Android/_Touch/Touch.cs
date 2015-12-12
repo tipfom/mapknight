@@ -1,6 +1,8 @@
 ﻿using System;
 
-namespace mapKnight_Android
+using mapKnight.Values;
+
+namespace mapKnight.Android
 {
 	public struct Touch : IDisposable
 	{

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace mapKnight_Android
+using mapKnight.Values;
+
+namespace mapKnight.Android
 {
 	public class Button : IDisposable
 	{

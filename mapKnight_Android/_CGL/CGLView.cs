@@ -3,12 +3,13 @@
 using Android.Views;
 using Android.Content;
 using Android.Util;
+using Android.Opengl;
 
-namespace mapKnight_Android.CGL
+namespace mapKnight.Android.CGL
 {
-	public class CGLView : Android.Opengl.GLSurfaceView
+	public class CGLView : GLSurfaceView
 	{
-		Android.Opengl.GLSurfaceView.IRenderer Renderer;
+		GLSurfaceView.IRenderer Renderer;
 
 		public CGLView (Context context) : base (context)
 		{
@@ -17,7 +18,7 @@ namespace mapKnight_Android.CGL
 			Renderer = new CGLRenderer (context);
 			base.SetEGLConfigChooser (8, 8, 8, 8, 16, 0);
 			this.SetRenderer (Renderer);
-			this.RenderMode = Android.Opengl.Rendermode.Continuously;
+			this.RenderMode = Rendermode.Continuously;
 		}
 	}
 

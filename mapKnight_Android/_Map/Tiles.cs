@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 	public enum Tile : ushort
 	{

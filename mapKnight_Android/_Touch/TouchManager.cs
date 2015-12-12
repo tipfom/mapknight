@@ -4,7 +4,9 @@ using System.Linq;
 
 using Android.Views;
 
-namespace mapKnight_Android
+using mapKnight.Values;
+
+namespace mapKnight.Android
 {
 	public class TouchManager : Java.Lang.Object, View.IOnTouchListener
 	{

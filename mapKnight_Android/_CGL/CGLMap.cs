@@ -7,7 +7,10 @@ using GL = Android.Opengl.GLES20;
 
 using Java.Nio;
 
-namespace mapKnight_Android.CGL
+using mapKnight.Values;
+using mapKnight.Utils;
+
+namespace mapKnight.Android.CGL
 {
 	public class CGLMap : Map
 	{

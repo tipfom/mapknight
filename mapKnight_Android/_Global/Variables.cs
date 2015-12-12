@@ -4,9 +4,10 @@ using System.ComponentModel;
 
 using Android.Graphics;
 
-using mapKnight_Android.CGL;
+using mapKnight.Android.CGL;
+using mapKnight.Values;
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 	public static partial class Content
 	{
@@ -44,7 +45,7 @@ namespace mapKnight_Android
 		public static bool AntialiasText{ get { return iAntialiasText; } set { iAntialiasText = value; } }
 
 		// version string
-		public static Version Version;
+		public static Values.Version Version;
 
 		// draw variables
 		public static float[] ViewMatrix{ get; private set; }
@@ -60,5 +61,8 @@ namespace mapKnight_Android
 		public static Character Character{ get; private set; }
 
 		public static List<CharacterInfo> LoadedCharacterInfos{ get; private set; }
+
+		//data
+		public static SaveManager Data{ get; private set; }
 	}
 }

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace mapKnight_Android
+using mapKnight.Utils;
+
+namespace mapKnight.Android
 {
 	public static class Log
 	{
@@ -43,32 +45,32 @@ namespace mapKnight_Android
 
 		public static void Debug (string tag, string message)
 		{
-			Android.Util.Log.Debug (tag, message);
+			global::Android.Util.Log.Debug (tag, message);
 		}
 
 		public static void Error (string tag, Exception ex)
 		{
-			Android.Util.Log.Error (tag, ex.Message);
-			Android.Util.Log.Info (tag, "ErrorSource = " + ex.Source);
-			Android.Util.Log.Info (tag, "ErrorStack = " + ex.StackTrace);
+			global::Android.Util.Log.Error (tag, ex.Message);
+			global::Android.Util.Log.Info (tag, "ErrorSource = " + ex.Source);
+			global::Android.Util.Log.Info (tag, "ErrorStack = " + ex.StackTrace);
 		}
 
 		public static void Info (string tag, string message)
 		{
-			Android.Util.Log.Info (tag, message);
+			global::Android.Util.Log.Info (tag, message);
 		}
 
 		public static void Warn (string tag, string message)
 		{
-			Android.Util.Log.Warn (tag, message);
+			global::Android.Util.Log.Warn (tag, message);
 		}
 
 		public static void WTF (string tag, string message, Exception ex)
 		{
-			Android.Util.Log.Wtf (tag, message);
-			Android.Util.Log.Error (tag, "ErrorMessage " + ex.Message);
-			Android.Util.Log.Info (tag, "ErrorSource = " + ex.Source);
-			Android.Util.Log.Info (tag, "ErrorStack = " + ex.StackTrace);
+			global::Android.Util.Log.Wtf (tag, message);
+			global::Android.Util.Log.Error (tag, "ErrorMessage " + ex.Message);
+			global::Android.Util.Log.Info (tag, "ErrorSource = " + ex.Source);
+			global::Android.Util.Log.Info (tag, "ErrorStack = " + ex.StackTrace);
 		}
 
 		private static Dictionary<Type, string> tagRegister = new Dictionary<Type, string> () {

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using Android.Views;
 using GL = Android.Opengl.GLES20;
 
-namespace mapKnight_Android
+using mapKnight.Values;
+
+namespace mapKnight.Android
 {
 	public class ButtonManager : TouchManager
 	{

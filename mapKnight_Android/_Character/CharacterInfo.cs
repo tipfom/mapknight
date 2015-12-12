@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace mapKnight_Android
+using mapKnight.Utils;
+
+namespace mapKnight.Android
 {
 	public class CharacterInfo
 	{

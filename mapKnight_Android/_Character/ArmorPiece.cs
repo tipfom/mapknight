@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace mapKnight_Android
+using mapKnight.Utils;
+using mapKnight.Values;
+
+namespace mapKnight.Android
 {
 	public class ArmorPiece
 	{

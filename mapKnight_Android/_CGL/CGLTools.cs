@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using Android.Opengl;
 using GL = Android.Opengl.GLES20;
 
-namespace mapKnight_Android.CGL
+using mapKnight.Values;
+
+namespace mapKnight.Android.CGL
 {
 	public static class CGLTools
 	{

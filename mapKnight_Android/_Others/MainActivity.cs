@@ -8,9 +8,9 @@ using Android.Widget;
 using Android.OS;
 using Android.Content.PM;
 
-using mapKnight_Android.CGL;
+using mapKnight.Android.CGL;
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 
 	[Activity (Label = "mapKnight",

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace mapKnight_Android
+namespace mapKnight.Android
 {
 	public static partial class Content
 	{

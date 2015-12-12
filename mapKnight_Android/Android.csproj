@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{D7E142F8-7BDF-4AB3-8A0B-CB0F585CAFE0}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>mapKnight_Android</RootNamespace>
+    <RootNamespace>mapKnight.Android</RootNamespace>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -14,7 +14,7 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
-    <AssemblyName>mapKnight_Android</AssemblyName>
+    <AssemblyName>mapKnight.Android</AssemblyName>
     <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -43,13 +43,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
-    <Reference Include="SQLite">
-      <HintPath>..\Components\sqlite-net-1.0.8.3\lib\android\SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_Utils\ArrayOperations.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_CGL\CGLMap.cs" />
@@ -77,21 +75,8 @@
     <Compile Include="_Touch\ButtonManager.cs" />
     <Compile Include="_Others\MainActivity.cs" />
     <Compile Include="_Others\IntArrayComparer.cs" />
-    <Compile Include="_Values\Size.cs" />
-    <Compile Include="_Values\Point.cs" />
-    <Compile Include="_Values\Color.cs" />
-    <Compile Include="_Values\HexValue.cs" />
-    <Compile Include="_Values\Version.cs" />
-    <Compile Include="_Values\Rectangle.cs" />
-    <Compile Include="_Values\fRectangle.cs" />
-    <Compile Include="_Values\fPoint.cs" />
-    <Compile Include="_Values\fSize.cs" />
-    <Compile Include="_Values\BufferData.cs" />
     <Compile Include="_CGL\CGLSprite.cs" />
-    <Compile Include="_Utils\SQLDataManager.cs" />
     <Compile Include="_Utils\Log.cs" />
-    <Compile Include="_Utils\XMLElemental.cs" />
-    <Compile Include="_Utils\ArrayOperations.cs" />
     <Compile Include="_Touch\Touch.cs" />
     <Compile Include="_Touch\Button.cs" />
     <Compile Include="_Character\Boner.cs" />
@@ -104,44 +89,25 @@
     <Compile Include="_Character\DefinitionPoint.cs" />
     <Compile Include="_Character\AnimationStep.cs" />
     <Compile Include="_Others\Extensions.cs" />
-    <Compile Include="_Values\Vector2D.cs" />
     <Compile Include="_Character\Character.cs" />
-    <Compile Include="_Values\fVector2D.cs" />
+    <Compile Include="_Utils\SQLDataManager.cs" />
+    <Compile Include="_Utils\SaveManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\drawable\" />
-    <Folder Include="Resources\layout\" />
-    <Folder Include="_CGL\" />
-    <Folder Include="_Global\" />
-    <Folder Include="Assets\fonts\" />
-    <Folder Include="Assets\maps\" />
-    <Folder Include="_Net\" />
-    <Folder Include="_Enum\" />
-    <Folder Include="_Map\" />
-    <Folder Include="_Touch\" />
-    <Folder Include="_Others\" />
-    <Folder Include="_Values\" />
-    <Folder Include="_Utils\" />
-    <Folder Include="_Character\" />
-    <Folder Include="Assets\character\" />
-    <Folder Include="Assets\entitys\" />
     <Folder Include="Assets\animations\" />
+    <Folder Include="Assets\entitys\" />
+    <Folder Include="Resources\layout\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <XamarinComponentReference Include="sqlite-net">
-      <Version>1.0.8.3</Version>
-      <Visible>False</Visible>
-    </XamarinComponentReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\main.png" />
@@ -154,4 +120,14 @@
     <AndroidAsset Include="Assets\main.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\mapKnight_Utils\Utils.csproj">
+      <Project>{F4435F77-DE56-45E4-B4CB-87C9F71CA088}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mapKnight_Values\Values.csproj">
+      <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
+      <Name>Values</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
