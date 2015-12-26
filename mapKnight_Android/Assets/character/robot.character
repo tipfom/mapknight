@@ -1,30 +1,53 @@
 ﻿
-<character name="robot" id="0">
+<character name="robot">
     <def>
-        <point texture="0" name="head" />
-        <point texture="1" name="body" />
-        <point texture="2" name="hand_left" />
-        <point texture="2" name="hand_right" />
-        <point texture="3" name="foot_left" />
-        <point texture="3" name="foot_right" />
+        <slot name="helmet" bpcount="1">
+            <texture x="0" y="0" width="18" height="18"/>
+        </slot>
+        <slot name="chestplate" bpcount="1">
+            <texture x="0" y="18" width="16" height="9"/>
+        </slot>
+        <slot name="gloves" bpcount="2">
+            <texture x="8" y="27" width="6" height="6"/>
+        </slot>
+        <slot name="shoes" bpcount="2">
+            <texture x="0" y="27" width="8" height="6"/>
+        </slot>
     </def>
+
+    <level>
+        <default>
+            <health value="20"/>
+            <strength value="12"/>
+        </default>
+        <increase>
+            <health value="1.2"/>
+            <strength value="0.5"/>
+        </increase>
+    </level>
+
     <set name="futuristic">
         <part slot="helmet" name="futuristic helmet">
-            <texture x="000" y="000" width="000" height="000" />
             <attribute name="strength">20</attribute>
         </part>
         <part slot="chestplate" name="futuristic chestplate">
-            <texture x="000" y="000" width="000" height="000" />
             <attribute name="armor">90</attribute>
         </part>
         <part slot="glove" name="futuristic glove">
-            <texture x="000" y="000" width="000" height="000" />
         </part>
         <part slot="shoe" name="futuristic shoe">
-            <texture x="000" y="000" width="000" height="000" />
         </part>
     </set>
-    <anim name="walk" abortable="true">
+
+    <anim action="walk" abortable="true">
+        <default>
+            <dpoint id="head_0" rotation="0" x="0" y="2"/>
+            <dpoint id="chestplate_0" rotation="0" x="0" y="0"/>
+            <dpoint id="glove_0" rotation="5" x="2" y="0"/>
+            <dpoint id="glove_1" rotation="355" x="-2" y="0"/>
+            <dpoint id="shoe_0" rotation="0" x="1" y="-1"/>
+            <dpoint id="shoe_1" rotation="0" x="-1" y="-1"/>
+        </default>
         <step time="200">
             <move point="head" rotation="0" x="20" y="0" />
         </step>
@@ -32,6 +55,5 @@
             <move point="head" rotation="0" x="-20" y="0" />
         </step>
     </anim>
-    <anim name="jump" abortable="false">
-    </anim>
+    
 </character>

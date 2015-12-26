@@ -8,11 +8,12 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>mapKnight.ToolKit</RootNamespace>
-    <AssemblyName>mapKnight.ToolKit</AssemblyName>
+    <AssemblyName>mapKnightToolKit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -121,6 +121,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="_Others\SlotSpriteData.cs" />
     <Compile Include="_Others\ToolStripTextTrackbar.cs" />
     <Compile Include="_Others\ToolStripTraceBarItem.cs">
       <SubType>Component</SubType>
@@ -132,6 +133,12 @@
       <DependentUpon>LoadForm.cs</DependentUpon>
     </Compile>
     <Compile Include="_Update\Updater.cs" />
+    <Compile Include="_Update\WhatsNewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Update\WhatsNewForm.Designer.cs">
+      <DependentUpon>WhatsNewForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="_MapEditor\DialogForm.resx">
       <DependentUpon>DialogForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,6 +155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_Update\LoadForm.resx">
       <DependentUpon>LoadForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Update\WhatsNewForm.resx">
+      <DependentUpon>WhatsNewForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest">
       <SubType>Designer</SubType>
@@ -228,6 +238,7 @@
     </Content>
     <Content Include="files.ico" />
     <Content Include="icon.ico" />
+    <None Include="Resources\^979E21584F01BB7CFC733031F7485D318F8E25E97AB375791E^pimgpsh_fullsize_distr.jpg" />
     <None Include="Resources\^4D12E7BC91AB945A344A9423F0403DE9E303CE9D5BB4EB4862^pimgpsh_fullsize_distr.jpg" />
     <None Include="Resources\Plus.png" />
     <None Include="Resources\Pipette.png" />
@@ -280,10 +291,12 @@
     <ProjectReference Include="..\mapKnight_Values\Values.csproj">
       <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
       <Name>Values</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
     <ProjectReference Include="..\mapKnight_Utils\Utils.csproj">
       <Project>{F4435F77-DE56-45E4-B4CB-87C9F71CA088}</Project>
       <Name>Utils</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@ namespace mapKnight.ToolKit
 		{
 			if (this.Enabled) {
 				pe.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+                pe.Graphics.PixelOffsetMode = PixelOffsetMode.Half;
 				pe.Graphics.Clear (Color.White);
 
 				if (this.BackgroundImage != null) {
@@ -23,9 +24,9 @@ namespace mapKnight.ToolKit
 					float scaleFactorY = (float)pe.ClipRectangle.Height / (float)this.BackgroundImage.Size.Height;
 
 					if (scaleFactorX > scaleFactorY) {
-						pe.Graphics.DrawImage (this.BackgroundImage, new Rectangle ((pe.ClipRectangle.Size.Width - (int)(scaleFactorY * this.BackgroundImage.Size.Width)) / 2, 0, (int)(scaleFactorY * this.BackgroundImage.Size.Width), (int)(scaleFactorY * this.BackgroundImage.Size.Height)));
+						pe.Graphics.DrawImage (this.BackgroundImage, new Rectangle ((pe.ClipRectangle.Size.Width - (int)(scaleFactorY * this.BackgroundImage.Size.Width)) / 2 + 1, 1, (int)(scaleFactorY * this.BackgroundImage.Size.Width), (int)(scaleFactorY * this.BackgroundImage.Size.Height)));
 					} else {
-						pe.Graphics.DrawImage (this.BackgroundImage, new Rectangle (0, (pe.ClipRectangle.Size.Height - (int)(scaleFactorX * this.BackgroundImage.Size.Height)) / 2, (int)(scaleFactorX * this.BackgroundImage.Size.Width), (int)(scaleFactorX * this.BackgroundImage.Size.Height)));
+						pe.Graphics.DrawImage (this.BackgroundImage, new Rectangle (1, (pe.ClipRectangle.Size.Height - (int)(scaleFactorX * this.BackgroundImage.Size.Height)) / 2 + 1, (int)(scaleFactorX * this.BackgroundImage.Size.Width), (int)(scaleFactorX * this.BackgroundImage.Size.Height)));
 					}
 				}
 			} else {

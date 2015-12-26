@@ -35,6 +35,10 @@ namespace mapKnight.ToolKit.Installer
 
             UpdateTKData("https://drive.google.com/uc?export=download&id=" + config["file"].Attributes["link"], path);
 
+            // cleanup old stuff
+            if (File.Exists("icon.ico")) File.Delete("icon.ico");
+            if (File.Exists("files.ico")) File.SetAttributes("files.ico", FileAttributes.Hidden);
+
             Console.WriteLine("");
             Console.WriteLine("update sucessfull");
             Console.WriteLine("");
@@ -65,24 +69,22 @@ namespace mapKnight.ToolKit.Installer
             Console.WriteLine("> downloading mapKnightToolKit from " + downloadurl);
             WebClient webClient = new WebClient();
             webClient.DownloadFile(downloadurl, "mapknighttoolkit_cache.zip");
-
-            Console.WriteLine("> clearing ToolKit directory");
-
+            
             Console.WriteLine("> extracting mapKnightToolKit from mapknighttoolkit_cache.zip");
             using (ZipArchive archive = ZipFile.OpenRead("mapknighttoolkit_cache.zip"))
             {
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
                     Console.WriteLine("> extracting " + entry.FullName);
-
-                    if (!Path.HasExtension(entry.FullName))
-                    {
-                        if (!Directory.Exists(Path.Combine(destinationdirectory, Path.GetDirectoryName(entry.FullName))))
-                            Directory.CreateDirectory(Path.Combine(destinationdirectory, Path.GetDirectoryName(entry.FullName)));
-                    }
-                    else
-                    {
-                        entry.ExtractToFile(Path.Combine(destinationdirectory, entry.FullName), true);
+                    try {
+                        if (!Path.HasExtension (entry.FullName)) {
+                            if (!Directory.Exists (Path.Combine (destinationdirectory, Path.GetDirectoryName (entry.FullName))))
+                                Directory.CreateDirectory (Path.Combine (destinationdirectory, Path.GetDirectoryName (entry.FullName)));
+                        } else {
+                            entry.ExtractToFile (Path.Combine (destinationdirectory, entry.FullName), true);
+                        }
+                    } catch(Exception ex) {
+                        Console.WriteLine ("> error while extracting " + entry.FullName);
                     }
                 }
             }

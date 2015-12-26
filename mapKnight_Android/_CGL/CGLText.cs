@@ -341,7 +341,10 @@ namespace mapKnight.Android.CGL
 				textbitmap.EraseColor (0);
 									
 				foreach (CGLText item in subscribedItems) {
-					textcanvas.DrawText (item.Text, item.Position.X, item.Position.Y, item.TextPaint);
+					string[] lines = item.Text.Split (new char[]{ '\n' }, StringSplitOptions.None);
+					for (int i = 0; i < lines.Length; i++) {
+						textcanvas.DrawText (lines [i], item.Position.X, item.Position.Y + i * item.Fontsize + 3, item.TextPaint);
+					}
 				}
 
 				int[] generatedtexture = new int[1];

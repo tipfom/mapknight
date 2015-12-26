@@ -82,7 +82,11 @@ namespace mapKnight.Android
 			{ typeof(CGL.CGLRenderer),"CGLRenderer" },
 			{ typeof(Touch),"Touch" },
 			{ typeof(TouchManager),"TouchManager" },
-			{ typeof(CGL.CGLInterface),"CGLInterface" }
+			{ typeof(CGL.CGLInterface),"CGLInterface" },
+			{ typeof(Net.Client),"SocketClient" },
+			{ typeof(Net.Server), "SocketServer" },
+			{ typeof(MainActivity), "Activity" },
+			{ typeof(Net.TerminalManager),"TerminalManager" }
 		};
 	}
 }

@@ -54,6 +54,12 @@ namespace mapKnight.Android
 
 		public static float[] MVPMatrix{ get; private set; }
 
+
+		public static int CoordsPerVertex2D = 2;
+		public static int CoordsPerVertex3D = 3;
+		public static int VertexStride2D = sizeof(float) * CoordsPerVertex2D;
+		public static int VertexStride3D = sizeof(float) * CoordsPerVertex3D;
+
 		// current touch manager
 		public static ButtonManager TouchManager{ get; private set; }
 
@@ -64,5 +70,7 @@ namespace mapKnight.Android
 
 		//data
 		public static SaveManager Data{ get; private set; }
+
+		public static Net.TerminalManager Terminal{ get; private set; }
 	}
 }

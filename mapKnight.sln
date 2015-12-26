@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "mapKnight_Utils\Ut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Values", "mapKnight_Values\Values.csproj", "{50B1F9F5-DD73-483B-947B-32220DC7561B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal", "mapKnight_Terminal\Terminal.csproj", "{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,14 @@ Global
 		{8F666DAE-DA7A-4A70-AA3B-49471ED3645F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F666DAE-DA7A-4A70-AA3B-49471ED3645F}.Release|x86.ActiveCfg = Release|Any CPU
 		{8F666DAE-DA7A-4A70-AA3B-49471ED3645F}.Release|x86.Build.0 = Release|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Debug|x86.Build.0 = Debug|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}.Release|x86.Build.0 = Release|Any CPU
 		{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE14AF40-2AA9-44FC-A032-EAEA4BAFD29E}.Debug|x86.ActiveCfg = Debug|x86

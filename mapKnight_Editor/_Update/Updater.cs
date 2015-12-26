@@ -1,9 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
-using System.Resources;
+using System.Windows.Forms;
 
 using mapKnight.Utils;
 
@@ -22,7 +21,7 @@ namespace mapKnight.ToolKit
 
 		public static UpdateResult Check (Values.Version currentVersion)
 		{
-			if (Connected ()) {
+           if (Connected ()) {
 				WebClient webClient = new WebClient ();
 				webClient.DownloadFile (configfileurl, "mapknighttoolkit_configfile.xml");
 
@@ -41,10 +40,15 @@ namespace mapKnight.ToolKit
 
 		public static void Update ()
 		{
-			File.Create ("mapKnightTK_Updater.exe").Close ();
-			File.WriteAllBytes ("mapKnightTK_Updater.exe", Properties.Resources.ResourceManager.GetObject ("mapKnight_Installer") as byte[]);
-			Process.Start ("mapKnightTK_Updater.exe");
-		}
+            WebClient webClient = new WebClient();
+            webClient.DownloadFile(configfileurl, "mapknighttoolkit_configfile.xml");
+
+            XMLElemental config = XMLElemental.Load(File.OpenRead("mapknighttoolkit_configfile.xml"));
+            File.Delete("mapknighttoolkit_configfile.xml");
+
+            webClient.DownloadFile("https://drive.google.com/uc?export=download&id=" + config["installer"].Attributes["link"], "mapknight_installer_cache.exe");
+            Process.Start("mapknight_installer_cache.exe");
+        }
 
 		//Creating the extern function...
 		[DllImport ("wininet.dll")]

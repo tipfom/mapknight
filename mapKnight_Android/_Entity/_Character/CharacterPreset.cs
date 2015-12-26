@@ -5,13 +5,15 @@ using mapKnight.Utils;
 
 namespace mapKnight.Android
 {
-	public class CharacterInfo
+	public class CharacterPreset
 	{
 		private Dictionary<string,Set> loadedSets;
 		private Dictionary<string,Animation> loadedAnimations;
 		private List<DefinitionPoint> loadedDefinitions;
 
-		public CharacterInfo (XMLElemental config)
+		public Dictionary<int,Level> loadedLevel;
+
+		public CharacterPreset (XMLElemental config)
 		{
 			loadedSets = new Dictionary<string, Set> ();
 			loadedAnimations = new Dictionary<string, Animation> ();

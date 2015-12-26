@@ -19,7 +19,7 @@ namespace mapKnight.Android
 	{
 		public delegate void HandleInitCompleted (Context GameContext);
 
-		public static event HandleInitCompleted OnInitCompleted;
+		public static event HandleInitCompleted OnInit;
 
 		public delegate void HandleUpdate ();
 
@@ -47,6 +47,7 @@ namespace mapKnight.Android
 			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
 
 			TouchManager = new ButtonManager ();
+			Terminal = new Net.TerminalManager ();
 
 			LoadShader ();
 
@@ -57,8 +58,8 @@ namespace mapKnight.Android
 
 			CGL.CGLText.CGLTextContainer.Init ();
 
-			if (OnInitCompleted != null)
-				OnInitCompleted (GameContext);
+			if (OnInit != null)
+				OnInit (GameContext);
 		}
 
 		private static void UpdateMatrix ()

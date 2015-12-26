@@ -25,7 +25,6 @@ namespace mapKnight.Android
 
 		protected override void OnCreate (Bundle bundle)
 		{
-
 			RequestWindowFeature (WindowFeatures.NoTitle);
 			base.OnCreate (bundle);
 
@@ -35,22 +34,25 @@ namespace mapKnight.Android
 			SetContentView (view);
 
 			HideNavBar ();
-			Content.OnInitCompleted += (Context GameContext) => {
-				view.SetOnTouchListener (Content.TouchManager);
-			};
+	
+			Content.OnInit += OnInit;
 		}
 
-		protected override void OnPause ()
+		protected override void OnStop ()
 		{
-			view.OnPause ();
-			base.OnPause ();
+			Content.Terminal.Disconnect ();
+			base.OnStop ();
 		}
 
 		protected override void OnResume ()
 		{
-			view.OnResume ();
 			base.OnResume ();
 			HideNavBar ();
+		}
+
+		private void OnInit (Context context)
+		{
+			view.SetOnTouchListener (Content.TouchManager);
 		}
 
 		public void HideNavBar ()

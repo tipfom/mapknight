@@ -10,6 +10,13 @@ namespace mapKnight.Android.CGL
 {
 	public class CGLInterface
 	{
+		private static Size jumpButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.45f));
+		private static Size moveButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.325f));
+
+		delegate void Test ();
+
+		delegate int TestIntVoid (int test222);
+
 		FloatBuffer VertexBuffer;
 		ShortBuffer IndexBuffer;
 		FloatBuffer TextureBuffer;
@@ -50,9 +57,7 @@ namespace mapKnight.Android.CGL
 			initTextureBuffer ();
 			initButtons ();
 
-			Content.OnUpdate += () => {
-				updateVertexBuffer ();
-			};
+			Content.OnUpdate += OnUpdate;
 		}
 
 		private void updateVertexBuffer ()
@@ -78,13 +83,14 @@ namespace mapKnight.Android.CGL
 				-Content.ScreenRatio + jumpbuttonsize.Width, -1f, 0f,
 				//health bar
 				-Content.ScreenRatio, 1f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Life / Content.Character.MaxLife, 1f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Life / Content.Character.MaxLife, 0.97f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 1f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 0.97f, 0f,
 				-Content.ScreenRatio, 0.97f, 0f,
 				//energie bar
+				// hat zur zeit die weerte der healtbar
 				-Content.ScreenRatio, 0.97f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Mana / Content.Character.MaxMana, 0.97f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Mana / Content.Character.MaxMana, 0.94f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 0.97f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 0.94f, 0f,
 				-Content.ScreenRatio, 0.94f, 0f,
 				// back button
 				Content.ScreenRatio, 0.8f, 0f,
@@ -101,9 +107,6 @@ namespace mapKnight.Android.CGL
 
 		private void initButtons ()
 		{
-			Size jumpButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.45f));
-			Size moveButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.325f));
-
 			JumpButton = Content.TouchManager.Create (new Point (Content.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
 			RightButton = Content.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
 			LeftButton = Content.TouchManager.Create (new Point (0, 0), moveButtonSize);
@@ -115,27 +118,6 @@ namespace mapKnight.Android.CGL
 			JumpButton.OnLeave += handleJumpButtonLeave;
 			RightButton.OnLeave += handleRightButtonLeave;
 			LeftButton.OnLeave += handleLeftButtonLeave;
-
-			Content.OnUpdate += () => {
-				JumpButton.Dispose ();
-				RightButton.Dispose ();
-				LeftButton.Dispose ();
-
-				jumpButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.45f));
-				moveButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.325f));
-
-				JumpButton = Content.TouchManager.Create (new Point (Content.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
-				RightButton = Content.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
-				LeftButton = Content.TouchManager.Create (new Point (0, 0), moveButtonSize);
-
-				JumpButton.OnClick += handleJumpButtonClick;
-				RightButton.OnClick += handleRightButtonClick;
-				LeftButton.OnClick += handleLeftButtonClick;
-
-				JumpButton.OnLeave += handleJumpButtonLeave;
-				RightButton.OnLeave += handleRightButtonLeave;
-				LeftButton.OnLeave += handleLeftButtonLeave;
-			};
 		}
 
 		private void handleJumpButtonClick ()
@@ -230,6 +212,30 @@ namespace mapKnight.Android.CGL
 			GL.GlDrawElements (GL.GlTriangles, IndexBuffer.Limit (), GL.GlUnsignedShort, IndexBuffer);
 			GL.GlDisableVertexAttribArray (PositionHandle);
 			GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
+		}
+
+		private void OnUpdate ()
+		{
+			JumpButton.Dispose ();
+			RightButton.Dispose ();
+			LeftButton.Dispose ();
+
+			jumpButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.45f));
+			moveButtonSize = new Size ((int)(Content.ScreenSize.Height * 0.325f));
+
+			JumpButton = Content.TouchManager.Create (new Point (Content.ScreenSize.Width - jumpButtonSize.Width, 0), jumpButtonSize);
+			RightButton = Content.TouchManager.Create (new Point (moveButtonSize.Width, 0), moveButtonSize);
+			LeftButton = Content.TouchManager.Create (new Point (0, 0), moveButtonSize);
+
+			JumpButton.OnClick += handleJumpButtonClick;
+			RightButton.OnClick += handleRightButtonClick;
+			LeftButton.OnClick += handleLeftButtonClick;
+
+			JumpButton.OnLeave += handleJumpButtonLeave;
+			RightButton.OnLeave += handleRightButtonLeave;
+			LeftButton.OnLeave += handleLeftButtonLeave;
+
+			updateVertexBuffer ();
 		}
 	}
 }

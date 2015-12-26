@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace mapKnight.Android
+namespace mapKnight.Entity
 {
-	public enum ArmorSlot
+	public enum Slot
 	{
 		Helmet,
 		Chestplate,

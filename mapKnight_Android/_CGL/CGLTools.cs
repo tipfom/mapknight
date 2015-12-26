@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Android.Opengl;
+using Android.Content;
+using Android.Graphics;
 using GL = Android.Opengl.GLES20;
 
 using mapKnight.Values;
@@ -125,6 +128,63 @@ namespace mapKnight.Android.CGL
 		{
 			DeleteBufferData (oldbufferdata);
 			return GenerateFramebuffer (oldbufferdata.Width, oldbufferdata.Height);
+		}
+
+		public static LoadedImage LoadImage (Context context, string assetpath)
+		{
+			int[] loadedtexture = new int[1];
+			GL.GlGenTextures (1, loadedtexture, 0);
+
+			BitmapFactory.Options bfoptions = new BitmapFactory.Options ();
+			bfoptions.InScaled = false;
+			Bitmap bitmap = BitmapFactory.DecodeStream (context.Assets.Open (assetpath), null, bfoptions);
+
+			GL.GlBindTexture (GL.GlTexture2d, loadedtexture [0]);
+
+			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMinFilter, GL.GlNearest);
+			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMagFilter, GL.GlNearest);
+			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureWrapS, GL.GlClampToEdge);
+			GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureWrapT, GL.GlClampToEdge);
+
+			GLUtils.TexImage2D (GL.GlTexture2d, 0, bitmap, 0);
+
+			LoadedImage limage = new LoadedImage (loadedtexture [0], bitmap.Width, bitmap.Height);
+
+			bitmap.Recycle ();
+			GL.GlBindTexture (GL.GlTexture2d, 0);
+
+			// Error Check
+			int error = GL.GlGetError ();
+			if (error != 0) {
+				Log.All (typeof(Content), "error while loading mainimage (errorcode => " + error.ToString () + ")", MessageType.Debug);
+				throw new FileLoadException ("error while loading mainimage (errorcode => " + error.ToString () + ")");
+			}
+			if (loadedtexture [0] == 0) {
+				Log.All (typeof(Content), "loaded mainimage is zero", MessageType.Debug);
+				throw new FileLoadException ("loaded mainimage is zero");
+			}
+
+			return limage;
+		}
+
+		public struct LoadedImage
+		{
+			public int Texture;
+			public int Width;
+			public int Height;
+
+			public LoadedImage (int texture, int width, int height) : this ()
+			{
+				this.Texture = texture;
+				this.Width = width;
+				this.Height = height;
+			}
+		}
+
+		public static fRectangle ParseCoordinates (Dictionary<string,string> config, Size imageSize)
+		{
+			// konvertiert die geradezahligen koordination von sprites in opengl koordinaten
+			return (new Rectangle (new fPoint (Convert.ToInt32 (config ["x"]), Convert.ToInt32 (config ["y"])), new fSize (Convert.ToInt32 (config ["width"]), Convert.ToInt32 (config ["height"]))) / imageSize);
 		}
 	}
 }

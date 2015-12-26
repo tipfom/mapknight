@@ -15,7 +15,7 @@ namespace mapKnight.ToolKit
 		private void LoadForm_Load (object sender, EventArgs e)
 		{
 			this.Location = new Point (Screen.PrimaryScreen.Bounds.Width / 2 - this.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2 - this.Bounds.Height / 2);
-			this.label_version.Text = "Version : " + new Values.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ()).ToString ();
+			this.label_version.Text = "Version : " + new Values.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ()).ToString (true);
 		}
 
 		private void LoadForm_Paint (object sender, PaintEventArgs e)

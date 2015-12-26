@@ -62,7 +62,7 @@ namespace mapKnight.Android.CGL
 
 			mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"));
 			gameInterface = new CGLInterface ();
-			infoText = new CGLText ("fps", 20, Font.Tahoma, new Values.Point (0, 20), Values.Color.Black);
+			infoText = new CGLText ("fps", 30, Font.Tahoma, new Values.Point (0, 20), Values.Color.Black);
 		}
 
 		#endregion
@@ -71,7 +71,9 @@ namespace mapKnight.Android.CGL
 
 		private void CalculateFrameRate ()
 		{
-			infoText.Text = " frametime = " + (System.Environment.TickCount - lastTick).ToString () + " ms ( " + (1000 / (System.Environment.TickCount - lastTick)).ToString () + " fps ) version = " + Content.Version.ToString (false);
+			infoText.Text = " frametime = " + (System.Environment.TickCount - lastTick).ToString () + " ms ( " + (1000 / (System.Environment.TickCount - lastTick)).ToString () + " fps )" +
+			"\n version = " + Content.Version.ToString (false) +
+			"\n terminal connected = " + Content.Terminal.Connected.ToString ().ToLower ();
 			lastTick = System.Environment.TickCount;
 		}
 

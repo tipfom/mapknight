@@ -4,6 +4,11 @@ namespace mapKnight.Values
 {
 	public struct Rectangle
 	{
+		public static fRectangle operator / (Rectangle rect, Size size)
+		{
+			return new fRectangle (new fPoint (rect.Position.X / (float)size.Width, rect.Position.Y / (float)size.Height), new fSize (rect.Width / (float)size.Width, rect.Height / (float)size.Height));
+		}
+
 		private Point iPosition;
 
 		public Point Position{ get { return iPosition; } set { iPosition = value; } }

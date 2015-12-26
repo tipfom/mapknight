@@ -28,6 +28,7 @@
     <AndroidLinkMode>None</AndroidLinkMode>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Externalconsole>true</Externalconsole>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -37,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -66,11 +68,6 @@
     <Compile Include="_Map\Map.cs" />
     <Compile Include="_Map\Tiles.cs" />
     <Compile Include="_Map\Overlay.cs" />
-    <Compile Include="_Global\Initialize.cs" />
-    <Compile Include="_Global\LoadTexCoordManager.cs" />
-    <Compile Include="_Global\Shader.cs" />
-    <Compile Include="_Global\TextureCoordinateManager.cs" />
-    <Compile Include="_Global\Variables.cs" />
     <Compile Include="_Touch\TouchManager.cs" />
     <Compile Include="_Touch\ButtonManager.cs" />
     <Compile Include="_Others\MainActivity.cs" />
@@ -79,32 +76,56 @@
     <Compile Include="_Utils\Log.cs" />
     <Compile Include="_Touch\Touch.cs" />
     <Compile Include="_Touch\Button.cs" />
-    <Compile Include="_Character\Boner.cs" />
-    <Compile Include="_Character\Set.cs" />
-    <Compile Include="_Character\Animation.cs" />
-    <Compile Include="_Character\ArmorPiece.cs" />
     <Compile Include="_Enum\Attribute.cs" />
-    <Compile Include="_Character\ArmorSlot.cs" />
-    <Compile Include="_Character\CharacterInfo.cs" />
-    <Compile Include="_Character\DefinitionPoint.cs" />
-    <Compile Include="_Character\AnimationStep.cs" />
     <Compile Include="_Others\Extensions.cs" />
-    <Compile Include="_Character\Character.cs" />
     <Compile Include="_Utils\SQLDataManager.cs" />
     <Compile Include="_Utils\SaveManager.cs" />
+    <Compile Include="_Content\Initialize.cs" />
+    <Compile Include="_Content\LoadTexCoordManager.cs" />
+    <Compile Include="_Content\Shader.cs" />
+    <Compile Include="_Content\TextureCoordinateManager.cs" />
+    <Compile Include="_Content\Variables.cs" />
+    <Compile Include="_CGL\CGLCamera.cs" />
+    <Compile Include="_Net\Server.cs" />
+    <Compile Include="_Net\TerminalManager.cs" />
+    <Compile Include="_Entity\_Character\Animation.cs" />
+    <Compile Include="_Entity\_Character\AnimationStep.cs" />
+    <Compile Include="_Entity\_Character\ArmorPiece.cs" />
+    <Compile Include="_Entity\_Character\Boner.cs" />
+    <Compile Include="_Entity\_Character\Character.cs" />
+    <Compile Include="_Entity\_Character\CharacterInfo.cs" />
+    <Compile Include="_Entity\_Character\CharacterPreset.cs" />
+    <Compile Include="_Entity\_Character\DefinitionPoint.cs" />
+    <Compile Include="_Entity\_Character\Level.cs" />
+    <Compile Include="_Entity\_Character\Set.cs" />
+    <Compile Include="_Entity\Entity.cs" />
+    <Compile Include="_Entity\Slot.cs" />
+    <Compile Include="_Entity\Set.cs" />
+    <Compile Include="_Entity\EntityPreset.cs" />
+    <Compile Include="_CGL\Entity\CGLEntity.cs" />
+    <Compile Include="_CGL\Entity\CGLEntityPreset.cs" />
+    <Compile Include="_CGL\Entity\CGLEntitySet.cs" />
+    <Compile Include="_CGL\Entity\CGLCharacter.cs" />
+    <Compile Include="_CGL\Entity\CGLAnimation.cs" />
+    <Compile Include="_CGL\Entity\CGLBoundedPoint.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\Strings.xml" />
     <AndroidResource Include="Resources\drawable\icon.png" />
+    <AndroidResource Include="Resources\values\strings.xml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\animations\" />
     <Folder Include="Assets\entitys\" />
     <Folder Include="Resources\layout\" />
+    <Folder Include="_Entity\" />
+    <Folder Include="_Entity\_Character\" />
+    <Folder Include="Assets\sets\" />
+    <Folder Include="_CGL\Entity\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />

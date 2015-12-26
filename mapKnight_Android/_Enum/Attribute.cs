@@ -1,9 +1,10 @@
-﻿namespace mapKnight.Android
+﻿namespace mapKnight.Entity
 {
-	public enum Attributes
+	public enum Attribute
 	{
 		Armor,
-		Strength
+		Strength,
+		Health
 	}
 }
 

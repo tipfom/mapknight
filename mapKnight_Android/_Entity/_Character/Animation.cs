@@ -29,8 +29,8 @@ namespace mapKnight.Android
 				iAnimationSteps.Add (new AnimationStep (step));
 			}
 
-			iTranslations = new Vector2D[Content.Character.BodyParts];
-			iMovement = new fVector2D[Content.Character.BodyParts];
+//			iTranslations = new Vector2D[Content.Character.BodyParts];
+//			iMovement = new fVector2D[Content.Character.BodyParts];
 		}
 
 		protected Animation (bool abortable, List<AnimationStep> animationsteps)
@@ -68,11 +68,11 @@ namespace mapKnight.Android
 					}
 				} else {
 					// der nächste animationsschritt muss ausgeführt werden
-					if (iFinalTranslations != null)
-						iFinalTranslations = iAnimationSteps [iCurrentAnimation].GetFinalPosition (iFinalTranslations);
-					else
-						iFinalTranslations = iAnimationSteps [iCurrentAnimation].GetFinalPosition ();
-					iTranslations = iFinalTranslations;
+//					if (iFinalTranslations != null)
+//						iFinalTranslations = iAnimationSteps [iCurrentAnimation].GetFinalPosition (iFinalTranslations);
+//					else
+//						iFinalTranslations = iAnimationSteps [iCurrentAnimation].GetFinalPosition ();
+//					iTranslations = iFinalTranslations;
 
 					iCurrentAnimation++;
 					if (iCurrentAnimation >= iAnimationSteps.Count && repeat) {
@@ -83,16 +83,16 @@ namespace mapKnight.Android
 						return;
 					}
 
-					for (int i = 0; i < Content.Character.BodyParts; i++) {
-						if (iAnimationSteps [iCurrentAnimation].Movements.ContainsKey (i)) {
-							//wenn sich das körperteil bewegt
-							float moveX = (float)iAnimationSteps [iCurrentAnimation].Movements [i].X / (float)iAnimationSteps [iCurrentAnimation].Time;
-							float moveY = (float)iAnimationSteps [iCurrentAnimation].Movements [i].Y / (float)iAnimationSteps [iCurrentAnimation].Time;
-							iMovement [i] = new fVector2D (moveX, moveY);
-						} else {
-							iMovement [i] = new fVector2D (0, 0);
-						}
-					}
+//					for (int i = 0; i < Content.Character.BodyParts; i++) {
+//						if (iAnimationSteps [iCurrentAnimation].Movements.ContainsKey (i)) {
+//							//wenn sich das körperteil bewegt
+//							float moveX = (float)iAnimationSteps [iCurrentAnimation].Movements [i].X / (float)iAnimationSteps [iCurrentAnimation].Time;
+//							float moveY = (float)iAnimationSteps [iCurrentAnimation].Movements [i].Y / (float)iAnimationSteps [iCurrentAnimation].Time;
+//							iMovement [i] = new fVector2D (moveX, moveY);
+//						} else {
+//							iMovement [i] = new fVector2D (0, 0);
+//						}
+//					}
 
 					iCurrentAnimTime -= iNextAnimTime;
 					iNextAnimTime = iAnimationSteps [iCurrentAnimation].Time;
@@ -102,7 +102,7 @@ namespace mapKnight.Android
 
 		public Vector2D? GetTranslation (string name)
 		{
-			return GetTranslation (Content.Character.GetID (name));
+			return null;//GetTranslation (Content.Character.GetID (name));
 		}
 
 		public Vector2D? GetTranslation (int id)
