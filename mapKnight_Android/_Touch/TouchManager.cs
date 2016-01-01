@@ -63,8 +63,10 @@ namespace mapKnight.Android
 			case MotionEventActions.Cancel:
 			case MotionEventActions.PointerUp:
 //				Utils.Log.All (this, pointerId.ToString (), MessageType.Debug);
-				ActiveTouches.Remove (pointerId);
-				Touches [pointerId].Dispose ();
+				if (ActiveTouches.Contains (pointerId)) {
+					ActiveTouches.Remove (pointerId);
+					Touches [pointerId].Dispose ();
+				}
 				break;
 			}
 		

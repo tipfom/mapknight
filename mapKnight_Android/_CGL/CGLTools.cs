@@ -222,12 +222,12 @@ namespace mapKnight.Android.CGL
 
 		public static float[] Rotate (float[] verticies, float centerX, float centerY, float angle)
 		{
-			angle *= Math.PI / 180; // convert to radians
+			angle *= (float)Math.PI / 180f; // convert to radians
 
 			float[] rotatedVerticies = new float[verticies.Length];
 			for (int i = 0; i < verticies.Length / 2; i++) {
-				rotatedVerticies [i * 2 + 0] = centerX + (verticies [i * 2 + 0] - centerX) * Math.Cos (angle) - (verticies [i * 2 + 1] - centerY) * Math.Sin (angle);
-				rotatedVerticies [i * 2 + 1] = centerX + (verticies [i * 2 + 1] - centerY) * Math.Sin (angle) - (verticies [i * 2 + 1] - centerY) * Math.Cos (angle);
+				rotatedVerticies [i * 2 + 0] = centerX + (verticies [i * 2 + 0] - centerX) * (float)Math.Cos (angle) - (verticies [i * 2 + 1] - centerY) * (float)Math.Sin (angle);
+				rotatedVerticies [i * 2 + 1] = centerX + (verticies [i * 2 + 1] - centerY) * (float)Math.Sin (angle) - (verticies [i * 2 + 1] - centerY) * (float)Math.Cos (angle);
 			}
 			return rotatedVerticies;
 		}
