@@ -3,15 +3,19 @@
     <def>
         <slot name="helmet" bpcount="1">
             <texture x="0" y="0" width="18" height="18"/>
+            <drawsize width=".05" height=".05"/>
         </slot>
         <slot name="chestplate" bpcount="1">
             <texture x="0" y="18" width="16" height="9"/>
+            <drawsize width=".05" height=".03"/>
         </slot>
         <slot name="gloves" bpcount="2">
             <texture x="8" y="27" width="6" height="6"/>
+            <drawsize width=".01" height=".01"/>
         </slot>
         <slot name="shoes" bpcount="2">
             <texture x="0" y="27" width="8" height="6"/>
+            <drawsize width=".01" height=".01"/>
         </slot>
     </def>
 
@@ -39,7 +43,7 @@
         </part>
     </set>
 
-    <anim action="walk" abortable="true">
+    <anim action="walk" abortable="true" loopable="true">
         <default>
             <dpoint id="head_0" rotation="0" x="0" y="2"/>
             <dpoint id="chestplate_0" rotation="0" x="0" y="0"/>
@@ -55,5 +59,5 @@
             <move point="head" rotation="0" x="-20" y="0" />
         </step>
     </anim>
-    
+
 </character>

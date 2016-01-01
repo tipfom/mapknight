@@ -7,6 +7,8 @@ using Android.Content;
 using Android.Graphics;
 using GL = Android.Opengl.GLES20;
 
+using Java.Nio;
+
 using mapKnight.Values;
 
 namespace mapKnight.Android.CGL
@@ -26,6 +28,7 @@ namespace mapKnight.Android.CGL
 			return shader;
 		}
 
+		[Obsolete ("Using this will increase loadtime very much. Use CGLTools.GetProgram instead. :)")]
 		public static int LoadProgram (params int[] Shader)
 		{
 			int program = GL.GlCreateProgram ();
@@ -184,7 +187,49 @@ namespace mapKnight.Android.CGL
 		public static fRectangle ParseCoordinates (Dictionary<string,string> config, Size imageSize)
 		{
 			// konvertiert die geradezahligen koordination von sprites in opengl koordinaten
-			return (new Rectangle (new fPoint (Convert.ToInt32 (config ["x"]), Convert.ToInt32 (config ["y"])), new fSize (Convert.ToInt32 (config ["width"]), Convert.ToInt32 (config ["height"]))) / imageSize);
+			return (new Rectangle (new mapKnight.Values.Point (Convert.ToInt32 (config ["x"]), Convert.ToInt32 (config ["y"])), new Size (Convert.ToInt32 (config ["width"]), Convert.ToInt32 (config ["height"]))) / imageSize);
+		}
+
+		public static FloatBuffer CreateBuffer (float[] source)
+		{
+			return CreateBuffer (source, source.Length);
+		}
+
+		public static FloatBuffer CreateBuffer (float[] source, int size)
+		{
+			ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size);
+			byteBuffer.Order (ByteOrder.NativeOrder ());
+			FloatBuffer floatBuffer = byteBuffer.AsFloatBuffer ();
+			floatBuffer.Put (source);
+			floatBuffer.Position (0);
+			return floatBuffer;
+		}
+
+		public static ShortBuffer CreateBuffer (short[] source)
+		{
+			return CreateBuffer (source, source.Length);
+		}
+
+		public static ShortBuffer CreateBuffer (short[] source, int size)
+		{
+			ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size);
+			byteBuffer.Order (ByteOrder.NativeOrder ());
+			ShortBuffer shortBuffer = byteBuffer.AsShortBuffer ();
+			shortBuffer.Put (source);
+			shortBuffer.Position (0);
+			return shortBuffer;
+		}
+
+		public static float[] Rotate (float[] verticies, float centerX, float centerY, float angle)
+		{
+			angle *= Math.PI / 180; // convert to radians
+
+			float[] rotatedVerticies = new float[verticies.Length];
+			for (int i = 0; i < verticies.Length / 2; i++) {
+				rotatedVerticies [i * 2 + 0] = centerX + (verticies [i * 2 + 0] - centerX) * Math.Cos (angle) - (verticies [i * 2 + 1] - centerY) * Math.Sin (angle);
+				rotatedVerticies [i * 2 + 1] = centerX + (verticies [i * 2 + 1] - centerY) * Math.Sin (angle) - (verticies [i * 2 + 1] - centerY) * Math.Cos (angle);
+			}
+			return rotatedVerticies;
 		}
 	}
 }

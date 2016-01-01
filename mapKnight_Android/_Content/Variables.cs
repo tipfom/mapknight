@@ -64,9 +64,9 @@ namespace mapKnight.Android
 		public static ButtonManager TouchManager{ get; private set; }
 
 		//character
-		public static Character Character{ get; private set; }
-
-		public static List<CharacterInfo> LoadedCharacterInfos{ get; private set; }
+		//		public static Character Character{ get; private set; }
+		//
+		//		public static List<CharacterInfo> LoadedCharacterInfos{ get; private set; }
 
 		//data
 		public static SaveManager Data{ get; private set; }

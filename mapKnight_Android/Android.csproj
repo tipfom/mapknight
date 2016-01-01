@@ -88,16 +88,6 @@
     <Compile Include="_CGL\CGLCamera.cs" />
     <Compile Include="_Net\Server.cs" />
     <Compile Include="_Net\TerminalManager.cs" />
-    <Compile Include="_Entity\_Character\Animation.cs" />
-    <Compile Include="_Entity\_Character\AnimationStep.cs" />
-    <Compile Include="_Entity\_Character\ArmorPiece.cs" />
-    <Compile Include="_Entity\_Character\Boner.cs" />
-    <Compile Include="_Entity\_Character\Character.cs" />
-    <Compile Include="_Entity\_Character\CharacterInfo.cs" />
-    <Compile Include="_Entity\_Character\CharacterPreset.cs" />
-    <Compile Include="_Entity\_Character\DefinitionPoint.cs" />
-    <Compile Include="_Entity\_Character\Level.cs" />
-    <Compile Include="_Entity\_Character\Set.cs" />
     <Compile Include="_Entity\Entity.cs" />
     <Compile Include="_Entity\Slot.cs" />
     <Compile Include="_Entity\Set.cs" />
@@ -123,7 +113,6 @@
     <Folder Include="Assets\entitys\" />
     <Folder Include="Resources\layout\" />
     <Folder Include="_Entity\" />
-    <Folder Include="_Entity\_Character\" />
     <Folder Include="Assets\sets\" />
     <Folder Include="_CGL\Entity\" />
   </ItemGroup>

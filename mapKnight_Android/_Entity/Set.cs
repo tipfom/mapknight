@@ -42,7 +42,7 @@ namespace mapKnight.Entity
 				Attributes = new Dictionary<Attribute, int> ();
 
 				foreach (XMLElemental attribute in partConfig.GetAll()) {
-					Attributes.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Name, true), attribute.Attributes ["value"]);
+					Attributes.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Name, true), Convert.ToInt32 (attribute.Attributes ["value"]));
 				}
 			}
 		}

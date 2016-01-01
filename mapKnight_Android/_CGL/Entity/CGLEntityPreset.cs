@@ -14,22 +14,22 @@ namespace mapKnight.Android.CGL.Entity
 		protected List<CGLSet> sets;
 		protected List<CGLAnimation> animations;
 
-		protected Dictionary<Slot, fRectangle> bpTextures;
+		protected List<CGLBoundedPoint> boundedPoints;
 
 		public CGLEntityPreset (XMLElemental entityConfig, Context context) : base (entityConfig)
 		{
 			foreach (XMLElemental set in entityConfig.GetAll("set")) {
 				sets.Add (new CGLSet (set, context));
 			}
-			foreach (XMLElemental set in entityConfig.GetAll("animation")) {
-				animations.Add (new CGLAnimation ());
+			foreach (XMLElemental animation in entityConfig.GetAll("animation")) {
+				animations.Add (new CGLAnimation (animation));
 			}
 
 			foreach (XMLElemental def in entityConfig["def"].GetAll()) {
 				switch (def.Name) {
 				case "slot":
 					for (int i = 0; i < Convert.ToInt32 (def.Attributes ["bpcount"]); i++) {
-						bpTextures.Add ((Slot)Enum.Parse (typeof(Slot), def.Attributes ["name"]), CGLTools.ParseCoordinates (def ["texture"].Attributes, sets [0].TextureSize));
+						boundedPoints.Add (new CGLBoundedPoint (CGLTools.ParseCoordinates (def ["texture"].Attributes, sets [0].TextureSize), (Slot)Enum.Parse (typeof(Slot), def.Attributes ["name"])));
 					}
 					break;
 				}
@@ -44,7 +44,7 @@ namespace mapKnight.Android.CGL.Entity
 		public CGLEntity Instantiate (uint level, string set, Point position)
 		{
 			return new CGLEntity (defaultAttributes [mapKnight.Entity.Attribute.Health] + (int)((level - 1) * attributeIncrease [mapKnight.Entity.Attribute.Health]), position, name,
-				bpTextures, animations, sets.FindAll ((CGLSet obj) => obj.Name == set));
+				boundedPoints, animations, sets.Find ((CGLSet obj) => obj.Name == set));
 		}
 	}
 }

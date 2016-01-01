@@ -13,3 +13,11 @@ mapKnight_Editor/bin/*
 mapKnight_Editor/obj/*
 mapKnight_Editor/content/Thumbs.db
 mapKnight_Test/*
+mapKnight_Utils/bin/*
+mapKnight_Values/bin/*
+mapKnight_Terminal/bin/*
+mapKnight_Installer/bin/*
+mapKnight_Utils/obj/*
+mapKnight_Values/obj/*
+mapKnight_Terminal/obj/*
+mapKnight_Installer/obj/*

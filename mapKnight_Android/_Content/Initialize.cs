@@ -53,7 +53,6 @@ namespace mapKnight.Android
 
 			UpdateMatrix ();
 
-			Character = new Character ();
 			Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
 
 			CGL.CGLText.CGLTextContainer.Init ();

@@ -2,7 +2,7 @@
 
 namespace mapKnight.Android
 {
-	public class CGLCharacter : Character
+	public class CGLCharacter
 	{
 		
 		public CGLCharacter ()

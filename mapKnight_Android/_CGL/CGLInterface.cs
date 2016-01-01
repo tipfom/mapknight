@@ -83,14 +83,14 @@ namespace mapKnight.Android.CGL
 				-Content.ScreenRatio + jumpbuttonsize.Width, -1f, 0f,
 				//health bar
 				-Content.ScreenRatio, 1f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 1f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 0.97f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio, 1f, 0f, // * Content.Character.Health.Current / Content.Character.Health.Max
+				-Content.ScreenRatio + Content.ScreenRatio, 0.97f, 0f,
 				-Content.ScreenRatio, 0.97f, 0f,
 				//energie bar
 				// hat zur zeit die weerte der healtbar
 				-Content.ScreenRatio, 0.97f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 0.97f, 0f,
-				-Content.ScreenRatio + Content.ScreenRatio * Content.Character.Health.Current / Content.Character.Health.Max, 0.94f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio, 0.97f, 0f,
+				-Content.ScreenRatio + Content.ScreenRatio, 0.94f, 0f,
 				-Content.ScreenRatio, 0.94f, 0f,
 				// back button
 				Content.ScreenRatio, 0.8f, 0f,
