@@ -9,11 +9,15 @@ namespace mapKnight.Android
 	{
 		public fRectangle TextureRectangle;
 		public Slot Slot;
+		public fSize Size;
+		public string Name;
 
-		public CGLBoundedPoint (fRectangle textureRectangle, Slot slot)
+		public CGLBoundedPoint (fRectangle textureRectangle, Slot slot, string name, fSize size)
 		{
 			TextureRectangle = textureRectangle;
 			Slot = slot;
+			Size = size;
+			Name = name;
 		}
 	}
 }

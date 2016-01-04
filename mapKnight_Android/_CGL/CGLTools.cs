@@ -222,14 +222,62 @@ namespace mapKnight.Android.CGL
 
 		public static float[] Rotate (float[] verticies, float centerX, float centerY, float angle)
 		{
+			if (verticies.Length % 2 != 0)
+				return null; // no verticies with format 0 = x, 1 = y available
+			
 			angle *= (float)Math.PI / 180f; // convert to radians
 
 			float[] rotatedVerticies = new float[verticies.Length];
 			for (int i = 0; i < verticies.Length / 2; i++) {
 				rotatedVerticies [i * 2 + 0] = centerX + (verticies [i * 2 + 0] - centerX) * (float)Math.Cos (angle) - (verticies [i * 2 + 1] - centerY) * (float)Math.Sin (angle);
-				rotatedVerticies [i * 2 + 1] = centerX + (verticies [i * 2 + 1] - centerY) * (float)Math.Sin (angle) - (verticies [i * 2 + 1] - centerY) * (float)Math.Cos (angle);
+				rotatedVerticies [i * 2 + 1] = centerX + (verticies [i * 2 + 0] - centerX) * (float)Math.Sin (angle) - (verticies [i * 2 + 1] - centerY) * (float)Math.Cos (angle);
 			}
 			return rotatedVerticies;
+		}
+
+		public static float[] Translate (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY)
+		{
+			if (verticies.Length % 2 != 0)
+				return null;
+
+			float[] transformedVerticies = new float[verticies.Length];
+			float shiftingX = oldCenterX - newCenterX;
+			float shiftingY = oldCenterY - newCenterY;
+			for (int i = 0; i < verticies.Length; i++) {
+				transformedVerticies [i * 2 + 0] = verticies [i * 2 + 0] + shiftingX;
+				transformedVerticies [i * 2 + 1] = verticies [i * 2 + 1] + shiftingY;
+			}
+			return transformedVerticies;
+		}
+
+		public static float[] TransformRotate (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle)
+		{
+			if (verticies.Length % 2 != 0)
+				return null;
+
+			float shiftingX = oldCenterX - 2 * newCenterX;
+			float shiftingY = oldCenterY - 2 * newCenterY;
+
+			float[] transformedRotatedVerticies = new float[verticies.Length];
+			for (int i = 0; i < verticies.Length; i++) {
+				transformedRotatedVerticies [i * 2 + 0] = newCenterX + (verticies [i * 2 + 0] + shiftingX) * (float)Math.Cos (angle) - (verticies [i * 2 + 1] + shiftingY) * (float)Math.Sin (angle);
+				transformedRotatedVerticies [i * 2 + 1] = newCenterX + (verticies [i * 2 + 0] + shiftingX) * (float)Math.Sin (angle) - (verticies [i * 2 + 1] + shiftingY) * (float)Math.Cos (angle);
+			}
+			return transformedRotatedVerticies;
+		}
+
+		public static float[] GetVerticies (fSize size)
+		{
+			return new float[] {
+				-size.Width / 2f,
+				size.Height / 2,
+				-size.Width / 2f,
+				-size.Height / 2f,
+				size.Width / 2f,
+				-size.Height / 2f,
+				size.Width / 2f,
+				size.Height / 2f
+			};
 		}
 	}
 }

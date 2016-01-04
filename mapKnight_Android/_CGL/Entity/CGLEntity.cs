@@ -41,9 +41,6 @@ namespace mapKnight.Android.CGL.Entity
 			for (int i = 0; i < boundedPoints.Count; i++) {
 				// set buffer default values
 
-				// vertex buffer
-				vertexBufferArray = animations [currentAnimation].Default;
-
 				// texture buffer
 				textureBufferArray [i * 8 + 0] = boundedPoints [i].TextureRectangle.Top;
 				textureBufferArray [i * 8 + 1] = boundedPoints [i].TextureRectangle.Left;
@@ -106,9 +103,32 @@ namespace mapKnight.Android.CGL.Entity
 			GL.GlDisableVertexAttribArray (mTextureCoordinateHandle);
 		}
 
-		private void Update ()
+		public bool Animate (string animation)
 		{
+			if (animations [currentAnimation].Abortable == true || animations [currentAnimation].Finished == true) {
+				currentAnimation = animations.IndexOf (animations.Find (((CGLAnimation obj) => obj.Action == animation)));
+				return true;
+			} else
+				return false;
+		}
+
+		private void Update (float deltatime)
+		{
+			if (animations [currentAnimation].Finished) {
+				if (animations [currentAnimation].Loopable)
+					animations [currentAnimation].Start ();
+				return;
+			}
 			
+			animations [currentAnimation].Step (deltatime);
+
+			// begin translating the current animationdata
+			for (int i = 0; i < boundedPoints.Count; i++) {
+				// base.Penis = (0 ==(8 % (8----0))*(0));
+				float[] data = animations [currentAnimation].Current [boundedPoints [i].Name];
+				vertexBuffer.Put (CGLTools.TransformRotate (CGLTools.GetVerticies (boundedPoints [i].Size), 0, 0, data [0], data [1], data [2]));
+			}
+			vertexBuffer.Position (0);
 		}
 
 		~CGLEntity ()
