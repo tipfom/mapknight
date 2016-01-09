@@ -18,10 +18,14 @@ namespace mapKnight.Android.CGL.Entity
 
 		public CGLEntityPreset (XMLElemental entityConfig, Context context) : base (entityConfig)
 		{
+			sets = new List<CGLSet> ();
+			animations = new List<CGLAnimation> ();
+			boundedPoints = new List<CGLBoundedPoint> ();
+
 			foreach (XMLElemental set in entityConfig.GetAll("set")) {
 				sets.Add (new CGLSet (set, context));
 			}
-			foreach (XMLElemental animation in entityConfig.GetAll("animation")) {
+			foreach (XMLElemental animation in entityConfig.GetAll("anim")) {
 				animations.Add (new CGLAnimation (animation));
 			}
 
@@ -29,7 +33,7 @@ namespace mapKnight.Android.CGL.Entity
 				switch (def.Name) {
 				case "slot":
 					for (int i = 0; i < Convert.ToInt32 (def.Attributes ["bpcount"]); i++) {
-						boundedPoints.Add (new CGLBoundedPoint (CGLTools.ParseCoordinates (def ["texture"].Attributes, sets [0].TextureSize), (Slot)Enum.Parse (typeof(Slot), def.Attributes ["name"]), def.Attributes ["name"] + "_" + i.ToString (), new fSize (float.Parse (def ["drawsize"].Attributes ["width"]), float.Parse (def ["drawsize"].Attributes ["height"]))));
+						boundedPoints.Add (new CGLBoundedPoint (CGLTools.ParseCoordinates (def ["texture"].Attributes, sets [0].TextureSize), (Slot)Enum.Parse (typeof(Slot), def.Attributes ["name"], true), def.Attributes ["name"] + "_" + i.ToString (), new fSize (float.Parse (def ["drawsize"].Attributes ["width"]), float.Parse (def ["drawsize"].Attributes ["height"]))));
 					}
 					break;
 				}

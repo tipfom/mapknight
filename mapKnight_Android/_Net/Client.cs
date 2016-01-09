@@ -43,7 +43,7 @@ namespace mapKnight.Android.Net
 				((Socket)ar.AsyncState).BeginReceive (buffer, 0, bufferSize, SocketFlags.None, new AsyncCallback (ReceiveCallback), ((Socket)ar.AsyncState));
 				if (OnConnectionStateChanged != null)
 					OnConnectionStateChanged (this, true);
-			} catch (Exception ex) {
+			} catch {
 				clientSocket.BeginConnect (ipEndPoint, new AsyncCallback (ConnectCallback), clientSocket);
 			}
 		}

@@ -19,13 +19,13 @@ namespace mapKnight.Entity
 			// default attributes
 			defaultAttributes = new Dictionary<Attribute, int> ();
 			foreach (XMLElemental attribute in entityConfig["level"]["default"].GetAll()) {
-				defaultAttributes.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Name), Convert.ToInt32 (attribute.Value));
+				defaultAttributes.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Name, true), Convert.ToInt32 (attribute.Attributes ["value"]));
 			}
 
 			// increase of each attribute per level
 			attributeIncrease = new Dictionary<Attribute, float> ();
 			foreach (XMLElemental attribute in entityConfig["level"]["increase"].GetAll()) {
-				attributeIncrease.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Name), Convert.ToInt32 (attribute.Value));
+				attributeIncrease.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Name, true), float.Parse (attribute.Attributes ["value"]));
 			}
 		}
 

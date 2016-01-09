@@ -6,7 +6,7 @@ namespace mapKnight.Values
 	{
 		public static fRectangle operator / (Rectangle rect, Size size)
 		{
-			return new fRectangle (new fPoint (rect.Position.X / (float)size.Width, rect.Position.Y / (float)size.Height), new fSize (rect.Width / (float)size.Width, rect.Height / (float)size.Height));
+			return new fRectangle (new fPoint ((float)rect.Position.X / (float)size.Width, (float)rect.Position.Y / (float)size.Height), new fSize ((float)rect.Width / (float)size.Width, (float)rect.Height / (float)size.Height));
 		}
 
 		private Point iPosition;

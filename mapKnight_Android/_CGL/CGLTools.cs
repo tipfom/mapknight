@@ -53,6 +53,8 @@ namespace mapKnight.Android.CGL
 			if (loadedPrograms.ContainsKey (shader)) {
 				return loadedPrograms [shader];
 			} else {
+				#pragma warning disable 612, 618
+				// disables obsolte warning
 				loadedPrograms.Add (shader, LoadProgram (shader));
 				return loadedPrograms [shader];
 			}
@@ -195,9 +197,18 @@ namespace mapKnight.Android.CGL
 			return CreateBuffer (source, source.Length);
 		}
 
+		public static FloatBuffer CreateBuffer (float size)
+		{
+			ByteBuffer byteBuffer = ByteBuffer.AllocateDirect ((int)size * sizeof(float));
+			byteBuffer.Order (ByteOrder.NativeOrder ());
+			FloatBuffer floatBuffer = byteBuffer.AsFloatBuffer ();
+			floatBuffer.Position (0);
+			return floatBuffer;
+		}
+
 		public static FloatBuffer CreateBuffer (float[] source, int size)
 		{
-			ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size);
+			ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size * sizeof(float));
 			byteBuffer.Order (ByteOrder.NativeOrder ());
 			FloatBuffer floatBuffer = byteBuffer.AsFloatBuffer ();
 			floatBuffer.Put (source);
@@ -212,7 +223,7 @@ namespace mapKnight.Android.CGL
 
 		public static ShortBuffer CreateBuffer (short[] source, int size)
 		{
-			ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size);
+			ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size * sizeof(short));
 			byteBuffer.Order (ByteOrder.NativeOrder ());
 			ShortBuffer shortBuffer = byteBuffer.AsShortBuffer ();
 			shortBuffer.Put (source);
@@ -230,7 +241,7 @@ namespace mapKnight.Android.CGL
 			float[] rotatedVerticies = new float[verticies.Length];
 			for (int i = 0; i < verticies.Length / 2; i++) {
 				rotatedVerticies [i * 2 + 0] = centerX + (verticies [i * 2 + 0] - centerX) * (float)Math.Cos (angle) - (verticies [i * 2 + 1] - centerY) * (float)Math.Sin (angle);
-				rotatedVerticies [i * 2 + 1] = centerX + (verticies [i * 2 + 0] - centerX) * (float)Math.Sin (angle) - (verticies [i * 2 + 1] - centerY) * (float)Math.Cos (angle);
+				rotatedVerticies [i * 2 + 1] = centerX + (verticies [i * 2 + 0] - centerX) * (float)Math.Sin (angle) + (verticies [i * 2 + 1] - centerY) * (float)Math.Cos (angle);
 			}
 			return rotatedVerticies;
 		}
@@ -241,27 +252,46 @@ namespace mapKnight.Android.CGL
 				return null;
 
 			float[] transformedVerticies = new float[verticies.Length];
-			float shiftingX = oldCenterX - newCenterX;
-			float shiftingY = oldCenterY - newCenterY;
-			for (int i = 0; i < verticies.Length; i++) {
-				transformedVerticies [i * 2 + 0] = verticies [i * 2 + 0] + shiftingX;
-				transformedVerticies [i * 2 + 1] = verticies [i * 2 + 1] + shiftingY;
+			float shiftingX = newCenterX - oldCenterX;
+			float shiftingY = newCenterY - oldCenterY;
+			for (int i = 0; i < verticies.Length / 2; i++) {
+				transformedVerticies [i * 2 + 0] = verticies [i * 2 + 0] - shiftingX;
+				transformedVerticies [i * 2 + 1] = verticies [i * 2 + 1] - shiftingY;
 			}
 			return transformedVerticies;
 		}
 
-		public static float[] TransformRotate (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle)
+		public static float[] TranslateRotate (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle)
 		{
 			if (verticies.Length % 2 != 0)
 				return null;
 
-			float shiftingX = oldCenterX - 2 * newCenterX;
-			float shiftingY = oldCenterY - 2 * newCenterY;
+			angle *= (float)Math.PI / 180f; // convert to radians
 
 			float[] transformedRotatedVerticies = new float[verticies.Length];
-			for (int i = 0; i < verticies.Length; i++) {
-				transformedRotatedVerticies [i * 2 + 0] = newCenterX + (verticies [i * 2 + 0] + shiftingX) * (float)Math.Cos (angle) - (verticies [i * 2 + 1] + shiftingY) * (float)Math.Sin (angle);
-				transformedRotatedVerticies [i * 2 + 1] = newCenterX + (verticies [i * 2 + 0] + shiftingX) * (float)Math.Sin (angle) - (verticies [i * 2 + 1] + shiftingY) * (float)Math.Cos (angle);
+			for (int i = 0; i < verticies.Length / 2; i++) {
+				transformedRotatedVerticies [i * 2 + 0] = newCenterX + (verticies [i * 2 + 0] - oldCenterX) * (float)Math.Cos (angle) - (verticies [i * 2 + 1] - oldCenterY) * (float)Math.Sin (angle);
+				transformedRotatedVerticies [i * 2 + 1] = newCenterY + (verticies [i * 2 + 0] - oldCenterX) * (float)Math.Sin (angle) + (verticies [i * 2 + 1] - oldCenterY) * (float)Math.Cos (angle);
+			}
+			return transformedRotatedVerticies;
+		}
+
+		public static float[] TranslateRotateMirror (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle, bool mirrored)
+		{
+			if (verticies.Length % 2 != 0)
+				return null;
+
+			angle *= (float)Math.PI / 180f; // convert to radians
+
+			float[] transformedRotatedVerticies = new float[verticies.Length];
+			for (int i = 0; i < verticies.Length / 2; i++) {
+				if (mirrored) {
+					transformedRotatedVerticies [i * 2 + 0] = newCenterX - (verticies [i * 2 + 0] - oldCenterX) * (float)Math.Cos (angle) + (verticies [i * 2 + 1] - oldCenterY) * (float)Math.Sin (angle);
+					transformedRotatedVerticies [i * 2 + 1] = newCenterY + (verticies [i * 2 + 0] - oldCenterX) * (float)Math.Sin (angle) + (verticies [i * 2 + 1] - oldCenterY) * (float)Math.Cos (angle);
+				} else {
+					transformedRotatedVerticies [i * 2 + 0] = newCenterX + (verticies [i * 2 + 0] - oldCenterX) * (float)Math.Cos (angle) - (verticies [i * 2 + 1] - oldCenterY) * (float)Math.Sin (angle);
+					transformedRotatedVerticies [i * 2 + 1] = newCenterY + (verticies [i * 2 + 0] - oldCenterX) * (float)Math.Sin (angle) + (verticies [i * 2 + 1] - oldCenterY) * (float)Math.Cos (angle);
+				}
 			}
 			return transformedRotatedVerticies;
 		}
@@ -270,7 +300,7 @@ namespace mapKnight.Android.CGL
 		{
 			return new float[] {
 				-size.Width / 2f,
-				size.Height / 2,
+				size.Height / 2f,
 				-size.Width / 2f,
 				-size.Height / 2f,
 				size.Width / 2f,
@@ -278,6 +308,11 @@ namespace mapKnight.Android.CGL
 				size.Width / 2f,
 				size.Height / 2f
 			};
+		}
+
+		public static float Lerp (float value1, float value2, float percent)
+		{
+			return value1 + (value2 - value1) * percent;
 		}
 	}
 }

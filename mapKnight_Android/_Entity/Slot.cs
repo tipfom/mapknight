@@ -6,8 +6,8 @@ namespace mapKnight.Entity
 	{
 		Helmet,
 		Chestplate,
-		Glove,
-		Shoe
+		Gloves,
+		Shoes
 	}
 }
 

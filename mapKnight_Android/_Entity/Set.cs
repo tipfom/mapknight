@@ -38,11 +38,11 @@ namespace mapKnight.Entity
 			public Part (XMLElemental partConfig)
 			{
 				Name = partConfig.Attributes ["name"];
-				Slot = (Slot)Enum.Parse (typeof(Slot), partConfig.Attributes ["slot"]);
+				Slot = (Slot)Enum.Parse (typeof(Slot), partConfig.Attributes ["slot"], true);
 				Attributes = new Dictionary<Attribute, int> ();
 
 				foreach (XMLElemental attribute in partConfig.GetAll()) {
-					Attributes.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Name, true), Convert.ToInt32 (attribute.Attributes ["value"]));
+					Attributes.Add ((Attribute)Enum.Parse (typeof(Attribute), attribute.Attributes ["name"], true), Convert.ToInt32 (attribute.Value));
 				}
 			}
 		}

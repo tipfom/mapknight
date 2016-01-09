@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using Android.Opengl;
 using Android.Graphics;
@@ -22,13 +23,15 @@ namespace mapKnight.Android.CGL
 		CGLInterface gameInterface;
 		Context context;
 		CGLText infoText;
+		int frameTime;
+		int measueredFPS;
 
 		public CGLRenderer (Context Context)
 		{
 			context = Context;
 		}
 
-		#region IRenderer implementation
+#region IRenderer implementation
 
 		public void OnDrawFrame (IGL10 gl)
 		{
@@ -36,6 +39,7 @@ namespace mapKnight.Android.CGL
 
 			testsquaremap.Draw (Content.MVPMatrix);
 			gameInterface.Draw (Content.MVPMatrix);
+			Entity.CGLEntity.Draw (frameTime);
 			CGLText.CGLTextContainer.Draw (Content.MVPMatrix);
 			CalculateFrameRate ();
 		}
@@ -62,20 +66,32 @@ namespace mapKnight.Android.CGL
 
 			mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"));
 			gameInterface = new CGLInterface ();
-			infoText = new CGLText ("fps", 30, Font.Tahoma, new Values.Point (0, 20), Values.Color.Black);
+			infoText = new CGLText ("fps", 30, Font.Tahoma, new Values.Point (0, 20), Values.Color.White);
 		}
 
-		#endregion
+#endregion
 
 		private int lastTick;
+		private int lastSecond;
+		private int ticks;
 
 		private void CalculateFrameRate ()
 		{
-			infoText.Text = " frametime = " + (System.Environment.TickCount - lastTick).ToString () + " ms ( " + (1000 / (System.Environment.TickCount - lastTick)).ToString () + " fps )" +
-			"\n version = " + Content.Version.ToString (false) +
-			"\n terminal connected = " + Content.Terminal.Connected.ToString ().ToLower ();
+			frameTime = System.Environment.TickCount - lastTick;
+
+
+			ticks++;
+			if (System.Environment.TickCount - lastSecond > 1000) {
+				measueredFPS = ticks;
+				ticks = 0;
+				lastSecond = System.Environment.TickCount;
+
+				infoText.Text = " frametime = " + frameTime.ToString () + " ms ( " + (1000 / frameTime).ToString () + " fps , " + measueredFPS.ToString () + " fps counted )" +
+				"\n version = " + Content.Version.ToString (false) +
+				"\n terminal connected = " + Content.Terminal.Connected.ToString ().ToLower ();
+
+			}
 			lastTick = System.Environment.TickCount;
 		}
-
 	}
 }
