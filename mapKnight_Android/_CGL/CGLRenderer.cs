@@ -37,7 +37,7 @@ namespace mapKnight.Android.CGL
 		{
 			GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
 
-			testsquaremap.Draw (Content.MVPMatrix);
+			testsquaremap.Draw ();
 			gameInterface.Draw (Content.MVPMatrix);
 			Entity.CGLEntity.Draw (frameTime);
 			CGLText.CGLTextContainer.Draw (Content.MVPMatrix);
@@ -51,7 +51,7 @@ namespace mapKnight.Android.CGL
 			screenHeight = height;
 
 			GL.GlViewport (0, 0, width, height);
-			testsquaremap = new CGLMap (22, ratio, mapElemental, new Size (width, height));
+			testsquaremap = new CGLMap (22, "dev.devmap");
 			GL.GlViewport (0, 0, width, height);
 			GL.GlClearColor (0f, 0f, 0f, 1.0f);
 
@@ -64,7 +64,6 @@ namespace mapKnight.Android.CGL
 
 			GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
-			mapElemental = XMLElemental.Load (context.Assets.Open ("maps/testMap.xml"));
 			gameInterface = new CGLInterface ();
 			infoText = new CGLText ("fps", 30, Font.Tahoma, new Values.Point (0, 20), Values.Color.White);
 		}

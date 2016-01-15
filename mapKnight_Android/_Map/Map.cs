@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
+
+using Android.Content;
 
 using mapKnight.Utils;
 
@@ -32,24 +35,45 @@ namespace mapKnight.Android
 			}
 		}
 
-		public Map (XMLElemental Map)
+		public Map (string name) : this (name, (Path.GetExtension (name) == ".devmap"))
 		{
-			if (IsMapXML (Map)) {
-				Author = Map.Attributes ["Author"];
-				Name = Map.Attributes ["Name"];
-				SpawnPoint = new int[2];
-				int.TryParse (Map.Attributes ["Spawn"].Split (';') [0], out SpawnPoint [0]);
-				int.TryParse (Map.Attributes ["Spawn"].Split (';') [1], out SpawnPoint [1]);
+		}
 
-				int.TryParse (Map ["Data"].Attributes ["Width"], out Width);
-				int.TryParse (Map ["Data"].Attributes ["Height"], out Height);
+		public Map (string name, bool isDev)
+		{
+			string rawCode;
+			using (StreamReader reader = new StreamReader (Content.Context.Assets.Open (Path.Combine ("maps", name)))) {
+				rawCode = reader.ReadToEnd ();
+			}
+			if (!isDev)
+				rawCode = AO.UnZipString (rawCode);
+
+			Load (XMLElemental.Load (rawCode));
+		}
+
+		private Map (XMLElemental xmlelemental)
+		{
+			Load (xmlelemental);
+		}
+
+		private void Load (XMLElemental rawXML)
+		{
+			if (IsMapXML (rawXML)) {
+				Author = rawXML.Attributes ["Author"];
+				Name = rawXML.Attributes ["Name"];
+				SpawnPoint = new int[2];
+				int.TryParse (rawXML.Attributes ["Spawn"].Split (';') [0], out SpawnPoint [0]);
+				int.TryParse (rawXML.Attributes ["Spawn"].Split (';') [1], out SpawnPoint [1]);
+
+				int.TryParse (rawXML ["Data"].Attributes ["Width"], out Width);
+				int.TryParse (rawXML ["Data"].Attributes ["Height"], out Height);
 
 				MapData = new ushort[Width, Height, 3];
 
 				// parse the def section
 				Dictionary<string,ushort[]> DataValueIndex = new Dictionary<string, ushort[]> ();
 
-				foreach (string Value in Map["Def"].Value.Split(new char[]{';'},StringSplitOptions.RemoveEmptyEntries)) {
+				foreach (string Value in rawXML["Def"].Value.Split(new char[]{';'},StringSplitOptions.RemoveEmptyEntries)) {
 					string[] Data = Value.Split (new char[]{ '=' }, StringSplitOptions.RemoveEmptyEntries) [1].Split (new char[]{ ',' }, StringSplitOptions.None);
 					Tile lTile = (Tile)Enum.Parse (typeof(Tile), Data [0]);
 					Overlay lOverlay;
@@ -59,16 +83,16 @@ namespace mapKnight.Android
 						lOverlay = Overlay.None;
 
 					DataValueIndex.Add (Value.Split (new char[]{ '=' }, StringSplitOptions.RemoveEmptyEntries) [0], new ushort[] {
-						(ushort)lTile,
-						(ushort)lOverlay
-					});
+							(ushort)lTile,
+							(ushort)lOverlay
+						});
 				}
 
 				// parse the data section
 				int cX = 0;
 				int cY = 0;
 
-				foreach (string Data in Map["Data"].Value.Split(new char[]{','},StringSplitOptions.RemoveEmptyEntries)) {
+				foreach (string Data in rawXML["Data"].Value.Split(new char[]{','},StringSplitOptions.RemoveEmptyEntries)) {
 					string[] AmountData = Data.Split (new char[]{ '~' }, StringSplitOptions.RemoveEmptyEntries);
 					int Amount;
 					if (int.TryParse (AmountData [0], out Amount)) {

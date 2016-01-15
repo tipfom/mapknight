@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Android.Opengl;
 using Android.Content;
@@ -13,9 +14,9 @@ using mapKnight.Values;
 
 namespace mapKnight.Android.CGL
 {
-	public static class CGLTools
+	public static partial class CGLTools
 	{
-		public static int LoadShader (int type, string code)
+		private static int LoadShader (int type, string code)
 		{
 			int shader = GL.GlCreateShader (type);
 
@@ -29,12 +30,12 @@ namespace mapKnight.Android.CGL
 		}
 
 		[Obsolete ("Using this will increase loadtime very much. Use CGLTools.GetProgram instead. :)")]
-		public static int LoadProgram (params int[] Shader)
+		public static int LoadProgram (params Shader[] Shader)
 		{
 			int program = GL.GlCreateProgram ();
 
-			foreach (int shader in Shader) {
-				GL.GlAttachShader (program, shader);
+			foreach (Shader shader in Shader) {
+				GL.GlAttachShader (program, loadedShader [shader]);
 			}
 
 			GL.GlLinkProgram (program);
@@ -45,9 +46,9 @@ namespace mapKnight.Android.CGL
 			return program;
 		}
 
-		private static Dictionary<int[], int> loadedPrograms = new Dictionary<int[], int> (new IntArrayComparer ());
+		private static Dictionary<Shader[], int> loadedPrograms = new Dictionary<Shader[], int> (new ShaderArrayComparer ());
 
-		public static int GetProgram (params int[] shader)
+		public static int GetProgram (params Shader[] shader)
 		{
 			Array.Sort (shader);
 			if (loadedPrograms.ContainsKey (shader)) {
@@ -58,6 +59,16 @@ namespace mapKnight.Android.CGL
 				loadedPrograms.Add (shader, LoadProgram (shader));
 				return loadedPrograms [shader];
 			}
+		}
+
+		private static Dictionary<Shader,int> loadedShader = new Dictionary<Shader, int> ();
+
+		public static void LoadShader ()
+		{
+			loadedShader.Add (Shader.VertexShaderN, LoadShader (GL.GlVertexShader, VertexShaderNCode));
+			loadedShader.Add (Shader.VertexShaderM, LoadShader (GL.GlVertexShader, VertexShaderMCode));
+
+			loadedShader.Add (Shader.FragmentShader, LoadShader (GL.GlFragmentShader, FragmentShaderCode));
 		}
 
 		public static BufferData GenerateFramebuffer (int width, int height)

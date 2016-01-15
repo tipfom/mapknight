@@ -13,8 +13,5 @@ namespace mapKnight.Android
 		Sandstone = 13,
 		Ruin = 21,
 		DestroyedRuin = 22,
-		GlowingGrass = 10001,
-		GlowingTendill = 10002,
-		GlowingRoot = 10003
 	}
 }

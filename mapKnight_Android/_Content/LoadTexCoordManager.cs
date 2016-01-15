@@ -7,12 +7,12 @@ namespace mapKnight.Android
 {
 	public static partial class Content
 	{
-		private static TextureCoordinateManager<short> LoadManager (List<XMLElemental> Tiles)
+		private static TextureCoordinateManager<ushort> LoadManager (List<XMLElemental> Tiles)
 		{
-			TextureCoordinateManager<short> LoadedInstance = new TextureCoordinateManager<short> ();
+			TextureCoordinateManager<ushort> LoadedInstance = new TextureCoordinateManager<ushort> ();
 
 			foreach (XMLElemental entry in Tiles) {
-				short id = (short)Convert.ToInt32 (entry.Attributes ["id"]);
+				ushort id = (ushort)Convert.ToInt32 (entry.Attributes ["id"]);
 				float x = (float)Convert.ToInt32 (entry.Attributes ["x"]) / ImageWidth;
 				float y = 1f - (float)(Content.ImageHeight - (short)Convert.ToInt32 (entry.Attributes ["y"])) / ImageHeight;
 

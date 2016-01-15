@@ -27,6 +27,8 @@ namespace mapKnight.Android
 
 		public static void Init (XMLElemental configfile, Context GameContext)
 		{
+			Context = GameContext;
+
 			Version = new Values.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
 			Log.All (typeof(Content), "Current Version : " + Version.ToString (), MessageType.Info);
 
@@ -49,7 +51,7 @@ namespace mapKnight.Android
 			TouchManager = new ButtonManager ();
 			Terminal = new Net.TerminalManager ();
 
-			LoadShader ();
+			CGL.CGLTools.LoadShader ();
 
 			UpdateMatrix ();
 
@@ -90,6 +92,7 @@ namespace mapKnight.Android
 
 			BitmapFactory.Options bfoptions = new BitmapFactory.Options ();
 			bfoptions.InScaled = false;
+			bfoptions.InPreferredConfig = Bitmap.Config.Argb8888;
 			Bitmap bitmap = BitmapFactory.DecodeStream (ImageStream, null, bfoptions);
 
 			GL.GlBindTexture (GL.GlTexture2d, loadedtexture [0]);
@@ -101,8 +104,8 @@ namespace mapKnight.Android
 
 			GLUtils.TexImage2D (GL.GlTexture2d, 0, bitmap, 0);
 
-			ImageHeight = bitmap.Height;
-			ImageWidth = bitmap.Width;
+			ImageHeight = bfoptions.OutHeight;
+			ImageWidth = bfoptions.OutWidth;
 
 			bitmap.Recycle ();
 			GL.GlBindTexture (GL.GlTexture2d, 0);

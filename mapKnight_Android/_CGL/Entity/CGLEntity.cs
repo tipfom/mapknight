@@ -69,7 +69,7 @@ namespace mapKnight.Android.CGL.Entity
 			textureBuffer = CGLTools.CreateBuffer (textureBufferArray);
 			indexBuffer = CGLTools.CreateBuffer (indexBufferArray);
 			vertexBuffer = CGLTools.CreateBuffer (vertexBufferArray);
-			renderProgram = CGLTools.GetProgram (Content.FragmentShaderN, Content.VertexShaderM);
+			renderProgram = CGLTools.GetProgram (Shader.FragmentShader, Shader.VertexShaderM);
 
 			activeEntitys.Add (this); // register entity
 		}

@@ -42,9 +42,9 @@
         </part>
     </set>
 
-    <!-- looptime = time to go back to default -->
-    <anim action="default" abortable="true" loopable="true" looptime="3000">
-        <default>
+    <anim action="default" abortable="true" loopable="true">
+        <default time="700">
+            <!-- time to go back to default -->
             <bpoint name="helmet_0" rot="0" x="0" y="0,16" mirrored="false"/>
             <bpoint name="chestplate_0" rot="0" x="0" y="0"  mirrored="false"/>
             <bpoint name="gloves_0" rot="0" x="0,15" y="0"  mirrored="false"/>

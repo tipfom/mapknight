@@ -17,7 +17,11 @@ namespace mapKnight.Android
 		Grass = 31,
 		GrassRoot = 32,
 		GrassEdge = 33,
-		GrassSpot = 34
+		GrassSpot = 34,
+
+		GlowingGrass = 10001,
+		GlowingTendill = 10002,
+		GlowingRoot = 10003
 	}
 }
 

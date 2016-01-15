@@ -31,7 +31,7 @@ namespace mapKnight.Android.CGL.Entity
 			Abortable = Boolean.Parse (animConfig.Attributes ["abortable"]);
 			Loopable = Boolean.Parse (animConfig.Attributes ["loopable"]);
 			if (Loopable)
-				loopTime = int.Parse (animConfig.Attributes ["looptime"]);
+				loopTime = int.Parse (animConfig.Get ("default").Attributes ["time"]);
 
 			// load default
 			foreach (XMLElemental bpoint in animConfig["default"].GetAll()) {

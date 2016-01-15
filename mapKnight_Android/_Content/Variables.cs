@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using Android.Graphics;
+using Android.Content;
 
 using mapKnight.Android.CGL;
 using mapKnight.Values;
@@ -27,9 +28,9 @@ namespace mapKnight.Android
 		private static float TextureVertexHeight{ get; set; }
 
 		// TextureCoordinateManager for tiles and overlays
-		public static TextureCoordinateManager<short> TileTexCoordManager { get; private set; }
+		public static TextureCoordinateManager<ushort> TileTexCoordManager { get; private set; }
 
-		public static TextureCoordinateManager<short> OverlayTexCoordManager { get; private set; }
+		public static TextureCoordinateManager<ushort> OverlayTexCoordManager { get; private set; }
 
 		// screen bounds
 		public static Size ScreenSize{ get; private set; }
@@ -72,5 +73,7 @@ namespace mapKnight.Android
 		public static SaveManager Data{ get; private set; }
 
 		public static Net.TerminalManager Terminal{ get; private set; }
+
+		public static Context Context{ get; private set; }
 	}
 }

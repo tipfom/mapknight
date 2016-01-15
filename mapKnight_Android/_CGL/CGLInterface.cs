@@ -30,7 +30,7 @@ namespace mapKnight.Android.CGL
 
 		public CGLInterface ()
 		{
-			RenderProgram = CGLTools.GetProgram (Content.FragmentShaderN, Content.VertexShaderM);
+			RenderProgram = CGLTools.GetProgram (Shader.VertexShaderM, Shader.FragmentShader);
 
 			short[] Indicies = new short[] {
 				0, 1, 2,
