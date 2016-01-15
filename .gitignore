@@ -1,25 +1,27 @@
 mapKnight.userprefs
 
-mapKnight_Utils/bin/*
-mapKnight_Values/bin/*
-mapKnight_Editor/bin/*
-mapKnight_Android/bin/*
-mapKnight_Terminal/bin/*
-mapKnight_Installer/bin/*
+mapKnight_utils/bin/*
+mapKnight_physX/bin/*
+mapKnight_values/bin/*
+mapKnight_editor/bin/*
+mapKnight_android/bin/*
+mapKnight_terminal/bin/*
+mapKnight_installer/bin/*
 
-mapKnight_Utils/obj/*
-mapKnight_Values/obj/*
-mapKnight_Editor/obj/*
-mapKnight_Android/obj/*
-mapKnight_Terminal/obj/*
-mapKnight_Installer/obj/*
+mapKnight_utils/obj/*
+mapKnight_physX/obj/*
+mapKnight_values/obj/*
+mapKnight_editor/obj/*
+mapKnight_android/obj/*
+mapKnight_terminal/obj/*
+mapKnight_installer/obj/*
 
-mapKnight_Test/*
+mapKnight_test/*
 Components/*
 .vs/*
 packages/*
 
-mapKnight_Android/Assets/Thumbs.db
-mapKnight_Android/Resources/drawable/Thumbs.db
-mapKnight_Editor/content/Thumbs.db
-mapKnight_Editor/Resources/Thumbs.db
+mapKnight_android/Assets/Thumbs.db
+mapKnight_android/Resources/drawable/Thumbs.db
+mapKnight_editor/content/Thumbs.db
+mapKnight_editor/Resources/Thumbs.db
