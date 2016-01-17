@@ -14,6 +14,7 @@
 		<font name="Tahoma" src="fonts/tahoma.ttf" />
 		<font name="ArcadeClassic" src="fonts/ARCADECLASSIC.TTF" />
 		<font name="ArcadeDotted" src="fonts/ARCADE.TTF" />
+		<font name="Pixel" src="fonts/8bitOperatorPlus8-Regular.ttf"/>
 	</fonts>
 	<tiles>
 		<entry id="65535" x="652" y="0" />

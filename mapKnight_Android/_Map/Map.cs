@@ -46,7 +46,7 @@ namespace mapKnight.Android
 				rawCode = reader.ReadToEnd ();
 			}
 			if (!isDev)
-				rawCode = AO.UnZipString (rawCode);
+				rawCode = rawCode.UnZip ();
 
 			Load (XMLElemental.Load (rawCode));
 		}

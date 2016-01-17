@@ -1,7 +1,7 @@
 ﻿namespace mapKnight.ToolKit
 {
-	enum Character
+	enum Character : int
 	{
-		Robot
+		Robot = 0
 	}
 }

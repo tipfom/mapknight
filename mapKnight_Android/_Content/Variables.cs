@@ -6,6 +6,7 @@ using Android.Graphics;
 using Android.Content;
 
 using mapKnight.Android.CGL;
+using mapKnight.Android.CGL.Entity;
 using mapKnight.Values;
 
 namespace mapKnight.Android
@@ -65,8 +66,8 @@ namespace mapKnight.Android
 		public static ButtonManager TouchManager{ get; private set; }
 
 		//character
-		//		public static Character Character{ get; private set; }
-		//
+		public static CGLEntity Character{ get; private set; }
+
 		//		public static List<CharacterInfo> LoadedCharacterInfos{ get; private set; }
 
 		//data

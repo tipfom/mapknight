@@ -50,7 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="_AnimEditor\CGLAnimation.cs" />
+    <Compile Include="_AnimEditor\Animation.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +101,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="_visuals\AttributeListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_visuals\FlickerFreePanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="_visuals\ItemPictureBox.cs">
@@ -224,6 +227,14 @@
     </Content>
     <Content Include="files.ico" />
     <Content Include="icon.ico" />
+    <None Include="Resources\futuristic mirrored.png" />
+    <None Include="Resources\futuristic.png" />
+    <None Include="Resources\6.png" />
+    <None Include="Resources\5.png" />
+    <None Include="Resources\4.png" />
+    <None Include="Resources\3.png" />
+    <None Include="Resources\2.png" />
+    <None Include="Resources\1.png" />
     <None Include="Resources\Plus.png" />
     <None Include="Resources\Pipette.png" />
     <None Include="Resources\Pinsel.png" />

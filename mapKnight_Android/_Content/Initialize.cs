@@ -58,6 +58,7 @@ namespace mapKnight.Android
 			Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
 
 			CGL.CGLText.CGLTextContainer.Init ();
+			LoadCharacter (GameContext);
 
 			if (OnInit != null)
 				OnInit (GameContext);
@@ -131,6 +132,13 @@ namespace mapKnight.Android
 			Fonts.Add (Font.Tahoma, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "Tahoma")).Attributes ["src"]));
 			Fonts.Add (Font.ArcadeClassic, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeClassic")).Attributes ["src"]));
 			Fonts.Add (Font.ArcadeDotted, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeDotted")).Attributes ["src"]));
+			Fonts.Add (Font.BitOperator, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Find ("name", "Pixel").Attributes ["src"]));
+		}
+
+		private static void LoadCharacter (Context context)
+		{
+			CGL.Entity.CGLEntityPreset preset = new mapKnight.Android.CGL.Entity.CGLEntityPreset (Utils.XMLElemental.Load (context.Assets.Open ("character/robot.character")), context);
+			Character = preset.Instantiate (10, "futuristic");
 		}
 	}
 }

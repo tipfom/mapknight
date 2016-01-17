@@ -3,17 +3,18 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 
+using mapKnight.Utils;
+
 namespace mapKnight.Android.Net
 {
 	public class Server
 	{
-		public event EventHandler<string> OnMessageReceived;
+		public event EventHandler<byte[]> OnMessageReceived;
 		public event EventHandler<Boolean> OnConnectionStateChanged;
 
-		private const int bufferSize = 1024;
 		private const int port = 1337;
 
-		private static byte[] buffer = new byte[bufferSize];
+		private static byte[] buffer;
 
 		private IPEndPoint ipEndPoint = new IPEndPoint (IPAddress.Any, port);
 		private Socket serverSocket = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -22,10 +23,9 @@ namespace mapKnight.Android.Net
 
 		public Server ()
 		{
-			Begin ();
 		}
 
-		void Begin ()
+		public void Begin ()
 		{
 			try {
 				serverSocket.Bind (ipEndPoint);
@@ -40,7 +40,6 @@ namespace mapKnight.Android.Net
 		{
 			try {
 				clientSocket = ((Socket)ar.AsyncState).EndAccept (ar);
-				clientSocket.BeginReceive (buffer, 0, bufferSize, SocketFlags.None, new AsyncCallback (ReceiveCallback), clientSocket);
 				if (OnConnectionStateChanged != null)
 					OnConnectionStateChanged (this, true);
 				connected = true;
@@ -53,9 +52,8 @@ namespace mapKnight.Android.Net
 		{
 			try {
 				int bytesReceived = ((Socket)ar.AsyncState).EndReceive (ar);
-				string message = Encoding.ASCII.GetString (buffer, 0, bytesReceived);
 
-				if (message == "__:disconnect:__") {
+				if (buffer [0] == 255) { // close connection send
 					clientSocket.Close ();
 					if (OnConnectionStateChanged != null)
 						OnConnectionStateChanged (this, false);
@@ -64,38 +62,44 @@ namespace mapKnight.Android.Net
 					serverSocket.BeginAccept (new AsyncCallback (AcceptCallback), serverSocket);
 					return;
 				} else if (bytesReceived != 0 && OnMessageReceived != null) {
-					OnMessageReceived (this, Encoding.ASCII.GetString (buffer, 0, bytesReceived));
+					OnMessageReceived (this, buffer.Cut (0, bytesReceived));
 				}
-				
-				clientSocket.BeginReceive (buffer, 0, bufferSize, SocketFlags.None, new AsyncCallback (ReceiveCallback), clientSocket);
 			} catch (Exception ex) {
 				Log.All (this, "", MessageType.Error, ex);
 			}
 		}
 
-		public void Send (string msg)
+		public void Send (byte[] bytes)
 		{
 			try {
-				byte[] rawData = Encoding.ASCII.GetBytes (msg);
-				if (rawData.Length < bufferSize) {
-					clientSocket.BeginSend (rawData, 0, rawData.Length, SocketFlags.None, new AsyncCallback (SendingCallback), clientSocket);
-				} else {
-					Log.All (this, "the message you are trying to send is too long", MessageType.Debug);
-				}
+				clientSocket.BeginSend (bytes, 0, bytes.Length, SocketFlags.None, new AsyncCallback (SendingCallback), clientSocket);
 			} catch (Exception ex) {
 				Log.All (this, "", MessageType.Error, ex);
 			}
 		}
+
+		public void Receive (int bufferLength = 1024)
+		{
+			buffer = new byte[bufferLength];
+			clientSocket.BeginReceive (buffer, 0, bufferLength, SocketFlags.None, new AsyncCallback (ReceiveCallback), clientSocket);
+		}
+
+		private bool disconnected;
 
 		public void Disconnect ()
 		{
-			serverSocket.Close ();
-			if (connected) {
-				Send ("__:disconnect:__");
-				clientSocket.Close ();
-				if (OnConnectionStateChanged != null) {
-					OnConnectionStateChanged (this, false);
+			if (!disconnected) {
+				disconnected = true;
+
+				if (connected) {
+					Send (new byte[]{ 255 });
+					clientSocket.Close ();
+					if (OnConnectionStateChanged != null) {
+						OnConnectionStateChanged (this, false);
+					}
 				}
+
+				serverSocket.Close ();
 			}
 		}
 

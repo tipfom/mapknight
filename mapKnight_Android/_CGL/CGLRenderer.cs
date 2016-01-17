@@ -19,7 +19,6 @@ namespace mapKnight.Android.CGL
 
 		float ratio;
 		int screenHeight;
-		XMLElemental mapElemental;
 		CGLInterface gameInterface;
 		Context context;
 		CGLText infoText;
@@ -65,7 +64,7 @@ namespace mapKnight.Android.CGL
 			GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
 			gameInterface = new CGLInterface ();
-			infoText = new CGLText ("fps", 30, Font.Tahoma, new Values.Point (0, 20), Values.Color.White);
+			infoText = new CGLText ("fps", 30, Font.BitOperator, new Values.Point (0, 20), Values.Color.White, FontStyle.Bold);
 		}
 
 #endregion

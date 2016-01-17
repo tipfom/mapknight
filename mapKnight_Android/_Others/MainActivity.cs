@@ -29,7 +29,8 @@ namespace mapKnight.Android
 
 		protected override void OnStop ()
 		{
-			Content.Terminal.Disconnect ();
+			if (Content.Terminal != null)
+				Content.Terminal.Disconnect ();
 			base.OnStop ();
 		}
 
@@ -42,8 +43,6 @@ namespace mapKnight.Android
 		private void OnInit (Context context)
 		{
 			view.SetOnTouchListener (Content.TouchManager);
-			CGL.Entity.CGLEntityPreset preset = new mapKnight.Android.CGL.Entity.CGLEntityPreset (Utils.XMLElemental.Load (context.Assets.Open ("character/robot.character")), context);
-			CGL.Entity.CGLEntity test = preset.Instantiate (4, "futuristic");
 		}
 
 		public void HideNavBar ()

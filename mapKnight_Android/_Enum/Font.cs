@@ -6,7 +6,8 @@ namespace mapKnight.Android
 	{
 		Tahoma,
 		ArcadeClassic,
-		ArcadeDotted
+		ArcadeDotted,
+		BitOperator
 	}
 }
 

@@ -2,21 +2,18 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-namespace mapKnight.ToolKit
-{
-    class AddRemoveTreeView : TreeView
-    {
+namespace mapKnight.ToolKit {
+    class AddRemoveTreeView : TreeView {
         public event EventHandler<TreeNode> OnAddButtonClicked;
         public event EventHandler<TreeNode> OnRemoveButtonClicked;
 
-        private MenuItem addItem = new MenuItem();
-        private MenuItem removeItem = new MenuItem();
+        private MenuItem addItem = new MenuItem ();
+        private MenuItem removeItem = new MenuItem ();
 
-        private List<TreeNode> activeAddItems = new List<TreeNode>();
-        private List<TreeNode> activeRemoveItems = new List<TreeNode>();
+        private List<TreeNode> activeAddItems = new List<TreeNode> ();
+        private List<TreeNode> activeRemoveItems = new List<TreeNode> ();
 
-        public AddRemoveTreeView()
-        {
+        public AddRemoveTreeView () {
             addItem.Text = "Add";
             addItem.Click += HandleAddItemClick;
             addItem.Shortcut = Shortcut.CtrlA;
@@ -28,82 +25,69 @@ namespace mapKnight.ToolKit
             this.KeyDown += HandleKeyDown;
         }
 
-        private void HandleKeyDown(object sender, KeyEventArgs e)
-        {
-            if ((e.KeyCode & Keys.Control) == Keys.Control && (e.KeyCode & Keys.A) == Keys.A)
-            {
+        private void HandleKeyDown (object sender, KeyEventArgs e) {
+            if (e.KeyData == (Keys.Control | Keys.A)) {
                 if (OnAddButtonClicked != null)
-                    OnAddButtonClicked.Invoke(this, this.SelectedNode);
+                    OnAddButtonClicked.Invoke (this, this.SelectedNode);
             }
 
-            if ((e.KeyCode & Keys.Control) == Keys.Control && (e.KeyCode & Keys.R) == Keys.R)
-            {
+            if (e.KeyData == (Keys.Control | Keys.R)) {
                 if (OnRemoveButtonClicked != null)
-                    OnRemoveButtonClicked.Invoke(this, this.SelectedNode);
+                    OnRemoveButtonClicked.Invoke (this, this.SelectedNode);
             }
         }
 
-        public void EnableAddButton(TreeNode node)
-        {
+        public void EnableAddButton (TreeNode node) {
             if (node.ContextMenu == null)
-                node.ContextMenu = new ContextMenu();
+                node.ContextMenu = new ContextMenu ();
 
-            if (!activeAddItems.Contains(node))
-            {
-                node.ContextMenu.MenuItems.Add(0, addItem.CloneMenu());
-                activeAddItems.Add(node);
+            if (!activeAddItems.Contains (node)) {
+                node.ContextMenu.MenuItems.Add (0, addItem.CloneMenu ());
+                activeAddItems.Add (node);
             }
 
         }
 
-        public void DisableAddButton(TreeNode node)
-        {
+        public void DisableAddButton (TreeNode node) {
             if (node.ContextMenu == null)
-                node.ContextMenu = new ContextMenu();
-            else if (activeAddItems.Contains(node))
-            {
-                node.ContextMenu.MenuItems.RemoveAt(0);
-                activeAddItems.Remove(node);
+                node.ContextMenu = new ContextMenu ();
+            else if (activeAddItems.Contains (node)) {
+                node.ContextMenu.MenuItems.RemoveAt (0);
+                activeAddItems.Remove (node);
             }
         }
 
-        public void EnableRemoveButton(TreeNode node)
-        {
+        public void EnableRemoveButton (TreeNode node) {
             if (node.ContextMenu == null)
-                node.ContextMenu = new ContextMenu();
+                node.ContextMenu = new ContextMenu ();
 
 
-            if (!activeRemoveItems.Contains(node))
-            {
-                node.ContextMenu.MenuItems.Add(removeItem.CloneMenu());
-                activeRemoveItems.Add(node);
+            if (!activeRemoveItems.Contains (node)) {
+                node.ContextMenu.MenuItems.Add (removeItem.CloneMenu ());
+                activeRemoveItems.Add (node);
             }
         }
 
-        public void DisableRemoveButton(TreeNode node)
-        {
+        public void DisableRemoveButton (TreeNode node) {
             if (node.ContextMenu == null)
-                node.ContextMenu = new ContextMenu();
-            else if (activeRemoveItems.Contains(node))
-            {
-                if (activeAddItems.Contains(node))
-                    node.ContextMenu.MenuItems.RemoveAt(1);
+                node.ContextMenu = new ContextMenu ();
+            else if (activeRemoveItems.Contains (node)) {
+                if (activeAddItems.Contains (node))
+                    node.ContextMenu.MenuItems.RemoveAt (1);
                 else
-                    node.ContextMenu.MenuItems.RemoveAt(0);
-                activeRemoveItems.Remove(node);
+                    node.ContextMenu.MenuItems.RemoveAt (0);
+                activeRemoveItems.Remove (node);
             }
         }
 
-        private void HandleAddItemClick(object sender, EventArgs e)
-        {
+        private void HandleAddItemClick (object sender, EventArgs e) {
             if (OnAddButtonClicked != null)
-                OnAddButtonClicked.Invoke(this, this.SelectedNode);
+                OnAddButtonClicked.Invoke (this, activeAddItems.Find ((TreeNode obj) => obj.ContextMenu == ((MenuItem)sender).Parent));
         }
 
-        private void HandleRemoveItemClick(object sender, EventArgs e)
-        {
+        private void HandleRemoveItemClick (object sender, EventArgs e) {
             if (OnRemoveButtonClicked != null)
-                OnRemoveButtonClicked.Invoke(this, this.SelectedNode);
+                OnRemoveButtonClicked.Invoke (this, activeRemoveItems.Find ((TreeNode obj) => obj.ContextMenu == ((MenuItem)sender).Parent));
         }
 
     }

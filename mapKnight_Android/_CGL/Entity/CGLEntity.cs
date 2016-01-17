@@ -116,9 +116,19 @@ namespace mapKnight.Android.CGL.Entity
 		{
 			if (animations [currentAnimation].Abortable == true || animations [currentAnimation].Finished == true) {
 				currentAnimation = animations.IndexOf (animations.Find (((CGLAnimation obj) => obj.Action == animation)));
+				animations [currentAnimation].Start ();
 				return true;
 			} else
 				return false;
+		}
+
+		[Obsolete ("this is only for debug puroses! remove it in the final builds.")]
+		public void AddAnimation (CGLAnimation animation)
+		{
+			animations.RemoveAll ((CGLAnimation obj) => obj.Action == animation.Action);
+
+			animations.Add (animation);
+			Animate (animation.Action);
 		}
 
 		private void Update (int deltatime)

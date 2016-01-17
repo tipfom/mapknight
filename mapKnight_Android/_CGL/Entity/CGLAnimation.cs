@@ -73,7 +73,10 @@ namespace mapKnight.Android.CGL.Entity
 			currentStep = 0;
 			Current = Default.Clone ();
 			timePassed = 0;
-			timeNext = steps [0].Item1;
+			if (steps.Count > 0)
+				timeNext = steps [0].Item1;
+			else
+				timeNext = 0;
 		}
 
 		public void Step (int deltatime)

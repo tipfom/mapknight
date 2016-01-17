@@ -125,7 +125,8 @@ namespace mapKnight.Android.CGL
 				textureBuffer.Get (copiedpart, 0, mapDrawWidth * (mapDrawHeight - 1) * 8);
 
 				textureBuffer.Position (0);
-				textureBuffer.Put (AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
+			
+				textureBuffer.Put (LineTileTextureCoords [currentTileY - mapDrawHeight / 2].Cut ((currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
 				textureBuffer.Put (copiedpart);
 				break;
 			case UpdateType.RemoveTop:	// Just add a new line at the bottom
@@ -135,16 +136,16 @@ namespace mapKnight.Android.CGL
 
 				textureBuffer.Position (0);
 				textureBuffer.Put (copiedpart);
-				textureBuffer.Put (AO.Cut (LineTileTextureCoords [currentTileY + mapDrawHeight / 2], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
+				textureBuffer.Put (LineTileTextureCoords [currentTileY + mapDrawHeight / 2].Cut ((currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
 				break;
 			case UpdateType.Complete:
 				textureBuffer.Position (0);
 				for (int y = 0; y < mapDrawHeight; y++) { // tiles
-					textureBuffer.Put (AO.Cut (LineTileTextureCoords [currentTileY - mapDrawHeight / 2 + y], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
+					textureBuffer.Put (LineTileTextureCoords [currentTileY - mapDrawHeight / 2 + y].Cut ((currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
 				}
 
 				for (int y = 0; y < mapDrawHeight; y++) {
-					textureBuffer.Put (AO.Cut (LineOvrlTextureCoords [currentTileY - mapDrawHeight / 2 + y], (currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
+					textureBuffer.Put (LineOvrlTextureCoords [currentTileY - mapDrawHeight / 2 + y].Cut ((currentTileX - mapDrawWidth / 2) * 8, mapDrawWidth * 8));
 				}
 				break;
 			}

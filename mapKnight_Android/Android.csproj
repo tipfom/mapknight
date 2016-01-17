@@ -53,7 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="_Utils\ArrayOperations.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_CGL\CGLMap.cs" />
@@ -89,7 +88,6 @@
     <Compile Include="_Content\Variables.cs" />
     <Compile Include="_CGL\CGLCamera.cs" />
     <Compile Include="_Net\Server.cs" />
-    <Compile Include="_Net\TerminalManager.cs" />
     <Compile Include="_Entity\Entity.cs" />
     <Compile Include="_Entity\Slot.cs" />
     <Compile Include="_Entity\Set.cs" />
@@ -103,6 +101,10 @@
     <Compile Include="_Others\ShaderArrayComparer.cs" />
     <Compile Include="_Enum\Shader.cs" />
     <Compile Include="_CGL\CGLTools %28Shader%29.cs" />
+    <Compile Include="_Net\Terminal\TerminalManager.cs" />
+    <Compile Include="_Net\Terminal\IMessageProcessor.cs" />
+    <Compile Include="_Net\Terminal\MessageProcessor\ContentMessageProcessor.cs" />
+    <Compile Include="_Net\Terminal\MessageProcessor\AnimationMessageProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -120,6 +122,8 @@
     <Folder Include="_Entity\" />
     <Folder Include="Assets\sets\" />
     <Folder Include="_CGL\Entity\" />
+    <Folder Include="_Net\Terminal\" />
+    <Folder Include="_Net\Terminal\MessageProcessor\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
@@ -135,6 +139,7 @@
     <AndroidAsset Include="Assets\sets\futuristic.png" />
     <AndroidAsset Include="Assets\main.png" />
     <AndroidAsset Include="Assets\maps\dev.devmap" />
+    <AndroidAsset Include="Assets\fonts\8bitOperatorPlus8-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets')" />

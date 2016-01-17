@@ -73,7 +73,9 @@
             this.button_itembitmap = new System.Windows.Forms.Button();
             this.textbox_itemname = new System.Windows.Forms.TextBox();
             this.tbpg_animeditor = new System.Windows.Forms.TabPage();
-            this.panel_anim_editstep = new System.Windows.Forms.Panel();
+            this.panel_anim_editstep = new mapKnight.ToolKit.FlickerFreePanel();
+            this.numericUpDown_anim_time = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.numericUpDown_anim_rot = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -142,6 +144,7 @@
             this.splitContainer4.SuspendLayout();
             this.tbpg_animeditor.SuspendLayout();
             this.panel_anim_editstep.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_time)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_rot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_x)).BeginInit();
@@ -649,6 +652,8 @@
             // 
             // panel_anim_editstep
             // 
+            this.panel_anim_editstep.Controls.Add(this.numericUpDown_anim_time);
+            this.panel_anim_editstep.Controls.Add(this.label4);
             this.panel_anim_editstep.Controls.Add(this.label8);
             this.panel_anim_editstep.Controls.Add(this.numericUpDown_anim_rot);
             this.panel_anim_editstep.Controls.Add(this.label7);
@@ -660,13 +665,41 @@
             this.panel_anim_editstep.Controls.Add(this.splitter2);
             this.panel_anim_editstep.Location = new System.Drawing.Point(127, 167);
             this.panel_anim_editstep.Name = "panel_anim_editstep";
-            this.panel_anim_editstep.Size = new System.Drawing.Size(683, 427);
+            this.panel_anim_editstep.Size = new System.Drawing.Size(968, 427);
             this.panel_anim_editstep.TabIndex = 0;
             this.panel_anim_editstep.Visible = false;
+            this.panel_anim_editstep.Paint += new System.Windows.Forms.PaintEventHandler(this.panel_anim_editstep_Paint);
+            this.panel_anim_editstep.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_anim_editstep_MouseDown);
+            this.panel_anim_editstep.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel_anim_editstep_MouseMove);
+            this.panel_anim_editstep.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel_anim_editstep_MouseUp);
+            // 
+            // numericUpDown_anim_time
+            // 
+            this.numericUpDown_anim_time.Location = new System.Drawing.Point(756, 8);
+            this.numericUpDown_anim_time.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.numericUpDown_anim_time.Name = "numericUpDown_anim_time";
+            this.numericUpDown_anim_time.Size = new System.Drawing.Size(132, 20);
+            this.numericUpDown_anim_time.TabIndex = 16;
+            this.numericUpDown_anim_time.ValueChanged += new System.EventHandler(this.numericUpDown_anim_time_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(675, 10);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(75, 13);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "AnimTime (ms)";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.White;
             this.label8.Location = new System.Drawing.Point(512, 10);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(45, 13);
@@ -676,13 +709,25 @@
             // numericUpDown_anim_rot
             // 
             this.numericUpDown_anim_rot.Location = new System.Drawing.Point(374, 8);
+            this.numericUpDown_anim_rot.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.numericUpDown_anim_rot.Minimum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            -2147483648});
             this.numericUpDown_anim_rot.Name = "numericUpDown_anim_rot";
             this.numericUpDown_anim_rot.Size = new System.Drawing.Size(132, 20);
             this.numericUpDown_anim_rot.TabIndex = 13;
+            this.numericUpDown_anim_rot.ValueChanged += new System.EventHandler(this.numericUpDown_anim_rot_ValueChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.White;
             this.label7.Location = new System.Drawing.Point(321, 10);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(47, 13);
@@ -692,13 +737,20 @@
             // numericUpDown_anim_y
             // 
             this.numericUpDown_anim_y.Location = new System.Drawing.Point(183, 8);
+            this.numericUpDown_anim_y.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.numericUpDown_anim_y.Name = "numericUpDown_anim_y";
             this.numericUpDown_anim_y.Size = new System.Drawing.Size(132, 20);
             this.numericUpDown_anim_y.TabIndex = 11;
+            this.numericUpDown_anim_y.ValueChanged += new System.EventHandler(this.numericUpDown_anim_y_ValueChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.White;
             this.label6.Location = new System.Drawing.Point(163, 10);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(14, 13);
@@ -708,13 +760,20 @@
             // numericUpDown_anim_x
             // 
             this.numericUpDown_anim_x.Location = new System.Drawing.Point(25, 8);
+            this.numericUpDown_anim_x.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.numericUpDown_anim_x.Name = "numericUpDown_anim_x";
             this.numericUpDown_anim_x.Size = new System.Drawing.Size(132, 20);
             this.numericUpDown_anim_x.TabIndex = 9;
+            this.numericUpDown_anim_x.ValueChanged += new System.EventHandler(this.numericUpDown_anim_x_ValueChanged);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(5, 10);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(14, 13);
@@ -723,20 +782,24 @@
             // 
             // button_anim_mirrored
             // 
+            this.button_anim_mirrored.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.button_anim_mirrored.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_anim_mirrored.Location = new System.Drawing.Point(563, 5);
             this.button_anim_mirrored.Name = "button_anim_mirrored";
             this.button_anim_mirrored.Size = new System.Drawing.Size(106, 23);
             this.button_anim_mirrored.TabIndex = 6;
-            this.button_anim_mirrored.Text = "button4";
-            this.button_anim_mirrored.UseVisualStyleBackColor = true;
+            this.button_anim_mirrored.Text = "false";
+            this.button_anim_mirrored.UseVisualStyleBackColor = false;
+            this.button_anim_mirrored.Click += new System.EventHandler(this.button_anim_mirrored_Click);
             // 
             // splitter2
             // 
+            this.splitter2.BackColor = System.Drawing.Color.White;
             this.splitter2.Cursor = System.Windows.Forms.Cursors.HSplit;
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Top;
             this.splitter2.Location = new System.Drawing.Point(0, 0);
             this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(683, 37);
+            this.splitter2.Size = new System.Drawing.Size(968, 37);
             this.splitter2.TabIndex = 0;
             this.splitter2.TabStop = false;
             // 
@@ -765,8 +828,9 @@
             this.button_anim_loopable.Name = "button_anim_loopable";
             this.button_anim_loopable.Size = new System.Drawing.Size(173, 23);
             this.button_anim_loopable.TabIndex = 13;
-            this.button_anim_loopable.Text = "button2";
+            this.button_anim_loopable.Text = "false";
             this.button_anim_loopable.UseVisualStyleBackColor = true;
+            this.button_anim_loopable.Click += new System.EventHandler(this.button_anim_loopable_Click);
             // 
             // button_anim_abortable
             // 
@@ -774,8 +838,9 @@
             this.button_anim_abortable.Name = "button_anim_abortable";
             this.button_anim_abortable.Size = new System.Drawing.Size(173, 23);
             this.button_anim_abortable.TabIndex = 12;
-            this.button_anim_abortable.Text = "button1";
+            this.button_anim_abortable.Text = "false";
             this.button_anim_abortable.UseVisualStyleBackColor = true;
+            this.button_anim_abortable.Click += new System.EventHandler(this.button_anim_abortable_Click);
             // 
             // trackBar_anim_progress
             // 
@@ -786,33 +851,39 @@
             this.trackBar_anim_progress.Name = "trackBar_anim_progress";
             this.trackBar_anim_progress.Size = new System.Drawing.Size(519, 28);
             this.trackBar_anim_progress.TabIndex = 11;
+            this.trackBar_anim_progress.ValueChanged += new System.EventHandler(this.trackBar_anim_progress_ValueChanged);
             // 
             // button_anim_repeat
             // 
+            this.button_anim_repeat.BackgroundImage = global::mapKnight.ToolKit.Properties.Resources.icon_refresh;
             this.button_anim_repeat.Location = new System.Drawing.Point(127, 100);
             this.button_anim_repeat.Name = "button_anim_repeat";
             this.button_anim_repeat.Size = new System.Drawing.Size(50, 50);
             this.button_anim_repeat.TabIndex = 10;
-            this.button_anim_repeat.Text = "button6";
             this.button_anim_repeat.UseVisualStyleBackColor = true;
+            this.button_anim_repeat.Click += new System.EventHandler(this.button_anim_repeat_Click);
             // 
             // button_anim_pause
             // 
+            this.button_anim_pause.BackgroundImage = global::mapKnight.ToolKit.Properties.Resources.icon_pause;
+            this.button_anim_pause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.button_anim_pause.Location = new System.Drawing.Point(71, 100);
             this.button_anim_pause.Name = "button_anim_pause";
             this.button_anim_pause.Size = new System.Drawing.Size(50, 50);
             this.button_anim_pause.TabIndex = 8;
-            this.button_anim_pause.Text = "button4";
             this.button_anim_pause.UseVisualStyleBackColor = true;
+            this.button_anim_pause.Click += new System.EventHandler(this.button_anim_pause_Click);
             // 
             // button_anim_play
             // 
+            this.button_anim_play.BackgroundImage = global::mapKnight.ToolKit.Properties.Resources.icon_play;
+            this.button_anim_play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.button_anim_play.Location = new System.Drawing.Point(15, 100);
             this.button_anim_play.Name = "button_anim_play";
             this.button_anim_play.Size = new System.Drawing.Size(50, 50);
             this.button_anim_play.TabIndex = 7;
-            this.button_anim_play.Text = "button3";
             this.button_anim_play.UseVisualStyleBackColor = true;
+            this.button_anim_play.Click += new System.EventHandler(this.button_anim_play_Click);
             // 
             // textBox_anim_action
             // 
@@ -820,6 +891,7 @@
             this.textBox_anim_action.Name = "textBox_anim_action";
             this.textBox_anim_action.Size = new System.Drawing.Size(173, 20);
             this.textBox_anim_action.TabIndex = 6;
+            this.textBox_anim_action.TextChanged += new System.EventHandler(this.textBox_anim_action_TextChanged);
             // 
             // label3
             // 
@@ -1093,6 +1165,7 @@
             this.tbpg_animeditor.ResumeLayout(false);
             this.panel_anim_editstep.ResumeLayout(false);
             this.panel_anim_editstep.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_time)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_rot)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_y)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_anim_x)).EndInit();
@@ -1181,7 +1254,7 @@
         private System.Windows.Forms.ToolStripLabel label_connectionstate;
         private System.Windows.Forms.ToolStripTextBox textbox_ip;
         private System.Windows.Forms.Panel panel_anim_editanim;
-        private System.Windows.Forms.Panel panel_anim_editstep;
+        private FlickerFreePanel panel_anim_editstep;
         private System.Windows.Forms.SplitContainer splitContainer_anim;
         private mapKnight.ToolKit.AddRemoveTreeView treeView_anim;
         private System.Windows.Forms.ListBox listBox1;
@@ -1205,5 +1278,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button_anim_loopable;
         private System.Windows.Forms.Button button_anim_abortable;
+        private System.Windows.Forms.NumericUpDown numericUpDown_anim_time;
+        private System.Windows.Forms.Label label4;
     }
 }

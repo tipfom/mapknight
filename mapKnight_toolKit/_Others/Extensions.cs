@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace mapKnight.Android
+namespace mapKnight
 {
 	public static class Extensions
 	{
