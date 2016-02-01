@@ -1,17 +1,15 @@
 mapKnight.userprefs
 
 mapKnight_utils/bin/*
-mapKnight_physX/bin/*
 mapKnight_values/bin/*
-mapKnight_editor/bin/*
+mapKnight_toolKit/bin/*
 mapKnight_android/bin/*
 mapKnight_terminal/bin/*
 mapKnight_installer/bin/*
 
 mapKnight_utils/obj/*
-mapKnight_physX/obj/*
 mapKnight_values/obj/*
-mapKnight_editor/obj/*
+mapKnight_toolKit/obj/*
 mapKnight_android/obj/*
 mapKnight_terminal/obj/*
 mapKnight_installer/obj/*
