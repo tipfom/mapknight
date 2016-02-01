@@ -1,0 +1,5 @@
+E:\Projekte\GitHub\mapknight\_Terminal\bin\Release\Terminal.exe
+E:\Projekte\GitHub\mapknight\_Terminal\bin\Release\Terminal.pdb
+E:\Projekte\GitHub\mapknight\_Terminal\obj\Release\Terminal.csprojResolveAssemblyReference.cache
+E:\Projekte\GitHub\mapknight\_Terminal\obj\Release\Terminal.exe
+E:\Projekte\GitHub\mapknight\_Terminal\obj\Release\Terminal.pdb

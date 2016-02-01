@@ -1,0 +1,7 @@
+E:\Projekte\GitHub\mapknight\_Values\bin\Release\Values.dll
+E:\Projekte\GitHub\mapknight\_Values\bin\Release\Values.pdb
+E:\Projekte\GitHub\mapknight\_Values\obj\Release\Values.csprojResolveAssemblyReference.cache
+E:\Projekte\GitHub\mapknight\_Values\obj\Release\Values.dll
+E:\Projekte\GitHub\mapknight\_Values\obj\Release\Values.pdb
+E:\Projekte\GitHub\mapknight\_Values\obj\Release\Values.dll.mdb
+E:\Projekte\GitHub\mapknight\_Values\bin\Release\Values.dll.mdb
