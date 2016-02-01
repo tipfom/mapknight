@@ -9,11 +9,13 @@ using Android.Opengl;
 using GL = Android.Opengl.GLES20;
 using Matrix = Android.Opengl.Matrix;
 
+using mapKnight.Android;
+using mapKnight.Android.Net;
 using mapKnight.Android.CGL;
 using mapKnight.Utils;
 using mapKnight.Values;
 
-namespace mapKnight.Android
+namespace mapKnight
 {
 	public static partial class Content
 	{
@@ -21,66 +23,67 @@ namespace mapKnight.Android
 
 		public static event HandleInitCompleted OnInit;
 
+		public static event HandleInitCompleted OnPreInit;
+
+		public static event HandleInitCompleted OnAfterInit;
+
 		public delegate void HandleUpdate ();
 
 		public static event HandleUpdate OnUpdate;
 
-		public static void Init (XMLElemental configfile, Context GameContext)
+		public static void PreInit (XMLElemental configfile, Context context)
 		{
-			Context = GameContext;
-
+			Context = context;
 			Version = new Values.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
-			Log.All (typeof(Content), "Current Version : " + Version.ToString (), MessageType.Info);
+
+			CGLTools.LoadShader ();
+			LoadFonts (configfile);
+
+			ScreenSize = new Size (context.Resources.DisplayMetrics.WidthPixels, context.Resources.DisplayMetrics.HeightPixels);
+			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
 
 			TileSize = Convert.ToInt32 (configfile ["images"].Find ("name", "tiles").Attributes ["tilesize"]);
-
-			LoadImage (GameContext.Assets.Open (configfile ["images"].Find ("name", "tiles").Attributes ["src"]));
-			InterfaceSprite = new CGLSprite<int> (GameContext.Assets.Open (configfile ["images"].Find ("name", "interface").Attributes ["src"]), configfile ["images"].Find ("name", "interface").GetAll ());
-
-			LoadFonts (configfile, GameContext);
-
-			TextureVertexWidth = TileSize / (float)ImageWidth;
-			TextureVertexHeight = TileSize / (float)ImageHeight;
-
+			LoadImage (context.Assets.Open (configfile ["images"].Find ("name", "tiles").Attributes ["src"]));
+			InterfaceSprite = new CGLSprite<int> (context.Assets.Open (configfile ["images"].Find ("name", "interface").Attributes ["src"]), configfile ["images"].Find ("name", "interface").GetAll ());
+		
 			TileTexCoordManager = LoadManager (configfile ["tiles"].GetAll ());
 			OverlayTexCoordManager = LoadManager (configfile ["overlay"].GetAll ());
 
-			ScreenSize = new Size (GameContext.Resources.DisplayMetrics.WidthPixels, GameContext.Resources.DisplayMetrics.HeightPixels);
-			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
+			Log.All (typeof(Content), "Current Version : " + Version.ToString (), MessageType.Info);
 
-			TouchManager = new ButtonManager ();
-			Terminal = new Net.TerminalManager ();
-
-			CGL.CGLTools.LoadShader ();
-
-			UpdateMatrix ();
-
-			Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
-
-			CGL.CGLText.CGLTextContainer.Init ();
-			LoadCharacter (GameContext);
-
-			if (OnInit != null)
-				OnInit (GameContext);
+			if (OnPreInit != null)
+				OnPreInit (context);
 		}
 
-		private static void UpdateMatrix ()
+		public static void Init (XMLElemental configfile)
 		{
-			ProjectionMatrix = new float[16];
-			ViewMatrix = new float[16];
-			MVPMatrix = new float[16];
 
-			Matrix.FrustumM (ProjectionMatrix, 0, -ScreenRatio, ScreenRatio, -1, 1, 3, 7);
-			Matrix.SetLookAtM (ViewMatrix, 0, 0, 0, -3, 0f, 0f, 0f, 0f, 1f, 0f);
-			Matrix.MultiplyMM (MVPMatrix, 0, ProjectionMatrix, 0, ViewMatrix, 0);
+			TouchManager = new ButtonManager ();
+			Terminal = new TerminalManager ();
+			Map = new CGLMap (22, "physXTest2.devmap");
+			Camera = new CGLCamera (-0.0f);
+			Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
+			LoadCharacter ();
+
+			CGLText.CGLTextContainer.Init ();
+
+			if (OnInit != null)
+				OnInit (Content.Context);
+		}
+
+		public static void AfterInit ()
+		{
+			Map.AddEntity (Content.Character);
+			Camera.Update ();
+
+			if (OnAfterInit != null)
+				OnAfterInit (Context);
 		}
 
 		public static void Update (Size screensize)
 		{
 			ScreenSize = screensize;
 			ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
-
-			UpdateMatrix ();
 
 			if (OnUpdate != null)
 				OnUpdate ();
@@ -124,21 +127,25 @@ namespace mapKnight.Android
 
 			// set MainTexture to the loaded texture
 			MainTexture = loadedtexture [0];
+
+			TextureVertexWidth = TileSize / (float)ImageWidth;
+			TextureVertexHeight = TileSize / (float)ImageHeight;
 		}
 
-		private static void LoadFonts (XMLElemental configfile, Context GameContext)
+		private static void LoadFonts (XMLElemental configfile)
 		{
 			Fonts = new System.Collections.Generic.Dictionary<Font, Typeface> ();
-			Fonts.Add (Font.Tahoma, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "Tahoma")).Attributes ["src"]));
-			Fonts.Add (Font.ArcadeClassic, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeClassic")).Attributes ["src"]));
-			Fonts.Add (Font.ArcadeDotted, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeDotted")).Attributes ["src"]));
-			Fonts.Add (Font.BitOperator, Typeface.CreateFromAsset (GameContext.Assets, configfile ["fonts"].Find ("name", "Pixel").Attributes ["src"]));
+			Fonts.Add (Font.Tahoma, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "Tahoma")).Attributes ["src"]));
+			Fonts.Add (Font.ArcadeClassic, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeClassic")).Attributes ["src"]));
+			Fonts.Add (Font.ArcadeDotted, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeDotted")).Attributes ["src"]));
+			Fonts.Add (Font.BitOperator, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Find ("name", "Pixel").Attributes ["src"]));
 		}
 
-		private static void LoadCharacter (Context context)
+		private static void LoadCharacter ()
 		{
-			CGL.Entity.CGLEntityPreset preset = new mapKnight.Android.CGL.Entity.CGLEntityPreset (Utils.XMLElemental.Load (context.Assets.Open ("character/robot.character")), context);
+			Entity.CharacterPreset preset = new Entity.CharacterPreset (Utils.XMLElemental.Load (Context.Assets.Open ("character/robot.character")), Context);
 			Character = preset.Instantiate (10, "futuristic");
+			Character.CollisionMask = mapKnight.Android.PhysX.PhysXFlag.Map;
 		}
 	}
 }

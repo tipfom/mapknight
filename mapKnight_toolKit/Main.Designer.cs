@@ -953,7 +953,8 @@
             this.treeView_anim.Name = "treeView_anim";
             this.treeView_anim.Size = new System.Drawing.Size(370, 690);
             this.treeView_anim.TabIndex = 0;
-            this.treeView_anim.OnAddButtonClicked += new System.EventHandler<System.Windows.Forms.TreeNode>(this.treeView_anim_OnAddButtonClicked);
+            this.treeView_anim.OnAddNormalButtonClicked += new System.EventHandler<System.Windows.Forms.TreeNode>(this.treeView_anim_OnAddNormalButtonClicked);
+            this.treeView_anim.OnAddDefaultButtonClicked += new System.EventHandler<System.Windows.Forms.TreeNode>(this.treeView_anim_OnAddDefaultButtonClicked);
             this.treeView_anim.OnRemoveButtonClicked += new System.EventHandler<System.Windows.Forms.TreeNode>(this.treeView_anim_OnRemoveButtonClicked);
             this.treeView_anim.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_anim_NodeMouseClick);
             // 

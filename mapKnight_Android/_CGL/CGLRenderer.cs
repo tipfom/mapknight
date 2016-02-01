@@ -15,8 +15,6 @@ namespace mapKnight.Android.CGL
 {
 	public class CGLRenderer : Java.Lang.Object, GLSurfaceView.IRenderer
 	{
-		CGLMap testsquaremap;
-
 		float ratio;
 		int screenHeight;
 		CGLInterface gameInterface;
@@ -36,10 +34,22 @@ namespace mapKnight.Android.CGL
 		{
 			GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
 
-			testsquaremap.Draw ();
-			gameInterface.Draw (Content.MVPMatrix);
+			Content.Map.Draw ();
+			gameInterface.Draw (Content.Camera.DefaultMVPMatrix);
 			Entity.CGLEntity.Draw (frameTime);
-			CGLText.CGLTextContainer.Draw (Content.MVPMatrix);
+			CGLText.CGLTextContainer.Draw (Content.Camera.DefaultMVPMatrix);
+
+			Content.Map.Step (frameTime);
+			Content.Camera.Update ();
+
+			if (gameInterface.LeftButton.Clicked) {
+				Content.Character.Move (Direction.Left);
+			} else if (gameInterface.RightButton.Clicked) {
+				Content.Character.Move (Direction.Right);
+			} else {
+				Content.Character.ResetMovement ();	
+			}
+
 			CalculateFrameRate ();
 		}
 
@@ -50,8 +60,6 @@ namespace mapKnight.Android.CGL
 			screenHeight = height;
 
 			GL.GlViewport (0, 0, width, height);
-			testsquaremap = new CGLMap (22, "dev.devmap");
-			GL.GlViewport (0, 0, width, height);
 			GL.GlClearColor (0f, 0f, 0f, 1.0f);
 
 			Content.Update (new Size (width, height));
@@ -59,11 +67,17 @@ namespace mapKnight.Android.CGL
 
 		public void OnSurfaceCreated (Javax.Microedition.Khronos.Opengles.IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
 		{
-			Content.Init (XMLElemental.Load (context.Assets.Open ("main.xml")), context);
+			XMLElemental configfile = XMLElemental.Load (context.Assets.Open ("main.xml"));
+			Content.PreInit (configfile, context);
+			Content.Init (configfile);
+			Content.AfterInit ();
 
 			GL.GlClearColor (1f, 0f, 1f, 1.0f);
 
 			gameInterface = new CGLInterface ();
+			gameInterface.JumpButton.OnClick += () => {
+				Content.Character.Jump ();
+			};
 			infoText = new CGLText ("fps", 30, Font.BitOperator, new Values.Point (0, 20), Values.Color.White, FontStyle.Bold);
 		}
 
@@ -76,7 +90,6 @@ namespace mapKnight.Android.CGL
 		private void CalculateFrameRate ()
 		{
 			frameTime = System.Environment.TickCount - lastTick;
-
 
 			ticks++;
 			if (System.Environment.TickCount - lastSecond > 1000) {

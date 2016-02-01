@@ -8,8 +8,8 @@ namespace mapKnight.ToolKit {
         public string Action;
         public readonly Dictionary<string, float[]> Default = new Dictionary<string, float[]> ();
         // first float = x, second float = y, third float = rotation in degree, fourth = mirrored
-        public  List<Tuple<int, Dictionary<string, float[]>>> steps = new List<Tuple<int, Dictionary<string, float[]>>> ();
-        
+        public List<Tuple<int, Dictionary<string, float[]>>> steps = new List<Tuple<int, Dictionary<string, float[]>>> ();
+
         public bool Finished = true;
         public bool Loopable;
         public bool Abortable;
@@ -56,21 +56,28 @@ namespace mapKnight.ToolKit {
         }
 
         public void AddStep () {
-            steps.Add (new Tuple<int, Dictionary<string, float[]>> (0, this.Default.Clone()));
+            if (steps.Count != 0)
+                steps.Add (new Tuple<int, Dictionary<string, float[]>> (0, this.steps[steps.Count - 1].Item2.Clone ()));
+            else
+                steps.Add (new Tuple<int, Dictionary<string, float[]>> (0, this.Default.Clone ()));
+        }
+
+        public void AddStepDefault () {
+            steps.Add (new Tuple<int, Dictionary<string, float[]>> (0, this.Default.Clone ()));
         }
 
         public void RemoveStep (int index) {
             steps.RemoveAt (index);
         }
 
-        public void SetTime(int time, int index) {
+        public void SetTime (int time, int index) {
             if (index == 0)
                 DefaultTime = time;
             else
                 steps[index - 1] = new Tuple<int, Dictionary<string, float[]>> (time, steps[index - 1].Item2);
         }
 
-        public int GetTime(int index) {
+        public int GetTime (int index) {
             if (index == 0)
                 return DefaultTime;
             else
@@ -84,7 +91,7 @@ namespace mapKnight.ToolKit {
                 return steps[index - 1].Item2;
         }
 
-        public XMLElemental Flush() {
+        public XMLElemental Flush () {
             XMLElemental animElemental = new XMLElemental ("anim");
 
             animElemental.Attributes.Add ("action", Action);
@@ -99,13 +106,13 @@ namespace mapKnight.ToolKit {
                 currentBP.Attributes.Add ("name", kvpair.Key);
                 currentBP.Attributes.Add ("x", (-kvpair.Value[0]).ToString ());
                 currentBP.Attributes.Add ("y", kvpair.Value[1].ToString ());
-                currentBP.Attributes.Add ("rot", kvpair.Value[2].ToString());
+                currentBP.Attributes.Add ("rot", kvpair.Value[2].ToString ());
                 currentBP.Attributes.Add ("mirrored", ((kvpair.Value[3] == 1f) ? true : false).ToString ().ToLower ());
                 animElemental.Get ("default").AddChild (currentBP);
             }
 
             // add the other steps
-            foreach(Tuple<int, Dictionary<string, float[]>> step in steps) {
+            foreach (Tuple<int, Dictionary<string, float[]>> step in steps) {
                 XMLElemental stepElemental = new XMLElemental ("step");
                 stepElemental.Attributes.Add ("time", step.Item1.ToString ());
 

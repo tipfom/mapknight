@@ -3,7 +3,7 @@
 using mapKnight.Entity;
 using mapKnight.Values;
 
-namespace mapKnight.Android
+namespace mapKnight.Android.CGL.Entity
 {
 	public class CGLBoundedPoint
 	{

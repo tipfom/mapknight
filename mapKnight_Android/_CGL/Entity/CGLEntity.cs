@@ -11,7 +11,7 @@ using mapKnight.Entity;
 
 namespace mapKnight.Android.CGL.Entity
 {
-	public class CGLEntity : mapKnight.Entity.Entity
+	public class CGLEntity : mapKnight.Android.PhysX.PhysXEntity
 	{
 		private static List<CGLEntity> activeEntitys = new List<CGLEntity> ();
 
@@ -26,7 +26,8 @@ namespace mapKnight.Android.CGL.Entity
 		protected List<CGLAnimation> animations;
 		private int currentAnimation;
 
-		public CGLEntity (int health, Point position, string name, List<CGLBoundedPoint>  boundedpoints, List<CGLAnimation> animations, CGLSet set) : base (health, position, name) //XMLElemental entityConfig
+		public CGLEntity (int health, fPoint position, string name, int weight, Size bounds, List<CGLBoundedPoint>  boundedpoints, List<CGLAnimation> animations, CGLSet set)
+			: base (weight, bounds, health, position, name)
 		{
 			this.set = set;
 			this.boundedPoints = boundedpoints;
@@ -93,7 +94,7 @@ namespace mapKnight.Android.CGL.Entity
 			GL.GlVertexAttribPointer (PositionHandle, Content.CoordsPerVertex2D, GL.GlFloat, false, Content.VertexStride2D, vertexBuffer);
 
 			int MVPMatrixHandle = GL.GlGetUniformLocation (renderProgram, "uMVPMatrix");
-			GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, Content.MVPMatrix, 0);
+			GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, Content.Camera.CharacterMVPMatrix, 0);
 
 			GL.GlEnable (GL.GlBlend);
 			GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);

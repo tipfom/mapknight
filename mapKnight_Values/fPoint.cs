@@ -2,7 +2,7 @@
 
 namespace mapKnight.Values
 {
-	public struct fPoint
+	public class fPoint
 	{
 		public static fPoint operator + (fPoint point1, fPoint point2)
 		{
@@ -14,8 +14,9 @@ namespace mapKnight.Values
 			return new fPoint (point1.X - point2.X, point1.Y - point2.Y);
 		}
 
-		public float X;
-		public float Y;
+		public float X{ get; set; }
+
+		public float Y{ get; set; }
 
 		public fPoint (float x, float y)
 		{

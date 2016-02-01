@@ -31,10 +31,10 @@ namespace mapKnight.Entity
 
 		public virtual Entity Instantiate (uint level)
 		{
-			return Instantiate (level, new Point (0, 0));			
+			return Instantiate (level, new fPoint (0, 0));			
 		}
 
-		public virtual Entity Instantiate (uint level, Point position)
+		public virtual Entity Instantiate (uint level, fPoint position)
 		{
 			return new Entity (defaultAttributes [Attribute.Health] + (int)((level - 1) * attributeIncrease [Attribute.Health]), position, name);
 		}

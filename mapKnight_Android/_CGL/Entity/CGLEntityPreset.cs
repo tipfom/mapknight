@@ -16,6 +16,9 @@ namespace mapKnight.Android.CGL.Entity
 
 		protected List<CGLBoundedPoint> boundedPoints;
 
+		protected int weight;
+		protected Size bounds;
+
 		public CGLEntityPreset (XMLElemental entityConfig, Context context) : base (entityConfig)
 		{
 			sets = new List<CGLSet> ();
@@ -38,16 +41,20 @@ namespace mapKnight.Android.CGL.Entity
 					break;
 				}
 			}
+
+			weight = int.Parse (entityConfig ["physx"] ["bounds"].Attributes ["weight"]);
+			bounds = new Size (int.Parse (entityConfig ["physx"] ["bounds"].Attributes ["width"]), int.Parse (entityConfig ["physx"] ["bounds"].Attributes ["height"]));
 		}
 
 		public CGLEntity Instantiate (uint level, string set)
 		{
-			return Instantiate (level, set, new Point (0, 0));
+			return Instantiate (level, set, new fPoint (0, 0));
 		}
 
-		public CGLEntity Instantiate (uint level, string set, Point position)
+		public CGLEntity Instantiate (uint level, string set, fPoint position)
 		{
 			return new CGLEntity (defaultAttributes [mapKnight.Entity.Attribute.Health] + (int)((level - 1) * attributeIncrease [mapKnight.Entity.Attribute.Health]), position, name,
+				weight, bounds,
 				boundedPoints, animations, sets.Find ((CGLSet obj) => obj.Name == set));
 		}
 	}

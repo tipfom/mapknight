@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using Android.Content;
 
+using mapKnight.Values;
 using mapKnight.Utils;
 
 namespace mapKnight.Android
@@ -18,9 +19,9 @@ namespace mapKnight.Android
 
 		public string Author;
 		public string Name;
-		public int[] SpawnPoint;
+		public fPoint SpawnPoint;
 
-		public Map (ushort[,,] Map, string author, string name, int[] spawnpoint)
+		public Map (ushort[,,] Map, string author, string name, fPoint spawnpoint)
 		{
 			if (Map.GetLength (2) == 3) {
 				Width = Map.GetLength (0);
@@ -59,15 +60,15 @@ namespace mapKnight.Android
 		private void Load (XMLElemental rawXML)
 		{
 			if (IsMapXML (rawXML)) {
-				Author = rawXML.Attributes ["Author"];
-				Name = rawXML.Attributes ["Name"];
-				SpawnPoint = new int[2];
-				int.TryParse (rawXML.Attributes ["Spawn"].Split (';') [0], out SpawnPoint [0]);
-				int.TryParse (rawXML.Attributes ["Spawn"].Split (';') [1], out SpawnPoint [1]);
-
 				int.TryParse (rawXML ["Data"].Attributes ["Width"], out Width);
 				int.TryParse (rawXML ["Data"].Attributes ["Height"], out Height);
 
+				Author = rawXML.Attributes ["Author"];
+				Name = rawXML.Attributes ["Name"];
+				SpawnPoint = new fPoint (
+					float.Parse (rawXML.Attributes ["Spawn"].Split (';') [0]) * PhysX.PhysXMap.TILE_BOX_SIZE,
+					float.Parse (rawXML.Attributes ["Spawn"].Split (';') [1]) * PhysX.PhysXMap.TILE_BOX_SIZE);
+				
 				MapData = new ushort[Width, Height, 3];
 
 				// parse the def section
@@ -117,14 +118,14 @@ namespace mapKnight.Android
 			}
 		}
 
-		public Tile GetTile (uint x, uint y)
+		public Tile GetTile (int x, int y)
 		{
-			return (Tile)MapData [x, y, 0];
+			return (x >= 0 && x < Width && y >= 0 && y < Height) ? (Tile)(MapData [x, Height - y - 1, 0]) : Tile.Air;
 		}
 
-		public Overlay GetOverlay (uint x, uint y)
+		public Overlay GetOverlay (int x, int y)
 		{
-			return (Width > x && Height > y) ? (Overlay)MapData [x, y, 1] : Overlay.None;
+			return (x >= 0 && x < Width && y >= 0 && y < Height) ? (Overlay)MapData [x, Height - y - 1, 1] : Overlay.None;
 		}
 
 		private static bool IsMapXML (XMLElemental MapXML)

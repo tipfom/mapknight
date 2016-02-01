@@ -10,14 +10,14 @@ namespace mapKnight.Entity
 
 		public ChangingProperty Health{ get; private set; }
 
-		public Point Position{ get; private set; }
+		public fPoint Position{ get; set; }
 		// oben links = (0, 0)
 
 		public bool Alive{ get; private set; }
 
 		public readonly string Name;
 
-		public Entity (int health, Point position, string name)
+		public Entity (int health, fPoint position, string name)
 		{
 			Alive = true;
 			Health = new ChangingProperty (health);
@@ -36,14 +36,14 @@ namespace mapKnight.Entity
 		public virtual void Die ()
 		{
 			Alive = false;
-			Position = new Point (-1, -1);
+			Position = new fPoint (-1, -1);
 			OnDeath (this);
 		}
 
 		public virtual void Move (int newx, int newy)
 		{
 			if (Alive)
-				Position = new Point (newx, newy);
+				Position = new fPoint (newx, newy);
 		}
 	}
 }

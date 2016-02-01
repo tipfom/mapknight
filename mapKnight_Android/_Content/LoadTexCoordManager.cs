@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using mapKnight.Utils;
 
-namespace mapKnight.Android
+namespace mapKnight
 {
 	public static partial class Content
 	{

@@ -5,11 +5,14 @@ using System.ComponentModel;
 using Android.Graphics;
 using Android.Content;
 
+using mapKnight.Android;
+using mapKnight.Android.Net;
 using mapKnight.Android.CGL;
 using mapKnight.Android.CGL.Entity;
 using mapKnight.Values;
+using mapKnight.Entity;
 
-namespace mapKnight.Android
+namespace mapKnight
 {
 	public static partial class Content
 	{
@@ -50,13 +53,6 @@ namespace mapKnight.Android
 		public static Values.Version Version;
 
 		// draw variables
-		public static float[] ViewMatrix{ get; private set; }
-
-		public static float[] ProjectionMatrix{ get; private set; }
-
-		public static float[] MVPMatrix{ get; private set; }
-
-
 		public static int CoordsPerVertex2D = 2;
 		public static int CoordsPerVertex3D = 3;
 		public static int VertexStride2D = sizeof(float) * CoordsPerVertex2D;
@@ -66,15 +62,21 @@ namespace mapKnight.Android
 		public static ButtonManager TouchManager{ get; private set; }
 
 		//character
-		public static CGLEntity Character{ get; private set; }
+		public static Character Character{ get; private set; }
 
 		//		public static List<CharacterInfo> LoadedCharacterInfos{ get; private set; }
 
 		//data
 		public static SaveManager Data{ get; private set; }
 
-		public static Net.TerminalManager Terminal{ get; private set; }
+		public static TerminalManager Terminal{ get; private set; }
 
 		public static Context Context{ get; private set; }
+
+		//map
+		public static CGLMap Map{ get; private set; }
+
+		//viewing
+		public static CGLCamera Camera{ get; private set; }
 	}
 }

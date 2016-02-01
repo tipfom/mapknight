@@ -18,12 +18,19 @@
         </slot>
     </def>
 
+    <physx>
+        <bounds width="7" height="9" weight="30"/>
+        <speed move="50" jump="30"/>
+    </physx>
+
     <level>
         <default>
+            <energy value="10"/>
             <health value="20"/>
             <strength value="12"/>
         </default>
         <increase>
+            <energy value="0.8"/>
             <health value="1,2"/>
             <strength value="0,5"/>
         </increase>

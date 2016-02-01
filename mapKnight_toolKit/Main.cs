@@ -16,106 +16,124 @@ using Microsoft.VisualBasic;
 
 using mapKnight.Utils;
 
-namespace mapKnight.ToolKit {
-    public partial class Main : Form {
-        #region static member
+namespace mapKnight.ToolKit
+{
+	public partial class Main : Form
+	{
+#region static member
 
-        private static int iMinTileSize = 20;
-        private static int iMaxTileSize = 100;
+		private static int iMinTileSize = 20;
+		private static int iMaxTileSize = 100;
 
-        private static int iMinImageSize = 20;
-        private static int iMaxImageSize = 60;
+		private static int iMinImageSize = 20;
+		private static int iMaxImageSize = 60;
 
-        private static Color iSelectionColor = Color.DimGray;
-        private static Color iMapColor = Color.DimGray;
+		private static Color iSelectionColor = Color.DimGray;
+		private static Color iMapColor = Color.DimGray;
 
-        private static string iContentDirectory = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), @"mapKnight ToolKit\content");
+		private static string iContentDirectory = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), @"mapKnight ToolKit\content");
 
-        private static Dictionary<Character, List<Slot>> supportedSlots = new Dictionary<Character, List<Slot>> () {
-            { Character.Robot, new List<Slot> () { Slot.Chestplate, Slot.Gloves, Slot.Helmet, Slot.Shoes } }
-        };
-        private static Dictionary<Character, SlotSpriteData> slotImageData = new Dictionary<Character, SlotSpriteData> () { {Character.Robot,new SlotSpriteData (new Size (18, 33), new Dictionary<Slot, Rectangle> () {
-                    { Slot.Helmet, new Rectangle (0, 0, 18, 18) },
-                    { Slot.Chestplate, new Rectangle (0, 18, 16, 9) },
-                    { Slot.Shoes, new Rectangle (0, 27, 8, 6) },
-                    { Slot.Gloves, new Rectangle (8, 27, 6, 6) }
-                })
-            }
-        };
-        private static int unselected = -1;
+		private static Dictionary<Character, List<Slot>> supportedSlots = new Dictionary<Character, List<Slot>> () {
+			{ Character.Robot, new List<Slot> () { Slot.Chestplate, Slot.Gloves, Slot.Helmet, Slot.Shoes } }
+		};
+		private static Dictionary<Character, SlotSpriteData> slotImageData = new Dictionary<Character, SlotSpriteData> () { {Character.Robot,new SlotSpriteData (new Size (18, 33), new Dictionary<Slot, Rectangle> () {
+						{ Slot.Helmet, new Rectangle (0, 0, 18, 18) },
+						{ Slot.Chestplate, new Rectangle (0, 18, 16, 9) },
+						{ Slot.Shoes, new Rectangle (0, 27, 8, 6) },
+						{ Slot.Gloves, new Rectangle (8, 27, 6, 6) }
+					})
+			}
+		};
+		private static int unselected = -1;
 
-        #endregion
+#endregion
 
-        private enum Tool {
-            Brush,
-            Bucket,
-            Eraser,
-            Select,
-            SpawnPointer
-        }
+		private enum Tool
+		{
+			Brush,
+			Bucket,
+			Eraser,
+			Select,
+			SpawnPointer
+		}
 
-        #region attributes
+#region attributes
 
-        // used to parse a mapfile to mapshort
+		// used to parse a mapfile to mapshort
 
-        private Dictionary<string, ushort> iTileNameIndex = new Dictionary<string, ushort> () {
-            { "Air", 0 },
-            { "0", 0 },
-            { "", 0 }
-        };
+		private Dictionary<string, ushort> iTileNameIndex = new Dictionary<string, ushort> () {
+			{ "Air", 0 },
+			{ "0", 0 },
+			{ "", 0 }
+		};
 
-        private Dictionary<string, ushort> iOverlayNameIndex = new Dictionary<string, ushort> () {
-            { "None", 0 },
-            { "0", 0 },
-            { "", 0 }
-        };
+		private Dictionary<string, ushort> iOverlayNameIndex = new Dictionary<string, ushort> () {
+			{ "None", 0 },
+			{ "0", 0 },
+			{ "", 0 }
+		};
 
-        private Dictionary<int, ushort> iTileIDIndex = new Dictionary<int, ushort> () {
-            { 0,0 }
-        };
+		private Dictionary<int, ushort> iTileIDIndex = new Dictionary<int, ushort> () {
+			{ 0,0 }
+		};
 
-        private Dictionary<int, ushort> iOverlayIDIndex = new Dictionary<int, ushort> () {
-            { 0,0 }
-        };
+		private Dictionary<int, ushort> iOverlayIDIndex = new Dictionary<int, ushort> () {
+			{ 0,0 }
+		};
 
-        private ToolStripTextTrackbar zoombar;
-        private ToolStripTextTrackbar imagesizebar;
+		private ToolStripTextTrackbar zoombar;
+		private ToolStripTextTrackbar imagesizebar;
 
-        private Bitmap[] iTileImages;
-        private Bitmap[] iOverlayImages;
+		private Bitmap[] iTileImages;
+		private Bitmap[] iOverlayImages;
 
-        private List<Map> iMaps = new List<Map> ();
-        private int iSelectedMap = -1;
+		private List<Map> iMaps = new List<Map> ();
+		private int iSelectedMap = -1;
 
-        private int iTileSize = iMinTileSize;
-        private int iTileRenderWidth;
-        private int iTileRenderHeight;
+		private int iTileSize = iMinTileSize;
+		private int iTileRenderWidth;
+		private int iTileRenderHeight;
 
-        private Tool iSelectedTool = Tool.Brush;
+		private Tool iSelectedTool = Tool.Brush;
 
-        private string iCurrentFilePath = null;
+		private string iCurrentFilePath = null;
 
-        private bool iClicked = false;
+		private bool iClicked = false;
 
-        private int iSelectedTile;
-        private int iSelectedOverlay;
+		private int iSelectedTile;
+		private int iSelectedOverlay;
 
-        private Dictionary<Character, List<Set>> iSets = new Dictionary<Character, List<Set>> ();
-        private Character iSelectedCharacter;
-        private int iSelectedSet = -1;
-        private Slot selectedSlot = Slot.None;
+		private Dictionary<Character, List<Set>> iSets = new Dictionary<Character, List<Set>> ();
+		private Character iSelectedCharacter;
+		private int iSelectedSet = -1;
+		private Slot selectedSlot = Slot.None;
 
-        private AttributeListView attributelistview_item = new AttributeListView ();
-        private ItemPictureBox picturebox_itempreview = new ItemPictureBox ();
+		private AttributeListView attributelistview_item = new AttributeListView ();
+		private ItemPictureBox picturebox_itempreview = new ItemPictureBox ();
 
-        private Dictionary<Character, List<Animation>> animations = new Dictionary<Character, List<Animation>> ();
-        private static Dictionary<Character, string[]> boundedPoints = new Dictionary<Character, string[]> () { { Character.Robot, new string[] { "helmet_0", "chestplate_0", "gloves_0", "gloves_1", "shoes_0", "shoes_1" } } };
-        private static Dictionary<Character, Bitmap[]> defaultAnimBitmaps = new Dictionary<Character, Bitmap[]> () { { Character.Robot, new Bitmap[] { Properties.Resources.character_robot, Properties.Resources.character_robot_mirrored } } };
-        private static Dictionary<Character, Dictionary<string, Rectangle>> defaultAnimBPRects = new Dictionary<Character, Dictionary<string, Rectangle>> () {
-            {Character.Robot,new Dictionary<string, Rectangle>() { { "helmet_0", new Rectangle (0, 0, 18, 18) }, {"chestplate_0", new Rectangle (0, 18, 16, 9) }, { "gloves_0", new Rectangle (8, 27, 6, 6) }, { "gloves_1", new Rectangle (8, 27, 6, 6) }, { "shoes_0", new Rectangle (0, 27, 8, 6) }, { "shoes_1", new Rectangle (0, 27, 8, 6) } }
+		private Dictionary<Character, List<Animation>> animations = new Dictionary<Character, List<Animation>> ();
+		private static Dictionary<Character, string[]> boundedPoints = new Dictionary<Character, string[]> () { {
+				Character.Robot,
+				new string[] {
+					"helmet_0",
+					"chestplate_0",
+					"gloves_0",
+					"gloves_1",
+					"shoes_0",
+					"shoes_1"
+				}
+			} };
+		private static Dictionary<Character, Bitmap[]> defaultAnimBitmaps = new Dictionary<Character, Bitmap[]> () { {
+				Character.Robot,
+				new Bitmap[] {
+					Properties.Resources.character_robot,
+					Properties.Resources.character_robot_mirrored
+				}
+			} };
+		private static Dictionary<Character, Dictionary<string, Rectangle>> defaultAnimBPRects = new Dictionary<Character, Dictionary<string, Rectangle>> () { {Character.Robot,new Dictionary<string, Rectangle>() { { "helmet_0", new Rectangle (0, 0, 18, 18) }, {"chestplate_0", new Rectangle (0, 18, 16, 9) }, { "gloves_0", new Rectangle (8, 27, 6, 6) }, { "gloves_1", new Rectangle (8, 27, 6, 6) }, { "shoes_0", new Rectangle (0, 27, 8, 6) }, { "shoes_1", new Rectangle (0, 27, 8, 6) } }
         } };
         private static Dictionary<Character, Dictionary<string, SizeF>> defaultAnimDrawRects = new Dictionary<Character, Dictionary<string, SizeF>> () {
-            {Character.Robot,new Dictionary<string, SizeF>() { { "helmet_0", new SizeF (0.22f,0.22f) }, { "chestplate_0",new SizeF(0.19f,0.107f) }, {"gloves_0",new SizeF(0.063f,0.063f) }, { "gloves_1", new SizeF (0.063f, 0.063f) }, {"shoes_0",new SizeF(0.078f,0.053f) } , {"shoes_1",new SizeF(0.078f,0.053f) } }
+            {Character.Robot,new Dictionary<string, SizeF>() { { "helmet_0", new SizeF (0.22f / 2f,0.22f/2f) }, { "chestplate_0",new SizeF(0.19f/2f,0.107f/2f) }, {"gloves_0",new SizeF(0.063f/2f,0.063f/2f) }, { "gloves_1", new SizeF (0.063f/2f, 0.063f/2f) }, {"shoes_0",new SizeF(0.078f/2f,0.053f/2f) } , {"shoes_1",new SizeF(0.078f/2f,0.053f/2f) } }
             } };
 
 
@@ -232,7 +250,7 @@ namespace mapKnight.ToolKit {
                     }
 
                     // draw spawnpoint
-                    g.Graphics.FillRectangle (Brushes.Red, new RectangleF (new PointF ((iMaps[iSelectedMap].Spawn.X + 0.25f - hscrlbar_map.Value) * iTileSize + spltcntr_map.Right, (iMaps[iSelectedMap].Spawn.Y + 0.25f - vscrlbar_map.Value) * iTileSize + tlstrp_map.Bottom), new SizeF (iTileSize / 2, iTileSize / 2)));
+					g.Graphics.FillRectangle (Brushes.Red, new RectangleF (new PointF ((iMaps[iSelectedMap].Spawn.X + 0.25f - hscrlbar_map.Value) * iTileSize + spltcntr_map.Right, (iMaps[iSelectedMap].Height - iMaps[iSelectedMap].Spawn.Y + 0.25f - vscrlbar_map.Value) * iTileSize + tlstrp_map.Bottom), new SizeF (iTileSize / 2, iTileSize / 2)));
 
                     g.Render ();
                     g.Dispose ();
@@ -335,8 +353,8 @@ namespace mapKnight.ToolKit {
                     case Tool.Bucket:
                         iMaps[iSelectedMap].Fill (clickedTile.X, clickedTile.Y, (ushort)iSelectedTile, (ushort)iSelectedOverlay);
                         break;
-                    case Tool.SpawnPointer:
-                        iMaps[iSelectedMap].Spawn = clickedTile;
+					case Tool.SpawnPointer:
+						iMaps [iSelectedMap].Spawn = new Point (clickedTile.X, iMaps [iSelectedMap].Height - clickedTile.Y);
                         break;
                     case Tool.Select:
                         lvw_tiles.Items[(int)iMaps[iSelectedMap].Data[clickedTile.X, clickedTile.Y, 0]].Selected = true;
@@ -559,13 +577,15 @@ namespace mapKnight.ToolKit {
                     Character character = (Character)Enum.Parse (typeof (Character), child.Attributes["character"], true);
                     foreach (XMLElemental animConfig in child.GetAll ()) {
                         Animation loadedAnim = new Animation (animConfig);
+
                         treeView_anim.Nodes[(int)character].Nodes.Add (new TreeNode ("Animation") { Name = "anim:1" });
                         treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1].Nodes.Add (new TreeNode ("Default") { Name = "step:default" });
-                        treeView_anim.EnableAddButton (treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1]);
+                        treeView_anim.EnableAddNormalButton (treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1]);
+                        treeView_anim.EnableAddDefaultButton (treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1]);
                         treeView_anim.EnableRemoveButton (treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1]);
                         foreach (Tuple<int, Dictionary<string, float[]>> step in loadedAnim.steps) {
-                            treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count-1].Nodes.Add (new TreeNode ("Step") { Name = "step:1" });
-                            treeView_anim.EnableRemoveButton (treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1]);
+                            treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1].Nodes.Add (new TreeNode ("Step") { Name = "step:1" });
+                            treeView_anim.EnableRemoveButton (treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1].Nodes[treeView_anim.Nodes[(int)character].Nodes[treeView_anim.Nodes[(int)character].Nodes.Count - 1].Nodes.Count - 1]);
                         }
                         animations[character].Add (loadedAnim);
                     }
@@ -856,7 +876,7 @@ namespace mapKnight.ToolKit {
         private void initAnim () {
             foreach (string character in Enum.GetNames (typeof (Character))) {
                 treeView_anim.Nodes.Add (new TreeNode (character) { Name = "character:" + character });
-                treeView_anim.EnableAddButton (treeView_anim.Nodes[treeView_anim.Nodes.Count - 1]);
+                treeView_anim.EnableAddNormalButton (treeView_anim.Nodes[treeView_anim.Nodes.Count - 1]);
 
                 animations.Add ((Character)Enum.Parse (typeof (Character), character), new List<Animation> ());
             }
@@ -911,13 +931,14 @@ namespace mapKnight.ToolKit {
             this.bfgraphicsAnim = bfgraphicscontext.Allocate (panel_anim_editstep.CreateGraphics (), new Rectangle (0, 0, panel_anim_editstep.Width, panel_anim_editstep.Height));
         }
 
-        private void treeView_anim_OnAddButtonClicked (object sender, TreeNode e) {
+        private void treeView_anim_OnAddNormalButtonClicked (object sender, TreeNode e) {
             if (e != null) {
                 switch (e.Name.Split (new char[] { ':' })[0]) {
                 case "character":
                     e.Nodes.Add (new TreeNode ("Animation") { Name = "anim:1" });
                     e.Nodes[e.Nodes.Count - 1].Nodes.Add (new TreeNode ("Default") { Name = "step:default" });
-                    treeView_anim.EnableAddButton (e.Nodes[e.Nodes.Count - 1]);
+                    treeView_anim.EnableAddNormalButton (e.Nodes[e.Nodes.Count - 1]);
+                    treeView_anim.EnableAddDefaultButton (e.Nodes[e.Nodes.Count - 1]);
                     treeView_anim.EnableRemoveButton (e.Nodes[e.Nodes.Count - 1]);
                     animations[(Character)Enum.Parse (typeof (Character), e.Text)].Add (new Animation (boundedPoints[(Character)Enum.Parse (typeof (Character), e.Text)]));
                     break;
@@ -925,6 +946,18 @@ namespace mapKnight.ToolKit {
                     e.Nodes.Add (new TreeNode ("Step") { Name = "step:1" });
                     treeView_anim.EnableRemoveButton (e.Nodes[e.Nodes.Count - 1]);
                     animations[(Character)Enum.Parse (typeof (Character), e.Parent.Text)][e.Parent.Nodes.IndexOf (e)].AddStep ();
+                    break;
+                }
+            }
+        }
+
+        private void treeView_anim_OnAddDefaultButtonClicked (object sender, TreeNode e) {
+            if (e != null) {
+                switch (e.Name.Split (new char[] { ':' })[0]) {
+                case "anim":
+                    e.Nodes.Add (new TreeNode ("Step") { Name = "step:1" });
+                    treeView_anim.EnableRemoveButton (e.Nodes[e.Nodes.Count - 1]);
+                    animations[(Character)Enum.Parse (typeof (Character), e.Parent.Text)][e.Parent.Nodes.IndexOf (e)].AddStepDefault ();
                     break;
                 }
             }
@@ -979,6 +1012,9 @@ namespace mapKnight.ToolKit {
 
                     bfgraphicsAnim.Graphics.DrawLine (Pens.Black, new Point (0, panel_anim_editstep.Height / 2), new Point (panel_anim_editstep.Width, panel_anim_editstep.Height / 2));
                     bfgraphicsAnim.Graphics.DrawLine (Pens.Black, new Point (panel_anim_editstep.Width / 2, 0), new Point (panel_anim_editstep.Width / 2, panel_anim_editstep.Height));
+
+                    // bottom line
+                    bfgraphicsAnim.Graphics.DrawLine (Pens.Green, new Point (0, panel_anim_editstep.Height / 2 + (int)(panel_anim_editstep.Height / 20)), new Point (panel_anim_editstep.Width, panel_anim_editstep.Height / 2 + (int)(panel_anim_editstep.Height / 20)));
                     bfgraphicsAnim.Render ();
 
                 }
@@ -1037,9 +1073,10 @@ namespace mapKnight.ToolKit {
         }
 
         private void Panel_anim_editstep_MouseWheel (object sender, MouseEventArgs e) {
-            if (selectedStepPart != null)
+            if (selectedStepPart != null) {
                 animations[selectedCharacter][selectedAnim].GetStep (selectedStep)[selectedStepPart].SetValue (animations[selectedCharacter][selectedAnim].GetStep (selectedStep)[selectedStepPart][2] + e.Delta / 10, 2);
-            numericUpDown_anim_rot.Value = (int)(animations[selectedCharacter][selectedAnim].GetStep (selectedStep)[selectedStepPart][2]);
+                numericUpDown_anim_rot.Value = (int)(animations[selectedCharacter][selectedAnim].GetStep (selectedStep)[selectedStepPart][2]);
+            }
         }
 
         private void panel_anim_editstep_MouseDown (object sender, MouseEventArgs e) {
@@ -1097,7 +1134,12 @@ namespace mapKnight.ToolKit {
 
         private void panel_anim_editstep_MouseMove (object sender, MouseEventArgs e) {
             if (currentlyClicked) {
-                PointF newPosition = new PointF (Math.Max (-1f, Math.Min (1f, (float)(e.Location.X - panel_anim_editstep.Width / 2) / (float)(panel_anim_editstep.Height / 2))), Math.Max (-1f, Math.Min (1f, -(float)(e.Location.Y - panel_anim_editstep.Height / 2) / (float)(Math.Min (panel_anim_editstep.Width, panel_anim_editstep.Height) / 2))));
+                Point rasteredLocation = new Point (e.Location.X / 10, e.Location.Y / 10);
+                rasteredLocation.X *= 10;
+                rasteredLocation.Y *= 10;
+
+                PointF newPosition = new PointF (Math.Max (-1f, Math.Min (1f, (float)(rasteredLocation.X - (int)(panel_anim_editstep.Width / 10) * 10 / 2) / (float)(Math.Min (panel_anim_editstep.Width, panel_anim_editstep.Height) / 2))), Math.Max (-1f, Math.Min (1f, -(float)(rasteredLocation.Y - (int)(panel_anim_editstep.Height / 10) * 10 / 2) / (float)(Math.Min (panel_anim_editstep.Width, panel_anim_editstep.Height) / 2))));
+
                 animations[selectedCharacter][selectedAnim].GetStep (selectedStep)[selectedStepPart].SetValue (newPosition.X, 0);
                 animations[selectedCharacter][selectedAnim].GetStep (selectedStep)[selectedStepPart].SetValue (newPosition.Y, 1);
 

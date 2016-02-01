@@ -4,7 +4,8 @@
 	{
 		Armor,
 		Strength,
-		Health
+		Health,
+		Energy
 	}
 }
 

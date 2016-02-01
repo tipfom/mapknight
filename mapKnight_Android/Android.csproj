@@ -95,7 +95,6 @@
     <Compile Include="_CGL\Entity\CGLEntity.cs" />
     <Compile Include="_CGL\Entity\CGLEntityPreset.cs" />
     <Compile Include="_CGL\Entity\CGLEntitySet.cs" />
-    <Compile Include="_CGL\Entity\CGLCharacter.cs" />
     <Compile Include="_CGL\Entity\CGLAnimation.cs" />
     <Compile Include="_CGL\Entity\CGLBoundedPoint.cs" />
     <Compile Include="_Others\ShaderArrayComparer.cs" />
@@ -105,6 +104,12 @@
     <Compile Include="_Net\Terminal\IMessageProcessor.cs" />
     <Compile Include="_Net\Terminal\MessageProcessor\ContentMessageProcessor.cs" />
     <Compile Include="_Net\Terminal\MessageProcessor\AnimationMessageProcessor.cs" />
+    <Compile Include="_PhysX\PhysXMap.cs" />
+    <Compile Include="_PhysX\PhysXEntity.cs" />
+    <Compile Include="_PhysX\PhysXFlag.cs" />
+    <Compile Include="_CGL\Entity\Character\Character.cs" />
+    <Compile Include="_Enum\Direction.cs" />
+    <Compile Include="_CGL\Entity\Character\CharacterPreset.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -124,6 +129,8 @@
     <Folder Include="_CGL\Entity\" />
     <Folder Include="_Net\Terminal\" />
     <Folder Include="_Net\Terminal\MessageProcessor\" />
+    <Folder Include="_PhysX\" />
+    <Folder Include="_CGL\Entity\Character\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
@@ -137,9 +144,12 @@
     <AndroidAsset Include="Assets\character\robot.character" />
     <AndroidAsset Include="Assets\main.xml" />
     <AndroidAsset Include="Assets\sets\futuristic.png" />
-    <AndroidAsset Include="Assets\main.png" />
     <AndroidAsset Include="Assets\maps\dev.devmap" />
     <AndroidAsset Include="Assets\fonts\8bitOperatorPlus8-Regular.ttf" />
+    <AndroidAsset Include="Assets\maps\physXTest.map" />
+    <AndroidAsset Include="Assets\main.png" />
+    <AndroidAsset Include="Assets\maps\physXTest2.devmap" />
+    <AndroidAsset Include="Assets\maps\physXTest2.map" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets')" />

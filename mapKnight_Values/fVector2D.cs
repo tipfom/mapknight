@@ -22,6 +22,11 @@ namespace mapKnight.Values
 			X = x;
 			Y = y;
 		}
+
+		public override string ToString ()
+		{
+			return string.Format ("X={0}; Y={1}", X.ToString (), Y.ToString ());
+		}
 	}
 }
 

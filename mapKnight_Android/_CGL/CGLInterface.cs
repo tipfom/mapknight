@@ -122,6 +122,7 @@ namespace mapKnight.Android.CGL
 
 		private void handleJumpButtonClick ()
 		{
+			Content.Character.Jump ();
 			Array.Copy (Content.InterfaceSprite.Sprites [1].Verticies, 0, TextureCoords, 16, 8);
 			updateTextureBuffer ();
 		}
@@ -195,7 +196,7 @@ namespace mapKnight.Android.CGL
 			GL.GlVertexAttribPointer (PositionHandle, 3, GL.GlFloat, false, 3 * sizeof(float), VertexBuffer);
 
 			int MVPMatrixHandle = GL.GlGetUniformLocation (RenderProgram, "uMVPMatrix");
-			GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, Content.MVPMatrix, 0);
+			GL.GlUniformMatrix4fv (MVPMatrixHandle, 1, false, Content.Camera.DefaultMVPMatrix, 0);
 
 			GL.GlEnable (GL.GlBlend);
 			GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);

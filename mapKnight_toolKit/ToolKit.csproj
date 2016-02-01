@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -149,12 +149,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mapKnight_Utils\Utils.csproj">
-      <Project>{f4435f77-de56-45e4-b4cb-87c9f71ca088}</Project>
+    <ProjectReference Include="..\mapKnight_utils\Utils.csproj">
+      <Project>{F4435F77-DE56-45E4-B4CB-87C9F71CA088}</Project>
       <Name>Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\mapKnight_Values\Values.csproj">
-      <Project>{50b1f9f5-dd73-483b-947b-32220dc7561b}</Project>
+    <ProjectReference Include="..\mapKnight_values\Values.csproj">
+      <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
       <Name>Values</Name>
     </ProjectReference>
   </ItemGroup>
