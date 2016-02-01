@@ -1,5 +1,0 @@
-E:\Projekte\GitHub\mapknight\mapKnight_Terminal\bin\Debug\Terminal.exe
-E:\Projekte\GitHub\mapknight\mapKnight_Terminal\bin\Debug\Terminal.pdb
-E:\Projekte\GitHub\mapknight\mapKnight_Terminal\obj\Debug\Terminal.exe
-E:\Projekte\GitHub\mapknight\mapKnight_Terminal\obj\Debug\Terminal.pdb
-E:\Projekte\GitHub\mapknight\mapKnight_terminal\obj\Debug\Terminal.csprojResolveAssemblyReference.cache

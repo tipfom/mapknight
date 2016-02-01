@@ -1,5 +1,0 @@
-E:\Projekte\GitHub\mapknight\mapKnight_Utils\bin\Release\Utils.dll
-E:\Projekte\GitHub\mapknight\mapKnight_Utils\bin\Release\Utils.pdb
-E:\Projekte\GitHub\mapknight\mapKnight_Utils\obj\Release\Utils.dll
-E:\Projekte\GitHub\mapknight\mapKnight_Utils\obj\Release\Utils.pdb
-E:\Projekte\GitHub\mapknight\mapKnight_utils\obj\Release\Utils.csprojResolveAssemblyReference.cache

@@ -1,5 +1,0 @@
-E:\Projekte\GitHub\mapknight\mapKnight_Values\bin\Debug\Values.dll
-E:\Projekte\GitHub\mapknight\mapKnight_Values\bin\Debug\Values.pdb
-E:\Projekte\GitHub\mapknight\mapKnight_Values\obj\Debug\Values.csprojResolveAssemblyReference.cache
-E:\Projekte\GitHub\mapknight\mapKnight_Values\obj\Debug\Values.dll
-E:\Projekte\GitHub\mapknight\mapKnight_Values\obj\Debug\Values.pdb

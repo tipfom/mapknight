@@ -1,0 +1,8 @@
+﻿# Comments are lines which start with '#'
+# Blank lines are ignored
+# http://developer.xamarin.com/guides/android/advanced_topics/environment/
+
+# Lässt nur Fehlermeldungen von Mono zu
+MONO_LOG_LEVEL=error
+
+# Follow me on GitHub
