@@ -1,0 +1,6 @@
+E:\Projekte\GitHub\mapknight\mapKnight_Installer\bin\Debug\mapKnight.ToolKit.Installer.exe.config
+E:\Projekte\GitHub\mapknight\mapKnight_Installer\bin\Debug\mapKnight.ToolKit.Installer.exe
+E:\Projekte\GitHub\mapknight\mapKnight_Installer\bin\Debug\mapKnight.ToolKit.Installer.pdb
+E:\Projekte\GitHub\mapknight\mapKnight_Installer\obj\Debug\Installer.csprojResolveAssemblyReference.cache
+E:\Projekte\GitHub\mapknight\mapKnight_Installer\obj\Debug\mapKnight.ToolKit.Installer.exe
+E:\Projekte\GitHub\mapknight\mapKnight_Installer\obj\Debug\mapKnight.ToolKit.Installer.pdb
