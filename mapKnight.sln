@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "mapKnight_android\Android.csproj", "{D7E142F8-7BDF-4AB3-8A0B-CB0F585CAFE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "_Android\Android.csproj", "{D7E142F8-7BDF-4AB3-8A0B-CB0F585CAFE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "mapKnight_installer\Installer.csproj", "{8F666DAE-DA7A-4A70-AA3B-49471ED3645F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "_Installer\Installer.csproj", "{8F666DAE-DA7A-4A70-AA3B-49471ED3645F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "mapKnight_utils\Utils.csproj", "{F4435F77-DE56-45E4-B4CB-87C9F71CA088}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "_Utils\Utils.csproj", "{F4435F77-DE56-45E4-B4CB-87C9F71CA088}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Values", "mapKnight_values\Values.csproj", "{50B1F9F5-DD73-483B-947B-32220DC7561B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Values", "_Values\Values.csproj", "{50B1F9F5-DD73-483B-947B-32220DC7561B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal", "mapKnight_terminal\Terminal.csproj", "{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal", "_Terminal\Terminal.csproj", "{B1EC4D1D-F47C-42DE-96B4-E25D3E1DB8B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit", "mapKnight_toolKit\ToolKit.csproj", "{D3FD9918-12AB-4947-ACE7-6367885D1145}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit", "_ToolKit\ToolKit.csproj", "{D3FD9918-12AB-4947-ACE7-6367885D1145}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
