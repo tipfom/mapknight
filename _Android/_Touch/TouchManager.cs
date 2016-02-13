@@ -4,7 +4,7 @@ using System.Linq;
 
 using Android.Views;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight.Android
 {

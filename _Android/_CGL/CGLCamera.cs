@@ -1,6 +1,6 @@
 ﻿using System;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 using Android.Opengl;
 
 namespace mapKnight.Android.CGL

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.PhysX
 {

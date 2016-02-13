@@ -2,8 +2,8 @@
 using System.Text;
 using System.Collections.Generic;
 
-using mapKnight.Android.CGL.Entity;
-using mapKnight.Utils;
+using mapKnight.Android.CGL;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.Net.MessageProcessor
 {

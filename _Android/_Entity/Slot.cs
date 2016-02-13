@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mapKnight.Entity
+namespace mapKnight.Android
 {
 	public enum Slot
 	{

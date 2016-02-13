@@ -3,7 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 
-namespace mapKnight.Utils
+namespace mapKnight.Basic
 {
 	public static class AO
 	{

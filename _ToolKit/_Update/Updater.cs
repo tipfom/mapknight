@@ -4,7 +4,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-using mapKnight.Utils;
+using mapKnight.Basic;
 
 namespace mapKnight.ToolKit
 {
@@ -19,16 +19,16 @@ namespace mapKnight.ToolKit
 			NoConnection
 		}
 
-		public static UpdateResult Check (Values.Version currentVersion)
+		public static UpdateResult Check (Basic.Version currentVersion)
 		{
-           if (Connected ()) {
+			if (Connected ()) {
 				WebClient webClient = new WebClient ();
 				webClient.DownloadFile (configfileurl, "mapknighttoolkit_configfile.xml");
 
 				XMLElemental config = XMLElemental.Load (File.OpenRead ("mapknighttoolkit_configfile.xml"));
 				File.Delete ("mapknighttoolkit_configfile.xml");
 
-				if (new Values.Version (config ["version"].Value) > currentVersion) {
+				if (new Basic.Version (config ["version"].Value) > currentVersion) {
 					return UpdateResult.UpdateRequired;
 				} else {
 					return UpdateResult.UpToDate;
@@ -40,15 +40,15 @@ namespace mapKnight.ToolKit
 
 		public static void Update ()
 		{
-            WebClient webClient = new WebClient();
-            webClient.DownloadFile(configfileurl, "mapknighttoolkit_configfile.xml");
+			WebClient webClient = new WebClient ();
+			webClient.DownloadFile (configfileurl, "mapknighttoolkit_configfile.xml");
 
-            XMLElemental config = XMLElemental.Load(File.OpenRead("mapknighttoolkit_configfile.xml"));
-            File.Delete("mapknighttoolkit_configfile.xml");
+			XMLElemental config = XMLElemental.Load (File.OpenRead ("mapknighttoolkit_configfile.xml"));
+			File.Delete ("mapknighttoolkit_configfile.xml");
 
-            webClient.DownloadFile("https://drive.google.com/uc?export=download&id=" + config["installer"].Attributes["link"], "mapknight_installer_cache.exe");
-            Process.Start("mapknight_installer_cache.exe");
-        }
+			webClient.DownloadFile ("https://drive.google.com/uc?export=download&id=" + config ["installer"].Attributes ["link"], "mapknight_installer_cache.exe");
+			Process.Start ("mapknight_installer_cache.exe");
+		}
 
 		//Creating the extern function...
 		[DllImport ("wininet.dll")]

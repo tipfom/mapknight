@@ -5,7 +5,7 @@ namespace mapKnight.ToolKit
 {
 	public partial class InfoWindow : Form
 	{
-		public InfoWindow (Values.Version version)
+		public InfoWindow (Basic.Version version)
 		{
 			InitializeComponent ();
 			this.versionlabel.Text += version.ToString (false);

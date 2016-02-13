@@ -8,8 +8,7 @@ using GL = Android.Opengl.GLES20;
 
 using Javax.Microedition.Khronos.Opengles;
 
-using mapKnight.Utils;
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL
 {
@@ -36,7 +35,7 @@ namespace mapKnight.Android.CGL
 
 			Content.Map.Draw ();
 			gameInterface.Draw (Content.Camera.DefaultMVPMatrix);
-			Entity.CGLEntity.Draw (frameTime);
+			CGLEntity.Draw (frameTime);
 			CGLText.CGLTextContainer.Draw (Content.Camera.DefaultMVPMatrix);
 
 			Content.Map.Step (frameTime);
@@ -78,7 +77,7 @@ namespace mapKnight.Android.CGL
 			gameInterface.JumpButton.OnClick += () => {
 				Content.Character.Jump ();
 			};
-			infoText = new CGLText ("fps", 30, Font.BitOperator, new Values.Point (0, 20), Values.Color.White, FontStyle.Bold);
+			infoText = new CGLText ("fps", 30, Font.BitOperator, new Basic.Point (0, 20), Basic.Color.White, FontStyle.Bold);
 		}
 
 #endregion

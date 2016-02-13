@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 
-using mapKnight.Utils;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.Net
 {

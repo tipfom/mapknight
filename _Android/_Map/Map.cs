@@ -4,8 +4,7 @@ using System.Collections.Generic;
 
 using Android.Content;
 
-using mapKnight.Values;
-using mapKnight.Utils;
+using mapKnight.Basic;
 
 namespace mapKnight.Android
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.PhysX
 {
-	public class PhysXEntity : Entity.Entity
+	public class PhysXEntity : Entity
 	{
 		public Size Bounds;
 		public fVector2D Velocity;

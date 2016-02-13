@@ -34,7 +34,7 @@ namespace mapKnight.ToolKit
                 if (File.Exists("mapknight_installer_cache.exe"))
                     File.Delete("mapknight_installer_cache.exe");
 
-                if (Updater.Check(new mapKnight.Values.Version(Assembly.GetExecutingAssembly().GetName().Version.ToString())) == Updater.UpdateResult.UpdateRequired)
+                if (Updater.Check(new mapKnight.Basic.Version(Assembly.GetExecutingAssembly().GetName().Version.ToString())) == Updater.UpdateResult.UpdateRequired)
                 {
                     if (MessageBox.Show("Do you want to update the ToolKit?", "Update Available", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
                     {

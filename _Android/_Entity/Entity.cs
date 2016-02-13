@@ -1,8 +1,8 @@
 ﻿using System;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 
-namespace mapKnight.Entity
+namespace mapKnight.Android
 {
 	public class Entity
 	{

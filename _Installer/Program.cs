@@ -6,7 +6,7 @@ using System.Net;
 
 using Microsoft.Win32;
 
-using mapKnight.Utils;
+using mapKnight.Basic;
 
 namespace mapKnight.ToolKit.Installer
 {

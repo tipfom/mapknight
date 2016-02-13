@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-using mapKnight.Utils;
+using XMLElemental = mapKnight.Basic.XMLElemental;
 
 namespace mapKnight.ToolKit
 {

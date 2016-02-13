@@ -12,8 +12,7 @@ using Matrix = Android.Opengl.Matrix;
 using mapKnight.Android;
 using mapKnight.Android.Net;
 using mapKnight.Android.CGL;
-using mapKnight.Utils;
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight
 {
@@ -34,7 +33,7 @@ namespace mapKnight
 		public static void PreInit (XMLElemental configfile, Context context)
 		{
 			Context = context;
-			Version = new Values.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
+			Version = new Basic.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
 
 			CGLTools.LoadShader ();
 			LoadFonts (configfile);
@@ -143,7 +142,7 @@ namespace mapKnight
 
 		private static void LoadCharacter ()
 		{
-			Entity.CharacterPreset preset = new Entity.CharacterPreset (Utils.XMLElemental.Load (Context.Assets.Open ("character/robot.character")), Context);
+			CharacterPreset preset = new CharacterPreset (XMLElemental.Load (Context.Assets.Open ("character/robot.character")), Context);
 			Character = preset.Instantiate (10, "futuristic");
 			Character.CollisionMask = mapKnight.Android.PhysX.PhysXFlag.Map;
 		}

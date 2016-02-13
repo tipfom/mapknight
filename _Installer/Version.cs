@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mapKnight.Values
+namespace mapKnight.Basic
 {
 	public struct Version
 	{

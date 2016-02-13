@@ -1,0 +1,27 @@
+﻿<Properties StartupItem="_Android\Android.csproj" RefactoringSettings.EnableRefactorings="True">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Nexus 5 (5.1.0)" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="_Android\_CGL\Entity\CGLEntityPreset.cs">
+    <Files>
+      <File FileName="_Android\_Content\Variables.cs" Line="11" Column="23" />
+      <File FileName="_Android\_Net\Terminal\MessageProcessor\AnimationMessageProcessor.cs" Line="5" Column="28" />
+      <File FileName="_Android\_CGL\Entity\CGLEntityPreset.cs" Line="54" Column="45" />
+      <File FileName="_Android\_CGL\Entity\CGLEntitySet.cs" Line="7" Column="23" />
+      <File FileName="_Android\_Entity\Entity.cs" Line="7" Column="18" />
+      <File FileName="_Android\_Entity\EntityPreset.cs" Line="6" Column="28" />
+      <File FileName="_Android\_Entity\Set.cs" Line="6" Column="28" />
+      <File FileName="_Android\_Entity\Slot.cs" Line="3" Column="28" />
+      <File FileName="_Android\_Enum\Attribute.cs" Line="1" Column="28" />
+      <File FileName="_Android\_PhysX\PhysXEntity.cs" Line="7" Column="35" />
+      <File FileName="_Android\_CGL\Entity\Character\CharacterPreset.cs" Line="23" Column="75" />
+      <File FileName="_Android\_CGL\Entity\Character\Character.cs" Line="6" Column="1" />
+      <File FileName="_Android\_CGL\Entity\CGLEntity.cs" Line="8" Column="23" />
+      <File FileName="_Android\_CGL\Entity\CGLBoundedPoint.cs" Line="2" Column="1" />
+      <File FileName="_Android\_Content\Initialize.cs" Line="145" Column="33" />
+      <File FileName="_Android\_CGL\CGLRenderer.cs" Line="38" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

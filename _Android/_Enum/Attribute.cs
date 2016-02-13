@@ -1,4 +1,4 @@
-﻿namespace mapKnight.Entity
+﻿namespace mapKnight.Android
 {
 	public enum Attribute
 	{

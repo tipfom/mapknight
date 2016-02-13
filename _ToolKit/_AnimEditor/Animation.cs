@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using mapKnight.Utils;
+using mapKnight.Basic;
 
 namespace mapKnight.ToolKit {
     public class Animation {

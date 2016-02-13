@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using mapKnight.Utils;
+using mapKnight.Basic;
 
-namespace mapKnight.Entity
+namespace mapKnight.Android
 {
 	public class Set
 	{

@@ -149,13 +149,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mapKnight_utils\Utils.csproj">
-      <Project>{F4435F77-DE56-45E4-B4CB-87C9F71CA088}</Project>
-      <Name>Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\mapKnight_values\Values.csproj">
+    <ProjectReference Include="..\_Values\Basic.csproj">
       <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
-      <Name>Values</Name>
+      <Name>Basic</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -7,8 +7,7 @@ using GL = Android.Opengl.GLES20;
 
 using Java.Nio;
 
-using mapKnight.Values;
-using mapKnight.Utils;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using mapKnight.Utils;
+using mapKnight.Basic;
 
 namespace mapKnight.Android
 {

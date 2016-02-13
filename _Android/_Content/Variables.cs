@@ -8,9 +8,7 @@ using Android.Content;
 using mapKnight.Android;
 using mapKnight.Android.Net;
 using mapKnight.Android.CGL;
-using mapKnight.Android.CGL.Entity;
-using mapKnight.Values;
-using mapKnight.Entity;
+using mapKnight.Basic;
 
 namespace mapKnight
 {
@@ -50,7 +48,7 @@ namespace mapKnight
 		public static bool AntialiasText{ get { return iAntialiasText; } set { iAntialiasText = value; } }
 
 		// version string
-		public static Values.Version Version;
+		public static Basic.Version Version;
 
 		// draw variables
 		public static int CoordsPerVertex2D = 2;

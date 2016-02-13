@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Android.Views;
 using GL = Android.Opengl.GLES20;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight.Android
 {

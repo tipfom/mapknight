@@ -7,7 +7,7 @@ using Android.Opengl;
 
 using Java.Nio;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL
 {
@@ -47,11 +47,11 @@ namespace mapKnight.Android.CGL
 			}
 		}
 
-		private Values.Point iPositionCorrection;
+		private Basic.Point iPositionCorrection;
 
-		private Values.Point iPosition;
+		private Basic.Point iPosition;
 
-		public Values.Point Position {
+		public Basic.Point Position {
 			get { return iPosition; }
 			set {
 				iPosition = value + iPositionCorrection;
@@ -59,9 +59,9 @@ namespace mapKnight.Android.CGL
 			}
 		}
 
-		private Values.Color iColor;
+		private Basic.Color iColor;
 
-		public Values.Color Color {
+		public Basic.Color Color {
 			get { return iColor; }
 			set {
 				iColor = value;
@@ -83,23 +83,23 @@ namespace mapKnight.Android.CGL
 
 		public int Height{ get; private set; }
 
-		public CGLText (string text, int fontsize, Font font) : this (text, fontsize, font, new Values.Point (Content.ScreenSize), Values.Color.Black, FontStyle.Normal)
+		public CGLText (string text, int fontsize, Font font) : this (text, fontsize, font, new Basic.Point (Content.ScreenSize), Basic.Color.Black, FontStyle.Normal)
 		{
 		}
 
-		public CGLText (string text, int fontsize, Font font, Values.Point position) : this (text, fontsize, font, position, Values.Color.Black, FontStyle.Normal)
+		public CGLText (string text, int fontsize, Font font, Basic.Point position) : this (text, fontsize, font, position, Basic.Color.Black, FontStyle.Normal)
 		{
 		}
 
-		public CGLText (string text, int fontsize, Font font, Values.Point position, Values.Color color) : this (text, fontsize, font, position, color, FontStyle.Normal)
+		public CGLText (string text, int fontsize, Font font, Basic.Point position, Basic.Color color) : this (text, fontsize, font, position, color, FontStyle.Normal)
 		{
 		}
 
-		public CGLText (string text, int fontsize, Font font, Values.Point position, FontStyle fontstyle) : this (text, fontsize, font, position, Values.Color.Black, fontstyle)
+		public CGLText (string text, int fontsize, Font font, Basic.Point position, FontStyle fontstyle) : this (text, fontsize, font, position, Basic.Color.Black, fontstyle)
 		{
 		}
 
-		public CGLText (string text, int fontsize, Font font, Values. Point position, Values.Color color, FontStyle fontstyle)
+		public CGLText (string text, int fontsize, Font font, Basic. Point position, Basic.Color color, FontStyle fontstyle)
 		{
 			this.iText = text;
 			this.iFontsize = fontsize;
@@ -147,7 +147,7 @@ namespace mapKnight.Android.CGL
 			this.Height = textbounds.Height ();
 			this.Width = textbounds.Width ();
 
-			this.iPositionCorrection = new Values.Point (0, 0);
+			this.iPositionCorrection = new Basic.Point (0, 0);
 			this.iPosition += this.iPositionCorrection;
 
 			if (OnRefresh != null)

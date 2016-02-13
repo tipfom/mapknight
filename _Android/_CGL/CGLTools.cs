@@ -10,7 +10,7 @@ using GL = Android.Opengl.GLES20;
 
 using Java.Nio;
 
-using mapKnight.Values;
+using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL
 {
@@ -200,7 +200,7 @@ namespace mapKnight.Android.CGL
 		public static fRectangle ParseCoordinates (Dictionary<string,string> config, Size imageSize)
 		{
 			// konvertiert die geradezahligen koordination von sprites in opengl koordinaten
-			return (new Rectangle (new mapKnight.Values.Point (Convert.ToInt32 (config ["x"]), Convert.ToInt32 (config ["y"])), new Size (Convert.ToInt32 (config ["width"]), Convert.ToInt32 (config ["height"]))) / imageSize);
+			return (new Rectangle (new mapKnight.Basic.Point (Convert.ToInt32 (config ["x"]), Convert.ToInt32 (config ["y"])), new Size (Convert.ToInt32 (config ["width"]), Convert.ToInt32 (config ["height"]))) / imageSize);
 		}
 
 		public static FloatBuffer CreateBuffer (float[] source)

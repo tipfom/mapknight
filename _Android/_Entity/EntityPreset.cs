@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using mapKnight.Values;
-using mapKnight.Utils;
+using mapKnight.Basic;
 
-namespace mapKnight.Entity
+namespace mapKnight.Android
 {
 	public class EntityPreset
 	{
