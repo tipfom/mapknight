@@ -1,6 +1,11 @@
 */bin/**
 */obj/**
-packages/*
+packages/
+Components/*
+.vs/*
+*.sou
 *.apk
 *.dll
 *.exe
+
+mapKnight.userprefs
