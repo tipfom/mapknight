@@ -89,7 +89,6 @@ namespace mapKnight.Android.CGL
 		private void CalculateFrameRate ()
 		{
 			frameTime = System.Environment.TickCount - lastTick;
-
 			ticks++;
 			if (System.Environment.TickCount - lastSecond > 1000) {
 				measueredFPS = ticks;

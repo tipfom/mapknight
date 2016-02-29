@@ -86,7 +86,8 @@ namespace mapKnight.Android
 			{ typeof(Net.Client),"SocketClient" },
 			{ typeof(Net.Server), "SocketServer" },
 			{ typeof(MainActivity), "Activity" },
-			{ typeof(Net.TerminalManager),"TerminalManager" }
+			{ typeof(Net.TerminalManager),"TerminalManager" },
+			{ typeof(CGL.CGLCamera),"Camera" }
 		};
 	}
 }

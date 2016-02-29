@@ -19,8 +19,8 @@
     </def>
 
     <physx>
-        <bounds width="7" height="9" weight="30"/>
-        <speed move="50" jump="30"/>
+        <bounds width="0,5" height="1,8" weight="30"/>
+        <speed move="1,4" jump="3,8"/>
     </physx>
 
     <level>
@@ -52,29 +52,29 @@
     <anim action="default" abortable="true" loopable="true">
         <default time="700">
             <!-- time to go back to default -->
-            <bpoint name="helmet_0" rot="0" x="0" y="0,16" mirrored="false"/>
+            <bpoint name="helmet_0" rot="0" x="0" y="0,0" mirrored="false"/>
             <bpoint name="chestplate_0" rot="0" x="0" y="0"  mirrored="false"/>
-            <bpoint name="gloves_0" rot="0" x="0,15" y="0"  mirrored="false"/>
-            <bpoint name="gloves_1" rot="-90" x="-0,15" y="0"  mirrored="false"/>
-            <bpoint name="shoes_0" rot="0" x="0,06" y="-0,09"  mirrored="false"/>
-            <bpoint name="shoes_1" rot="0" x="-0,06" y="-0,09"  mirrored="true"/>
+            <bpoint name="gloves_0" rot="0" x="0,0" y="0"  mirrored="false"/>
+            <bpoint name="gloves_1" rot="-90" x="-0,0" y="0"  mirrored="false"/>
+            <bpoint name="shoes_0" rot="0" x="0,0" y="-0,0"  mirrored="false"/>
+            <bpoint name="shoes_1" rot="0" x="-0,0" y="-00"  mirrored="true"/>
         </default>
 
         <step time="700">
-            <bpoint name="helmet_0" rot="0" x="0" y="0,16" mirrored="false"/>
+            <bpoint name="helmet_0" rot="0" x="0" y="0,0" mirrored="false"/>
             <bpoint name="chestplate_0" rot="0" x="0" y="0"  mirrored="false"/>
-            <bpoint name="gloves_0" rot="7" x="0,2" y="0,02"  mirrored="false"/>
-            <bpoint name="gloves_1" rot="-85" x="-0,2" y="0"  mirrored="false"/>
-            <bpoint name="shoes_0" rot="0" x="0,06" y="-0,1"  mirrored="false"/>
-            <bpoint name="shoes_1" rot="0" x="-0,06" y="-0,1"  mirrored="true"/>
+            <bpoint name="gloves_0" rot="7" x="0,0" y="0,0"  mirrored="false"/>
+            <bpoint name="gloves_1" rot="-85" x="-0,0" y="0"  mirrored="false"/>
+            <bpoint name="shoes_0" rot="0" x="0,0" y="-0,0"  mirrored="false"/>
+            <bpoint name="shoes_1" rot="0" x="-0,0" y="-0,0"  mirrored="true"/>
         </step>
         <step time="200">
-            <bpoint name="helmet_0" rot="0" x="0" y="0,16" mirrored="false"/>
+            <bpoint name="helmet_0" rot="0" x="0" y="0,0" mirrored="false"/>
             <bpoint name="chestplate_0" rot="0" x="0" y="0"  mirrored="false"/>
-            <bpoint name="gloves_0" rot="0" x="0,15" y="0"  mirrored="false"/>
-            <bpoint name="gloves_1" rot="-90" x="-0,15" y="0"  mirrored="false"/>
-            <bpoint name="shoes_0" rot="100" x="1" y="-0,09"  mirrored="false"/>
-            <bpoint name="shoes_1" rot="0" x="-0,06" y="-0,09"  mirrored="true"/>
+            <bpoint name="gloves_0" rot="0" x="0,0" y="0"  mirrored="false"/>
+            <bpoint name="gloves_1" rot="-90" x="-0,0" y="0"  mirrored="false"/>
+            <bpoint name="shoes_0" rot="100" x="0,0" y="-0,0"  mirrored="false"/>
+            <bpoint name="shoes_1" rot="0" x="-0,0" y="-0,0"  mirrored="true"/>
         </step>
 
     </anim>

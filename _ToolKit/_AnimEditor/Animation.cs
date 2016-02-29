@@ -67,7 +67,8 @@ namespace mapKnight.ToolKit {
         }
 
         public void RemoveStep (int index) {
-            steps.RemoveAt (index);
+            if(index > 0)
+            steps.RemoveAt (index-1);
         }
 
         public void SetTime (int time, int index) {

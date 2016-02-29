@@ -1069,7 +1069,7 @@ namespace mapKnight.ToolKit
 					e.Parent.Nodes.Remove (e);
 					break;
 				case "step":
-					animations [(Character)Enum.Parse (typeof(Character), e.Parent.Parent.Text)] [e.Parent.Nodes.IndexOf (e)].RemoveStep (e.Parent.Nodes.IndexOf (e));
+                    animations [(Character)Enum.Parse (typeof(Character), e.Parent.Parent.Text)] [e.Parent.Parent.Nodes.IndexOf (e.Parent)].RemoveStep (e.Parent.Nodes.IndexOf (e));
 					e.Parent.Nodes.Remove (e);
 					break;
 				}

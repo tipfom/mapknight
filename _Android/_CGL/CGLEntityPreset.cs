@@ -15,7 +15,7 @@ namespace mapKnight.Android.CGL
 		protected List<CGLBoundedPoint> boundedPoints;
 
 		protected int weight;
-		protected Size bounds;
+		protected fSize bounds;
 
 		public CGLEntityPreset (XMLElemental entityConfig, Context context) : base (entityConfig)
 		{
@@ -41,7 +41,7 @@ namespace mapKnight.Android.CGL
 			}
 
 			weight = int.Parse (entityConfig ["physx"] ["bounds"].Attributes ["weight"]);
-			bounds = new Size (int.Parse (entityConfig ["physx"] ["bounds"].Attributes ["width"]), int.Parse (entityConfig ["physx"] ["bounds"].Attributes ["height"]));
+			bounds = new fSize (float.Parse (entityConfig ["physx"] ["bounds"].Attributes ["width"]), float.Parse (entityConfig ["physx"] ["bounds"].Attributes ["height"]));
 		}
 
 		public CGLEntity Instantiate (uint level, string set)

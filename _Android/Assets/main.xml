@@ -9,11 +9,7 @@
 			<sprite id="4" x="82" y="0" width="6" height="6" />
 		</image>
 	</images>
-	<map drawwidth="22" />
 	<fonts>
-		<font name="Tahoma" src="fonts/tahoma.ttf" />
-		<font name="ArcadeClassic" src="fonts/ARCADECLASSIC.TTF" />
-		<font name="ArcadeDotted" src="fonts/ARCADE.TTF" />
 		<font name="Pixel" src="fonts/8bitOperatorPlus8-Regular.ttf"/>
 	</fonts>
 	<tiles>

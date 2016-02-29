@@ -6,13 +6,13 @@ namespace mapKnight.Android.PhysX
 {
 	public class PhysXEntity : Entity
 	{
-		public Size Bounds;
+		public fSize Bounds;
 		public fVector2D Velocity;
 		public fVector2D Acceleration;
 		public readonly int Weight;
 		public PhysXFlag CollisionMask;
 
-		public PhysXEntity (int weight, Size bounds, int health, fPoint position, string name) : base (health, position, name)
+		public PhysXEntity (int weight, fSize bounds, int health, fPoint position, string name) : base (health, position, name)
 		{
 			Bounds = bounds;
 			Weight = weight; 

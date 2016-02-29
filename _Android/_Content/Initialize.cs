@@ -59,8 +59,8 @@ namespace mapKnight
 
 			TouchManager = new ButtonManager ();
 			Terminal = new TerminalManager ();
-			Map = new CGLMap (22, "physXTest2.devmap");
-			Camera = new CGLCamera (-0.0f);
+			Map = new CGLMap (18, "physXTest2.devmap");
+			Camera = new CGLCamera (0.3f);
 			Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
 			LoadCharacter ();
 
@@ -134,9 +134,6 @@ namespace mapKnight
 		private static void LoadFonts (XMLElemental configfile)
 		{
 			Fonts = new System.Collections.Generic.Dictionary<Font, Typeface> ();
-			Fonts.Add (Font.Tahoma, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "Tahoma")).Attributes ["src"]));
-			Fonts.Add (Font.ArcadeClassic, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeClassic")).Attributes ["src"]));
-			Fonts.Add (Font.ArcadeDotted, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Get (((XMLElemental element) => element.Attributes ["name"] == "ArcadeDotted")).Attributes ["src"]));
 			Fonts.Add (Font.BitOperator, Typeface.CreateFromAsset (Context.Assets, configfile ["fonts"].Find ("name", "Pixel").Attributes ["src"]));
 		}
 

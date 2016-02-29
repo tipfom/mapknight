@@ -10,10 +10,10 @@ namespace mapKnight.Android.CGL
 	{
 		public ChangingProperty Energy;
 
-		private int moveSpeed;
-		private int jumpSpeed;
+		private float moveSpeed;
+		private float jumpSpeed;
 
-		public Character (int health, int energy, string name, int weight, Size bounds, List<CGLBoundedPoint> boundedpoints, List<CGLAnimation> animations, CGLSet set, int movespeed, int jumpspeed)
+		public Character (int health, int energy, string name, int weight, fSize bounds, List<CGLBoundedPoint> boundedpoints, List<CGLAnimation> animations, CGLSet set, float movespeed, float jumpspeed)
 			: base (health, Content.Map.SpawnPoint, name, weight, bounds, boundedpoints, animations, set)
 		{
 			Energy = new ChangingProperty (energy);

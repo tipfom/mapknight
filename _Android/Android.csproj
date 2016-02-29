@@ -19,7 +19,7 @@
     <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
@@ -30,6 +30,16 @@
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Externalconsole>true</Externalconsole>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidSupportedAbis />
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n />
+    <Debugger>Xamarin</Debugger>
+    <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -92,11 +102,6 @@
     <Compile Include="_Entity\Slot.cs" />
     <Compile Include="_Entity\Set.cs" />
     <Compile Include="_Entity\EntityPreset.cs" />
-    <Compile Include="_CGL\Entity\CGLEntity.cs" />
-    <Compile Include="_CGL\Entity\CGLEntityPreset.cs" />
-    <Compile Include="_CGL\Entity\CGLEntitySet.cs" />
-    <Compile Include="_CGL\Entity\CGLAnimation.cs" />
-    <Compile Include="_CGL\Entity\CGLBoundedPoint.cs" />
     <Compile Include="_Others\ShaderArrayComparer.cs" />
     <Compile Include="_Enum\Shader.cs" />
     <Compile Include="_CGL\CGLTools %28Shader%29.cs" />
@@ -107,9 +112,14 @@
     <Compile Include="_PhysX\PhysXMap.cs" />
     <Compile Include="_PhysX\PhysXEntity.cs" />
     <Compile Include="_PhysX\PhysXFlag.cs" />
-    <Compile Include="_CGL\Entity\Character\Character.cs" />
     <Compile Include="_Enum\Direction.cs" />
-    <Compile Include="_CGL\Entity\Character\CharacterPreset.cs" />
+    <Compile Include="_CGL\CGLAnimation.cs" />
+    <Compile Include="_CGL\CGLBoundedPoint.cs" />
+    <Compile Include="_CGL\CGLEntity.cs" />
+    <Compile Include="_CGL\CGLEntityPreset.cs" />
+    <Compile Include="_CGL\CGLEntitySet.cs" />
+    <Compile Include="_Character\Character.cs" />
+    <Compile Include="_Character\CharacterPreset.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -124,23 +134,13 @@
     <Folder Include="Assets\animations\" />
     <Folder Include="Assets\entitys\" />
     <Folder Include="Resources\layout\" />
-    <Folder Include="_Entity\" />
-    <Folder Include="Assets\sets\" />
-    <Folder Include="_CGL\Entity\" />
-    <Folder Include="_Net\Terminal\" />
-    <Folder Include="_Net\Terminal\MessageProcessor\" />
-    <Folder Include="_PhysX\" />
-    <Folder Include="_CGL\Entity\Character\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="environment.txt" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\interface.png" />
-    <AndroidAsset Include="Assets\fonts\tahoma.ttf" />
     <AndroidAsset Include="Assets\maps\testMap.xml" />
-    <AndroidAsset Include="Assets\fonts\ARCADE.TTF" />
-    <AndroidAsset Include="Assets\fonts\ARCADECLASSIC.TTF" />
     <AndroidAsset Include="Assets\character\robot.character" />
     <AndroidAsset Include="Assets\main.xml" />
     <AndroidAsset Include="Assets\sets\futuristic.png" />
@@ -154,7 +154,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Insights.1.11.4\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\packages\Xamarin.Insights.1.11.4\build\MonoAndroid10\Xamarin.Insights.targets')" />
   <ItemGroup>
-    <ProjectReference Include="..\_Values\Basic.csproj">
+    <ProjectReference Include="..\_Basic\Basic.csproj">
       <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
       <Name>Basic</Name>
     </ProjectReference>

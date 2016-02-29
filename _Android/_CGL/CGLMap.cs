@@ -30,10 +30,12 @@ namespace mapKnight.Android.CGL
 		Dictionary<int, float[]> LineOvrlTextureCoords;
 
 		public readonly Size DrawSize;
-		private float vertexSize;
+		public readonly fSize RealDrawSize;
+		public float vertexSize;
 
 		public CGLMap (int mapDrawWidth, string name) : base (name)
 		{
+			RealDrawSize = new fSize (mapDrawWidth, mapDrawWidth / Content.ScreenRatio);
 			DrawSize = new Size (mapDrawWidth + 2, (int)((float)mapDrawWidth / Content.ScreenRatio) + 2);
 			vertexSize = 2 * Content.ScreenRatio / (float)(DrawSize.Width - 2);
 

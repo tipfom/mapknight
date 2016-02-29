@@ -8,13 +8,13 @@ namespace mapKnight.Android.CGL
 {
 	public class CharacterPreset : mapKnight.Android.CGL.CGLEntityPreset
 	{
-		private int moveSpeed;
-		private int jumpSpeed;
+		private float moveSpeed;
+		private float jumpSpeed;
 
 		public CharacterPreset (XMLElemental config, Context context) : base (config, context)
 		{
-			moveSpeed = int.Parse (config ["physx"] ["speed"].Attributes ["move"]);
-			jumpSpeed = int.Parse (config ["physx"] ["speed"].Attributes ["jump"]);
+			moveSpeed = float.Parse (config ["physx"] ["speed"].Attributes ["move"]);
+			jumpSpeed = float.Parse (config ["physx"] ["speed"].Attributes ["jump"]);
 		}
 
 		public new Character Instantiate (uint level, string set)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 using mapKnight.Basic;
 
@@ -7,7 +8,7 @@ namespace mapKnight.Android.PhysX
 {
 	public class PhysXMap : Map
 	{
-		public const int TILE_BOX_SIZE = 5;
+		public const int TILE_BOX_SIZE = 1;
 		private List<PhysXEntity> addedEntitys = new List<PhysXEntity> ();
 		private fVector2D Gravity = new fVector2D (0, -10);
 
@@ -18,7 +19,15 @@ namespace mapKnight.Android.PhysX
 
 		public PhysXMap (string name, bool isDev) : base (name, isDev)
 		{
-		}
+            string rawCode;
+            using (StreamReader reader = new StreamReader (Content.Context.Assets.Open (Path.Combine ("maps", name)))) {
+                rawCode = reader.ReadToEnd ();
+            }
+            if (!isDev)
+                rawCode = rawCode.UnZip ();
+
+            Load (XMLElemental.Load (rawCode));
+        }
 
 		public void AddEntity (PhysXEntity entity)
 		{
@@ -45,21 +54,25 @@ namespace mapKnight.Android.PhysX
 					if (entity.Velocity.X > 0) {
 						// right
 						for (int x = (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x <= (int)(entity.Position.X + entity.Bounds.Width + entity.Velocity.X * time) / TILE_BOX_SIZE; x++) {
-							if (this.GetTile (x, (int)(entity.Position.Y / TILE_BOX_SIZE)) != Tile.Air) {
-								entity.Position.X = (float)(x * TILE_BOX_SIZE) - (float)entity.Bounds.Width - 0.00001f;
-								entity.Velocity.X = 0;
-								moved = true;
-								break;
+							for (int y = (int)(entity.Position.Y / TILE_BOX_SIZE); y <= (int)((entity.Position.Y + entity.Bounds.Height) / TILE_BOX_SIZE); y++) {
+								if (this.GetTile (x, y) != Tile.Air) {
+									entity.Position.X = (float)(x * TILE_BOX_SIZE) - (float)entity.Bounds.Width;
+									entity.Velocity.X = 0;
+									moved = true;
+									break;
+								}
 							}
 						}
 					} else if (entity.Velocity.X < 0) {
 						// left
 						for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x >= (int)(entity.Position.X + entity.Velocity.X * time) / TILE_BOX_SIZE; x--) {
-							if (this.GetTile (x, (int)(entity.Position.Y / TILE_BOX_SIZE)) != Tile.Air) {
-								entity.Position.X = (float)((x + 1) * TILE_BOX_SIZE);
-								entity.Velocity.X = 0;
-								moved = true;
-								break;
+							for (int y = (int)(entity.Position.Y / TILE_BOX_SIZE); y <= (int)((entity.Position.Y + entity.Bounds.Height) / TILE_BOX_SIZE); y++) {
+								if (this.GetTile (x, y) != Tile.Air) {
+									entity.Position.X = (float)((x + 1) * TILE_BOX_SIZE);
+									entity.Velocity.X = 0;
+									moved = true;
+									break;
+								}
 							}
 						}
 					}
@@ -74,25 +87,41 @@ namespace mapKnight.Android.PhysX
 						for (int y = (int)((entity.Position.Y + entity.Bounds.Height) / TILE_BOX_SIZE); y <= (entity.Position.Y + entity.Velocity.Y * time + entity.Bounds.Height) / TILE_BOX_SIZE; y++) {
 							if (moved)
 								break;
-							for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x <= (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x++) {
+							for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x < (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x++) {
 								if (this.GetTile (x, y) != Tile.Air) {
 									entity.Position.Y = y * TILE_BOX_SIZE - entity.Bounds.Height;
 									entity.Velocity.Y = 0;
 									moved = true;
 								}
 							}
+
+							// to prevent gliching
+							if ((entity.Position.X + entity.Bounds.Width) % TILE_BOX_SIZE != 0 && this.GetTile ((int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE), y) != Tile.Air) {
+								entity.Position.Y = y * TILE_BOX_SIZE - entity.Bounds.Height;
+								entity.Velocity.Y = 0;
+								moved = true;
+								break;
+							}
 						}
 					} else if (entity.Velocity.Y < 0) {
 						for (int y = (int)(entity.Position.Y / TILE_BOX_SIZE); y >= (int)(entity.Position.Y + entity.Velocity.Y * time) / TILE_BOX_SIZE; y--) {
 							if (moved)
 								break;
-							for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x <= (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x++) {
+							for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x < (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x++) {
 								if (this.GetTile (x, y) != Tile.Air) {
 									entity.Position.Y = (y + 1) * TILE_BOX_SIZE;
 									entity.Velocity.Y = 0;
 									moved = true;
 									break;
 								}
+							}
+
+							// to prevent gliching
+							if ((entity.Position.X + entity.Bounds.Width) % TILE_BOX_SIZE != 0 && this.GetTile ((int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE), y) != Tile.Air) {
+								entity.Position.Y = (y + 1) * TILE_BOX_SIZE;
+								entity.Velocity.Y = 0;
+								moved = true;
+								break;
 							}
 						}
 					}
@@ -105,8 +134,8 @@ namespace mapKnight.Android.PhysX
 				entity.Position.Y = Math.Min (Math.Max (0f, entity.Position.Y), Height * TILE_BOX_SIZE - entity.Bounds.Height);
 				entity.Position.X = Math.Min (Math.Max (0f, entity.Position.X), Width * TILE_BOX_SIZE - entity.Bounds.Width);
 
-				Log.All (typeof(Content), entity.Position.ToString (), MessageType.Debug);
-				Log.All (typeof(Content), entity.Velocity.ToString (), MessageType.Debug);
+//				Log.All (typeof(Content), entity.Position.ToString (), MessageType.Debug);
+//				Log.All (typeof(Content), entity.Velocity.ToString (), MessageType.Debug);
 			}
 		}
 	}

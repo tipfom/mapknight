@@ -24,7 +24,7 @@ namespace mapKnight.Android.CGL
 		protected List<CGLAnimation> animations;
 		private int currentAnimation;
 
-		public CGLEntity (int health, fPoint position, string name, int weight, Size bounds, List<CGLBoundedPoint>  boundedpoints, List<CGLAnimation> animations, CGLSet set)
+		public CGLEntity (int health, fPoint position, string name, int weight, fSize bounds, List<CGLBoundedPoint>  boundedpoints, List<CGLAnimation> animations, CGLSet set)
 			: base (weight, bounds, health, position, name)
 		{
 			this.set = set;
