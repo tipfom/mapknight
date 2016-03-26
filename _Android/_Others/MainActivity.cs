@@ -17,7 +17,6 @@ namespace mapKnight.Android
 
 		protected override void OnCreate (Bundle bundle)
 		{
-			Xamarin.Insights.Initialize (XamarinInsights.ApiKey, this);
 			RequestWindowFeature (WindowFeatures.NoTitle);
 			base.OnCreate (bundle);
 			// Create our OpenGL view, and display it

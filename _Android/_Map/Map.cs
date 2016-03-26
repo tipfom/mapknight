@@ -1,145 +1,159 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-
-using Android.Content;
-
+﻿using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using mapKnight.Basic;
 
-namespace mapKnight.Android
-{
-	public class Map
-	{
-		// x, y, TileData (0 -> TileID, 1 -> Overlay, 2 -> MetaData)
-		private ushort[,,] MapData;
+namespace mapKnight.Android {
+    public class Map {
+        public static byte[] IDENTIFIER = { 84, 77, 83, 76, 4, 42, 133, 7 };
 
-		public int Width;
-		public int Height;
+        // x, y, TileData (0 -> TileID, 1 -> Overlay, 2 -> MetaData)
+        private int[,,] Data;
 
-		public string Author;
-		public string Name;
-		public fPoint SpawnPoint;
+        public Size Size;
 
-		public Map (ushort[,,] Map, string author, string name, fPoint spawnpoint)
-		{
-			if (Map.GetLength (2) == 3) {
-				Width = Map.GetLength (0);
-				Height = Map.GetLength (1);
-				Author = author;
-				Name = name;
-				SpawnPoint = spawnpoint;
+        public string Creator;
+        public string Name;
+        public fPoint SpawnPoint;
+        public TileManager TileManager;
 
-				MapData = Map;
-			} else {
-				throw new ArgumentException ("map has not the correct format");
-			}
-		}
+        public Map (string filename) {
+            if (Path.GetExtension (filename) != "map")
+                Log.All (this, "selected map may isnt certified", MessageType.Warn);
+            Load (Content.Context.Assets.Open (Path.Combine ("maps", filename)));
+        }
 
-		public Map (string name) : this (name, (Path.GetExtension (name) == ".devmap"))
-		{
-		}
+        public Map (byte[] data) {
+            Load (data);
+        }
 
-		public Map (string name, bool isDev)
-		{
-			string rawCode;
-			using (StreamReader reader = new StreamReader (Content.Context.Assets.Open (Path.Combine ("maps", name)))) {
-				rawCode = reader.ReadToEnd ();
-			}
-			if (!isDev)
-				rawCode = rawCode.UnZip ();
+        public Map (Stream stream) {
+            Load (stream);
+        }
 
-			Load (XMLElemental.Load (rawCode));
-		}
+        private void Load (Stream stream) {
+            using (BinaryReader reader = new BinaryReader (stream)) {
+                // check if file has the map prebytes
+                if (reader.ReadBytes (8).SequenceEqual (IDENTIFIER)) {
+                    // read header and load tileset
+                    TileManager = new TileManager (XMLElemental.Load (Content.Context.Assets.Open (Path.ChangeExtension (Path.Combine ("tilesets", reader.ReadInt32 ().ToString ()), "tileset"))));
+                    Size = new Size ((int)reader.ReadInt16 (), (int)reader.ReadInt16 ());
+                    SpawnPoint = new fPoint ((this.Size.Height - (float)reader.ReadInt16 ()) * PhysX.PhysXMap.TILE_BOX_SIZE, (float)reader.ReadInt16 () * PhysX.PhysXMap.TILE_BOX_SIZE);
+                    Log.All (this, Size.ToString (), MessageType.Debug);
+                    Data = new int[Size.Width, Size.Height, 3];
 
-		private Map (XMLElemental xmlelemental)
-		{
-			Load (xmlelemental);
-		}
+                    // read in mapdata
+                    switch (reader.ReadByte ()) {
+                    case 1:
+                        // map is 16-bit decoded
+                        int currenttile = (int)reader.ReadInt16 ();
+                        int currentlayer = 0;
+                        while (currenttile != 0) {
+                            while (currentlayer < 3) {
+                                int data = (int)reader.ReadInt16 () - 1;
+                                if (data == -1) {
+                                    currentlayer++;
+                                } else {
+                                    int y = (int)(data / Size.Width);
+                                    int x = data - (int)(y * Size.Width);
+                                    Data[x, y, currentlayer] = currenttile;
+                                }
+                            }
+                            currenttile = (int)reader.ReadInt16 ();
+                            currentlayer = 0;
+                        }
+                        break;
+                    case 2:
+                        // map is 32-bit decoded
+                        currenttile = (int)reader.ReadInt32 ();
+                        currentlayer = 0;
+                        while (currenttile != 0) {
+                            while (currentlayer < 3) {
+                                int data = (int)reader.ReadInt32 () - 1;
+                                if (data == -1) {
+                                    currentlayer++;
+                                } else {
+                                    int y = this.Size.Height - (int)(data / Size.Width);
+                                    int x = data - (int)(y * Size.Width);
+                                    Data[x, y, currentlayer] = currenttile;
+                                }
+                            }
+                            currenttile = (int)reader.ReadInt32 ();
+                            currentlayer = 0;
+                        }
+                        break;
+                    }
 
-		private void Load (XMLElemental rawXML)
-		{
-			if (IsMapXML (rawXML)) {
-				int.TryParse (rawXML ["Data"].Attributes ["Width"], out Width);
-				int.TryParse (rawXML ["Data"].Attributes ["Height"], out Height);
+                    // uncompress mapdata
+                    int[] currentTile = new int[] { -1, -1, -1 };
+                    for (int y = 0; y < Size.Height; y++) {
+                        for (int x = 0; x < Size.Width; x++) {
+                            for (int layer = 0; layer < 3; layer++) {
+                                if (Data[x, y, layer] != currentTile[layer] && Data[x, y, layer] != 0) {
+                                    currentTile[layer] = Data[x, y, layer];
+                                } else {
+                                    Data[x, y, layer] = currentTile[layer];
+                                }
+                                Data[x, y, layer] -= 1;
+                            }
+                        }
+                    }
 
-				Author = rawXML.Attributes ["Author"];
-				Name = rawXML.Attributes ["Name"];
-				SpawnPoint = new fPoint (
-					float.Parse (rawXML.Attributes ["Spawn"].Split (';') [0]) * PhysX.PhysXMap.TILE_BOX_SIZE,
-					float.Parse (rawXML.Attributes ["Spawn"].Split (';') [1]) * PhysX.PhysXMap.TILE_BOX_SIZE);
-				
-				MapData = new ushort[Width, Height, 3];
+                    // load and verify infodata
+                    int infostringlength = reader.ReadInt32 ();
+                    byte[] infostringbytes = reader.ReadBytes (infostringlength);
+                    int hashlength = reader.ReadInt32 ();
+                    byte[] infohash = reader.ReadBytes (hashlength);
+                    string infostring = Encoding.UTF8.GetString (infostringbytes);
+                    string[] info = infostring.Split (new char[] { Encoding.UTF8.GetChars (new byte[] { 255 })[0] });
+                    Creator = info[0];
+                    Name = info[1];
+                    byte[] realhash = SHA1.Create ().ComputeHash (infostringbytes); // verify
+                    if (!realhash.SequenceEqual (infohash)) {
+                        throw new InvalidDataException ("map has been modified!");
+                    }
+                } else {
+                    Log.All (this, "selected file isnt a tmsl4-map", MessageType.Warn);
+                }
+            }
+        }
 
-				// parse the def section
-				Dictionary<string,ushort[]> DataValueIndex = new Dictionary<string, ushort[]> ();
+        private void Load (byte[] data) {
+            using (MemoryStream stream = new MemoryStream (data)) {
+                Load (stream);
+            }
+        }
 
-				foreach (string Value in rawXML["Def"].Value.Split(new char[]{';'},StringSplitOptions.RemoveEmptyEntries)) {
-					string[] Data = Value.Split (new char[]{ '=' }, StringSplitOptions.RemoveEmptyEntries) [1].Split (new char[]{ ',' }, StringSplitOptions.None);
-					Tile lTile = (Tile)Enum.Parse (typeof(Tile), Data [0]);
-					Overlay lOverlay;
-					if (Data [1] != "")
-						lOverlay = (Overlay)Enum.Parse (typeof(Overlay), Data [1]);
-					else
-						lOverlay = Overlay.None;
+        public Tile GetTile (int x, int y, int layer) {
+            return TileManager.GetTile (Data[x, y, layer]);
+        }
 
-					DataValueIndex.Add (Value.Split (new char[]{ '=' }, StringSplitOptions.RemoveEmptyEntries) [0], new ushort[] {
-							(ushort)lTile,
-							(ushort)lOverlay
-						});
-				}
+        public Tile GetTileL1 (int x, int y) {
+            return TileManager.GetTile (Data[x, y, 0]);
+        }
 
-				// parse the data section
-				int cX = 0;
-				int cY = 0;
+        public Tile GetTileL2 (int x, int y) {
+            return TileManager.GetTile (Data[x, y, 1]);
+        }
 
-				foreach (string Data in rawXML["Data"].Value.Split(new char[]{','},StringSplitOptions.RemoveEmptyEntries)) {
-					string[] AmountData = Data.Split (new char[]{ '~' }, StringSplitOptions.RemoveEmptyEntries);
-					int Amount;
-					if (int.TryParse (AmountData [0], out Amount)) {
-						for (int i = 0; i < Amount; i++) {
-							MapData [cX, cY, 0] = DataValueIndex [AmountData [1]] [0];
-							MapData [cX, cY, 1] = DataValueIndex [AmountData [1]] [1];
+        public Tile GetTileL3 (int x, int y) {
+            return TileManager.GetTile (Data[x, y, 2]);
+        }
 
-							cX++;
-							if (cX == Width) {
-								cX = 0;
-								cY++;
-								if (cY == Height) {
-									break;
-								}
-							}
-						}
-						if (cY == Height) {
-							break;
-						}
-					}
-				}
-			}
-		}
 
-		public Tile GetTile (int x, int y)
-		{
-			return (x >= 0 && x < Width && y >= 0 && y < Height) ? (Tile)(MapData [x, Height - y - 1, 0]) : Tile.Air;
-		}
+        private static bool IsMapXML (XMLElemental MapXML) {
+            if (MapXML["Data"] != null &&
+                MapXML["Data"].Attributes.ContainsKey ("Height") &&
+                MapXML["Data"].Attributes.ContainsKey ("Width") &&
+                MapXML["Def"] != null &&
+                MapXML["Background"] != null &&
+                MapXML.Attributes.ContainsKey ("Author") &&
+                MapXML.Attributes.ContainsKey ("Name") &&
+                MapXML.Attributes.ContainsKey ("Spawn"))
+                return true;
 
-		public Overlay GetOverlay (int x, int y)
-		{
-			return (x >= 0 && x < Width && y >= 0 && y < Height) ? (Overlay)MapData [x, Height - y - 1, 1] : Overlay.None;
-		}
-
-		private static bool IsMapXML (XMLElemental MapXML)
-		{
-			if (MapXML ["Data"] != null &&
-			    MapXML ["Data"].Attributes.ContainsKey ("Height") &&
-			    MapXML ["Data"].Attributes.ContainsKey ("Width") &&
-			    MapXML ["Def"] != null &&
-			    MapXML ["Background"] != null &&
-			    MapXML.Attributes.ContainsKey ("Author") &&
-			    MapXML.Attributes.ContainsKey ("Name") &&
-			    MapXML.Attributes.ContainsKey ("Spawn"))
-				return true;
-			
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }

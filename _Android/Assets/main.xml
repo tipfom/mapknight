@@ -13,7 +13,7 @@
 		<font name="Pixel" src="fonts/8bitOperatorPlus8-Regular.ttf"/>
 	</fonts>
 	<tiles>
-		<entry id="65535" x="652" y="0" />
+		<entry id="65535" x="652" y="0"/>
 		<!-- ERROR -->
 		<entry id="0" x="492" y="492" />
 		<!-- AIR -->

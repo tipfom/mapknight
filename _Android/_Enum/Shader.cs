@@ -6,7 +6,7 @@ namespace mapKnight.Android
 	{
 		VertexShaderM = 0,
 		VertexShaderN = 1,
-		FragmentShader = 2
+		FragmentShader = 2,
+		FragmentShaderL = 3
 	}
 }
-

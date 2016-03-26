@@ -70,6 +70,7 @@
       <DependentUpon>DialogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="_MapEditor\Map.cs" />
+    <Compile Include="_MapEditor\TileManager.cs" />
     <Compile Include="_Others\ArrayOperations.cs" />
     <Compile Include="_Others\CustomToolStripRenderer.cs" />
     <Compile Include="_Others\Extensions.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="_Others\ToolStripTraceBarItem.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="_TileSets\Tileset.cs" />
     <Compile Include="_Update\LoadForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,6 +225,9 @@
     </Content>
     <Content Include="files.ico" />
     <Content Include="icon.ico" />
+    <None Include="Resources\Pinsel3.png" />
+    <None Include="Resources\Pinsel2.png" />
+    <None Include="Resources\Pinsel1.png" />
     <None Include="Resources\futuristic mirrored.png" />
     <None Include="Resources\futuristic.png" />
     <None Include="Resources\6.png" />
