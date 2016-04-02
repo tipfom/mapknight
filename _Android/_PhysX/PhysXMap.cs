@@ -5,7 +5,8 @@ using mapKnight.Basic;
 
 namespace mapKnight.Android.PhysX {
     public class PhysXMap : Map {
-        public const float TILE_BOX_SIZE = .5f;
+        public const int COLLISION_LAYER = 1;
+
         private List<PhysXEntity> addedEntitys = new List<PhysXEntity> ();
         private fVector2D Gravity = new fVector2D (0, -10);
 
@@ -27,95 +28,83 @@ namespace mapKnight.Android.PhysX {
             time /= 1000f;
 
             foreach (PhysXEntity entity in addedEntitys) {
+
                 if (entity.CollisionMask.HasFlag (PhysXFlag.Map)) {
+                    // calculate new positions
+                    fPoint movement = new fPoint (entity.Velocity.X * time, entity.Velocity.Y * time);
 
-                    // move on X
-                    bool moved = false;
-
+                    // move on x coordinate
                     if (entity.Velocity.X > 0) {
-                        // right
-                        for (int x = (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x <= (int)(entity.Position.X + entity.Bounds.Width + entity.Velocity.X * time) / TILE_BOX_SIZE; x++) {
-                            for (int y = (int)(entity.Position.Y / TILE_BOX_SIZE); y <= (int)((entity.Position.Y + entity.Bounds.Height) / TILE_BOX_SIZE); y++) {
-                                if (this.GetTile (x, y, 1).Mask.HasFlag (Tile.TileMask.COLLISION)) {
-                                    entity.Position.X = (float)(x * TILE_BOX_SIZE) - (float)entity.Bounds.Width;
+                        // moves to the right
+                        for (int x = (int)entity.AABB.B.X; x <= (int)(entity.AABB.B.X + movement.X); x++) {
+                            for (int y = (int)entity.AABB.A.Y; y <= (int)entity.AABB.B.Y; y++) {
+                                if (GetTile (x, y, COLLISION_LAYER).Mask.HasFlag (Tile.TileMask.COLLISION)) {
+                                    entity.AABB.Translate (x - entity.AABB.Bounds.Width / 2, entity.AABB.Centre.Y);
                                     entity.Velocity.X = 0;
-                                    moved = true;
-                                    break;
+                                    goto MOVEDX;
                                 }
                             }
                         }
                     } else if (entity.Velocity.X < 0) {
-                        // left
-                        for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x >= (int)(entity.Position.X + entity.Velocity.X * time) / TILE_BOX_SIZE; x--) {
-                            for (int y = (int)(entity.Position.Y / TILE_BOX_SIZE); y <= (int)((entity.Position.Y + entity.Bounds.Height) / TILE_BOX_SIZE); y++) {
-                                if (this.GetTile (x, y, 1).Mask.HasFlag (Tile.TileMask.COLLISION)) {
-                                    entity.Position.X = (float)((x + 1) * TILE_BOX_SIZE);
+                        // moves to the left
+                        for (int x = (int)entity.AABB.A.X; x >= (int)(entity.AABB.A.X + movement.X); x--) {
+                            for (int y = (int)entity.AABB.A.Y; y <= (int)entity.AABB.B.Y; y++) {
+                                if (GetTile (x, y, COLLISION_LAYER).Mask.HasFlag (Tile.TileMask.COLLISION)) {
+                                    entity.AABB.Translate (x + 1 + entity.AABB.Bounds.Width / 2, entity.AABB.Centre.Y);
                                     entity.Velocity.X = 0;
-                                    moved = true;
-                                    break;
+                                    goto MOVEDX;
                                 }
                             }
                         }
+                    } else {
+                        // no movement happens
+                        goto MOVEDX;
                     }
-                    if (!moved) {
-                        entity.Position.X += entity.Velocity.X * time;
-                    }
-                    entity.Velocity.X += (this.Gravity.X + entity.Acceleration.X) * time;
 
-                    moved = false;
+                    // only gets called, when no collision happened
+                    entity.AABB.Translate (entity.AABB.Centre.X + movement.X, entity.AABB.Centre.Y);
+
+                    MOVEDX:
+
                     // move on Y
                     if (entity.Velocity.Y > 0) {
-                        for (int y = (int)((entity.Position.Y + entity.Bounds.Height) / TILE_BOX_SIZE); y <= (entity.Position.Y + entity.Velocity.Y * time + entity.Bounds.Height) / TILE_BOX_SIZE; y++) {
-                            if (moved)
-                                break;
-                            for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x < (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x++) {
-                                if (this.GetTile (x, y, 1).Mask.HasFlag (Tile.TileMask.COLLISION)) {
-                                    entity.Position.Y = y * TILE_BOX_SIZE - entity.Bounds.Height;
+                        // goes up
+                        for (int y = (int)entity.AABB.B.Y; y <= (int)(entity.AABB.B.Y + movement.Y); y++) {
+                            for (int x = (int)entity.AABB.A.X; x <= ((entity.AABB.B.X == Math.Floor (entity.AABB.B.X)) ? (int)entity.AABB.B.X - 1 : (int)entity.AABB.B.X); x++) {
+                                if (GetTile (x, y, COLLISION_LAYER).Mask.HasFlag (Tile.TileMask.COLLISION)) {
+                                    entity.AABB.Translate (entity.AABB.Centre.X, y - entity.AABB.Bounds.Height / 2);
                                     entity.Velocity.Y = 0;
-                                    moved = true;
+                                    goto MOVEDY;
                                 }
-                            }
-
-                            // to prevent gliching
-                            if ((entity.Position.X + entity.Bounds.Width) % TILE_BOX_SIZE != 0 && this.GetTile ((int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE), y, 1).Mask.HasFlag (Tile.TileMask.COLLISION)) {
-                                entity.Velocity.Y = 0;
-                                moved = true;
-                                break;
                             }
                         }
                     } else if (entity.Velocity.Y < 0) {
-                        for (int y = (int)(entity.Position.Y / TILE_BOX_SIZE); y >= (int)(entity.Position.Y + entity.Velocity.Y * time) / TILE_BOX_SIZE; y--) {
-                            if (moved)
-                                break;
-                            for (int x = (int)(entity.Position.X / TILE_BOX_SIZE); x < (int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE); x++) {
-                                if (this.GetTile (x, y, 1).Mask.HasFlag (Tile.TileMask.COLLISION) || y == 0) {
-                                    entity.Position.Y = (y + 1) * TILE_BOX_SIZE;
+                        // goes down
+                        for (int y = (int)entity.AABB.A.Y; y >= (int)(entity.AABB.A.Y + movement.Y); y--) {
+                            for (int x = (int)entity.AABB.A.X; x <= ((entity.AABB.B.X == Math.Floor (entity.AABB.B.X)) ? (int)entity.AABB.B.X - 1 : (int)entity.AABB.B.X); x++) {
+                                if (GetTile (x, y, COLLISION_LAYER).Mask.HasFlag (Tile.TileMask.COLLISION)) {
+                                    entity.AABB.Translate (entity.AABB.Centre.X, y + 1 + entity.AABB.Bounds.Height / 2);
                                     entity.Velocity.Y = 0;
-                                    moved = true;
-                                    Log.Debug ("t", "collision");
-                                    break;
+                                    goto MOVEDY;
                                 }
                             }
-
-                            // to prevent gliching
-                            if ((entity.Position.X + entity.Bounds.Width) % TILE_BOX_SIZE != 0 && this.GetTile ((int)((entity.Position.X + entity.Bounds.Width) / TILE_BOX_SIZE), y, 1).Mask.HasFlag (Tile.TileMask.COLLISION)) {
-                                entity.Position.Y = (y + 1) * TILE_BOX_SIZE;
-                                entity.Velocity.Y = 0;
-                                moved = true;
-                                break;
-                            }
                         }
+                    } else {
+                        // no movement on y
+                        goto MOVEDY;
                     }
-                    if (!moved) {
-                        entity.Position.Y += entity.Velocity.Y * time;
-                    }
-                    entity.Velocity.Y += (this.Gravity.Y + entity.Acceleration.Y) * time;
+
+                    entity.AABB.Translate (entity.AABB.Centre.X, entity.AABB.Centre.Y + movement.Y);
                 }
 
-                entity.Position.Y = Math.Min (Math.Max (0f, entity.Position.Y), Size.Height * TILE_BOX_SIZE - entity.Bounds.Height);
-                entity.Position.X = Math.Min (Math.Max (0f, entity.Position.X), Size.Width * TILE_BOX_SIZE - entity.Bounds.Width);
+                MOVEDY:
+                entity.Velocity.Y += (this.Gravity.Y + entity.Acceleration.Y) * time;
+                entity.Velocity.X += (this.Gravity.X + entity.Acceleration.X) * time;
+
+                Content.Map.hitboxTiles.Clear ();
+                Content.Map.hitboxTiles.Add (new Point ((int)entity.AABB.A.X, (int)entity.AABB.A.Y));
+                Content.Map.hitboxTiles.Add (new Point ((int)entity.AABB.B.X, (int)entity.AABB.B.Y));
             }
         }
     }
 }
-

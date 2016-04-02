@@ -8,7 +8,7 @@ namespace mapKnight.Android {
     public class Map {
         public static byte[] IDENTIFIER = { 84, 77, 83, 76, 4, 42, 133, 7 };
 
-        // x, y, TileData (0 -> TileID, 1 -> Overlay, 2 -> MetaData)
+        // x,y,layer
         private int[,,] Data;
 
         public Size Size;
@@ -39,7 +39,8 @@ namespace mapKnight.Android {
                     // read header and load tileset
                     TileManager = new TileManager (XMLElemental.Load (Content.Context.Assets.Open (Path.ChangeExtension (Path.Combine ("tilesets", reader.ReadInt32 ().ToString ()), "tileset"))));
                     Size = new Size ((int)reader.ReadInt16 (), (int)reader.ReadInt16 ());
-                    SpawnPoint = new fPoint ((this.Size.Height - (float)reader.ReadInt16 ()) * PhysX.PhysXMap.TILE_BOX_SIZE, (float)reader.ReadInt16 () * PhysX.PhysXMap.TILE_BOX_SIZE);
+                    SpawnPoint = new fPoint ((float)reader.ReadInt16 (), (float)reader.ReadInt16 ());
+                    SpawnPoint = new fPoint (15, 15);
                     Log.All (this, Size.ToString (), MessageType.Debug);
                     Data = new int[Size.Width, Size.Height, 3];
 
@@ -140,7 +141,6 @@ namespace mapKnight.Android {
         public Tile GetTileL3 (int x, int y) {
             return TileManager.GetTile (Data[x, y, 2]);
         }
-
 
         private static bool IsMapXML (XMLElemental MapXML) {
             if (MapXML["Data"] != null &&

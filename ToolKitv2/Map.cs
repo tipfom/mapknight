@@ -278,7 +278,8 @@ namespace mapKnight.ToolKit {
                 Array.Copy (BitConverter.GetBytes ((short)this.Width), 0, header, 4, 2);
                 Array.Copy (BitConverter.GetBytes ((short)this.Height), 0, header, 6, 2);
                 Array.Copy (BitConverter.GetBytes ((short)this.Spawn.X), 0, header, 8, 2);
-                Array.Copy (BitConverter.GetBytes ((short)this.Spawn.Y), 0, header, 10, 2);
+                // invert the y axis
+                Array.Copy (BitConverter.GetBytes ((short)(this.Height - this.Spawn.Y - 1)), 0, header, 10, 2);
 
                 filestream.Write (header, 0, header.Length);
 
@@ -291,7 +292,7 @@ namespace mapKnight.ToolKit {
                 currenttile[1] = -1;
                 currenttile[2] = -1;
 
-                for (uint y = 0; y < this.Height; y++) {
+                for (int y = this.Height - 1; y >= 0; y--) {
                     for (uint x = 0; x < this.Width; x++) {
                         for (int layer = 0; layer < 3; layer++) {
                             // go through each layer
@@ -305,12 +306,19 @@ namespace mapKnight.ToolKit {
                                     startpoints[Data[x, y, layer]][2] = new List<uint> ();
                                 }
                                 // remember startingpoint
-                                startpoints[Data[x, y, layer]][layer].Add (y * (uint)this.Width + x);
+                                // invert the y axis
+                                startpoints[Data[x, y, layer]][layer].Add ((uint)(this.Height - y - 1) * (uint)this.Width + x);
                                 entrycount++;
                                 currenttile[layer] = Data[x, y, layer];
                             }
                         }
                     }
+                }
+
+                foreach (KeyValuePair<int, List<uint>[]> tilentry in startpoints) {
+                    startpoints[tilentry.Key][0].Sort ();
+                    startpoints[tilentry.Key][1].Sort ();
+                    startpoints[tilentry.Key][2].Sort ();
                 }
 
                 byte[] data;

@@ -1,5 +1,4 @@
-﻿using System;
-using Android.Opengl;
+﻿using Android.Opengl;
 using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL {
@@ -52,9 +51,8 @@ namespace mapKnight.Android.CGL {
         }
 
         public void Update () {
-            fPoint CharacterCenter = new fPoint (Content.Character.Position.X + Content.Character.Bounds.Width * 0.5f,
-                                         Content.Character.Position.Y + Content.Character.Bounds.Height * 0.5f);
-            fPoint CharacterTile = new fPoint (CharacterCenter.X / PhysX.PhysXMap.TILE_BOX_SIZE, CharacterCenter.Y / PhysX.PhysXMap.TILE_BOX_SIZE);
+            fVector2D CharacterTile = Content.Character.AABB.Centre;
+
             // berechnet die werte für die map abhängig von der Character position
 
             Matrix.SetLookAtM (CharacterViewMatrix, 0, 0, 0, -3f, 0, 0f, 0, 0f, 1f, 0f);
@@ -65,13 +63,11 @@ namespace mapKnight.Android.CGL {
             float charOffsetY = 0f;
             float charOffsetX = 0f;
 
-            CurrentMapTile.X = Math.Min (Math.Max ((int)CharacterTile.X - (int)(Content.Map.DrawSize.Width / 2), 0), (int)(Content.Map.Size.Width - Content.Map.DrawSize.Width));
-            if (CharacterTile.X > Content.Map.DrawSize.Width / 2f && CharacterTile.X < (Content.Map.Size.Width - Content.Map.RealDrawSize.Width / 2f)) {
+            CurrentMapTile.X = ((int)CharacterTile.X - (int)Content.Map.DrawSize.Width / 2 - 1).FitBounds (0, (int)(Content.Map.Size.Width - Content.Map.DrawSize.Width));
+            if (CurrentMapTile.X > 0 && CurrentMapTile.X < Content.Map.Size.Width - Content.Map.DrawSize.Width) {
                 mapOffsetX = CharacterTile.X;
                 mapOffsetX -= (int)mapOffsetX;
-                //mapOffsetX -= Content.Map.DrawSize.Width / Content.Map.RealDrawSize.Width;
-                mapOffsetX = 2f * mapOffsetX * Content.ScreenRatio / (Content.Map.DrawSize.Width);
-                //mapOffsetX -= Content.Character.Bounds.Width / PhysX.PhysXMap.TILE_BOX_SIZE / Content.Map.DrawSize.Width;
+                mapOffsetX = 2f * mapOffsetX * Content.ScreenRatio / (Content.Map.RealDrawSize.Width);
             } else if (CharacterTile.X > Content.Map.DrawSize.Width / 2) {
                 // on the right side
                 charOffsetX = -Content.ScreenRatio + 2f * ((Content.Map.Size.Width - CharacterTile.X) / Content.Map.DrawSize.Width) * Content.ScreenRatio;
@@ -80,21 +76,18 @@ namespace mapKnight.Android.CGL {
                 charOffsetX = 2f * ((Content.Map.DrawSize.Width / 2 - CharacterTile.X) / Content.Map.RealDrawSize.Width) * Content.ScreenRatio;
             }
 
-            if (CharacterTile.Y > (1 - characterOffset) * Content.Map.RealDrawSize.Height / 2 && CharacterTile.Y < (Content.Map.Size.Height - (1 + characterOffset) * Content.Map.DrawSize.Height / 2)) {
-                mapOffsetY = (CharacterTile.Y - (1 - characterOffset) * Content.Map.RealDrawSize.Height / 2f);//CharacterTile.Y;// - characterOffset * Content.Map.DrawSize.Height / 2;
+            CurrentMapTile.Y = ((int)(CharacterTile.Y - (1 - characterOffset) * Content.Map.RealDrawSize.Height / 2)).FitBounds (0, Content.Map.Size.Height - Content.Map.DrawSize.Height);
+            if (CurrentMapTile.Y > 0 && CurrentMapTile.Y < Content.Map.Size.Height - Content.Map.DrawSize.Height) {
+                mapOffsetY = (CharacterTile.Y - (1 - characterOffset) * Content.Map.RealDrawSize.Height / 2f);
                 mapOffsetY -= (int)mapOffsetY;
                 mapOffsetY = -2f * mapOffsetY / (Content.Map.RealDrawSize.Height);
 
                 charOffsetY = -characterOffset;
-
-                CurrentMapTile.Y = (int)(CharacterTile.Y - (1 - characterOffset) * Content.Map.RealDrawSize.Height / 2);
-
-            } else if (CharacterTile.Y > Content.Map.DrawSize.Height / 2) {
-                charOffsetY = 1 - 2f * (Content.Map.Size.Height - (CharacterCenter.Y / PhysX.PhysXMap.TILE_BOX_SIZE)) / ((float)Content.Map.DrawSize.Height);
-                mapOffsetY = Content.Map.DrawSize.Height - Content.Map.RealDrawSize.Height - 2;
+            } else if (CurrentMapTile.Y > 0) {
+                charOffsetY = 1 - 2f * (Content.Map.Size.Height - CharacterTile.Y) / ((float)Content.Map.DrawSize.Height);
+                mapOffsetY = Content.Map.DrawSize.Height - Content.Map.RealDrawSize.Height;
             } else {
                 charOffsetY = -1 + 2f * CharacterTile.Y / Content.Map.RealDrawSize.Height;
-                CurrentMapTile.Y = 0;
             }
 
             Matrix.TranslateM (CharacterViewMatrix, 0, charOffsetX, charOffsetY, 0f);
@@ -102,7 +95,6 @@ namespace mapKnight.Android.CGL {
 
             Matrix.MultiplyMM (CharacterMVPMatrix, 0, DefaultProjectionMatrix, 0, CharacterViewMatrix, 0);
             Matrix.MultiplyMM (MapMVPMatrix, 0, DefaultProjectionMatrix, 0, MapViewMatrix, 0);
-            Log.All (this, mapOffsetX.ToString (), MessageType.Debug);
             Content.Map.updateTextureBuffer ();
         }
     }

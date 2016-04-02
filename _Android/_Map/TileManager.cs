@@ -39,7 +39,7 @@ namespace mapKnight.Android {
         public Dictionary<TileAttribute, string> Attributes;
 
         public Tile (XMLElemental config, fSize tvertexsize, int imagewidth, int imageheight) : this () {
-            this.Name = config.Name; // name is name of xml-element
+            this.Name = config.Attributes["name"]; // name is name of xml-element
             if (!Enum.TryParse (config.Attributes["maskflag"], out Mask))
                 Mask = TileMask.NONE;
 

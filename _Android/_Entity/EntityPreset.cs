@@ -28,14 +28,8 @@ namespace mapKnight.Android
 			}
 		}
 
-		public virtual Entity Instantiate (uint level)
-		{
-			return Instantiate (level, new fPoint (0, 0));			
-		}
-
-		public virtual Entity Instantiate (uint level, fPoint position)
-		{
-			return new Entity (defaultAttributes [Attribute.Health] + (int)((level - 1) * attributeIncrease [Attribute.Health]), position, name);
+		public virtual Entity Instantiate (uint level) {
+			return new Entity (defaultAttributes[Attribute.Health] + (int)((level - 1) * attributeIncrease[Attribute.Health]), name);
 		}
 	}
 }

@@ -120,7 +120,9 @@
     <Compile Include="_Character\CharacterPreset.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\tilesets\1222789648.tileset" />
+    <AndroidAsset Include="Assets\tilesets\1222789648.tileset">
+      <SubType>Designer</SubType>
+    </AndroidAsset>
     <AndroidAsset Include="Assets\maps\testmap.map" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="packages.config" />

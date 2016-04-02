@@ -1,4 +1,6 @@
-﻿using Java.Nio;
+﻿using System;
+using System.Collections.Generic;
+using Java.Nio;
 using mapKnight.Basic;
 using GL = Android.Opengl.GLES20;
 
@@ -23,10 +25,14 @@ namespace mapKnight.Android.CGL {
         public readonly fSize RealDrawSize;
         public float vertexSize;
 
+        [Obsolete ("only for debug purposes")]
+        public List<Point> hitboxTiles = new List<Point> ();
+        private static float[] hitboxTexCoords;
+
         public CGLMap (string name) : base (name) {
             RealDrawSize = new fSize (DRAW_WIDTH, DRAW_WIDTH / Content.ScreenRatio);
             DrawSize = new Size (DRAW_WIDTH + 2, (int)((float)DRAW_WIDTH / Content.ScreenRatio) + 2);
-            vertexSize = 2 * Content.ScreenRatio / (float)(DrawSize.Width - 2);
+            vertexSize = 2 * Content.ScreenRatio / (float)(DRAW_WIDTH);
 
 
             renderProgram = CGLTools.GetProgram (Shader.VertexShaderM, Shader.FragmentShader);
@@ -35,10 +41,12 @@ namespace mapKnight.Android.CGL {
             initTextureCoords ();
 
             Content.OnUpdate += () => {
-                vertexSize = 2 * Content.ScreenRatio / (float)(DrawSize.Width - 2);
+                vertexSize = 2 * Content.ScreenRatio / (float)(DRAW_WIDTH);
                 initVertexCoords ();
                 updateTextureBuffer ();
             };
+
+            hitboxTexCoords = TileManager.GetTile (5).Texture;
         }
 
         private void initVertexCoords () {
@@ -142,6 +150,10 @@ namespace mapKnight.Android.CGL {
                 for (int y = 0; y < DrawSize.Height; y++) {
                     textureBuffer.Put (layerBuffer[layer][Content.Camera.CurrentMapTile.Y + y].Cut (Content.Camera.CurrentMapTile.X * 8, DrawSize.Width * 8));
                 }
+            }
+            foreach (Point tile in hitboxTiles) {
+                textureBuffer.Position (((tile.Y - Content.Camera.CurrentMapTile.Y) * this.DrawSize.Width + (tile.X - Content.Camera.CurrentMapTile.X)) * 8);
+                textureBuffer.Put (hitboxTexCoords);
             }
             textureBuffer.Position (0);
         }

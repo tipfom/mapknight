@@ -39,15 +39,15 @@ namespace mapKnight.Android.CGL
 			"  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);" +
 			"}";
 
-		private static string FragmentShaderLightningCode =
-			"precision mediump float;" +
-			"uniform sampler2D u_Texture;" +
-			"attribute vec3 a_Ambient " +
-			"varying vec2 v_TexCoordinate; " +
-			"" +
-			"void main()" +
-			"{" +
-			"  gl_FragColor = texture2D(u_Texture, v_TexCoordinate) * a_Ambient;" +
-			"}";
-	}
+        private static string FragmentShaderLightningCode =
+            "precision mediump float;" +
+            "uniform sampler2D u_Texture;" +
+            "attribute vec3 a_Ambient " +
+            "varying vec2 v_TexCoordinate; " +
+            "" +
+            "void main()" +
+            "{" +
+            "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate) * a_Ambient;" +
+            "}";
+    }
 }

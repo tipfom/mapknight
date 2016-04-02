@@ -30,6 +30,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AABB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BufferData.cs" />
     <Compile Include="Color.cs" />
