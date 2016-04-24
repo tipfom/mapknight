@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace mapKnight.Basic {
+﻿namespace mapKnight.Basic {
     public struct fVector2D {
         public static fVector2D operator + (fVector2D vec1, fVector2D vec2) {
             return new fVector2D (vec1.X + vec2.X, vec1.Y + vec2.Y);
@@ -14,6 +12,18 @@ namespace mapKnight.Basic {
             return new fVector2D (vec1.X - vec2.X, vec1.Y - vec2.Y);
         }
 
+        public static bool operator != (fVector2D vec1, fVector2D vec2) {
+            return (vec1.X != vec2.X && vec1.Y != vec2.Y);
+        }
+
+        public static bool operator == (fVector2D vec1, fVector2D vec2) {
+            return (vec1.X == vec2.X && vec1.Y == vec2.Y);
+        }
+
+        public static explicit operator fVector2D (Vector2D vec) {
+            return new fVector2D (vec.X, vec.Y);
+        }
+
         public float X;
         public float Y;
 
@@ -22,13 +32,11 @@ namespace mapKnight.Basic {
             Y = y;
         }
 
-        public fVector2D GSub (fVector2D v2, float xMin, float yMin) {
-            return new fVector2D (Math.Min (this.X - v2.X, xMin), Math.Min (this.Y - v2.Y, yMin));
-        }
-
         public override string ToString () {
             return string.Format ("X={0}; Y={1}", X.ToString (), Y.ToString ());
         }
+
+        public static fVector2D Zero { get { return new fVector2D (0, 0); } }
     }
 }
 

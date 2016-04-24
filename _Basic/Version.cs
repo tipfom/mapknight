@@ -42,15 +42,15 @@ namespace mapKnight.Basic
 
 		public override string ToString ()
 		{
-			return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString () + "-" + Revision.ToString () + " updated " + BuildDate.ToString ("dd/MM/yyyy HH:mm:ss") + " UTC+00";
+			return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString () + "." + Revision.ToString () + " updated " + BuildDate.ToString ("dd/MM/yyyy HH:mm:ss") + " UTC+00";
 		}
 
 		public string ToString (bool addBuildDate)
 		{
 			if (addBuildDate) {
-				return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString () + "-" + Revision.ToString () + " updated " + BuildDate.ToString ("dd/MM/yyyy HH:mm:ss") + " UTC+00";
+				return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString ()+ " updated " + BuildDate.ToString ("dd/MM/yyyy HH:mm:ss") + " UTC+00";
 			} else {
-				return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString () + "-" + Revision.ToString ();
+				return Major.ToString () + "." + Minor.ToString () + "." + Build.ToString ();
 			}
 		}
 	}

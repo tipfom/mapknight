@@ -7,7 +7,7 @@
     <ProjectGuid>{50B1F9F5-DD73-483B-947B-32220DC7561B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>mapKnight.Basic</RootNamespace>
-    <AssemblyName>Values</AssemblyName>
+    <AssemblyName>mapKnight.Basic</AssemblyName>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
