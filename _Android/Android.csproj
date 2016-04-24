@@ -15,7 +15,7 @@
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <AssemblyName>mapKnight.Android</AssemblyName>
-    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.4</TargetFrameworkVersion>
     <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -25,11 +25,10 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;LOGTOUCH</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkMode>None</AndroidLinkMode>
-    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <AndroidLinkMode>Full</AndroidLinkMode>
     <Externalconsole>true</Externalconsole>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
@@ -42,6 +41,10 @@
     <MandroidI18n />
     <Debugger>Xamarin</Debugger>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>1519;CS1519</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -54,6 +57,10 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -62,91 +69,76 @@
     <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="Assets.cs" />
+    <Compile Include="CGL\GUI\GUI.cs" />
+    <Compile Include="CGL\GUI\GUIElement.cs" />
+    <Compile Include="MathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_CGL\CGLMap.cs" />
-    <Compile Include="_CGL\CGLRenderer.cs" />
-    <Compile Include="_CGL\CGLView.cs" />
-    <Compile Include="_CGL\CGLTools.cs" />
-    <Compile Include="_CGL\CGLInterface.cs" />
-    <Compile Include="_CGL\CGLText.cs" />
-    <Compile Include="_Map\TileManager.cs" />
-    <Compile Include="_Net\Client.cs" />
-    <Compile Include="_Enum\TexCorner.cs" />
-    <Compile Include="_Enum\Compression.cs" />
-    <Compile Include="_Enum\Font.cs" />
-    <Compile Include="_Enum\FontStyle.cs" />
-    <Compile Include="_Enum\Orientation.cs" />
-    <Compile Include="_Enum\MessageType.cs" />
-    <Compile Include="_Map\Map.cs" />
-    <Compile Include="_Touch\TouchManager.cs" />
-    <Compile Include="_Touch\ButtonManager.cs" />
-    <Compile Include="_Others\MainActivity.cs" />
-    <Compile Include="_CGL\CGLSprite.cs" />
-    <Compile Include="_Utils\Log.cs" />
-    <Compile Include="_Touch\Touch.cs" />
-    <Compile Include="_Touch\Button.cs" />
-    <Compile Include="_Enum\Attribute.cs" />
-    <Compile Include="_Others\Extensions.cs" />
-    <Compile Include="_Utils\SQLDataManager.cs" />
-    <Compile Include="_Utils\SaveManager.cs" />
-    <Compile Include="_Content\Initialize.cs" />
-    <Compile Include="_Content\LoadTexCoordManager.cs" />
-    <Compile Include="_Content\TextureCoordinateManager.cs" />
-    <Compile Include="_Content\Variables.cs" />
-    <Compile Include="_CGL\CGLCamera.cs" />
-    <Compile Include="_Net\Server.cs" />
-    <Compile Include="_Entity\Entity.cs" />
-    <Compile Include="_Entity\Slot.cs" />
-    <Compile Include="_Entity\Set.cs" />
-    <Compile Include="_Entity\EntityPreset.cs" />
-    <Compile Include="_Others\ShaderArrayComparer.cs" />
-    <Compile Include="_Enum\Shader.cs" />
-    <Compile Include="_CGL\CGLTools %28Shader%29.cs" />
-    <Compile Include="_Net\Terminal\TerminalManager.cs" />
-    <Compile Include="_Net\Terminal\IMessageProcessor.cs" />
-    <Compile Include="_Net\Terminal\MessageProcessor\ContentMessageProcessor.cs" />
-    <Compile Include="_Net\Terminal\MessageProcessor\AnimationMessageProcessor.cs" />
-    <Compile Include="_PhysX\PhysXMap.cs" />
-    <Compile Include="_PhysX\PhysXEntity.cs" />
-    <Compile Include="_PhysX\PhysXFlag.cs" />
-    <Compile Include="_Enum\Direction.cs" />
-    <Compile Include="_CGL\CGLAnimation.cs" />
-    <Compile Include="_CGL\CGLBoundedPoint.cs" />
-    <Compile Include="_CGL\CGLEntity.cs" />
-    <Compile Include="_CGL\CGLEntityPreset.cs" />
-    <Compile Include="_CGL\CGLEntitySet.cs" />
-    <Compile Include="_Character\Character.cs" />
-    <Compile Include="_Character\CharacterPreset.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="CGL\CGLMap.cs" />
+    <Compile Include="CGL\CGLRenderer.cs" />
+    <Compile Include="CGL\CGLTexture2D.cs" />
+    <Compile Include="CGL\CGLView.cs" />
+    <Compile Include="CGL\CGLTools.cs" />
+    <Compile Include="CGL\CGLInterface.cs" />
+    <Compile Include="CGL\GUI\GUILabel.cs" />
+    <Compile Include="CGL\GUI\GUITextRenderer.cs" />
+    <Compile Include="CGL\Programs\ProgramHelper.cs" />
+    <Compile Include="CGL\Programs\MatrixProgram.cs" />
+    <Compile Include="CGL\Programs\RenderProgram.cs" />
+    <Compile Include="Map\TileManager.cs" />
+    <Compile Include="Enum\FontStyle.cs" />
+    <Compile Include="Enum\Orientation.cs" />
+    <Compile Include="Enum\MessageType.cs" />
+    <Compile Include="Map\Map.cs" />
+    <Compile Include="Touch\TouchManager.cs" />
+    <Compile Include="Touch\ButtonManager.cs" />
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="CGL\CGLSprite.cs" />
+    <Compile Include="Utils\Log.cs" />
+    <Compile Include="Touch\Touch.cs" />
+    <Compile Include="Touch\Button.cs" />
+    <Compile Include="Enum\Attribute.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Utils\SQLDataManager.cs" />
+    <Compile Include="Utils\SaveManager.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="CGL\CGLCamera.cs" />
+    <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\Slot.cs" />
+    <Compile Include="Entity\Set.cs" />
+    <Compile Include="Entity\EntityPreset.cs" />
+    <Compile Include="PhysX\PhysXMap.cs" />
+    <Compile Include="PhysX\PhysXEntity.cs" />
+    <Compile Include="PhysX\PhysXFlag.cs" />
+    <Compile Include="Enum\Direction.cs" />
+    <Compile Include="CGL\CGLAnimation.cs" />
+    <Compile Include="CGL\CGLBoundedPoint.cs" />
+    <Compile Include="CGL\Entity\CGLEntity.cs" />
+    <Compile Include="CGL\Entity\CGLEntityPreset.cs" />
+    <Compile Include="CGL\Entity\CGLEntitySet.cs" />
+    <Compile Include="Character\Character.cs" />
+    <Compile Include="Character\CharacterPreset.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\tilesets\1222789648.tileset">
       <SubType>Designer</SubType>
     </AndroidAsset>
     <AndroidAsset Include="Assets\maps\testmap.map" />
-    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\values\strings.xml" />
-    <AndroidResource Include="Resources\values\styles.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\animations\" />
-    <Folder Include="Assets\entitys\" />
     <Folder Include="Resources\layout\" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidEnvironment Include="environment.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\interface.png" />
-    <AndroidAsset Include="Assets\character\robot.character" />
+    <AndroidAsset Include="Assets\character\robot.character">
+      <SubType>Designer</SubType>
+    </AndroidAsset>
     <AndroidAsset Include="Assets\main.xml" />
-    <AndroidAsset Include="Assets\sets\futuristic.png" />
-    <AndroidAsset Include="Assets\fonts\8bitOperatorPlus8-Regular.ttf" />
-    <AndroidAsset Include="Assets\main.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
@@ -154,5 +146,30 @@
       <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
       <Name>Basic</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\font.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\matrix.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\normal.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\normal.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\lightning.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon.png" />
+    <AndroidResource Include="Resources\values\strings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values\styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\sets\futuristic.png" />
   </ItemGroup>
 </Project>
