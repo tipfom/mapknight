@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<style name="CustomTheme" parent="android:Theme.Material.Light">
-		<!-- Customizations go here -->
-		<item name="android:colorPrimary">#3a89e6</item>
-	</style>
+  <style name="thisTheme" parent="android:Theme.Light">
+  </style>
 </resources>

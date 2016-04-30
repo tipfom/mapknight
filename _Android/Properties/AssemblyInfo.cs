@@ -25,4 +25,4 @@ using Android.App;
 //[assembly: AssemblyDelaySign(false)]
 //[assembly: AssemblyKeyFile("")]
 
-[assembly: Application (Theme = "@style/CustomTheme")]
+[assembly: Application (Theme = "@style/thisTheme")]

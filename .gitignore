@@ -7,5 +7,6 @@ Components/*
 *.apk
 *.dll
 *.exe
+*.db
 
 mapKnight.userprefs
