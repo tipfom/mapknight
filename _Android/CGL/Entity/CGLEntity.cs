@@ -4,8 +4,8 @@ using Java.Nio;
 using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL.Entity {
-    public class CGLEntity : PhysX.PhysXEntity {
-        private static List<CGLEntity> activeEntitys = new List<CGLEntity> ();
+    public class CGLEntity : Physics.Entity {
+        private static List<CGLEntity> activeEntitys = new List<CGLEntity> ( );
 
         private FloatBuffer vertexBuffer;
         private ShortBuffer indexBuffer;
@@ -23,18 +23,18 @@ namespace mapKnight.Android.CGL.Entity {
             this.boundedPoints = boundedpoints;
             this.animations = animations;
             this.currentAnimation = animations.FindIndex (((CGLAnimation obj) => obj.Action == "default"));
-            this.animations[currentAnimation].Start ();
+            this.animations[currentAnimation].Start ( );
 
-            float[] textureBufferArray = new float[boundedPoints.Count * 8];
-            short[] indexBufferArray = new short[boundedPoints.Count * 6];
-            float[] vertexBufferArray = new float[boundedPoints.Count * 8];
+            float[ ] textureBufferArray = new float[boundedPoints.Count * 8];
+            short[ ] indexBufferArray = new short[boundedPoints.Count * 6];
+            float[ ] vertexBufferArray = new float[boundedPoints.Count * 8];
 
             for (int i = 0; i < boundedPoints.Count; i++) {
                 // set buffer default values
 
-                float[] data = animations[currentAnimation].Default[boundedPoints[i].Name];
-                float[] vert = MathHelper.GetVerticies (boundedPoints[i].Size);
-                float[] trans = MathHelper.TranslateRotateMirror (MathHelper.GetVerticies (boundedPoints[i].Size), 0, 0, data[0], data[1], data[2], (data[3] == 1f) ? true : false);
+                float[ ] data = animations[currentAnimation].Default[boundedPoints[i].Name];
+                float[ ] vert = MathHelper.GetVerticies (boundedPoints[i].Size);
+                float[ ] trans = MathHelper.TranslateRotateMirror (MathHelper.GetVerticies (boundedPoints[i].Size), 0, 0, data[0], data[1], data[2], (data[3] == 1f) ? true : false);
                 // if data == 1f give mirrored as true, else false
                 Array.Copy (trans, 0, vertexBufferArray, i * 8, 8);
 
@@ -67,13 +67,13 @@ namespace mapKnight.Android.CGL.Entity {
         public static void Draw (int deltatime) {
             foreach (CGLEntity entity in activeEntitys) {
                 entity.Update (deltatime);
-                entity.Draw (); // das wird bald verbessert du fauler hund!!!!
+                entity.Draw ( ); // das wird bald verbessert du fauler hund!!!!
             }
         }
 
         private void Draw () {
-            Content.MatrixProgram.Begin ();
-            Content.MatrixProgram.EnableAlphaBlending ();
+            Content.MatrixProgram.Begin ( );
+            Content.MatrixProgram.EnableAlphaBlending ( );
 
             Content.MatrixProgram.SetMVPMatrix (Content.Camera.CharacterMVPMatrix);
             Content.MatrixProgram.SetTexture (this.set.Texture.Texture);
@@ -81,13 +81,13 @@ namespace mapKnight.Android.CGL.Entity {
             Content.MatrixProgram.SetVertexBuffer (vertexBuffer);
             Content.MatrixProgram.Draw (indexBuffer);
 
-            Content.MatrixProgram.End ();
+            Content.MatrixProgram.End ( );
         }
 
         public bool Animate (string animation) {
             if (animations[currentAnimation].Abortable == true || animations[currentAnimation].Finished == true) {
                 currentAnimation = animations.IndexOf (animations.Find (((CGLAnimation obj) => obj.Action == animation)));
-                animations[currentAnimation].Start ();
+                animations[currentAnimation].Start ( );
                 return true;
             } else
                 return false;
@@ -104,14 +104,14 @@ namespace mapKnight.Android.CGL.Entity {
         private void Update (int deltatime) {
             if (animations[currentAnimation].Finished) {
                 if (animations[currentAnimation].Loopable)
-                    animations[currentAnimation].Start ();
+                    animations[currentAnimation].Start ( );
             } else {
                 animations[currentAnimation].Step (deltatime);
             }
 
             // begin translating the current animationdata
             for (int i = 0; i < boundedPoints.Count; i++) {
-                float[] data = animations[currentAnimation].Current[boundedPoints[i].Name];
+                float[ ] data = animations[currentAnimation].Current[boundedPoints[i].Name];
                 vertexBuffer.Put (MathHelper.TranslateRotateMirror (MathHelper.GetVerticies (boundedPoints[i].Size), 0, 0, data[0], data[1], data[2], (data[3] == 1f) ? true : false));
             }
             vertexBuffer.Position (0);

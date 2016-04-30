@@ -1,37 +1,39 @@
-﻿using System;
+﻿namespace mapKnight.Basic {
+    public struct fRectangle {
+        private fVector2D _Position;
 
-namespace mapKnight.Basic
-{
-	public struct fRectangle
-	{
-		private fPoint iPosition;
+        public fVector2D Position { get { return _Position; } set { _Position = value; } }
 
-		public fPoint Position{ get { return iPosition; } set { iPosition = value; } }
+        private fVector2D _Size;
 
-		private fSize iSize;
+        public fVector2D Size { get { return _Size; } set { _Size = value; } }
 
-		public fSize Size{ get { return iSize; } set { iSize = value; } }
+        public float Left { get { return Position.X; } set { _Position.X = value; } }
 
-		public float Left{ get { return Position.X; } set { iPosition.X = value; } }
+        public float Right { get { return Position.X + Width; } set { _Position.X = value - Width; } }
 
-		public float Right{ get { return Position.X + Width; } set { iPosition.X = value - Width; } }
+        public float Top { get { return Position.Y; } set { _Position.Y = value; } }
 
-		public float Top{ get { return Position.Y + Height; } set { iPosition.Y = value - Height; } }
+        public float Bottom { get { return Position.Y + Height; } set { _Position.Y = value - Height; } }
 
-		public float Bottom{ get { return Position.Y; } set { iPosition.Y = value; } }
+        public float Width { get { return _Size.X; } set { _Size.X = value; } }
 
-		public float Width{ get { return Size.Width; } set { iSize.Width = value; } }
+        public float Height { get { return _Size.Y; } set { _Size.Y = value; } }
 
-		public float Height { get { return Size.Height; } set { iSize.Height = value; } }
+        public float[ ] Verticies { get { return new float[ ] { Left, Top, Left, Bottom, Right, Bottom, Right, Top }; } }
 
-		public float[] Verticies { get { return new float[]{ Left, Top, Left, Bottom, Right, Bottom, Right, Top }; } }
+        public fRectangle (fVector2D position, fVector2D size) : this ( ) {
+            this.Position = position;
+            this.Size = size;
+        }
 
-		public fRectangle (fPoint position, fSize size) : this ()
-		{
-			this.Position = position;
-			this.Size = size;
-		}
+        public fRectangle (float x, float y, float width, float height) : this (new fVector2D (x, y), new fVector2D (width, height)) {
 
-	}
+        }
+
+        public float[ ] GetVerticies () {
+            return new float[ ] { Left, Top, Left, Bottom, Right, Bottom, Right, Top };
+        }
+    }
 }
 

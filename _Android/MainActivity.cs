@@ -1,5 +1,4 @@
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
@@ -14,23 +13,25 @@ namespace mapKnight.Android {
             RequestWindowFeature (WindowFeatures.NoTitle);
             base.OnCreate (bundle);
             // Create our OpenGL view, and display it
+            Content.Initialized += Content_Initialized;
+            Content.PrepareInit (this);
+
             view = new CGLView (this);
             SetContentView (view);
-            HideNavBar ();
-            Content.OnInit += OnInit;
+            HideNavBar ( );
+        }
+
+        private void Content_Initialized (global::Android.Content.Context GameContext) {
+            view.SetOnTouchListener (Content.GUI);
         }
 
         protected override void OnStop () {
-            base.OnStop ();
+            base.OnStop ( );
         }
 
         protected override void OnResume () {
-            base.OnResume ();
-            HideNavBar ();
-        }
-
-        private void OnInit (Context context) {
-            view.SetOnTouchListener (new mapKnight.Android.CGL.GUI.GUI ());
+            base.OnResume ( );
+            HideNavBar ( );
         }
 
         public void HideNavBar () {

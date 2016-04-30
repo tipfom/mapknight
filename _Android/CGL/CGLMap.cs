@@ -2,7 +2,7 @@
 using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL {
-    public class CGLMap : PhysX.PhysXMap {
+    public class CGLMap : Physics.Map {
         public const int DRAW_WIDTH = 18;
 
         public enum UpdateType {
@@ -15,43 +15,43 @@ namespace mapKnight.Android.CGL {
         ShortBuffer indexBuffer;
         FloatBuffer textureBuffer;
 
-        private float[][][] layerBuffer; // buffers each texturecoordinate for every layer
+        private float[ ][ ][ ] layerBuffer; // buffers each texturecoordinate for every layer
 
         public readonly Size DrawSize;
         public readonly fSize RealDrawSize;
         public float VertexSize;
 
         public CGLMap (string name) : base (name) {
-            RealDrawSize = new fSize (DRAW_WIDTH, DRAW_WIDTH / Content.ScreenRatio);
-            DrawSize = new Size (DRAW_WIDTH + 2, (int)((float)DRAW_WIDTH / Content.ScreenRatio) + 2);
-            VertexSize = 2 * Content.ScreenRatio / (float)(DRAW_WIDTH);
+            RealDrawSize = new fSize (DRAW_WIDTH, DRAW_WIDTH / Screen.ScreenRatio);
+            DrawSize = new Size (DRAW_WIDTH + 2, (int)((float)DRAW_WIDTH / Screen.ScreenRatio) + 2);
+            VertexSize = 2 * Screen.ScreenRatio / (float)(DRAW_WIDTH);
 
-            initVertexCoords ();
-            initTextureCoords ();
+            initVertexCoords ( );
+            initTextureCoords ( );
 
-            Content.OnUpdate += () => {
-                VertexSize = 2 * Content.ScreenRatio / (float)(DRAW_WIDTH);
-                initVertexCoords ();
-                updateTextureBuffer ();
+            Screen.Changed += () => {
+                VertexSize = 2 * Screen.ScreenRatio / (float)(DRAW_WIDTH);
+                initVertexCoords ( );
+                updateTextureBuffer ( );
             };
         }
 
         private void initVertexCoords () {
             int iTileCount = DrawSize.Width * DrawSize.Height;
-            float[] vertexCoords = new float[iTileCount * 8 * 3];
-            short[] vertexIndices = new short[iTileCount * 6 * 3];
+            float[ ] vertexCoords = new float[iTileCount * 8 * 3];
+            short[ ] vertexIndices = new short[iTileCount * 6 * 3];
 
             for (int i = 0; i < 3; i++) { // PR tile and overlay vertex
                 for (int y = 0; y < DrawSize.Height; y++) {
                     for (int x = 0; x < DrawSize.Width; x++) {
 
-                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 0] = -Content.ScreenRatio - VertexSize + (x * VertexSize);
+                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 0] = -Screen.ScreenRatio - VertexSize + (x * VertexSize);
                         vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 1] = -1f - VertexSize + (y * VertexSize);
-                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 2] = -Content.ScreenRatio - VertexSize + (x * VertexSize);
+                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 2] = -Screen.ScreenRatio - VertexSize + (x * VertexSize);
                         vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 3] = -1f - VertexSize + ((y + 1) * VertexSize);
-                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 4] = -Content.ScreenRatio - VertexSize + (x * VertexSize) + VertexSize;
+                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 4] = -Screen.ScreenRatio - VertexSize + (x * VertexSize) + VertexSize;
                         vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 5] = -1f - VertexSize + ((y + 1) * VertexSize);
-                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 6] = -Content.ScreenRatio - VertexSize + (x * VertexSize) + VertexSize;
+                        vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 6] = -Screen.ScreenRatio - VertexSize + (x * VertexSize) + VertexSize;
                         vertexCoords[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 7] = -1f - VertexSize + (y * VertexSize);
 
                         vertexIndices[x * 6 + y * DrawSize.Width * 6 + i * iTileCount * 6 + 0] = (short)(x * 4 + y * DrawSize.Width * 4 + i * iTileCount * 4 + 0);
@@ -73,9 +73,9 @@ namespace mapKnight.Android.CGL {
             textureBuffer = CGLTools.CreateFloatBuffer (DrawSize.Width * DrawSize.Height * 8 * 3);
 
             // buffer tile coords
-            layerBuffer = new float[3][][];
+            layerBuffer = new float[3][ ][ ];
             for (int layer = 0; layer < 3; layer++) {
-                layerBuffer[layer] = new float[this.Size.Height][];
+                layerBuffer[layer] = new float[this.Size.Height][ ];
                 for (int y = 0; y < this.Size.Height; y++) {
                     layerBuffer[layer][y] = new float[this.Size.Width * 8];
                 }
@@ -103,11 +103,11 @@ namespace mapKnight.Android.CGL {
         }
 
         public void Draw () {
-            Content.MatrixProgram.Begin ();
+            Content.MatrixProgram.Begin ( );
 
             Content.MatrixProgram.Draw (vertexBuffer, textureBuffer, indexBuffer, TileManager.Texture.Texture, Content.Camera.MapMVPMatrix, true);
 
-            Content.MatrixProgram.End ();
+            Content.MatrixProgram.End ( );
         }
     }
 }

@@ -14,7 +14,7 @@ namespace mapKnight.Android.CGL {
 
         public new Character Instantiate (uint level, string set) {
             return new Character (defaultAttributes[Attribute.Health] + (int)((level - 1) * attributeIncrease[Attribute.Health]), defaultAttributes[Attribute.Energy] + (int)((level - 1) * attributeIncrease[Attribute.Energy]), name, weight,
-                bounds, boundedPoints, animations, sets.Find (((CGLSet obj) => obj.Name == set)), moveSpeed, jumpSpeed) { CollisionMask = mapKnight.Android.PhysX.PhysXFlag.Map };
+                bounds, boundedPoints, animations, sets.Find (((CGLSet obj) => obj.Name == set)), moveSpeed, jumpSpeed) { CollisionMask = Physics.Flag.Map };
         }
     }
 }

@@ -6,10 +6,10 @@ namespace mapKnight.Android.CGL {
         GLSurfaceView.IRenderer Renderer;
 
         public CGLView (Context context) : base (context) {
-            this.SetEGLContextClientVersion (2);
-
-            Renderer = new CGLRenderer (context);
             base.SetEGLConfigChooser (8, 8, 8, 8, 16, 0);
+            this.SetEGLContextClientVersion (2);
+            
+            Renderer = new CGLRenderer ();
             this.SetRenderer (Renderer);
             this.RenderMode = Rendermode.Continuously;
         }

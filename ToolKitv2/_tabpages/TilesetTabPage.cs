@@ -9,7 +9,7 @@ namespace mapKnight.ToolKit {
     class TilesetTabPage : TabPage {
         private const int TILE_SIZE_IN_LISTVIEW = 30;
 
-        private readonly static string[] supportedMasks = { "COLLISION" };
+        private readonly static string[ ] supportedMasks = { "COLLISION" };
 
         private Home.SetMenuStripDelegate setMenuStrip;
 
@@ -18,25 +18,25 @@ namespace mapKnight.ToolKit {
         private TextBox attributeTextBox;
         private TextBox nameTextBox;
         private CheckedListBox maskListBox;
-        private Label[] infoLabel;
+        private Label[ ] infoLabel;
         private OpenFileDialog openTilesetDialog;
         private BeautifulDragAndDropListView listViewContainer;
         private List<ToolStripItem> menuItems;
 
-        private List<Tileset> tilesets = new List<Tileset> ();
+        private List<Tileset> tilesets = new List<Tileset> ( );
         private int _selectedTileset_ = -1;
         private int selectedTile = -1;
         private int selectedTileset {
             get { return _selectedTileset_; }
             set {
                 _selectedTileset_ = value;
-                updateListView ();
+                updateListView ( );
                 ((ToolStripComboBox)menuItems[1]).SelectedIndex = value;
             }
         }
 
-        public TilesetTabPage (Home.SetMenuStripDelegate smsdelegate) : base () {
-            InitializeComponent ();
+        public TilesetTabPage (Home.SetMenuStripDelegate smsdelegate) : base ( ) {
+            InitializeComponent ( );
 
             this.Name = "tabpage_tileset";
             this.Text = " TILESET ";
@@ -56,20 +56,20 @@ namespace mapKnight.ToolKit {
         }
 
         private void InitializeComponent () {
-            splitContainer = new SplitContainer ();
-            tableLayoutPanel = new TableLayoutPanel ();
-            attributeTextBox = new TextBox ();
-            nameTextBox = new TextBox ();
-            maskListBox = new CheckedListBox ();
-            infoLabel = new Label[] { new Label (), new Label (), new Label () };
-            openTilesetDialog = new OpenFileDialog ();
-            listViewContainer = new BeautifulDragAndDropListView ();
-            menuItems = new List<ToolStripItem> ();
+            splitContainer = new SplitContainer ( );
+            tableLayoutPanel = new TableLayoutPanel ( );
+            attributeTextBox = new TextBox ( );
+            nameTextBox = new TextBox ( );
+            maskListBox = new CheckedListBox ( );
+            infoLabel = new Label[ ] { new Label ( ), new Label ( ), new Label ( ) };
+            openTilesetDialog = new OpenFileDialog ( );
+            listViewContainer = new BeautifulDragAndDropListView ( );
+            menuItems = new List<ToolStripItem> ( );
 
             this.openTilesetDialog.Filter = "TILESET-Files|*.tileset";
 
             this.listViewContainer.Dock = DockStyle.Fill;
-            this.listViewContainer.LargeImageList = new ImageList ();
+            this.listViewContainer.LargeImageList = new ImageList ( );
             this.listViewContainer.LargeImageList.ImageSize = new System.Drawing.Size (TILE_SIZE_IN_LISTVIEW, TILE_SIZE_IN_LISTVIEW);
             this.listViewContainer.LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
             this.listViewContainer.BitmapDroped += ListViewContainer_BitmapDroped;
@@ -136,12 +136,12 @@ namespace mapKnight.ToolKit {
 
         private void ListViewContainer_SelectedIndexChanged (object sender, EventArgs e) {
             if (this.listViewContainer.SelectedIndices.Count > 0) {
-                updateTile ();
+                updateTile ( );
 
                 this.selectedTile = this.listViewContainer.SelectedIndices[0];
 
                 this.nameTextBox.Text = this.tilesets[selectedTileset].Tiles[selectedTile].Name;
-                this.attributeTextBox.Lines = this.tilesets[selectedTileset].Tiles[selectedTile].Attributes.Select (str => str.Key.ToString () + " " + str.Value.ToString ()).ToArray ();
+                this.attributeTextBox.Lines = this.tilesets[selectedTileset].Tiles[selectedTile].Attributes.Select (str => str.Key.ToString ( ) + " " + str.Value.ToString ( )).ToArray ( );
                 for (int i = 0; i < this.maskListBox.Items.Count; i++) {
                     this.maskListBox.SetItemChecked (i, false);
                     // uncheck everything
@@ -155,40 +155,40 @@ namespace mapKnight.ToolKit {
 
         private void menuItems_SELECT_changed (object sender, EventArgs e) {
             if (this.selectedTile > -1)
-                updateTile ();
+                updateTile ( );
             this.selectedTileset = ((ToolStripComboBox)menuItems[1]).SelectedIndex;
         }
 
         private void menuItems_NEW_clicked (object sender, EventArgs e) {
             NameForm namedialog = new NameForm ("tileset");
-            if (namedialog.ShowDialog () == DialogResult.OK) {
-                updateTile ();
+            if (namedialog.ShowDialog ( ) == DialogResult.OK) {
+                updateTile ( );
 
                 this.tilesets.Add (new Tileset (namedialog.Result));
-                updateMenuItems ();
+                updateMenuItems ( );
                 this.selectedTileset = this.tilesets.Count - 1;
             }
         }
 
         private void menuItems_LOAD_clicked (object sender, EventArgs e) {
-            if (this.openTilesetDialog.ShowDialog () == DialogResult.OK) {
-                updateTile ();
+            if (this.openTilesetDialog.ShowDialog ( ) == DialogResult.OK) {
+                updateTile ( );
 
                 this.tilesets.Add (new Tileset (XMLElemental.Load (File.OpenRead (this.openTilesetDialog.FileName))));
-                updateMenuItems ();
+                updateMenuItems ( );
                 this.selectedTileset = this.tilesets.Count - 1;
             }
         }
 
         private void updateMenuItems () {
-            ((ToolStripComboBox)menuItems[1]).Items.Clear ();
-            ((ToolStripComboBox)menuItems[1]).Items.AddRange (this.tilesets.ToArray ());
-            ((ToolStripComboBox)menuItems[1]).Control.Refresh ();
+            ((ToolStripComboBox)menuItems[1]).Items.Clear ( );
+            ((ToolStripComboBox)menuItems[1]).Items.AddRange (this.tilesets.ToArray ( ));
+            ((ToolStripComboBox)menuItems[1]).Control.Refresh ( );
         }
 
         private void updateListView () {
-            this.listViewContainer.LargeImageList.Images.Clear ();
-            this.listViewContainer.Items.Clear ();
+            this.listViewContainer.LargeImageList.Images.Clear ( );
+            this.listViewContainer.Items.Clear ( );
 
             foreach (Tileset.Tile tile in this.tilesets[selectedTileset].Tiles) {
                 this.listViewContainer.LargeImageList.Images.Add (tile.Texture);
@@ -202,12 +202,12 @@ namespace mapKnight.ToolKit {
 
                 this.tilesets[selectedTileset].Tiles[selectedTile].MaskFlag = new string[this.maskListBox.CheckedItems.Count];
                 for (int i = 0; i < this.maskListBox.CheckedItems.Count; i++) {
-                    this.tilesets[selectedTileset].Tiles[selectedTile].MaskFlag[i] = this.maskListBox.CheckedItems[i].ToString ();
+                    this.tilesets[selectedTileset].Tiles[selectedTile].MaskFlag[i] = this.maskListBox.CheckedItems[i].ToString ( );
                 }
-                this.tilesets[selectedTileset].Tiles[selectedTile].Attributes.Clear ();
+                this.tilesets[selectedTileset].Tiles[selectedTile].Attributes.Clear ( );
 
                 foreach (string line in this.attributeTextBox.Lines) {
-                    string[] arguments = line.Split (new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[ ] arguments = line.Split (new char[ ] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     if (arguments.Length == 2 && !this.tilesets[selectedTileset].Tiles[selectedTile].Attributes.ContainsKey (arguments[0])) {
                         this.tilesets[selectedTileset].Tiles[selectedTile].Attributes.Add (arguments[0], arguments[1]);
                     }
@@ -219,56 +219,56 @@ namespace mapKnight.ToolKit {
         }
 
         private void ListViewContainer_BitmapDroped (object sender, System.Drawing.Bitmap e) {
-            updateTile ();
+            updateTile ( );
 
             AddTileForm addtiledialog = new AddTileForm (e);
-            if (addtiledialog.ShowDialog () == DialogResult.OK) {
+            if (addtiledialog.ShowDialog ( ) == DialogResult.OK) {
                 this.tilesets[selectedTileset].Tiles.Add (new Tileset.Tile (addtiledialog.textbox_name.Text, e));
             }
 
-            updateListView ();
-            updateMenuItems ();
+            updateListView ( );
+            updateMenuItems ( );
             this.listViewContainer.SelectedIndices.Add (this.tilesets[selectedTileset].Tiles.Count - 1);
         }
 
-        public Tileset GetTileset (int refid) {
-            return tilesets.Find ((Tileset tileset) => tileset.RefID == refid);
+        public Tileset GetTileset (string name) {
+            return tilesets.Find ((Tileset tileset) => tileset.Name == name);
         }
 
-        public Tileset[] GetAllTilesets () {
-            return tilesets.ToArray ();
+        public Tileset[ ] GetAllTilesets () {
+            return tilesets.ToArray ( );
         }
 
-        public int CreateTileSet (string name) {
+        public string CreateTileSet (string name) {
             this.tilesets.Add (new Tileset (name));
-            updateMenuItems ();
-            return this.tilesets[this.tilesets.Count - 1].RefID;
+            updateMenuItems ( );
+            return this.tilesets[this.tilesets.Count - 1].Name;
         }
 
         public mapKnight.Basic.XMLElemental Save () {
-            updateTile ();
+            updateTile ( );
 
             Basic.XMLElemental container = new Basic.XMLElemental ("tileset");
             foreach (Tileset tileset in this.tilesets) {
-                container.AddChild (tileset.Save ());
+                container.AddChild (tileset.Save ( ));
             }
             return container;
         }
 
         public void Export (string homepath) {
-            updateTile ();
+            updateTile ( );
 
             foreach (Tileset tileset in this.tilesets) {
-                tileset.Export (Path.ChangeExtension (Path.Combine (homepath, tileset.RefID.ToString ()), "tileset"));
+                tileset.Export (Path.ChangeExtension (Path.Combine (homepath, tileset.Name), "tileset"));
             }
         }
 
         public void Load (XMLElemental config) {
-            this.tilesets.Clear ();
-            foreach (XMLElemental tileset in config.GetAll ()) {
+            this.tilesets.Clear ( );
+            foreach (XMLElemental tileset in config.GetAll ( )) {
                 this.tilesets.Add (new Tileset (tileset));
             }
-            updateMenuItems ();
+            updateMenuItems ( );
         }
     }
 }

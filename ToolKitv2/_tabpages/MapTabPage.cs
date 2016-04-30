@@ -35,24 +35,24 @@ namespace mapKnight.ToolKit {
 
         private List<ToolStripItem> menuItems;
         private List<Map> maps;
-        private Bitmap[] tileImages;
+        private Bitmap[ ] tileImages;
 
         private int currentZoomLevel;
         private int selectedMap = -1;
         private int selectedLayer = -1;
-        private int[] selectedTile = new int[3];
+        private int[ ] selectedTile = new int[3];
         private Tool selectedTool;
         private int tileSize = Tileset.Tile.TILE_SIZE;
         private bool clicked;
         private bool altPressed;
         private Size renderSize;
 
-        public MapTabPage (Home.SetMenuStripDelegate smsdelegate, Home.GetTileSetDelegate gtsdelegate, Home.GetAllTileSetDelegate gatsdelegate, Home.CreateTileSetDelegate ctsdelegate) : base () {
-            InitializeComponent ();
+        public MapTabPage (Home.SetMenuStripDelegate smsdelegate, Home.GetTileSetDelegate gtsdelegate, Home.GetAllTileSetDelegate gatsdelegate, Home.CreateTileSetDelegate ctsdelegate) : base ( ) {
+            InitializeComponent ( );
 
             this.Name = "tabpage_map";
             this.Text = " MAP ";
-            this.maps = new List<Map> ();
+            this.maps = new List<Map> ( );
 
             setMenuStrip = smsdelegate;
             getTileSet = gtsdelegate;
@@ -70,29 +70,29 @@ namespace mapKnight.ToolKit {
                 setMenuStrip (this.menuItems);
 
                 if (this.maps.Count > 0 && this.selectedMap != -1)
-                    updateListView ();
+                    updateListView ( );
             }
         }
 
         protected override void OnSizeChanged (EventArgs e) {
             base.OnSizeChanged (e);
             renderSize = new Size ((int)((this.splitContainer.Panel2.Width - this.yScrollBar.Width) / tileSize) + 1, (int)((this.splitContainer.Panel2.Height - this.xScrollBar.Height) / tileSize) + 1);
-            updateScrollBar ();
+            updateScrollBar ( );
         }
 
         private void InitializeComponent () {
-            menuItems = new List<ToolStripItem> ();
-            splitContainer = new SplitContainer ();
-            tileListView = new BeautifulDragAndDropListView ();
-            xScrollBar = new HScrollBar ();
-            yScrollBar = new VScrollBar ();
-            openMapFileDialog = new OpenFileDialog ();
-            gridCheckBox = new CheckBox ();
+            menuItems = new List<ToolStripItem> ( );
+            splitContainer = new SplitContainer ( );
+            tileListView = new BeautifulDragAndDropListView ( );
+            xScrollBar = new HScrollBar ( );
+            yScrollBar = new VScrollBar ( );
+            openMapFileDialog = new OpenFileDialog ( );
+            gridCheckBox = new CheckBox ( );
 
             this.openMapFileDialog.Filter = "TMSL4-Files|*.tmsl4";
 
             this.splitContainer.Dock = DockStyle.Fill;
-            this.splitContainer.Panel2.Paint += (object sender, PaintEventArgs e) => { drawMap (); };
+            this.splitContainer.Panel2.Paint += (object sender, PaintEventArgs e) => { drawMap ( ); };
             this.splitContainer.Panel2.MouseWheel += Panel2_MouseWheel;
             this.splitContainer.Panel2.MouseDown += Panel2_MouseDown;
             this.splitContainer.Panel2.MouseMove += Panel2_MouseMove;
@@ -101,7 +101,7 @@ namespace mapKnight.ToolKit {
             this.Controls.Add (this.splitContainer);
 
             this.tileListView.Dock = DockStyle.Fill;
-            this.tileListView.LargeImageList = new ImageList () { ColorDepth = ColorDepth.Depth32Bit, ImageSize = new Size (TILE_SIZE_IN_LISTVIEW, TILE_SIZE_IN_LISTVIEW) };
+            this.tileListView.LargeImageList = new ImageList ( ) { ColorDepth = ColorDepth.Depth32Bit, ImageSize = new Size (TILE_SIZE_IN_LISTVIEW, TILE_SIZE_IN_LISTVIEW) };
             this.tileListView.SelectedIndexChanged += TileListView_SelectedIndexChanged;
             this.tileListView.BitmapDroped += TileListView_BitmapDroped;
             this.splitContainer.Panel1.Controls.Add (this.tileListView);
@@ -109,13 +109,13 @@ namespace mapKnight.ToolKit {
             this.xScrollBar.Dock = DockStyle.Bottom;
             this.xScrollBar.Maximum = 0;
             this.xScrollBar.Value = 0;
-            this.xScrollBar.ValueChanged += (object sender, EventArgs e) => { drawMap (); };
+            this.xScrollBar.ValueChanged += (object sender, EventArgs e) => { drawMap ( ); };
             this.splitContainer.Panel2.Controls.Add (this.xScrollBar);
 
             this.yScrollBar.Dock = DockStyle.Right;
             this.yScrollBar.Maximum = 0;
             this.yScrollBar.Value = 0;
-            this.yScrollBar.ValueChanged += (object sender, EventArgs e) => { drawMap (); };
+            this.yScrollBar.ValueChanged += (object sender, EventArgs e) => { drawMap ( ); };
             this.splitContainer.Panel2.Controls.Add (this.yScrollBar);
 
             this.gridCheckBox.Text = "Show Grid";
@@ -130,7 +130,7 @@ namespace mapKnight.ToolKit {
                 this.gridCheckBox.ForeColor = Properties.Settings.Default.MenuStripInActiveForeColor;
                 this.gridCheckBox.BackColor = Properties.Settings.Default.MenuStripInActiveBackColor;
             };
-            this.gridCheckBox.CheckedChanged += (object sender, EventArgs e) => { drawMap (); };
+            this.gridCheckBox.CheckedChanged += (object sender, EventArgs e) => { drawMap ( ); };
 
             this.menuItems.Add (new ToolStripMenuItem ("MAP"));
             ((ToolStripMenuItem)this.menuItems[0]).DropDownItems.Add ("NEW");
@@ -138,7 +138,7 @@ namespace mapKnight.ToolKit {
             ((ToolStripMenuItem)this.menuItems[0]).DropDownItems.Add ("LOAD");
             ((ToolStripMenuItem)this.menuItems[0]).DropDownItems[1].Click += loadMap_Click;
             this.menuItems.Add (new ToolStripMenuItem ("UNDO"));
-            ((ToolStripMenuItem)this.menuItems[1]).Click += (object sender, EventArgs e) => { if (selectedMap != -1) { maps[selectedMap].Undo (); drawMap (); } };
+            ((ToolStripMenuItem)this.menuItems[1]).Click += (object sender, EventArgs e) => { if (selectedMap != -1) { maps[selectedMap].Undo ( ); drawMap ( ); } };
             this.menuItems.Add (new ToolStripComboBox ("map_select") { Enabled = false, Width = 200 });
             ((ToolStripComboBox)this.menuItems[2]).SelectedIndexChanged += map_select_SelectedIndexChanged;
 
@@ -162,30 +162,30 @@ namespace mapKnight.ToolKit {
         private void TileListView_BitmapDroped (object sender, Bitmap e) {
             // add tile to the maps tileset
             AddTileForm addtiledialog = new AddTileForm (e);
-            if (addtiledialog.ShowDialog () == DialogResult.OK) {
+            if (addtiledialog.ShowDialog ( ) == DialogResult.OK) {
                 getTileSet (maps[selectedMap].TileSet).Tiles.Add (new Tileset.Tile (addtiledialog.textbox_name.Text, e));
             }
-            updateListView ();
+            updateListView ( );
         }
 
         private void erase_clicked (object sender, EventArgs e) {
             selectedTool = Tool.Eraser;
-            updateToolInterface ();
+            updateToolInterface ( );
         }
 
         private void spawn_clicked (object sender, EventArgs e) {
             selectedTool = Tool.SpawnPointer;
-            updateToolInterface ();
+            updateToolInterface ( );
         }
 
         private void select_clicked (object sender, EventArgs e) {
             selectedTool = Tool.Select;
-            updateToolInterface ();
+            updateToolInterface ( );
         }
 
         private void fill_clicked (object sender, EventArgs e) {
             selectedTool = Tool.Bucket;
-            updateToolInterface ();
+            updateToolInterface ( );
         }
 
         private void brush_layer3_clicked (object sender, EventArgs e) {
@@ -208,16 +208,16 @@ namespace mapKnight.ToolKit {
                     selectedTile[selectedLayer] = this.tileListView.SelectedIndices[0];
                 } else {
                     selectedTile[selectedLayer] = 0;
-                    this.tileListView.SelectedIndices.Clear ();
+                    this.tileListView.SelectedIndices.Clear ( );
                     if (selectedTile[selectedLayer] != -1)
                         this.tileListView.SelectedIndices.Add (selectedTile[selectedLayer]);
                 }
             } else {
-                this.tileListView.SelectedIndices.Clear ();
+                this.tileListView.SelectedIndices.Clear ( );
                 if (selectedTile[selectedLayer] != -1)
                     this.tileListView.SelectedIndices.Add (selectedTile[selectedLayer]);
             }
-            updateToolInterface ();
+            updateToolInterface ( );
         }
 
         public void HandleKeyUp (KeyEventArgs e) {
@@ -232,8 +232,8 @@ namespace mapKnight.ToolKit {
             }
 
             if (e.KeyData == (Keys.Control | Keys.Z)) {
-                maps[selectedMap].Undo ();
-                drawMap ();
+                maps[selectedMap].Undo ( );
+                drawMap ( );
             }
         }
 
@@ -286,15 +286,15 @@ namespace mapKnight.ToolKit {
                 currentZoomLevel = Math.Min (currentZoomLevel + 1, MAX_ZOOM_LEVEL);
                 tileSize = (int)(MIN_TILE_SIZE_DRAW + (MAX_TILE_SIZE_DRAW - MIN_TILE_SIZE_DRAW) * (float)(currentZoomLevel) / MAX_ZOOM_LEVEL);
                 renderSize = new Size ((int)((this.splitContainer.Panel2.Width - this.yScrollBar.Width) / tileSize) + 1, (int)((this.splitContainer.Panel2.Height - this.xScrollBar.Height) / tileSize) + 1);
-                updateScrollBar ();
-                drawMap ();
+                updateScrollBar ( );
+                drawMap ( );
             } else {
                 // zoom out
                 currentZoomLevel = Math.Max (currentZoomLevel - 1, 0);
                 tileSize = (int)(MIN_TILE_SIZE_DRAW + (MAX_TILE_SIZE_DRAW - MIN_TILE_SIZE_DRAW) * (float)(currentZoomLevel) / MAX_ZOOM_LEVEL);
                 renderSize = new Size ((int)((this.splitContainer.Panel2.Width - this.yScrollBar.Width) / tileSize) + 1, (int)((this.splitContainer.Panel2.Height - this.xScrollBar.Height) / tileSize) + 1);
-                updateScrollBar ();
-                drawMap ();
+                updateScrollBar ( );
+                drawMap ( );
             }
         }
 
@@ -303,7 +303,7 @@ namespace mapKnight.ToolKit {
                 Point clickedTile = new Point ((int)e.X / tileSize + xScrollBar.Value, (int)e.Y / tileSize + yScrollBar.Value);
 
                 if (e.Button == MouseButtons.Left && clickedTile.X >= 0 && clickedTile.Y >= 0 && clickedTile.X < maps[selectedMap].Width && clickedTile.Y < maps[selectedMap].Height) {
-                    maps[selectedMap].PrepareUndo ();
+                    maps[selectedMap].PrepareUndo ( );
 
                     switch (selectedTool) {
                     case Tool.Brush:
@@ -343,7 +343,7 @@ namespace mapKnight.ToolKit {
                     clicked = true;
                 }
 
-                drawMap ();
+                drawMap ( );
             }
         }
 
@@ -369,7 +369,7 @@ namespace mapKnight.ToolKit {
                     maps[selectedMap].Data[clickedTile.X, clickedTile.Y, 2] = 0;
                 }
 
-                drawMap ();
+                drawMap ( );
             }
         }
 
@@ -382,11 +382,11 @@ namespace mapKnight.ToolKit {
         }
 
         private void loadMap_Click (object sender, EventArgs e) {
-            if (openMapFileDialog.ShowDialog () == DialogResult.OK) {
+            if (openMapFileDialog.ShowDialog ( ) == DialogResult.OK) {
                 maps.Add (new Map (File.ReadAllBytes (openMapFileDialog.FileName)));
 
-                updateMenuItems ();
-                selectLastMap ();
+                updateMenuItems ( );
+                selectLastMap ( );
             }
         }
 
@@ -395,14 +395,14 @@ namespace mapKnight.ToolKit {
         }
 
         private void newMap_Click (object sender, EventArgs e) {
-            Tileset[] tilesets = getAllTileSets ();
-            NewMapForm dialogform = new NewMapForm (getAllTileSets ());
-            if (dialogform.ShowDialog () == DialogResult.OK) {
+            Tileset[ ] tilesets = getAllTileSets ( );
+            NewMapForm dialogform = new NewMapForm (getAllTileSets ( ));
+            if (dialogform.ShowDialog ( ) == DialogResult.OK) {
                 if (dialogform.combobox_tileset.SelectedIndex == 0) {
                     // add new tileset selected
                     /**/
                     NameForm namedialog = new NameForm ("tileset");
-                    if (namedialog.ShowDialog () == DialogResult.OK) {
+                    if (namedialog.ShowDialog ( ) == DialogResult.OK) {
                         maps.Add (new Map ((int)dialogform.numericupdown_width.Value,
                             (int)dialogform.numericupdown_height.Value,
                             dialogform.textbox_creator.Text,
@@ -415,31 +415,31 @@ namespace mapKnight.ToolKit {
                         (int)dialogform.numericupdown_height.Value,
                         dialogform.textbox_creator.Text,
                         dialogform.textbox_name.Text,
-                        tilesets[dialogform.combobox_tileset.SelectedIndex - 1].RefID,
+                        tilesets[dialogform.combobox_tileset.SelectedIndex - 1].Name,
                         new Point (0, 0)));
                 }
 
-                updateMenuItems ();
-                selectLastMap ();
+                updateMenuItems ( );
+                selectLastMap ( );
             }
         }
 
         private void map_select_SelectedIndexChanged (object sender, EventArgs e) {
             selectedMap = ((ToolStripComboBox)this.menuItems[2]).SelectedIndex;
-            updateListView ();
-            updateScrollBar ();
-            this.Refresh ();
+            updateListView ( );
+            updateScrollBar ( );
+            this.Refresh ( );
         }
 
         private void updateListView () {
-            tileListView.Items.Clear ();
-            tileListView.LargeImageList.Images.Clear ();
+            tileListView.Items.Clear ( );
+            tileListView.LargeImageList.Images.Clear ( );
             Tileset tileset = getTileSet (maps[selectedMap].TileSet);
             for (int i = 0; i < tileset.Tiles.Count; i++) {
                 tileListView.LargeImageList.Images.Add (tileset.Tiles[i].Texture);
                 tileListView.Items.Add (new ListViewItem (tileset.Tiles[i].Name, i));
             }
-            tileImages = tileListView.LargeImageList.Images.Cast<Bitmap> ().ToArray ();
+            tileImages = tileListView.LargeImageList.Images.Cast<Bitmap> ( ).ToArray ( );
         }
 
         private void updateScrollBar () {
@@ -456,8 +456,8 @@ namespace mapKnight.ToolKit {
 
         private void updateMenuItems () {
             ((ToolStripComboBox)menuItems[2]).Enabled = true;
-            ((ToolStripComboBox)menuItems[2]).Items.Clear ();
-            ((ToolStripComboBox)menuItems[2]).Items.AddRange (this.maps.ToArray ());
+            ((ToolStripComboBox)menuItems[2]).Items.Clear ( );
+            ((ToolStripComboBox)menuItems[2]).Items.AddRange (this.maps.ToArray ( ));
         }
 
         protected override void OnPaintBackground (PaintEventArgs e) {
@@ -467,7 +467,7 @@ namespace mapKnight.ToolKit {
         public mapKnight.Basic.XMLElemental Save () {
             Basic.XMLElemental container = new Basic.XMLElemental ("map");
             foreach (Map map in maps) {
-                container.AddChild (map.Save ());
+                container.AddChild (map.Save ( ));
             }
             return container;
         }
@@ -479,16 +479,16 @@ namespace mapKnight.ToolKit {
         }
 
         public void Load (Basic.XMLElemental config) {
-            this.maps.Clear ();
-            foreach (Basic.XMLElemental map in config.GetAll ()) {
+            this.maps.Clear ( );
+            foreach (Basic.XMLElemental map in config.GetAll ( )) {
                 this.maps.Add (new Map (map));
             }
-            updateMenuItems ();
+            updateMenuItems ( );
         }
 
         private void drawMap () {
             if (selectedMap > -1) {
-                using (BufferedGraphics g = BufferedGraphicsManager.Current.Allocate (splitContainer.Panel2.CreateGraphics (), splitContainer.Bounds)) {
+                using (BufferedGraphics g = BufferedGraphicsManager.Current.Allocate (splitContainer.Panel2.CreateGraphics ( ), splitContainer.Bounds)) {
                     g.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
                     g.Graphics.CompositingQuality = CompositingQuality.HighSpeed;
                     g.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
@@ -514,7 +514,7 @@ namespace mapKnight.ToolKit {
                         (maps[selectedMap].Height - maps[selectedMap].Spawn.Y + 0.25f - yScrollBar.Value) * tileSize,
                         tileSize / 2, tileSize / 2));
 
-                    g.Render ();
+                    g.Render ( );
                 }
             }
         }

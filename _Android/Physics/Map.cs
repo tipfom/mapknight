@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using mapKnight.Android.Map;
 using mapKnight.Basic;
 
-namespace mapKnight.Android.PhysX {
-    public class PhysXMap : Map {
+namespace mapKnight.Android.Physics {
+    public class Map : Android.Map.Map {
         public const int COLLISION_LAYER = 1;
 
-        private List<PhysXEntity> addedEntitys = new List<PhysXEntity> ();
+        private List<Entity> addedEntitys = new List<Entity> ( );
         private fVector2D Gravity = new fVector2D (0, -10);
 
-        public PhysXMap (string name) : base (name) {
+        public Map (string name) : base (name) {
 
         }
 
-        public void AddEntity (PhysXEntity entity) {
+        public void AddEntity (Entity entity) {
             addedEntitys.Add (entity);
         }
 
-        public void RemoveEntity (PhysXEntity entity) {
+        public void RemoveEntity (Entity entity) {
             if (addedEntitys.Contains (entity)) {
                 addedEntitys.Remove (entity);
             }
@@ -27,9 +27,9 @@ namespace mapKnight.Android.PhysX {
         public void Step (float time) {
             time /= 1000f;
 
-            foreach (PhysXEntity entity in addedEntitys) {
+            foreach (Entity entity in addedEntitys) {
 
-                if (entity.CollisionMask.HasFlag (PhysXFlag.Map)) {
+                if (entity.CollisionMask.HasFlag (Flag.Map)) {
                     // calculate new positions
                     fPoint movement = new fPoint (entity.Velocity.X * time, entity.Velocity.Y * time);
 
@@ -88,9 +88,9 @@ namespace mapKnight.Android.PhysX {
                     // only gets called, when no collision happened
                     entity.AABB.Translate (entity.AABB.Centre.X + movement.X, entity.AABB.Centre.Y);
 
-                    MOVEDX:
+MOVEDX:
 
-                    // move on Y
+// move on Y
                     if (entity.Velocity.Y > 0) {
                         if (entity.AABB.B.Y >= this.Size.Height - 1) {
                             entity.AABB.Translate (entity.AABB.Centre.X, this.Size.Height - 1 - entity.AABB.Bounds.Y / 2);
@@ -133,7 +133,7 @@ namespace mapKnight.Android.PhysX {
                     entity.AABB.Translate (entity.AABB.Centre.X, entity.AABB.Centre.Y + movement.Y);
                 }
 
-                MOVEDY:
+MOVEDY:
                 entity.Velocity.Y += (this.Gravity.Y + entity.Acceleration.Y) * time;
                 entity.Velocity.X += (this.Gravity.X + entity.Acceleration.X) * time;
             }

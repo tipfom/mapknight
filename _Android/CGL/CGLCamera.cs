@@ -5,26 +5,26 @@ namespace mapKnight.Android.CGL {
     public class CGLCamera {
         public Point CurrentMapTile;
 
-        private float[] DefaultProjectionMatrix;
-        private float[] DefaultViewMatrix;
-        public float[] DefaultMVPMatrix { get; private set; }
+        private float[ ] DefaultProjectionMatrix;
+        private float[ ] DefaultViewMatrix;
+        public float[ ] DefaultMVPMatrix { get; private set; }
 
-        private float[] MapViewMatrix;
-        public float[] MapMVPMatrix { get; private set; }
+        private float[ ] MapViewMatrix;
+        public float[ ] MapMVPMatrix { get; private set; }
 
-        private float[] CharacterViewMatrix;
-        public float[] CharacterMVPMatrix { get; private set; }
+        private float[ ] CharacterViewMatrix;
+        public float[ ] CharacterMVPMatrix { get; private set; }
 
         private float characterOffset;
 
         public CGLCamera (float characteroffset) {
-            CurrentMapTile = new Point ();
+            CurrentMapTile = new Point ( );
             characterOffset = characteroffset;
 
             DefaultProjectionMatrix = new float[16];
             DefaultViewMatrix = new float[16];
             DefaultMVPMatrix = new float[16];
-            UpdateDefaultMatrix ();
+            UpdateDefaultMatrix ( );
 
             MapViewMatrix = new float[16];
             MapMVPMatrix = new float[16];
@@ -32,14 +32,14 @@ namespace mapKnight.Android.CGL {
             CharacterViewMatrix = new float[16];
             CharacterMVPMatrix = new float[16];
 
-            Content.OnUpdate += () => {
-                UpdateDefaultMatrix ();
+            Screen.Changed += () => {
+                UpdateDefaultMatrix ( );
             };
         }
 
         private void UpdateDefaultMatrix () {
-            float ratio = Content.ScreenRatio;
-            Matrix.OrthoM (DefaultProjectionMatrix, 0, -Content.ScreenRatio, Content.ScreenRatio, -1, 1, 3, 7);
+            float ratio = Screen.ScreenRatio;
+            Matrix.OrthoM (DefaultProjectionMatrix, 0, -Screen.ScreenRatio, Screen.ScreenRatio, -1, 1, 3, 7);
             Matrix.SetLookAtM (DefaultViewMatrix, 0, 0, 0, 3, 0f, 0f, 0f, 0f, 1f, 0f);
             Matrix.MultiplyMM (DefaultMVPMatrix, 0, DefaultProjectionMatrix, 0, DefaultViewMatrix, 0);
         }
@@ -50,8 +50,8 @@ namespace mapKnight.Android.CGL {
                 (characterTile.X - Content.Map.RealDrawSize.Width / 2f).FitBounds (0f, (Content.Map.Size.Width - Content.Map.DrawSize.Width)),
                 (characterTile.Y - (1 - characterOffset) * Content.Map.DrawSize.Height / 2f).FitBounds (0f, Content.Map.Size.Height - Content.Map.DrawSize.Height));
 
-            CharacterViewMatrix = (float[])DefaultViewMatrix.Clone ();
-            MapViewMatrix = (float[])DefaultViewMatrix.Clone ();
+            CharacterViewMatrix = (float[ ])DefaultViewMatrix.Clone ( );
+            MapViewMatrix = (float[ ])DefaultViewMatrix.Clone ( );
 
             float mapOffsetY = 0f;
             float mapOffsetX = 0f;
@@ -60,14 +60,14 @@ namespace mapKnight.Android.CGL {
 
             if (nextMapTile.X > 0f && nextMapTile.X < Content.Map.Size.Width - Content.Map.DrawSize.Width) {
                 mapOffsetX = characterTile.X % 1;
-                mapOffsetX = -2f * mapOffsetX * Content.ScreenRatio / (Content.Map.DrawSize.Width);
+                mapOffsetX = -2f * mapOffsetX * Screen.ScreenRatio / (Content.Map.DrawSize.Width);
             } else if (nextMapTile.X > 0) {
                 // on the right side
-                charOffsetX = Content.ScreenRatio - 2f * ((Content.Map.Size.Width - characterTile.X - 2) / Content.Map.DrawSize.Width) * Content.ScreenRatio;
+                charOffsetX = Screen.ScreenRatio - 2f * ((Content.Map.Size.Width - characterTile.X - 2) / Content.Map.DrawSize.Width) * Screen.ScreenRatio;
             } else {
                 // on the left side
                 mapOffsetX = Content.Map.VertexSize;
-                charOffsetX = -2f * ((Content.Map.RealDrawSize.Width / 2 - characterTile.X) / Content.Map.DrawSize.Width) * Content.ScreenRatio;
+                charOffsetX = -2f * ((Content.Map.RealDrawSize.Width / 2 - characterTile.X) / Content.Map.DrawSize.Width) * Screen.ScreenRatio;
             }
 
             if (nextMapTile.Y > 0 && nextMapTile.Y < Content.Map.Size.Height - Content.Map.DrawSize.Height) {
@@ -91,7 +91,7 @@ namespace mapKnight.Android.CGL {
 
             CurrentMapTile.X = (int)nextMapTile.X;
             CurrentMapTile.Y = (int)nextMapTile.Y;
-            Content.Map.updateTextureBuffer ();
+            Content.Map.updateTextureBuffer ( );
         }
     }
 }

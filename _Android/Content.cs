@@ -6,27 +6,19 @@ using mapKnight.Android.CGL;
 using mapKnight.Android.CGL.GUI;
 using mapKnight.Android.CGL.Programs;
 using mapKnight.Basic;
+using Newtonsoft.Json;
 
 namespace mapKnight {
     public static class Content {
         #region instances
-        // screen bounds
-        public static Size ScreenSize { get; private set; }
-
-        public static float ScreenRatio { get; private set; }
-
         // version string
         public static Basic.Version Version;
-
-        // current touch manager
-        public static ButtonManager TouchManager { get; private set; }
+        private static ContentConfig config;
 
         //character
         public static Character Character { get; private set; }
 
         //data
-        public static SaveManager Data { get; private set; }
-
         public static Context Context { get; private set; }
 
         //map
@@ -35,75 +27,56 @@ namespace mapKnight {
         //viewing
         public static CGLCamera Camera { get; private set; }
 
-        public static GUITextRenderer TextRenderer { get; private set; }
-        public static CGLInterface Interface { get; private set; }
+        public static GUI GUI { get; private set; }
 
         // programs
         public static MatrixProgram MatrixProgram { get; private set; }
-        public static NormalProgram NormalProgram { get; private set; }
+        public static FBOProgram FBOProgram { get; private set; }
+        public static ColorProgram ColorProgram { get; private set; }
         #endregion
 
         #region inits
         public delegate void HandleInitCompleted (Context GameContext);
 
-        public static event HandleInitCompleted OnInit;
+        public static event HandleInitCompleted Initialized;
 
-        public static event HandleInitCompleted OnPreInit;
-
-        public static event HandleInitCompleted OnAfterInit;
-
-        public delegate void HandleUpdate ();
-
-        public static event HandleUpdate OnUpdate;
-
-        public static void PreInit (XMLElemental configfile, Context context) {
+        public static void PrepareInit (Context context) {
             Context = context;
-            Version = new Basic.Version (Assembly.GetExecutingAssembly ().GetName ().Version.ToString ());
+            Version = new Basic.Version (Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ));
+            JsonConvert.PopulateObject (Assets.Load<string> ("config", "content.json"), (config = new ContentConfig ( )));
 
-
-            ScreenSize = new Size (context.Resources.DisplayMetrics.WidthPixels, context.Resources.DisplayMetrics.HeightPixels);
-            ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
-
-            Log.All (typeof (Content), "Current Version : " + Version.ToString (), MessageType.Info);
-
-            OnPreInit?.Invoke (context);
+            Screen.Change (new Size (context.Resources.DisplayMetrics.WidthPixels, context.Resources.DisplayMetrics.HeightPixels));
+            Log.Print (typeof (Content), "Current Version : " + Version.ToString ( ));
         }
 
-        public static void Init (XMLElemental configfile) {
-            ProgramHelper.Load ();
-            NormalProgram = new NormalProgram ();
-            MatrixProgram = new MatrixProgram ();
-
-            TouchManager = new ButtonManager ();
-            Map = new CGLMap ("testmap.map");
+        public static void Init () {
+            ProgramHelper.Load ( );
+            FBOProgram = new FBOProgram ( );
+            MatrixProgram = new MatrixProgram ( );
+            ColorProgram = new ColorProgram ( );
+            GUI = new GUI ( );
+            Map = new CGLMap (config.DebugMap);
             Camera = new CGLCamera (0.3f);
-            Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
-            Interface = new CGLInterface (configfile);
-            TextRenderer = new Android.CGL.GUI.GUITextRenderer ();
-            LoadCharacter ();
+            // Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
 
-            OnInit?.Invoke (Content.Context);
-        }
+            LoadCharacter ( );
 
-        public static void AfterInit () {
+            Initialized?.Invoke (Content.Context);
+
+            // after init stuff
             Map.AddEntity (Content.Character);
-            Camera.Update ();
-
-            OnAfterInit?.Invoke (Context);
-        }
-
-        public static void Update (Size screensize) {
-            ScreenSize = screensize;
-            ScreenRatio = (float)ScreenSize.Width / (float)ScreenSize.Height;
-
-            OnUpdate?.Invoke ();
+            Camera.Update ( );
         }
 
         private static void LoadCharacter () {
             CharacterPreset preset = new CharacterPreset (XMLElemental.Load (Context.Assets.Open ("character/robot.character")), Context);
             Character = preset.Instantiate (10, "futuristic");
-            Character.CollisionMask = Android.PhysX.PhysXFlag.Map;
+            Character.CollisionMask = Android.Physics.Flag.Map;
         }
         #endregion
+
+        public class ContentConfig {
+            public string DebugMap;
+        }
     }
 }

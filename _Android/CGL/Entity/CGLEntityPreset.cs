@@ -56,7 +56,7 @@ namespace mapKnight.Android.CGL.Entity {
 
         private fRectangle ParseCoordinates (Dictionary<string, string> config, Size imageSize) {
             // konvertiert die geradezahligen koordination von sprites in opengl koordinaten
-            return (new Rectangle (new Point (Convert.ToInt32 (config["x"]), Convert.ToInt32 (config["y"])), new Size (Convert.ToInt32 (config["width"]), Convert.ToInt32 (config["height"]))) / imageSize);
+            return (new fRectangle (new fVector2D (Convert.ToInt32 (config["x"]), Convert.ToInt32 (config["y"])) / new fVector2D ((float)imageSize.Width, (float)imageSize.Height), new fVector2D (Convert.ToInt32 (config["width"]), Convert.ToInt32 (config["height"])) / new fVector2D (imageSize.Width, imageSize.Height)));
         }
     }
 }

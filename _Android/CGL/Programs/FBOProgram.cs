@@ -2,7 +2,7 @@ using Java.Nio;
 using GL = Android.Opengl.GLES20;
 
 namespace mapKnight.Android.CGL.Programs {
-    public class MatrixProgram {
+    public class FBOProgram {
         private int vertexShader;
         private int fragmentShader;
 
@@ -10,11 +10,10 @@ namespace mapKnight.Android.CGL.Programs {
         private int positionHandle;
         private int textureUniformHandle;
         private int textureCoordinateHandle;
-        private int mvpMatrixHandle;
 
-        public MatrixProgram () {
+        public FBOProgram () {
             // get shader
-            vertexShader = ProgramHelper.GetVertexShader ("matrix");
+            vertexShader = ProgramHelper.GetVertexShader ("normal");
             fragmentShader = ProgramHelper.GetFragmentShader ("normal");
             program = ProgramHelper.CreateProgram (vertexShader, fragmentShader);
 
@@ -22,7 +21,6 @@ namespace mapKnight.Android.CGL.Programs {
             positionHandle = GL.GlGetAttribLocation (program, "a_position");
             textureUniformHandle = GL.GlGetUniformLocation (program, "u_texture");
             textureCoordinateHandle = GL.GlGetAttribLocation (program, "a_texcoord");
-            mvpMatrixHandle = GL.GlGetUniformLocation (program, "u_mvpmatrix");
         }
 
         public void Draw (ShortBuffer indexBuffer) {
@@ -35,16 +33,6 @@ namespace mapKnight.Android.CGL.Programs {
 
         public void Draw (ShortBuffer indexBuffer, int count, int mode) {
             GL.GlDrawElements (mode, count, GL.GlUnsignedShort, indexBuffer);
-        }
-
-        public void Draw (FloatBuffer vertexBuffer, FloatBuffer textureBuffer, ShortBuffer indexBuffer, int texture, float[ ] matrix, bool alphaBlending = false) {
-            SetTexture (texture);
-            SetMVPMatrix (matrix);
-            SetTextureBuffer (textureBuffer);
-            SetVertexBuffer (vertexBuffer);
-            if (alphaBlending)
-                EnableAlphaBlending ( );
-            Draw (indexBuffer);
         }
 
         public void Begin () {
@@ -77,16 +65,13 @@ namespace mapKnight.Android.CGL.Programs {
             GL.GlVertexAttribPointer (textureCoordinateHandle, dimensions, GL.GlFloat, false, 0, textureBuffer);
         }
 
-        public void SetVertexBuffer (FloatBuffer vertexBuffer) {
+        public void SetVertexBuffer (float[ ] vertexBuffer) {
             SetVertexBuffer (vertexBuffer, 2);
         }
 
-        public void SetVertexBuffer (FloatBuffer vertexBuffer, int dimensions) {
-            GL.GlVertexAttribPointer (positionHandle, dimensions, GL.GlFloat, false, dimensions * sizeof (float), vertexBuffer);
-        }
-
-        public void SetMVPMatrix (float[ ] matrix) {
-            GL.GlUniformMatrix4fv (mvpMatrixHandle, 1, false, matrix, 0);
+        public void SetVertexBuffer (float[ ] vertexBuffer, int dimensions) {
+            GL.GlVertexAttrib4fv (positionHandle, vertexBuffer, 0);
+            //GL.GlVertexAttribPointer (positionHandle, dimensions, GL.GlFloat, false, dimensions * sizeof (float), vertexBuffer);
         }
     }
 }

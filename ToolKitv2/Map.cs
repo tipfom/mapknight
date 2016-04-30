@@ -10,38 +10,38 @@ using XMLElemental = mapKnight.Basic.XMLElemental;
 
 namespace mapKnight.ToolKit {
     class Map {
-        private static byte[] identifier = new byte[] { 84, 77, 83, 76, 4, 42, 133, 7 };
+        private static byte[ ] identifier = new byte[ ] { 84, 77, 83, 76, 4, 42, 133, 7 };
 
         public string Creator;
         public string Name;
-        public int TileSet;
+        public string TileSet;
         public Point Spawn;
 
         public int Width;
         public int Height;
 
-        public int[,,] Data;
+        public int[ , , ] Data;
 
-        private Stack<int[,,]> Cache = new Stack<int[,,]> ();
+        private Stack<int[ , , ]> Cache = new Stack<int[ , , ]> ( );
 
         public Map (XMLElemental config) {
             using (BinaryReader reader = new BinaryReader (new MemoryStream (Convert.FromBase64String (config["header"].Attributes["content"])))) {
                 // read header data
-                TileSet = reader.ReadInt32 ();
-                Width = reader.ReadInt32 ();
-                Height = reader.ReadInt32 ();
-                Spawn = new Point (reader.ReadInt32 (), reader.ReadInt32 ());
+                Width = reader.ReadInt32 ( );
+                Height = reader.ReadInt32 ( );
+                Spawn = new Point (reader.ReadInt32 ( ), reader.ReadInt32 ( ));
+                TileSet = Encoding.UTF8.GetString (reader.ReadBytes (reader.ReadInt32 ( )));
             }
 
             // read mapdata
             Data = new int[Width, Height, 3];
             using (BinaryReader reader = new BinaryReader (new MemoryStream (Convert.FromBase64String (config["data"].Attributes["content"])))) {
 
-                int currenttile = reader.ReadInt32 ();
+                int currenttile = reader.ReadInt32 ( );
                 int currentlayer = 0;
                 while (currenttile != 0) {
                     while (currentlayer < 3) {
-                        int data = reader.ReadInt32 () - 1;
+                        int data = reader.ReadInt32 ( ) - 1;
                         if (data == -1) {
                             currentlayer++;
                         } else {
@@ -50,12 +50,12 @@ namespace mapKnight.ToolKit {
                             Data[x, y, currentlayer] = currenttile;
                         }
                     }
-                    currenttile = reader.ReadInt32 ();
+                    currenttile = reader.ReadInt32 ( );
                     currentlayer = 0;
                 }
             }
 
-            int[] currentTile = new int[] { -1, -1, -1 };
+            int[ ] currentTile = new int[ ] { -1, -1, -1 };
             for (int y = 0; y < Height; y++) {
                 for (int x = 0; x < Width; x++) {
                     for (int layer = 0; layer < 3; layer++) {
@@ -71,24 +71,24 @@ namespace mapKnight.ToolKit {
 
             // read info
             using (BinaryReader reader = new BinaryReader (new MemoryStream (Convert.FromBase64String (config["info"].Attributes["content"])))) {
-                int infostringlength = reader.ReadInt32 ();
-                byte[] infostringbytes = reader.ReadBytes (infostringlength);
-                int hashlength = reader.ReadInt32 ();
-                byte[] infohash = reader.ReadBytes (hashlength);
+                int infostringlength = reader.ReadInt32 ( );
+                byte[ ] infostringbytes = reader.ReadBytes (infostringlength);
+                int hashlength = reader.ReadInt32 ( );
+                byte[ ] infohash = reader.ReadBytes (hashlength);
                 string infostring = Encoding.UTF8.GetString (infostringbytes);
-                string[] info = infostring.Split (new char[] { Encoding.UTF8.GetChars (new byte[] { 255 })[0] });
+                string[ ] info = infostring.Split (new char[ ] { Encoding.UTF8.GetChars (new byte[ ] { 255 })[0] });
                 Creator = info[0];
                 Name = info[1];
-                byte[] realhash = SHA1.Create ().ComputeHash (infostringbytes);
+                byte[ ] realhash = SHA1.Create ( ).ComputeHash (infostringbytes);
                 if (!realhash.SequenceEqual (infohash)) {
                     throw new InvalidDataException ("map has been modified!");
                 }
             }
 
-            PrepareUndo ();
+            PrepareUndo ( );
         }
 
-        public Map (int width, int height, string creator, string name, int tileset, Point spawn) {
+        public Map (int width, int height, string creator, string name, string tileset, Point spawn) {
             Width = width;
             Height = height;
             Creator = creator;
@@ -98,28 +98,29 @@ namespace mapKnight.ToolKit {
 
             Data = new int[width, height, 3];
 
-            PrepareUndo ();
+            PrepareUndo ( );
         }
 
-        public Map (byte[] file) {
+        [Obsolete ("not tmsl4")]
+        public Map (byte[ ] file) {
             using (BinaryReader reader = new BinaryReader (new MemoryStream (file))) {
                 if (reader.ReadBytes (Map.identifier.Length).SequenceEqual (Map.identifier)) {
                     // map is certified
                     // read header data
-                    TileSet = reader.ReadInt32 ();
-                    Width = reader.ReadInt32 ();
-                    Height = reader.ReadInt32 ();
-                    Spawn = new Point (reader.ReadInt32 (), reader.ReadInt32 ());
+                    // TileSet = reader.ReadInt32 ( );
+                    Width = reader.ReadInt32 ( );
+                    Height = reader.ReadInt32 ( );
+                    Spawn = new Point (reader.ReadInt32 ( ), reader.ReadInt32 ( ));
 
                     // read mapdata
 
                     Data = new int[Width, Height, 3];
 
-                    int currenttile = reader.ReadInt32 ();
+                    int currenttile = reader.ReadInt32 ( );
                     int currentlayer = 0;
                     while (currenttile != 0) {
                         while (currentlayer < 3) {
-                            int data = reader.ReadInt32 ();
+                            int data = reader.ReadInt32 ( );
                             if (data == 0) {
                                 currentlayer++;
                             } else {
@@ -128,18 +129,18 @@ namespace mapKnight.ToolKit {
                                 Data[x, y, currentlayer] = currenttile;
                             }
                         }
-                        currenttile = reader.ReadInt32 ();
+                        currenttile = reader.ReadInt32 ( );
                     }
 
                     // read info
-                    int infohash = reader.ReadInt32 ();
-                    int infostringlength = reader.ReadInt32 ();
+                    int infohash = reader.ReadInt32 ( );
+                    int infostringlength = reader.ReadInt32 ( );
                     string infostring = Encoding.UTF8.GetString (reader.ReadBytes (infostringlength));
-                    string[] info = infostring.Split (new char[] { Encoding.UTF8.GetChars (new byte[] { 255 })[0] });
+                    string[ ] info = infostring.Split (new char[ ] { Encoding.UTF8.GetChars (new byte[ ] { 255 })[0] });
                     Creator = info[0];
                     Name = info[1];
 
-                    if (infostring.GetHashCode () != infohash) {
+                    if (infostring.GetHashCode ( ) != infohash) {
                         throw new InvalidDataException ("map has been modified!");
                     }
                 } else {
@@ -148,22 +149,22 @@ namespace mapKnight.ToolKit {
             }
         }
 
-        public void Fill (int x, int y, int[] replacement) {
+        public void Fill (int x, int y, int[ ] replacement) {
             if (Data[x, y, 0] == replacement[0] & Data[x, y, 1] == replacement[1] & Data[x, y, 2] == replacement[2])
                 return;
 
-            bool[,] allreadycomputed = new bool[Width, Height];
-            int[] searching = new int[3];
+            bool[ , ] allreadycomputed = new bool[Width, Height];
+            int[ ] searching = new int[3];
             searching[0] = Data[x, y, 0];
             searching[1] = Data[x, y, 1];
             searching[2] = Data[x, y, 2];
 
-            Queue<Point> TileQueue = new Queue<Point> ();
+            Queue<Point> TileQueue = new Queue<Point> ( );
             TileQueue.Enqueue (new Point (x, y));
             allreadycomputed[x, y] = true;
 
             while (TileQueue.Count > 0) {
-                Point ComputingTile = TileQueue.Dequeue ();
+                Point ComputingTile = TileQueue.Dequeue ( );
 
                 if (Data[ComputingTile.X, ComputingTile.Y, 0] == searching[0] && Data[ComputingTile.X, ComputingTile.Y, 1] == searching[1] && Data[ComputingTile.X, ComputingTile.Y, 2] == searching[2]) {
                     Data[ComputingTile.X, ComputingTile.Y, 0] = replacement[0];
@@ -193,18 +194,19 @@ namespace mapKnight.ToolKit {
         public XMLElemental Save () {
             XMLElemental parsedelemental = XMLElemental.EmptyRootElemental ("map");
 
-            byte[] header = new byte[20]; // 4 uint, hash of tilesetname
-            Array.Copy (BitConverter.GetBytes (this.TileSet), 0, header, 0, 4);
-            Array.Copy (BitConverter.GetBytes (this.Width), 0, header, 4, 4);
-            Array.Copy (BitConverter.GetBytes (this.Height), 0, header, 8, 4);
-            Array.Copy (BitConverter.GetBytes (this.Spawn.X), 0, header, 12, 4);
-            Array.Copy (BitConverter.GetBytes (this.Spawn.Y), 0, header, 16, 4);
+            byte[ ] header = new byte[16 + 4 + this.TileSet.Length]; // 4 uint, hash of tilesetname
+            Array.Copy (BitConverter.GetBytes (this.Width), 0, header, 0, 4);
+            Array.Copy (BitConverter.GetBytes (this.Height), 0, header, 4, 4);
+            Array.Copy (BitConverter.GetBytes (this.Spawn.X), 0, header, 8, 4);
+            Array.Copy (BitConverter.GetBytes (this.Spawn.Y), 0, header, 12, 4);
+            Array.Copy (BitConverter.GetBytes (this.TileSet.Length), 0, header, 16, 4);
+            Array.Copy (Encoding.UTF8.GetBytes (this.TileSet), 0, header, 20, this.TileSet.Length);
 
             parsedelemental.AddChild ("header").Attributes.Add ("content", Convert.ToBase64String (header));
 
             int entrycount = 0;
-            int[] currenttile = new int[3]; // current tile of each layer
-            Dictionary<int, List<uint>[]> startpoints = new Dictionary<int, List<uint>[]> ();
+            int[ ] currenttile = new int[3]; // current tile of each layer
+            Dictionary<int, List<uint>[ ]> startpoints = new Dictionary<int, List<uint>[ ]> ( );
 
             // set start variables
             currenttile[0] = -1;
@@ -220,9 +222,9 @@ namespace mapKnight.ToolKit {
                             if (!startpoints.ContainsKey (Data[x, y, layer])) {
                                 startpoints.Add (Data[x, y, layer], new List<uint>[3]);
 
-                                startpoints[Data[x, y, layer]][0] = new List<uint> ();
-                                startpoints[Data[x, y, layer]][1] = new List<uint> ();
-                                startpoints[Data[x, y, layer]][2] = new List<uint> ();
+                                startpoints[Data[x, y, layer]][0] = new List<uint> ( );
+                                startpoints[Data[x, y, layer]][1] = new List<uint> ( );
+                                startpoints[Data[x, y, layer]][2] = new List<uint> ( );
                             }
                             // remember startingpoint
                             startpoints[Data[x, y, layer]][layer].Add (y * (uint)this.Width + x);
@@ -233,10 +235,10 @@ namespace mapKnight.ToolKit {
                 }
             }
 
-            byte[] data = new byte[(startpoints.Count * 4 + entrycount) * 4 + 4]; //every tile (3 layer + tile id) and entry are a int (4 byte) + last 0 int
+            byte[ ] data = new byte[(startpoints.Count * 4 + entrycount) * 4 + 4]; //every tile (3 layer + tile id) and entry are a int (4 byte) + last 0 int
 
             int currentindex = 0;
-            foreach (KeyValuePair<int, List<uint>[]> tilentry in startpoints) {
+            foreach (KeyValuePair<int, List<uint>[ ]> tilentry in startpoints) {
                 Array.Copy (BitConverter.GetBytes (tilentry.Key + 1), 0, data, currentindex, 4);
                 currentindex += 4;
 
@@ -256,9 +258,9 @@ namespace mapKnight.ToolKit {
 
             // save additional map info info (at the end) with hash to secure, that the map does not get changed
             // get byte of infostring (data seperated by last char of utf-8)
-            byte[] infostring = Encoding.UTF8.GetBytes (String.Join (Encoding.UTF8.GetString (new byte[] { 255 }), this.Creator, this.Name).ToCharArray ());
-            byte[] hash = SHA1.Create ().ComputeHash (infostring);
-            byte[] info = new byte[infostring.Length + 4 + hash.Length + 4]; // infostring, infostring-length, hash, hashlength
+            byte[ ] infostring = Encoding.UTF8.GetBytes (String.Join (Encoding.UTF8.GetString (new byte[ ] { 255 }), this.Creator, this.Name).ToCharArray ( ));
+            byte[ ] hash = SHA1.Create ( ).ComputeHash (infostring);
+            byte[ ] info = new byte[infostring.Length + 4 + hash.Length + 4]; // infostring, infostring-length, hash, hashlength
             Array.Copy (BitConverter.GetBytes (infostring.Length), 0, info, 0, 4);
             Array.Copy (infostring, 0, info, 4, infostring.Length);
             Array.Copy (BitConverter.GetBytes (hash.Length), 0, info, infostring.Length + 4, 4);
@@ -273,19 +275,19 @@ namespace mapKnight.ToolKit {
             using (FileStream filestream = new FileStream (Path.ChangeExtension (filename, "map"), FileMode.Create)) {
                 filestream.Write (Map.identifier, 0, Map.identifier.Length);
 
-                byte[] header = new byte[4 + 4 * 2]; // 4 short, hash of tilesetname
-                Array.Copy (BitConverter.GetBytes (this.TileSet), 0, header, 0, 4);
-                Array.Copy (BitConverter.GetBytes ((short)this.Width), 0, header, 4, 2);
-                Array.Copy (BitConverter.GetBytes ((short)this.Height), 0, header, 6, 2);
-                Array.Copy (BitConverter.GetBytes ((short)this.Spawn.X), 0, header, 8, 2);
-                // invert the y axis
-                Array.Copy (BitConverter.GetBytes ((short)(this.Height - this.Spawn.Y - 1)), 0, header, 10, 2);
+                byte[ ] header = new byte[8 + 2 + this.TileSet.Length]; // 4 short, tilesetnamelength, tilesetname
+                Array.Copy (BitConverter.GetBytes ((short)this.Width), 0, header, 0, 2);
+                Array.Copy (BitConverter.GetBytes ((short)this.Height), 0, header, 2, 2);
+                Array.Copy (BitConverter.GetBytes ((short)this.Spawn.X), 0, header, 4, 2);
+                Array.Copy (BitConverter.GetBytes ((short)this.Height - this.Spawn.Y - 1), 0, header, 6, 2);
+                Array.Copy (BitConverter.GetBytes ((short)this.TileSet.Length), 0, header, 8, 2);
+                Array.Copy (Encoding.UTF8.GetBytes (this.TileSet), 0, header, 10, this.TileSet.Length);
 
                 filestream.Write (header, 0, header.Length);
 
                 int entrycount = 0;
-                int[] currenttile = new int[3]; // current tile of each layer
-                Dictionary<int, List<uint>[]> startpoints = new Dictionary<int, List<uint>[]> ();
+                int[ ] currenttile = new int[3]; // current tile of each layer
+                Dictionary<int, List<uint>[ ]> startpoints = new Dictionary<int, List<uint>[ ]> ( );
 
                 // set start variables
                 currenttile[0] = -1;
@@ -301,9 +303,9 @@ namespace mapKnight.ToolKit {
                                 if (!startpoints.ContainsKey (Data[x, y, layer])) {
                                     startpoints.Add (Data[x, y, layer], new List<uint>[3]);
 
-                                    startpoints[Data[x, y, layer]][0] = new List<uint> ();
-                                    startpoints[Data[x, y, layer]][1] = new List<uint> ();
-                                    startpoints[Data[x, y, layer]][2] = new List<uint> ();
+                                    startpoints[Data[x, y, layer]][0] = new List<uint> ( );
+                                    startpoints[Data[x, y, layer]][1] = new List<uint> ( );
+                                    startpoints[Data[x, y, layer]][2] = new List<uint> ( );
                                 }
                                 // remember startingpoint
                                 // invert the y axis
@@ -315,20 +317,20 @@ namespace mapKnight.ToolKit {
                     }
                 }
 
-                foreach (KeyValuePair<int, List<uint>[]> tilentry in startpoints) {
-                    startpoints[tilentry.Key][0].Sort ();
-                    startpoints[tilentry.Key][1].Sort ();
-                    startpoints[tilentry.Key][2].Sort ();
+                foreach (KeyValuePair<int, List<uint>[ ]> tilentry in startpoints) {
+                    startpoints[tilentry.Key][0].Sort ( );
+                    startpoints[tilentry.Key][1].Sort ( );
+                    startpoints[tilentry.Key][2].Sort ( );
                 }
 
-                byte[] data;
+                byte[ ] data;
                 if (this.Width * this.Height + 1 < 65536) {
                     filestream.WriteByte (1); // id to know, its 16-bit based
                     // write 16bit-numbers to save file length
                     data = new byte[(startpoints.Count * 4 + entrycount) * 2 + 2]; //every tile (tile + 3 * 0 uint) and entry are a short (2 byte)
 
                     int currentindex = 0;
-                    foreach (KeyValuePair<int, List<uint>[]> tilentry in startpoints) {
+                    foreach (KeyValuePair<int, List<uint>[ ]> tilentry in startpoints) {
                         Array.Copy (BitConverter.GetBytes ((short)tilentry.Key + 1), 0, data, currentindex, 2);
                         currentindex += 2;
 
@@ -349,7 +351,7 @@ namespace mapKnight.ToolKit {
                     data = new byte[(startpoints.Count * 4 + entrycount) * 4 + 4]; //every tile (tile + 3 * 0 uint) and entry are a int (4 byte)
 
                     int currentindex = 0;
-                    foreach (KeyValuePair<int, List<uint>[]> tilentry in startpoints) {
+                    foreach (KeyValuePair<int, List<uint>[ ]> tilentry in startpoints) {
                         Array.Copy (BitConverter.GetBytes (tilentry.Key + 1), 0, data, currentindex, 4);
                         currentindex += 4;
 
@@ -370,9 +372,9 @@ namespace mapKnight.ToolKit {
 
                 // save additional map info info (at the end) with hash to secure, that the map does not get changed
                 // get byte of infostring (data seperated by last char of utf-8)
-                byte[] infostring = Encoding.UTF8.GetBytes (String.Join (Encoding.UTF8.GetString (new byte[] { 255 }), this.Creator, this.Name).ToCharArray ());
-                byte[] hash = SHA1.Create ().ComputeHash (infostring);
-                byte[] info = new byte[infostring.Length + 4 + hash.Length + 4]; // infostring, infostring-length, hash, hashlength
+                byte[ ] infostring = Encoding.UTF8.GetBytes (String.Join (Encoding.UTF8.GetString (new byte[ ] { 255 }), this.Creator, this.Name).ToCharArray ( ));
+                byte[ ] hash = SHA1.Create ( ).ComputeHash (infostring);
+                byte[ ] info = new byte[infostring.Length + 4 + hash.Length + 4]; // infostring, infostring-length, hash, hashlength
                 Array.Copy (BitConverter.GetBytes (infostring.Length), 0, info, 0, 4);
                 Array.Copy (infostring, 0, info, 4, infostring.Length);
                 Array.Copy (BitConverter.GetBytes (hash.Length), 0, info, infostring.Length + 4, 4);
@@ -384,11 +386,11 @@ namespace mapKnight.ToolKit {
 
         public void Undo () {
             if (Cache.Count > 0)
-                Data = Cache.Pop ();
+                Data = Cache.Pop ( );
         }
 
         public void PrepareUndo () {
-            Cache.Push ((int[,,])Data.Clone ());
+            Cache.Push ((int[ , , ])Data.Clone ( ));
         }
 
         public override string ToString () {

@@ -5,9 +5,9 @@ using GL = Android.Opengl.GLES20;
 namespace mapKnight.Android.CGL {
     public static class CGLTools {
         public static BufferData GenerateFramebuffer (int width, int height) {
-            BufferData bufferdata = new BufferData () { Width = width, Height = height };
+            BufferData bufferdata = new BufferData ( ) { Width = width, Height = height };
 
-            int[] temp = new int[1];
+            int[ ] temp = new int[1];
             GL.GlGenFramebuffers (1, temp, 0);
             bufferdata.FrameBuffer = temp[0];
 
@@ -41,7 +41,7 @@ namespace mapKnight.Android.CGL {
         }
 
         public static BufferData GenerateFramebuffer () {
-            return GenerateFramebuffer (Content.ScreenSize);
+            return GenerateFramebuffer ((Size)Screen.ScreenSize);
         }
 
         public static BufferData GenerateFramebuffer (Size size) {
@@ -49,15 +49,15 @@ namespace mapKnight.Android.CGL {
         }
 
         public static void DeleteTexture (int texture) {
-            GL.GlDeleteTextures (1, new int[] { texture }, 0);
+            GL.GlDeleteTextures (1, new int[ ] { texture }, 0);
         }
 
         public static void DeleteFrameBuffer (int framebuffer) {
-            GL.GlDeleteFramebuffers (1, new int[] { framebuffer }, 0);
+            GL.GlDeleteFramebuffers (1, new int[ ] { framebuffer }, 0);
         }
 
         public static void DeleteRenderBuffer (int renderbuffer) {
-            GL.GlDeleteRenderbuffers (1, new int[] { renderbuffer }, 0);
+            GL.GlDeleteRenderbuffers (1, new int[ ] { renderbuffer }, 0);
         }
 
         public static void DeleteBufferData (BufferData bufferdata) {
@@ -71,43 +71,43 @@ namespace mapKnight.Android.CGL {
             return GenerateFramebuffer (oldbufferdata.Width, oldbufferdata.Height);
         }
 
-        public static FloatBuffer CreateBuffer (float[] source) {
+        public static FloatBuffer CreateBuffer (float[ ] source) {
             return CreateBuffer (source, source.Length);
         }
         public static ShortBuffer CreateShortBuffer (int size) {
             ByteBuffer byteBuffer = ByteBuffer.AllocateDirect ((int)size * sizeof (float));
-            byteBuffer.Order (ByteOrder.NativeOrder ());
-            ShortBuffer result = byteBuffer.AsShortBuffer ();
+            byteBuffer.Order (ByteOrder.NativeOrder ( ));
+            ShortBuffer result = byteBuffer.AsShortBuffer ( );
             result.Position (0);
             return result;
         }
 
         public static FloatBuffer CreateFloatBuffer (int size) {
             ByteBuffer byteBuffer = ByteBuffer.AllocateDirect ((int)size * sizeof (float));
-            byteBuffer.Order (ByteOrder.NativeOrder ());
-            FloatBuffer result = byteBuffer.AsFloatBuffer ();
+            byteBuffer.Order (ByteOrder.NativeOrder ( ));
+            FloatBuffer result = byteBuffer.AsFloatBuffer ( );
             result.Position (0);
             return result;
 
         }
 
-        public static FloatBuffer CreateBuffer (float[] source, int size) {
+        public static FloatBuffer CreateBuffer (float[ ] source, int size) {
             ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size * sizeof (float));
-            byteBuffer.Order (ByteOrder.NativeOrder ());
-            FloatBuffer floatBuffer = byteBuffer.AsFloatBuffer ();
+            byteBuffer.Order (ByteOrder.NativeOrder ( ));
+            FloatBuffer floatBuffer = byteBuffer.AsFloatBuffer ( );
             floatBuffer.Put (source);
             floatBuffer.Position (0);
             return floatBuffer;
         }
 
-        public static ShortBuffer CreateBuffer (short[] source) {
+        public static ShortBuffer CreateBuffer (short[ ] source) {
             return CreateBuffer (source, source.Length);
         }
 
-        public static ShortBuffer CreateBuffer (short[] source, int size) {
+        public static ShortBuffer CreateBuffer (short[ ] source, int size) {
             ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size * sizeof (short));
-            byteBuffer.Order (ByteOrder.NativeOrder ());
-            ShortBuffer shortBuffer = byteBuffer.AsShortBuffer ();
+            byteBuffer.Order (ByteOrder.NativeOrder ( ));
+            ShortBuffer shortBuffer = byteBuffer.AsShortBuffer ( );
             shortBuffer.Put (source);
             shortBuffer.Position (0);
             return shortBuffer;

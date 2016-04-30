@@ -18,6 +18,10 @@ namespace mapKnight.Basic {
             return new Size (vec.X, vec.Y);
         }
 
+        public static explicit operator Size (fVector2D fvec) {
+            return new Size ((int)fvec.X, (int)fvec.Y);
+        }
+
         public int Width;
         public int Height;
 
@@ -37,7 +41,7 @@ namespace mapKnight.Basic {
         }
 
         public override string ToString () {
-            return String.Format ("Width = {0}; Height = {1}", Width.ToString (), Height.ToString ());
+            return String.Format ("Width = {0}; Height = {1}", Width.ToString ( ), Height.ToString ( ));
         }
     }
 }

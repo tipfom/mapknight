@@ -2,29 +2,33 @@ using Java.Nio;
 using GL = Android.Opengl.GLES20;
 
 namespace mapKnight.Android.CGL.Programs {
-    public class NormalProgram {
+    public class ColorProgram {
         private int vertexShader;
         private int fragmentShader;
 
         private int program;
         private int positionHandle;
+        private int colorHandle;
         private int textureUniformHandle;
         private int textureCoordinateHandle;
+        private int mvpMatrixHandle;
 
-        public NormalProgram () {
+        public ColorProgram () {
             // get shader
-            vertexShader = ProgramHelper.GetVertexShader ("normal");
-            fragmentShader = ProgramHelper.GetFragmentShader ("normal");
+            vertexShader = ProgramHelper.GetVertexShader ("color");
+            fragmentShader = ProgramHelper.GetFragmentShader ("color");
             program = ProgramHelper.CreateProgram (vertexShader, fragmentShader);
 
             // get handles
-            positionHandle = GL.GlGetAttribLocation (program, "vPosition");
-            textureUniformHandle = GL.GlGetUniformLocation (program, "u_Texture");
-            textureCoordinateHandle = GL.GlGetAttribLocation (program, "a_TexCoordinate");
+            colorHandle = GL.GlGetAttribLocation (program, "a_color");
+            positionHandle = GL.GlGetAttribLocation (program, "a_position");
+            textureUniformHandle = GL.GlGetUniformLocation (program, "u_texture");
+            textureCoordinateHandle = GL.GlGetAttribLocation (program, "a_texcoord");
+            mvpMatrixHandle = GL.GlGetUniformLocation (program, "u_mvpmatrix");
         }
 
         public void Draw (ShortBuffer indexBuffer) {
-            Draw (indexBuffer, indexBuffer.Limit (), GL.GlTriangles);
+            Draw (indexBuffer, indexBuffer.Limit ( ), GL.GlTriangles);
         }
 
         public void Draw (ShortBuffer indexBuffer, int count) {
@@ -35,15 +39,28 @@ namespace mapKnight.Android.CGL.Programs {
             GL.GlDrawElements (mode, count, GL.GlUnsignedShort, indexBuffer);
         }
 
+        public void Draw (FloatBuffer vertexBuffer, FloatBuffer textureBuffer, FloatBuffer colorBuffer, ShortBuffer indexBuffer, int texture, float[ ] matrix, bool alphaBlending = false) {
+            SetTexture (texture);
+            SetMVPMatrix (matrix);
+            SetTextureBuffer (textureBuffer);
+            SetVertexBuffer (vertexBuffer);
+            SetColorBuffer (colorBuffer);
+            if (alphaBlending)
+                EnableAlphaBlending ( );
+            Draw (indexBuffer);
+        }
+
         public void Begin () {
             GL.GlUseProgram (program);
             GL.GlEnableVertexAttribArray (positionHandle);
             GL.GlEnableVertexAttribArray (textureCoordinateHandle);
+            GL.GlEnableVertexAttribArray (colorHandle);
         }
 
         public void End () {
             GL.GlDisableVertexAttribArray (positionHandle);
             GL.GlDisableVertexAttribArray (textureCoordinateHandle);
+            GL.GlDisableVertexAttribArray (colorHandle);
         }
 
         public void EnableAlphaBlending () {
@@ -71,6 +88,14 @@ namespace mapKnight.Android.CGL.Programs {
 
         public void SetVertexBuffer (FloatBuffer vertexBuffer, int dimensions) {
             GL.GlVertexAttribPointer (positionHandle, dimensions, GL.GlFloat, false, dimensions * sizeof (float), vertexBuffer);
+        }
+
+        public void SetMVPMatrix (float[ ] matrix) {
+            GL.GlUniformMatrix4fv (mvpMatrixHandle, 1, false, matrix, 0);
+        }
+
+        public void SetColorBuffer (FloatBuffer colorBuffer) {
+            GL.GlVertexAttribPointer (colorHandle, 4, GL.GlFloat, false, 0, colorBuffer);
         }
     }
 }

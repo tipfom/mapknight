@@ -58,20 +58,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
-    <Reference Include="System.Data" />
     <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="CGL\CGLSprite2D.cs" />
     <Compile Include="CGL\GUI\GUI.cs" />
-    <Compile Include="CGL\GUI\GUIElement.cs" />
+    <Compile Include="CGL\GUI\GUIBar.cs" />
+    <Compile Include="CGL\GUI\GUIButton.cs" />
+    <Compile Include="CGL\GUI\GUIClickItem.cs" />
+    <Compile Include="CGL\GUI\GUIImage.cs" />
+    <Compile Include="CGL\GUI\GUIItem.cs" />
+    <Compile Include="CGL\Programs\ColorProgram.cs" />
+    <Compile Include="Map\Tile.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -80,37 +85,29 @@
     <Compile Include="CGL\CGLTexture2D.cs" />
     <Compile Include="CGL\CGLView.cs" />
     <Compile Include="CGL\CGLTools.cs" />
-    <Compile Include="CGL\CGLInterface.cs" />
     <Compile Include="CGL\GUI\GUILabel.cs" />
-    <Compile Include="CGL\GUI\GUITextRenderer.cs" />
     <Compile Include="CGL\Programs\ProgramHelper.cs" />
     <Compile Include="CGL\Programs\MatrixProgram.cs" />
-    <Compile Include="CGL\Programs\RenderProgram.cs" />
+    <Compile Include="CGL\Programs\FBOProgram.cs" />
     <Compile Include="Map\TileManager.cs" />
     <Compile Include="Enum\FontStyle.cs" />
     <Compile Include="Enum\Orientation.cs" />
     <Compile Include="Enum\MessageType.cs" />
     <Compile Include="Map\Map.cs" />
-    <Compile Include="Touch\TouchManager.cs" />
-    <Compile Include="Touch\ButtonManager.cs" />
+    <Compile Include="Screen.cs" />
     <Compile Include="MainActivity.cs" />
-    <Compile Include="CGL\CGLSprite.cs" />
-    <Compile Include="Utils\Log.cs" />
-    <Compile Include="Touch\Touch.cs" />
-    <Compile Include="Touch\Button.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Enum\Attribute.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Utils\SQLDataManager.cs" />
-    <Compile Include="Utils\SaveManager.cs" />
     <Compile Include="Content.cs" />
     <Compile Include="CGL\CGLCamera.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\Slot.cs" />
     <Compile Include="Entity\Set.cs" />
     <Compile Include="Entity\EntityPreset.cs" />
-    <Compile Include="PhysX\PhysXMap.cs" />
-    <Compile Include="PhysX\PhysXEntity.cs" />
-    <Compile Include="PhysX\PhysXFlag.cs" />
+    <Compile Include="Physics\Map.cs" />
+    <Compile Include="Physics\Entity.cs" />
+    <Compile Include="Physics\Flag.cs" />
     <Compile Include="Enum\Direction.cs" />
     <Compile Include="CGL\CGLAnimation.cs" />
     <Compile Include="CGL\CGLBoundedPoint.cs" />
@@ -121,10 +118,11 @@
     <Compile Include="Character\CharacterPreset.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\tilesets\1222789648.tileset">
-      <SubType>Designer</SubType>
-    </AndroidAsset>
     <AndroidAsset Include="Assets\maps\testmap.map" />
+    <AndroidAsset Include="Assets\config\sprites\interface.json" />
+    <AndroidAsset Include="Assets\config\content.json" />
+    <AndroidAsset Include="Assets\maps\debug_map.map" />
+    <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -134,11 +132,9 @@
     <Folder Include="Resources\layout\" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\interface.png" />
     <AndroidAsset Include="Assets\character\robot.character">
       <SubType>Designer</SubType>
     </AndroidAsset>
-    <AndroidAsset Include="Assets\main.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
@@ -148,7 +144,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\font.png" />
+    <AndroidAsset Include="Assets\textures\interface.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\vertex\matrix.txt" />
@@ -160,9 +156,6 @@
     <AndroidAsset Include="Assets\shader\vertex\normal.txt" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\lightning.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon.png" />
     <AndroidResource Include="Resources\values\strings.xml">
       <SubType>Designer</SubType>
@@ -171,5 +164,14 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\sets\futuristic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\color.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\color.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\debug_tileset.png" />
   </ItemGroup>
 </Project>

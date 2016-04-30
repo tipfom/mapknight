@@ -8,6 +8,10 @@
             return new fVector2D (vec1.X * (float)multiplier, vec1.Y * (float)multiplier);
         }
 
+        public static fVector2D operator / (fVector2D vec1, fVector2D vec2) {
+            return new fVector2D (vec1.X / vec2.X, vec1.Y / vec2.Y);
+        }
+
         public static fVector2D operator - (fVector2D vec1, fVector2D vec2) {
             return new fVector2D (vec1.X - vec2.X, vec1.Y - vec2.Y);
         }
@@ -33,7 +37,7 @@
         }
 
         public override string ToString () {
-            return string.Format ("X={0}; Y={1}", X.ToString (), Y.ToString ());
+            return string.Format ("X={0}; Y={1}", X.ToString ( ), Y.ToString ( ));
         }
 
         public static fVector2D Zero { get { return new fVector2D (0, 0); } }

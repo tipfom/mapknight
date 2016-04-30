@@ -6,14 +6,14 @@ using System.Windows.Forms;
 namespace mapKnight.ToolKit {
     public partial class Home : Form {
         public delegate void SetMenuStripDelegate (List<ToolStripItem> menustrip);
-        public delegate int CreateTileSetDelegate (string name);
-        public delegate Tileset GetTileSetDelegate (int refid);
-        public delegate Tileset[] GetAllTileSetDelegate ();
+        public delegate string CreateTileSetDelegate (string name);
+        public delegate Tileset GetTileSetDelegate (string name);
+        public delegate Tileset[ ] GetAllTileSetDelegate ();
 
         private string lastSavePath;
 
         public Home () {
-            InitializeComponent ();
+            InitializeComponent ( );
         }
 
         private void Home_Load (object sender, EventArgs e) {
@@ -23,7 +23,7 @@ namespace mapKnight.ToolKit {
             splitcontainer_menustrip.IsSplitterFixed = true;
             splitcontainer_menustrip.FixedPanel = FixedPanel.Panel1;
 
-            initTabControl ();
+            initTabControl ( );
         }
 
         private void initTabControl () {
@@ -34,26 +34,26 @@ namespace mapKnight.ToolKit {
         }
 
         public void SetMenuStrip (List<ToolStripItem> items) {
-            menustrip_tab.Items.Clear ();
+            menustrip_tab.Items.Clear ( );
             foreach (ToolStripItem item in items) {
                 menustrip_tab.Items.Add (item);
             }
         }
 
-        public Tileset[] GetTileSets () {
-            return ((TilesetTabPage)tabcontrol_main.TabPages[1]).GetAllTilesets ();
+        public Tileset[ ] GetTileSets () {
+            return ((TilesetTabPage)tabcontrol_main.TabPages[1]).GetAllTilesets ( );
         }
 
-        public Tileset GetTileSet (int refid) {
-            return ((TilesetTabPage)tabcontrol_main.TabPages[1]).GetTileset (refid);
+        public Tileset GetTileSet (string name) {
+            return ((TilesetTabPage)tabcontrol_main.TabPages[1]).GetTileset (name);
         }
 
-        private int CreateTileSet (string name) {
+        private string CreateTileSet (string name) {
             return ((TilesetTabPage)tabcontrol_main.TabPages[1]).CreateTileSet (name);
         }
 
         private void maintoolstrip_export_Click (object sender, EventArgs e) {
-            if (folderdialog.ShowDialog () == DialogResult.OK) {
+            if (folderdialog.ShowDialog ( ) == DialogResult.OK) {
                 string exportpath = folderdialog.SelectedPath;
                 string mappath = Path.Combine (exportpath, "maps");
                 string tilesetpath = Path.Combine (exportpath, "tilesets");
@@ -69,37 +69,37 @@ namespace mapKnight.ToolKit {
         }
 
         private void maintoolstrip_saveas_Click (object sender, EventArgs e) {
-            if (savefiledialog_workfile.ShowDialog () == DialogResult.OK) {
+            if (savefiledialog_workfile.ShowDialog ( ) == DialogResult.OK) {
                 lastSavePath = savefiledialog_workfile.FileName;
-                save ();
+                save ( );
             }
         }
 
         private void maintoolstrip_save_Click (object sender, EventArgs e) {
             if (lastSavePath != null) {
-                save ();
-            } else if (savefiledialog_workfile.ShowDialog () == DialogResult.OK) {
+                save ( );
+            } else if (savefiledialog_workfile.ShowDialog ( ) == DialogResult.OK) {
                 lastSavePath = savefiledialog_workfile.FileName;
-                save ();
+                save ( );
             }
         }
 
         private void maintoolstrip_load_Click (object sender, EventArgs e) {
-            if (openfiledialog_workfile.ShowDialog () == DialogResult.OK) {
+            if (openfiledialog_workfile.ShowDialog ( ) == DialogResult.OK) {
                 lastSavePath = openfiledialog_workfile.FileName;
-                load ();
+                load ( );
             }
         }
 
         private void save () {
             Basic.XMLElemental parsed = new Basic.XMLElemental ("workfile");
 
-            parsed.AddChild (((MapTabPage)tabcontrol_main.TabPages[0]).Save ());
-            parsed.AddChild (((TilesetTabPage)tabcontrol_main.TabPages[1]).Save ());
+            parsed.AddChild (((MapTabPage)tabcontrol_main.TabPages[0]).Save ( ));
+            parsed.AddChild (((TilesetTabPage)tabcontrol_main.TabPages[1]).Save ( ));
 
             using (FileStream stream = File.Open (lastSavePath, FileMode.Create)) {
                 using (StreamWriter writer = new StreamWriter (stream)) {
-                    writer.WriteLine (parsed.Flush ());
+                    writer.WriteLine (parsed.Flush ( ));
                 }
             }
         }
@@ -122,13 +122,13 @@ namespace mapKnight.ToolKit {
                 maintoolstrip_export_Click (this, EventArgs.Empty);
             }
 
-            if (this.tabcontrol_main.SelectedTab.GetType () == typeof (MapTabPage)) {
+            if (this.tabcontrol_main.SelectedTab.GetType ( ) == typeof (MapTabPage)) {
                 ((MapTabPage)this.tabcontrol_main.SelectedTab).HandleKeyDown (e);
             }
         }
 
         private void Home_KeyUp (object sender, KeyEventArgs e) {
-            if (this.tabcontrol_main.SelectedTab.GetType () == typeof (MapTabPage)) {
+            if (this.tabcontrol_main.SelectedTab.GetType ( ) == typeof (MapTabPage)) {
                 ((MapTabPage)this.tabcontrol_main.SelectedTab).HandleKeyUp (e);
             }
         }
