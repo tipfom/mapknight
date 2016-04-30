@@ -139,12 +139,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\_Basic\Basic.csproj">
-      <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
-      <Name>Basic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface.png" />
   </ItemGroup>
   <ItemGroup>
@@ -180,5 +174,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Basic\Basic.csproj">
+      <Project>{50b1f9f5-dd73-483b-947b-32220dc7561b}</Project>
+      <Name>Basic</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

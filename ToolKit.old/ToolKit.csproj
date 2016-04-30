@@ -151,7 +151,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\_Basic\Basic.csproj">
+    <ProjectReference Include="..\Basic\Basic.csproj">
       <Project>{50B1F9F5-DD73-483B-947B-32220DC7561B}</Project>
       <Name>Basic</Name>
     </ProjectReference>
