@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basic", "Basic\Basic.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit", "ToolKit\ToolKit.csproj", "{59BCE36F-EF48-43AE-9D51-FFA05023B2B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit [old]", "ToolKit.old\ToolKit.csproj", "{D3FD9918-12AB-4947-ACE7-6367885D1145}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit [old]", "ToolKit.old\ToolKit.old.csproj", "{D3FD9918-12AB-4947-ACE7-6367885D1145}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Installer", "Installer\Installer.csproj", "{8F666DAE-DA7A-4A70-AA3B-49471ED3645F}"
 EndProject
