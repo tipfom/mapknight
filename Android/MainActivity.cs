@@ -22,7 +22,7 @@ namespace mapKnight.Android {
         }
 
         private void Content_Initialized (global::Android.Content.Context GameContext) {
-            view.SetOnTouchListener (Content.GUI);
+            view.SetOnTouchListener (Content.TouchHandler);
         }
 
         protected override void OnStop () {

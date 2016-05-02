@@ -69,14 +69,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="CGL\Buffer\CGLBufferBatch.cs" />
+    <Compile Include="CGL\Buffer\CGLColorBufferBatch.cs" />
     <Compile Include="CGL\CGLSprite2D.cs" />
+    <Compile Include="CGL\CGLMatrix.cs" />
+    <Compile Include="CGL\CGLVertexData.cs" />
     <Compile Include="CGL\GUI\GUI.cs" />
     <Compile Include="CGL\GUI\GUIBar.cs" />
     <Compile Include="CGL\GUI\GUIButton.cs" />
-    <Compile Include="CGL\GUI\GUIClickItem.cs" />
     <Compile Include="CGL\GUI\GUIImage.cs" />
     <Compile Include="CGL\GUI\GUIItem.cs" />
+    <Compile Include="CGL\GUI\GUITouchHandler.cs" />
     <Compile Include="CGL\Programs\ColorProgram.cs" />
+    <Compile Include="Config\ContentConfig.cs" />
+    <Compile Include="Config\GameConfig.cs" />
+    <Compile Include="Entity\EntityConfig.cs" />
+    <Compile Include="Entity\Stat.cs" />
+    <Compile Include="Scenes\GameScene.cs" />
+    <Compile Include="Scenes\IScene.cs" />
+    <Compile Include="Scenes\MainMenuScene.cs" />
+    <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Map\Tile.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,7 +123,7 @@
     <Compile Include="Physics\Flag.cs" />
     <Compile Include="Enum\Direction.cs" />
     <Compile Include="CGL\CGLAnimation.cs" />
-    <Compile Include="CGL\CGLBoundedPoint.cs" />
+    <Compile Include="CGL\Entity\CGLBoundedPoint.cs" />
     <Compile Include="CGL\Entity\CGLEntity.cs" />
     <Compile Include="CGL\Entity\CGLEntityPreset.cs" />
     <Compile Include="CGL\Entity\CGLEntitySet.cs" />
@@ -124,6 +136,8 @@
     <AndroidAsset Include="Assets\config\content.json" />
     <AndroidAsset Include="Assets\maps\debug_map.map" />
     <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
+    <AndroidAsset Include="Assets\config\game.json" />
+    <AndroidAsset Include="Assets\config\entitys\robot.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -152,13 +166,13 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\values-v11\strings.xml">
+    <AndroidResource Include="Resources\values\strings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values-v11\styles.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\sets\futuristic.png" />
+    <AndroidAsset Include="Assets\textures\entitys\robot\futuristic.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\fragment\color.txt" />

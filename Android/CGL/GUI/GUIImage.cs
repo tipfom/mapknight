@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL.GUI {
-    public class GUIImage : GUIClickItem {
+    public class GUIImage : GUIItem {
         private string textureIdle;
         private string textureClick;
         private Color _ModificationColor;
@@ -16,8 +16,8 @@ namespace mapKnight.Android.CGL.GUI {
             this.Release += () => { RequestUpdate ( ); };
         }
 
-        public override List<VertexData> GetVertexData () {
-            return new List<VertexData> ( ) { new VertexData (Screen.ToGlobal (Bounds.GetVerticies ( )), this.Clicked ? textureClick : textureIdle, ModificationColor) };
+        public override List<CGLVertexData> GetVertexData () {
+            return new List<CGLVertexData> ( ) { new CGLVertexData (Screen.ToGlobal (Bounds.GetVerticies ( )), this.Clicked ? textureClick : textureIdle, ModificationColor) };
         }
     }
 }

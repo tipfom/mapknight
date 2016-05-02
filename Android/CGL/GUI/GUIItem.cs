@@ -3,25 +3,45 @@ using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL.GUI {
     public abstract class GUIItem {
-        public enum Action {
-            Move,
-            Begin,
-            End,
-            Leave,
-            Enter
-        }
-
         public delegate void HandleUpdate (GUIItem sender);
         public static event HandleUpdate Changed;
+        public delegate void HandleItemClick ();
+        public event HandleItemClick Click;
+        public event HandleItemClick Release;
+        public bool Clicked { get { return (clickCount > 0); } }
+        private bool multiClick;
+        private int clickCount;
 
         public fRectangle Bounds;
+        public fVector2D Position { get { return Bounds.Position; } set { Bounds.Position = value; RequestUpdate ( ); } }
+        public fVector2D Size { get { return Bounds.Size; } set { Bounds.Size = value; RequestUpdate ( ); } }
 
-        public GUIItem (fRectangle bounds) {
-            Bounds = bounds;
+        private bool _Visible = true;
+        public bool Visible { get { return _Visible; } set { _Visible = value; RequestUpdate ( ); } }
+
+        public GUIItem (fRectangle bounds, bool multiclick = false) {
+            this.Bounds = bounds;
+            this.multiClick = multiclick;
         }
 
-        public virtual void HandleTouch (Action action) {
-
+        public virtual void HandleTouch (GUITouchHandler.Touch.Action action) {
+            switch (action) {
+            case GUITouchHandler.Touch.Action.Begin:
+            case GUITouchHandler.Touch.Action.Enter:
+                if (!Clicked || multiClick) {
+                    clickCount++;
+                    Click?.Invoke ( );
+                }
+                break;
+            case GUITouchHandler.Touch.Action.End:
+            case GUITouchHandler.Touch.Action.Leave:
+                if (Clicked) {
+                    clickCount--;
+                    if (!Clicked)
+                        Release?.Invoke ( );
+                }
+                break;
+            }
         }
 
         public bool Collides (fVector2D touchPosition) {
@@ -30,27 +50,16 @@ namespace mapKnight.Android.CGL.GUI {
         }
 
         protected void RequestUpdate () {
-            Changed?.Invoke (this);
+            if (this.Visible)
+                Changed?.Invoke (this);
         }
 
         public virtual void Update (float dt) {
 
         }
 
-        public virtual List<VertexData> GetVertexData () {
-            return new List<VertexData> ( );
-        }
-
-        public struct VertexData {
-            public float[ ] Verticies;
-            public string Texture;
-            public Color Color;
-
-            public VertexData (float[ ] verticies, string texture, Color color) : this ( ) {
-                Verticies = verticies;
-                Texture = texture;
-                Color = color;
-            }
+        public virtual List<CGLVertexData> GetVertexData () {
+            return new List<CGLVertexData> ( );
         }
     }
 }

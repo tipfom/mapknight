@@ -5,15 +5,10 @@ namespace mapKnight.Android.CGL {
     public class CGLCamera {
         public Point CurrentMapTile;
 
-        private float[ ] DefaultProjectionMatrix;
-        private float[ ] DefaultViewMatrix;
-        public float[ ] DefaultMVPMatrix { get; private set; }
+        public CGLMatrix MapMatrix { get; private set; }
 
-        private float[ ] MapViewMatrix;
-        public float[ ] MapMVPMatrix { get; private set; }
-
-        private float[ ] CharacterViewMatrix;
-        public float[ ] CharacterMVPMatrix { get; private set; }
+        public fVector2D ScreenCentre { get; private set; }
+        public fVector2D CharacterCentreOnScreen { get; private set; }
 
         private float characterOffset;
 
@@ -21,77 +16,58 @@ namespace mapKnight.Android.CGL {
             CurrentMapTile = new Point ( );
             characterOffset = characteroffset;
 
-            DefaultProjectionMatrix = new float[16];
-            DefaultViewMatrix = new float[16];
-            DefaultMVPMatrix = new float[16];
-            UpdateDefaultMatrix ( );
-
-            MapViewMatrix = new float[16];
-            MapMVPMatrix = new float[16];
-
-            CharacterViewMatrix = new float[16];
-            CharacterMVPMatrix = new float[16];
-
-            Screen.Changed += () => {
-                UpdateDefaultMatrix ( );
-            };
+            MapMatrix = new CGLMatrix ( );
+            ScreenCentre = new fVector2D ( );
+            CharacterCentreOnScreen = new fVector2D ( );
         }
 
-        private void UpdateDefaultMatrix () {
-            float ratio = Screen.ScreenRatio;
-            Matrix.OrthoM (DefaultProjectionMatrix, 0, -Screen.ScreenRatio, Screen.ScreenRatio, -1, 1, 3, 7);
-            Matrix.SetLookAtM (DefaultViewMatrix, 0, 0, 0, 3, 0f, 0f, 0f, 0f, 1f, 0f);
-            Matrix.MultiplyMM (DefaultMVPMatrix, 0, DefaultProjectionMatrix, 0, DefaultViewMatrix, 0);
-        }
-
-        public void Update () {
-            fVector2D characterTile = Content.Character.AABB.Centre;
+        public void Update (fVector2D characterPosition, CGLMap map) {
             fPoint nextMapTile = new fPoint (
-                (characterTile.X - Content.Map.RealDrawSize.Width / 2f).FitBounds (0f, (Content.Map.Size.Width - Content.Map.DrawSize.Width)),
-                (characterTile.Y - (1 - characterOffset) * Content.Map.DrawSize.Height / 2f).FitBounds (0f, Content.Map.Size.Height - Content.Map.DrawSize.Height));
+                (characterPosition.X - map.RealDrawSize.Width / 2f).FitBounds (0f, (map.Size.Width - map.DrawSize.Width)),
+                (characterPosition.Y - (1 - characterOffset) * map.DrawSize.Height / 2f).FitBounds (0f, map.Size.Height - map.DrawSize.Height));
 
-            CharacterViewMatrix = (float[ ])DefaultViewMatrix.Clone ( );
-            MapViewMatrix = (float[ ])DefaultViewMatrix.Clone ( );
+            MapMatrix.ResetView ( );
 
             float mapOffsetY = 0f;
             float mapOffsetX = 0f;
             float charOffsetY = 0f;
             float charOffsetX = 0f;
 
-            if (nextMapTile.X > 0f && nextMapTile.X < Content.Map.Size.Width - Content.Map.DrawSize.Width) {
-                mapOffsetX = characterTile.X % 1;
-                mapOffsetX = -2f * mapOffsetX * Screen.ScreenRatio / (Content.Map.DrawSize.Width);
+            if (nextMapTile.X > 0f && nextMapTile.X < map.Size.Width - map.DrawSize.Width) {
+                mapOffsetX = characterPosition.X % 1;
+                mapOffsetX = -2f * mapOffsetX * Screen.ScreenRatio / (map.DrawSize.Width);
             } else if (nextMapTile.X > 0) {
                 // on the right side
-                charOffsetX = Screen.ScreenRatio - 2f * ((Content.Map.Size.Width - characterTile.X - 2) / Content.Map.DrawSize.Width) * Screen.ScreenRatio;
+                charOffsetX = Screen.ScreenRatio - 2f * ((map.Size.Width - characterPosition.X - 2) / map.DrawSize.Width) * Screen.ScreenRatio;
             } else {
                 // on the left side
-                mapOffsetX = Content.Map.VertexSize;
-                charOffsetX = -2f * ((Content.Map.RealDrawSize.Width / 2 - characterTile.X) / Content.Map.DrawSize.Width) * Screen.ScreenRatio;
+                mapOffsetX = map.VertexSize;
+                charOffsetX = -2f * ((map.RealDrawSize.Width / 2 - characterPosition.X) / map.DrawSize.Width) * Screen.ScreenRatio;
             }
 
-            if (nextMapTile.Y > 0 && nextMapTile.Y < Content.Map.Size.Height - Content.Map.DrawSize.Height) {
-                mapOffsetY = (characterTile.Y - (1 - characterOffset) * Content.Map.DrawSize.Height / 2f);
+            if (nextMapTile.Y > 0 && nextMapTile.Y < map.Size.Height - map.DrawSize.Height) {
+                mapOffsetY = (characterPosition.Y - (1 - characterOffset) * map.DrawSize.Height / 2f);
                 mapOffsetY -= (int)mapOffsetY;
-                mapOffsetY = -2f * mapOffsetY / (Content.Map.RealDrawSize.Height);
+                mapOffsetY = -2f * mapOffsetY / (map.RealDrawSize.Height);
 
                 charOffsetY = -characterOffset;
             } else if (nextMapTile.Y > 0) {
-                charOffsetY = 1 - 2f * (Content.Map.Size.Height - characterTile.Y - 1) / ((float)Content.Map.DrawSize.Height);
-                mapOffsetY = Content.Map.DrawSize.Height - Content.Map.RealDrawSize.Height;
+                charOffsetY = 1 - 2f * (map.Size.Height - characterPosition.Y - 1) / ((float)map.DrawSize.Height);
+                mapOffsetY = map.DrawSize.Height - map.RealDrawSize.Height;
             } else {
-                charOffsetY = -1 + 2f * characterTile.Y / Content.Map.RealDrawSize.Height;
+                charOffsetY = -1 + 2f * characterPosition.Y / map.RealDrawSize.Height;
             }
 
-            Matrix.TranslateM (CharacterViewMatrix, 0, charOffsetX, charOffsetY, 0f);
-            Matrix.TranslateM (MapViewMatrix, 0, mapOffsetX, mapOffsetY, 0f);
 
-            Matrix.MultiplyMM (CharacterMVPMatrix, 0, DefaultProjectionMatrix, 0, CharacterViewMatrix, 0);
-            Matrix.MultiplyMM (MapMVPMatrix, 0, DefaultProjectionMatrix, 0, MapViewMatrix, 0);
+
+            Matrix.TranslateM (CharacterMatrix.View, 0, charOffsetX, charOffsetY, 0f);
+            Matrix.TranslateM (MapMatrix.View, 0, mapOffsetX, mapOffsetY, 0f);
+
+            CharacterMatrix.CalculateMVP ( );
+            MapMatrix.CalculateMVP ( );
 
             CurrentMapTile.X = (int)nextMapTile.X;
             CurrentMapTile.Y = (int)nextMapTile.Y;
-            Content.Map.updateTextureBuffer ( );
         }
     }
 }

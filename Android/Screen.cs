@@ -1,3 +1,4 @@
+using mapKnight.Android.CGL;
 using mapKnight.Basic;
 
 namespace mapKnight.Android {
@@ -7,10 +8,14 @@ namespace mapKnight.Android {
 
         public static fVector2D ScreenSize { get; private set; }
         public static float ScreenRatio { get; private set; }
+        public static CGLMatrix DefaultMatrix { get; private set; }
 
         public static void Change (Size screensize) {
             ScreenSize = new fVector2D (screensize.Width, screensize.Height);
             ScreenRatio = ScreenSize.X / ScreenSize.Y;
+
+            if (DefaultMatrix == null)
+                DefaultMatrix = new CGLMatrix ( );
             Changed?.Invoke ( );
         }
 

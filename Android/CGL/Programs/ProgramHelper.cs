@@ -33,8 +33,11 @@ namespace mapKnight.Android.CGL.Programs {
             GL.GlShaderSource (shader, code);
             GL.GlCompileShader (shader);
 
+            int error = GL.GlGetError ( );
+            string source = GL.GlGetShaderSource (shader);
+            string log = GL.GlGetShaderInfoLog (shader);
             Log.Print (typeof (ProgramHelper), "Loaded new shader (id = " + shader.ToString ( ) + ")");
-            Log.Print (typeof (ProgramHelper), "Log = " + GL.GlGetShaderInfoLog (shader));
+            Log.Print (typeof (ProgramHelper), "Log = " + log);
 
             return shader;
         }
