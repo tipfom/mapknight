@@ -1,0 +1,199 @@
+﻿{
+  "Name": "El Roboto",
+  "Weight": 20,
+  "Bounds": {
+    "Y": 2,
+    "X": 1
+  },
+
+  ////////////////////////////////////////////////////////////////////////
+  // stats
+  "Stats": {
+    "Health": {
+      "Increasement": 3.4,
+      "Base": 6
+    },
+    "Energy": {
+      "Increasement": 2,
+      "Base": 7
+    }
+  },
+
+  ////////////////////////////////////////////////////////////////////////
+  // graphics
+  "BodyParts": [
+    {
+      "Name": "left_glove",
+      "Texture": {
+        "X": 1,
+        "Y": 2,
+        "Width": 3,
+        "Height": 3
+      },
+      "Bounds": {
+        "X": 0.4,
+        "Y": 0.4
+      }
+    },
+
+    {
+      "Name": "right_glove",
+      "Texture": {
+        "X": 1,
+        "Y": 2,
+        "Width": 3,
+        "Height": 3
+      },
+      "Bounds": {
+        "X": 0.4,
+        "Y": 0.4
+      }
+    },
+
+    {
+      "Name": "helmet",
+      "Texture": {
+        "X": 1,
+        "Y": 2,
+        "Width": 3,
+        "Height": 3
+      },
+      "Bounds": {
+        "X": 0.4,
+        "Y": 0.4
+      }
+    },
+
+    {
+      "Name": "chestplate",
+      "Texture": {
+        "X": 1,
+        "Y": 2,
+        "Width": 3,
+        "Height": 3
+      },
+      "Bounds": {
+        "X": 0.4,
+        "Y": 0.4
+      }
+    },
+
+    {
+      "Name": "left_shoe",
+      "Texture": {
+        "X": 1,
+        "Y": 2,
+        "Width": 3,
+        "Height": 3
+      },
+      "Bounds": {
+        "X": 0.4,
+        "Y": 0.4
+      }
+    },
+
+    {
+      "Name": "right_shoe",
+      "Texture": {
+        "X": 1,
+        "Y": 2,
+        "Width": 3,
+        "Height": 3
+      },
+      "Bounds": {
+        "X": 0.4,
+        "Y": 0.4
+      }
+    }
+  ],
+
+  "Skins": [
+    {
+      "Name": "Copo Roboto",
+      "Texture": "futuristic.png"
+    }
+  ],
+
+  "Animations": {
+    "EatSleepRepeat": {
+      "Default": {
+        "left_glove": {
+          "X": 0,
+          "Y": 0,
+          "Rotation": 0,
+          "Mirrored": false
+        },
+        "right_glove": {
+          "X": 0,
+          "Y": 0,
+          "Rotation": 0,
+          "Mirrored": false
+        },
+        "helmet": {
+          "X": 0,
+          "Y": 0,
+          "Rotation": 0,
+          "Mirrored": false
+        },
+        "chestplate": {
+          "X": 0,
+          "Y": 0,
+          "Rotation": 0,
+          "Mirrored": false
+        },
+        "left_shoe": {
+          "X": 0,
+          "Y": 0,
+          "Rotation": 0,
+          "Mirrored": false
+        },
+        "right_shoe": {
+          "X": 0,
+          "Y": 0,
+          "Rotation": 0,
+          "Mirrored": false
+        }
+      },
+      "Steps": [
+        {
+          "left_glove": {
+            "X": 0,
+            "Y": 0,
+            "Rotation": 0,
+            "Mirrored": false
+          },
+          "right_glove": {
+            "X": 0,
+            "Y": 0,
+            "Rotation": 0,
+            "Mirrored": false
+          },
+          "helmet": {
+            "X": 0,
+            "Y": 0,
+            "Rotation": 0,
+            "Mirrored": false
+          },
+          "chestplate": {
+            "X": 0,
+            "Y": 0,
+            "Rotation": 0,
+            "Mirrored": false
+          },
+          "left_shoe": {
+            "X": 0,
+            "Y": 0,
+            "Rotation": 0,
+            "Mirrored": false
+          },
+          "right_shoe": {
+            "X": 0,
+            "Y": 0,
+            "Rotation": 0,
+            "Mirrored": false
+          }
+        }
+      ]
+    }
+  }
+}

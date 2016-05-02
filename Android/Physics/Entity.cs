@@ -1,7 +1,7 @@
 ﻿using mapKnight.Basic;
 
 namespace mapKnight.Android.Physics {
-    public class Entity : Android.Entity {
+    public class Entity : Android.Entity.Entity {
         public AABB AABB;
         // centre
         public fVector2D Position { get { return AABB.Centre; } }

@@ -7,10 +7,10 @@ using mapKnight.Basic;
 namespace mapKnight.Android.CGL {
     public class CGLAnimation {
         public string Action;
-        public readonly Dictionary<string, float[]> Default = new Dictionary<string, float[]> ();
+        public readonly Dictionary<string, float[ ]> Default = new Dictionary<string, float[ ]> ( );
         // first float = x, second float = y, third float = rotation in degree
-        public Dictionary<string, float[]> Current = new Dictionary<string, float[]> ();
-        private List<Tuple<int, Dictionary<string, float[]>>> steps = new List<Tuple<int, Dictionary<string, float[]>>> ();
+        public Dictionary<string, float[ ]> Current = new Dictionary<string, float[ ]> ( );
+        private List<Tuple<int, Dictionary<string, float[ ]>>> steps = new List<Tuple<int, Dictionary<string, float[ ]>>> ( );
 
         private int loopTime;
         private int currentStep;
@@ -31,9 +31,9 @@ namespace mapKnight.Android.CGL {
                 loopTime = int.Parse (animConfig.Get ("default").Attributes["time"]);
 
             // load default
-            foreach (XMLElemental bpoint in animConfig["default"].GetAll ()) {
+            foreach (XMLElemental bpoint in animConfig["default"].GetAll ( )) {
                 // add a new entry to the default dictionary and load the positiondata und the mirrored bool into a a new tuple
-                Default.Add (bpoint.Attributes["name"], new float[] {
+                Default.Add (bpoint.Attributes["name"], new float[ ] {
                         float.Parse (bpoint.Attributes ["x"]),
                         float.Parse (bpoint.Attributes ["y"]),
                         float.Parse (bpoint.Attributes ["rot"]),
@@ -43,11 +43,11 @@ namespace mapKnight.Android.CGL {
 
             foreach (XMLElemental step in animConfig.GetAll ("step")) {
                 // query each step in the entity-file and add the steptime and a new dict to the steps list
-                steps.Add (new Tuple<int, Dictionary<string, float[]>> (int.Parse (step.Attributes["time"]), new Dictionary<string, float[]> ()));
+                steps.Add (new Tuple<int, Dictionary<string, float[ ]>> (int.Parse (step.Attributes["time"]), new Dictionary<string, float[ ]> ( )));
 
-                foreach (XMLElemental bpoint in step.GetAll ()) {
+                foreach (XMLElemental bpoint in step.GetAll ( )) {
                     // query each boundedpoint and add the bpoint data to the dict of the last added step
-                    steps[steps.Count - 1].Item2.Add (bpoint.Attributes["name"], new float[] {
+                    steps[steps.Count - 1].Item2.Add (bpoint.Attributes["name"], new float[ ] {
                             float.Parse (bpoint.Attributes ["x"]),
                             float.Parse (bpoint.Attributes ["y"]),
                             float.Parse (bpoint.Attributes ["rot"]),
@@ -67,7 +67,7 @@ namespace mapKnight.Android.CGL {
         public void Start () {
             Finished = false;
             currentStep = 0;
-            Current = Default.Clone ();
+            Current = Default.Clone ( );
             timePassed = 0;
             if (steps.Count > 0)
                 timeNext = steps[0].Item1;
@@ -75,12 +75,12 @@ namespace mapKnight.Android.CGL {
                 timeNext = 0;
         }
 
-        public void Step (int deltatime) {
+        public void Step (float deltatime) {
             // end if animation is allready finished
             if (Finished == true)
                 return;
 
-            timePassed += deltatime;
+            timePassed += (int)deltatime;
 
             if (timePassed >= timeNeeded) {
                 Finished = true;
@@ -101,7 +101,7 @@ namespace mapKnight.Android.CGL {
                         float newX = MathHelper.Lerp (Default[currentItem][0], steps[currentStep].Item2[currentItem][0], lerpPercent);
                         float newY = MathHelper.Lerp (Default[currentItem][1], steps[currentStep].Item2[currentItem][1], lerpPercent);
                         float newRotation = MathHelper.Lerp (Default[currentItem][2], steps[currentStep].Item2[currentItem][2], lerpPercent);
-                        Current[currentItem] = new float[] {
+                        Current[currentItem] = new float[ ] {
                             newX,
                             newY,
                             newRotation,
@@ -114,7 +114,7 @@ namespace mapKnight.Android.CGL {
                         float newX = MathHelper.Lerp (steps[currentStep - 1].Item2[currentItem][0], steps[currentStep].Item2[currentItem][0], lerpPercent);
                         float newY = MathHelper.Lerp (steps[currentStep - 1].Item2[currentItem][1], steps[currentStep].Item2[currentItem][1], lerpPercent);
                         float newRotation = MathHelper.Lerp (steps[currentStep - 1].Item2[currentItem][2], steps[currentStep].Item2[currentItem][2], lerpPercent);
-                        Current[currentItem] = new float[] {
+                        Current[currentItem] = new float[ ] {
                             newX,
                             newY,
                             newRotation,
@@ -127,7 +127,7 @@ namespace mapKnight.Android.CGL {
                         float newX = MathHelper.Lerp (steps[currentStep - 1].Item2[currentItem][0], Default[currentItem][0], lerpPercent);
                         float newY = MathHelper.Lerp (steps[currentStep - 1].Item2[currentItem][1], Default[currentItem][1], lerpPercent);
                         float newRotation = MathHelper.Lerp (steps[currentStep - 1].Item2[currentItem][2], Default[currentItem][2], lerpPercent);
-                        Current[currentItem] = new float[] {
+                        Current[currentItem] = new float[ ] {
                             newX,
                             newY,
                             newRotation,

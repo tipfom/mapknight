@@ -10,8 +10,9 @@ namespace mapKnight.Android.CGL {
         private float moveSpeed;
         private float jumpSpeed;
 
+
         public Character (int health, int energy, string name, int weight, fSize bounds, List<CGLBoundedPoint> boundedpoints, List<CGLAnimation> animations, CGLSet set, float movespeed, float jumpspeed)
-            : base (health, Content.Map.SpawnPoint, name, weight, bounds, boundedpoints, animations, set) {
+            : base (health, new fPoint (0f, 0f), name, weight, bounds, boundedpoints, animations, set) {
             Energy = new ChangingProperty (energy);
 
             moveSpeed = movespeed;
@@ -27,6 +28,10 @@ namespace mapKnight.Android.CGL {
                 this.Velocity.X = moveSpeed;
                 break;
             }
+        }
+
+        protected override fVector2D GetCentreOnScreen (CGLCamera camera) {
+            return camera.CharacterCentreOnScreen;
         }
 
         public void ResetMovement () {

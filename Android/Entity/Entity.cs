@@ -2,7 +2,7 @@
 
 using mapKnight.Basic;
 
-namespace mapKnight.Android {
+namespace mapKnight.Android.Entity {
     public class Entity {
         public event Action<Entity> OnDeath;
 
@@ -21,7 +21,7 @@ namespace mapKnight.Android {
         public virtual void TakeDamage (int damage) {
             Health.Current -= damage;
             if (Health.Current <= 0) {
-                Die ();
+                Die ( );
             }
         }
 

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Java.Nio;
+using mapKnight.Android.CGL.Buffer;
 using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL.Entity {
     public class CGLEntity : Physics.Entity {
-        private static List<CGLEntity> activeEntitys = new List<CGLEntity> ( );
+        const int MAX_QUADS = 50;
 
-        private FloatBuffer vertexBuffer;
-        private ShortBuffer indexBuffer;
-        private FloatBuffer textureBuffer;
+        private static List<CGLEntity> activeEntitys = new List<CGLEntity> ( );
 
         protected List<CGLBoundedPoint> boundedPoints;
 
@@ -25,63 +23,24 @@ namespace mapKnight.Android.CGL.Entity {
             this.currentAnimation = animations.FindIndex (((CGLAnimation obj) => obj.Action == "default"));
             this.animations[currentAnimation].Start ( );
 
-            float[ ] textureBufferArray = new float[boundedPoints.Count * 8];
-            short[ ] indexBufferArray = new short[boundedPoints.Count * 6];
-            float[ ] vertexBufferArray = new float[boundedPoints.Count * 8];
-
-            for (int i = 0; i < boundedPoints.Count; i++) {
-                // set buffer default values
-
-                float[ ] data = animations[currentAnimation].Default[boundedPoints[i].Name];
-                float[ ] vert = MathHelper.GetVerticies (boundedPoints[i].Size);
-                float[ ] trans = MathHelper.TranslateRotateMirror (MathHelper.GetVerticies (boundedPoints[i].Size), 0, 0, data[0], data[1], data[2], (data[3] == 1f) ? true : false);
-                // if data == 1f give mirrored as true, else false
-                Array.Copy (trans, 0, vertexBufferArray, i * 8, 8);
-
-                // texture buffer
-                textureBufferArray[i * 8 + 0] = boundedPoints[i].TextureRectangle.Right;
-                textureBufferArray[i * 8 + 1] = boundedPoints[i].TextureRectangle.Bottom;
-                textureBufferArray[i * 8 + 2] = boundedPoints[i].TextureRectangle.Right;
-                textureBufferArray[i * 8 + 3] = boundedPoints[i].TextureRectangle.Top;
-                textureBufferArray[i * 8 + 4] = boundedPoints[i].TextureRectangle.Left;
-                textureBufferArray[i * 8 + 5] = boundedPoints[i].TextureRectangle.Top;
-                textureBufferArray[i * 8 + 6] = boundedPoints[i].TextureRectangle.Left;
-                textureBufferArray[i * 8 + 7] = boundedPoints[i].TextureRectangle.Bottom;
-
-                // index buffer
-                indexBufferArray[i * 6 + 0] = (short)(i * 4 + 0);
-                indexBufferArray[i * 6 + 1] = (short)(i * 4 + 1);
-                indexBufferArray[i * 6 + 2] = (short)(i * 4 + 2);
-                indexBufferArray[i * 6 + 3] = (short)(i * 4 + 0);
-                indexBufferArray[i * 6 + 4] = (short)(i * 4 + 2);
-                indexBufferArray[i * 6 + 5] = (short)(i * 4 + 3);
-            }
-
-            textureBuffer = CGLTools.CreateBuffer (textureBufferArray);
-            indexBuffer = CGLTools.CreateBuffer (indexBufferArray);
-            vertexBuffer = CGLTools.CreateBuffer (vertexBufferArray);
-
             activeEntitys.Add (this); // register entity
         }
 
-        public static void Draw (int deltatime) {
-            foreach (CGLEntity entity in activeEntitys) {
-                entity.Update (deltatime);
-                entity.Draw ( ); // das wird bald verbessert du fauler hund!!!!
-            }
+        protected virtual fVector2D GetCentreOnScreen (CGLCamera camera) {
+            return this.Position - camera.ScreenCentre;
         }
 
-        private void Draw () {
-            Content.MatrixProgram.Begin ( );
-            Content.MatrixProgram.EnableAlphaBlending ( );
+        public List<CGLVertexData> GetVertexData (CGLCamera camera) {
+            List<CGLVertexData> vertexData = new List<CGLVertexData> ( );
+            fVector2D entityOffset = GetCentreOnScreen (camera);
+            // begin translating the current animationdata
+            for (int i = 0; i < boundedPoints.Count; i++) {
+                float[ ] data = animations[currentAnimation].Current[boundedPoints[i].Name];
+                vertexData.Add (new CGLVertexData (MathHelper.TranslateRotateMirror (MathHelper.GetVerticies (boundedPoints[i].Size), 0, 0, data[0] + entityOffset.X, data[1] + entityOffset.Y, data[2], (data[3] == 1f) ? true : false),
+                    this.Name + "_" + boundedPoints[i].Name, Color.White));
+            }
 
-            Content.MatrixProgram.SetMVPMatrix (Content.Camera.CharacterMVPMatrix);
-            Content.MatrixProgram.SetTexture (this.set.Texture.Texture);
-            Content.MatrixProgram.SetTextureBuffer (textureBuffer);
-            Content.MatrixProgram.SetVertexBuffer (vertexBuffer);
-            Content.MatrixProgram.Draw (indexBuffer);
-
-            Content.MatrixProgram.End ( );
+            return vertexData;
         }
 
         public bool Animate (string animation) {
@@ -101,20 +60,13 @@ namespace mapKnight.Android.CGL.Entity {
             Animate (animation.Action);
         }
 
-        private void Update (int deltatime) {
+        private void UpdateEntity (float deltatime) {
             if (animations[currentAnimation].Finished) {
                 if (animations[currentAnimation].Loopable)
                     animations[currentAnimation].Start ( );
             } else {
                 animations[currentAnimation].Step (deltatime);
             }
-
-            // begin translating the current animationdata
-            for (int i = 0; i < boundedPoints.Count; i++) {
-                float[ ] data = animations[currentAnimation].Current[boundedPoints[i].Name];
-                vertexBuffer.Put (MathHelper.TranslateRotateMirror (MathHelper.GetVerticies (boundedPoints[i].Size), 0, 0, data[0], data[1], data[2], (data[3] == 1f) ? true : false));
-            }
-            vertexBuffer.Position (0);
         }
 
         public void Die () {
@@ -122,5 +74,38 @@ namespace mapKnight.Android.CGL.Entity {
             // wenns hier fehler, auf erik zukommen (keine destruktor)
             activeEntitys.Remove (this); // unregister entity
         }
+
+        #region static drawing and updating
+
+        private static CGLColorBufferBatch buffer = new CGLColorBufferBatch (MAX_QUADS * 4);
+        private static CGLSprite2D entitySprite;
+
+        public static void Draw (CGLCamera camera, CGLMap map) {
+            Array.Clear (buffer.VertexData, 0, buffer.VertexData.Length);
+            // updating buffer
+            int currentIndex = 0;
+            foreach (CGLEntity entityToDraw in activeEntitys.FindAll ((CGLEntity entity) => (entity.Position - camera.ScreenCentre).Abs ( ) < (fVector2D)map.DrawSize / 2)) {
+                // all entitys, that can be seen on the map
+                foreach (CGLVertexData vertexData in entityToDraw.GetVertexData (camera)) {
+                    Array.Copy (vertexData.Verticies, 0, buffer.VertexData, currentIndex * 8, 8);
+                    Array.Copy (entitySprite.Get (vertexData.Texture), 0, buffer.TextureData, currentIndex * 8, 8);
+                    Array.Copy (vertexData.Color.ToOpenGL ( ), 0, buffer.ColorData, currentIndex * 16, 16);
+                    currentIndex++;
+                }
+            }
+            buffer.UpdateBuffer ( );
+
+            Content.ColorProgram.Begin ( );
+            Content.ColorProgram.Draw (buffer.VertexBuffer, buffer.TextureBuffer, buffer.ColorBuffer, buffer.IndexBuffer, entitySprite.Texture, Screen.DefaultMatrix.MVP, true);
+            Content.ColorProgram.End ( );
+        }
+
+        public static void Update (float dt) {
+            foreach (CGLEntity entity in activeEntitys) {
+                entity.UpdateEntity (dt);
+            }
+        }
+
+        #endregion
     }
 }
