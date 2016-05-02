@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL.GUI {
-    public class GUIButton : GUIClickItem {
+    public class GUIButton : GUIItem {
         const float DEFAULT_TEXT_SIZE = 0.1f;
 
         private string _Text;
@@ -10,6 +10,14 @@ namespace mapKnight.Android.CGL.GUI {
         private Color _Color;
         public Color Color { get { return _Color; } set { _Color = value; RequestUpdate ( ); } }
         private fVector2D charSize;
+
+        public GUIButton (string text, fRectangle bounds) : this (text, DEFAULT_TEXT_SIZE, Color.White, bounds) {
+
+        }
+
+        public GUIButton (string text, Color color, fRectangle bounds) : this (text, DEFAULT_TEXT_SIZE, color, bounds) {
+
+        }
 
         public GUIButton (string text, float textsize, Color color, fRectangle bounds) : base (bounds, false) {
             Text = text;
@@ -27,13 +35,9 @@ namespace mapKnight.Android.CGL.GUI {
             RequestUpdate ( );
         }
 
-        public GUIButton (string text, fRectangle bounds) : this (text, DEFAULT_TEXT_SIZE, Color.White, bounds) {
-
-        }
-
-        public override List<VertexData> GetVertexData () {
-            List<VertexData> vertexData = new List<VertexData> ( );
-            vertexData.Add (new VertexData (Screen.ToGlobal (Bounds.GetVerticies ( )), (this.Clicked ? "button_pressed" : "button_idle"), Color));
+        public override List<CGLVertexData> GetVertexData () {
+            List<CGLVertexData> vertexData = new List<CGLVertexData> ( );
+            vertexData.Add (new CGLVertexData (Screen.ToGlobal (Bounds.GetVerticies ( )), (this.Clicked ? "button_pressed" : "button_idle"), Color));
 
             fVector2D textSize = GUILabel.MeasureText (this.Text, charSize);
             fVector2D centeredTextPosition = Screen.ToGlobal (new fVector2D (this.Bounds.Left + this.Bounds.Width / 2, this.Bounds.Top + this.Bounds.Height / 2)) - (textSize / new fVector2D (2, -2));

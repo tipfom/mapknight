@@ -2,6 +2,7 @@
 */obj/**
 packages/
 Components/*
+Shared/*
 .vs/*
 *.sou
 *.apk

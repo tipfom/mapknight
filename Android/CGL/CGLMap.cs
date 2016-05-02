@@ -26,17 +26,16 @@ namespace mapKnight.Android.CGL {
             DrawSize = new Size (DRAW_WIDTH + 2, (int)((float)DRAW_WIDTH / Screen.ScreenRatio) + 2);
             VertexSize = 2 * Screen.ScreenRatio / (float)(DRAW_WIDTH);
 
-            initVertexCoords ( );
+            setVertexCoords ( );
             initTextureCoords ( );
 
             Screen.Changed += () => {
                 VertexSize = 2 * Screen.ScreenRatio / (float)(DRAW_WIDTH);
-                initVertexCoords ( );
-                updateTextureBuffer ( );
+                setVertexCoords ( );
             };
         }
 
-        private void initVertexCoords () {
+        private void setVertexCoords () {
             int iTileCount = DrawSize.Width * DrawSize.Height;
             float[ ] vertexCoords = new float[iTileCount * 8 * 3];
             short[ ] vertexIndices = new short[iTileCount * 6 * 3];
@@ -92,20 +91,20 @@ namespace mapKnight.Android.CGL {
             }
         }
 
-        public void updateTextureBuffer () {
+        public void updateTextureBuffer (CGLCamera camera) {
             // insert buffered tile coords to texturebuffer
             for (int layer = 0; layer < 3; layer++) {
                 for (int y = 0; y < DrawSize.Height; y++) {
-                    textureBuffer.Put (layerBuffer[layer][Content.Camera.CurrentMapTile.Y + y].Cut (Content.Camera.CurrentMapTile.X * 8, DrawSize.Width * 8));
+                    textureBuffer.Put (layerBuffer[layer][camera.CurrentMapTile.Y + y].Cut (camera.CurrentMapTile.X * 8, DrawSize.Width * 8));
                 }
             }
             textureBuffer.Position (0);
         }
 
-        public void Draw () {
+        public void Draw (CGLCamera camera) {
             Content.MatrixProgram.Begin ( );
 
-            Content.MatrixProgram.Draw (vertexBuffer, textureBuffer, indexBuffer, TileManager.Texture.Texture, Content.Camera.MapMVPMatrix, true);
+            Content.MatrixProgram.Draw (vertexBuffer, textureBuffer, indexBuffer, TileManager.Texture.Texture, camera.MapMatrix.MVP, true);
 
             Content.MatrixProgram.End ( );
         }

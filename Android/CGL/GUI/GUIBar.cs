@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using mapKnight.Basic;
 
 namespace mapKnight.Android.CGL.GUI {
-    public class GUIBar : GUIClickItem {
+    public class GUIBar : GUIItem {
         const float BORDER_BOUNDS_RATIO = 10f / 10f; // width / height of image
 
         private float currentPercent;
@@ -17,8 +17,8 @@ namespace mapKnight.Android.CGL.GUI {
             RequestUpdate ( );
         }
 
-        public override List<VertexData> GetVertexData () {
-            List<VertexData> vertexData = new List<VertexData> ( );
+        public override List<CGLVertexData> GetVertexData () {
+            List<CGLVertexData> vertexData = new List<CGLVertexData> ( );
 
             fVector2D globalPosition = Screen.ToGlobal (this.Bounds.Position);
             fVector2D globalSize = new fVector2D (this.Bounds.Size.X * Screen.ScreenRatio, this.Bounds.Size.Y) * 2;
@@ -42,9 +42,9 @@ namespace mapKnight.Android.CGL.GUI {
                 borderPosition + borderWidthHalf,globalPosition.Y
             };
 
-            vertexData.Add (new VertexData (filled_verticies, "bar_filled", Color.White));
-            vertexData.Add (new VertexData (empty_verticies, "bar_empty", Color.White));
-            vertexData.Add (new VertexData (border_verticies, "bar_border", Color.White));
+            vertexData.Add (new CGLVertexData (filled_verticies, "bar_filled", Color.White));
+            vertexData.Add (new CGLVertexData (empty_verticies, "bar_empty", Color.White));
+            vertexData.Add (new CGLVertexData (border_verticies, "bar_border", Color.White));
 
             return vertexData;
         }
