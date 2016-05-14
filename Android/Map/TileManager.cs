@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using mapKnight.Android.CGL;
 using mapKnight.Basic;
 using Newtonsoft.Json;
@@ -14,10 +15,10 @@ namespace mapKnight.Android.Map {
         public TileManager (string name) {
             ExportData exportedData = new ExportData ( );
             JsonConvert.PopulateObject (Assets.Load<string> ("tilesets", $"{name}.tileset"), exportedData);
-            Texture = Assets.Load<CGLTexture2D> (exportedData.Texture);
+            Texture = Assets.Load<CGLTexture2D> (Path.Combine ("tilesets", exportedData.Texture));
 
 
-            fSize tvertexsize = new fSize (TILE_SIZE / Texture.Width, TILE_SIZE / Texture.Height); // size of each texturevertex
+            Vector2 tvertexsize = new Vector2 (TILE_SIZE / Texture.Width, TILE_SIZE / Texture.Height); // size of each texturevertex
             tiles = new Tile[exportedData.Tiles.Count];
             foreach (var exportedTile in exportedData.Tiles) {
                 this.tiles[exportedTile.Key] = new Tile (exportedTile.Value, tvertexsize, Texture.Width, Texture.Height);

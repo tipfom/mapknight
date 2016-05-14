@@ -7,7 +7,7 @@ namespace mapKnight.Android.CGL.GUI {
 
         private float currentPercent;
 
-        public GUIBar (ChangingProperty binder, fRectangle bounds) : base (bounds) {
+        public GUIBar (ChangingProperty binder, Rectangle bounds) : base (bounds) {
             binder.Changed += binder_Changed;
             currentPercent = binder.Percent;
         }
@@ -20,8 +20,8 @@ namespace mapKnight.Android.CGL.GUI {
         public override List<CGLVertexData> GetVertexData () {
             List<CGLVertexData> vertexData = new List<CGLVertexData> ( );
 
-            fVector2D globalPosition = Screen.ToGlobal (this.Bounds.Position);
-            fVector2D globalSize = new fVector2D (this.Bounds.Size.X * Screen.ScreenRatio, this.Bounds.Size.Y) * 2;
+            Vector2 globalPosition = Screen.ToGlobal (this.Bounds.Position);
+            Vector2 globalSize = new Vector2 (this.Bounds.Size.X * Screen.ScreenRatio, this.Bounds.Size.Y) * 2;
             float borderWidthHalf = globalSize.Y * BORDER_BOUNDS_RATIO;
             float borderPosition = globalPosition.X + globalSize.X * currentPercent;
 

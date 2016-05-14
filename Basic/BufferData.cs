@@ -6,7 +6,7 @@ namespace mapKnight.Basic
 	{
 		public int FrameBuffer;
 		public int RenderBuffer;
-		public int FrameBufferTexture;
+		public int Texture;
 
 		public int Width;
 		public int Height;
@@ -15,7 +15,7 @@ namespace mapKnight.Basic
 		{
 			this.FrameBuffer = framebuffer;
 			this.RenderBuffer = renderbuffer;
-			this.FrameBufferTexture = framebuffertexture;
+			this.Texture = framebuffertexture;
 			this.Width = width;
 			this.Height = height;
 		}

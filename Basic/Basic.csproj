@@ -30,22 +30,20 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AABB.cs" />
+    <Compile Include="Components\Animation.cs" />
+    <Compile Include="Components\Bone.cs" />
+    <Compile Include="Components\Sprite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BufferData.cs" />
     <Compile Include="Color.cs" />
-    <Compile Include="fPoint.cs" />
-    <Compile Include="fRectangle.cs" />
-    <Compile Include="fSize.cs" />
-    <Compile Include="fVector2D.cs" />
-    <Compile Include="HexValue.cs" />
-    <Compile Include="Point.cs" />
     <Compile Include="Rectangle.cs" />
+    <Compile Include="Components\Step.cs" />
+    <Compile Include="Vector2.cs" />
     <Compile Include="Size.cs" />
-    <Compile Include="Vector2D.cs" />
-    <Compile Include="Version.cs" />
+    <Compile Include="Transform.cs" />
     <Compile Include="ChangingProperty.cs" />
     <Compile Include="XMLElemental.cs" />
+    <Compile Include="MathHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

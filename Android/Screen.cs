@@ -6,25 +6,30 @@ namespace mapKnight.Android {
         public delegate void HandleScreenChange ();
         public static event HandleScreenChange Changed;
 
-        public static fVector2D ScreenSize { get; private set; }
+        public static Vector2 ScreenSize { get; private set; }
         public static float ScreenRatio { get; private set; }
         public static CGLMatrix DefaultMatrix { get; private set; }
 
         public static void Change (Size screensize) {
-            ScreenSize = new fVector2D (screensize.Width, screensize.Height);
+            ScreenSize = new Vector2 (screensize.Width, screensize.Height);
             ScreenRatio = ScreenSize.X / ScreenSize.Y;
 
-            if (DefaultMatrix == null)
+            if (DefaultMatrix == null) {
                 DefaultMatrix = new CGLMatrix ( );
+            } else {
+                DefaultMatrix.ResetView ( );
+                DefaultMatrix.UpdateProjection ( );
+                DefaultMatrix.CalculateMVP ( );
+            }
             Changed?.Invoke ( );
         }
 
-        public static fVector2D ToLocal (fVector2D globalPosition) {
-            return new fVector2D (globalPosition.X / 2 / ScreenRatio + 0.5f, globalPosition.Y / 2 + 0.5f);
+        public static Vector2 ToLocal (Vector2 globalPosition) {
+            return new Vector2 (globalPosition.X / 2 / ScreenRatio + 0.5f, globalPosition.Y / 2 + 0.5f);
         }
 
-        public static fVector2D ToGlobal (fVector2D localPosition) {
-            return new fVector2D ((localPosition.X - 0.5f) * 2 * ScreenRatio, (localPosition.Y - 0.5f) * -2);
+        public static Vector2 ToGlobal (Vector2 localPosition) {
+            return new Vector2 ((localPosition.X - 0.5f) * 2 * ScreenRatio, (localPosition.Y - 0.5f) * -2);
         }
 
         public static float[ ] ToGlobal (float[ ] localPositions) {

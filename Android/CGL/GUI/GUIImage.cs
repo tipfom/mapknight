@@ -8,7 +8,7 @@ namespace mapKnight.Android.CGL.GUI {
         private Color _ModificationColor;
         public Color ModificationColor { get { return _ModificationColor; } set { _ModificationColor = value; RequestUpdate ( ); } }
 
-        public GUIImage (string idletexture, string clicktexture, Color modificationcolor, fRectangle bounds) : base (bounds) {
+        public GUIImage (string idletexture, string clicktexture, Color modificationcolor, Rectangle bounds) : base (bounds) {
             textureIdle = idletexture;
             textureClick = clicktexture;
 

@@ -11,12 +11,13 @@ namespace mapKnight.Android.Map {
         // x,y,layer
         private int[ , , ] Data;
 
-        public Size Size;
+        public Vector2 Bounds { get; private set; }
 
         public string Creator;
         public string Name;
-        public fPoint SpawnPoint;
+        public Vector2 SpawnPoint;
         public TileManager TileManager;
+        public float VertexSize { get; protected set; }
 
         public Map (string filename) {
             if (Path.GetExtension (filename) != ".map")
@@ -37,10 +38,10 @@ namespace mapKnight.Android.Map {
                 // check if file has the map prebytes
                 if (reader.ReadBytes (8).SequenceEqual (IDENTIFIER)) {
                     // read header and load tileset
-                    Size = new Size ((int)reader.ReadInt16 ( ), (int)reader.ReadInt16 ( ));
-                    SpawnPoint = new fPoint ((float)reader.ReadInt16 ( ), (float)reader.ReadInt16 ( ));
+                    Bounds = new Vector2 ((int)reader.ReadInt16 ( ), (int)reader.ReadInt16 ( ));
+                    SpawnPoint = new Vector2 ((float)reader.ReadInt16 ( ), (float)reader.ReadInt16 ( ));
                     TileManager = new TileManager (Encoding.UTF8.GetString (reader.ReadBytes (reader.ReadInt16 ( ))));
-                    Data = new int[Size.Width, Size.Height, 3];
+                    Data = new int[(int)Bounds.X, (int)Bounds.Y, 3];
 
                     // read in mapdata
                     switch (reader.ReadByte ( )) {
@@ -54,8 +55,8 @@ namespace mapKnight.Android.Map {
                                 if (data == -1) {
                                     currentlayer++;
                                 } else {
-                                    int y = (int)(data / Size.Width);
-                                    int x = data - (int)(y * Size.Width);
+                                    int y = (int)(data / Bounds.X);
+                                    int x = data - (int)(y * Bounds.X);
                                     Data[x, y, currentlayer] = currenttile;
                                 }
                             }
@@ -73,8 +74,8 @@ namespace mapKnight.Android.Map {
                                 if (data == -1) {
                                     currentlayer++;
                                 } else {
-                                    int y = this.Size.Height - (int)(data / Size.Width);
-                                    int x = data - (int)(y * Size.Width);
+                                    int y = (int)this.Bounds.Y - (int)(data / Bounds.X);
+                                    int x = data - (int)(y * Bounds.X);
                                     Data[x, y, currentlayer] = currenttile;
                                 }
                             }
@@ -86,8 +87,8 @@ namespace mapKnight.Android.Map {
 
                     // uncompress mapdata
                     int[ ] currentTile = new int[ ] { -1, -1, -1 };
-                    for (int y = 0; y < Size.Height; y++) {
-                        for (int x = 0; x < Size.Width; x++) {
+                    for (int y = 0; y < Bounds.Y; y++) {
+                        for (int x = 0; x < Bounds.X; x++) {
                             for (int layer = 0; layer < 3; layer++) {
                                 if (Data[x, y, layer] != currentTile[layer] && Data[x, y, layer] != 0) {
                                     currentTile[layer] = Data[x, y, layer];

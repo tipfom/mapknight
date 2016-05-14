@@ -57,6 +57,14 @@
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
@@ -71,6 +79,8 @@
     <Compile Include="Assets.cs" />
     <Compile Include="CGL\Buffer\CGLBufferBatch.cs" />
     <Compile Include="CGL\Buffer\CGLColorBufferBatch.cs" />
+    <Compile Include="CGL\CGLEntityRenderer.cs" />
+    <Compile Include="CGL\CGLMap.cs" />
     <Compile Include="CGL\CGLSprite2D.cs" />
     <Compile Include="CGL\CGLMatrix.cs" />
     <Compile Include="CGL\CGLVertexData.cs" />
@@ -80,20 +90,39 @@
     <Compile Include="CGL\GUI\GUIImage.cs" />
     <Compile Include="CGL\GUI\GUIItem.cs" />
     <Compile Include="CGL\GUI\GUITouchHandler.cs" />
+    <Compile Include="CGL\Programs\Collection.cs" />
     <Compile Include="CGL\Programs\ColorProgram.cs" />
+    <Compile Include="CGL\Programs\EntityProgram.cs" />
     <Compile Include="Config\ContentConfig.cs" />
     <Compile Include="Config\GameConfig.cs" />
-    <Compile Include="Entity\EntityConfig.cs" />
-    <Compile Include="Entity\Stat.cs" />
+    <Compile Include="Entity\ComponentLoadException.cs" />
+    <Compile Include="Entity\Components\AnimationComponent.cs" />
+    <Compile Include="Entity\Components\CollisionComponent.cs" />
+    <Compile Include="Entity\Components\Configs\AnimationComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\CollisionComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\DrawComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\GravityComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\MotionComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\PushComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\SkeletComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\SpriteComponentConfig.cs" />
+    <Compile Include="Entity\Components\DrawComponent.cs" />
+    <Compile Include="Entity\Components\MotionComponent.cs" />
+    <Compile Include="Entity\Components\GravityComponent.cs" />
+    <Compile Include="Entity\Components\PushComponent.cs" />
+    <Compile Include="Entity\Components\SkeletComponent.cs" />
+    <Compile Include="Entity\Components\SpriteComponent.cs" />
+    <Compile Include="Entity\Components\TextureComponent.cs" />
+    <Compile Include="Entity\Component.cs" />
+    <Compile Include="Entity\Components\Configs\TextureComponentConfig.cs" />
+    <Compile Include="Entity\Map.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Scenes\MainMenuScene.cs" />
     <Compile Include="Scenes\SceneManager.cs" />
     <Compile Include="Map\Tile.cs" />
-    <Compile Include="MathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="CGL\CGLMap.cs" />
     <Compile Include="CGL\CGLRenderer.cs" />
     <Compile Include="CGL\CGLTexture2D.cs" />
     <Compile Include="CGL\CGLView.cs" />
@@ -103,41 +132,23 @@
     <Compile Include="CGL\Programs\MatrixProgram.cs" />
     <Compile Include="CGL\Programs\FBOProgram.cs" />
     <Compile Include="Map\TileManager.cs" />
-    <Compile Include="Enum\FontStyle.cs" />
-    <Compile Include="Enum\Orientation.cs" />
-    <Compile Include="Enum\MessageType.cs" />
     <Compile Include="Map\Map.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="Enum\Attribute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Content.cs" />
     <Compile Include="CGL\CGLCamera.cs" />
     <Compile Include="Entity\Entity.cs" />
-    <Compile Include="Entity\Slot.cs" />
-    <Compile Include="Entity\Set.cs" />
-    <Compile Include="Entity\EntityPreset.cs" />
-    <Compile Include="Physics\Map.cs" />
-    <Compile Include="Physics\Entity.cs" />
-    <Compile Include="Physics\Flag.cs" />
-    <Compile Include="Enum\Direction.cs" />
-    <Compile Include="CGL\CGLAnimation.cs" />
-    <Compile Include="CGL\Entity\CGLBoundedPoint.cs" />
-    <Compile Include="CGL\Entity\CGLEntity.cs" />
-    <Compile Include="CGL\Entity\CGLEntityPreset.cs" />
-    <Compile Include="CGL\Entity\CGLEntitySet.cs" />
-    <Compile Include="Character\Character.cs" />
-    <Compile Include="Character\CharacterPreset.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\maps\testmap.map" />
     <AndroidAsset Include="Assets\config\sprites\interface.json" />
     <AndroidAsset Include="Assets\config\content.json" />
+    <AndroidAsset Include="Assets\config\game.json" />
+    <AndroidAsset Include="Assets\entities\potatoe_patrick.json" />
+    <AndroidAsset Include="Assets\config\sprites\potatoe_patrick.json" />
     <AndroidAsset Include="Assets\maps\debug_map.map" />
     <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
-    <AndroidAsset Include="Assets\config\game.json" />
-    <AndroidAsset Include="Assets\config\entitys\robot.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -145,11 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\layout\" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\character\robot.character">
-      <SubType>Designer</SubType>
-    </AndroidAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
@@ -172,16 +178,10 @@
     <AndroidResource Include="Resources\values-v11\styles.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\entitys\robot\futuristic.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\shader\fragment\color.txt" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\vertex\color.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\debug_tileset.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-v21\styles.xml" />
@@ -194,5 +194,11 @@
       <Project>{50b1f9f5-dd73-483b-947b-32220dc7561b}</Project>
       <Name>Basic</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\potatoe_patrick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\tilesets\debug_tileset.png" />
   </ItemGroup>
 </Project>

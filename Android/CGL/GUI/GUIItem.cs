@@ -12,14 +12,14 @@ namespace mapKnight.Android.CGL.GUI {
         private bool multiClick;
         private int clickCount;
 
-        public fRectangle Bounds;
-        public fVector2D Position { get { return Bounds.Position; } set { Bounds.Position = value; RequestUpdate ( ); } }
-        public fVector2D Size { get { return Bounds.Size; } set { Bounds.Size = value; RequestUpdate ( ); } }
+        public Rectangle Bounds;
+        public Vector2 Position { get { return Bounds.Position; } set { Bounds.Position = value; RequestUpdate ( ); } }
+        public Vector2 Size { get { return Bounds.Size; } set { Bounds.Size = value; RequestUpdate ( ); } }
 
         private bool _Visible = true;
         public bool Visible { get { return _Visible; } set { _Visible = value; RequestUpdate ( ); } }
 
-        public GUIItem (fRectangle bounds, bool multiclick = false) {
+        public GUIItem (Rectangle bounds, bool multiclick = false) {
             this.Bounds = bounds;
             this.multiClick = multiclick;
         }
@@ -44,7 +44,7 @@ namespace mapKnight.Android.CGL.GUI {
             }
         }
 
-        public bool Collides (fVector2D touchPosition) {
+        public bool Collides (Vector2 touchPosition) {
             return (this.Bounds.Left < touchPosition.X && this.Bounds.Right > touchPosition.X &&
                             this.Bounds.Top < touchPosition.Y && this.Bounds.Bottom > touchPosition.Y);
         }

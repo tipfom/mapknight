@@ -28,7 +28,7 @@ namespace mapKnight.Android.CGL.Programs {
         }
 
         public void Draw (ShortBuffer indexBuffer) {
-            Draw (indexBuffer, indexBuffer.Limit ( ), GL.GlTriangles);
+            Draw (indexBuffer, indexBuffer.Limit (), GL.GlTriangles);
         }
 
         public void Draw (ShortBuffer indexBuffer, int count) {
@@ -39,15 +39,27 @@ namespace mapKnight.Android.CGL.Programs {
             GL.GlDrawElements (mode, count, GL.GlUnsignedShort, indexBuffer);
         }
 
-        public void Draw (FloatBuffer vertexBuffer, FloatBuffer textureBuffer, FloatBuffer colorBuffer, ShortBuffer indexBuffer, int texture, float[ ] matrix, bool alphaBlending = false) {
-            SetTexture (texture);
-            SetMVPMatrix (matrix);
-            SetTextureBuffer (textureBuffer);
-            SetVertexBuffer (vertexBuffer);
-            SetColorBuffer (colorBuffer);
-            if (alphaBlending)
-                EnableAlphaBlending ( );
-            Draw (indexBuffer);
+        public void Draw (FloatBuffer vertexBuffer, FloatBuffer textureBuffer, FloatBuffer colorBuffer, ShortBuffer indexBuffer, int texture, float[] matrix, bool alphaBlending = false) {
+
+            // set texture
+            GL.GlActiveTexture (GL.GlTexture0);
+            GL.GlBindTexture (GL.GlTexture2d, texture);
+            GL.GlUniform1i (textureUniformHandle, 0);
+            // set matrix
+            GL.GlUniformMatrix4fv (mvpMatrixHandle, 1, false, Screen.DefaultMatrix.MVP, 0);
+            // set texture buffer
+            GL.GlVertexAttribPointer (textureCoordinateHandle, 2, GL.GlFloat, false, 0, textureBuffer);
+            // set vertex buffer
+            GL.GlVertexAttribPointer (positionHandle, 2, GL.GlFloat, false, 2 * sizeof (float), vertexBuffer);
+            // set color buffer
+            GL.GlVertexAttribPointer (colorHandle, 4, GL.GlFloat, false, 0, colorBuffer);
+            // enable alphablending if wanted
+            if (alphaBlending) {
+                GL.GlEnable (GL.GlBlend);
+                GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);
+            }
+            //draw
+            GL.GlDrawElements (GL.GlTriangles, indexBuffer.Limit (), GL.GlUnsignedShort, indexBuffer);
         }
 
         public void Begin () {
@@ -90,7 +102,7 @@ namespace mapKnight.Android.CGL.Programs {
             GL.GlVertexAttribPointer (positionHandle, dimensions, GL.GlFloat, false, dimensions * sizeof (float), vertexBuffer);
         }
 
-        public void SetMVPMatrix (float[ ] matrix) {
+        public void SetMVPMatrix (float[] matrix) {
             GL.GlUniformMatrix4fv (mvpMatrixHandle, 1, false, matrix, 0);
         }
 

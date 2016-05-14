@@ -9,7 +9,7 @@ namespace mapKnight.Android.CGL.Programs {
 
         private static Dictionary<string, int> loadedShader = new Dictionary<string, int> ( );
 
-        public static void Load () {
+        public static void Prepare () {
             // load all vertex shader
             foreach (string vertexshaderpath in Content.Context.Assets.List (VERTEX_SHADER_LOCATION)) {
                 string shadername = Path.GetFileNameWithoutExtension (vertexshaderpath);
@@ -33,11 +33,10 @@ namespace mapKnight.Android.CGL.Programs {
             GL.GlShaderSource (shader, code);
             GL.GlCompileShader (shader);
 
-            int error = GL.GlGetError ( );
-            string source = GL.GlGetShaderSource (shader);
             string log = GL.GlGetShaderInfoLog (shader);
             Log.Print (typeof (ProgramHelper), "Loaded new shader (id = " + shader.ToString ( ) + ")");
             Log.Print (typeof (ProgramHelper), "Log = " + log);
+            Log.Print (typeof (ProgramHelper), "GL.GLGetError returned " + GL.GlGetError ( ).ToString ( ));
 
             return shader;
         }
@@ -61,6 +60,7 @@ namespace mapKnight.Android.CGL.Programs {
 
             Log.Print (typeof (ProgramHelper), "Loaded new program (id = " + program.ToString ( ) + ")");
             Log.Print (typeof (ProgramHelper), "Log = " + GL.GlGetProgramInfoLog (program));
+            Log.Print (typeof (ProgramHelper), "GL.GLGetError returned " + GL.GlGetError ( ).ToString ( ));
 
             return program;
         }

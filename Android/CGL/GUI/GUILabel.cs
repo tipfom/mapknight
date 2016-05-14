@@ -10,34 +10,41 @@ namespace mapKnight.Android.CGL.GUI {
         private string _Text;
         public string Text {
             get { return _Text; }
-            set {
-                _Text = value;
-                RequestUpdate ( );
-            }
+            set { _Text = value; RequestUpdate ( ); }
+        }
+        private Color _Color;
+        public Color Color {
+            get { return _Color; }
+            set { _Color = value; RequestUpdate ( ); }
         }
 
-        readonly fVector2D charSize;
+        readonly Vector2 charSize;
 
-        public GUILabel (fVector2D position, float size, string text = "default") : base (new fRectangle (position, new fVector2D (0f, 0f))) {
+        public GUILabel (Vector2 position, float size, string text = "default") : this (position, size, Color.White, text) {
+
+        }
+
+        public GUILabel (Vector2 position, float size, Color color, string text = "default") : base (new Rectangle (position, new Vector2 (0f, 0f))) {
             // label needs no touch management
             this._Text = text;
-            this.charSize = new fVector2D (CHAR_WIDTH_PIXEL * size / CHAR_HEIGHT_PIXEL, size);
+            this._Color = color;
+            this.charSize = new Vector2 (CHAR_WIDTH_PIXEL * size / CHAR_HEIGHT_PIXEL, size);
         }
 
         public override List<CGLVertexData> GetVertexData () {
-            return GetVertexData (this.Text, Screen.ToGlobal (this.Position), this.charSize);
+            return GetVertexData (this.Text, Screen.ToGlobal (this.Position), this.charSize, this.Color);
         }
 
-        public fVector2D MeasureText () {
+        public Vector2 MeasureText () {
             return MeasureText (Text, this.charSize);
         }
 
 
-        public static List<CGLVertexData> GetVertexData (string text, fVector2D position, fVector2D charSize) {
+        public static List<CGLVertexData> GetVertexData (string text, Vector2 position, Vector2 charSize, Color color) {
             List<CGLVertexData> vertexData = new List<CGLVertexData> ( );
             charSize *= 2; // scale to screen size
 
-            fVector2D currentPoint = position;
+            Vector2 currentPoint = position;
             foreach (char character in text) {
                 if (character == '\n') {
                     currentPoint.X = position.X;
@@ -51,7 +58,8 @@ namespace mapKnight.Android.CGL.GUI {
                             currentPoint.X,currentPoint.Y - charSize.Y,
                             currentPoint.X+ charSize.X,currentPoint.Y - charSize.Y,
                             currentPoint.X+ charSize.X,currentPoint.Y},
-                        character.ToString ( ).ToUpper ( ), Color.White
+                        character.ToString ( ).ToUpper ( ),
+                        color
                         ));
                     currentPoint.X += charSize.X;
                 }
@@ -60,7 +68,7 @@ namespace mapKnight.Android.CGL.GUI {
             return vertexData;
         }
 
-        public static fVector2D MeasureText (string text, fVector2D charSize) {
+        public static Vector2 MeasureText (string text, Vector2 charSize) {
             charSize *= 2;
 
             int maxWidth = 0;
@@ -79,7 +87,7 @@ namespace mapKnight.Android.CGL.GUI {
             if (currentWidth > maxWidth)
                 maxWidth = currentWidth;
 
-            return new fVector2D (charSize.X * maxWidth, charSize.Y * height);
+            return new Vector2 (charSize.X * maxWidth, charSize.Y * height);
         }
 
     }

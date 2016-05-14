@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using mapKnight.Basic;
+
+namespace mapKnight.Android.Entity.Components {
+    public class DrawComponent : Component {
+        public DrawComponent (Entity owner) : base (owner) {
+
+        }
+
+        public override void Update (float dt) {
+            if (Owner.Owner.IsOnScreen (Owner)) {
+                Entity.VertexData entityVertexData = new Entity.VertexData ( );
+                Dictionary<string, string> spriteData = new Dictionary<string, string> ( );
+                Dictionary<string, float[ ]> vertexData = new Dictionary<string, float[ ]> ( );
+
+                while (Owner.HasComponentInfo (Type.Draw)) {
+                    Info info = Owner.GetComponentInfo (Type.Draw);
+                    switch (info.Action) {
+                    case Action.TextureData:
+                        // bodypart name, sprite name
+                        spriteData = (Dictionary<string, string>)info.Data;
+                        break;
+                    case Action.VertexData:
+                        vertexData = (Dictionary<string, float[ ]>)info.Data;
+                        entityVertexData.QuadCount = vertexData.Count;
+                        break;
+                    }
+                }
+
+                entityVertexData.Entity = Owner.ID;
+                entityVertexData.SpriteNames = new List<string> ( );
+                entityVertexData.VertexCoords = new float[vertexData.Count * 8];
+                int currentEntry = 0;
+
+                Vector2 positionOnScreen = (Owner.Transform.Center - Owner.Owner.Camera.ScreenCentre) * Owner.Owner.VertexSize;
+                foreach (var entry in vertexData) {
+                    Array.Copy (MathHelper.Translate (entry.Value, 0, 0, positionOnScreen.X, positionOnScreen.Y), 0, entityVertexData.VertexCoords, currentEntry * 8, 8);
+                    entityVertexData.SpriteNames.Add (spriteData[entry.Key]);
+                    currentEntry++;
+                }
+
+                Owner.Owner.Renderer.QueueVertexData (entityVertexData);
+            }
+        }
+    }
+}

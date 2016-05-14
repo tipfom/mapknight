@@ -11,17 +11,13 @@ namespace mapKnight.Android.Scenes {
         private GUIButton creditsButton;
 
         public MainMenuScene () {
-            string versionLabelText = $"Version : {Content.Version.ToString (false)} (" +
-#if DEBUG
-                "DEBUG)";
-#else
-                "STABLE)";
-#endif
+            string versionLabelText = $"Version : {Content.Version}";
+
 
             GUI = new GUI ( );
-            versionLabel = GUI.Add (new GUILabel (new fVector2D (0f, 0f), 0.05f, versionLabelText));
-            headerLabel = GUI.Add (new GUILabel (new fVector2D (0f, 0.8f), 0.2f, "MAPKNIGHT"));
-            playButton = GUI.Add (new GUIButton ("play", Color.White, new fRectangle (0.25f, 0.35f, 0.5f, 0.3f)));
+            versionLabel = GUI.Add (new GUILabel (new Vector2 (0f, 0f), 0.05f, versionLabelText));
+            headerLabel = GUI.Add (new GUILabel (new Vector2 (0f, 0.8f), 0.2f, "MAPKNIGHT"));
+            playButton = GUI.Add (new GUIButton ("play", Color.White, new Rectangle (0.25f, 0.35f, 0.5f, 0.3f)));
             playButton.Click += () => {
                 Content.SceneManager.Next (this, typeof (GameScene), null);
             };

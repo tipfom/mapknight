@@ -100,9 +100,9 @@ namespace mapKnight.Android.CGL.GUI {
         }
 
         public void Draw () {
-            Content.ColorProgram.Begin ( );
-            Content.ColorProgram.Draw (vertexBuffer, textureBuffer, colorBuffer, indexBuffer, sprite.Texture, Screen.DefaultMatrix.MVP, true);
-            Content.ColorProgram.End ( );
+            Content.ProgramCollection.Color.Begin ( );
+            Content.ProgramCollection.Color.Draw (vertexBuffer, textureBuffer, colorBuffer, indexBuffer, sprite.Texture, Screen.DefaultMatrix.MVP, true);
+            Content.ProgramCollection.Color.End ( );
         }
 
         public void Update (float dt) {

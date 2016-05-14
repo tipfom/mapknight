@@ -32,7 +32,7 @@ namespace mapKnight.Android.CGL.GUI {
                 case MotionEventActions.Down:
                 case MotionEventActions.PointerDown:
                     // user touched the screen
-                    fVector2D touchPosition = new fVector2D (e.GetX (pointerIndex) / Screen.ScreenSize.X, e.GetY (pointerIndex) / Screen.ScreenSize.Y);
+                    Vector2 touchPosition = new Vector2 (e.GetX (pointerIndex) / Screen.ScreenSize.X, e.GetY (pointerIndex) / Screen.ScreenSize.Y);
 
                     if (activeTouches.Count < MAX_TOUCH_COUNT) {
                         activeTouches.Add (new Touch (pointerId, touchPosition));
@@ -58,8 +58,8 @@ namespace mapKnight.Android.CGL.GUI {
                 case MotionEventActions.Move:
                     // user moved the finger
                     for (int i = 0; i < activeTouches.Count; i++) {
-                        fVector2D activeTouchPosition = new fVector2D (e.GetX (i) / Screen.ScreenSize.X, e.GetY (i) / Screen.ScreenSize.Y);
-                        if (activeTouches[i].Position - activeTouchPosition != fVector2D.Zero) {
+                        Vector2 activeTouchPosition = new Vector2 (e.GetX (i) / Screen.ScreenSize.X, e.GetY (i) / Screen.ScreenSize.Y);
+                        if (activeTouches[i].Position - activeTouchPosition != Vector2.Zero) {
                             // touch moved
                             foreach (GUIItem gui in getCurrentGUIItems()) {
                                 if (gui.Collides (activeTouchPosition) && !gui.Collides (activeTouches[i].Position)) {
@@ -94,9 +94,9 @@ namespace mapKnight.Android.CGL.GUI {
 
             // class to be able to change the position
             public readonly int ID;
-            public fVector2D Position;
+            public Vector2 Position;
 
-            public Touch (int id, fVector2D initialposition) {
+            public Touch (int id, Vector2 initialposition) {
                 ID = id;
                 Position = initialposition;
             }

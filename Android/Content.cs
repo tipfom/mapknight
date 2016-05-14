@@ -1,8 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Android.Content;
 using mapKnight.Android;
-using mapKnight.Android.CGL;
 using mapKnight.Android.CGL.GUI;
 using mapKnight.Android.CGL.Programs;
 using mapKnight.Android.Config;
@@ -14,11 +12,8 @@ namespace mapKnight {
     public static class Content {
         #region instances
         // version string
-        public static Basic.Version Version;
+        public static string Version;
         private static ContentConfig config;
-
-        //character
-        public static Character Character { get; private set; }
 
         //data
         public static Context Context { get; private set; }
@@ -27,9 +22,7 @@ namespace mapKnight {
         public static GUITouchHandler TouchHandler { get; private set; }
 
         // programs
-        public static MatrixProgram MatrixProgram { get; private set; }
-        public static FBOProgram FBOProgram { get; private set; }
-        public static ColorProgram ColorProgram { get; private set; }
+        public static Collection ProgramCollection { get; private set; }
         #endregion
 
         #region inits
@@ -39,34 +32,30 @@ namespace mapKnight {
 
         public static void PrepareInit (Context context) {
             Context = context;
-            Version = new Basic.Version (Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString ( ));
+            Version = Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString (3);
+#if DEBUG
+            Version += " (DEBUG)";
+#else
+            Version += " (STABLE)";
+#endif
+
             config = JsonConvert.DeserializeObject<ContentConfig> (Assets.Load<string> ("config", "content.json"));
 
             Screen.Change (new Size (context.Resources.DisplayMetrics.WidthPixels, context.Resources.DisplayMetrics.HeightPixels));
-            Log.Print (typeof (Content), "Current Version : " + Version.ToString ( ));
+            Log.Print (typeof (Content), "Current Version : " + Version);
         }
 
         public static void Init () {
-            ProgramHelper.Load ( );
-            FBOProgram = new FBOProgram ( );
-            MatrixProgram = new MatrixProgram ( );
-            ColorProgram = new ColorProgram ( );
+            ProgramCollection = new Collection ( );
             SceneManager = new SceneManager (
                 new MainMenuScene ( ),
                 new GameScene (JsonConvert.DeserializeObject<GameConfig> (Assets.Load<string> ("config", "game.json"))));
             TouchHandler = new GUITouchHandler (SceneManager.GetCurrentGUIItems);
             // Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));
 
-            LoadCharacter ( );
-
             Initialized?.Invoke (Content.Context);
         }
 
-        private static void LoadCharacter () {
-            CharacterPreset preset = new CharacterPreset (XMLElemental.Load (Context.Assets.Open ("character/robot.character")), Context);
-            Character = preset.Instantiate (10, "futuristic");
-            Character.CollisionMask = Android.Physics.Flag.Map;
-        }
         #endregion
     }
 }

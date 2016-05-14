@@ -6,8 +6,7 @@
       "X": 0,
       "Y": 0,
       "Name": "None",
-      "MaskFlag": [
-      ],
+      "MaskFlag": [],
       "Attributes": {}
     },
     "1": {
@@ -29,8 +28,8 @@
       "Attributes": {}
     },
     "3": {
-      "X": 63,
-      "Y": 0,
+      "X": 0,
+      "Y": 21,
       "Name": "",
       "MaskFlag": [
         "COLLISION"
@@ -38,8 +37,8 @@
       "Attributes": {}
     },
     "4": {
-      "X": 84,
-      "Y": 0,
+      "X": 21,
+      "Y": 21,
       "Name": "",
       "MaskFlag": [
         "COLLISION"
@@ -47,8 +46,8 @@
       "Attributes": {}
     },
     "5": {
-      "X": 105,
-      "Y": 0,
+      "X": 42,
+      "Y": 21,
       "Name": "",
       "MaskFlag": [
         "COLLISION"
@@ -57,7 +56,7 @@
     },
     "6": {
       "X": 0,
-      "Y": 21,
+      "Y": 42,
       "Name": "",
       "MaskFlag": [
         "COLLISION"
@@ -66,160 +65,7 @@
     },
     "7": {
       "X": 21,
-      "Y": 21,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "8": {
-      "X": 42,
-      "Y": 21,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "9": {
-      "X": 63,
-      "Y": 21,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "10": {
-      "X": 84,
-      "Y": 21,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "11": {
-      "X": 105,
-      "Y": 21,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "12": {
-      "X": 0,
       "Y": 42,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "13": {
-      "X": 21,
-      "Y": 42,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "14": {
-      "X": 42,
-      "Y": 42,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "15": {
-      "X": 63,
-      "Y": 42,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "16": {
-      "X": 84,
-      "Y": 42,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "17": {
-      "X": 105,
-      "Y": 42,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "18": {
-      "X": 0,
-      "Y": 63,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "19": {
-      "X": 21,
-      "Y": 63,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "20": {
-      "X": 42,
-      "Y": 63,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "21": {
-      "X": 63,
-      "Y": 63,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "22": {
-      "X": 84,
-      "Y": 63,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "23": {
-      "X": 105,
-      "Y": 63,
-      "Name": "",
-      "MaskFlag": [
-        "COLLISION"
-      ],
-      "Attributes": {}
-    },
-    "24": {
-      "X": 0,
-      "Y": 84,
       "Name": "",
       "MaskFlag": [
         "COLLISION"
