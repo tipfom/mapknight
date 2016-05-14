@@ -1,5 +1,5 @@
 using Java.Nio;
-using mapKnight.Android.Entity;
+using mapKnight.Android.ECS;
 using mapKnight.Android.Map;
 using mapKnight.Basic;
 using System;
@@ -32,7 +32,7 @@ namespace mapKnight.Android.CGL {
 
         public CGLCamera Camera { get; private set; }
 
-        private HashSet<Entity.Entity> entities = new HashSet<Entity.Entity> ();
+        private HashSet<Entity> entities = new HashSet<Entity> ();
 
         public CGLMap (string name, CGLCamera camera) : base (name) {
             Bounds = new Vector2 (base.Size.Width - 1, base.Size.Height - 1);
@@ -135,7 +135,7 @@ namespace mapKnight.Android.CGL {
         }
 
         public void Update (float dt) {
-            foreach (Entity.Entity entity in entities) {
+            foreach (Entity entity in entities) {
                 entity.Update (dt);
             }
             entityRenderer.Update ();
@@ -150,12 +150,12 @@ namespace mapKnight.Android.CGL {
             return ++currentID;
         }
 
-        public void Add (Entity.Entity entity) {
+        public void Add (Entity entity) {
             entities.Add (entity);
         }
 
-        public bool IsOnScreen (Entity.Entity entity) {
-            return (entity.Transform.Center - Camera.ScreenCentre).Abs() < Camera.DrawRange;
+        public bool IsOnScreen (Entity entity) {
+            return (entity.Transform.Center - Camera.ScreenCentre).Abs () < Camera.DrawRange;
         }
     }
 }

@@ -1,7 +1,7 @@
 using mapKnight.Android.CGL;
 using mapKnight.Android.CGL.GUI;
 using mapKnight.Android.Config;
-using mapKnight.Android.Entity;
+using mapKnight.Android.ECS;
 using System;
 
 namespace mapKnight.Android.Scenes {
@@ -15,7 +15,7 @@ namespace mapKnight.Android.Scenes {
             Camera = new CGLCamera (config.CharacterOffset);
             Map = new CGLMap (config.Map, Camera);
             EntityConfig potatoe_joe_config = Assets.Load<EntityConfig> ("potatoe_patrick");
-            Entity.Entity potatoe_joe_example = potatoe_joe_config.Create (new Basic.Vector2 (5f, 7f), Map);
+            Entity potatoe_joe_example = potatoe_joe_config.Create (new Basic.Vector2 (5f, 7f), Map);
             //potatoe_joe_example.SetComponentInfo (Entity.Component.Type.Animation, Entity.Component.Type.Animation, Entity.Component.Action.Animation, "check_1234");
         }
 

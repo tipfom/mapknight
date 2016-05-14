@@ -1,5 +1,5 @@
 using Java.Nio;
-using mapKnight.Android.Entity;
+using mapKnight.Android.ECS;
 using System;
 using System.Collections.Generic;
 

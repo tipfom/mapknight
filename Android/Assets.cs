@@ -1,7 +1,7 @@
 using Android.Graphics;
 using Android.Opengl;
 using mapKnight.Android.CGL;
-using mapKnight.Android.Entity;
+using mapKnight.Android.ECS;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -73,7 +73,7 @@ namespace mapKnight.Android {
 
         private static JsonSerializerSettings entitySerializerSettings = new JsonSerializerSettings () {
             TypeNameHandling = TypeNameHandling.Auto,
-            Binder = new Entity.ComponentSerializationBinder ()
+            Binder = new ComponentSerializationBinder ()
         };
         public static EntityConfig LoadEntity (string name) {
             return JsonConvert.DeserializeObject<EntityConfig> (Assets.Load<string> ("entities", $"{name}.json"), entitySerializerSettings);
