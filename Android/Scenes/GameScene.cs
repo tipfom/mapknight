@@ -7,26 +7,23 @@ using System;
 namespace mapKnight.Android.Scenes {
     public class GameScene : IScene {
         public GUI GUI { get; private set; }
-        public CGLCamera Camera;
         public CGLMap Map;
 
         public GameScene (GameConfig config) {
             GUI = new GUI ();
-            Camera = new CGLCamera (config.CharacterOffset);
-            Map = new CGLMap (config.Map, Camera);
+            Map = new CGLMap (config);
             EntityConfig potatoe_joe_config = Assets.Load<EntityConfig> ("potatoe_patrick");
             Entity potatoe_joe_example = potatoe_joe_config.Create (new Basic.Vector2 (5f, 7f), Map);
             //potatoe_joe_example.SetComponentInfo (Entity.Component.Type.Animation, Entity.Component.Type.Animation, Entity.Component.Action.Animation, "check_1234");
         }
 
         public void Begin (Type caller, object[] data) {
-
+            Map.Prepare ();
         }
 
         public void Draw () {
             Map.Draw ();
             GUI.Draw ();
-            Map.Draw ();
         }
 
         private float dtpassed;
@@ -34,10 +31,7 @@ namespace mapKnight.Android.Scenes {
             dtpassed += dt / 1000f;
 
             GUI.Update (dt);
-            Map.Update (dt);
-
-            Camera.Update (new Basic.Vector2 (0, 0), Map);
-            Map.UpdateTextureBuffer ();
+            Map.Update (dt, 0);
         }
     }
 }

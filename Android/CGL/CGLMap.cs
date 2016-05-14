@@ -1,4 +1,5 @@
 using Java.Nio;
+using mapKnight.Android.Config;
 using mapKnight.Android.ECS;
 using mapKnight.Android.Map;
 using mapKnight.Basic;
@@ -32,7 +33,11 @@ namespace mapKnight.Android.CGL {
 
         public CGLCamera Camera { get; private set; }
 
-        private HashSet<Entity> entities = new HashSet<Entity> ();
+        private List<Entity> entities = new List<Entity> ();
+
+        public CGLMap (GameConfig config) : this (config.Map, new CGLCamera (config.CharacterOffset)) {
+
+        }
 
         public CGLMap (string name, CGLCamera camera) : base (name) {
             Bounds = new Vector2 (base.Size.Width - 1, base.Size.Height - 1);
@@ -134,11 +139,13 @@ namespace mapKnight.Android.CGL {
             entityRenderer.Draw ();
         }
 
-        public void Update (float dt) {
+        public void Update (float dt, int focusEntityID) {
             foreach (Entity entity in entities) {
                 entity.Update (dt);
             }
             entityRenderer.Update ();
+
+            Camera.Update (entities.Find (entity => entity.ID == focusEntityID)?.Transform.Center ?? new Vector2 (0, 0), this);
         }
 
         public bool HasCollider (int x, int y) {
@@ -156,6 +163,16 @@ namespace mapKnight.Android.CGL {
 
         public bool IsOnScreen (Entity entity) {
             return (entity.Transform.Center - Camera.ScreenCentre).Abs () < Camera.DrawRange;
+        }
+
+        public Vector2 GetPositionOnScreen (Entity entity) {
+            return (entity.Transform.Center - Camera.ScreenCentre) * this.VertexSize;
+        }
+
+        public void Prepare () {
+            foreach (Entity entity in entities) {
+                entity.Prepare ();
+            }
         }
     }
 }

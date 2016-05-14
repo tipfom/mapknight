@@ -9,7 +9,7 @@ namespace mapKnight.Android.ECS.Components {
         }
 
         public override void Update (float dt) {
-            if (Owner.Owner.IsOnScreen (Owner)) {
+            if (Owner.IsOnScreen) {
                 EntityVertexData entityVertexData = new EntityVertexData ();
                 Dictionary<string, string> spriteData = new Dictionary<string, string> ();
                 Dictionary<string, float[]> vertexData = new Dictionary<string, float[]> ();
@@ -33,7 +33,7 @@ namespace mapKnight.Android.ECS.Components {
                 entityVertexData.VertexCoords = new float[vertexData.Count * 8];
                 int currentEntry = 0;
 
-                Vector2 positionOnScreen = (Owner.Transform.Center - Owner.Owner.Camera.ScreenCentre) * Owner.Owner.VertexSize;
+                Vector2 positionOnScreen = Owner.PositionOnScreen;
                 foreach (var entry in vertexData) {
                     Array.Copy (MathHelper.Translate (entry.Value, 0, 0, positionOnScreen.X, positionOnScreen.Y), 0, entityVertexData.VertexCoords, currentEntry * 8, 8);
                     entityVertexData.SpriteNames.Add (spriteData[entry.Key]);

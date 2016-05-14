@@ -35,7 +35,7 @@ namespace mapKnight.Android.CGL {
             drawTime = Draw ();
             calculateFrameTime ();
 
-            Log.Print (this, $"running at {1000f / frameTime} fps (drawtime={drawTime}; updatetime={updateTime})");
+            //Log.Print (this, $"running at {1000f / frameTime} fps (drawtime={drawTime}; updatetime={updateTime})");
         }
 
         public void OnSurfaceChanged (IGL10 gl, int width, int height) {

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Android.Content;
+﻿using Android.Content;
 using mapKnight.Android;
 using mapKnight.Android.CGL.GUI;
 using mapKnight.Android.CGL.Programs;
@@ -7,6 +6,7 @@ using mapKnight.Android.Config;
 using mapKnight.Android.Scenes;
 using mapKnight.Basic;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace mapKnight {
     public static class Content {
@@ -32,7 +32,7 @@ namespace mapKnight {
 
         public static void PrepareInit (Context context) {
             Context = context;
-            Version = Assembly.GetExecutingAssembly ( ).GetName ( ).Version.ToString (3);
+            Version = Assembly.GetExecutingAssembly ().GetName ().Version.ToString (3);
 #if DEBUG
             Version += " (DEBUG)";
 #else
@@ -46,9 +46,9 @@ namespace mapKnight {
         }
 
         public static void Init () {
-            ProgramCollection = new Collection ( );
+            ProgramCollection = new Collection ();
             SceneManager = new SceneManager (
-                new MainMenuScene ( ),
+                new MainMenuScene (),
                 new GameScene (JsonConvert.DeserializeObject<GameConfig> (Assets.Load<string> ("config", "game.json"))));
             TouchHandler = new GUITouchHandler (SceneManager.GetCurrentGUIItems);
             // Data = new SaveManager (System.IO.Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.Personal), "gamedata.db3"));

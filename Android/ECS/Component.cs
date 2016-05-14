@@ -18,6 +18,10 @@ namespace mapKnight.Android.ECS {
 
         }
 
+        public virtual void Prepare () {
+
+        }
+
         public override string ToString () {
             return this.GetType ().Name;
         }

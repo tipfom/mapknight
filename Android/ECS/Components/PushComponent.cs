@@ -1,5 +1,5 @@
-using System;
 using mapKnight.Basic;
+using System;
 
 namespace mapKnight.Android.ECS.Components {
     public class PushComponent : Component {
@@ -11,8 +11,11 @@ namespace mapKnight.Android.ECS.Components {
         public PushComponent (Entity owner, float intervall, Vector2 velocity, bool resetlastvelocity) : base (owner) {
             this.intervall = (int)(intervall * 1000); // to ms
             this.velocity = velocity;
-            this.lastPush = Environment.TickCount;
             this.resetLastVelocity = resetlastvelocity;
+        }
+
+        public override void Prepare () {
+            this.lastPush = Environment.TickCount;
         }
 
         public override void Update (float dt) {

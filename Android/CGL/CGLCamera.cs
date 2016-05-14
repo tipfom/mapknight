@@ -6,15 +6,14 @@ namespace mapKnight.Android.CGL {
     public class CGLCamera {
         public Vector2 CurrentMapTile;
 
-        public CGLMatrix MapMatrix { get; private set; }
+        public CGLMatrix MapMatrix { get; private set; } = new CGLMatrix ();
 
         public Vector2 ScreenCentre { get; private set; }
         public Vector2 DrawRange { get; private set; }
 
         public CGLCamera (float characteroffset) {
-            CurrentMapTile = new Vector2 ();
+            CurrentMapTile = new Vector2 (-1, -1);
 
-            MapMatrix = new CGLMatrix ();
             ScreenCentre = new Vector2 ();
             DrawRange = new Vector2 (10, 10);
         }
@@ -33,8 +32,11 @@ namespace mapKnight.Android.CGL {
 
             MapMatrix.CalculateMVP ();
 
-            CurrentMapTile.X = (int)Math.Max (0, nextMapTile.X);
-            CurrentMapTile.Y = (int)Math.Max (0, nextMapTile.Y);
+            Vector2 nextMapTileINT = new Vector2 ((int)Math.Max (0, nextMapTile.X), (int)Math.Max (0, nextMapTile.Y));
+            if (CurrentMapTile != nextMapTileINT) {
+                CurrentMapTile = nextMapTileINT;
+                map.UpdateTextureBuffer ();
+            }
 
             ScreenCentre = nextMapTile + (Vector2)map.DrawSize / 2;
         }
