@@ -12,12 +12,12 @@ namespace mapKnight.Android.CGL {
             bufferdata.FrameBuffer = temp[0];
 
             GL.GlGenTextures (1, temp, 0);
-            bufferdata.FrameBufferTexture = temp[0];
+            bufferdata.Texture = temp[0];
 
             GL.GlGenRenderbuffers (1, temp, 0);
             bufferdata.RenderBuffer = temp[0];
 
-            GL.GlBindTexture (GL.GlTexture2d, bufferdata.FrameBufferTexture);
+            GL.GlBindTexture (GL.GlTexture2d, bufferdata.Texture);
             GL.GlTexImage2D (GL.GlTexture2d, 0, GL.GlRgba, width, height, 0, GL.GlRgba, GL.GlUnsignedByte, null);
 
             GL.GlTexParameteri (GL.GlTexture2d, GL.GlTextureMinFilter, GL.GlNearest);
@@ -30,7 +30,7 @@ namespace mapKnight.Android.CGL {
 
             GL.GlBindFramebuffer (GL.GlFramebuffer, bufferdata.FrameBuffer);
 
-            GL.GlFramebufferTexture2D (GL.GlFramebuffer, GL.GlColorAttachment0, GL.GlTexture2d, bufferdata.FrameBufferTexture, 0);
+            GL.GlFramebufferTexture2D (GL.GlFramebuffer, GL.GlColorAttachment0, GL.GlTexture2d, bufferdata.Texture, 0);
 
             // reset
             GL.GlBindTexture (GL.GlTexture2d, 0);
@@ -63,7 +63,7 @@ namespace mapKnight.Android.CGL {
         public static void DeleteBufferData (BufferData bufferdata) {
             DeleteFrameBuffer (bufferdata.FrameBuffer);
             DeleteRenderBuffer (bufferdata.RenderBuffer);
-            DeleteTexture (bufferdata.FrameBufferTexture);
+            DeleteTexture (bufferdata.Texture);
         }
 
         public static BufferData UpdateFramebuffer (BufferData oldbufferdata) {
@@ -74,6 +74,26 @@ namespace mapKnight.Android.CGL {
         public static FloatBuffer CreateBuffer (float[ ] source) {
             return CreateBuffer (source, source.Length);
         }
+
+        public static T CreateBuffer<T> (int size) where T : Java.Nio.Buffer {
+            ByteBuffer byteBuffer = ByteBuffer.AllocateDirect ((int)size * sizeof (float));
+            byteBuffer.Order (ByteOrder.NativeOrder ( ));
+            T result;
+
+            if (typeof (T) == typeof (FloatBuffer)) {
+                result = (T)(object)byteBuffer.AsFloatBuffer ( );
+            } else if (typeof (T) == typeof (ShortBuffer)) {
+                result = (T)(object)byteBuffer.AsShortBuffer ( );
+            } else if (typeof (T) == typeof (IntBuffer)) {
+                result = (T)(object)byteBuffer.AsIntBuffer ( );
+            } else {
+                result = (T)(object)byteBuffer;
+            }
+
+            result.Position (0);
+            return result;
+        }
+
         public static ShortBuffer CreateShortBuffer (int size) {
             ByteBuffer byteBuffer = ByteBuffer.AllocateDirect ((int)size * sizeof (float));
             byteBuffer.Order (ByteOrder.NativeOrder ( ));
@@ -100,6 +120,19 @@ namespace mapKnight.Android.CGL {
             return floatBuffer;
         }
 
+        public static IntBuffer CreateBuffer (int[ ] source) {
+            return CreateBuffer (source, source.Length);
+        }
+
+        public static IntBuffer CreateBuffer (int[ ] source, int size) {
+            ByteBuffer byteBuffer = ByteBuffer.AllocateDirect (size * sizeof (float));
+            byteBuffer.Order (ByteOrder.NativeOrder ( ));
+            IntBuffer intBuffer = byteBuffer.AsIntBuffer ( );
+            intBuffer.Put (source);
+            intBuffer.Position (0);
+            return intBuffer;
+        }
+
         public static ShortBuffer CreateBuffer (short[ ] source) {
             return CreateBuffer (source, source.Length);
         }
@@ -111,6 +144,19 @@ namespace mapKnight.Android.CGL {
             shortBuffer.Put (source);
             shortBuffer.Position (0);
             return shortBuffer;
+        }
+
+        public static ShortBuffer CreateIndexBuffer (int quadCount) {
+            short[ ] indicies = new short[quadCount * 6];
+            for (int i = 0; i < quadCount; i++) {
+                indicies[i * 6 + 0] = (short)(i * 4 + 0);
+                indicies[i * 6 + 1] = (short)(i * 4 + 1);
+                indicies[i * 6 + 2] = (short)(i * 4 + 2);
+                indicies[i * 6 + 3] = (short)(i * 4 + 0);
+                indicies[i * 6 + 4] = (short)(i * 4 + 2);
+                indicies[i * 6 + 5] = (short)(i * 4 + 3);
+            }
+            return CGLTools.CreateBuffer (indicies);
         }
     }
 }

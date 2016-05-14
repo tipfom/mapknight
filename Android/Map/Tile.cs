@@ -9,7 +9,7 @@ namespace mapKnight.Android.Map {
         public TileMask Mask;
         public Dictionary<TileAttribute, string> Attributes;
 
-        public Tile (TileManager.ExportTile tileData, fSize tvertexsize, int imagewidth, int imageheight) : this ( ) {
+        public Tile (TileManager.ExportTile tileData, Vector2 tvertexsize, int imagewidth, int imageheight) : this ( ) {
             this.Name = tileData.Name;
             if (!Enum.TryParse (String.Join (",", tileData.MaskFlag), out Mask))
                 Mask = TileMask.NONE;
@@ -20,10 +20,10 @@ namespace mapKnight.Android.Map {
             float y = (float)tileData.Y / imageheight;
 
             this.Texture = new float[ ] {
-                    x, y + tvertexsize.Height,
+                    x, y + tvertexsize.Y,
                     x, y,
-                    x + tvertexsize.Width, y,
-                    x + tvertexsize.Width, y + tvertexsize.Height
+                    x + tvertexsize.X, y,
+                    x + tvertexsize.X, y + tvertexsize.Y
                 };
         }
 

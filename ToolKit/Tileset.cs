@@ -98,7 +98,7 @@ namespace mapKnight.ToolKit {
             parsed.Attributes.Add ("name", this.Name);
 
             // create texture
-            Dictionary<int, Basic.Point> texturecoords = new Dictionary<int, Basic.Point> ( );
+            Dictionary<int, Basic.Vector2> texturecoords = new Dictionary<int, Basic.Vector2> ( );
             // get best image width with base 2 size
             int imagewidthtile = (int)(Math.Sqrt (this.Tiles.Count)) + 1;
             int imagewidthpixelnopower = imagewidthtile * Tile.TILE_SIZE;
@@ -111,7 +111,7 @@ namespace mapKnight.ToolKit {
             using (Graphics g = Graphics.FromImage (this.texture)) {
                 for (int y = 0; y <= (int)(this.Tiles.Count / imagewidthtile) + 1; y++) {
                     for (int x = 0; x < Math.Min (imagewidthtile, this.Tiles.Count - y * imagewidthtile); x++) {
-                        texturecoords.Add (y * imagewidthtile + x, new Basic.Point (x * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
+                        texturecoords.Add (y * imagewidthtile + x, new Basic.Vector2 (x * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
                         g.DrawImage (this.Tiles[y * imagewidthtile + x].Texture, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
                     }
                 }

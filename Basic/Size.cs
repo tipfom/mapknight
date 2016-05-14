@@ -14,11 +14,7 @@ namespace mapKnight.Basic {
             return new Size (size1.Width - size2.Width, size1.Height - size2.Height);
         }
 
-        public static explicit operator Size (Vector2D vec) {
-            return new Size (vec.X, vec.Y);
-        }
-
-        public static explicit operator Size (fVector2D fvec) {
+        public static explicit operator Size (Vector2 fvec) {
             return new Size ((int)fvec.X, (int)fvec.Y);
         }
 
@@ -28,11 +24,6 @@ namespace mapKnight.Basic {
         public Size (int width, int height) {
             Width = width;
             Height = height;
-        }
-
-        public Size (Point point) {
-            Width = point.X;
-            Height = point.Y;
         }
 
         public Size (int sqrsidelength) {

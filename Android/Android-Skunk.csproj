@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{D7E142F8-7BDF-4AB3-8A0B-CB0F585CAFE0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>mapKnight.Android</RootNamespace>
+    <AndroidApplication>True</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <AssemblyName>mapKnight.Android</AssemblyName>
+    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
+    <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <Externalconsole>true</Externalconsole>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <BundleAssemblies>False</BundleAssemblies>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidSupportedAbis />
+    <AndroidStoreUncompressedFileExtensions>.dll</AndroidStoreUncompressedFileExtensions>
+    <MandroidI18n />
+    <Debugger>Xamarin</Debugger>
+    <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>1519;CS1519</NoWarn>
+    <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Data.Sqlite" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets.cs" />
+    <Compile Include="CGL\Buffer\CGLBufferBatch.cs" />
+    <Compile Include="CGL\Buffer\CGLColorBufferBatch.cs" />
+    <Compile Include="CGL\CGLEntityRenderer.cs" />
+    <Compile Include="CGL\CGLMap.cs" />
+    <Compile Include="CGL\CGLSprite2D.cs" />
+    <Compile Include="CGL\CGLMatrix.cs" />
+    <Compile Include="CGL\CGLVertexData.cs" />
+    <Compile Include="CGL\GUI\GUI.cs" />
+    <Compile Include="CGL\GUI\GUIBar.cs" />
+    <Compile Include="CGL\GUI\GUIButton.cs" />
+    <Compile Include="CGL\GUI\GUIImage.cs" />
+    <Compile Include="CGL\GUI\GUIItem.cs" />
+    <Compile Include="CGL\GUI\GUITouchHandler.cs" />
+    <Compile Include="CGL\Programs\Collection.cs" />
+    <Compile Include="CGL\Programs\ColorProgram.cs" />
+    <Compile Include="CGL\Programs\EntityProgram.cs" />
+    <Compile Include="Config\ContentConfig.cs" />
+    <Compile Include="Config\GameConfig.cs" />
+    <Compile Include="Entity\ComponentLoadException.cs" />
+    <Compile Include="Entity\Components\AnimationComponent.cs" />
+    <Compile Include="Entity\Components\CollisionComponent.cs" />
+    <Compile Include="Entity\Components\Configs\CollisionComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\DrawComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\GravityComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\MotionComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\PushComponentConfig.cs" />
+    <Compile Include="Entity\Components\Configs\SkeletComponentConfig.cs" />
+    <Compile Include="Entity\Components\DrawComponent.cs" />
+    <Compile Include="Entity\Components\MotionComponent.cs" />
+    <Compile Include="Entity\Components\GravityComponent.cs" />
+    <Compile Include="Entity\Components\PushComponent.cs" />
+    <Compile Include="Entity\Components\SkeletComponent.cs" />
+    <Compile Include="Entity\Components\TextureComponent.cs" />
+    <Compile Include="Entity\Component.cs" />
+    <Compile Include="Entity\Components\Configs\TextureComponentConfig.cs" />
+    <Compile Include="Entity\Map.cs" />
+    <Compile Include="Scenes\GameScene.cs" />
+    <Compile Include="Scenes\IScene.cs" />
+    <Compile Include="Scenes\MainMenuScene.cs" />
+    <Compile Include="Scenes\SceneManager.cs" />
+    <Compile Include="Map\Tile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="CGL\CGLRenderer.cs" />
+    <Compile Include="CGL\CGLTexture2D.cs" />
+    <Compile Include="CGL\CGLView.cs" />
+    <Compile Include="CGL\CGLTools.cs" />
+    <Compile Include="CGL\GUI\GUILabel.cs" />
+    <Compile Include="CGL\Programs\ProgramHelper.cs" />
+    <Compile Include="CGL\Programs\MatrixProgram.cs" />
+    <Compile Include="CGL\Programs\FBOProgram.cs" />
+    <Compile Include="Map\TileManager.cs" />
+    <Compile Include="Map\Map.cs" />
+    <Compile Include="Screen.cs" />
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Content.cs" />
+    <Compile Include="CGL\CGLCamera.cs" />
+    <Compile Include="Entity\Entity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\maps\testmap.map" />
+    <AndroidAsset Include="Assets\config\sprites\interface.json" />
+    <AndroidAsset Include="Assets\config\content.json" />
+    <AndroidAsset Include="Assets\maps\debug_map.map" />
+    <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
+    <AndroidAsset Include="Assets\config\game.json" />
+    <AndroidAsset Include="Assets\entities\coconutjoe.json" />
+    <AndroidAsset Include="Assets\config\sprites\coconutjoe.json" />
+    <None Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\layout\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\interface.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\matrix.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\normal.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\normal.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon.png" />
+    <AndroidResource Include="Resources\values\strings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values-v11\styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\color.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\color.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\tilesets\debug_tileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values-v21\styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\styles.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Basic\Basic.csproj">
+      <Project>{50b1f9f5-dd73-483b-947b-32220dc7561b}</Project>
+      <Name>Basic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\coconutjoe.png" />
+  </ItemGroup>
+</Project>

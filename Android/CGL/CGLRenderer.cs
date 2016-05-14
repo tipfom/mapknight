@@ -1,7 +1,7 @@
-﻿using System;
-using Android.Opengl;
+﻿using Android.Opengl;
 using Javax.Microedition.Khronos.Opengles;
 using mapKnight.Basic;
+using System;
 using GL = Android.Opengl.GLES20;
 
 namespace mapKnight.Android.CGL {
@@ -31,11 +31,13 @@ namespace mapKnight.Android.CGL {
         #region IRenderer implementation
 
         public void OnDrawFrame (IGL10 gl) {
-            drawTime = Draw ( );
-            updateTime = Update ( );
+            updateTime = Update ();
+            drawTime = Draw ();
             calculateFrameTime ();
+
+            //Log.Print (this, $"running at {1000f / frameTime} fps (drawtime={drawTime}; updatetime={updateTime})");
         }
-        
+
         public void OnSurfaceChanged (IGL10 gl, int width, int height) {
             GL.GlViewport (0, 0, width, height);
             Screen.Change (new Size (width, height));
@@ -43,7 +45,7 @@ namespace mapKnight.Android.CGL {
 
         public void OnSurfaceCreated (IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config) {
             // init ( needs to get called from openglcontext :/ )
-            Content.Init ( );
+            Content.Init ();
             GL.GlClearColor (0f, 0f, 0f, 1.0f);
         }
 
@@ -54,7 +56,6 @@ namespace mapKnight.Android.CGL {
 
             GL.GlClear (GL.GlColorBufferBit | GL.GlDepthBufferBit);
             Content.SceneManager.Current.Draw ();
-
             return Environment.TickCount - beginTime;
         }
 
