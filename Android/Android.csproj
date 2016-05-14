@@ -95,6 +95,7 @@
     <Compile Include="CGL\Programs\EntityProgram.cs" />
     <Compile Include="Config\ContentConfig.cs" />
     <Compile Include="Config\GameConfig.cs" />
+    <Compile Include="Entity\ComponentDependencyException.cs" />
     <Compile Include="Entity\ComponentLoadException.cs" />
     <Compile Include="Entity\Components\AnimationComponent.cs" />
     <Compile Include="Entity\Components\CollisionComponent.cs" />

@@ -1,6 +1,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace mapKnight.Android.Entity {
     public abstract class Component {
@@ -88,6 +90,46 @@ namespace mapKnight.Android.Entity {
             public Action Action;
             public Type Sender;
             public object Data;
+        }
+
+        public static System.Type GetComponentConfigType (Type type) {
+            return System.Type.GetType ($"mapKnight.Android.Entity.Components.Configs.{type.ToString ()}ComponentConfig");
+        }
+
+        public static System.Type GetComponentType (Type type) {
+            return System.Type.GetType ($"mapKnight.Android.Entity.Components.{type.ToString ()}Component");
+        }
+
+        // use inheritance (Animation needs Skelet and Draw, Skelet needs Draw, so Animation only needs Skelet)
+        private static Dictionary<Component.Type, Component.Type> Dependencies = new Dictionary<Type, Type> () {
+            [Component.Type.Animation] = Type.Skelet,
+            [Component.Type.Gravity] = Type.Motion,
+            [Component.Type.Push] = Type.Motion,
+            [Component.Type.Skelet] = Type.Draw,
+            [Component.Type.Sprite] = Type.Draw,
+            [Component.Type.Texture] = Type.Draw
+        };
+
+        public static void ResolveDependencies (ref List<Component.Config> componentConfigs) {
+            IEnumerable<Component.Type> componentTypes = componentConfigs.ToArray().Select (componentConfig => componentConfig.Type);
+            foreach (Component.Type componentType in componentTypes) {
+                if (!Dependencies.ContainsKey (componentType))
+                    continue;
+
+                Component.Type dependency = Dependencies[componentType];
+
+                if (!componentConfigs.Exists (componentConfig => componentConfig.Type == dependency)) {
+                    // dependency doesnt exist allready
+                    System.Type dependencyType = GetComponentType (dependency);
+                    ConstructorInfo dependencyConstructor = dependencyType.GetConstructor (new[] { typeof (Entity) });
+                    // check if dependency component could be initialized with an entity only
+                    if (dependencyConstructor == null)
+                        throw new ComponentDependencyException (componentType, dependency);
+                    else
+                        componentConfigs.Add ((Component.Config)Activator.CreateInstance (GetComponentConfigType (dependency)));
+
+                }
+            }
         }
     }
 }
