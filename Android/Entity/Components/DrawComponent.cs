@@ -1,6 +1,6 @@
+using mapKnight.Basic;
 using System;
 using System.Collections.Generic;
-using mapKnight.Basic;
 
 namespace mapKnight.Android.Entity.Components {
     public class DrawComponent : Component {
@@ -10,26 +10,26 @@ namespace mapKnight.Android.Entity.Components {
 
         public override void Update (float dt) {
             if (Owner.Owner.IsOnScreen (Owner)) {
-                Entity.VertexData entityVertexData = new Entity.VertexData ( );
-                Dictionary<string, string> spriteData = new Dictionary<string, string> ( );
-                Dictionary<string, float[ ]> vertexData = new Dictionary<string, float[ ]> ( );
+                EntityVertexData entityVertexData = new EntityVertexData ();
+                Dictionary<string, string> spriteData = new Dictionary<string, string> ();
+                Dictionary<string, float[]> vertexData = new Dictionary<string, float[]> ();
 
                 while (Owner.HasComponentInfo (ComponentType.Draw)) {
                     ComponentInfo ComponentInfo = Owner.GetComponentInfo (ComponentType.Draw);
                     switch (ComponentInfo.Action) {
-                    case ComponentAction.TextureData:
-                        // bodypart name, sprite name
-                        spriteData = (Dictionary<string, string>)ComponentInfo.Data;
-                        break;
-                    case ComponentAction.VertexData:
-                        vertexData = (Dictionary<string, float[ ]>)ComponentInfo.Data;
-                        entityVertexData.QuadCount = vertexData.Count;
-                        break;
+                        case ComponentAction.TextureData:
+                            // bodypart name, sprite name
+                            spriteData = (Dictionary<string, string>)ComponentInfo.Data;
+                            break;
+                        case ComponentAction.VertexData:
+                            vertexData = (Dictionary<string, float[]>)ComponentInfo.Data;
+                            entityVertexData.QuadCount = vertexData.Count;
+                            break;
                     }
                 }
 
                 entityVertexData.Entity = Owner.ID;
-                entityVertexData.SpriteNames = new List<string> ( );
+                entityVertexData.SpriteNames = new List<string> ();
                 entityVertexData.VertexCoords = new float[vertexData.Count * 8];
                 int currentEntry = 0;
 

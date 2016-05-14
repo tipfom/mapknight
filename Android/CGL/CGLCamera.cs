@@ -21,8 +21,8 @@ namespace mapKnight.Android.CGL {
 
         public void Update (Vector2 focusPoint, CGLMap map) {
             Vector2 nextMapTile = new Vector2 (
-                (focusPoint.X - map.DrawSize.Width / 2f).FitBounds (-1, map.Bounds.X - map.DrawSize.Width),
-                (focusPoint.Y - map.DrawSize.Height / 2f).FitBounds (-1, map.Bounds.Y - map.DrawSize.Height));
+                (focusPoint.X - map.DrawSize.Width / 2f).FitBounds (-1, map.Size.Width - map.DrawSize.Width),
+                (focusPoint.Y - map.DrawSize.Height / 2f).FitBounds (-1, map.Size.Height - map.DrawSize.Height));
 
             MapMatrix.ResetView ();
 

@@ -1,6 +1,7 @@
 using Android.Graphics;
 using Android.Opengl;
 using mapKnight.Android.CGL;
+using mapKnight.Android.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -74,8 +75,8 @@ namespace mapKnight.Android {
             TypeNameHandling = TypeNameHandling.Auto,
             Binder = new Entity.ComponentSerializationBinder ()
         };
-        public static Entity.Entity.Config LoadEntity (string name) {
-            return JsonConvert.DeserializeObject<Entity.Entity.Config> (Assets.Load<string> ("entities", $"{name}.json"), entitySerializerSettings);
+        public static EntityConfig LoadEntity (string name) {
+            return JsonConvert.DeserializeObject<EntityConfig> (Assets.Load<string> ("entities", $"{name}.json"), entitySerializerSettings);
         }
 
         public static T Load<T>(params string[] paths) {
@@ -86,7 +87,7 @@ namespace mapKnight.Android {
                 return (T)((object)LoadText (System.IO.Path.Combine (paths)));
             } else if (request == typeof (CGLSprite2D) && paths.Length == 2) {
                 return (T)((object)LoadSprite (paths[0], paths[1]));
-            } else if (request == typeof (Entity.Entity.Config) && paths.Length == 1) {
+            } else if (request == typeof (EntityConfig) && paths.Length == 1) {
                 return (T)((object)LoadEntity (paths[0]));
             } else {
                 throw new FileLoadException ($"requested filetype { request.FullName } couldnt be loaded with { paths.Length } parameters");

@@ -1,17 +1,17 @@
-﻿using System.IO;
+﻿using mapKnight.Basic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using mapKnight.Basic;
 
 namespace mapKnight.Android.Map {
     public class Map {
-        public static byte[ ] IDENTIFIER = { 84, 77, 83, 76, 4, 42, 133, 7 };
+        public static byte[] IDENTIFIER = { 84, 77, 83, 76, 4, 42, 133, 7 };
 
         // x,y,layer
-        private int[ , , ] Data;
+        private int[,,] Data;
 
-        public Vector2 Bounds { get; private set; }
+        public Size Size { get; private set; }
 
         public string Creator;
         public string Name;
@@ -25,7 +25,7 @@ namespace mapKnight.Android.Map {
             Load (Content.Context.Assets.Open (Path.Combine ("maps", filename)));
         }
 
-        public Map (byte[ ] data) {
+        public Map (byte[] data) {
             Load (data);
         }
 
@@ -38,57 +38,57 @@ namespace mapKnight.Android.Map {
                 // check if file has the map prebytes
                 if (reader.ReadBytes (8).SequenceEqual (IDENTIFIER)) {
                     // read header and load tileset
-                    Bounds = new Vector2 ((int)reader.ReadInt16 ( ), (int)reader.ReadInt16 ( ));
-                    SpawnPoint = new Vector2 ((float)reader.ReadInt16 ( ), (float)reader.ReadInt16 ( ));
-                    TileManager = new TileManager (Encoding.UTF8.GetString (reader.ReadBytes (reader.ReadInt16 ( ))));
-                    Data = new int[(int)Bounds.X, (int)Bounds.Y, 3];
+                    Size = new Size ((int)reader.ReadInt16 (), (int)reader.ReadInt16 ());
+                    SpawnPoint = new Vector2 ((float)reader.ReadInt16 (), (float)reader.ReadInt16 ());
+                    TileManager = new TileManager (Encoding.UTF8.GetString (reader.ReadBytes (reader.ReadInt16 ())));
+                    Data = new int[(int)Size.Width, (int)Size.Height, 3];
 
                     // read in mapdata
-                    switch (reader.ReadByte ( )) {
-                    case 1:
-                        // map is 16-bit decoded
-                        int currenttile = (int)reader.ReadInt16 ( );
-                        int currentlayer = 0;
-                        while (currenttile != 0) {
-                            while (currentlayer < 3) {
-                                int data = (int)reader.ReadInt16 ( ) - 1;
-                                if (data == -1) {
-                                    currentlayer++;
-                                } else {
-                                    int y = (int)(data / Bounds.X);
-                                    int x = data - (int)(y * Bounds.X);
-                                    Data[x, y, currentlayer] = currenttile;
+                    switch (reader.ReadByte ()) {
+                        case 1:
+                            // map is 16-bit decoded
+                            int currenttile = (int)reader.ReadInt16 ();
+                            int currentlayer = 0;
+                            while (currenttile != 0) {
+                                while (currentlayer < 3) {
+                                    int data = (int)reader.ReadInt16 () - 1;
+                                    if (data == -1) {
+                                        currentlayer++;
+                                    } else {
+                                        int y = (int)(data / Size.Width);
+                                        int x = data - (int)(y * Size.Width);
+                                        Data[x, y, currentlayer] = currenttile;
+                                    }
                                 }
+                                currenttile = (int)reader.ReadInt16 ();
+                                currentlayer = 0;
                             }
-                            currenttile = (int)reader.ReadInt16 ( );
+                            break;
+                        case 2:
+                            // map is 32-bit decoded
+                            currenttile = (int)reader.ReadInt32 ();
                             currentlayer = 0;
-                        }
-                        break;
-                    case 2:
-                        // map is 32-bit decoded
-                        currenttile = (int)reader.ReadInt32 ( );
-                        currentlayer = 0;
-                        while (currenttile != 0) {
-                            while (currentlayer < 3) {
-                                int data = (int)reader.ReadInt32 ( ) - 1;
-                                if (data == -1) {
-                                    currentlayer++;
-                                } else {
-                                    int y = (int)this.Bounds.Y - (int)(data / Bounds.X);
-                                    int x = data - (int)(y * Bounds.X);
-                                    Data[x, y, currentlayer] = currenttile;
+                            while (currenttile != 0) {
+                                while (currentlayer < 3) {
+                                    int data = (int)reader.ReadInt32 () - 1;
+                                    if (data == -1) {
+                                        currentlayer++;
+                                    } else {
+                                        int y = (int)this.Size.Height - (int)(data / Size.Width);
+                                        int x = data - (int)(y * Size.Width);
+                                        Data[x, y, currentlayer] = currenttile;
+                                    }
                                 }
+                                currenttile = (int)reader.ReadInt32 ();
+                                currentlayer = 0;
                             }
-                            currenttile = (int)reader.ReadInt32 ( );
-                            currentlayer = 0;
-                        }
-                        break;
+                            break;
                     }
 
                     // uncompress mapdata
-                    int[ ] currentTile = new int[ ] { -1, -1, -1 };
-                    for (int y = 0; y < Bounds.Y; y++) {
-                        for (int x = 0; x < Bounds.X; x++) {
+                    int[] currentTile = new int[] { -1, -1, -1 };
+                    for (int y = 0; y < Size.Height; y++) {
+                        for (int x = 0; x < Size.Width; x++) {
                             for (int layer = 0; layer < 3; layer++) {
                                 if (Data[x, y, layer] != currentTile[layer] && Data[x, y, layer] != 0) {
                                     currentTile[layer] = Data[x, y, layer];
@@ -101,15 +101,15 @@ namespace mapKnight.Android.Map {
                     }
 
                     // load and verify infodata
-                    int infostringlength = reader.ReadInt32 ( );
-                    byte[ ] infostringbytes = reader.ReadBytes (infostringlength);
-                    int hashlength = reader.ReadInt32 ( );
-                    byte[ ] infohash = reader.ReadBytes (hashlength);
+                    int infostringlength = reader.ReadInt32 ();
+                    byte[] infostringbytes = reader.ReadBytes (infostringlength);
+                    int hashlength = reader.ReadInt32 ();
+                    byte[] infohash = reader.ReadBytes (hashlength);
                     string infostring = Encoding.UTF8.GetString (infostringbytes);
-                    string[ ] info = infostring.Split (new char[ ] { Encoding.UTF8.GetChars (new byte[ ] { 255 })[0] });
+                    string[] info = infostring.Split (new char[] { Encoding.UTF8.GetChars (new byte[] { 255 })[0] });
                     Creator = info[0];
                     Name = info[1];
-                    byte[ ] realhash = SHA1.Create ( ).ComputeHash (infostringbytes); // verify
+                    byte[] realhash = SHA1.Create ().ComputeHash (infostringbytes); // verify
                     if (!realhash.SequenceEqual (infohash)) {
                         throw new InvalidDataException ("map has been modified!");
                     }
@@ -119,7 +119,7 @@ namespace mapKnight.Android.Map {
             }
         }
 
-        private void Load (byte[ ] data) {
+        private void Load (byte[] data) {
             using (MemoryStream stream = new MemoryStream (data)) {
                 Load (stream);
             }

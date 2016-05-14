@@ -97,15 +97,6 @@
           ]
         }
       ]
-    },
-    {
-      "$type": "Push",
-      "Intervall": 1,
-      "Velocity": {
-        "X": 0,
-        "Y": 5
-      },
-      "ResetLastVelocity": true
     }
   ]
 }

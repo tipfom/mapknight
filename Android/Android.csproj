@@ -122,7 +122,10 @@
     <Compile Include="Entity\Component.cs" />
     <Compile Include="Entity\Components\Configs\TextureComponentConfig.cs" />
     <Compile Include="Entity\ComponentType.cs" />
-    <Compile Include="Entity\Map.cs" />
+    <Compile Include="Entity\EntityConfig.cs" />
+    <Compile Include="Entity\EntityVertexData.cs" />
+    <Compile Include="Entity\IEntityContainer.cs" />
+    <Compile Include="Entity\IEntityRenderer.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Scenes\MainMenuScene.cs" />

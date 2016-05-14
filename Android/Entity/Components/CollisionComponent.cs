@@ -1,5 +1,5 @@
-using System;
 using mapKnight.Basic;
+using System;
 
 namespace mapKnight.Android.Entity.Components {
     public class CollisionComponent : Component {
@@ -13,7 +13,7 @@ namespace mapKnight.Android.Entity.Components {
                 ComponentInfo pendingComponentInfo = Owner.GetComponentInfo (ComponentType.Collision);
 
                 Transform targetTransform = (Transform)pendingComponentInfo.Data;
-                bool[ ] moveResult = { moveHorizontally (lastTransform, targetTransform), moveVertically (lastTransform, targetTransform) };
+                bool[] moveResult = { moveHorizontally (lastTransform, targetTransform), moveVertically (lastTransform, targetTransform) };
                 Owner.SetComponentInfo (pendingComponentInfo.Sender, ComponentType.Collision, ComponentAction.Result, moveResult);
                 lastTransform = targetTransform;
             }
@@ -64,8 +64,8 @@ namespace mapKnight.Android.Entity.Components {
 
         private bool moveVertically (Transform oldTransform, Transform targetTransform) {
             if (oldTransform.Center.Y < targetTransform.Center.Y) {
-                if (targetTransform.TR.Y >= Owner.Owner.Bounds.Y - 1) {
-                    targetTransform.TranslateVertically (Owner.Owner.Bounds.Y - 1 - targetTransform.Bounds.Y / 2);
+                if (targetTransform.TR.Y >= Owner.Owner.Bounds.Y) {
+                    targetTransform.TranslateVertically (Owner.Owner.Bounds.Y - targetTransform.Bounds.Y / 2);
                     return true;
                 }
 

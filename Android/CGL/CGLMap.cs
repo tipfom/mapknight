@@ -1,10 +1,12 @@
-using System;
 using Java.Nio;
+using mapKnight.Android.Entity;
 using mapKnight.Android.Map;
 using mapKnight.Basic;
+using System;
+using System.Collections.Generic;
 
 namespace mapKnight.Android.CGL {
-    public class CGLMap : Entity.Map {
+    public class CGLMap : Map.Map, IEntityContainer {
         public const int DRAW_WIDTH = 18;
 
         public enum UpdateType {
@@ -17,30 +19,45 @@ namespace mapKnight.Android.CGL {
         ShortBuffer indexBuffer;
         FloatBuffer textureBuffer;
 
-        private float[ ][ ][ ] layerBuffer; // buffers each texturecoordinate for every layer
+        private float[][][] layerBuffer; // buffers each texturecoordinate for every layer
 
         public Size DrawSize { get; private set; }
 
-        public CGLMap (string name, CGLCamera camera) : base (name, camera) {
+        public Vector2 Gravity { get; set; }
+
+        public Vector2 Bounds { get; private set; }
+
+        private CGLEntityRenderer entityRenderer = new CGLEntityRenderer ();
+        public IEntityRenderer Renderer { get { return entityRenderer; } }
+
+        public CGLCamera Camera { get; private set; }
+
+        private HashSet<Entity.Entity> entities = new HashSet<Entity.Entity> ();
+
+        public CGLMap (string name, CGLCamera camera) : base (name) {
+            Bounds = new Vector2 (base.Size.Width - 1, base.Size.Height - 1);
+            Gravity = new Vector2 (0, -10);
+            Camera = camera;
+
             DrawSize = new Size (DRAW_WIDTH + 2, (int)((float)DRAW_WIDTH / Screen.ScreenRatio) + 2);
             VertexSize = 2 * Screen.ScreenRatio / (float)(DRAW_WIDTH);
 
-            setVertexCoords ( );
-            initTextureBuffer ( );
-            initTextureCoords ( );
+            setVertexCoords ();
+            initTextureBuffer ();
+            initTextureCoords ();
 
             Screen.Changed += () => {
                 DrawSize = new Size (DRAW_WIDTH + 2, (int)Math.Ceiling (DRAW_WIDTH / Screen.ScreenRatio) + 2);
                 VertexSize = 2 * Screen.ScreenRatio / (float)(DRAW_WIDTH);
-                initTextureBuffer ( );
-                setVertexCoords ( );
+                initTextureBuffer ();
+                setVertexCoords ();
             };
         }
 
         private void setVertexCoords () {
             int iTileCount = DrawSize.Width * DrawSize.Height;
-            float[ ] vertexCoords = new float[iTileCount * 8 * 3];
-            short[ ] vertexIndices = new short[iTileCount * 6 * 3];
+            float[] vertexCoords = new float[iTileCount * 8 * 3];
+            short[] vertexIndices = new short[iTileCount * 6 * 3];
 
             float ystart = -DrawSize.Height / 2f * VertexSize;
 
@@ -78,17 +95,17 @@ namespace mapKnight.Android.CGL {
 
         private void initTextureCoords () {
             // buffer tile coords
-            layerBuffer = new float[3][ ][ ];
+            layerBuffer = new float[3][][];
             for (int layer = 0; layer < 3; layer++) {
-                layerBuffer[layer] = new float[(int)base.Bounds.Y][ ];
-                for (int y = 0; y < this.Bounds.Y; y++) {
-                    layerBuffer[layer][y] = new float[(int)this.Bounds.X * 8];
+                layerBuffer[layer] = new float[(int)base.Size.Height][];
+                for (int y = 0; y < this.Size.Height; y++) {
+                    layerBuffer[layer][y] = new float[(int)this.Size.Width * 8];
                 }
             }
 
             for (int layer = 0; layer < 3; layer++) {
-                for (int y = 0; y < Bounds.Y; y++) {
-                    for (int x = 0; x < Bounds.X; x++) {
+                for (int y = 0; y < Size.Height; y++) {
+                    for (int x = 0; x < Size.Width; x++) {
                         for (int c = 0; c < 8; c++) {
                             layerBuffer[layer][y][x * 8 + c] = this.GetTile (x, y, layer).Texture[c];
                         }
@@ -97,22 +114,48 @@ namespace mapKnight.Android.CGL {
             }
         }
 
-        public void updateTextureBuffer (CGLCamera camera) {
+        public void UpdateTextureBuffer () {
             // insert buffered tile coords to texturebuffer
             for (int layer = 0; layer < 3; layer++) {
                 for (int y = 0; y < DrawSize.Height; y++) {
-                    textureBuffer.Put (layerBuffer[layer][(int)camera.CurrentMapTile.Y + y].Cut ((int)camera.CurrentMapTile.X * 8, DrawSize.Width * 8));
+                    textureBuffer.Put (layerBuffer[layer][(int)Camera.CurrentMapTile.Y + y].Cut ((int)Camera.CurrentMapTile.X * 8, DrawSize.Width * 8));
                 }
             }
             textureBuffer.Position (0);
         }
 
-        public void Draw (CGLCamera camera) {
-            Content.ProgramCollection.Matrix.Begin ( );
+        public void Draw () {
+            Content.ProgramCollection.Matrix.Begin ();
 
-            Content.ProgramCollection.Matrix.Draw (vertexBuffer, textureBuffer, indexBuffer, TileManager.Texture.Texture, camera.MapMatrix.MVP, true);
+            Content.ProgramCollection.Matrix.Draw (vertexBuffer, textureBuffer, indexBuffer, TileManager.Texture.Texture, Camera.MapMatrix.MVP, true);
 
-            Content.ProgramCollection.Matrix.End ( );
+            Content.ProgramCollection.Matrix.End ();
+
+            entityRenderer.Draw ();
+        }
+
+        public void Update (float dt) {
+            foreach (Entity.Entity entity in entities) {
+                entity.Update (dt);
+            }
+            entityRenderer.Update ();
+        }
+
+        public bool HasCollider (int x, int y) {
+            return base.GetTileL2 (x, y).Mask.HasFlag (Tile.TileMask.COLLISION);
+        }
+
+        private int currentID = 0;
+        public int CreateID () {
+            return ++currentID;
+        }
+
+        public void Add (Entity.Entity entity) {
+            entities.Add (entity);
+        }
+
+        public bool IsOnScreen (Entity.Entity entity) {
+            return (entity.Transform.Center - Camera.ScreenCentre).Abs() < Camera.DrawRange;
         }
     }
 }
