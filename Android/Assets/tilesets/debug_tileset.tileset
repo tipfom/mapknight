@@ -14,7 +14,7 @@
       "Y": 0,
       "Name": "",
       "MaskFlag": [
-        "COLLISION"
+        "Collision"
       ],
       "Attributes": {}
     },
@@ -23,7 +23,7 @@
       "Y": 0,
       "Name": "",
       "MaskFlag": [
-        "COLLISION"
+        "Collision"
       ],
       "Attributes": {}
     },
@@ -32,7 +32,7 @@
       "Y": 21,
       "Name": "",
       "MaskFlag": [
-        "COLLISION"
+        "Collision"
       ],
       "Attributes": {}
     },
@@ -41,7 +41,7 @@
       "Y": 21,
       "Name": "",
       "MaskFlag": [
-        "COLLISION"
+        "Collision"
       ],
       "Attributes": {}
     },
@@ -50,7 +50,7 @@
       "Y": 21,
       "Name": "",
       "MaskFlag": [
-        "COLLISION"
+        "Collision"
       ],
       "Attributes": {}
     },
@@ -59,7 +59,7 @@
       "Y": 42,
       "Name": "",
       "MaskFlag": [
-        "COLLISION"
+        "Collision"
       ],
       "Attributes": {}
     },
@@ -68,7 +68,7 @@
       "Y": 42,
       "Name": "",
       "MaskFlag": [
-        "COLLISION"
+        "Collision"
       ],
       "Attributes": {}
     }

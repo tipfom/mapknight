@@ -2,13 +2,13 @@ using System;
 
 namespace mapKnight.Basic {
     public static class MathHelper {
-        public static float[ ] Rotate (float[ ] verticies, float centerX, float centerY, float angle) {
+        public static float[] Rotate (float[] verticies, float centerX, float centerY, float angle) {
             if (verticies.Length % 2 != 0)
                 return null; // no verticies with format 0 = x, 1 = y available
 
             angle *= (float)Math.PI / 180f; // convert to radians
 
-            float[ ] rotatedVerticies = new float[verticies.Length];
+            float[] rotatedVerticies = new float[verticies.Length];
             for (int i = 0; i < verticies.Length / 2; i++) {
                 rotatedVerticies[i * 2 + 0] = centerX + (verticies[i * 2 + 0] - centerX) * (float)Math.Cos (angle) - (verticies[i * 2 + 1] - centerY) * (float)Math.Sin (angle);
                 rotatedVerticies[i * 2 + 1] = centerX + (verticies[i * 2 + 0] - centerX) * (float)Math.Sin (angle) + (verticies[i * 2 + 1] - centerY) * (float)Math.Cos (angle);
@@ -16,11 +16,11 @@ namespace mapKnight.Basic {
             return rotatedVerticies;
         }
 
-        public static float[ ] Translate (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY) {
+        public static float[] Translate (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY) {
             if (verticies.Length % 2 != 0)
                 return null;
 
-            float[ ] transformedVerticies = new float[verticies.Length];
+            float[] transformedVerticies = new float[verticies.Length];
             float shiftingX = newCenterX - oldCenterX;
             float shiftingY = newCenterY - oldCenterY;
             for (int i = 0; i < verticies.Length / 2; i++) {
@@ -30,13 +30,13 @@ namespace mapKnight.Basic {
             return transformedVerticies;
         }
 
-        public static float[ ] TranslateRotate (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle) {
+        public static float[] TranslateRotate (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle) {
             if (verticies.Length % 2 != 0)
                 return null;
 
             angle *= (float)Math.PI / 180f; // convert to radians
 
-            float[ ] transformedRotatedVerticies = new float[verticies.Length];
+            float[] transformedRotatedVerticies = new float[verticies.Length];
             for (int i = 0; i < verticies.Length / 2; i++) {
                 transformedRotatedVerticies[i * 2 + 0] = newCenterX + (verticies[i * 2 + 0] - oldCenterX) * (float)Math.Cos (angle) - (verticies[i * 2 + 1] - oldCenterY) * (float)Math.Sin (angle);
                 transformedRotatedVerticies[i * 2 + 1] = newCenterY + (verticies[i * 2 + 0] - oldCenterX) * (float)Math.Sin (angle) + (verticies[i * 2 + 1] - oldCenterY) * (float)Math.Cos (angle);
@@ -44,13 +44,13 @@ namespace mapKnight.Basic {
             return transformedRotatedVerticies;
         }
 
-        public static float[ ] TranslateRotateMirror (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle, bool mirrored) {
+        public static float[] TranslateRotateMirror (float[] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle, bool mirrored) {
             if (verticies.Length % 2 != 0)
                 return null;
 
             angle *= (float)Math.PI / 180f; // convert to radians
 
-            float[ ] transformedRotatedVerticies = new float[verticies.Length];
+            float[] transformedRotatedVerticies = new float[verticies.Length];
             for (int i = 0; i < verticies.Length / 2; i++) {
                 if (mirrored) {
                     transformedRotatedVerticies[i * 2 + 0] = newCenterX - (verticies[i * 2 + 0] - oldCenterX) * (float)Math.Cos (angle) + (verticies[i * 2 + 1] - oldCenterY) * (float)Math.Sin (angle);
@@ -67,19 +67,35 @@ namespace mapKnight.Basic {
             return Math.Min (Math.Max (value, min), max);
         }
 
-        public static float Interpolate (float value1, float value2, float percent) {
-            return value1 + (value2 - value1) * percent;
+        public static float Interpolate (float v1, float v2, float percent) {
+            return Interpolate (v1, v2, percent, InterpolationMode.Linear);
+        }
+
+        public static float Interpolate (float v1, float v2, float percent, InterpolationMode mode) {
+            switch (mode) {
+                case InterpolationMode.Linear:
+                    return v1 + (v2 - v1) * percent;
+                case InterpolationMode.Cosine:
+                    double x = Math.PI * percent;
+                    if (v1 < v2)
+                        x += Math.PI; // interpolate on the raising part of the cosine function
+                    return (float)(v1 + (Math.Cos (x) + 1) / 2 * (v1 - v2));
+                case InterpolationMode.Jump:
+                    return (percent > 0.5) ? v1 : v2;
+                default:
+                    return Interpolate (v1, v2, percent, InterpolationMode.Linear);
+            }
         }
 
         public static Vector2 Interpolate (Vector2 vec1, Vector2 vec2, float percent) {
             return new Vector2 (vec1.X + (vec2.X - vec1.X) * percent, vec1.Y + (vec2.Y - vec1.Y) * percent);
         }
 
-        public static float[ ] GetVerticies (Vector2 size) {
+        public static float[] GetVerticies (Vector2 size) {
             Vector2 bottomleft = -size / 2;
             Vector2 topright = size / 2;
 
-            return new float[ ] {
+            return new float[] {
                 bottomleft.X, topright.Y,
                 bottomleft.X, bottomleft.Y,
                 topright.X, bottomleft.Y,

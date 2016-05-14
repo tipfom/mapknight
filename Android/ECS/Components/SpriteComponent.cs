@@ -9,7 +9,7 @@ namespace mapKnight.Android.ECS.Components {
 
         public SpriteComponent (Entity owner, Dictionary<string, Sprite> sprites, string texture) : base (owner) {
             this.sprites = sprites;
-            Owner.Owner.Renderer.AddTexture (Owner.ID, Assets.Load<CGLSprite2D> (texture + ".png", texture + ".json"));
+            Owner.Owner.Renderer.AddTexture (Owner.ID, Assets.Load<CGLSprite2D> (texture));
         }
 
         public override void Update (float dt) {

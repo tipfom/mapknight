@@ -129,15 +129,15 @@ namespace mapKnight.Android.Map {
             return TileManager.GetTile (Data[x, y, layer]);
         }
 
-        public Tile GetTileL1 (int x, int y) {
+        public Tile GetTileBackground (int x, int y) {
             return TileManager.GetTile (Data[x, y, 0]);
         }
 
-        public Tile GetTileL2 (int x, int y) {
+        public Tile GetTile (int x, int y) {
             return TileManager.GetTile (Data[x, y, 1]);
         }
 
-        public Tile GetTileL3 (int x, int y) {
+        public Tile GetTileForeground (int x, int y) {
             return TileManager.GetTile (Data[x, y, 2]);
         }
     }

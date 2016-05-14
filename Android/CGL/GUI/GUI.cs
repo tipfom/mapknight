@@ -1,6 +1,6 @@
+using Java.Nio;
 using System;
 using System.Collections.Generic;
-using Java.Nio;
 
 namespace mapKnight.Android.CGL.GUI {
     public class GUI {
@@ -10,25 +10,25 @@ namespace mapKnight.Android.CGL.GUI {
         // buttons ( text und standartbild, nur bild)
         // bar
 
-        private List<GUIItem> addedItems = new List<GUIItem> ( );
+        private List<GUIItem> addedItems = new List<GUIItem> ();
 
         private CGLSprite2D sprite;
-        private Stack<int> freeIndicies = new Stack<int> ( );
-        private Dictionary<GUIItem, Stack<int>> usedIndicies = new Dictionary<GUIItem, Stack<int>> ( );
+        private Stack<int> freeIndicies = new Stack<int> ();
+        private Dictionary<GUIItem, Stack<int>> usedIndicies = new Dictionary<GUIItem, Stack<int>> ();
         private FloatBuffer vertexBuffer;
         private FloatBuffer textureBuffer;
         private FloatBuffer colorBuffer;
         private ShortBuffer indexBuffer;
 
-        private float[ ] vertexBufferData;
-        private float[ ] textureBufferData;
-        private float[ ] colorBufferData;
+        private float[] vertexBufferData;
+        private float[] textureBufferData;
+        private float[] colorBufferData;
         private bool areBufferUpToDate = true;
 
         public GUI () {
             GUIItem.Changed += OnGUIChanged;
 
-            sprite = Assets.Load<CGLSprite2D> ("interface.png", "interface.json");
+            sprite = Assets.Load<CGLSprite2D> ("interface");
             vertexBuffer = CGLTools.CreateFloatBuffer (MAX_QUADS * 8);
             vertexBufferData = new float[MAX_QUADS * 8];
             textureBuffer = CGLTools.CreateFloatBuffer (MAX_QUADS * 8);
@@ -40,7 +40,7 @@ namespace mapKnight.Android.CGL.GUI {
                 colorBufferData[i] = 1f;
             }
 
-            short[ ] indicies = new short[MAX_QUADS * 6];
+            short[] indicies = new short[MAX_QUADS * 6];
             for (int i = 0; i < MAX_QUADS; i++) {
                 indicies[i * 6 + 0] = (short)(i * 4 + 0);
                 indicies[i * 6 + 1] = (short)(i * 4 + 1);
@@ -71,22 +71,22 @@ namespace mapKnight.Android.CGL.GUI {
 
             while (usedIndicies[sender].Count > 0) {
                 // free up used space
-                int usedIndex = usedIndicies[sender].Pop ( );
+                int usedIndex = usedIndicies[sender].Pop ();
                 freeIndicies.Push (usedIndex);
-                Array.Copy (new float[ ] { 0, 0, 0, 0, 0, 0, 0, 0 }, 0, vertexBufferData, usedIndex * 8, 8);
+                Array.Copy (new float[] { 0, 0, 0, 0, 0, 0, 0, 0 }, 0, vertexBufferData, usedIndex * 8, 8);
             }
 
-            List<CGLVertexData> senderVertexData = sender.GetVertexData ( );
+            List<CGLVertexData> senderVertexData = sender.GetVertexData ();
 
             if (senderVertexData.Count <= freeIndicies.Count) {
                 for (int i = 0; i < senderVertexData.Count; i++) {
-                    int newIndex = freeIndicies.Pop ( );
+                    int newIndex = freeIndicies.Pop ();
                     usedIndicies[sender].Push (newIndex);
 
                     Array.Copy (senderVertexData[i].Verticies, 0, vertexBufferData, newIndex * 8, 8);
                     Array.Copy (sprite.Get (senderVertexData[i].Texture), 0, textureBufferData, newIndex * 8, 8);
 
-                    Array.Copy (senderVertexData[i].Color.ToOpenGL ( ), 0, colorBufferData, newIndex * 16, 16);
+                    Array.Copy (senderVertexData[i].Color.ToOpenGL (), 0, colorBufferData, newIndex * 16, 16);
                 }
             } else {
                 Log.Print (typeof (GUI), "guielement couldnt be updated, there were not enough free indicies");
@@ -100,9 +100,9 @@ namespace mapKnight.Android.CGL.GUI {
         }
 
         public void Draw () {
-            Content.ProgramCollection.Color.Begin ( );
+            Content.ProgramCollection.Color.Begin ();
             Content.ProgramCollection.Color.Draw (vertexBuffer, textureBuffer, colorBuffer, indexBuffer, sprite.Texture, Screen.DefaultMatrix.MVP, true);
-            Content.ProgramCollection.Color.End ( );
+            Content.ProgramCollection.Color.End ();
         }
 
         public void Update (float dt) {
@@ -128,10 +128,10 @@ namespace mapKnight.Android.CGL.GUI {
             }
         }
 
-        public T Add<T> (T item) where T : GUIItem {
+        public T Add<T>(T item) where T : GUIItem {
             if (!addedItems.Contains (item)) {
                 this.addedItems.Add (item);
-                usedIndicies.Add (item, new Stack<int> ( ));
+                usedIndicies.Add (item, new Stack<int> ());
                 OnGUIChanged (item);
             }
             return item;

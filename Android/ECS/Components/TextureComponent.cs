@@ -8,7 +8,7 @@ namespace mapKnight.Android.ECS.Components {
         private Dictionary<string, string> textures;
 
         public TextureComponent (Entity owner, string texturename) : base (owner) {
-            CGLSprite2D texture = Assets.Load<CGLSprite2D> (new string[] { texturename + ".png", texturename + ".json" });
+            CGLSprite2D texture = Assets.Load<CGLSprite2D> (texturename);
             this.textureName = texture.Name;
             this.textures = texture.Sprites.Keys.ToDictionary (spritename => spritename);
 

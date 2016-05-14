@@ -149,7 +149,7 @@ namespace mapKnight.Android.CGL {
         }
 
         public bool HasCollider (int x, int y) {
-            return base.GetTileL2 (x, y).Mask.HasFlag (Tile.TileMask.COLLISION);
+            return base.GetTile (x, y).Mask.HasFlag (TileMask.Collision);
         }
 
         private int currentID = 0;

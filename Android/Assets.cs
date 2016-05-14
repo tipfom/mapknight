@@ -58,10 +58,10 @@ namespace mapKnight.Android {
 
         }
 
-        public static CGLSprite2D LoadSprite (string name, string config) {
-            CGLTexture2D texture = Load<CGLTexture2D> (name);
+        public static CGLSprite2D LoadSprite (string name) {
+            CGLTexture2D texture = Load<CGLTexture2D> (name + ".png");
             Dictionary<string, int[]> spriteContent = new Dictionary<string, int[]> ();
-            JsonConvert.PopulateObject (Load<string> ("config", "sprites", config), spriteContent);
+            JsonConvert.PopulateObject (Load<string> ("textures", name + ".json"), spriteContent);
             return new CGLSprite2D (spriteContent, texture.Texture, name, texture.Width, texture.Height);
         }
 
@@ -85,8 +85,8 @@ namespace mapKnight.Android {
                 return (T)((object)LoadTexture (paths[0]));
             } else if (request == typeof (string)) {
                 return (T)((object)LoadText (System.IO.Path.Combine (paths)));
-            } else if (request == typeof (CGLSprite2D) && paths.Length == 2) {
-                return (T)((object)LoadSprite (paths[0], paths[1]));
+            } else if (request == typeof (CGLSprite2D) && paths.Length == 1) {
+                return (T)((object)LoadSprite (paths[0]));
             } else if (request == typeof (EntityConfig) && paths.Length == 1) {
                 return (T)((object)LoadEntity (paths[0]));
             } else {

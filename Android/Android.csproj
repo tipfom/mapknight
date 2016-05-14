@@ -126,6 +126,8 @@
     <Compile Include="ECS\EntityVertexData.cs" />
     <Compile Include="ECS\IEntityContainer.cs" />
     <Compile Include="ECS\IEntityRenderer.cs" />
+    <Compile Include="Map\TileAttribute.cs" />
+    <Compile Include="Map\TileMask.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Scenes\MainMenuScene.cs" />
@@ -152,11 +154,11 @@
     <Compile Include="ECS\Entity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\config\sprites\interface.json" />
+    <AndroidAsset Include="Assets\textures\interface.json" />
     <AndroidAsset Include="Assets\config\content.json" />
     <AndroidAsset Include="Assets\config\game.json" />
     <AndroidAsset Include="Assets\entities\potatoe_patrick.json" />
-    <AndroidAsset Include="Assets\config\sprites\potatoe_patrick.json" />
+    <AndroidAsset Include="Assets\textures\potatoe_patrick.json" />
     <AndroidAsset Include="Assets\maps\debug_map.map" />
     <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
     <None Include="Properties\AndroidManifest.xml">

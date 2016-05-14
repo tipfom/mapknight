@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using mapKnight.Android.CGL;
+﻿using mapKnight.Android.CGL;
 using mapKnight.Basic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.IO;
 
 namespace mapKnight.Android.Map {
 
@@ -10,10 +10,10 @@ namespace mapKnight.Android.Map {
         public const float TILE_SIZE = 20;
 
         public CGLTexture2D Texture;
-        private Tile[ ] tiles;
+        private Tile[] tiles;
 
         public TileManager (string name) {
-            ExportData exportedData = new ExportData ( );
+            ExportData exportedData = new ExportData ();
             JsonConvert.PopulateObject (Assets.Load<string> ("tilesets", $"{name}.tileset"), exportedData);
             Texture = Assets.Load<CGLTexture2D> (Path.Combine ("tilesets", exportedData.Texture));
 
@@ -31,7 +31,7 @@ namespace mapKnight.Android.Map {
             return tiles[id];
         }
 
-        public float[ ] GetTexture (int id) {
+        public float[] GetTexture (int id) {
             return tiles[id].Texture;
         }
 
@@ -40,8 +40,8 @@ namespace mapKnight.Android.Map {
             public int X;
             public int Y;
             public string Name;
-            public string[ ] MaskFlag;
-            public Dictionary<Tile.TileAttribute, string> Attributes;
+            public string[] MaskFlag;
+            public Dictionary<TileAttribute, string> Attributes;
         }
 
         public class ExportData {
