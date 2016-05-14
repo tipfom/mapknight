@@ -1,5 +1,5 @@
 namespace mapKnight.Android.Entity.Components.Configs {
-    class CollisionComponentConfig : Component.Config {
+    class CollisionComponentConfig : ComponentConfig {
         public override int Priority { get { return 0; } }
 
         public override Component Create (Entity owner) {

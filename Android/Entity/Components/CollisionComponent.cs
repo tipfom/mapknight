@@ -9,12 +9,12 @@ namespace mapKnight.Android.Entity.Components {
         public override void Update (float dt) {
             // handles movement to a certain point, if one is given
             Transform lastTransform = Owner.Transform;
-            while (Owner.HasComponentInfo (Type.Collision)) {
-                Info pendingComponentInfo = Owner.GetComponentInfo (Type.Collision);
+            while (Owner.HasComponentInfo (ComponentType.Collision)) {
+                ComponentInfo pendingComponentInfo = Owner.GetComponentInfo (ComponentType.Collision);
 
                 Transform targetTransform = (Transform)pendingComponentInfo.Data;
                 bool[ ] moveResult = { moveHorizontally (lastTransform, targetTransform), moveVertically (lastTransform, targetTransform) };
-                Owner.SetComponentInfo (pendingComponentInfo.Sender, Type.Collision, Action.Result, moveResult);
+                Owner.SetComponentInfo (pendingComponentInfo.Sender, ComponentType.Collision, ComponentAction.Result, moveResult);
                 lastTransform = targetTransform;
             }
             Owner.Transform = lastTransform;

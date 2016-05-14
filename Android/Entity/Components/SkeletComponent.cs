@@ -24,14 +24,14 @@ namespace mapKnight.Android.Entity.Components {
 
         public override void Update (float dt) {
             Dictionary<string, float[]> currentVertexData;
-            Type sender = Type.Skelet;
+            ComponentType sender = ComponentType.Skelet;
 
-            if (!Owner.HasComponentInfo (Type.Skelet))
+            if (!Owner.HasComponentInfo (ComponentType.Skelet))
                 currentVertexData = defaultVertexData.Clone ();
             else {
-                Info componentInfo = Owner.GetComponentInfo (Type.Skelet);
-                sender = componentInfo.Sender;
-                currentVertexData = ((Dictionary<string, float[]>)componentInfo.Data).Clone ();
+                ComponentInfo ComponentInfo = Owner.GetComponentInfo (ComponentType.Skelet);
+                sender = ComponentInfo.Sender;
+                currentVertexData = ((Dictionary<string, float[]>)ComponentInfo.Data).Clone ();
             }
 
             // update currentvertexdata based on the current transform
@@ -42,7 +42,7 @@ namespace mapKnight.Android.Entity.Components {
                 }
             }
 
-            Owner.SetComponentInfo (Type.Draw, sender, Action.VertexData, currentVertexData);
+            Owner.SetComponentInfo (ComponentType.Draw, sender, ComponentAction.VertexData, currentVertexData);
         }
     }
 }

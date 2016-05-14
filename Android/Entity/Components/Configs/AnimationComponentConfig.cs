@@ -2,7 +2,7 @@ using mapKnight.Basic.Components;
 using System.Collections.Generic;
 
 namespace mapKnight.Android.Entity.Components.Configs {
-    public class AnimationComponentConfig : Component.Config {
+    public class AnimationComponentConfig : ComponentConfig {
         public override int Priority { get { return 2; } }
         public List<Animation> Animations;
 

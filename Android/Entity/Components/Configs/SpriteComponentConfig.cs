@@ -2,7 +2,7 @@ using mapKnight.Basic.Components;
 using System.Collections.Generic;
 
 namespace mapKnight.Android.Entity.Components.Configs {
-    public class SpriteComponentConfig : Component.Config {
+    public class SpriteComponentConfig : ComponentConfig {
         public override int Priority { get { return 1; } }
 
         public string Texture;

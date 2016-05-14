@@ -17,7 +17,7 @@ namespace mapKnight.Android.Entity.Components {
                 sprites[bone].Update (dt);
             }
 
-            Owner.SetComponentInfo (Type.Draw, Type.Sprite, Action.TextureData, sprites.ToDictionary (v => v.Key, v => v.Value.Current));
+            Owner.SetComponentInfo (ComponentType.Draw, ComponentType.Sprite, ComponentAction.TextureData, sprites.ToDictionary (v => v.Key, v => v.Value.Current));
         }
     }
 }

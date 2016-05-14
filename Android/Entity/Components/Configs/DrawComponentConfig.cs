@@ -1,5 +1,5 @@
 namespace mapKnight.Android.Entity.Components.Configs {
-    public class DrawComponentConfig : Component.Config {
+    public class DrawComponentConfig : ComponentConfig {
         public override int Priority { get { return 0; } }
 
         public override Component Create (Entity owner) {

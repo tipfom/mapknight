@@ -19,9 +19,9 @@ namespace mapKnight.Android.Entity.Components {
             if (lastPush + intervall < Environment.TickCount) {
                 lastPush += intervall;
                 if (resetLastVelocity) {
-                    Owner.SetComponentInfo (Type.Motion, Type.Push, Action.Velocity, -(Vector2)Owner.GetComponentState (Type.Motion) + velocity);
+                    Owner.SetComponentInfo (ComponentType.Motion, ComponentType.Push, ComponentAction.Velocity, -(Vector2)Owner.GetComponentState (ComponentType.Motion) + velocity);
                 } else {
-                    Owner.SetComponentInfo (Type.Motion, Type.Push, Action.Velocity, velocity);
+                    Owner.SetComponentInfo (ComponentType.Motion, ComponentType.Push, ComponentAction.Velocity, velocity);
                 }
             }
         }

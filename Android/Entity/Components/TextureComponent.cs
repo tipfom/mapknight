@@ -16,7 +16,7 @@ namespace mapKnight.Android.Entity.Components {
         }
 
         public override void Update (float dt) {
-            Owner.SetComponentInfo (Type.Draw, Type.Texture, Action.TextureData, textures);
+            Owner.SetComponentInfo (ComponentType.Draw, ComponentType.Texture, ComponentAction.TextureData, textures);
         }
     }
 }

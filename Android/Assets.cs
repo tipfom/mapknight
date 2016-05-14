@@ -72,7 +72,7 @@ namespace mapKnight.Android {
 
         private static JsonSerializerSettings entitySerializerSettings = new JsonSerializerSettings () {
             TypeNameHandling = TypeNameHandling.Auto,
-            Binder = new Entity.Component.Binder ()
+            Binder = new Entity.ComponentSerializationBinder ()
         };
         public static Entity.Entity.Config LoadEntity (string name) {
             return JsonConvert.DeserializeObject<Entity.Entity.Config> (Assets.Load<string> ("entities", $"{name}.json"), entitySerializerSettings);

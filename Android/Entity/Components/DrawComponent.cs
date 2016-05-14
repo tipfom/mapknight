@@ -14,15 +14,15 @@ namespace mapKnight.Android.Entity.Components {
                 Dictionary<string, string> spriteData = new Dictionary<string, string> ( );
                 Dictionary<string, float[ ]> vertexData = new Dictionary<string, float[ ]> ( );
 
-                while (Owner.HasComponentInfo (Type.Draw)) {
-                    Info info = Owner.GetComponentInfo (Type.Draw);
-                    switch (info.Action) {
-                    case Action.TextureData:
+                while (Owner.HasComponentInfo (ComponentType.Draw)) {
+                    ComponentInfo ComponentInfo = Owner.GetComponentInfo (ComponentType.Draw);
+                    switch (ComponentInfo.Action) {
+                    case ComponentAction.TextureData:
                         // bodypart name, sprite name
-                        spriteData = (Dictionary<string, string>)info.Data;
+                        spriteData = (Dictionary<string, string>)ComponentInfo.Data;
                         break;
-                    case Action.VertexData:
-                        vertexData = (Dictionary<string, float[ ]>)info.Data;
+                    case ComponentAction.VertexData:
+                        vertexData = (Dictionary<string, float[ ]>)ComponentInfo.Data;
                         entityVertexData.QuadCount = vertexData.Count;
                         break;
                     }

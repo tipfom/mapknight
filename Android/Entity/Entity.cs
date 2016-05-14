@@ -4,55 +4,55 @@ using System.Collections.Generic;
 
 namespace mapKnight.Android.Entity {
     public class Entity {
-        private Dictionary<Component.Type, Component> components = new Dictionary<Component.Type, Component> ();
-        private Dictionary<Component.Type, Stack<Component.Info>> pendingComponentData = new Dictionary<Component.Type, Stack<Component.Info>> ();
+        private Dictionary<ComponentType, Component> components = new Dictionary<ComponentType, Component> ();
+        private Dictionary<ComponentType, Stack<ComponentInfo>> pendingComponentData = new Dictionary<ComponentType, Stack<ComponentInfo>> ();
         public IContainer Owner { get; private set; }
 
         public readonly string Name;
         public readonly int ID;
         public Transform Transform { get; set; }
-        public Entity (List<Component.Config> components, Transform transform, IContainer owner, string name, int id) {
+        public Entity (List<ComponentConfig> components, Transform transform, IContainer owner, string name, int id) {
             Name = name;
             Owner = owner;
             Transform = transform;
             ID = id;
 
             Component.ResolveDependencies (ref components);
-            foreach (Component.Config config in components) {
+            foreach (ComponentConfig config in components) {
                 this.components.Add (config.Type, config.Create (this));
             }
 
             Owner.Add (this);
         }
 
-        public bool HasComponent (Component.Type component) {
+        public bool HasComponent (ComponentType component) {
             return components.ContainsKey (component);
         }
 
-        public Component GetComponent (Component.Type component) {
+        public Component GetComponent (ComponentType component) {
             return components[component];
         }
 
-        public bool HasComponentInfo (Component.Type requester) {
+        public bool HasComponentInfo (ComponentType requester) {
             return pendingComponentData.ContainsKey (requester) && pendingComponentData[requester].Count > 0;
         }
 
-        public Component.Info GetComponentInfo (Component.Type requester) {
+        public ComponentInfo GetComponentInfo (ComponentType requester) {
             // not containing needs to be handled with HasComponentInfo
             return pendingComponentData[requester].Pop ();
         }
 
-        public object GetComponentState (Component.Type type) {
-            if (HasComponent (type)) {
-                return components[type].State;
+        public object GetComponentState (ComponentType ComponentType) {
+            if (HasComponent (ComponentType)) {
+                return components[ComponentType].State;
             } else
                 return null;
         }
 
-        public void SetComponentInfo (Component.Type target, Component.Type sender, Component.Action action, object data) {
+        public void SetComponentInfo (ComponentType target, ComponentType sender, ComponentAction ComponentAction, object data) {
             if (!pendingComponentData.ContainsKey (target))
-                pendingComponentData.Add (target, new Stack<Component.Info> ());
-            pendingComponentData[target].Push (new Component.Info () { Action = action, Sender = sender, Data = data });
+                pendingComponentData.Add (target, new Stack<ComponentInfo> ());
+            pendingComponentData[target].Push (new ComponentInfo () { Action = ComponentAction, Sender = sender, Data = data });
         }
 
         public void Update (float dt) {
@@ -64,8 +64,8 @@ namespace mapKnight.Android.Entity {
         public class Config {
             public string Name;
             public Transform Transform;
-            private List<Component.Config> _Component;
-            public List<Component.Config> Components { get { return _Component; } set { _Component = value; _Component.Sort (new Component.Comparer ()); } }
+            private List<ComponentConfig> _Component;
+            public List<ComponentConfig> Components { get { return _Component; } set { _Component = value; _Component.Sort (new ComponentComparer ()); } }
             private int entityID = -1;
 
             public Entity Create (Vector2 spawnLocation, Entity.IContainer container) {

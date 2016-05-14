@@ -1,7 +1,7 @@
 using mapKnight.Basic;
 
 namespace mapKnight.Android.Entity.Components.Configs {
-    public class PushComponentConfig : Component.Config {
+    public class PushComponentConfig : ComponentConfig {
         public override int Priority { get { return 2; } }
 
         public float Intervall;

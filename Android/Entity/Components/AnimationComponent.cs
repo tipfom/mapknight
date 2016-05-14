@@ -13,10 +13,10 @@ namespace mapKnight.Android.Entity.Components {
         }
 
         public override void Update (float dt) {
-            while (Owner.HasComponentInfo (Type.Animation)) {
-                Info componentInfo = Owner.GetComponentInfo (Type.Animation);
-                if (componentInfo.Action == Action.Animation) {
-                    setAnimation ((string)componentInfo.Data);
+            while (Owner.HasComponentInfo (ComponentType.Animation)) {
+                ComponentInfo ComponentInfo = Owner.GetComponentInfo (ComponentType.Animation);
+                if (ComponentInfo.Action == ComponentAction.Animation) {
+                    setAnimation ((string)ComponentInfo.Data);
                 }
             }
 
@@ -24,7 +24,7 @@ namespace mapKnight.Android.Entity.Components {
                 isAnimating = current.IsRunning;
                 if (!isAnimating)
                     return;
-                Owner.SetComponentInfo (Type.Skelet, Type.Animation, Action.VertexData, animations[currentAnimation].Update (dt));
+                Owner.SetComponentInfo (ComponentType.Skelet, ComponentType.Animation, ComponentAction.VertexData, animations[currentAnimation].Update (dt));
             }
         }
 

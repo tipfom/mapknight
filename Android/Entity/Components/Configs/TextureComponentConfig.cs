@@ -1,5 +1,5 @@
 namespace mapKnight.Android.Entity.Components.Configs {
-    class TextureComponentConfig : Component.Config {
+    class TextureComponentConfig : ComponentConfig {
         public override int Priority { get { return 1; } }
 
         public string Texture;

@@ -1,5 +1,5 @@
 namespace mapKnight.Android.Entity.Components.Configs {
-    public class GravityComponentConfig : Component.Config {
+    public class GravityComponentConfig : ComponentConfig {
         public override int Priority { get { return 2; } }
 
         public float Influence;
