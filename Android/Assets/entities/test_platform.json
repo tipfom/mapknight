@@ -1,0 +1,37 @@
+﻿{
+  "Name": "Potatoe Patrick",
+  "Transform": {
+    "Bounds": {
+      "X": 3,
+      "Y": 1
+    }
+  },
+  ////////////////////////////////////////////////////////////////////////////////////////////////
+  "Components": [
+    {
+      "$type": "Sprite",
+      "Texture": "potatoe_patrick",
+      "Sprites": {
+        "body": {
+          "Delay": 200,
+          "Sprites": [ "anim1", "anim2", "anim3", "anim2" ]
+        }
+      }
+    },
+    {
+      "$type": "Skelet",
+      "Bones": {
+        "body": {
+          "Position": {
+            "X": 0.5,
+            "Y": 0.5
+          },
+          "Size": {
+            "X": 1,
+            "Y": 1
+          }
+        }
+      }
+    }
+  ]
+}

@@ -66,13 +66,13 @@ namespace mapKnight.Android.CGL {
         }
 
         public void Draw () {
-            Content.ProgramCollection.Entity.Begin ();
             int overallOffset = 0;
             for (int i = 0; i < frameData.Count; i++) {
+                Content.ProgramCollection.Entity.Begin ();
                 Content.ProgramCollection.Entity.Draw (vertexBuffer, textureBuffer, indexBuffer, frameData[i].Item1, overallOffset, frameData[i].Item2, true);
+                Content.ProgramCollection.Entity.End ();
                 overallOffset += frameData[i].Item2;
             }
-            Content.ProgramCollection.Entity.End ();
             textureBuffer.Position (0);
             vertexBuffer.Position (0);
         }

@@ -26,8 +26,6 @@ namespace mapKnight.Android.CGL.Programs {
         }
 
         public void Draw (FloatBuffer vertexBuffer, FloatBuffer textureBuffer, ShortBuffer indexBuffer, int texture, int bufferOffset, int quadCount, bool alphaBlending = true) {
-            vertexBuffer.Position (bufferOffset * 8);
-            textureBuffer.Position (bufferOffset * 8);
             indexBuffer.Position (bufferOffset * 6);
 
             // set texture
@@ -37,7 +35,7 @@ namespace mapKnight.Android.CGL.Programs {
             // set matrix
             GL.GlUniformMatrix4fv (mvpMatrixHandle, 1, false, Screen.DefaultMatrix.MVP, 0);
             // set texture buffer
-            GL.GlVertexAttribPointer (textureCoordinateHandle, 2, GL.GlFloat, false,0, textureBuffer);
+            GL.GlVertexAttribPointer (textureCoordinateHandle, 2, GL.GlFloat, false, 0, textureBuffer);
             // set vertex buffer
             GL.GlVertexAttribPointer (positionHandle, 2, GL.GlFloat, false, 2 * sizeof (float), vertexBuffer);
             // enable alphablending if wanted

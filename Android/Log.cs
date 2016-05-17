@@ -3,7 +3,7 @@
 namespace mapKnight.Android {
     public static class Log {
         public static void Print (object sender, string message) {
-            Print (sender.GetType ( ), message);
+            Print (sender.GetType (), message);
         }
 
         public static void Print (Type sender, string message) {
@@ -14,8 +14,16 @@ namespace mapKnight.Android {
 #endif
         }
 
+        public static void Print (object sender, object message) {
+            Print (sender.GetType (), message.ToString ());
+        }
+
+        public static void Print (Type sender, object message) {
+            Print (sender, message.ToString ());
+        }
+
         public static void Warn (object sender, string message) {
-            Warn (sender.GetType ( ), message);
+            Warn (sender.GetType (), message);
         }
 
         public static void Warn (Type sender, string message) {

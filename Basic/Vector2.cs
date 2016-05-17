@@ -18,6 +18,10 @@ namespace mapKnight.Basic {
             return new Vector2 (vec1.X / divider, vec1.Y / divider);
         }
 
+        public static Vector2 operator / (Vector2 vec1, float divider) {
+            return new Vector2 (vec1.X / divider, vec1.Y / divider);
+        }
+
         public static Vector2 operator / (Vector2 vec1, Vector2 vec2) {
             return new Vector2 (vec1.X / vec2.X, vec1.Y / vec2.Y);
         }
@@ -53,27 +57,45 @@ namespace mapKnight.Basic {
         public float X;
         public float Y;
 
-        public Vector2 (float x, float y) {
+        public Vector2 (float x, float y) : this () {
             X = x;
             Y = y;
         }
 
-        public override string ToString () {
-            return string.Format ("X={0}; Y={1}", X.ToString ( ), Y.ToString ( ));
-        }
-
         public static Vector2 Zero { get { return new Vector2 (0, (float)0); } }
+
+        #region Methods
 
         public Vector2 Abs () {
             return new Vector2 (Math.Abs (this.X), Math.Abs (this.Y));
         }
 
+        /// <returns>
+        /// returns the distance discribed by the vector
+        /// </returns>
+        public float Magnitude () {
+            return (float)Math.Sqrt (Math.Pow (X, 2) + Math.Pow (Y, 2));
+        }
+
+        /// <returns>
+        /// returns the squared distance of the vector (much faster)
+        /// </returns>
+        public float MagnitudeSqr () {
+            return (float)(Math.Pow (X, 2f) + Math.Pow (Y, 2f));
+        }
+
+        #endregion
+
         public override bool Equals (object obj) {
-            return (obj.GetType ( ) == typeof (Vector2)) ? (((Vector2)obj) == this) : false;
+            return (obj.GetType () == typeof (Vector2)) ? (((Vector2)obj) == this) : false;
         }
 
         public override int GetHashCode () {
-            return base.GetHashCode ( );
+            return base.GetHashCode ();
+        }
+
+        public override string ToString () {
+            return $"({X} {Y})";
         }
     }
 }

@@ -1,4 +1,6 @@
 using mapKnight.Basic;
+using System;
+using System.Collections.Generic;
 
 namespace mapKnight.Android.ECS {
     public interface IEntityContainer {
@@ -7,6 +9,9 @@ namespace mapKnight.Android.ECS {
         Vector2 Gravity { get; }
         Vector2 Bounds { get; }
         Vector2 GetPositionOnScreen (Entity entity);
+
+        List<Entity> GetEntities ();
+        List<Entity> GetEntities (Predicate<Entity> predicate);
 
         bool HasCollider (int x, int y);
         bool IsOnScreen (Entity entity);

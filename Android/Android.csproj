@@ -60,6 +60,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -103,18 +104,18 @@
     <Compile Include="ECS\ComponentLoadException.cs" />
     <Compile Include="ECS\ComponentSerializationBinder.cs" />
     <Compile Include="ECS\Components\AnimationComponent.cs" />
-    <Compile Include="ECS\Components\CollisionComponent.cs" />
     <Compile Include="ECS\Components\Configs\AnimationComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\CollisionComponentConfig.cs" />
     <Compile Include="ECS\Components\Configs\DrawComponentConfig.cs" />
     <Compile Include="ECS\Components\Configs\GravityComponentConfig.cs" />
     <Compile Include="ECS\Components\Configs\MotionComponentConfig.cs" />
+    <Compile Include="ECS\Components\Configs\PlatformComponentConfig.cs" />
     <Compile Include="ECS\Components\Configs\PushComponentConfig.cs" />
     <Compile Include="ECS\Components\Configs\SkeletComponentConfig.cs" />
     <Compile Include="ECS\Components\Configs\SpriteComponentConfig.cs" />
     <Compile Include="ECS\Components\DrawComponent.cs" />
     <Compile Include="ECS\Components\MotionComponent.cs" />
     <Compile Include="ECS\Components\GravityComponent.cs" />
+    <Compile Include="ECS\Components\PlatformComponent.cs" />
     <Compile Include="ECS\Components\PushComponent.cs" />
     <Compile Include="ECS\Components\SkeletComponent.cs" />
     <Compile Include="ECS\Components\SpriteComponent.cs" />
@@ -161,6 +162,7 @@
     <AndroidAsset Include="Assets\textures\potatoe_patrick.json" />
     <AndroidAsset Include="Assets\maps\debug_map.map" />
     <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
+    <AndroidAsset Include="Assets\entities\test_platform.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>

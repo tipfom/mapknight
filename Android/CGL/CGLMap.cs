@@ -174,5 +174,13 @@ namespace mapKnight.Android.CGL {
                 entity.Prepare ();
             }
         }
+
+        public List<Entity> GetEntities () {
+            return entities;
+        }
+
+        public List<Entity> GetEntities (Predicate<Entity> predicate) {
+            return entities.FindAll (predicate);
+        }
     }
 }
