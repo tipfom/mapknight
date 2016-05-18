@@ -59,22 +59,14 @@ namespace mapKnight.Android.CGL {
                 currentIndex += currentFrameData[entity].Item1.Count;
             }
 
-            textureBuffer.Put (textureBufferData);
-            vertexBuffer.Put (vertexBufferData);
-            textureBuffer.Position (0);
-            vertexBuffer.Position (0);
+            textureBuffer.Put (textureBufferData).Position (0);
+            vertexBuffer.Put (vertexBufferData).Position (0);
         }
 
         public void Draw () {
-            int overallOffset = 0;
-            for (int i = 0; i < frameData.Count; i++) {
-                Content.ProgramCollection.Entity.Begin ();
-                Content.ProgramCollection.Entity.Draw (vertexBuffer, textureBuffer, indexBuffer, frameData[i].Item1, overallOffset, frameData[i].Item2, true);
-                Content.ProgramCollection.Entity.End ();
-                overallOffset += frameData[i].Item2;
-            }
-            textureBuffer.Position (0);
-            vertexBuffer.Position (0);
+            Content.ProgramCollection.Entity.Begin ();
+            Content.ProgramCollection.Entity.StreamDraw (vertexBuffer, textureBuffer, indexBuffer, frameData, true);
+            Content.ProgramCollection.Entity.End ();
         }
     }
 }

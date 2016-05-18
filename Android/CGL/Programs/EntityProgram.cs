@@ -1,4 +1,6 @@
 using Java.Nio;
+using System;
+using System.Collections.Generic;
 using GL = Android.Opengl.GLES20;
 
 namespace mapKnight.Android.CGL.Programs {
@@ -45,6 +47,32 @@ namespace mapKnight.Android.CGL.Programs {
             }
             //draw
             GL.GlDrawElements (GL.GlTriangles, quadCount * 6, GL.GlUnsignedShort, indexBuffer);
+        }
+
+        public void StreamDraw (FloatBuffer vertexBuffer, FloatBuffer textureBuffer, ShortBuffer indexBuffer, List<Tuple<int, int>> streamData, bool alphaBlending = true) {
+            // set matrix
+            GL.GlUniformMatrix4fv (mvpMatrixHandle, 1, false, Screen.DefaultMatrix.MVP, 0);
+            // set texture buffer
+            GL.GlVertexAttribPointer (textureCoordinateHandle, 2, GL.GlFloat, false, 0, textureBuffer);
+            // set vertex buffer
+            GL.GlVertexAttribPointer (positionHandle, 2, GL.GlFloat, false, 2 * sizeof (float), vertexBuffer);
+            // enable alphablending if wanted
+            if (alphaBlending) {
+                GL.GlEnable (GL.GlBlend);
+                GL.GlBlendFunc (GL.GlSrcAlpha, GL.GlOneMinusSrcAlpha);
+            }
+
+            int overallOffset = 0;
+            foreach (Tuple<int, int> drawData in streamData) {
+                // set texture
+                GL.GlActiveTexture (GL.GlTexture0);
+                GL.GlBindTexture (GL.GlTexture2d, drawData.Item1);
+                GL.GlUniform1i (textureUniformHandle, 0);
+
+                indexBuffer.Position (overallOffset * 6);
+                overallOffset += drawData.Item2;
+                GL.GlDrawElements (GL.GlTriangles, drawData.Item2 * 6, GL.GlUnsignedShort, indexBuffer);
+            }
         }
 
         public void Begin () {
