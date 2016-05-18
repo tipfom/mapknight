@@ -2,9 +2,25 @@
 
 namespace mapKnight.Basic {
     public struct Vector2 {
+        #region operator
+
+        #region +, -
+
         public static Vector2 operator + (Vector2 vec1, Vector2 vec2) {
             return new Vector2 (vec1.X + vec2.X, vec1.Y + vec2.Y);
         }
+
+        public static Vector2 operator - (Vector2 vec) {
+            return new Vector2 (-vec.X, -vec.Y);
+        }
+
+        public static Vector2 operator - (Vector2 vec1, Vector2 vec2) {
+            return new Vector2 (vec1.X - vec2.X, vec1.Y - vec2.Y);
+        }
+
+        #endregion
+
+        #region *, /
 
         public static Vector2 operator * (Vector2 vec1, int multiplier) {
             return new Vector2 (vec1.X * (float)multiplier, vec1.Y * (float)multiplier);
@@ -26,9 +42,9 @@ namespace mapKnight.Basic {
             return new Vector2 (vec1.X / vec2.X, vec1.Y / vec2.Y);
         }
 
-        public static Vector2 operator - (Vector2 vec1, Vector2 vec2) {
-            return new Vector2 (vec1.X - vec2.X, vec1.Y - vec2.Y);
-        }
+        #endregion
+
+        #region comparison
 
         public static bool operator != (Vector2 vec1, Vector2 vec2) {
             return (vec1.X != vec2.X && vec1.Y != vec2.Y);
@@ -46,25 +62,37 @@ namespace mapKnight.Basic {
             return (vec1.X > vec2.X) && (vec1.Y > vec2.Y);
         }
 
-        public static Vector2 operator - (Vector2 vec) {
-            return new Vector2 (-vec.X, -vec.Y);
-        }
+        #endregion
+
+        #region conversion
 
         public static explicit operator Vector2 (Size size) {
             return new Vector2 (size.Width, (float)size.Height);
         }
 
+        #endregion
+
+        #endregion
+
+        #region defaults
+
+        public static Vector2 Zero { get { return new Vector2 (0, 0); } }
+
+        public static Vector2 One { get { return new Vector2 (1, 1); } }
+
+        #endregion
+
+
         public float X;
         public float Y;
 
-        public Vector2 (float x, float y) : this () {
+        public Vector2 (float x, float y) {
             X = x;
             Y = y;
         }
 
-        public static Vector2 Zero { get { return new Vector2 (0, (float)0); } }
 
-        #region Methods
+        #region methods
 
         public Vector2 Abs () {
             return new Vector2 (Math.Abs (this.X), Math.Abs (this.Y));
@@ -86,6 +114,8 @@ namespace mapKnight.Basic {
 
         #endregion
 
+        #region overrides
+
         public override bool Equals (object obj) {
             return (obj.GetType () == typeof (Vector2)) ? (((Vector2)obj) == this) : false;
         }
@@ -97,6 +127,8 @@ namespace mapKnight.Basic {
         public override string ToString () {
             return $"({X} {Y})";
         }
+
+        #endregion
     }
 }
 
