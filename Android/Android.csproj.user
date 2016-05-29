@@ -3,5 +3,7 @@
   <PropertyGroup>
     <SelectedDevice>Motorola XT1032</SelectedDevice>
     <ProjectView>ProjectFiles</ProjectView>
+    <AndroidDesignerPreferredDevice>Nexus 4</AndroidDesignerPreferredDevice>
+    <AndroidDesignerPreferredTheme>thisTheme</AndroidDesignerPreferredTheme>
   </PropertyGroup>
 </Project>

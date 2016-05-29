@@ -1,4 +1,6 @@
-﻿uniform mat4 u_mvpmatrix;
+﻿ precision mediump float;
+
+uniform mat4 u_mvpmatrix;
 
 attribute vec4 a_color;
 attribute vec4 a_position;

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>482c4f52-d450-4468-a1f3-d50b96a58d26</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>mapKnight.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Anchor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Component.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AnimationComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Communication\Data.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Communication\Identifier.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Communication\Info.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\AnimationComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\DrawComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\GravityComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\MotionComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\PlatformComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\PushComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\SkeletComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\SpriteComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Configs\TextureComponentConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\DrawComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\GravityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\MotionComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\PlatformComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\PushComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SkeletComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\TextureComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ChangedHashException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MapLoadException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingMapIdentifierException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IEntityContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IEntityRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interpolation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Map.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mathf.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rectangle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Size.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TileAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Vector2.cs" />
+  </ItemGroup>
+</Project>

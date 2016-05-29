@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>41264171-a1a1-4b71-903e-79bf93330bc9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>mapKnight.Graphics</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Animation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Bone.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BufferBatch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Color.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ColorBufferBatch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUIBar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUIButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUICollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUIImage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUIItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUILabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUIRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GUI\GUITouchAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handle\AttributeHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handle\TextureHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handle\Uniform4Handle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Handle\UniformMatrixHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Manager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matrix.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Programs\ColorProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Programs\MatrixProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Programs\Program.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteBatch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Step.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Texture2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VertexData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Window.cs" />
+  </ItemGroup>
+</Project>

@@ -61,6 +61,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -71,88 +73,26 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets.cs" />
-    <Compile Include="CGL\Buffer\CGLBufferBatch.cs" />
-    <Compile Include="CGL\Buffer\CGLColorBufferBatch.cs" />
-    <Compile Include="CGL\CGLEntityRenderer.cs" />
+    <Compile Include="AssetProvider.cs" />
     <Compile Include="CGL\CGLMap.cs" />
-    <Compile Include="CGL\CGLSprite2D.cs" />
-    <Compile Include="CGL\CGLMatrix.cs" />
-    <Compile Include="CGL\CGLVertexData.cs" />
-    <Compile Include="CGL\GUI\GUI.cs" />
-    <Compile Include="CGL\GUI\GUIBar.cs" />
-    <Compile Include="CGL\GUI\GUIButton.cs" />
-    <Compile Include="CGL\GUI\GUIImage.cs" />
-    <Compile Include="CGL\GUI\GUIItem.cs" />
-    <Compile Include="CGL\GUI\GUITouchHandler.cs" />
-    <Compile Include="CGL\Programs\Collection.cs" />
-    <Compile Include="CGL\Programs\ColorProgram.cs" />
-    <Compile Include="CGL\Programs\EntityProgram.cs" />
+    <Compile Include="TouchHandler.cs" />
     <Compile Include="Config\ContentConfig.cs" />
     <Compile Include="Config\GameConfig.cs" />
-    <Compile Include="ECS\ComponentAction.cs" />
-    <Compile Include="ECS\ComponentComparer.cs" />
-    <Compile Include="ECS\ComponentConfig.cs" />
-    <Compile Include="ECS\ComponentDependencyException.cs" />
-    <Compile Include="ECS\ComponentInfo.cs" />
-    <Compile Include="ECS\ComponentLoadException.cs" />
-    <Compile Include="ECS\ComponentSerializationBinder.cs" />
-    <Compile Include="ECS\Components\AnimationComponent.cs" />
-    <Compile Include="ECS\Components\Configs\AnimationComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\DrawComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\GravityComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\MotionComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\PlatformComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\PushComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\SkeletComponentConfig.cs" />
-    <Compile Include="ECS\Components\Configs\SpriteComponentConfig.cs" />
-    <Compile Include="ECS\Components\DrawComponent.cs" />
-    <Compile Include="ECS\Components\MotionComponent.cs" />
-    <Compile Include="ECS\Components\GravityComponent.cs" />
-    <Compile Include="ECS\Components\PlatformComponent.cs" />
-    <Compile Include="ECS\Components\PushComponent.cs" />
-    <Compile Include="ECS\Components\SkeletComponent.cs" />
-    <Compile Include="ECS\Components\SpriteComponent.cs" />
-    <Compile Include="ECS\Components\TextureComponent.cs" />
-    <Compile Include="ECS\Component.cs" />
-    <Compile Include="ECS\Components\Configs\TextureComponentConfig.cs" />
-    <Compile Include="ECS\ComponentType.cs" />
-    <Compile Include="ECS\EntityConfig.cs" />
-    <Compile Include="ECS\EntityVertexData.cs" />
-    <Compile Include="ECS\IEntityContainer.cs" />
-    <Compile Include="ECS\IEntityRenderer.cs" />
-    <Compile Include="Map\TileAttribute.cs" />
-    <Compile Include="Map\TileMask.cs" />
     <Compile Include="Scenes\GameScene.cs" />
-    <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Scenes\MainMenuScene.cs" />
-    <Compile Include="Scenes\SceneManager.cs" />
-    <Compile Include="Map\Tile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="CGL\CGLRenderer.cs" />
-    <Compile Include="CGL\CGLTexture2D.cs" />
-    <Compile Include="CGL\CGLView.cs" />
-    <Compile Include="CGL\CGLTools.cs" />
-    <Compile Include="CGL\GUI\GUILabel.cs" />
-    <Compile Include="CGL\Programs\ProgramHelper.cs" />
-    <Compile Include="CGL\Programs\MatrixProgram.cs" />
-    <Compile Include="CGL\Programs\FBOProgram.cs" />
-    <Compile Include="Map\TileManager.cs" />
-    <Compile Include="Map\Map.cs" />
-    <Compile Include="Screen.cs" />
-    <Compile Include="MainActivity.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Content.cs" />
+    <Compile Include="Renderer.cs" />
+    <Compile Include="View.cs" />
+    <Compile Include="Activity.cs" />
     <Compile Include="CGL\CGLCamera.cs" />
-    <Compile Include="ECS\Entity.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface.json" />
@@ -169,6 +109,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CGL\GUI\" />
     <Folder Include="Resources\layout\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
@@ -204,15 +145,11 @@
     <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Basic\Basic.csproj">
-      <Project>{50b1f9f5-dd73-483b-947b-32220dc7561b}</Project>
-      <Name>Basic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\textures\potatoe_patrick.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\tilesets\debug_tileset.png" />
   </ItemGroup>
+  <Import Project="..\Core\Core.projitems" Label="Shared" />
+  <Import Project="..\Graphics\Graphics\Graphics.projitems" Label="Shared" />
 </Project>
