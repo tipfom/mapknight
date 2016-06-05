@@ -21,6 +21,9 @@
             <Setter Property="Maximum" Value="0"/>
             <Setter Property="Minimum" Value="0"/>
             <Setter Property="Value" Value="0"/>
+            <Setter Property="ViewportSize" Value="5"/>
+            <Setter Property="SmallChange" Value="1"/>
+            <Setter Property="LargeChange" Value="10"/>
         </Style>
         <DataTemplate x:Key="TileItemTemplate">
             <Image Source="{Binding Image}" Width="50" Height="50" Margin="-5,-2,-5,-2" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
@@ -49,7 +52,7 @@
                        ValueChanged="scrollbar_horizontal_ValueChanged"/>
             <ScrollBar x:Name="scrollbar_vertical"
                        Orientation="Vertical" HorizontalAlignment="Right"
-                       ValueChanged="scrollbar_vertical_ValueChanged" LargeChange="10" SmallChange="1">
+                       ValueChanged="scrollbar_vertical_ValueChanged">
             </ScrollBar>
         </Grid>
     </Grid>

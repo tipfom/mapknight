@@ -83,7 +83,7 @@ namespace mapKnight.Core {
                 }
 
                 byte[ ] mapinforaw = reader.ReadBytes(reader.ReadInt32( ));
-                string[ ] mapinfo = mapinforaw.Decode( ).Split(Convert.ToChar(INFO_SPERATOR));
+                string[ ] mapinfo = mapinforaw.Decode( ).Split(new char[ ] { Convert.ToChar(INFO_SPERATOR) }, StringSplitOptions.None);
                 Creator = mapinfo[0];
                 Name = mapinfo[1];
                 if (!reader.ReadBytes(reader.ReadInt32( )).SequenceEqual(mapinforaw.ComputeHash( )))
@@ -99,19 +99,29 @@ namespace mapKnight.Core {
             }
         }
 
+        public string Flush ( ) {
+            using (MemoryStream ms = new MemoryStream( )) {
+                Flush(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                using (BinaryReader reader = new BinaryReader(ms)) {
+                    return Convert.ToBase64String(reader.ReadBytes((int)ms.Length));
+                }
+            }
+        }
+
         public void Flush(Stream targetstream) {
-            using (GZipStream zipstream = new GZipStream(targetstream, COMPRESSION_LEVEL))
+            using (GZipStream zipstream = new GZipStream(targetstream, COMPRESSION_LEVEL, true))
             using (BinaryWriter writer = new BinaryWriter(zipstream)) {
                 // write identifies
                 writer.Write(IDENTIFIER);
 
                 // write header
-                writer.Write((short)Size.Width);
-                writer.Write((short)Size.Height);
-                writer.Write((short)SpawnPoint.X);
-                writer.Write((short)SpawnPoint.Y);
+                writer.Write((Int16)Size.Width);
+                writer.Write((Int16)Size.Height);
+                writer.Write((Int16)SpawnPoint.X);
+                writer.Write((Int16)SpawnPoint.Y);
 
-                bool is32bit = (this.Size.Area < Math.Pow(2, 16));
+                bool is32bit = (this.Size.Area >= Math.Pow(2, 16));
                 writer.Write(is32bit);
 
                 /////////////////////////////////////////////////////////////////////////////////////////
@@ -144,11 +154,11 @@ namespace mapKnight.Core {
                 /////////////////////////////////////////////////////////////////////////////////////////
                 // write data
                 foreach (var tileentry in startpoints) {
-                    WriteInt(writer, tileentry.Key, is32bit); // tileid
+                    WriteInt(writer, tileentry.Key + 1, is32bit); // tileid
                     for (int layer = 0; layer < 3; layer++) {
                         tileentry.Value[layer].Sort( );
                         for (int i = 0; i < tileentry.Value[layer].Count; i++) {
-                            WriteInt(writer, tileentry.Value[layer][i], is32bit);
+                            WriteInt(writer, tileentry.Value[layer][i] + 1, is32bit);
                         }
                         WriteInt(writer, 0, is32bit);
                     }
@@ -166,7 +176,7 @@ namespace mapKnight.Core {
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 // write tiles
-                byte[ ] tilesraw = JsonConvert.SerializeObject(Tiles).Encode( );
+                byte[ ] tilesraw = JsonConvert.SerializeObject(Tiles).Compress().Encode( );
                 writer.Write(tilesraw.Length);
                 writer.Write(tilesraw);
                 byte[ ] tilesrawhash = tilesraw.ComputeHash( );

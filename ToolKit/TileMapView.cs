@@ -14,19 +14,19 @@ namespace mapKnight.ToolKit {
         private Map _CurrentMap;
         public Map CurrentMap {
             get { return _CurrentMap; }
-            set { _CurrentMap = value; Update = true; }
+            set { _CurrentMap = value; Update(); }
         }
 
         private Point _Offset;
         public Point Offset {
             get { return _Offset; }
-            set { _Offset = value; Update = true; }
+            set { _Offset = value; Update (); }
         }
 
         private int _TileSize = 40;
         public int TileSize {
             get { return _TileSize; }
-            set { _TileSize = value; Update = true; }
+            set { _TileSize = value; Update (); }
         }
 
         public Dictionary<Map, Dictionary<string, Texture2D>> Textures = new Dictionary<Map, Dictionary<string, Texture2D>>( );

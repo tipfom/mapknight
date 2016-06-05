@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Threading;
 using Color = Microsoft.Xna.Framework.Color;
 
@@ -28,7 +27,6 @@ namespace mapKnight.ToolKit.Xna {
         }
 
         public new Color Background { get; protected set; } = Color.White;
-        public bool Update { get; set; }
         private DispatcherTimer resizeTimer = new DispatcherTimer( ) { Interval = new TimeSpan(100), IsEnabled = false };
 
         public XnaControl( ) {
@@ -59,7 +57,7 @@ namespace mapKnight.ToolKit.Xna {
                     GraphicsDevice, (int)ActualWidth, (int)ActualHeight);
                 rootImage.Source = imageSource.WriteableBitmap;
             }
-            Update = true;
+            Update( );
         }
 
         void XnaControl_Loaded(object sender, RoutedEventArgs e) {
@@ -90,7 +88,7 @@ namespace mapKnight.ToolKit.Xna {
                 rootImage.Source = imageSource.WriteableBitmap;
 
                 // hook the rendering event
-                CompositionTarget.Rendering += CompositionTarget_Rendering;
+                // CompositionTarget.Rendering += CompositionTarget_Rendering;
             }
         }
 
@@ -106,16 +104,12 @@ namespace mapKnight.ToolKit.Xna {
 
         }
 
-        void CompositionTarget_Rendering(object sender, EventArgs e) {
-            if (!Update)
-                return;
-            Update = false;
-
+        public void Update( ) {
             // set the image source render target
             GraphicsDevice.SetRenderTarget(imageSource.RenderTarget);
             GraphicsDevice.Clear(Background);
 
-            SpriteBatch.Begin( );
+            SpriteBatch.Begin(samplerState: SamplerState.PointWrap);
             // allow the control to draw
             Render(SpriteBatch);
 

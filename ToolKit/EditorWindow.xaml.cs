@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 
@@ -7,6 +8,8 @@ namespace mapKnight.ToolKit {
     /// Interaktionslogik für EditorWindow.xaml
     /// </summary>
     public partial class EditorWindow : Window {
+        public const string PROJECT_FILTER = "PROJECT-Files|*.mkproj";
+
         public EditorWindow( ) {
             InitializeComponent( );
             LoadConfig( );
@@ -31,14 +34,6 @@ namespace mapKnight.ToolKit {
                 menu_editor.Items.Add(item);
         }
 
-        private void NewCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = true;
-        }
-
-        private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
-
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             if (WindowState == WindowState.Maximized) {
                 // Use the RestoreBounds as the current values will be 0, 0 and the size of the screen
@@ -60,6 +55,45 @@ namespace mapKnight.ToolKit {
 
         private void Map_Selected(object sender, RoutedEventArgs e) {
             SetTabPageMenu(mapeditor.Menu);
+        }
+
+        private void NewCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = true;
+        }
+
+        private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
+            App.Project = new Project( );
+        }
+
+        private void OpenCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = true;
+        }
+
+        private void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
+            OpenFileDialog projectopendialog = new OpenFileDialog( );
+            projectopendialog.CheckFileExists = true;
+            projectopendialog.Multiselect = false;
+            projectopendialog.Filter = PROJECT_FILTER;
+            if (projectopendialog.ShowDialog( ) ?? false) {
+                App.Project = new Project(projectopendialog.FileName);
+            }
+        }
+
+        private void SaveCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = true;
+        }
+
+        private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
+            if (!App.Project.IsLocated) {
+                SaveFileDialog projectsavedialog = new SaveFileDialog( );
+                projectsavedialog.OverwritePrompt = true;
+                projectsavedialog.Filter = PROJECT_FILTER;
+                if (projectsavedialog.ShowDialog( ) ?? false) {
+                    App.Project.Save(projectsavedialog.FileName);
+                }
+            } else {
+                App.Project.Save( );
+            }
         }
     }
 }

@@ -40,6 +40,7 @@ namespace mapKnight.ToolKit.Xna {
         // IGraphicsDeviceService events.
         public event EventHandler<EventArgs> DeviceCreated;
         public event EventHandler<EventArgs> DeviceDisposing;
+#pragma warning disable 0067
         public event EventHandler<EventArgs> DeviceReset;
         public event EventHandler<EventArgs> DeviceResetting;
 

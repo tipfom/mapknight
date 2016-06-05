@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="ImageConverter.cs" />
+    <Compile Include="Project.cs" />
     <Compile Include="TileMapView.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Xna\GraphicsDeviceService.cs" />
