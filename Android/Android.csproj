@@ -83,8 +83,6 @@
     <Compile Include="AssetProvider.cs" />
     <Compile Include="CGL\CGLMap.cs" />
     <Compile Include="TouchHandler.cs" />
-    <Compile Include="Config\ContentConfig.cs" />
-    <Compile Include="Config\GameConfig.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\MainMenuScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

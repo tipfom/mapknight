@@ -1,5 +1,4 @@
 ﻿using mapKnight.Core.Exceptions;
-using mapKnight.Graphics;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,18 +13,27 @@ namespace mapKnight.Core {
         public static byte[ ] IDENTIFIER = { 133, 7, 42, 84, 77, 83, 76, 52 };
 
         // x,y,layer
-        private int[ , , ] Data;
+        public int[ , , ] Data;
 
         public Size Size { get; private set; }
+        public int Height { get { return Size.Height; } }
+        public int Width { get { return Size.Width; } }
+
         public Vector2 SpawnPoint;
-        private Tile[ ] tiles = new Tile[1];
-        private Texture2D texture;
+        public Tile[ ] Tiles = new Tile[0];
+        public string Texture;
         public string Creator;
         public string Name;
 
-        public float VertexSize { get; protected set; }
+        public Map(Size size, string creator, string name) {
+            Size = size;
+            Data = new int[size.Width, size.Height, 3];
+            Creator = creator;
+            Name = name;
+            SpawnPoint = new Vector2( );
+        }
 
-        public Map (Stream stream) {
+        public Map(Stream stream) {
             using (BinaryReader reader = new BinaryReader(stream.Decompress( ))) {
                 if (!reader.ReadBytes(IDENTIFIER.Length).SequenceEqual(IDENTIFIER))
                     throw new MissingMapIdentifierException( );
@@ -83,20 +91,15 @@ namespace mapKnight.Core {
 
                 byte[ ] tilesraw = reader.ReadBytes(reader.ReadInt32( ));
                 string tiles = tilesraw.Decode( ).Decompress( );
-                JsonConvert.PopulateObject(tiles, this.tiles);
+                JsonConvert.PopulateObject(tiles, this.Tiles);
                 if (!reader.ReadBytes(reader.ReadInt32( )).SequenceEqual(tilesraw.ComputeHash( )))
                     throw new ChangedHashException(new MapLoadException( ));
 
-                string texturename = reader.ReadBytes(reader.ReadInt32( )).Decode( );
-                texture = Assets.Load<Texture2D>(texturename);
+                Texture = reader.ReadBytes(reader.ReadInt32( )).Decode( );
             }
         }
 
-        public void Flush (Stream targetstream) {
-            Flush(targetstream, texture.Name);
-        }
-
-        public void Flush (Stream targetstream, string textureName) {
+        public void Flush(Stream targetstream) {
             using (GZipStream zipstream = new GZipStream(targetstream, COMPRESSION_LEVEL))
             using (BinaryWriter writer = new BinaryWriter(zipstream)) {
                 // write identifies
@@ -163,7 +166,7 @@ namespace mapKnight.Core {
 
                 //////////////////////////////////////////////////////////////////////////////////////////
                 // write tiles
-                byte[ ] tilesraw = JsonConvert.SerializeObject(tiles).Encode( );
+                byte[ ] tilesraw = JsonConvert.SerializeObject(Tiles).Encode( );
                 writer.Write(tilesraw.Length);
                 writer.Write(tilesraw);
                 byte[ ] tilesrawhash = tilesraw.ComputeHash( );
@@ -171,32 +174,36 @@ namespace mapKnight.Core {
                 writer.Write(tilesrawhash);
 
                 // write texturename
-                writer.Write(textureName.Length);
-                writer.Write(textureName.Encode( ));
+                writer.Write(Texture.Length);
+                writer.Write(Texture.Encode( ));
             }
         }
 
-        private void WriteInt (BinaryWriter writer, int number, bool is32bit) {
+        private void WriteInt(BinaryWriter writer, int number, bool is32bit) {
             if (is32bit)
                 writer.Write(number);
             else
                 writer.Write((short)number);
         }
 
-        public Tile GetTile (int x, int y, int layer) {
-            return tiles[Data[x, y, layer]];
+        public Tile GetTile(int x, int y, int layer) {
+            return Tiles[Data[x, y, layer]];
         }
 
-        public Tile GetTileBackground (int x, int y) {
-            return tiles[Data[x, y, 0]];
+        public Tile GetTileBackground(int x, int y) {
+            return Tiles[Data[x, y, 0]];
         }
 
-        public Tile GetTile (int x, int y) {
-            return tiles[Data[x, y, 1]];
+        public Tile GetTile(int x, int y) {
+            return Tiles[Data[x, y, 1]];
         }
 
-        public Tile GetTileForeground (int x, int y) {
-            return tiles[Data[x, y, 2]];
+        public Tile GetTileForeground(int x, int y) {
+            return Tiles[Data[x, y, 2]];
+        }
+
+        public override string ToString( ) {
+            return $"{Name} ({Size.Width}x{Size.Height})";
         }
     }
 }

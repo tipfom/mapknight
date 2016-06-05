@@ -1,0 +1,45 @@
+﻿using mapKnight.Core;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media.Imaging;
+
+namespace mapKnight.ToolKit {
+    /// <summary>
+    /// Interaktionslogik für AddTileWindow.xaml
+    /// </summary>
+    public partial class AddTileWindow : Window {
+        public Tuple<Tile, BitmapImage> Created;
+        public string Path;
+
+#if DEBUG
+        public AddTileWindow( ) {
+            InitializeComponent( );
+        }
+#endif
+
+        public AddTileWindow(string path) {
+            Path = path;
+            InitializeComponent( );
+
+            BitmapImage image = new BitmapImage();
+            image.BeginInit( );
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.CreateOptions = BitmapCreateOptions.None;
+            image.DecodePixelWidth = Properties.Settings.Default.TileSize;
+            image.DecodePixelHeight = Properties.Settings.Default.TileSize;
+            image.UriSource = new Uri(path);
+            image.EndInit( );
+
+            image_tile.Source = image;
+            textbox_name.Text = System.IO.Path.GetFileNameWithoutExtension(path);
+        }
+
+        private void button_submit_Click(object sender, RoutedEventArgs e) {
+            Created = new Tuple<Tile, BitmapImage>(
+                new Tile( ) { Name = textbox_name.Text, Attributes = new Dictionary<TileAttribute, string>( ) },
+                (BitmapImage)image_tile.Source);
+            DialogResult = true;
+        }
+    }
+}

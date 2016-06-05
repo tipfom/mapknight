@@ -8,13 +8,13 @@ namespace mapKnight.Android {
     public class MainActivity : Activity {
         View view;
 
-        protected override void OnCreate (Bundle bundle) {
+        protected override void OnCreate(Bundle bundle) {
             RequestWindowFeature(WindowFeatures.NoTitle);
             base.OnCreate(bundle);
 
             // Create our OpenGL view, and display it
             AssetProvider.Context = this;
-            Core.Assets.AssetProvider = new AssetProvider( );
+            Extended.Assets.AssetProvider = new AssetProvider( );
 
             view = new View(this);
             view.SetOnTouchListener(TouchHandler.Instance);
@@ -22,16 +22,16 @@ namespace mapKnight.Android {
             HideNavBar( );
         }
 
-        protected override void OnStop ( ) {
+        protected override void OnStop( ) {
             base.OnStop( );
         }
 
-        protected override void OnResume ( ) {
+        protected override void OnResume( ) {
             base.OnResume( );
             HideNavBar( );
         }
 
-        public void HideNavBar ( ) {
+        public void HideNavBar( ) {
             //versteckt die Navigationsleiste
             global::Android.Views.View decorView = base.Window.DecorView;
             int newUiOptions = (int)decorView.WindowSystemUiVisibility;
