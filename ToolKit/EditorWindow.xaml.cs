@@ -1,6 +1,6 @@
-﻿using Microsoft.Win32;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace mapKnight.ToolKit {
@@ -10,12 +10,12 @@ namespace mapKnight.ToolKit {
     public partial class EditorWindow : Window {
         public const string PROJECT_FILTER = "PROJECT-Files|*.mkproj";
 
-        public EditorWindow( ) {
+        public EditorWindow ( ) {
             InitializeComponent( );
             LoadConfig( );
         }
 
-        private void LoadConfig( ) {
+        private void LoadConfig ( ) {
             this.Top = Properties.Settings.Default.Top;
             this.Left = Properties.Settings.Default.Left;
             this.Height = Properties.Settings.Default.Height;
@@ -26,7 +26,7 @@ namespace mapKnight.ToolKit {
             }
         }
 
-        private void SetTabPageMenu(List<UIElement> items) {
+        private void SetTabPageMenu (List<UIElement> items) {
             while (menu_editor.Items.Count > 2)
                 menu_editor.Items.RemoveAt(2);
 
@@ -34,7 +34,7 @@ namespace mapKnight.ToolKit {
                 menu_editor.Items.Add(item);
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+        private void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e) {
             if (WindowState == WindowState.Maximized) {
                 // Use the RestoreBounds as the current values will be 0, 0 and the size of the screen
                 Properties.Settings.Default.Top = RestoreBounds.Top;
@@ -53,47 +53,46 @@ namespace mapKnight.ToolKit {
             Properties.Settings.Default.Save( );
         }
 
-        private void Map_Selected(object sender, RoutedEventArgs e) {
+        private void Map_Selected (object sender, RoutedEventArgs e) {
             SetTabPageMenu(mapeditor.Menu);
         }
 
-        private void NewCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+        private void NewCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }
 
-        private void NewCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
-            App.Project = new Project( );
+        private void NewCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
+            App.Project = new Project(this);
         }
 
-        private void OpenCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+        private void OpenCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }
 
-        private void OpenCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
-            OpenFileDialog projectopendialog = new OpenFileDialog( );
-            projectopendialog.CheckFileExists = true;
-            projectopendialog.Multiselect = false;
-            projectopendialog.Filter = PROJECT_FILTER;
-            if (projectopendialog.ShowDialog( ) ?? false) {
-                App.Project = new Project(projectopendialog.FileName);
+        private void OpenCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
+            FolderBrowserDialog projectopendialog = new FolderBrowserDialog( );
+            if (projectopendialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
+                App.Project = new Project(this, projectopendialog.SelectedPath);
             }
         }
 
-        private void SaveCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
+        private void SaveCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }
 
-        private void SaveCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
+        private void SaveCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (!App.Project.IsLocated) {
-                SaveFileDialog projectsavedialog = new SaveFileDialog( );
-                projectsavedialog.OverwritePrompt = true;
-                projectsavedialog.Filter = PROJECT_FILTER;
-                if (projectsavedialog.ShowDialog( ) ?? false) {
-                    App.Project.Save(projectsavedialog.FileName);
+                FolderBrowserDialog projectsavedialog = new FolderBrowserDialog( );
+                if (projectsavedialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
+                    App.Project.Save(projectsavedialog.SelectedPath);
                 }
             } else {
                 App.Project.Save( );
             }
+        }
+
+        private void Window_Loaded (object sender, RoutedEventArgs e) {
+            App.Project = new Project(this);
         }
     }
 }

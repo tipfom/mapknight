@@ -13,21 +13,21 @@ namespace mapKnight.ToolKit {
         public string Path;
 
 #if DEBUG
-        public AddTileWindow( ) {
+        public AddTileWindow ( ) {
             InitializeComponent( );
         }
 #endif
 
-        public AddTileWindow(string path) {
+        public AddTileWindow (string path) {
             Path = path;
             InitializeComponent( );
 
-            BitmapImage image = new BitmapImage();
+            BitmapImage image = new BitmapImage( );
             image.BeginInit( );
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.CreateOptions = BitmapCreateOptions.None;
-            image.DecodePixelWidth = Properties.Settings.Default.TileSize;
-            image.DecodePixelHeight = Properties.Settings.Default.TileSize;
+            image.DecodePixelWidth = Map.TILE_PXL_SIZE;
+            image.DecodePixelHeight = Map.TILE_PXL_SIZE;
             image.UriSource = new Uri(path);
             image.EndInit( );
 
@@ -35,7 +35,7 @@ namespace mapKnight.ToolKit {
             textbox_name.Text = System.IO.Path.GetFileNameWithoutExtension(path);
         }
 
-        private void button_submit_Click(object sender, RoutedEventArgs e) {
+        private void button_submit_Click (object sender, RoutedEventArgs e) {
             Created = new Tuple<Tile, BitmapImage>(
                 new Tile( ) { Name = textbox_name.Text, Attributes = new Dictionary<TileAttribute, string>( ) },
                 (BitmapImage)image_tile.Source);

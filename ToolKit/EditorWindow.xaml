@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit"
         mc:Ignorable="d"
-        Title="Kartenknecht Werkzeugkasten" Height="300" Width="300" Closing="Window_Closing">
+        Title="Kartenknecht Werkzeugkasten" Height="300" Width="300" Closing="Window_Closing" Loaded="Window_Loaded">
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="NewCommand_CanExecute" Executed="NewCommand_Executed" />
         <CommandBinding Command="Open" CanExecute="OpenCommand_CanExecute"  Executed="OpenCommand_Executed"/>

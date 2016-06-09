@@ -7,7 +7,7 @@ namespace mapKnight.ToolKit {
     /// </summary>
     public partial class App : Application {
         public static event Action ProjectChanged;
-        private static Project _Project = new Project( );
+        private static Project _Project;
         public static Project Project {
             get { return _Project; }
             set { _Project = value; ProjectChanged?.Invoke( ); }

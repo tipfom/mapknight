@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interpolation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Map.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MapSerizalizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rectangle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Size.cs" />
