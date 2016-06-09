@@ -1,4 +1,5 @@
 ﻿using mapKnight.Core;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -142,10 +143,11 @@ namespace mapKnight.ToolKit {
         }
 
         private void tilemapview_MouseMove (object sender, MouseEventArgs e) {
-            if (CurrentMap == null || CurrentTileIndex == -1)
+            if (CurrentMap == null)
                 return;
+            UpdateSelectedTile(e);
 
-            if (e.LeftButton == MouseButtonState.Pressed) {
+            if (CurrentTileIndex > -1 && e.LeftButton == MouseButtonState.Pressed) {
                 Point clickedTile;
                 if (GetClickedTile(e, out clickedTile)) {
                     CurrentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, 0] = CurrentTileIndex;
@@ -177,6 +179,27 @@ namespace mapKnight.ToolKit {
             }
 
             public BitmapImage Image { get; private set; }
+        }
+
+        private void tilemapview_MouseLeave (object sender, MouseEventArgs e) {
+            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Point(-1, -1);
+        }
+
+        private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {
+            if (CurrentMap != null)
+                UpdateSelectedTile(e);
+        }
+
+        private void UpdateSelectedTile (MouseEventArgs e) {
+            Point positionOnControl = e.GetPosition(tilemapview);
+            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Point(
+                (int)Math.Min(positionOnControl.X / tilemapview.TileSize, CurrentMap.Width - tilemapview.Offset.X - 1),
+                (int)Math.Min(positionOnControl.Y / tilemapview.TileSize, CurrentMap.Height - tilemapview.Offset.Y - 1)
+                );
+        }
+
+        private void buttonexport_Click (object sender, RoutedEventArgs e) {
+            // export current maps tileset
         }
     }
 }

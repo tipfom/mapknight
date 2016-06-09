@@ -12,19 +12,21 @@ namespace mapKnight.ToolKit.Xna {
     /// Interaktionslogik für XnaControl.xaml
     /// </summary>
     public partial class XnaControl : UserControl {
-        private GraphicsDeviceService graphicsService;
+        public GraphicsDeviceService GraphicsService { get; private set; }
         private ImageSource imageSource;
 
         /// <summary>
         /// Gets the GraphicsDevice behind the control.
         /// </summary>
         public GraphicsDevice GraphicsDevice {
-            get { return graphicsService.GraphicsDevice; }
+            get { return GraphicsService.GraphicsDevice; }
         }
 
         public SpriteBatch SpriteBatch {
             get; private set;
         }
+
+        public event Action DeviceInitialized;
 
         public new Color Background { get; protected set; } = Color.White;
         private DispatcherTimer resizeTimer = new DispatcherTimer( ) { Interval = new TimeSpan(100), IsEnabled = false };
@@ -41,8 +43,8 @@ namespace mapKnight.ToolKit.Xna {
             imageSource.Dispose( );
 
             // release on finalizer to clean up the graphics device
-            if (graphicsService != null)
-                graphicsService.Release( );
+            if (GraphicsService != null)
+                GraphicsService.Release( );
         }
 
         private void ResizeTimer_Tick (object sender, EventArgs e) {
@@ -50,7 +52,7 @@ namespace mapKnight.ToolKit.Xna {
             // if we're not in design mode, recreate the 
             // image source for the new size
             if (DesignerProperties.GetIsInDesignMode(this) == false &&
-                graphicsService != null) {
+                GraphicsService != null) {
                 // recreate the image source
                 imageSource.Dispose( );
                 imageSource = new ImageSource(
@@ -77,9 +79,9 @@ namespace mapKnight.ToolKit.Xna {
         }
 
         private void InitializeGraphicsDevice ( ) {
-            if (graphicsService == null) {
+            if (GraphicsService == null) {
                 // add a reference to the graphics device
-                graphicsService = GraphicsDeviceService.AddRef(
+                GraphicsService = GraphicsDeviceService.AddRef(
                     (PresentationSource.FromVisual(this) as HwndSource).Handle);
 
                 // create the image source
@@ -89,6 +91,7 @@ namespace mapKnight.ToolKit.Xna {
 
                 // hook the rendering event
                 // CompositionTarget.Rendering += CompositionTarget_Rendering;
+                DeviceInitialized?.Invoke( );
             }
         }
 

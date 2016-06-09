@@ -30,23 +30,26 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="6"/>
             <ColumnDefinition MinWidth="100"/>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0" Grid.Row="0"
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="EXPORT" Margin="0,0,0,3" Click="buttonexport_Click"/>
+            <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles" 
                  ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop">
+                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop"/>
 
-        </ListBox>
+        </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False"/>
         <Grid Grid.Column="2">
-            <local:TileMapView x:Name="tilemapview" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove"/>
+            <local:TileMapView x:Name="tilemapview" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter"/>
             <ScrollBar x:Name="scrollbar_horizontal"
                        Orientation="Horizontal" VerticalAlignment="Bottom"
                        ValueChanged="scrollbar_horizontal_ValueChanged"/>
