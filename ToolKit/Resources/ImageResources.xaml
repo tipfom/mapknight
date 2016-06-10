@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:mapKnight.ToolKit">
+    <BitmapImage x:Key="logo" UriSource="../Resources/logo.png"/>
+
     <Image x:Key="image_project_new" Source="../Resources/folder-48.png"/>
     <Image x:Key="image_project_load" Source="../Resources/opened_folder-48.png"/>
     <Image x:Key="image_project_save" Source="../Resources/save-48.png"/>

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit"
              xmlns:xna="clr-namespace:mapKnight.ToolKit.Xna"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="900">
     <UserControl.Resources>
         <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">
@@ -31,16 +31,19 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition MinWidth="300" Width="*"/>
             <ColumnDefinition Width="6"/>
-            <ColumnDefinition MinWidth="100"/>
+            <ColumnDefinition MinWidth="300" Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Content="EXPORT" Margin="0,0,0,3" Click="buttonexport_Click"/>
+            <DockPanel>
+                <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0"/>
+                <Button Grid.Row="0" Content="EXPORT" Margin="0,0,0,3" Click="buttonexport_Click"/>
+            </DockPanel>
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles" 
                  ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"

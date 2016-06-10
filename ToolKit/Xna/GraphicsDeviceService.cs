@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Linq;
 using System.Threading;
 
 namespace mapKnight.ToolKit.Xna {
@@ -65,9 +66,10 @@ namespace mapKnight.ToolKit.Xna {
             parameters.DepthStencilFormat = DepthFormat.Depth24Stencil8;
             parameters.IsFullScreen = false;
 
+            GraphicsAdapter.UseDriverType = GraphicsAdapter.DriverType.FastSoftware;
             GraphicsDevice = new GraphicsDevice(
                 GraphicsAdapter.DefaultAdapter,
-                GraphicsProfile.HiDef,
+                GraphicsProfile.Reach,
                 parameters);
 
             if (DeviceCreated != null)

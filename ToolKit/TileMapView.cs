@@ -30,7 +30,7 @@ namespace mapKnight.ToolKit {
         private Point _CurrentSelection = new Point(-1, -1);
         public Point CurrentSelection {
             get { return _CurrentSelection; }
-            set { _CurrentSelection = value; Update( ); }
+            set { _CurrentSelection = value; }
         }
 
         private bool[ ] Layer = { true, true, true };
@@ -78,7 +78,7 @@ namespace mapKnight.ToolKit {
                     int cx = x + Offset.X, cy = CurrentMap.Height - y - 1 - Offset.Y;
                     Rectangle drawingRectangle = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
                     for (int l = 0; l < 3; l++) {
-                        if (Layer[l])
+                        //if (Layer[l])
                             spriteBatch.Draw(App.Project.GetMapXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, Color.White);
                     }
                 }
@@ -89,7 +89,7 @@ namespace mapKnight.ToolKit {
                 spriteBatch.Draw(selectionTexture, new Rectangle(CurrentSelection.X * TileSize, CurrentSelection.Y * TileSize, TileSize, TileSize), Color.White);
 
             // draw spawnpoint tile
-            spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Offset.X) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Offset.Y) * TileSize), TileSize, TileSize),Color.White);
+            spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Offset.X) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Offset.Y) * TileSize), TileSize, TileSize), Color.White);
         }
     }
 }

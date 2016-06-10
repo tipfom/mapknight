@@ -44,7 +44,7 @@ namespace mapKnight.ToolKit.Xna {
         /// <param name="graphics">The GraphicsDevice to use.</param>
         /// <param name="width">The width of the image source.</param>
         /// <param name="height">The height of the image source.</param>
-        public ImageSource(GraphicsDevice graphics, int width, int height) {
+        public ImageSource (GraphicsDevice graphics, int width, int height) {
             // create the render target and buffer to hold the data
             renderTarget = new RenderTarget2D(
                 graphics, width, height, false,
@@ -56,15 +56,15 @@ namespace mapKnight.ToolKit.Xna {
                 PixelFormats.Bgra32, null);
         }
 
-        ~ImageSource( ) {
+        ~ImageSource ( ) {
             Dispose(false);
         }
 
-        public void Dispose( ) {
+        public void Dispose ( ) {
             Dispose(true);
         }
 
-        protected virtual void Dispose(bool disposing) {
+        protected virtual void Dispose (bool disposing) {
             renderTarget.Dispose( );
 
             if (disposing)
@@ -74,7 +74,7 @@ namespace mapKnight.ToolKit.Xna {
         /// <summary>
         /// Commits the render target data into our underlying bitmap source.
         /// </summary>
-        public void Commit( ) {
+        public void Commit ( ) {
             // get the data from the render target
             renderTarget.GetData(buffer);
 
