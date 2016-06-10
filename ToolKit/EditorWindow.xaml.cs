@@ -57,6 +57,10 @@ namespace mapKnight.ToolKit {
             SetTabPageMenu(mapeditor.Menu);
         }
 
+        private void Entity_Selected (object sender, RoutedEventArgs e) {
+            SetTabPageMenu(new List<UIElement>( ));
+        }
+
         private void NewCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }

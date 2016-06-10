@@ -1,6 +1,5 @@
 ﻿using mapKnight.Core;
 using mapKnight.ToolKit.Xna;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace mapKnight.ToolKit {
     public class Project {
@@ -37,32 +35,14 @@ namespace mapKnight.ToolKit {
             foreach (string map in Directory.GetFiles(mapPath).Where(file => Path.GetExtension(file) == ".map")) {
                 using (Stream mapStream = File.OpenRead(map)) {
                     Map loadedMap = Map.FromStream(mapStream);
-                    xnaTextures.Add(loadedMap, ExtractTextures(loadedMap, Path.Combine(mapPath, loadedMap.Texture)));
+                    using (Stream imageStream = File.OpenRead(loadedMap.Texture))
+                        xnaTextures.Add(loadedMap, TileSerializer.ExtractTextures(Texture2D.FromStream(GraphicsDevice, imageStream), loadedMap.Tiles, GraphicsDevice));
                     wpfTextures.Add(loadedMap, new Dictionary<string, BitmapImage>( ));
                     foreach (var entry in xnaTextures[loadedMap])
                         wpfTextures[loadedMap].Add(entry.Key, entry.Value.ToBitmapImage( ));
                     AddMap(loadedMap);
                 }
             }
-        }
-
-        private Dictionary<string, Texture2D> ExtractTextures (Map map, string texturePath) {
-            Texture2D originalTexture = Texture2D.FromStream(GraphicsDevice, File.OpenRead(texturePath));
-            Dictionary<string, Texture2D> result = new Dictionary<string, Texture2D>( );
-            foreach (Tile tile in map.Tiles) {
-                RenderTarget2D renderTarget = new RenderTarget2D(GraphicsDevice, Map.TILE_PXL_SIZE, Map.TILE_PXL_SIZE);
-                GraphicsDevice.SetRenderTarget(renderTarget);
-                GraphicsDevice.Clear(Color.Transparent);
-                using (SpriteBatch batch = new SpriteBatch(GraphicsDevice)) {
-                    batch.Begin(samplerState: SamplerState.PointWrap);
-                    Rectangle sourceRectangle = new Rectangle((int)Math.Round(originalTexture.Width * tile.Texture[0]), (int)Math.Round(originalTexture.Height * tile.Texture[3]), Map.TILE_PXL_SIZE, Map.TILE_PXL_SIZE);
-                    batch.Draw(originalTexture, new Rectangle(0, 0, Map.TILE_PXL_SIZE, Map.TILE_PXL_SIZE), sourceRectangle, Color.White);
-                    batch.End( );
-                }
-                GraphicsDevice.SetRenderTarget(null);
-                result.Add(tile.Name, renderTarget);
-            }
-            return result;
         }
 
         public void Save ( ) {
@@ -79,65 +59,15 @@ namespace mapKnight.ToolKit {
                 // build texture
                 string texturePath = Path.ChangeExtension(Path.Combine(mapDirectory, map.Name), "png");
                 string mapPath = Path.ChangeExtension(Path.Combine(mapDirectory, map.Name), "map");
-                BuildTexture(map, xnaTextures[map], texturePath);
+
+                Texture2D packedTexture = TileSerializer.BuildTexture(map.Tiles, xnaTextures[map], GraphicsDevice);
+                using (Stream stream = File.OpenWrite(texturePath))
+                    packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
                 map.Texture = map.Name + ".png";
                 map.Serialize(File.OpenWrite(mapPath));
             }
 
             MessageBox.Show("Completed!", "Save", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void BuildTexture (Map map, Dictionary<string, Texture2D> textures, string path) {
-            int textureTileSize = Map.TILE_PXL_SIZE + 2;
-            int textureSizeTL = (int)Math.Sqrt(map.Tiles.Length) + 1;
-            int textureSizePXL = textureSizeTL * textureTileSize;
-            RenderTarget2D renderTarget = new RenderTarget2D(graphicsService.GraphicsDevice, textureSizePXL, textureSizePXL);
-            graphicsService.GraphicsDevice.SetRenderTarget(renderTarget);
-
-            graphicsService.GraphicsDevice.Clear(Color.Transparent);
-            using (SpriteBatch batch = new SpriteBatch(graphicsService.GraphicsDevice)) {
-                batch.Begin(samplerState: SamplerState.PointClamp);
-                for (int y = 0; y < textureSizeTL; y++) {
-                    for (int x = 0; x < Math.Min(textureSizeTL, map.Tiles.Length - y * textureSizeTL); x++) {
-                        int currentIndex = y * textureSizeTL + x;
-                        Texture2D tileTexture = textures[map.Tiles[currentIndex].Name];
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // draw to texture
-                        // tile
-                        Rectangle drawRectangle = new Rectangle(x * textureTileSize + 1, y * textureTileSize + 1, Map.TILE_PXL_SIZE, Map.TILE_PXL_SIZE);
-                        batch.Draw(tileTexture, drawRectangle, Color.White);
-                        // expanding border
-                        Rectangle blDrawRectangle = new Rectangle(x * textureTileSize, y * textureTileSize + 1, 1, Map.TILE_PXL_SIZE);
-                        Rectangle blSourceRectangle = new Rectangle(0, 0, 1, Map.TILE_PXL_SIZE);
-                        Rectangle brDrawRectangle = new Rectangle((x + 1) * textureTileSize - 1, y * textureTileSize + 1, 1, Map.TILE_PXL_SIZE);
-                        Rectangle brSourceRectangle = new Rectangle(Map.TILE_PXL_SIZE - 1, 0, 1, Map.TILE_PXL_SIZE);
-                        Rectangle btDrawRectangle = new Rectangle(x * textureTileSize + 1, y * textureTileSize, Map.TILE_PXL_SIZE, 1);
-                        Rectangle btSourceRectangle = new Rectangle(0, 0, Map.TILE_PXL_SIZE, 1);
-                        Rectangle bbDrawRectangle = new Rectangle(x * textureTileSize + 1, (y + 1) * textureTileSize - 1, Map.TILE_PXL_SIZE, 1);
-                        Rectangle bbSourceRectangle = new Rectangle(0, Map.TILE_PXL_SIZE - 1, Map.TILE_PXL_SIZE, 1);
-                        batch.Draw(tileTexture, blDrawRectangle, blSourceRectangle, Color.White);
-                        batch.Draw(tileTexture, brDrawRectangle, brSourceRectangle, Color.White);
-                        batch.Draw(tileTexture, btDrawRectangle, btSourceRectangle, Color.White);
-                        batch.Draw(tileTexture, bbDrawRectangle, bbSourceRectangle, Color.White);
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        // save texture coords
-                        float vertexSize = (float)Map.TILE_PXL_SIZE / textureSizePXL;
-                        float startX = (float)drawRectangle.X / textureSizePXL;
-                        float startY = (float)drawRectangle.Y / textureSizePXL;
-                        map.Tiles[currentIndex].Texture = new float[ ] {
-                            startX ,startY + vertexSize,
-                            startX ,startY,
-                            startX + vertexSize, startY,
-                            startX + vertexSize, startY + vertexSize
-                        };
-                    }
-                }
-                batch.End( );
-            }
-
-            graphicsService.GraphicsDevice.SetRenderTarget(null);
-            using (Stream imageStream = File.OpenWrite(path))
-                renderTarget.SaveAsPng(imageStream, renderTarget.Width, renderTarget.Height);
         }
 
         public void AddMap (Map map) {

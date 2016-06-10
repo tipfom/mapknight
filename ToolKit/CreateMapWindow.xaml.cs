@@ -1,6 +1,8 @@
 ﻿using mapKnight.Core;
 using Microsoft.Win32;
+using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -14,11 +16,12 @@ namespace mapKnight.ToolKit {
             "The size of the map you are trying to create is very large.\n" +
             "This might cause extremly large files. Do you want to continue?";
 
-        public Map CreatedMap;
-        private string importedTileTemplate;
+        private Tuple<Tile[ ], Dictionary<string, Texture2D>> template;
+        private GraphicsDevice graphicsDevice;
 
-        public CreateMapWindow ( ) {
+        public CreateMapWindow (GraphicsDevice g) {
             InitializeComponent( );
+            graphicsDevice = g;
         }
 
         private void CheckNumericPreviewTextInput (object sender, TextCompositionEventArgs e) {
@@ -27,21 +30,33 @@ namespace mapKnight.ToolKit {
 
         private void button_import_Click (object sender, RoutedEventArgs e) {
             OpenFileDialog importDialog = new OpenFileDialog( );
-            importDialog.DefaultExt = "TileTemplates|*.mktiletemplate";
+            importDialog.DefaultExt = "TileTemplates|*.mkttemplate";
             importDialog.Multiselect = false;
             importDialog.AddExtension = false;
             importDialog.CheckFileExists = true;
-            importDialog.Filter = "TileTemplates|*.mktiletemplate";
-            importDialog.ShowDialog( );
-            if (File.Exists(importDialog.FileName)) {
-                importedTileTemplate = importDialog.FileName;
+            importDialog.Filter = "TileTemplates|*.mkttemplate";
+
+            if (importDialog.ShowDialog( ) ?? false) {
+                using (Stream stream = File.OpenRead(importDialog.FileName)) {
+                    template = TileSerializer.Deserialize(stream, graphicsDevice);
+                }
+                label_template.Content = importDialog.FileName;
             }
         }
 
         private void button_create_Click (object sender, RoutedEventArgs e) {
             Core.Size mapSize = new Core.Size(0, 0);
             if (ValidName( ) && ValidCreator( ) && ValidSize(ref mapSize)) {
-                CreatedMap = new Map(mapSize, textbox_creator.Text, textbox_name.Text);
+                Map createdMap = new Map(mapSize, textbox_creator.Text, textbox_name.Text);
+                App.Project.AddMap(createdMap);
+                if (template != null) {
+                    foreach (Tile tile in template.Item1) {
+                        if (tile.Name == "None")
+                            continue;
+                        App.Project.AddTexture(createdMap, tile.Name, template.Item2[tile.Name]);
+                        createdMap.AddTile(tile);
+                    }
+                }
                 DialogResult = true;
                 this.Close( );
             }

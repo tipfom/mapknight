@@ -79,6 +79,7 @@
     <Compile Include="Project.cs" />
     <Compile Include="TileMapView.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="TileTemplateSerializer.cs" />
     <Compile Include="Xna\GraphicsDeviceService.cs" />
     <Compile Include="Xna\ImageSource.cs" />
     <Compile Include="Xna\XnaControl.xaml.cs">

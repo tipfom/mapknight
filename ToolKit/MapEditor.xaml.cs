@@ -1,4 +1,5 @@
 ﻿using mapKnight.Core;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -21,21 +22,42 @@ namespace mapKnight.ToolKit {
                     new MenuItem() { Header = "NEW" , Icon = App.Current.FindResource("add_image") },
                     new MenuItem() { Header = "LOAD" }
                 } },
-            new ComboBox() { Width = 260 }
+            new ComboBox() { Width = 260, Margin = new Thickness(-6, 0, -6, 0)},
+            new MenuItem() { Header = "SHOW LAYER", IsEnabled = false },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0) },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0) },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0) },
+            new Separator() { },
+            new MenuItem() {Header ="MODIFY LAYER",IsEnabled =false },
+            new RadioButton() {IsChecked = true, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0) },
+            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0) },
+            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0) }
         };
 
         public List<UIElement> Menu { get { return _Menu; } }
 
-        private Map CurrentMap { get { return (Map)((ComboBox)_Menu[1]).SelectedItem; } }
-        private Tile CurrentTile { get { return (wrappanel_tiles.SelectedIndex != -1) ? CurrentMap.Tiles[wrappanel_tiles.SelectedIndex] : CurrentMap.Tiles[0]; } }
-        private int CurrentMapIndex { get { return (int)((ComboBox)_Menu[1]).SelectedIndex; } }
-        private int CurrentTileIndex { get { return wrappanel_tiles.SelectedIndex; } }
+        private Map currentMap { get { return (Map)((ComboBox)_Menu[1]).SelectedItem; } }
+        private Tile currentTile { get { return (wrappanel_tiles.SelectedIndex != -1) ? currentMap.Tiles[wrappanel_tiles.SelectedIndex] : currentMap.Tiles[0]; } }
+        private int currentMapIndex { get { return (int)((ComboBox)_Menu[1]).SelectedIndex; } }
+        private int currentTileIndex { get { return wrappanel_tiles.SelectedIndex; } }
+        private int currentLayer;
 
         public MapEditor ( ) {
             InitializeComponent( );
 
             ((MenuItem)((MenuItem)_Menu[0]).Items[0]).Click += create_map_Click;
             ((ComboBox)_Menu[1]).SelectionChanged += CurrentMapChanged;
+
+            ((CheckBox)_Menu[3]).Checked += (sender, e) => { tilemapview.ShowBackground = true; };
+            ((CheckBox)_Menu[3]).Unchecked += (sender, e) => { tilemapview.ShowBackground = false; };
+            ((CheckBox)_Menu[4]).Checked += (sender, e) => { tilemapview.ShowMiddle = true; };
+            ((CheckBox)_Menu[4]).Unchecked += (sender, e) => { tilemapview.ShowMiddle = false; };
+            ((CheckBox)_Menu[5]).Checked += (sender, e) => { tilemapview.ShowForeground = true; };
+            ((CheckBox)_Menu[5]).Unchecked += (sender, e) => { tilemapview.ShowForeground = false; };
+
+            ((RadioButton)_Menu[8]).Checked += (sender, e) => { currentLayer = 0; };
+            ((RadioButton)_Menu[9]).Checked += (sender, e) => { currentLayer = 2; };
+            ((RadioButton)_Menu[10]).Checked += (sender, e) => { currentLayer = 1; };
 
             App.ProjectChanged += ( ) => { App.Project.MapAdded += Project_MapAdded; Reset( ); };
         }
@@ -69,37 +91,35 @@ namespace mapKnight.ToolKit {
         }
 
         private void CurrentMapChanged (object sender, SelectionChangedEventArgs e) {
-            if (CurrentMap == null)
+            if (currentMap == null)
                 return;
 
             UpdateListbox( );
-            tilemapview.CurrentMap = CurrentMap;
+            tilemapview.CurrentMap = currentMap;
             // reset scrollbars
             scrollbar_horizontal.Value = 0;
             scrollbar_horizontal.Minimum = 0;
-            scrollbar_horizontal.Maximum = CurrentMap.Width;
+            scrollbar_horizontal.Maximum = currentMap.Width;
             scrollbar_vertical.Value = 0;
             scrollbar_vertical.Minimum = 0;
-            scrollbar_vertical.Maximum = CurrentMap.Height;
+            scrollbar_vertical.Maximum = currentMap.Height;
         }
 
         private void create_map_Click (object sender, RoutedEventArgs e) {
-            CreateMapWindow createWindow = new CreateMapWindow( );
-            if (createWindow.ShowDialog( ) ?? false) {
-                App.Project.AddMap(createWindow.CreatedMap);
-            }
+            new CreateMapWindow(tilemapview.GraphicsDevice).ShowDialog( );
+            UpdateListbox( );
         }
 
 
         public void UpdateListbox ( ) {
             wrappanel_tiles.Items.Clear( );
-            foreach (Tile tile in CurrentMap.Tiles) {
-                wrappanel_tiles.Items.Add(new ListViewEntry(App.Project.GetMapWPFTextures(CurrentMap)[tile.Name]));
+            foreach (Tile tile in currentMap.Tiles) {
+                wrappanel_tiles.Items.Add(new ListViewEntry(App.Project.GetMapWPFTextures(currentMap)[tile.Name]));
             }
         }
 
         private void wrappanel_tiles_DragEnter (object sender, DragEventArgs e) {
-            if (CurrentMap == null)
+            if (currentMap == null)
                 return;
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -107,7 +127,7 @@ namespace mapKnight.ToolKit {
         }
 
         private void wrappanel_tiles_Drop (object sender, DragEventArgs e) {
-            if (CurrentMap == null)
+            if (currentMap == null)
                 return;
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
@@ -116,9 +136,9 @@ namespace mapKnight.ToolKit {
                     if (Path.GetExtension(file) == ".png") {
                         AddTileWindow addTileDialog = new AddTileWindow(file);
                         if (addTileDialog.ShowDialog( ) ?? false) {
-                            if (CurrentMap.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
-                                CurrentMap.AddTile(addTileDialog.Created.Item1);
-                                App.Project.AddTexture(CurrentMap, addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2);
+                            if (currentMap.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
+                                currentMap.AddTile(addTileDialog.Created.Item1);
+                                App.Project.AddTexture(currentMap, addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2);
                                 wrappanel_tiles.Items.Add(new ListViewEntry(addTileDialog.Created.Item2));
                             } else {
                                 MessageBox.Show("Please don't add tiles with the same name twice!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -130,27 +150,41 @@ namespace mapKnight.ToolKit {
         }
 
         private void tilemapview_MouseDown (object sender, MouseButtonEventArgs e) {
-            if (CurrentMap == null || CurrentTileIndex == -1)
+            if (currentMap == null || currentTileIndex == -1)
                 return;
 
-            if (e.LeftButton == MouseButtonState.Pressed) {
+            if (e.RightButton == MouseButtonState.Pressed) {
                 Point clickedTile;
                 if (GetClickedTile(e, out clickedTile)) {
-                    CurrentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, 0] = CurrentTileIndex;
+                    currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                    tilemapview.Update( );
+                }
+            } else if (e.LeftButton == MouseButtonState.Pressed) {
+                Point clickedTile;
+                if (GetClickedTile(e, out clickedTile)) {
+                    currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
                     tilemapview.Update( );
                 }
             }
         }
 
         private void tilemapview_MouseMove (object sender, MouseEventArgs e) {
-            if (CurrentMap == null)
+            if (currentMap == null)
                 return;
             UpdateSelectedTile(e);
+            if (currentTileIndex == -1)
+                return;
 
-            if (CurrentTileIndex > -1 && e.LeftButton == MouseButtonState.Pressed) {
+            if (e.RightButton == MouseButtonState.Pressed) {
                 Point clickedTile;
                 if (GetClickedTile(e, out clickedTile)) {
-                    CurrentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, 0] = CurrentTileIndex;
+                    currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                    tilemapview.Update( );
+                }
+            } else if (e.LeftButton == MouseButtonState.Pressed) {
+                Point clickedTile;
+                if (GetClickedTile(e, out clickedTile)) {
+                    currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
                     tilemapview.Update( );
                 }
             }
@@ -160,9 +194,9 @@ namespace mapKnight.ToolKit {
             Point positionOnControl = e.GetPosition(tilemapview);
             tile = new Point(
                     positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X,
-                    CurrentMap.Height - positionOnControl.Y / tilemapview.TileSize - tilemapview.Offset.Y
+                    currentMap.Height - positionOnControl.Y / tilemapview.TileSize - tilemapview.Offset.Y
                 );
-            return (tile.X >= 0 && tile.X < CurrentMap.Width && tile.Y >= 0 && tile.Y < CurrentMap.Height);
+            return (tile.X >= 0 && tile.X < currentMap.Width && tile.Y >= 0 && tile.Y < currentMap.Height);
         }
 
         private void scrollbar_horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -186,20 +220,26 @@ namespace mapKnight.ToolKit {
         }
 
         private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {
-            if (CurrentMap != null)
+            if (currentMap != null)
                 UpdateSelectedTile(e);
         }
 
         private void UpdateSelectedTile (MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Point(
-                (int)Math.Min(positionOnControl.X / tilemapview.TileSize, CurrentMap.Width - tilemapview.Offset.X - 1),
-                (int)Math.Min(positionOnControl.Y / tilemapview.TileSize, CurrentMap.Height - tilemapview.Offset.Y - 1)
+                (int)Math.Min(positionOnControl.X / tilemapview.TileSize, currentMap.Width - tilemapview.Offset.X - 1),
+                (int)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - tilemapview.Offset.Y - 1)
                 );
         }
 
         private void buttonexport_Click (object sender, RoutedEventArgs e) {
             // export current maps tileset
+            SaveFileDialog exportDialog = new SaveFileDialog( );
+            exportDialog.Filter = "TileTemplate|*.mkttemplate";
+            if (exportDialog.ShowDialog( ) ?? false) {
+                using (Stream stream = File.OpenWrite(exportDialog.FileName))
+                    TileSerializer.Serialize(stream, currentMap.Tiles, App.Project.GetMapXNATextures(currentMap), tilemapview.GraphicsDevice);
+            }
         }
     }
 }

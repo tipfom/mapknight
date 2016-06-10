@@ -33,6 +33,20 @@ namespace mapKnight.ToolKit {
             set { _CurrentSelection = value; Update( ); }
         }
 
+        private bool[ ] Layer = { true, true, true };
+        public bool ShowForeground {
+            get { return Layer[2]; }
+            set { Layer[2] = value; Update( ); }
+        }
+        public bool ShowBackground {
+            get { return Layer[0]; }
+            set { Layer[0] = value; Update( ); }
+        }
+        public bool ShowMiddle {
+            get { return Layer[1]; }
+            set { Layer[1] = value; Update( ); }
+        }
+
         private Color selectionColor;
         private Texture2D emptyTexture;
 
@@ -61,7 +75,8 @@ namespace mapKnight.ToolKit {
                     int cx = x + Offset.X, cy = CurrentMap.Height - y - 1 - Offset.Y;
                     Rectangle drawingRectangle = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
                     for (int l = 0; l < 3; l++) {
-                        spriteBatch.Draw(App.Project.GetMapXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, Color.White);
+                        if (Layer[l])
+                            spriteBatch.Draw(App.Project.GetMapXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, Color.White);
                     }
                 }
             }

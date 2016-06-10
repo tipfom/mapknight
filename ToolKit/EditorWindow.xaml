@@ -24,7 +24,7 @@
             <TabItem Header="MAP" Selector.Selected="Map_Selected">
                 <local:MapEditor x:Name="mapeditor"/>
             </TabItem>
-            <TabItem Header="ENTITY">
+            <TabItem Header="ENTITY" Selector.Selected="Entity_Selected">
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Soon..."/>
             </TabItem>
         </TabControl>
