@@ -147,10 +147,31 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\interface.png" />
+    <Resource Include="Resources\fill_color-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\plus.png" />
+    <Resource Include="Resources\edit-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\eraser-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\collapse-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\color_dropper-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\create_new-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\save-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\opened_folder-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\folder-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

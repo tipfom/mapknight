@@ -47,8 +47,8 @@ namespace mapKnight.ToolKit {
             set { Layer[1] = value; Update( ); }
         }
 
-        private Color selectionColor;
-        private Texture2D emptyTexture;
+        private Texture2D selectionTexture;
+        private Texture2D spawnpointTexture;
 
         public TileMapView ( ) {
             base.DeviceInitialized += ( ) => {
@@ -59,9 +59,12 @@ namespace mapKnight.ToolKit {
         private void CreateEmptyTexture ( ) {
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
-            selectionColor = new Color(255, 0, 0, 63);
-            emptyTexture = new Texture2D(GraphicsDevice, 1, 1);
-            emptyTexture.SetData(new Color[ ] { selectionColor });
+
+            selectionTexture = new Texture2D(GraphicsDevice, 1, 1);
+            selectionTexture.SetData(new Color[ ] { new Color(255, 0, 0, 63) });
+
+            spawnpointTexture = new Texture2D(GraphicsDevice, 1, 1);
+            spawnpointTexture.SetData(new Color[ ] { new Color(0, 255, 0, 63) });
         }
 
         protected override void Render (SpriteBatch spriteBatch) {
@@ -81,8 +84,12 @@ namespace mapKnight.ToolKit {
                 }
             }
 
+            // draw selected tile
             if (CurrentSelection.X > -1 && CurrentSelection.Y > -1)
-                spriteBatch.Draw(emptyTexture, new Rectangle(CurrentSelection.X * TileSize, CurrentSelection.Y * TileSize, TileSize, TileSize), Color.White);
+                spriteBatch.Draw(selectionTexture, new Rectangle(CurrentSelection.X * TileSize, CurrentSelection.Y * TileSize, TileSize, TileSize), Color.White);
+
+            // draw spawnpoint tile
+            spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Offset.X) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Offset.Y) * TileSize), TileSize, TileSize),Color.White);
         }
     }
 }
