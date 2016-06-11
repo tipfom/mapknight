@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "Android\Android.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Core", "Core\Core.shproj", "{482C4F52-D450-4468-A1F3-D50B96A58D26}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Extended", "Graphics\Graphics\Extended.shproj", "{41264171-A1A1-4B71-903E-79BF93330BC9}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Extended", "Extended\Extended.shproj", "{41264171-A1A1-4B71-903E-79BF93330BC9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit", "ToolKit\ToolKit.csproj", "{2DE1EF79-27A4-4243-BE4B-EB47C5D04824}"
 EndProject
