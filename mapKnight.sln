@@ -13,11 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit", "ToolKit\ToolKit.
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Graphics\Graphics\Graphics.projitems*{41264171-a1a1-4b71-903e-79bf93330bc9}*SharedItemsImports = 13
+		Extended\Graphics.projitems*{41264171-a1a1-4b71-903e-79bf93330bc9}*SharedItemsImports = 13
 		Core\Core.projitems*{2de1ef79-27a4-4243-be4b-eb47c5d04824}*SharedItemsImports = 4
 		Core\Core.projitems*{482c4f52-d450-4468-a1f3-d50b96a58d26}*SharedItemsImports = 13
+		Extended\Extended.projitems*{d7e142f8-7bdf-4ab3-8a0b-cb0f585cafe0}*SharedItemsImports = 4
 		Core\Core.projitems*{d7e142f8-7bdf-4ab3-8a0b-cb0f585cafe0}*SharedItemsImports = 4
-		Graphics\Graphics\Graphics.projitems*{d7e142f8-7bdf-4ab3-8a0b-cb0f585cafe0}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AppStore|Any CPU = AppStore|Any CPU

@@ -149,5 +149,5 @@
     <AndroidAsset Include="Assets\textures\tilesets\debug_tileset.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
-  <Import Project="..\Graphics\Graphics\Graphics.projitems" Label="Shared" />
+  <Import Project="..\Extended\Extended.projitems" Label="Shared" />
 </Project>
