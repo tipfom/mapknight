@@ -6,7 +6,6 @@ Shared/*
 .vs/*
 *.sou
 *.apk
-*.dll
 *.exe
 *.db
 

@@ -78,6 +78,7 @@
     <Compile Include="CreateMapWindow.xaml.cs">
       <DependentUpon>CreateMapWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EmbeddedAssemblies.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="TileMapView.cs" />
@@ -182,6 +183,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Libraries\MonoGame.Framework.dll" />
+    <EmbeddedResource Include="Libraries\Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.Direct2D1.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.Direct3D11.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.Direct3D9.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.DXGI.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.MediaFoundation.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.RawInput.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.XAudio2.dll" />
+    <EmbeddedResource Include="Libraries\SharpDX.XInput.dll" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

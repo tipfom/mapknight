@@ -12,5 +12,9 @@ namespace mapKnight.ToolKit {
             get { return _Project; }
             set { _Project = value; ProjectChanged?.Invoke( ); }
         }
+
+        public App ( ) {
+            EmbeddedAssemblies.Serve( );
+        }
     }
 }
