@@ -1,7 +1,7 @@
 ﻿using Android.Opengl;
 using Javax.Microedition.Khronos.Opengles;
 using mapKnight.Core;
-using mapKnight.Graphics;
+using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Android {
 

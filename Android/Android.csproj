@@ -13,9 +13,9 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
     <AssemblyName>mapKnight.Android</AssemblyName>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -83,8 +83,6 @@
     <Compile Include="AssetProvider.cs" />
     <Compile Include="CGL\CGLMap.cs" />
     <Compile Include="TouchHandler.cs" />
-    <Compile Include="Config\ContentConfig.cs" />
-    <Compile Include="Config\GameConfig.cs" />
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\MainMenuScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

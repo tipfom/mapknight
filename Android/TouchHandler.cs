@@ -1,8 +1,8 @@
 using Android.Views;
 using mapKnight.Core;
-using mapKnight.Graphics.GUI;
+using mapKnight.Extended.Graphics.GUI;
 using System.Collections.Generic;
-using Window = mapKnight.Graphics.Window;
+using Window = mapKnight.Extended.Graphics.Window;
 
 namespace mapKnight.Android {
     public class TouchHandler : Java.Lang.Object, View.IOnTouchListener {

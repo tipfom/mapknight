@@ -1,0 +1,32 @@
+﻿<Window x:Class="mapKnight.ToolKit.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mapKnight.ToolKit"
+        mc:Ignorable="d"
+        Title="Kartenknecht Werkzeugkasten" Height="300" Width="300" Closing="Window_Closing" Loaded="Window_Loaded" Icon="{StaticResource ResourceKey=logo}">
+    <Window.CommandBindings>
+        <CommandBinding Command="New" CanExecute="NewCommand_CanExecute" Executed="NewCommand_Executed" />
+        <CommandBinding Command="Open" CanExecute="OpenCommand_CanExecute"  Executed="OpenCommand_Executed"/>
+        <CommandBinding Command="Save" CanExecute="SaveCommand_CanExecute" Executed="SaveCommand_Executed"/>
+    </Window.CommandBindings>
+    <DockPanel>
+        <Menu Name="menu_editor" IsMainMenu="True" DockPanel.Dock="Top" Height="24">
+            <MenuItem Header="_PROJECT">
+                <MenuItem Header="NEW" Command="New" Icon="{StaticResource ResourceKey=image_project_new }"/>
+                <MenuItem Header="OPEN" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
+                <MenuItem Header="SAVE" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
+            </MenuItem>
+            <MenuItem Header="ABOUT"/>
+        </Menu>
+        <TabControl Name="tabcontrol_editor">
+            <TabItem Header="MAP" Selector.Selected="Map_Selected">
+                <local:MapEditor x:Name="mapeditor"/>
+            </TabItem>
+            <TabItem Header="ENTITY" Selector.Selected="Entity_Selected">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Soon..."/>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

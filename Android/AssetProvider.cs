@@ -2,7 +2,8 @@ using Android.Content;
 using Android.Graphics;
 using Android.Opengl;
 using mapKnight.Core;
-using mapKnight.Graphics;
+using mapKnight.Extended;
+using mapKnight.Extended.Graphics;
 using System.IO;
 using GL = Android.Opengl.GLES20;
 
@@ -10,12 +11,12 @@ namespace mapKnight.Android {
     class AssetProvider : Assets.IAssetProvider {
         public static Context Context { get; set; }
 
-        public Stream GetStream (params string[ ] path) {
+        public Stream GetStream(params string[ ] path) {
             return Context.Assets.Open(System.IO.Path.Combine(path));
 
         }
 
-        public Texture2D GetTexture (string name) {
+        public Texture2D GetTexture(string name) {
             // load texture
             int[ ] loadedtexture = new int[1];
             GL.GlGenTextures(1, loadedtexture, 0);

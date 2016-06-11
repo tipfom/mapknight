@@ -1,0 +1,15 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:mapKnight.ToolKit">
+    <BitmapImage x:Key="logo" UriSource="../Resources/logo.png"/>
+
+    <Image x:Key="image_project_new" Source="../Resources/folder-48.png"/>
+    <Image x:Key="image_project_load" Source="../Resources/opened_folder-48.png"/>
+    <Image x:Key="image_project_save" Source="../Resources/save-48.png"/>
+    
+    <Image x:Key="image_map_new" Source="../Resources/create_new-48.png"/>
+    <Image x:Key="image_map_pen" Source="../Resources/edit-48.png"/>
+    <Image x:Key="image_map_fill" Source="../Resources/fill_color-48.png"/>
+    <Image x:Key="image_map_eraser" Source="../Resources/eraser-48.png"/>
+    <Image x:Key="image_map_pointer" Source="../Resources/collapse-48.png"/>
+</ResourceDictionary>

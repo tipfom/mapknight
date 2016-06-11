@@ -1,0 +1,14 @@
+﻿<Window x:Class="mapKnight.ToolKit.AddTileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mapKnight.ToolKit"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize">
+    <StackPanel>
+        <Image x:Name="image_tile" Margin="10,10,10,0" Width="200" Height="200" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+        <TextBox x:Name="textbox_name" Margin="10,10,10,10" Text="NAME"/>
+        <Button x:Name="button_submit" Margin="10,0,10,10" Content="SUBMIT" Click="button_submit_Click"/>
+    </StackPanel>
+</Window>
