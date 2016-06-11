@@ -36,10 +36,10 @@ namespace mapKnight.Core {
 
                 // write data 
                 writer.Write(is32bit);
-                writer.Write((Int16)map.Width);
-                writer.Write((Int16)map.Height);
-                writer.Write((Int16)map.SpawnPoint.X);
-                writer.Write((Int16)map.SpawnPoint.Y);
+                writer.Write((short)map.Width);
+                writer.Write((short)map.Height);
+                writer.Write((short)map.SpawnPoint.X);
+                writer.Write((short)map.SpawnPoint.Y);
 
                 /////////////////////////////////////////////////////////////////////////////////////////
                 // compress mapdata
@@ -61,7 +61,7 @@ namespace mapKnight.Core {
                                 }
                                 // remember startingpoint
                                 // invert the y axis
-                                startpoints[map.Data[x, y, layer]][layer].Add((int)(y * (map.Size.Width + x)));
+                                startpoints[map.Data[x, y, layer]][layer].Add((int)(y * map.Size.Width + x));
                                 currenttile[layer] = map.Data[x, y, layer];
                             }
                         }
@@ -85,7 +85,7 @@ namespace mapKnight.Core {
                 //////////////////////////////////////////////////////////////////////////////////////////
                 // write tiles
                 byte[ ] tilesraw = JsonConvert.SerializeObject(map.Tiles).Compress( ).Encode( );
-                writer.Write(tilesraw.Length);
+                writer.Write((short)tilesraw.Length);
                 writer.Write(tilesraw);
 
                 // write texturename
@@ -109,16 +109,18 @@ namespace mapKnight.Core {
 
         #region version specific deserialization
         private static Map Deserialize00001 (BinaryReader reader) {
+            bool is32bit = reader.ReadBoolean( );
+
             Map map = new Map(new Size(reader.ReadInt16( ), reader.ReadInt16( )));
+            Console.WriteLine(map.Width);
+            Console.WriteLine(map.Height);
             map.SpawnPoint = new Vector2(reader.ReadInt16( ), reader.ReadInt16( ));
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
             // load data
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
             map.Data = new int[map.Width, map.Height, 3];
-
-            bool is32bit = reader.ReadBoolean( );
-
+            
             int currenttile;
             int currentlayer = 0;
             while ((currenttile = is32bit ? reader.ReadInt32( ) : reader.ReadInt16( )) != 0) {

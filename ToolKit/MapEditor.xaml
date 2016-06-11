@@ -38,6 +38,8 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <DockPanel>
@@ -47,8 +49,32 @@
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles" 
                  ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop"/>
-
+                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_Selected"/>
+            <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            <DockPanel Grid.Row="3">
+                <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2"/>
+                <ListView x:Name="listview_tile_attributes">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn  Header="Active">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{ Binding Active }" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100" Header="Attribute" DisplayMemberBinding="{ Binding Attribute }"/>
+                            <GridViewColumn Width="140" Header="Value">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Value}" MinWidth="50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False"/>
         <Grid Grid.Column="2">

@@ -22,6 +22,7 @@ namespace mapKnight.ToolKit {
         public CreateMapWindow (GraphicsDevice g) {
             InitializeComponent( );
             graphicsDevice = g;
+            this.Owner = App.Current.MainWindow;
         }
 
         private void CheckNumericPreviewTextInput (object sender, TextCompositionEventArgs e) {

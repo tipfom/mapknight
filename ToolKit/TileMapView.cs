@@ -56,6 +56,10 @@ namespace mapKnight.ToolKit {
             };
         }
 
+        public bool IsLayerActive (int id) {
+            return id < 0 || id > 3 || Layer[id];
+        }
+
         private void CreateEmptyTexture ( ) {
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
@@ -78,7 +82,7 @@ namespace mapKnight.ToolKit {
                     int cx = x + Offset.X, cy = CurrentMap.Height - y - 1 - Offset.Y;
                     Rectangle drawingRectangle = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
                     for (int l = 0; l < 3; l++) {
-                        //if (Layer[l])
+                        if (Layer[l])
                             spriteBatch.Draw(App.Project.GetMapXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, Color.White);
                     }
                 }

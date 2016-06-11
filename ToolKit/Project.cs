@@ -33,15 +33,7 @@ namespace mapKnight.ToolKit {
             string mapPath = Path.Combine(Home, "maps");
 
             foreach (string map in Directory.GetFiles(mapPath).Where(file => Path.GetExtension(file) == ".map")) {
-                using (Stream mapStream = File.OpenRead(map)) {
-                    Map loadedMap = Map.FromStream(mapStream);
-                    using (Stream imageStream = File.OpenRead(loadedMap.Texture))
-                        xnaTextures.Add(loadedMap, TileSerializer.ExtractTextures(Texture2D.FromStream(GraphicsDevice, imageStream), loadedMap.Tiles, GraphicsDevice));
-                    wpfTextures.Add(loadedMap, new Dictionary<string, BitmapImage>( ));
-                    foreach (var entry in xnaTextures[loadedMap])
-                        wpfTextures[loadedMap].Add(entry.Key, entry.Value.ToBitmapImage( ));
-                    AddMap(loadedMap);
-                }
+                LoadMap(map);
             }
         }
 
@@ -79,7 +71,19 @@ namespace mapKnight.ToolKit {
             MapAdded?.Invoke(map);
         }
 
-        public IEnumerable<Map> GetMaps ( ) {
+        public void LoadMap (string path) {
+            using (Stream mapStream = File.OpenRead(path)) {
+                Map loadedMap = Map.FromStream(mapStream);
+                using (Stream imageStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(path), loadedMap.Texture)))
+                    xnaTextures.Add(loadedMap, TileSerializer.ExtractTextures(Texture2D.FromStream(GraphicsDevice, imageStream), loadedMap.Tiles, GraphicsDevice));
+                wpfTextures.Add(loadedMap, new Dictionary<string, BitmapImage>( ));
+                foreach (var entry in xnaTextures[loadedMap])
+                    wpfTextures[loadedMap].Add(entry.Key, entry.Value.ToBitmapImage( ));
+                AddMap(loadedMap);
+            }
+        }
+
+        public List<Map> GetMaps ( ) {
             return maps;
         }
 
@@ -95,6 +99,16 @@ namespace mapKnight.ToolKit {
                 return;
             xnaTextures[map].Add(name, image.ToTexture2D(GraphicsDevice));
             wpfTextures[map].Add(name, image);
+        }
+
+        public void ChangeTextureName (Map map, string oldname, string newname) {
+            Texture2D texture = xnaTextures[map][oldname];
+            xnaTextures[map].Remove(oldname);
+            xnaTextures[map].Add(newname, texture);
+
+            BitmapImage image = wpfTextures[map][oldname];
+            wpfTextures[map].Remove(oldname);
+            wpfTextures[map].Add(newname, image);
         }
 
         public Dictionary<string, Texture2D> GetMapXNATextures (Map map) {

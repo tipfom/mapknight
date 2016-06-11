@@ -13,6 +13,7 @@ namespace mapKnight.ToolKit {
         public EditorWindow ( ) {
             InitializeComponent( );
             LoadConfig( );
+            App.Current.MainWindow = this;
         }
 
         private void LoadConfig ( ) {

@@ -54,6 +54,8 @@ namespace mapKnight.ToolKit {
         private Tile currentTile { get { return (wrappanel_tiles.SelectedIndex != -1) ? currentMap.Tiles[wrappanel_tiles.SelectedIndex] : currentMap.Tiles[0]; } }
         private int currentMapIndex { get { return (int)((ComboBox)_Menu[1]).SelectedIndex; } }
         private int currentTileIndex { get { return wrappanel_tiles.SelectedIndex; } }
+        private int currentlyEditionTilesMap = -1;
+        private int currentlyEditingTile = -1;
         private int currentLayer = 1;
         private Tool currentTool = Tool.Pen;
         private Point lastClickedTile = new Point(-1, -1);
@@ -62,6 +64,7 @@ namespace mapKnight.ToolKit {
             InitializeComponent( );
 
             ((MenuItem)((MenuItem)_Menu[0]).Items[0]).Click += create_map_Click;
+            ((MenuItem)((MenuItem)_Menu[0]).Items[1]).Click += load_map_Click;
             ((ComboBox)_Menu[1]).SelectionChanged += CurrentMapChanged;
 
             ((CheckBox)_Menu[3]).Checked += (sender, e) => { tilemapview.ShowBackground = true; };
@@ -101,10 +104,14 @@ namespace mapKnight.ToolKit {
 
         private void Reset ( ) {
             ((ComboBox)_Menu[1]).Items.Clear( );
+            currentlyEditingTile = -1;
+            currentlyEditionTilesMap = -1;
             wrappanel_tiles.Items.Clear( );
             foreach (Map map in App.Project.GetMaps( )) {
                 Project_MapAdded(map);
             }
+            if (tilemapview.CurrentMap != null)
+                tilemapview.CurrentMap = null;
         }
 
         private void ResetToolBorders ( ) {
@@ -155,6 +162,14 @@ namespace mapKnight.ToolKit {
                 UpdateListbox( );
         }
 
+        private void load_map_Click (object sender, RoutedEventArgs e) {
+            OpenFileDialog mapOpenDialog = new OpenFileDialog( );
+            mapOpenDialog.Filter = "MAP-Files|*.map";
+            mapOpenDialog.CheckFileExists = true;
+            if (mapOpenDialog.ShowDialog( ) ?? false) {
+                App.Project.LoadMap(mapOpenDialog.FileName);
+            }
+        }
 
         public void UpdateListbox ( ) {
             wrappanel_tiles.Items.Clear( );
@@ -215,7 +230,7 @@ namespace mapKnight.ToolKit {
         }
 
         private void tilemapview_MouseDown (object sender, MouseButtonEventArgs e) {
-            if (currentMap == null || currentTileIndex == -1)
+            if (currentMap == null || currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer))
                 return;
 
             Point clickedTile;
@@ -265,7 +280,7 @@ namespace mapKnight.ToolKit {
             if (currentMap == null)
                 return;
             bool update = UpdateSelectedTile(e);
-            if (currentTileIndex == -1)
+            if (currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer))
                 return;
 
             Point clickedTile;
@@ -310,14 +325,6 @@ namespace mapKnight.ToolKit {
             tilemapview.Offset = new Microsoft.Xna.Framework.Point(tilemapview.Offset.X, (int)scrollbar_vertical.Value);
         }
 
-        private struct ListViewEntry {
-            public ListViewEntry (BitmapImage image) {
-                Image = image;
-            }
-
-            public BitmapImage Image { get; private set; }
-        }
-
         private void tilemapview_MouseLeave (object sender, MouseEventArgs e) {
             tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Point(-1, -1);
         }
@@ -349,5 +356,55 @@ namespace mapKnight.ToolKit {
                     TileSerializer.Serialize(stream, currentMap.Tiles, App.Project.GetMapXNATextures(currentMap), tilemapview.GraphicsDevice);
             }
         }
+
+        private void wrappanel_tiles_Selected (object sender, RoutedEventArgs e) {
+            if (currentlyEditingTile >= 0 || currentlyEditionTilesMap >= 0) {
+                if (App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles.Where(t => t.Name == textbox_tile_name.Text) != null) {
+                    App.Project.ChangeTextureName(App.Project.GetMaps( )[currentlyEditionTilesMap], App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name, textbox_tile_name.Text);
+                    App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name = textbox_tile_name.Text;
+                }
+                App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Attributes.Clear( );
+                foreach (AttributeListViewEntry entry in listview_tile_attributes.Items) {
+                    if (entry.Active)
+                        App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Attributes.Add((TileAttribute)Enum.Parse(typeof(TileAttribute), entry.Attribute), entry.Value);
+                }
+            }
+            if (currentMapIndex == -1 || currentTileIndex == -1)
+                return;
+            currentlyEditionTilesMap = currentMapIndex;
+            currentlyEditingTile = currentTileIndex;
+            textbox_tile_name.Text = currentTile.Name;
+            listview_tile_attributes.Items.Clear( );
+            foreach (TileAttribute attribute in Enum.GetValues(typeof(TileAttribute))) {
+                if (currentTile.HasFlag(attribute)) {
+                    listview_tile_attributes.Items.Add(new AttributeListViewEntry(true, attribute.ToString( ), currentTile.Attributes[attribute]));
+                } else {
+                    listview_tile_attributes.Items.Add(new AttributeListViewEntry(false, attribute.ToString( ), ""));
+                }
+            }
+        }
+
+        #region templates
+        private struct ListViewEntry {
+            public ListViewEntry (BitmapImage image) {
+                Image = image;
+            }
+
+            public BitmapImage Image { get; private set; }
+        }
+
+        private class AttributeListViewEntry {
+
+            public AttributeListViewEntry (bool active, string attribute, string value) {
+                Active = active;
+                Attribute = attribute;
+                Value = value;
+            }
+
+            public bool Active { get; set; }
+            public string Attribute { get; set; }
+            public string Value { get; set; }
+        }
+        #endregion
     }
 }
