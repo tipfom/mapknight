@@ -17,8 +17,5 @@
     <Setting Name="Maximized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="TileSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">18</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

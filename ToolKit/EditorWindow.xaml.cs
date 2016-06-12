@@ -99,5 +99,9 @@ namespace mapKnight.ToolKit {
         private void Window_Loaded (object sender, RoutedEventArgs e) {
             App.Project = new Project(this);
         }
+
+        private void About_Click (object sender, RoutedEventArgs e) {
+            new AboutWindow( ).ShowDialog( );
+        }
     }
 }

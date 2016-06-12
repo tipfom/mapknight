@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace mapKnight.ToolKit {
     /// <summary>
     /// Interaktionslogik für AboutWindow.xaml
     /// </summary>
     public partial class AboutWindow : Window {
+        Version supportingVersion = new Version(2, 1, 101);
+
         public AboutWindow ( ) {
+            this.Owner = App.Current.MainWindow;
             InitializeComponent( );
+        }
+
+        private void Window_Loaded (object sender, RoutedEventArgs e) {
+            label_version.Text += " " + Assembly.GetExecutingAssembly( ).GetName( ).Version.ToString(3);
+            label_mkversion.Text += " " + supportingVersion.ToString(3);
         }
     }
 }

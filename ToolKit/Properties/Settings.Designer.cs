@@ -82,17 +82,5 @@ namespace mapKnight.ToolKit.Properties {
                 this["Maximized"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("18")]
-        public int TileSize {
-            get {
-                return ((int)(this["TileSize"]));
-            }
-            set {
-                this["TileSize"] = value;
-            }
-        }
     }
 }

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit"
              xmlns:xna="clr-namespace:mapKnight.ToolKit.Xna"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="900">
+             d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
         <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">
@@ -33,7 +33,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="300" Width="*"/>
             <ColumnDefinition Width="6"/>
-            <ColumnDefinition MinWidth="300" Width="5*"/>
+            <ColumnDefinition MinWidth="300" Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
@@ -44,7 +44,7 @@
             </Grid.RowDefinitions>
             <DockPanel>
                 <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0"/>
-                <Button Grid.Row="0" Content="EXPORT" Margin="0,0,0,3" Click="buttonexport_Click"/>
+                <Button Grid.Row="0" Content="EXPORT TEMPLATE" Margin="0,0,0,3" Click="buttonexport_Click"/>
             </DockPanel>
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles" 
@@ -76,7 +76,7 @@
                 </ListView>
             </DockPanel>
         </Grid>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False" Background="White"/>
         <Grid Grid.Column="2">
             <local:TileMapView x:Name="tilemapview" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter"/>
             <ScrollBar x:Name="scrollbar_horizontal"

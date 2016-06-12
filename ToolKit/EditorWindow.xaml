@@ -5,20 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit"
         mc:Ignorable="d"
-        Title="Kartenknecht Werkzeugkasten" Height="300" Width="300" Closing="Window_Closing" Loaded="Window_Loaded" Icon="{StaticResource ResourceKey=logo}">
+        Title="mapKnight ToolKit" Height="300" Width="300" Closing="Window_Closing" Loaded="Window_Loaded" Icon="{StaticResource ResourceKey=logo}">
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="NewCommand_CanExecute" Executed="NewCommand_Executed" />
         <CommandBinding Command="Open" CanExecute="OpenCommand_CanExecute"  Executed="OpenCommand_Executed"/>
         <CommandBinding Command="Save" CanExecute="SaveCommand_CanExecute" Executed="SaveCommand_Executed"/>
     </Window.CommandBindings>
     <DockPanel>
-        <Menu Name="menu_editor" IsMainMenu="True" DockPanel.Dock="Top" Height="24">
+        <Menu Name="menu_editor" IsMainMenu="True" DockPanel.Dock="Top" Height="24" Background="White">
             <MenuItem Header="_PROJECT">
                 <MenuItem Header="NEW" Command="New" Icon="{StaticResource ResourceKey=image_project_new }"/>
                 <MenuItem Header="OPEN" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
                 <MenuItem Header="SAVE" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
             </MenuItem>
-            <MenuItem Header="ABOUT"/>
+            <MenuItem Header="_ABOUT" Click="About_Click"/>
         </Menu>
         <TabControl Name="tabcontrol_editor">
             <TabItem Header="MAP" Selector.Selected="Map_Selected">
