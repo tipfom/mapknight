@@ -1,10 +1,10 @@
 ﻿using mapKnight.Core;
 using mapKnight.ToolKit.Xna;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.ComponentModel;
 using Color = Microsoft.Xna.Framework.Color;
+using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace mapKnight.ToolKit {
@@ -54,6 +54,9 @@ namespace mapKnight.ToolKit {
             base.DeviceInitialized += ( ) => {
                 CreateEmptyTexture( );
             };
+            Loaded += (sender, e) => {
+                this.Focus( );
+            };
         }
 
         public bool IsLayerActive (int id) {
@@ -80,10 +83,12 @@ namespace mapKnight.ToolKit {
             for (int x = 0; x < columns; x++) {
                 for (int y = 0; y < rows; y++) {
                     int cx = x + Offset.X, cy = CurrentMap.Height - y - 1 - Offset.Y;
-                    Rectangle drawingRectangle = new Rectangle(x * TileSize, y * TileSize, TileSize, TileSize);
+                    Rectangle drawingRectangle = new Rectangle((int)((x + 0.5f) * TileSize), (int)((y + 0.5f) * TileSize), TileSize, TileSize);
                     for (int l = 0; l < 3; l++) {
-                        if (Layer[l])
-                            spriteBatch.Draw(App.Project.GetMapXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, Color.White);
+                        if (Layer[l]) {
+                            float rotation = CurrentMap.GetRotation(cx, cy, l) * (float)Math.PI;
+                            spriteBatch.Draw(App.Project.GetMapXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, null, Color.White, rotation, new Microsoft.Xna.Framework.Vector2(Map.TILE_PXL_SIZE / 2f, Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);
+                        }
                     }
                 }
             }

@@ -12,4 +12,5 @@
     <Image x:Key="image_map_fill" Source="../Resources/fill_color-48.png"/>
     <Image x:Key="image_map_eraser" Source="../Resources/eraser-48.png"/>
     <Image x:Key="image_map_pointer" Source="../Resources/collapse-48.png"/>
+    <Image x:Key="image_map_rotate" Source="../Resources/rotate_left-48.png"/>
 </ResourceDictionary>

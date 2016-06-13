@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
+using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 
 namespace mapKnight.ToolKit {
     /// <summary>
@@ -15,6 +17,34 @@ namespace mapKnight.ToolKit {
 
         public App ( ) {
             EmbeddedAssemblies.Serve( );
+        }
+
+        public static void CreateNewProject (Control renderParent) {
+            if (Project?.HasChanged ?? false)
+                ShowSaveDialog( );
+            Project = new Project(renderParent);
+        }
+
+        public static void LoadProject (Control renderParent, string path) {
+            if (Project?.HasChanged ?? false)
+                ShowSaveDialog( );
+            Project = new Project(renderParent, path);
+        }
+
+        public static void ShowSaveDialog ( ) {
+            if (MessageBox.Show("Don't you want to save the state of your current project?", "Save?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                SaveProject( );
+        }
+
+        public static void SaveProject ( ) {
+            if (Project.IsLocated) {
+                Project.Save( );
+            } else {
+                FolderBrowserDialog projectsavedialog = new FolderBrowserDialog( );
+                if (projectsavedialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
+                    App.Project.Save(projectsavedialog.SelectedPath);
+                }
+            }
         }
     }
 }

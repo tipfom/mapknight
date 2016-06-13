@@ -52,6 +52,8 @@ namespace mapKnight.ToolKit {
             }
 
             Properties.Settings.Default.Save( );
+            if (App.Project?.HasChanged ?? false)
+                App.ShowSaveDialog( );
         }
 
         private void Map_Selected (object sender, RoutedEventArgs e) {
@@ -67,7 +69,7 @@ namespace mapKnight.ToolKit {
         }
 
         private void NewCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
-            App.Project = new Project(this);
+            App.CreateNewProject(this);
         }
 
         private void OpenCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -77,7 +79,7 @@ namespace mapKnight.ToolKit {
         private void OpenCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
             FolderBrowserDialog projectopendialog = new FolderBrowserDialog( );
             if (projectopendialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
-                App.Project = new Project(this, projectopendialog.SelectedPath);
+                App.LoadProject(this, projectopendialog.SelectedPath);
             }
         }
 
@@ -86,18 +88,11 @@ namespace mapKnight.ToolKit {
         }
 
         private void SaveCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (!App.Project.IsLocated) {
-                FolderBrowserDialog projectsavedialog = new FolderBrowserDialog( );
-                if (projectsavedialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
-                    App.Project.Save(projectsavedialog.SelectedPath);
-                }
-            } else {
-                App.Project.Save( );
-            }
+            App.SaveProject( );
         }
 
         private void Window_Loaded (object sender, RoutedEventArgs e) {
-            App.Project = new Project(this);
+            App.CreateNewProject(this);
         }
 
         private void About_Click (object sender, RoutedEventArgs e) {

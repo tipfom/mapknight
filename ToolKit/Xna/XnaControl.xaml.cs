@@ -56,8 +56,8 @@ namespace mapKnight.ToolKit.Xna {
                 // recreate the image source
                 imageSource.Dispose( );
                 imageSource = new ImageSource(
-                    GraphicsDevice, (int)ActualWidth, (int)ActualHeight);
-                rootImage.Source = imageSource.WriteableBitmap;
+                    GraphicsDevice, (int)RenderSize.Width, (int)RenderSize.Height);
+                rootImage.Source = imageSource.WriteableBitmap; 
             }
             Update( );
         }
@@ -112,7 +112,7 @@ namespace mapKnight.ToolKit.Xna {
             GraphicsDevice.SetRenderTarget(imageSource.RenderTarget);
             GraphicsDevice.Clear(Background);
 
-            SpriteBatch.Begin(samplerState: SamplerState.PointWrap);
+            SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
             // allow the control to draw
             Render(SpriteBatch);
 

@@ -14,9 +14,11 @@ namespace mapKnight.ToolKit {
     public class Project {
         public string Home { get; private set; } = null;
         public bool IsLocated { get { return Home != null; } }
+        public bool HasChanged { get; set; } = false;
 
         public event Action<Map> MapAdded;
         private List<Map> maps = new List<Map>( );
+        private Dictionary<Map, float[ , , ]> mapRotations = new Dictionary<Map, float[ , , ]>( );
         private Dictionary<Map, Dictionary<string, Texture2D>> xnaTextures = new Dictionary<Map, Dictionary<string, Texture2D>>( );
         private Dictionary<Map, Dictionary<string, BitmapImage>> wpfTextures = new Dictionary<Map, Dictionary<string, BitmapImage>>( );
 
@@ -59,14 +61,18 @@ namespace mapKnight.ToolKit {
                 map.Serialize(File.OpenWrite(mapPath));
             }
 
-            MessageBox.Show("Completed!", "Save", MessageBoxButton.OK, MessageBoxImage.Information);
+            HasChanged = false;
         }
 
         public void AddMap (Map map) {
-            maps.Add(map);
-            if (!xnaTextures.ContainsKey(map)) {
-                xnaTextures.Add(map, new Dictionary<string, Texture2D>( ));
-                wpfTextures.Add(map, new Dictionary<string, BitmapImage>( ));
+            HasChanged = true;
+            if (!maps.Contains(map)) {
+                mapRotations.Add(map, new float[map.Width, map.Height, 3]);
+                maps.Add(map);
+                if (!xnaTextures.ContainsKey(map)) {
+                    xnaTextures.Add(map, new Dictionary<string, Texture2D>( ));
+                    wpfTextures.Add(map, new Dictionary<string, BitmapImage>( ));
+                }
             }
             MapAdded?.Invoke(map);
         }
@@ -117,6 +123,16 @@ namespace mapKnight.ToolKit {
 
         public Dictionary<string, BitmapImage> GetMapWPFTextures (Map map) {
             return wpfTextures[map];
+        }
+
+        public float[ , , ] GetRotations (Map map) {
+            return mapRotations[map];
+        }
+
+        public void SetRotation (Map map, int x, int y, int layer, float value) {
+            float[ , , ] data = mapRotations[map];
+            data[x, y, layer] = value;
+            mapRotations[map] = data;
         }
 
         public static bool Validate (string path) {

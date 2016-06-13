@@ -23,7 +23,8 @@ namespace mapKnight.ToolKit {
             Pen,
             Eraser,
             Filler,
-            Pointer
+            Pointer,
+            Rotater
         }
 
         private List<UIElement> _Menu = new List<UIElement>( ) {
@@ -45,7 +46,8 @@ namespace mapKnight.ToolKit {
             new Border() { Child = (Image)App.Current.FindResource("image_map_pen"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
             new Border() { Child = (Image)App.Current.FindResource("image_map_eraser"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0) },
             new Border() { Child = (Image)App.Current.FindResource("image_map_fill"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0) },
-            new Border() { Child = (Image)App.Current.FindResource("image_map_pointer"), BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0)}
+            new Border() { Child = (Image)App.Current.FindResource("image_map_pointer"), BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0)},
+            new Border() { Child = (Image)App.Current.FindResource("image_map_rotate"), BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0)}
         };
 
         public List<UIElement> Menu { get { return _Menu; } }
@@ -98,6 +100,11 @@ namespace mapKnight.ToolKit {
                 ResetToolBorders( );
                 ((Border)_Menu[15]).BorderThickness = new Thickness(1);
             };
+            _Menu[16].MouseDown += (sender, e) => {
+                currentTool = Tool.Rotater;
+                ResetToolBorders( );
+                ((Border)_Menu[16]).BorderThickness = new Thickness(1);
+            };
 
             App.ProjectChanged += ( ) => { App.Project.MapAdded += Project_MapAdded; Reset( ); };
         }
@@ -119,6 +126,7 @@ namespace mapKnight.ToolKit {
             ((Border)_Menu[13]).BorderThickness = new Thickness(0);
             ((Border)_Menu[14]).BorderThickness = new Thickness(0);
             ((Border)_Menu[15]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[16]).BorderThickness = new Thickness(0);
         }
 
         private void Project_MapAdded (Map obj) {
@@ -196,6 +204,7 @@ namespace mapKnight.ToolKit {
                 string[ ] files = (string[ ])e.Data.GetData(DataFormats.FileDrop);
                 foreach (string file in files) {
                     if (Path.GetExtension(file) == ".png") {
+                        App.Project.HasChanged = true;
                         if (checkbox_auto.IsChecked ?? false && currentMap.Tiles.Where(t => t.Name == Path.GetFileNameWithoutExtension(file)) != null) {
                             // add tile
                             string tileName = Path.GetFileNameWithoutExtension(file);
@@ -270,8 +279,15 @@ namespace mapKnight.ToolKit {
                         case Tool.Pointer:
                             currentMap.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
                             break;
+                        case Tool.Rotater:
+                            float tileRotation = currentMap.GetRotation((int)clickedTile.X, (int)clickedTile.Y, currentLayer);
+                            tileRotation += 0.5f;
+                            tileRotation %= 2f;
+                            currentMap.SetRotation((int)clickedTile.X, (int)clickedTile.Y, currentLayer, tileRotation);
+                            break;
                     }
                 }
+                App.Project.HasChanged = e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed;
                 tilemapview.Update( );
             }
         }
@@ -301,9 +317,10 @@ namespace mapKnight.ToolKit {
                             currentMap.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
                             break;
                     }
-                    update = currentTool != Tool.Filler;
+                    update = update || (currentTool != Tool.Filler && currentTool != Tool.Rotater);
                 }
             }
+            App.Project.HasChanged = update && ((e.LeftButton == MouseButtonState.Pressed && currentTool != Tool.Filler) || e.RightButton == MouseButtonState.Pressed);
             if (update)
                 tilemapview.Update( );
         }
@@ -327,6 +344,7 @@ namespace mapKnight.ToolKit {
 
         private void tilemapview_MouseLeave (object sender, MouseEventArgs e) {
             tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Point(-1, -1);
+            tilemapview.Update( );
         }
 
         private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {

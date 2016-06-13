@@ -35,5 +35,17 @@ namespace mapKnight.ToolKit {
                 return Texture2D.FromStream(g, ms);
             }
         }
+
+        public static float[ , , ] GetRotations (this Map map) {
+            return App.Project.GetRotations(map);
+        }
+
+        public static float GetRotation (this Map map, int x, int y, int layer) {
+            return App.Project.GetRotations(map)[x, y, layer];
+        }
+
+        public static void SetRotation (this Map map, int x, int y, int layer, float value) {
+            App.Project.SetRotation(map, x, y, layer, value);
+        }
     }
 }
