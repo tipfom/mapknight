@@ -2,6 +2,9 @@ using System;
 
 namespace mapKnight.Core {
     public static class Mathf {
+        public const float PI = (float)Math.PI;
+        public const float E = (float)Math.E;
+
         public static float[ ] Translate (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY) {
             if (verticies.Length % 2 != 0)
                 return null;

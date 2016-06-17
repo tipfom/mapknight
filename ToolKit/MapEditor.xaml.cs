@@ -106,7 +106,10 @@ namespace mapKnight.ToolKit {
                 ((Border)_Menu[16]).BorderThickness = new Thickness(1);
             };
 
-            App.ProjectChanged += ( ) => { App.Project.MapAdded += Project_MapAdded; Reset( ); };
+            App.ProjectChanged += ( ) => {
+                App.Project.MapAdded += Project_MapAdded;
+                Reset( );
+            };
         }
 
         private void Reset ( ) {
@@ -114,11 +117,11 @@ namespace mapKnight.ToolKit {
             currentlyEditingTile = -1;
             currentlyEditionTilesMap = -1;
             wrappanel_tiles.Items.Clear( );
+            if (tilemapview.CurrentMap != null)
+                tilemapview.CurrentMap = null;
             foreach (Map map in App.Project.GetMaps( )) {
                 Project_MapAdded(map);
             }
-            if (tilemapview.CurrentMap != null)
-                tilemapview.CurrentMap = null;
         }
 
         private void ResetToolBorders ( ) {

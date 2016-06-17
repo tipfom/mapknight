@@ -58,7 +58,7 @@ namespace mapKnight.ToolKit {
                 using (Stream stream = File.OpenWrite(texturePath))
                     packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
                 map.Texture = map.Name + ".png";
-                map.Serialize(File.OpenWrite(mapPath));
+                map.MergeRotations(mapRotations[map]).Serialize(File.OpenWrite(mapPath));
             }
 
             HasChanged = false;
@@ -67,7 +67,8 @@ namespace mapKnight.ToolKit {
         public void AddMap (Map map) {
             HasChanged = true;
             if (!maps.Contains(map)) {
-                mapRotations.Add(map, new float[map.Width, map.Height, 3]);
+                if (!mapRotations.ContainsKey(map))
+                    mapRotations.Add(map, new float[map.Width, map.Height, 3]);
                 maps.Add(map);
                 if (!xnaTextures.ContainsKey(map)) {
                     xnaTextures.Add(map, new Dictionary<string, Texture2D>( ));
@@ -80,6 +81,7 @@ namespace mapKnight.ToolKit {
         public void LoadMap (string path) {
             using (Stream mapStream = File.OpenRead(path)) {
                 Map loadedMap = Map.FromStream(mapStream);
+                mapRotations.Add(loadedMap, loadedMap.ExtractRotations( ));
                 using (Stream imageStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(path), loadedMap.Texture)))
                     xnaTextures.Add(loadedMap, TileSerializer.ExtractTextures(Texture2D.FromStream(GraphicsDevice, imageStream), loadedMap.Tiles, GraphicsDevice));
                 wpfTextures.Add(loadedMap, new Dictionary<string, BitmapImage>( ));

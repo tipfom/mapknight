@@ -50,7 +50,7 @@
                  x:Name="wrappanel_tiles" 
                  ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_Selected"/>
-            <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White"/>
             <DockPanel Grid.Row="3">
                 <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2"/>
                 <ListView x:Name="listview_tile_attributes">
