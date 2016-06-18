@@ -26,12 +26,12 @@ namespace mapKnight.Extended.Graphics.Programs {
             base.End( );
         }
 
-        public void Draw (ColorBufferBatch buffer, int texture, Matrix4 matrix, bool alphaBlending = true) {
+        public void Draw (ColorBufferBatch buffer, Texture2D texture, Matrix4 matrix, bool alphaBlending = true) {
             Draw(buffer, texture, matrix, buffer.QuadCount * 6, alphaBlending);
         }
 
-        public void Draw (ColorBufferBatch buffer, int texture, Matrix4 matrix, int count, bool alphaBlending = true) {
-            Apply(texture, buffer.Verticies, buffer.Dimesions, buffer.Texture, alphaBlending);
+        public void Draw (ColorBufferBatch buffer, Texture2D texture, Matrix4 matrix, int count, bool alphaBlending = true) {
+            Apply(texture.ID, buffer.Verticies, buffer.Dimesions, buffer.Texture, alphaBlending);
             colorHandle.Set(buffer.Color, 4);
             mvpMatrixHandle.Set(matrix);
 

@@ -65,7 +65,7 @@ namespace mapKnight.Extended.Graphics.GUI {
 
 		public static void Draw ( ) {
 			Program.Begin( );
-			Program.Draw(buffer, Texture.ID, Matrix.Default.MVP, true);
+			Program.Draw(buffer, Texture, Matrix.Default.MVP, true);
 			Program.End( );
 		}
 	}

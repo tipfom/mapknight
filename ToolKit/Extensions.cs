@@ -123,11 +123,11 @@ namespace mapKnight.ToolKit {
 
         private static float[ ] ShiftTextureCoordinates (float rotation, float[ ] texturecoords) {
             if (rotation == 0.5f) {
-                return new float[ ] { texturecoords[2], texturecoords[3], texturecoords[4], texturecoords[5], texturecoords[6], texturecoords[7], texturecoords[0], texturecoords[1] };
+                return new float[ ] { texturecoords[6], texturecoords[7], texturecoords[0], texturecoords[1], texturecoords[2], texturecoords[3], texturecoords[4], texturecoords[5] };
             } else if (rotation == 1f) {
                 return new float[ ] { texturecoords[4], texturecoords[5], texturecoords[6], texturecoords[7], texturecoords[0], texturecoords[1], texturecoords[2], texturecoords[3] };
             } else if (rotation == 1.5f) {
-                return new float[ ] { texturecoords[6], texturecoords[7], texturecoords[0], texturecoords[1], texturecoords[2], texturecoords[3], texturecoords[4], texturecoords[5] };
+                return new float[ ] { texturecoords[2], texturecoords[3], texturecoords[4], texturecoords[5], texturecoords[6], texturecoords[7], texturecoords[0], texturecoords[1] };
             } else {
                 return null;
             }

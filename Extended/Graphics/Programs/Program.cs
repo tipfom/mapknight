@@ -32,9 +32,13 @@ namespace mapKnight.Extended.Graphics.Programs {
         protected void Apply(int texture, float[] vertexBuffer, int dimension, float[] textureBuffer, bool alphaBlending) {
             if (alphaBlending)
                 EnableAlphaBlending( );
+            ErrorCode error = GL.GetErrorCode( );
             textureHandle.Set(texture);
+            error = GL.GetErrorCode( );
             positionHandle.Set(vertexBuffer, dimension);
+            error = GL.GetErrorCode( );
             textureCoordsHandle.Set(textureBuffer, 2);
+            error = GL.GetErrorCode( );
         }
 
         private void EnableAlphaBlending ( ) {

@@ -40,6 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Bone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\BufferBatch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Color.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\ColorBufferBatch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
@@ -55,12 +56,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\TextureHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\Uniform4Handle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\UniformMatrixHandle.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Manager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Map.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Matrix.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ColorProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\MatrixProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Screen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Screens\MainMenuScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteBatch.cs" />
@@ -70,5 +72,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IEntityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IEntityRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Manager.cs" />
   </ItemGroup>
 </Project>

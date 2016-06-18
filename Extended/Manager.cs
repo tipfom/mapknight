@@ -6,7 +6,7 @@ using OpenTK.Graphics.ES20;
 using mapKnight.Extended.Graphics.Screens;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Graphics {
+namespace mapKnight.Extended {
     public static class Manager {
         public static void Initialize ( ) {
             ColorProgram.Program = new ColorProgram( );

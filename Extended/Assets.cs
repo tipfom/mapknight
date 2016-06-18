@@ -9,7 +9,7 @@ using mapKnight.Core;
 namespace mapKnight.Extended {
     public static class Assets {
         public static IAssetProvider AssetProvider;
-        
+
         public static T Load<T> (params string[ ] paths) {
             Type request = typeof(T);
             if (request == typeof(Texture2D) && paths.Length == 1) {
@@ -20,6 +20,8 @@ namespace mapKnight.Extended {
                 return (T)((object)GetSprite(paths[0]));
                 //} else if (request == typeof (EntityConfig) && paths.Length == 1) {
                 //    return (T)((object)LoadEntity (paths[0]));
+            } else if (request == typeof(Graphics.Map) && paths.Length == 1) {
+                return (T)((object)GetMap(paths[0]));
             } else {
                 throw new TypeLoadException($"requested filetype { request.FullName } couldnt be loaded with { paths.Length } parameters");
             }
@@ -77,6 +79,10 @@ namespace mapKnight.Extended {
             Log.Print(typeof(Assets), "GL.GLGetError returned " + GL.GetErrorCode( ).ToString( ));
 
             return shader;
+        }
+
+        public static Graphics.Map GetMap (string name) {
+            return new Graphics.Map(AssetProvider.GetStream("maps", name + ".map"));
         }
 
         public interface IAssetProvider {

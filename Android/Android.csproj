@@ -98,9 +98,9 @@
     <AndroidAsset Include="Assets\config\game.json" />
     <AndroidAsset Include="Assets\entities\potatoe_patrick.json" />
     <AndroidAsset Include="Assets\textures\potatoe_patrick.json" />
-    <AndroidAsset Include="Assets\maps\debug_map.map" />
     <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
     <AndroidAsset Include="Assets\entities\test_platform.json" />
+    <AndroidAsset Include="Assets\maps\test.map" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -146,7 +146,7 @@
     <AndroidAsset Include="Assets\textures\potatoe_patrick.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\tilesets\debug_tileset.png" />
+    <AndroidAsset Include="Assets\textures\test.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

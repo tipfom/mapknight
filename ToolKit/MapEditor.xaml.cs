@@ -141,9 +141,9 @@ namespace mapKnight.ToolKit {
             emptyImage.StreamSource = memoryStream;
             emptyImage.EndInit( );
 
-            if (obj.Tiles.Length == 0) {
+            if ((obj.Tiles?.Length ?? 0) == 0) {
                 App.Project.AddTexture(obj, "None", emptyImage);
-                obj.AddTile(new Tile( ) { Name = "None", Attributes = new Dictionary<TileAttribute, string>( ) });
+                obj.Tiles = new Tile[ ] { new Tile( ) { Name = "None", Attributes = new Dictionary<TileAttribute, string>( ) } };
             }
 
             ((ComboBox)_Menu[1]).Items.Add(obj);

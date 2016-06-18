@@ -7,7 +7,7 @@ namespace mapKnight.ToolKit {
     /// Interaktionslogik für AboutWindow.xaml
     /// </summary>
     public partial class AboutWindow : Window {
-        Version supportingVersion = new Version(2, 1, 101);
+        Version supportingVersion = new Version(2, 1, 106);
 
         public AboutWindow ( ) {
             this.Owner = App.Current.MainWindow;
