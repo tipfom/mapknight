@@ -18,8 +18,8 @@ namespace mapKnight.Extended {
                 return (T)((object)GetText(Path.Combine(paths)));
             } else if (request == typeof(SpriteBatch) && paths.Length == 1) {
                 return (T)((object)GetSprite(paths[0]));
-                //} else if (request == typeof (EntityConfig) && paths.Length == 1) {
-                //    return (T)((object)LoadEntity (paths[0]));
+            } else if (request == typeof(EntityConfig) && paths.Length == 1) {
+                return (T)((object)GetEntityConfig(paths[0]));
             } else if (request == typeof(Graphics.Map) && paths.Length == 1) {
                 return (T)((object)GetMap(paths[0]));
             } else {
@@ -84,6 +84,16 @@ namespace mapKnight.Extended {
         public static Graphics.Map GetMap (string name) {
             return new Graphics.Map(AssetProvider.GetStream("maps", name + ".map"));
         }
+
+
+        private static JsonSerializerSettings entitySerializerSettings = new JsonSerializerSettings( ) {
+            TypeNameHandling = TypeNameHandling.Auto,
+            Binder = Component.SerializationBinder
+        };
+        public static EntityConfig GetEntityConfig (string name) {
+            return JsonConvert.DeserializeObject<EntityConfig>(GetText("entities", $"{name}.json"), entitySerializerSettings);
+        }
+
 
         public interface IAssetProvider {
             Stream GetStream (params string[ ] path);

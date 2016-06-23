@@ -37,6 +37,10 @@ namespace mapKnight.Extended.Graphics {
             _View = Matrix4.LookAt(0, 0, 3, 0f, 0f, 0f, 0f, 1f, 0f);
         }
 
+        public void TranslateView(float x, float y, float z) {
+            _View = Matrix4.Mult(_View , Matrix4.CreateTranslation(new Vector3(x, y, z)));
+        }
+
         public static Matrix Default { get; } = new Matrix( );
     }
 }

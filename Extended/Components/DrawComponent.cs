@@ -37,9 +37,10 @@ namespace mapKnight.Extended.Components {
                         spriteData[entry.Key],
                         0,
                         colorData);
+                    entityVertexData.Add(entryVertexData);
                 }
 
-                Owner.Owner.Renderer.QueueVertexData(Owner.ID, entityVertexData);
+                Owner.Owner.Renderer.QueueVertexData(Owner.Species, entityVertexData);
             }
         }
     }

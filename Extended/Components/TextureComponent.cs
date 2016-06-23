@@ -13,7 +13,7 @@ namespace mapKnight.Extended.Components {
             this.textureName = texture.Name;
             this.textures = texture.Sprites.Keys.ToDictionary (spritename => spritename);
 
-            Owner.Owner.Renderer.AddTexture (Owner.ID, texture);
+            Owner.Owner.Renderer.AddTexture (Owner.Species, texture);
         }
 
         public override void Update (float dt) {

@@ -9,7 +9,7 @@ namespace mapKnight.Extended.Components {
 
         public SpriteComponent (Entity owner, Dictionary<string, SpriteAnimation> sprites, string texture) : base (owner) {
             this.sprites = sprites;
-            Owner.Owner.Renderer.AddTexture (Owner.ID, Assets.Load<SpriteBatch> (texture));
+            Owner.Owner.Renderer.AddTexture (Owner.Species, Assets.Load<SpriteBatch> (texture));
         }
 
         public override void Update (float dt) {

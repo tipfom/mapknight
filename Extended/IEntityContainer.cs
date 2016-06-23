@@ -10,13 +10,14 @@ namespace mapKnight.Extended {
         Vector2 Bounds { get; }
         Vector2 GetPositionOnScreen (Entity entity);
 
-        List<Entity> GetEntities ();
+        List<Entity> GetEntities ( );
         List<Entity> GetEntities (Predicate<Entity> predicate);
 
         bool HasCollider (int x, int y);
         bool IsOnScreen (Entity entity);
 
-        int CreateID ();
+        int NewSpecies ( );
+        int NewID ( );
 
         float VertexSize { get; }
 

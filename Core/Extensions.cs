@@ -93,8 +93,12 @@ namespace mapKnight.Core {
         #endregion
 
         #region Dictionary
-        public static Dictionary<K, V> DeepClone<K, V> (this Dictionary<K, V> original) {
-            return new Dictionary<K, V>(original);
+        public static Dictionary<K, V> DeepClone<K, V> (this Dictionary<K, V> original) where V : ICloneable {
+            Dictionary<K,V> result = new Dictionary<K, V>();
+            foreach(KeyValuePair<K,V> kvpair in original) {
+                result.Add(kvpair.Key, (V)kvpair.Value.Clone( ));
+            }
+            return result;
         }
         #endregion
 

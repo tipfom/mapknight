@@ -12,13 +12,16 @@ namespace mapKnight.Extended {
         public Vector2 PositionOnScreen { get { return Owner.GetPositionOnScreen (this); } }
 
         public readonly string Name;
+        public readonly int Species;
         public readonly int ID;
+
         public Transform Transform { get; set; }
-        public Entity (List<ComponentConfig> components, Transform transform, IEntityContainer owner, string name, int id) {
+        public Entity (List<ComponentConfig> components, Transform transform, IEntityContainer owner, string name, int species) {
             Name = name;
             Owner = owner;
             Transform = transform;
-            ID = id;
+            Species = species;
+            ID = owner.NewID( );
 
             Component.ResolveDependencies (ref components);
             foreach (ComponentConfig config in components) {

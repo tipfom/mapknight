@@ -101,6 +101,7 @@
     <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
     <AndroidAsset Include="Assets\entities\test_platform.json" />
     <AndroidAsset Include="Assets\maps\test.map" />
+    <AndroidAsset Include="Assets\maps\testMap.map" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -147,6 +148,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\testMap.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

@@ -16,15 +16,15 @@ namespace mapKnight.Extended.Graphics {
             buffer = new ColorBufferBatch(MAX_QUAD_COUNT, 3);
         }
 
-        public void AddTexture (int entity, SpriteBatch entityTexture) {
-            if (!entityTextures.ContainsKey(entity)) {
-                entityTextures.Add(entity, entityTexture);
-                frameVertexData.Add(entity, new Queue<VertexData>( ));
+        public void AddTexture (int species, SpriteBatch entityTexture) {
+            if (!entityTextures.ContainsKey(species)) {
+                entityTextures.Add(species, entityTexture);
+                frameVertexData.Add(species, new Queue<VertexData>( ));
             }
         }
 
-        public void QueueVertexData (int entity, List<VertexData> vertexData) {
-            frameVertexData[entity].Enqueue(vertexData);
+        public void QueueVertexData (int species, List<VertexData> vertexData) {
+            frameVertexData[species].Enqueue(vertexData);
         }
 
         public void Update (float dt) {
@@ -33,10 +33,10 @@ namespace mapKnight.Extended.Graphics {
 
         public void Draw ( ) {
             Program.Begin( );
-            foreach (int entity in frameVertexData.Keys) {
+            foreach (int species in frameVertexData.Keys) {
                 int currentIndex = 0;
-                while (frameVertexData[entity].Count > 0) {
-                    VertexData vertexData = frameVertexData[entity].Dequeue( );
+                while (frameVertexData[species].Count > 0) {
+                    VertexData vertexData = frameVertexData[species].Dequeue( );
                     float[ ] verticies = {
                         vertexData.Verticies[0], vertexData.Verticies[1], vertexData.Depth,
                         vertexData.Verticies[2], vertexData.Verticies[3], vertexData.Depth,
@@ -45,10 +45,10 @@ namespace mapKnight.Extended.Graphics {
                     };
                     Array.Copy(verticies, 0, buffer.Verticies, currentIndex * 12, 12);
                     Array.Copy(vertexData.Color.ToOpenGL( ), 0, buffer.Color, currentIndex * 16, 16);
-                    Array.Copy(entityTextures[entity].Get(vertexData.Texture), 0, buffer.Texture, currentIndex * 8, 8);
+                    Array.Copy(entityTextures[species].Get(vertexData.Texture), 0, buffer.Texture, currentIndex * 8, 8);
                     currentIndex++;
                 }
-                //Program.Draw(buffer, entityTextures[entity].ID, Matrix.Default.MVP, currentIndex * 6, true);
+                Program.Draw(buffer, entityTextures[species], Matrix.Default.MVP, currentIndex * 6, true);
             }
             Program.End( );
         }
