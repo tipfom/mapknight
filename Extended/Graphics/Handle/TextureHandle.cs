@@ -17,15 +17,9 @@ namespace mapKnight.Extended.Graphics.Handle {
         }
 
         public void Set (int texture, int unit) {
-            ErrorCode error = GL.GetErrorCode( );
-            //GL.Enable(EnableCap.Texture2D);
-            error = GL.GetErrorCode( );
             GL.ActiveTexture((TextureUnit)(TextureUnit.Texture0 + unit));
-            error = GL.GetErrorCode( );
             GL.BindTexture(TextureTarget.Texture2D, texture);
-            error = GL.GetErrorCode( );
             GL.Uniform1(Location, unit);
-            error = GL.GetErrorCode( );
         }
     }
 }

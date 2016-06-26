@@ -1,9 +1,9 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Extended.Components.Communication;
 using mapKnight.Extended.Exceptions;
+using Newtonsoft.Json;
 
 namespace mapKnight.Extended {
     public abstract class Component {
@@ -43,7 +43,9 @@ namespace mapKnight.Extended {
             [Identifier.Push] = Identifier.Motion,
             [Identifier.Skelet] = Identifier.Draw,
             [Identifier.Sprite] = Identifier.Draw,
-            [Identifier.Texture] = Identifier.Draw
+            [Identifier.Texture] = Identifier.Draw,
+            [Identifier.Speed] = Identifier.Motion,
+            [Identifier.UserControl] = Identifier.Speed
         };
 
         public static void ResolveDependencies (ref List<ComponentConfig> componentConfigs) {

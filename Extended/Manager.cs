@@ -1,10 +1,10 @@
-﻿using mapKnight.Extended.Graphics.Programs;
+﻿using System;
+using mapKnight.Core;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.GUI;
-using System;
-using OpenTK.Graphics.ES20;
+using mapKnight.Extended.Graphics.Programs;
 using mapKnight.Extended.Graphics.Screens;
-using mapKnight.Core;
+using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended {
     public static class Manager {
@@ -13,6 +13,8 @@ namespace mapKnight.Extended {
             MatrixProgram.Program = new MatrixProgram( );
 
             GUIRenderer.Texture = Assets.Load<SpriteBatch>("interface");
+            Assets.Load<Texture2D>("testMap");
+            Assets.Load<SpriteBatch>("potatoe_patrick");
 
             GL.ClearColor(0f, 0f, 0f, 1f);
 
@@ -40,7 +42,7 @@ namespace mapKnight.Extended {
 
         private static int lastUpdate = Environment.TickCount;
         private static void UpdateFrametime ( ) {
-            frameTime = new TimeSpan(Environment.TickCount - lastUpdate);
+            frameTime = new TimeSpan(0, 0, 0, 0, Environment.TickCount - lastUpdate);
             lastUpdate = Environment.TickCount;
         }
     }

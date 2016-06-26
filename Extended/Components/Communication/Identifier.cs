@@ -4,10 +4,12 @@ namespace mapKnight.Extended.Components.Communication {
         Draw,
         Gravity,
         Motion,
+        Platform,
         Push,
         Skelet,
+        Speed,
         Sprite,
         Texture,
-        Platform
+        UserControl
     }
 }
