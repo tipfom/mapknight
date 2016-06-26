@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using mapKnight.Core;
+using mapKnight.Extended.Graphics.Buffer;
 using OpenTK.Graphics.ES20;
 using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
 
@@ -40,44 +41,44 @@ namespace mapKnight.Extended.Graphics {
             Bounds = new Vector2(Width, Height);
             DrawSize = new Size((int)DRAW_WIDTH + 2, (int)Math.Ceiling(DRAW_WIDTH / Window.Ratio + 2));
             VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
-            buffer = new BufferBatch(DrawSize.Area * 3, 2);
-            texture = Assets.Load<Texture2D>(Texture);
-            SetVertexCoords( );
             InitTextureCoords( );
+
+            ErrorCode error = GL.GetErrorCode( );
+            texture = Assets.Load<Texture2D>(Texture);
 
             Window.Changed += Window_Changed;
         }
 
         private void Window_Changed ( ) {
+            VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
             if ((int)(DRAW_WIDTH / Window.Ratio) + 2 != DrawSize.Height) {
                 DrawSize = new Size((int)DRAW_WIDTH + 2, (int)(DRAW_WIDTH / Window.Ratio + 2));
-                buffer = new ColorBufferBatch(DrawSize.Area * 3, 2);
+                buffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 3), new GPUBuffer(2, DrawSize.Area * 3, GenerateVertexCoords( )), new GPUBuffer(2, DrawSize.Area * 3));
             }
-            VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
-            SetVertexCoords( );
         }
 
-        private void SetVertexCoords ( ) {
-            int iTileCount = DrawSize.Width * DrawSize.Height;
+        private float[ ] GenerateVertexCoords ( ) {
+            int tileCount = DrawSize.Area;
             float ystart = -(DrawSize.Height / 2f * VertexSize);
             yOffsetRaw = (VertexSize - Math.Abs(ystart + 1));
             yOffsetTile = yOffsetRaw / VertexSize;
 
+            float[ ] verticies = new float[tileCount * 3 * 8];
             for (int i = 0; i < 3; i++) { // PR tile and overlay vertex
                 for (int y = 0; y < DrawSize.Height; y++) {
                     for (int x = 0; x < DrawSize.Width; x++) {
-
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 0] = -Window.Ratio - VertexSize + (x * VertexSize);
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 1] = ystart + (y * VertexSize);
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 2] = -Window.Ratio - VertexSize + (x * VertexSize);
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 3] = ystart + ((y + 1) * VertexSize);
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 4] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 5] = ystart + ((y + 1) * VertexSize);
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 6] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
-                        buffer.Verticies[x * 8 + y * DrawSize.Width * 8 + i * iTileCount * 8 + 7] = ystart + (y * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 0] = -Window.Ratio - VertexSize + (x * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 1] = ystart + (y * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 2] = -Window.Ratio - VertexSize + (x * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 3] = ystart + ((y + 1) * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 4] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 5] = ystart + ((y + 1) * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 6] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 7] = ystart + (y * VertexSize);
                     }
                 }
             }
+            return verticies;
         }
 
         private void InitTextureCoords ( ) {
@@ -101,23 +102,30 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        private void UpdateTextureBuffer ( ) {
+        private float[ ] GenerateTextureCoords ( ) {
+            float[ ] textureBuffer = new float[DrawSize.Area * 8 * 3];
             // insert buffered tile coords to texturebuffer
             for (int layer = 0; layer < 3; layer++) {
                 for (int ly = 0; ly < DrawSize.Height; ly++) {
-                    Array.Copy(layerBuffer[layer][ly + (int)updateTile.Y], (int)updateTile.X * 8, buffer.Texture, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
+                    Array.Copy(layerBuffer[layer][ly + (int)updateTile.Y], (int)updateTile.X * 8, textureBuffer, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
                 }
             }
+            return textureBuffer;
         }
 
         public void Draw ( ) {
             Program.Begin( );
-            Program.Draw(buffer, texture, matrix.MVP, true);
+            Program.Draw(buffer, texture, matrix, true);
             Program.End( );
             ((EntityRenderer)Renderer).Draw( );
         }
 
         public void Update (float dt, int focusEntityID) {
+            if (buffer == null) {
+                buffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 3), new GPUBuffer(2, DrawSize.Area * 3, GenerateVertexCoords( )), new GPUBuffer(2, DrawSize.Area * 3));
+                ((EntityRenderer)Renderer).REINIT( );
+            }
+
             foreach (Entity entity in GetEntities( ))
                 entity.Update(dt);
             UpdateFocus( );
@@ -155,7 +163,7 @@ namespace mapKnight.Extended.Graphics {
                 Vector2 intNextTile = new Vector2((int)Mathf.Clamp(nextTile.X, 0, Width - DrawSize.Width), (int)Mathf.Clamp(nextTile.Y, 0, Height - DrawSize.Height));
                 if (updateTile != intNextTile) {
                     updateTile = intNextTile;
-                    UpdateTextureBuffer( );
+                    ((GPUBuffer)buffer.TextureBuffer).Put(GenerateTextureCoords( ));
                 }
             }
         }
@@ -188,7 +196,7 @@ namespace mapKnight.Extended.Graphics {
             return ++lastSpecies;
         }
 
-        public int NewID ( ) {
+        public int NewInstance ( ) {
             return ++lastID;
         }
     }

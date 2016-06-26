@@ -1,4 +1,6 @@
-﻿using mapKnight.Core;
+﻿using System;
+using mapKnight.Core;
+using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Handle;
 using OpenTK;
 using OpenTK.Graphics.ES20;
@@ -11,20 +13,35 @@ namespace mapKnight.Extended.Graphics.Programs {
             mvpMatrixHandle = new UniformMatrixHandle(glProgram, "u_mvpmatrix");
         }
 
-        public void Draw (BufferBatch buffer, Texture2D texture, Matrix4 matrix, bool alphaBlending = false) {
-            Draw(buffer.Verticies, buffer.Dimesions, buffer.Texture, buffer.Indicies, texture.ID, matrix, buffer.QuadCount * 6, alphaBlending);
+        public void Draw (BufferBatch buffer, Texture2D texture, Matrix matrix, bool alphaBlending = true) {
+            Draw(buffer, texture, matrix, buffer.IndexBuffer.Length, alphaBlending);
         }
 
-        public void Draw (float[ ] vertexBuffer, float[ ] textureBuffer, short[ ] indexBuffer, int texture, Matrix4 matrix, bool alphaBlending = true) {
-            Draw(vertexBuffer, 2, textureBuffer, indexBuffer, texture, matrix, indexBuffer.Length, alphaBlending);
+        public void Draw (BufferBatch buffer, Texture2D texture, Matrix matrix, int count, bool alphaBlending = true) {
+            Draw(buffer.IndexBuffer, buffer.VertexBuffer, buffer.TextureBuffer, texture, matrix, count, alphaBlending);
         }
 
-        public void Draw (float[ ] vertexBuffer, int dimension, float[ ] textureBuffer, short[ ] indexBuffer, int texture, Matrix4 matrix, int count, bool alphaBlending = true) {
-            Apply(texture, vertexBuffer, dimension, textureBuffer, alphaBlending);
-            mvpMatrixHandle.Set(matrix);
-            GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, indexBuffer);
+        public void Draw (IndexBuffer indexbuffer, IAttributeBuffer vertexbuffer, IAttributeBuffer texturebuffer, Texture2D texture, Matrix matrix, int count, bool alphablending = true) {
+            Apply(texture.ID, vertexbuffer, texturebuffer, alphablending);
+            mvpMatrixHandle.Set(matrix.MVP);
+            indexbuffer.Bind( );
+
+            GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
 
         public static MatrixProgram Program { get; set; }
+
+        public class BufferBatch {
+            public IndexBuffer IndexBuffer { get; set; }
+            public IAttributeBuffer VertexBuffer { get; set; }
+            public IAttributeBuffer TextureBuffer { get; set; }
+
+            public BufferBatch (IndexBuffer indexbuffer, IAttributeBuffer vertexbuffer, IAttributeBuffer texturebuffer) {
+                IndexBuffer = indexbuffer;
+                VertexBuffer = vertexbuffer;
+                TextureBuffer = texturebuffer;
+            }
+
+        }
     }
 }

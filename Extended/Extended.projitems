@@ -43,10 +43,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Bone.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\BufferBatch.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Camera.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\CachedGPUBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IAttributeBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\ClientBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\GPUBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IndexBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Color.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\ColorBufferBatch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\GUI\GUIBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\GUI\GUIButton.cs" />

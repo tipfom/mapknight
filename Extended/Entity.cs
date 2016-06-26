@@ -21,7 +21,7 @@ namespace mapKnight.Extended {
             Owner = owner;
             Transform = transform;
             Species = species;
-            ID = owner.NewID( );
+            ID = owner.NewInstance( );
 
             Component.ResolveDependencies (ref components);
             foreach (ComponentConfig config in components) {

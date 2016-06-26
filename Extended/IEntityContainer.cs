@@ -1,6 +1,6 @@
-using mapKnight.Core;
 using System;
 using System.Collections.Generic;
+using mapKnight.Core;
 
 namespace mapKnight.Extended {
     public interface IEntityContainer {
@@ -17,7 +17,7 @@ namespace mapKnight.Extended {
         bool IsOnScreen (Entity entity);
 
         int NewSpecies ( );
-        int NewID ( );
+        int NewInstance ( );
 
         float VertexSize { get; }
 

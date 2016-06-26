@@ -1,4 +1,5 @@
 ﻿using mapKnight.Core;
+using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Handle;
 using OpenTK.Graphics.ES20;
 
@@ -27,14 +28,16 @@ namespace mapKnight.Extended.Graphics.Programs {
         public virtual void End ( ) {
             positionHandle.Disable( );
             textureCoordsHandle.Disable( );
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
-        protected void Apply (int texture, float[ ] vertexBuffer, int dimension, float[ ] textureBuffer, bool alphaBlending) {
+        protected void Apply (int texture, IAttributeBuffer vertexbuffer, IAttributeBuffer texturebuffer, bool alphaBlending) {
             if (alphaBlending)
                 EnableAlphaBlending( );
             textureHandle.Set(texture);
-            positionHandle.Set(vertexBuffer, dimension);
-            textureCoordsHandle.Set(textureBuffer, 2);
+            vertexbuffer.Bind(positionHandle);
+            texturebuffer.Bind(textureCoordsHandle);
         }
 
         private void EnableAlphaBlending ( ) {
