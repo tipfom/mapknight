@@ -81,16 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetProvider.cs" />
-    <Compile Include="CGL\CGLMap.cs" />
     <Compile Include="TouchHandler.cs" />
-    <Compile Include="Scenes\GameScene.cs" />
-    <Compile Include="Scenes\MainMenuScene.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="View.cs" />
     <Compile Include="Activity.cs" />
-    <Compile Include="CGL\CGLCamera.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface.json" />
@@ -108,7 +104,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CGL\GUI\" />
     <Folder Include="Resources\layout\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

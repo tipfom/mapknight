@@ -1,10 +1,11 @@
-﻿using mapKnight.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using mapKnight.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
+using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace mapKnight.ToolKit {

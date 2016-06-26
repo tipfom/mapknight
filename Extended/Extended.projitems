@@ -41,15 +41,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)EntityConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Bone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\CachedGPUBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IAttributeBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\ClientBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\GPUBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IndexBuffer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Color.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\GUI\GUIBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\GUI\GUIButton.cs" />
@@ -73,7 +70,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Screens\MainMenuScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteBatch.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Step.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Texture2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />

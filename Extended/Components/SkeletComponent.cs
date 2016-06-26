@@ -1,17 +1,17 @@
+using System.Collections.Generic;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Communication;
 using mapKnight.Extended.Graphics;
-using System.Collections.Generic;
 
 namespace mapKnight.Extended.Components {
     public class SkeletComponent : Component {
-        Dictionary<string, float[]> defaultVertexData;
+        Dictionary<string, float[ ]> defaultVertexData;
 
-        public SkeletComponent (Entity owner, Dictionary<string, Bone> bones) : base (owner) {
-            defaultVertexData = new Dictionary<string, float[]> ();
+        public SkeletComponent (Entity owner, Dictionary<string, Bone> bones) : base(owner) {
+            defaultVertexData = new Dictionary<string, float[ ]>( );
             foreach (var entry in bones) {
-                defaultVertexData.Add (entry.Key,
-                    new float[] {
+                defaultVertexData.Add(entry.Key,
+                    new float[ ] {
                         entry.Value.Position.X - entry.Value.Size.X / 2,
                         entry.Value.Position.Y + entry.Value.Size.Y / 2,
                         entry.Value.Position.X - entry.Value.Size.X / 2,
@@ -25,15 +25,15 @@ namespace mapKnight.Extended.Components {
         }
 
         public override void Update (float dt) {
-            Dictionary<string, float[]> currentVertexData;
+            Dictionary<string, float[ ]> currentVertexData;
             Identifier sender = Identifier.Skelet;
 
-            if (!Owner.HasComponentInfo (Identifier.Skelet))
-                currentVertexData = defaultVertexData.DeepClone ();
+            if (!Owner.HasComponentInfo(Identifier.Skelet))
+                currentVertexData = defaultVertexData.DeepClone( );
             else {
-                Info ComponentInfo = Owner.GetComponentInfo (Identifier.Skelet);
+                Info ComponentInfo = Owner.GetComponentInfo(Identifier.Skelet);
                 sender = ComponentInfo.Sender;
-                currentVertexData = (Dictionary<string, float[]>)ComponentInfo.Data;
+                currentVertexData = (Dictionary<string, float[ ]>)ComponentInfo.Data;
             }
 
             // update currentvertexdata based on the current transform
@@ -44,7 +44,14 @@ namespace mapKnight.Extended.Components {
                 }
             }
 
-            Owner.SetComponentInfo (Identifier.Draw, sender, Data.Verticies, currentVertexData);
+            Owner.SetComponentInfo(Identifier.Draw, sender, Data.Verticies, currentVertexData);
+        }
+
+        public struct Bone {
+            public Vector2 Position;
+            public Vector2 Size;
+            public bool Mirrored;
+            public float Rotation;
         }
     }
 }

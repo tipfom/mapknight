@@ -1,5 +1,6 @@
 using mapKnight.Extended.Graphics;
 using System.Collections.Generic;
+using static mapKnight.Extended.Components.AnimationComponent;
 
 namespace mapKnight.Extended.Components.Configs {
     public class AnimationComponentConfig : ComponentConfig {
@@ -7,7 +8,7 @@ namespace mapKnight.Extended.Components.Configs {
         public List<Animation> Animations;
 
         public override Component Create (Entity owner) {
-            return new AnimationComponent (owner, Animations);
+            return new AnimationComponent(owner, Animations);
         }
     }
 }

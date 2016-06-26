@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Anchor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Color.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ChangedHashException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MapLoadException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingMapIdentifierException.cs" />
