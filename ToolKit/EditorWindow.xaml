@@ -16,9 +16,9 @@
     <DockPanel>
         <Menu Name="menu_editor" IsMainMenu="True" DockPanel.Dock="Top" Height="24" Background="White">
             <MenuItem Header="_PROJECT" Height="24">
-                <MenuItem Header="NEW" Command="New" Icon="{StaticResource ResourceKey=image_project_new }"/>
-                <MenuItem Header="OPEN" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
-                <MenuItem Header="SAVE" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
+                <MenuItem Header="NEW" Height="22" Command="New" Icon="{StaticResource ResourceKey=image_project_new }"/>
+                <MenuItem Header="OPEN" Height="22" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
+                <MenuItem Header="SAVE" Height="22" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
             </MenuItem>
             <MenuItem Header="_ABOUT" Click="About_Click"/>
         </Menu>

@@ -29,20 +29,21 @@ namespace mapKnight.ToolKit {
 
         private List<UIElement> _Menu = new List<UIElement>( ) {
             new MenuItem( ) { Header = "MAP", Items = {
-                    new MenuItem() { Header = "NEW" , Icon = App.Current.FindResource("image_map_new") },
-                    new MenuItem() { Header = "LOAD" }
+                    new MenuItem() { Header = "NEW", Height = 22, Icon = App.Current.FindResource("image_map_new") },
+                    new MenuItem() { Header = "LOAD", Height = 22 }
                 } },
-            new ComboBox() { Width = 260, Margin = new Thickness(-6, 0, -6, 0)},
+            new ComboBox() { Width = 260, Margin = new Thickness(-6, 0, -6, 0), VerticalAlignment = VerticalAlignment.Center },
             new MenuItem() { Header = "SHOW LAYER", IsEnabled = false },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0) },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0) },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0) },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
             new Separator() { },
             new MenuItem() {Header ="MODIFY LAYER",IsEnabled =false },
-            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0) },
-            new RadioButton() {IsChecked = true, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0) },
-            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0) },
+            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
+            new RadioButton() {IsChecked = true, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
+            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
             new Separator(),
+            new Border() { Child = (Image)App.Current.FindResource("image_map_undo"), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
             new Border() { Child = (Image)App.Current.FindResource("image_map_pen"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
             new Border() { Child = (Image)App.Current.FindResource("image_map_eraser"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0) },
             new Border() { Child = (Image)App.Current.FindResource("image_map_fill"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0) },
@@ -59,6 +60,8 @@ namespace mapKnight.ToolKit {
         private int currentlyEditionTilesMap = -1;
         private int currentlyEditingTile = -1;
         private int currentLayer = 1;
+        //                 Map  Cache List von   Koord  Layer alter Wert IsRotation
+        private Dictionary<Map, Stack<List<Tuple<Point, int, int, bool>>>> Cache = new Dictionary<Map, Stack<List<Tuple<Point, int, int, bool>>>>( );
         private Tool currentTool = Tool.Pen;
         private Point lastClickedTile = new Point(-1, -1);
 
@@ -81,29 +84,32 @@ namespace mapKnight.ToolKit {
             ((RadioButton)_Menu[10]).Checked += (sender, e) => { currentLayer = 2; };
 
             _Menu[12].MouseDown += (sender, e) => {
-                currentTool = Tool.Pen;
-                ResetToolBorders( );
-                ((Border)_Menu[12]).BorderThickness = new Thickness(1);
+                UndoLast( );
             };
             _Menu[13].MouseDown += (sender, e) => {
-                currentTool = Tool.Eraser;
+                currentTool = Tool.Pen;
                 ResetToolBorders( );
                 ((Border)_Menu[13]).BorderThickness = new Thickness(1);
             };
             _Menu[14].MouseDown += (sender, e) => {
-                currentTool = Tool.Filler;
+                currentTool = Tool.Eraser;
                 ResetToolBorders( );
                 ((Border)_Menu[14]).BorderThickness = new Thickness(1);
             };
             _Menu[15].MouseDown += (sender, e) => {
-                currentTool = Tool.Pointer;
+                currentTool = Tool.Filler;
                 ResetToolBorders( );
                 ((Border)_Menu[15]).BorderThickness = new Thickness(1);
             };
             _Menu[16].MouseDown += (sender, e) => {
-                currentTool = Tool.Rotater;
+                currentTool = Tool.Pointer;
                 ResetToolBorders( );
                 ((Border)_Menu[16]).BorderThickness = new Thickness(1);
+            };
+            _Menu[17].MouseDown += (sender, e) => {
+                currentTool = Tool.Rotater;
+                ResetToolBorders( );
+                ((Border)_Menu[17]).BorderThickness = new Thickness(1);
             };
 
             App.ProjectChanged += ( ) => {
@@ -114,6 +120,7 @@ namespace mapKnight.ToolKit {
 
         private void Reset ( ) {
             ((ComboBox)_Menu[1]).Items.Clear( );
+            Cache.Clear( );
             currentlyEditingTile = -1;
             currentlyEditionTilesMap = -1;
             wrappanel_tiles.Items.Clear( );
@@ -125,11 +132,27 @@ namespace mapKnight.ToolKit {
         }
 
         private void ResetToolBorders ( ) {
-            ((Border)_Menu[12]).BorderThickness = new Thickness(0);
             ((Border)_Menu[13]).BorderThickness = new Thickness(0);
             ((Border)_Menu[14]).BorderThickness = new Thickness(0);
             ((Border)_Menu[15]).BorderThickness = new Thickness(0);
             ((Border)_Menu[16]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[17]).BorderThickness = new Thickness(0);
+        }
+
+        private void UndoLast ( ) {
+            if (currentMap == null || Cache[currentMap].Count == 0)
+                return;
+
+            foreach (Tuple<Point, int, int, bool> undoData in Cache[currentMap].Pop( )) {
+                if (undoData.Item4) {
+                    // tile got rotated
+                    currentMap.SetRotation((int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2, undoData.Item3 / 2f);
+                } else {
+                    // tile got changed
+                    currentMap.Data[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3;
+                }
+            }
+            tilemapview.Update( );
         }
 
         private void Project_MapAdded (Map obj) {
@@ -150,6 +173,7 @@ namespace mapKnight.ToolKit {
             ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
 
             UpdateListbox( );
+            Cache.Add(obj, new Stack<List<Tuple<Point, int, int, bool>>>( ));
         }
 
         private void CurrentMapChanged (object sender, SelectionChangedEventArgs e) {
@@ -249,10 +273,14 @@ namespace mapKnight.ToolKit {
             if (GetClickedTile(e, out clickedTile) && (e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed)) {
                 lastClickedTile = clickedTile;
                 if (e.RightButton == MouseButtonState.Pressed) {
+                    Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
+                                    new Tuple<Point, int, int,bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                     currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                 } else if (e.LeftButton == MouseButtonState.Pressed) {
                     switch (currentTool) {
                         case Tool.Eraser:
+                            Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
+                                    new Tuple<Point, int, int,bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                             break;
                         case Tool.Filler:
@@ -262,12 +290,14 @@ namespace mapKnight.ToolKit {
                             int replacing = currentTileIndex;
                             Queue<Point> pointQueue = new Queue<Point>( );
                             pointQueue.Enqueue(clickedTile);
+                            List<Tuple<Point, int, int, bool>> changesForCache = new List<Tuple<Point, int, int, bool>>( );
                             while (pointQueue.Count > 0) {
                                 Point current = pointQueue.Dequeue( );
                                 if (current.X < 0 || current.X >= currentMap.Width || current.Y < 0 || current.Y >= currentMap.Height)
                                     continue;
                                 if (currentMap.Data[(int)current.X, (int)current.Y, currentLayer] == searching) {
                                     currentMap.Data[(int)current.X, (int)current.Y, currentLayer] = replacing;
+                                    changesForCache.Add(new Tuple<Point, int, int, bool>(current, currentLayer, searching, false));
 
                                     pointQueue.Enqueue(new Point(current.X - 1, current.Y));
                                     pointQueue.Enqueue(new Point(current.X + 1, current.Y));
@@ -275,8 +305,11 @@ namespace mapKnight.ToolKit {
                                     pointQueue.Enqueue(new Point(current.X, current.Y + 1));
                                 }
                             }
+                            Cache[currentMap].Push(changesForCache);
                             break;
                         case Tool.Pen:
+                            Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
+                                    new Tuple<Point, int, int, bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
                             break;
                         case Tool.Pointer:
@@ -284,6 +317,8 @@ namespace mapKnight.ToolKit {
                             break;
                         case Tool.Rotater:
                             float tileRotation = currentMap.GetRotation((int)clickedTile.X, (int)clickedTile.Y, currentLayer);
+                            Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
+                                    new Tuple<Point, int, int, bool>(clickedTile,currentLayer, (int)(tileRotation * 2), true)});
                             tileRotation += 0.5f;
                             tileRotation %= 2f;
                             currentMap.SetRotation((int)clickedTile.X, (int)clickedTile.Y, currentLayer, tileRotation);
@@ -306,14 +341,20 @@ namespace mapKnight.ToolKit {
             if (GetClickedTile(e, out clickedTile) && ((int)clickedTile.X != (int)lastClickedTile.X || (int)clickedTile.Y != (int)lastClickedTile.Y) && (e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed)) {
                 lastClickedTile = clickedTile;
                 if (e.RightButton == MouseButtonState.Pressed) {
+                    Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
+                                    new Tuple<Point, int, int,bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                     currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                     update = true;
                 } else if (e.LeftButton == MouseButtonState.Pressed) {
                     switch (currentTool) {
                         case Tool.Eraser:
+                            Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
+                                    new Tuple<Point, int, int, bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                             break;
                         case Tool.Pen:
+                            Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
+                                    new Tuple<Point, int, int, bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
                             break;
                         case Tool.Pointer:
