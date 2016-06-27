@@ -78,7 +78,7 @@
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False" Background="White"/>
         <Grid Grid.Column="2">
-            <local:TileMapView x:Name="tilemapview" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter"/>
+            <local:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter"/>
             <ScrollBar x:Name="scrollbar_horizontal"
                        Orientation="Horizontal" VerticalAlignment="Bottom"
                        ValueChanged="scrollbar_horizontal_ValueChanged"/>

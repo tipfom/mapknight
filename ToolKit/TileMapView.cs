@@ -1,14 +1,18 @@
-﻿using mapKnight.Core;
+﻿using System;
+using System.ComponentModel;
+using mapKnight.Core;
 using mapKnight.ToolKit.Xna;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.ComponentModel;
 using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace mapKnight.ToolKit {
     public class TileMapView : XnaControl {
+        const int TILESIZE_MIN = 20;
+        const int TILESIZE_MAX = 100;
+        const int ZOOM_LEVELS = 15;
+
         private Map _CurrentMap;
         public Map CurrentMap {
             get { return _CurrentMap; }
@@ -21,10 +25,20 @@ namespace mapKnight.ToolKit {
             set { _Offset = value; Update( ); }
         }
 
+
+        private int _ZoomLevel = 6;
+        public int ZoomLevel {
+            get { return _ZoomLevel; }
+            set {
+                _ZoomLevel = (int)Mathf.Clamp(value, 0, ZOOM_LEVELS);
+                _TileSize = (int)Mathf.Interpolate(TILESIZE_MIN, TILESIZE_MAX, (float)_ZoomLevel / ZOOM_LEVELS);
+                Update( );
+            }
+        }
+
         private int _TileSize = 40;
         public int TileSize {
             get { return _TileSize; }
-            set { _TileSize = value; Update( ); }
         }
 
         private Point _CurrentSelection = new Point(-1, -1);

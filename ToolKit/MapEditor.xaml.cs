@@ -1,6 +1,4 @@
-﻿using mapKnight.Core;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -10,6 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using mapKnight.Core;
+using Microsoft.Win32;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using Point = System.Windows.Point;
@@ -402,6 +402,14 @@ namespace mapKnight.ToolKit {
                 } else {
                     listview_tile_attributes.Items.Add(new AttributeListViewEntry(false, attribute.ToString( ), ""));
                 }
+            }
+        }
+
+        private void tilemapview_PreviewMouseWheel (object sender, MouseWheelEventArgs e) {
+            if (e.Delta > 0) {
+                tilemapview.ZoomLevel++;
+            } else {
+                tilemapview.ZoomLevel--;
             }
         }
 
