@@ -16,24 +16,24 @@ namespace mapKnight.Extended.Components {
         private int nextWaypointTime;
         private int currentWaypointDuration;
 
-        public PlatformComponent (Entity owner, List<Vector2> waypoints, float speed) : base (owner) {
-            this.State = new Vector2 (0, 0);
+        public PlatformComponent (Entity owner, List<Vector2> waypoints, float speed) : base(owner) {
+            this.State = new Vector2(0, 0);
             this.waypoints = waypoints;
-            this.speed = (float)Math.Pow (speed, 2);
+            this.speed = (float)Math.Pow(speed, 2);
 
             // translate waypoints (since they are 0,0 based and need to start at the entities startposition)
             for (int i = 0; i < waypoints.Count; i++)
                 waypoints[i] += owner.Transform.Center;
         }
 
-        public override void Prepare () {
+        public override void Prepare ( ) {
             currentWaypointIndex = 0;
             nextWaypointIndex = 1;
             nextWaypointTime = Environment.TickCount;
-            PrepareNextStep ();
+            PrepareNextStep( );
         }
 
-        public override void Update (float dt) {
+        public override void Update (TimeSpan dt) {
             if (Environment.TickCount >= nextWaypointTime) {
                 // next waypoint
                 currentWaypointIndex = nextWaypointIndex;
@@ -41,20 +41,20 @@ namespace mapKnight.Extended.Components {
                 if (nextWaypointIndex == waypoints.Count) {
                     nextWaypointIndex = 0;
                 }
-                PrepareNextStep ();
+                PrepareNextStep( );
             }
 
             float progressPercent = 1f - (nextWaypointTime - Environment.TickCount) / (float)currentWaypointDuration;
-            Vector2 nextPosition = Mathf.Interpolate (currentWaypoint, nextWaypoint, progressPercent);
-            this.Owner.Transform.Translate (nextPosition);
+            Vector2 nextPosition = Mathf.Interpolate(currentWaypoint, nextWaypoint, progressPercent);
+            this.Owner.Transform.Translate(nextPosition);
         }
 
-        private int GetCurrentWaypointDuration () {
-            return (int)((currentWaypoint - nextWaypoint).MagnitudeSqr () / speed * 1000);
+        private int GetCurrentWaypointDuration ( ) {
+            return (int)((currentWaypoint - nextWaypoint).MagnitudeSqr( ) / speed * 1000);
         }
 
-        private void PrepareNextStep () {
-            currentWaypointDuration = GetCurrentWaypointDuration ();
+        private void PrepareNextStep ( ) {
+            currentWaypointDuration = GetCurrentWaypointDuration( );
             nextWaypointTime += currentWaypointDuration;
             this.State = (nextWaypoint - currentWaypoint) / (currentWaypointDuration / 1000f); // current velocity
         }

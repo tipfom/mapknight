@@ -10,7 +10,7 @@ namespace mapKnight.Extended.Components {
 
         }
 
-        public override void Update (float dt) {
+        public override void Update (TimeSpan dt) {
             if (Owner.IsOnScreen) {
                 List<VertexData> entityVertexData = new List<VertexData>( );
                 Dictionary<string, string> spriteData = new Dictionary<string, string>( );
@@ -29,7 +29,7 @@ namespace mapKnight.Extended.Components {
                             break;
                     }
                 }
-                
+
                 Vector2 positionOnScreen = Owner.PositionOnScreen;
                 foreach (var entry in vertexData) {
                     VertexData entryVertexData = new VertexData(

@@ -38,7 +38,7 @@ namespace mapKnight.Extended.Graphics.Screens {
         }
 
         public override void Update (TimeSpan time) {
-            map.Update((float)time.Milliseconds, 1);
+            map.Update(time, 1);
             base.Update(time);
         }
     }

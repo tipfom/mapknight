@@ -12,7 +12,7 @@ namespace mapKnight.Extended.Components {
             defaultSpeed = defaultspeed;
         }
 
-        public override void Update (float dt) {
+        public override void Update (TimeSpan dt) {
             if (Owner.HasComponentInfo(Identifier.Speed)) {
                 Vector2 slowDown = (Vector2)Owner.GetComponentInfo(Identifier.Speed).Data;
                 this.State = defaultSpeed * slowDown;

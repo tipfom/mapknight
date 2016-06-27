@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Communication;
@@ -24,7 +25,7 @@ namespace mapKnight.Extended.Components {
             }
         }
 
-        public override void Update (float dt) {
+        public override void Update (TimeSpan dt) {
             Dictionary<string, float[ ]> currentVertexData;
             Identifier sender = Identifier.Skelet;
 

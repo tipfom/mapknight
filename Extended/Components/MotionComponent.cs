@@ -24,10 +24,9 @@ namespace mapKnight.Extended.Components {
             HasPlatformCollider = platformCollider;
         }
 
-        public override void Update (float dt) {
-            if (Math.Abs(dt) > MAX_DELTA_TIME)
+        public override void Update (TimeSpan dt) {
+            if (Math.Abs(dt.Milliseconds) > MAX_DELTA_TIME)
                 return;
-            dt /= 1000f;
 
             Vector2 appliedAcceleration = new Vector2( ); // reset acceleration
             List<Vector2> appliedVelocities = new List<Vector2>( );
@@ -65,11 +64,11 @@ namespace mapKnight.Extended.Components {
             }
 
             // update velocity
-            this.Velocity += appliedAcceleration * dt;
+            this.Velocity += appliedAcceleration * (float)dt.TotalSeconds;
             foreach (Vector2 velocity in appliedVelocities)
                 this.Velocity += velocity;
 
-            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * dt, Owner.Transform.Bounds);
+            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * (float)dt.TotalSeconds, Owner.Transform.Bounds);
             if (HasMapCollider) {
                 moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);

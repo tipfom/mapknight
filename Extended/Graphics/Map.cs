@@ -120,7 +120,7 @@ namespace mapKnight.Extended.Graphics {
             ((EntityRenderer)Renderer).Draw( );
         }
 
-        public void Update (float dt, int focusEntityID) {
+        public void Update (TimeSpan dt, int focusEntityID) {
             if (buffer == null) {
                 buffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 3), new GPUBuffer(2, DrawSize.Area * 3, GenerateVertexCoords( )), new GPUBuffer(2, DrawSize.Area * 3));
                 ((EntityRenderer)Renderer).REINIT( );

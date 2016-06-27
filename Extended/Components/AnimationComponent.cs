@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Components {
             this.animations = animations;
         }
 
-        public override void Update (float dt) {
+        public override void Update (TimeSpan dt) {
             while (Owner.HasComponentInfo(Identifier.Animation)) {
                 Info ComponentInfo = Owner.GetComponentInfo(Identifier.Animation);
                 if (ComponentInfo.Action == Data.Animation) {
@@ -28,7 +28,7 @@ namespace mapKnight.Extended.Components {
                 isAnimating = current.IsRunning;
                 if (!isAnimating)
                     return;
-                Owner.SetComponentInfo(Identifier.Skelet, Identifier.Animation, Data.Verticies, animations[currentAnimation].Update(dt));
+                Owner.SetComponentInfo(Identifier.Skelet, Identifier.Animation, Data.Verticies, animations[currentAnimation].Update(dt.Milliseconds));
             }
         }
 

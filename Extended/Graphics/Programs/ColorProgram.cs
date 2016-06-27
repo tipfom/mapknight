@@ -40,7 +40,7 @@ namespace mapKnight.Extended.Graphics.Programs {
             colorbuffer.Bind(colorHandle);
             mvpMatrixHandle.Set(matrix.MVP);
             indexbuffer.Bind( );
-            GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, IntPtr.Zero);
+            GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, new IntPtr(offset));
         }
 
         public static ColorProgram Program { get; set; }

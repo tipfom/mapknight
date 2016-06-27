@@ -16,7 +16,7 @@ namespace mapKnight.Extended {
             this.State = null;
         }
 
-        public virtual void Update (float dt) {
+        public virtual void Update (TimeSpan dt) {
 
         }
 

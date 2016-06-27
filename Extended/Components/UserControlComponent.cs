@@ -12,7 +12,7 @@ namespace mapKnight.Extended.Components {
             inputProvider = inputprovider;
         }
 
-        public override void Update (float dt) {
+        public override void Update (TimeSpan dt) {
             Vector2 speed = (Vector2)Owner.GetComponentState(Identifier.Speed);
             if (inputProvider.Jump && ((MotionComponent)Owner.GetComponent(Identifier.Motion)).IsOnGround) {
                 Owner.SetComponentInfo(Identifier.Motion, Identifier.UserControl, Data.Velocity, new Vector2(0, speed.Y));
