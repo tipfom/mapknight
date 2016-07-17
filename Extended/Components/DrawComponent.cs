@@ -1,8 +1,7 @@
-using mapKnight.Core;
-using mapKnight.Extended.Components.Communication;
-using mapKnight.Extended.Graphics;
 using System;
 using System.Collections.Generic;
+using mapKnight.Core;
+using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
     public class DrawComponent : Component {
@@ -10,21 +9,21 @@ namespace mapKnight.Extended.Components {
 
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void PostUpdate ( ) {
             if (Owner.IsOnScreen) {
                 List<VertexData> entityVertexData = new List<VertexData>( );
                 Dictionary<string, string> spriteData = new Dictionary<string, string>( );
                 Dictionary<string, float[ ]> vertexData = new Dictionary<string, float[ ]>( );
                 Color colorData = Color.White;
 
-                while (Owner.HasComponentInfo(Identifier.Draw)) {
-                    Info ComponentInfo = Owner.GetComponentInfo(Identifier.Draw);
+                while (Owner.HasComponentInfo(ComponentEnum.Draw)) {
+                    ComponentInfo ComponentInfo = Owner.GetComponentInfo(ComponentEnum.Draw);
                     switch (ComponentInfo.Action) {
-                        case Data.Texture:
+                        case ComponentData.Texture:
                             // bodypart name, sprite name
                             spriteData = (Dictionary<string, string>)ComponentInfo.Data;
                             break;
-                        case Data.Verticies:
+                        case ComponentData.Verticies:
                             vertexData = (Dictionary<string, float[ ]>)ComponentInfo.Data;
                             break;
                     }
@@ -41,6 +40,16 @@ namespace mapKnight.Extended.Components {
                 }
 
                 Owner.Owner.Renderer.QueueVertexData(Owner.Species, entityVertexData);
+            } else {
+                while (Owner.HasComponentInfo(ComponentEnum.Draw)) {
+                    Owner.GetComponentInfo(ComponentEnum.Draw);
+                }
+            }
+        }
+
+        public new class Configuration : Component.Configuration {
+            public override Component Create (Entity owner) {
+                return new DrawComponent(owner);
             }
         }
     }

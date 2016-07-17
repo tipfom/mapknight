@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using mapKnight.Extended.Components.Communication;
 using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
+    [ComponentRequirement(typeof(DrawComponent))]
+    [ComponentOrder(ComponentEnum.Draw)]
     public class TextureComponent : Component {
         private string textureName;
         private Dictionary<string, string> textures;
@@ -18,7 +19,15 @@ namespace mapKnight.Extended.Components {
         }
 
         public override void Update (TimeSpan dt) {
-            Owner.SetComponentInfo(Identifier.Draw, Identifier.Texture, Data.Texture, textures);
+            Owner.SetComponentInfo(ComponentEnum.Draw, ComponentEnum.Texture, ComponentData.Texture, textures);
+        }
+
+        public new class Configuration : Component.Configuration {
+            public string Texture;
+
+            public override Component Create (Entity owner) {
+                return new TextureComponent(owner, Texture);
+            }
         }
     }
 }

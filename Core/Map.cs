@@ -1,10 +1,10 @@
-﻿using System;
+﻿using mapKnight.Core.Exceptions;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using mapKnight.Core.Exceptions;
-using Newtonsoft.Json;
 
 namespace mapKnight.Core {
     public class Map {
@@ -21,10 +21,10 @@ namespace mapKnight.Core {
 
         public Vector2 SpawnPoint;
         public Tile[ ] Tiles;
-        public string Texture;
-        public string Creator;
-        public string Name;
-        public Vector2 Gravity;
+        public string Texture { get; set; }
+        public string Creator { get; set; }
+        public string Name { get; set; }
+        public Vector2 Gravity { get; set; }
 
         public Map (Size size, string creator, string name) {
             Size = size;
@@ -208,7 +208,7 @@ namespace mapKnight.Core {
 
             Creator = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Name = reader.ReadBytes(reader.ReadInt16( )).Decode( );
-            Gravity = new Vector2(0, 10);
+            Gravity = new Vector2(0, -10);
         }
 
         private void Deserialize00002 (BinaryReader reader) {

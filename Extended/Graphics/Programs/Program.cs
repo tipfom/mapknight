@@ -1,10 +1,11 @@
-﻿using mapKnight.Core;
+﻿using System;
+using mapKnight.Core;
 using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Handle;
 using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Programs {
-    public abstract class Program {
+    public abstract class Program : IDisposable {
         protected int glProgram;
 
         private TextureHandle textureHandle;
@@ -38,6 +39,10 @@ namespace mapKnight.Extended.Graphics.Programs {
             textureHandle.Set(texture);
             vertexbuffer.Bind(positionHandle);
             texturebuffer.Bind(textureCoordsHandle);
+        }
+
+        public void Dispose ( ) {
+            GL.DeleteProgram(glProgram);
         }
 
         private void EnableAlphaBlending ( ) {

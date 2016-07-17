@@ -16,7 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingMapIdentifierException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpolation.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Map.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rectangle.cs" />

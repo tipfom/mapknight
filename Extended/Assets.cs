@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using mapKnight.Core;
+using mapKnight.Extended.Graphics;
+using mapKnight.Extended.Graphics.Programs;
 using Newtonsoft.Json;
 using OpenTK.Graphics.ES20;
-using mapKnight.Extended.Graphics;
-using mapKnight.Core;
 
 namespace mapKnight.Extended {
     public static class Assets {
@@ -18,13 +19,28 @@ namespace mapKnight.Extended {
                 return (T)((object)GetText(Path.Combine(paths)));
             } else if (request == typeof(SpriteBatch) && paths.Length == 1) {
                 return (T)((object)GetSprite(paths[0]));
-            } else if (request == typeof(EntityConfig) && paths.Length == 1) {
+            } else if (request == typeof(Entity.Configuration) && paths.Length == 1) {
                 return (T)((object)GetEntityConfig(paths[0]));
             } else if (request == typeof(Graphics.Map) && paths.Length == 1) {
                 return (T)((object)GetMap(paths[0]));
             } else {
                 throw new TypeLoadException($"requested filetype { request.FullName } couldnt be loaded with { paths.Length } parameters");
             }
+        }
+
+        public static void Destroy ( ) {
+            foreach (Texture2D texture in textureCache.Values)
+                texture.Dispose( );
+            textureCache = null;
+
+            ColorProgram.Program.Dispose( );
+            MatrixProgram.Program.Dispose( );
+            foreach (int shader in loadedVertexShader.Values)
+                GL.DeleteShader(shader);
+            loadedVertexShader = null;
+            foreach (int shader in loadedFragmentShader.Values)
+                GL.DeleteShader(shader);
+            loadedFragmentShader = null;
         }
 
         static Dictionary<string, Texture2D> textureCache = new Dictionary<string, Texture2D>( );
@@ -85,15 +101,14 @@ namespace mapKnight.Extended {
             return new Graphics.Map(AssetProvider.GetStream("maps", name + ".map"));
         }
 
-
         private static JsonSerializerSettings entitySerializerSettings = new JsonSerializerSettings( ) {
             TypeNameHandling = TypeNameHandling.Auto,
             Binder = Component.SerializationBinder
         };
-        public static EntityConfig GetEntityConfig (string name) {
-            return JsonConvert.DeserializeObject<EntityConfig>(GetText("entities", $"{name}.json"), entitySerializerSettings);
-        }
 
+        public static Entity.Configuration GetEntityConfig (string name) {
+            return JsonConvert.DeserializeObject<Entity.Configuration>(GetText("entities", $"{name}.json"), entitySerializerSettings);
+        }
 
         public interface IAssetProvider {
             Stream GetStream (params string[ ] path);

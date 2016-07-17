@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Graphics {
         private ClientBuffer colorBuffer { get { return (ClientBuffer)buffer.ColorBuffer; } }
 
         public EntityRenderer ( ) {
-
+            buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(3, MAX_QUAD_COUNT), new ClientBuffer(4, MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT));
         }
 
         [Obsolete("fix that opengl context thing!!!")]

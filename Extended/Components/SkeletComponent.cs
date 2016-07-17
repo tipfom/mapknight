@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Communication;
 using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
+    [ComponentRequirement(typeof(DrawComponent))]
+    [ComponentOrder(ComponentEnum.Draw)]
     public class SkeletComponent : Component {
         Dictionary<string, float[ ]> defaultVertexData;
 
@@ -27,12 +28,12 @@ namespace mapKnight.Extended.Components {
 
         public override void Update (TimeSpan dt) {
             Dictionary<string, float[ ]> currentVertexData;
-            Identifier sender = Identifier.Skelet;
+            ComponentEnum sender = ComponentEnum.Skelet;
 
-            if (!Owner.HasComponentInfo(Identifier.Skelet))
+            if (!Owner.HasComponentInfo(ComponentEnum.Skelet))
                 currentVertexData = defaultVertexData.DeepClone( );
             else {
-                Info ComponentInfo = Owner.GetComponentInfo(Identifier.Skelet);
+                ComponentInfo ComponentInfo = Owner.GetComponentInfo(ComponentEnum.Skelet);
                 sender = ComponentInfo.Sender;
                 currentVertexData = (Dictionary<string, float[ ]>)ComponentInfo.Data;
             }
@@ -45,7 +46,7 @@ namespace mapKnight.Extended.Components {
                 }
             }
 
-            Owner.SetComponentInfo(Identifier.Draw, sender, Data.Verticies, currentVertexData);
+            Owner.SetComponentInfo(ComponentEnum.Draw, sender, ComponentData.Verticies, currentVertexData);
         }
 
         public struct Bone {
@@ -53,6 +54,14 @@ namespace mapKnight.Extended.Components {
             public Vector2 Size;
             public bool Mirrored;
             public float Rotation;
+        }
+
+        public new class Configuration : Component.Configuration {
+            public Dictionary<string, Bone> Bones;
+
+            public override Component Create (Entity owner) {
+                return new SkeletComponent(owner, Bones);
+            }
         }
     }
 }

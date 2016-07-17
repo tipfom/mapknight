@@ -27,7 +27,7 @@
                 <local:MapEditor x:Name="mapeditor"/>
             </TabItem>
             <TabItem Header="ENTITY" Selector.Selected="Entity_Selected">
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Soon..."/>
+                <local:EntityEditor x:Name="entityeditor"/>
             </TabItem>
         </TabControl>
     </DockPanel>

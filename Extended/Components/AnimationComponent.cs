@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Communication;
-using mapKnight.Extended.Graphics;
 using static mapKnight.Extended.Components.SkeletComponent;
 
 namespace mapKnight.Extended.Components {
+    [ComponentRequirement(typeof(SkeletComponent))]
+    [ComponentOrder(ComponentEnum.Skelet)]
     public class AnimationComponent : Component {
         private List<Animation> animations;
         private int currentAnimation = -1;
@@ -17,9 +17,9 @@ namespace mapKnight.Extended.Components {
         }
 
         public override void Update (TimeSpan dt) {
-            while (Owner.HasComponentInfo(Identifier.Animation)) {
-                Info ComponentInfo = Owner.GetComponentInfo(Identifier.Animation);
-                if (ComponentInfo.Action == Data.Animation) {
+            while (Owner.HasComponentInfo(ComponentEnum.Animation)) {
+                ComponentInfo ComponentInfo = Owner.GetComponentInfo(ComponentEnum.Animation);
+                if (ComponentInfo.Action == ComponentData.Animation) {
                     setAnimation((string)ComponentInfo.Data);
                 }
             }
@@ -28,7 +28,7 @@ namespace mapKnight.Extended.Components {
                 isAnimating = current.IsRunning;
                 if (!isAnimating)
                     return;
-                Owner.SetComponentInfo(Identifier.Skelet, Identifier.Animation, Data.Verticies, animations[currentAnimation].Update(dt.Milliseconds));
+                Owner.SetComponentInfo(ComponentEnum.Skelet, ComponentEnum.Animation, ComponentData.Verticies, animations[currentAnimation].Update(dt.Milliseconds));
             }
         }
 
@@ -93,6 +93,14 @@ namespace mapKnight.Extended.Components {
         public struct Step {
             public int Time;
             public Dictionary<string, Bone> State;
+        }
+
+        public new class Configuration : Component.Configuration {
+            public List<Animation> Animations;
+
+            public override Component Create (Entity owner) {
+                return new AnimationComponent(owner, Animations);
+            }
         }
     }
 }

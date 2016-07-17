@@ -7,9 +7,9 @@ using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Buffer {
     public class GPUBuffer : IAttributeBuffer {
-        public int Dimensions { get; }
-        public int Length { get; }
-        public int Bytes { get; }
+        public int Dimensions { get; private set; }
+        public int Length { get; private set; }
+        public int Bytes { get; private set; }
         public int Stride { get; set; }
 
         private int buffer;
@@ -51,8 +51,12 @@ namespace mapKnight.Extended.Graphics.Buffer {
             GL.VertexAttribPointer(location, Dimensions, VertexAttribPointerType.Float, false, 0, 0);
         }
 
-        public void Delete ( ) {
+        public void Dispose ( ) {
             GL.DeleteBuffers(1, ref buffer);
+            Dimensions = 0;
+            Length = 0;
+            Bytes = 0;
+            Stride = 0;
         }
     }
 }

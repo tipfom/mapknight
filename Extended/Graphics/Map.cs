@@ -9,7 +9,7 @@ using OpenTK.Graphics.ES20;
 using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
 
 namespace mapKnight.Extended.Graphics {
-    public class Map : Core.Map, IEntityContainer {
+    public class Map : Core.Map, IEntityWorld {
         const float DRAW_WIDTH = 18;
 
         private BufferBatch buffer;
@@ -29,12 +29,6 @@ namespace mapKnight.Extended.Graphics {
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
 
-        public Vector2 Gravity {
-            get {
-                return new Vector2(0, -10);
-            }
-        }
-
         public Vector2 Bounds { get; private set; }
 
         public Map (Stream input) : base(input) {
@@ -43,7 +37,6 @@ namespace mapKnight.Extended.Graphics {
             VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
             InitTextureCoords( );
 
-            ErrorCode error = GL.GetErrorCode( );
             texture = Assets.Load<Texture2D>(Texture);
 
             Window.Changed += Window_Changed;
@@ -120,24 +113,26 @@ namespace mapKnight.Extended.Graphics {
             ((EntityRenderer)Renderer).Draw( );
         }
 
-        public void Update (TimeSpan dt, int focusEntityID) {
+        public void Update (TimeSpan dt) {
             if (buffer == null) {
                 buffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 3), new GPUBuffer(2, DrawSize.Area * 3, GenerateVertexCoords( )), new GPUBuffer(2, DrawSize.Area * 3));
                 ((EntityRenderer)Renderer).REINIT( );
             }
 
-            foreach (Entity entity in GetEntities( ))
+            foreach (Entity entity in Entity.Entities)
                 entity.Update(dt);
             UpdateFocus( );
+            foreach (Entity entity in Entity.Entities)
+                entity.PostUpdate( );
         }
 
         public void Focus (int entityID) {
-            focusEntityIndex = entities.FindIndex(entity => entity.ID == entityID);
+            focusEntityIndex = Entity.Entities.FindIndex(entity => entity.ID == entityID);
         }
 
         private void UpdateFocus ( ) {
             if (focusEntityIndex > -1) {
-                Vector2 focusPoint = entities[focusEntityIndex].Transform.Center;
+                Vector2 focusPoint = Entity.Entities[focusEntityIndex].Transform.Center;
                 focusCenter = new Vector2(
                     Mathf.Clamp(focusPoint.X, DrawSize.Width / 2f - 1, Width - DrawSize.Width / 2f + 1),
                     Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f - 1 + yOffsetTile, Height - DrawSize.Height / 2f + 1 - yOffsetTile)
@@ -171,18 +166,6 @@ namespace mapKnight.Extended.Graphics {
         public Vector2 GetPositionOnScreen (Entity entity) {
             return (entity.Transform.Center - focusCenter) * VertexSize;
         }
-        List<Entity> entities = new List<Entity>( );
-        public List<Entity> GetEntities ( ) {
-            return entities;
-        }
-
-        public List<Entity> GetEntities (Predicate<Entity> predicate) {
-            return entities.FindAll(predicate);
-        }
-
-        public void Add (Entity entity) {
-            entities.Add(entity);
-        }
 
         public bool HasCollider (int x, int y) {
             return GetTile(x, y).HasFlag(TileAttribute.Collision);
@@ -190,14 +173,6 @@ namespace mapKnight.Extended.Graphics {
 
         public bool IsOnScreen (Entity entity) {
             return true;
-        }
-
-        public int NewSpecies ( ) {
-            return ++lastSpecies;
-        }
-
-        public int NewInstance ( ) {
-            return ++lastID;
         }
     }
 }

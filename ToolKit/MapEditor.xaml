@@ -44,7 +44,7 @@
             </Grid.RowDefinitions>
             <DockPanel>
                 <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0"/>
-                <Button Grid.Row="0" Content="EXPORT TEMPLATE" Margin="0,0,0,3" Click="buttonexport_Click"/>
+                <Button Content="EXPORT TEMPLATE" Margin="0,0,0,3" Click="buttonexport_Click" VerticalAlignment="Center"/>
             </DockPanel>
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles" 

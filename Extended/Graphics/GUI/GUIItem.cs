@@ -1,6 +1,6 @@
-using mapKnight.Core;
 using System;
 using System.Collections.Generic;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.GUI {
     public abstract class GUIItem {
@@ -27,7 +27,9 @@ namespace mapKnight.Extended.Graphics.GUI {
         public int Depth { get { return _Depth; } set { _Depth = value; DepthOnScreen = DEFAULT_DEPTH + value; RequestUpdate( ); } }
         protected int DepthOnScreen { get; private set; }
 
-        public GUIItem (Rectangle bounds, int depth, bool multiclick = false) {
+        public GUIItem (Screen owner, Rectangle bounds, int depth, bool multiclick = false) {
+            GUIRenderer.Add(owner, this);
+
             this.Bounds = bounds;
             this.multiClick = multiclick;
             this._Depth = depth;

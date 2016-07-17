@@ -1,12 +1,12 @@
-using mapKnight.Core;
 using System.Collections.Generic;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.GUI {
     public class GUILabel : GUIItem {
         public const int CHAR_WIDTH_PIXEL = 7;
         public const int CHAR_HEIGHT_PIXEL = 9;
         public const int CHAR_SPACING_PIXEL = 1;
-        public const int DEFAULT_TEXT_DEPTH = - 2;
+        public const int DEFAULT_TEXT_DEPTH = -2;
 
         private string _Text;
         public string Text {
@@ -19,21 +19,21 @@ namespace mapKnight.Extended.Graphics.GUI {
             set { _Color = value; RequestUpdate( ); }
         }
 
-        readonly Vector2 charSize;
+        readonly float charSize;
 
-        public GUILabel (Vector2 position, float size, string text) : this(position, DEFAULT_TEXT_DEPTH, size, text) {
-
-        }
-
-        public GUILabel (Vector2 position, int depth, float size, string text) : this(position, depth, size, Color.White, text) {
+        public GUILabel (Screen owner, Vector2 position, float size, string text) : this(owner, position, DEFAULT_TEXT_DEPTH, size, text) {
 
         }
 
-        public GUILabel (Vector2 position, int depth, float size, Color color, string text) : base(new Rectangle(position, new Vector2(0f, 0f)), depth) {
+        public GUILabel (Screen owner, Vector2 position, int depth, float size, string text) : this(owner, position, depth, size, Color.White, text) {
+
+        }
+
+        public GUILabel (Screen owner, Vector2 position, int depth, float size, Color color, string text) : base(owner, new Rectangle(position, new Vector2(0f, 0f)), depth) {
             // label needs no touch management
             this._Text = text;
             this._Color = color;
-            this.charSize = new Vector2(CHAR_WIDTH_PIXEL * size / CHAR_HEIGHT_PIXEL, size);
+            this.charSize = size;
         }
 
         public override List<VertexData> GetVertexData ( ) {
@@ -45,56 +45,61 @@ namespace mapKnight.Extended.Graphics.GUI {
         }
 
 
-        public static List<VertexData> GetVertexData (string text, Vector2 position, Vector2 charSize, int depth, Color color) {
+        public static List<VertexData> GetVertexData (string text, Vector2 position, float charSize, int depth, Color color) {
             List<VertexData> vertexData = new List<VertexData>( );
             charSize *= 2; // scale to screen size
 
             Vector2 currentPoint = position;
-            foreach (char character in text) {
+            foreach (char character in text.ToUpper( )) {
+                float characterWidth = GetCharScale(character) * charSize;
                 if (character == '\n') {
                     currentPoint.X = position.X;
-                    currentPoint.Y -= charSize.Y;
+                    currentPoint.Y -= charSize;
                 } else if (character == ' ') {
-                    currentPoint.X += charSize.X;
+                    currentPoint.X += charSize;
                 } else {
                     vertexData.Add(new VertexData(
                         new float[ ] {
                             currentPoint.X ,currentPoint.Y,
-                            currentPoint.X,currentPoint.Y - charSize.Y,
-                            currentPoint.X+ charSize.X,currentPoint.Y - charSize.Y,
-                            currentPoint.X+ charSize.X,currentPoint.Y},
-                        character.ToString( ).ToUpper( ),
+                            currentPoint.X,currentPoint.Y - charSize,
+                            currentPoint.X+ characterWidth,currentPoint.Y - charSize,
+                            currentPoint.X+ characterWidth,currentPoint.Y},
+                        character.ToString( ),
                         depth,
                         color
                         ));
-                    currentPoint.X += charSize.X;
+                    currentPoint.X += characterWidth;
                 }
             }
 
             return vertexData;
         }
 
-        public static Vector2 MeasureText (string text, Vector2 charSize) {
+        public static Vector2 MeasureText (string text, float charSize) {
             charSize *= 2;
 
-            int maxWidth = 0;
-            int currentWidth = 0;
+            float maxWidth = 0;
+            float currentWidth = 0;
             int height = 1;
-            foreach (char charachter in text) {
-                if (charachter == '\n') {
+            foreach (char character in text.ToUpper( )) {
+                if (character == '\n') {
                     height++;
                     if (currentWidth > maxWidth)
                         maxWidth = currentWidth;
                     currentWidth = 0;
                 } else {
-                    currentWidth++;
+                    currentWidth += GetCharScale(character) * charSize;
                 }
             }
             if (currentWidth > maxWidth)
                 maxWidth = currentWidth;
 
-            return new Vector2(charSize.X * maxWidth, charSize.Y * height);
+            return new Vector2(maxWidth, charSize * height);
         }
 
+        private static float GetCharScale (char character) {
+            float[ ] verticies = GUIRenderer.Texture.Get(character.ToString( ));
+            return ((verticies[4] - verticies[0]) * GUIRenderer.Texture.Width) / ((verticies[3] - verticies[1]) * GUIRenderer.Texture.Height);
+        }
     }
 }

@@ -1,5 +1,5 @@
-using mapKnight.Core;
 using System.Collections.Generic;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.GUI {
     public class GUIBar : GUIItem {
@@ -7,7 +7,7 @@ namespace mapKnight.Extended.Graphics.GUI {
 
         private float currentPercent;
 
-        public GUIBar (Rectangle bounds, int depth) : base(bounds, depth, false) {
+        public GUIBar (Screen owner, Rectangle bounds, int depth) : base(owner, bounds, depth, false) {
             //binder.Changed += binder_Changed;
             //currentPercent = binder.Percent;
         }

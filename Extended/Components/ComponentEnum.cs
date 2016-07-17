@@ -1,5 +1,5 @@
-namespace mapKnight.Extended.Components.Communication {
-    public enum Identifier {
+namespace mapKnight.Extended.Components {
+    public enum ComponentEnum {
         Animation,
         Draw,
         Gravity,

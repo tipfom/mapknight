@@ -1,10 +1,11 @@
-using mapKnight.Extended.Components.Communication;
-using mapKnight.Extended.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
+    [ComponentRequirement(typeof(DrawComponent))]
+    [ComponentOrder(ComponentEnum.Draw)]
     public class SpriteComponent : Component {
         private Dictionary<string, SpriteAnimation> sprites;
 
@@ -18,7 +19,16 @@ namespace mapKnight.Extended.Components {
                 sprites[bone].Update(dt.Milliseconds);
             }
 
-            Owner.SetComponentInfo(Identifier.Draw, Identifier.Sprite, Data.Texture, sprites.ToDictionary(v => v.Key, v => v.Value.Current));
+            Owner.SetComponentInfo(ComponentEnum.Draw, ComponentEnum.Sprite, ComponentData.Texture, sprites.ToDictionary(v => v.Key, v => v.Value.Current));
+        }
+
+        public new class Configuration : Component.Configuration {
+            public string Texture;
+            public Dictionary<string, SpriteAnimation> Sprites;
+
+            public override Component Create (Entity owner) {
+                return new SpriteComponent(owner, Sprites, Texture);
+            }
         }
     }
 }

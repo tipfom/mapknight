@@ -1,5 +1,5 @@
-using mapKnight.Core;
 using System.Collections.Generic;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.GUI {
     public class GUIButton : GUIItem {
@@ -9,20 +9,20 @@ namespace mapKnight.Extended.Graphics.GUI {
         public string Text { get { return _Text; } set { _Text = value; RequestUpdate( ); } }
         private Color _Color;
         public Color Color { get { return _Color; } set { _Color = value; RequestUpdate( ); } }
-        private Vector2 charSize;
+        private float charSize;
 
-        public GUIButton (string text, Rectangle bounds) : this(text, DEFAULT_TEXT_SIZE, DEFAULT_DEPTH, Color.White, bounds) {
-
-        }
-
-        public GUIButton (string text, int depth, Color color, Rectangle bounds) : this(text, DEFAULT_TEXT_SIZE, depth, color, bounds) {
+        public GUIButton (Screen owner, string text, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, DEFAULT_DEPTH, Color.White, bounds) {
 
         }
 
-        public GUIButton (string text, float textsize, int depth, Color color, Rectangle bounds) : base(bounds, depth, false) {
+        public GUIButton (Screen owner, string text, int depth, Color color, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, depth, color, bounds) {
+
+        }
+
+        public GUIButton (Screen owner, string text, float textsize, int depth, Color color, Rectangle bounds) : base(owner, bounds, depth, false) {
             Text = text;
             Color = color;
-            charSize = new Vector2(GUILabel.CHAR_WIDTH_PIXEL * textsize / GUILabel.CHAR_HEIGHT_PIXEL, textsize);
+            charSize = textsize;
             base.Click += this_Click;
             base.Release += this_Release;
         }

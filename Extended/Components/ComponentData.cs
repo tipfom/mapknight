@@ -1,5 +1,5 @@
-namespace mapKnight.Extended.Components.Communication {
-    public enum Data {
+namespace mapKnight.Extended.Components {
+    public enum ComponentData {
         None,
         Result,
 
@@ -9,7 +9,7 @@ namespace mapKnight.Extended.Components.Communication {
         Texture,
         Color,
         Animation,
-        
+
         //////////////////////////////////////////////////////////////////////////////////////////////
         // logic
 

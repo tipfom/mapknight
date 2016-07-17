@@ -1,43 +1,50 @@
 ﻿using System;
+using System.Diagnostics;
 using mapKnight.Core;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.GUI;
 using mapKnight.Extended.Graphics.Programs;
-using mapKnight.Extended.Graphics.Screens;
 using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended {
     public static class Manager {
         public static void Initialize ( ) {
+            stopWatch = new Stopwatch( );
             ColorProgram.Program = new ColorProgram( );
             MatrixProgram.Program = new MatrixProgram( );
 
             GUIRenderer.Texture = Assets.Load<SpriteBatch>("interface");
-            Assets.Load<Texture2D>("testMap");
-            Assets.Load<SpriteBatch>("potatoe_patrick");
+
+            Screen.Gameplay.Load( );
+            Screen.MainMenu.Load( );
+            Screen.Active = Screen.MainMenu;
 
             GL.ClearColor(0f, 0f, 0f, 1f);
-
-            Screen.Current = new MainMenuScreen( );
-            Screen.Current.Active = true;
         }
 
+        private static Stopwatch stopWatch;
         private static TimeSpan frameTime;
-        private static int drawTime;
-        private static int updateTime;
+        private static double drawTime;
+        private static double updateTime;
 
         public static void Update ( ) {
+            stopWatch.Restart( );
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             UpdateFrametime( );
-            int updateBegin = Environment.TickCount;
 
-            Screen.Current.Update(frameTime);
-            updateTime = Environment.TickCount - updateBegin;
+            Screen.Active.Update(frameTime);
+            updateTime = stopWatch.Elapsed.TotalMilliseconds;
+            stopWatch.Restart( );
 
-            GUIRenderer.Draw( );
-            Screen.Current.Draw( );
-            drawTime = Environment.TickCount - updateTime - updateBegin;
+            Screen.Active.Draw( );
+            drawTime = stopWatch.Elapsed.TotalMilliseconds;
+
+            Log.Print(typeof(Manager), $"draw {drawTime:0.000} update {updateTime:0.000} frame {frameTime.TotalMilliseconds:00.000}");
+        }
+
+        public static void Destroy ( ) {
+            Assets.Destroy( );
         }
 
         private static int lastUpdate = Environment.TickCount;

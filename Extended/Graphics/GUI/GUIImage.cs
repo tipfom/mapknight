@@ -1,5 +1,5 @@
-using mapKnight.Core;
 using System.Collections.Generic;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.GUI {
     public class GUIImage : GUIItem {
@@ -8,7 +8,7 @@ namespace mapKnight.Extended.Graphics.GUI {
         private Color _ModificationColor;
         public Color ModificationColor { get { return _ModificationColor; } set { _ModificationColor = value; RequestUpdate( ); } }
 
-        public GUIImage (string idletexture, string clicktexture, int depth, Color modificationcolor, Rectangle bounds) : base(bounds, depth) {
+        public GUIImage (Screen owner, string idletexture, string clicktexture, int depth, Color modificationcolor, Rectangle bounds) : base(owner, bounds, depth) {
             textureIdle = idletexture;
             textureClick = clicktexture;
 

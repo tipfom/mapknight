@@ -5,8 +5,8 @@ using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Buffer {
     public class IndexBuffer : IBuffer {
-        public int Length { get; }
-        public int Bytes { get; }
+        public int Length { get; private set; }
+        public int Bytes { get; private set; }
 
         private int buffer;
 
@@ -35,8 +35,10 @@ namespace mapKnight.Extended.Graphics.Buffer {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, buffer);
         }
 
-        public void Delete ( ) {
+        public void Dispose ( ) {
             GL.DeleteBuffers(1, ref buffer);
+            Length = 0;
+            Bytes = 0;
         }
     }
 }

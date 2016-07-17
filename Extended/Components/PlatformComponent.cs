@@ -1,6 +1,6 @@
-using mapKnight.Core;
 using System;
 using System.Collections.Generic;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Components {
     public class PlatformComponent : Component {
@@ -57,6 +57,15 @@ namespace mapKnight.Extended.Components {
             currentWaypointDuration = GetCurrentWaypointDuration( );
             nextWaypointTime += currentWaypointDuration;
             this.State = (nextWaypoint - currentWaypoint) / (currentWaypointDuration / 1000f); // current velocity
+        }
+
+        public new class Configuration : Component.Configuration {
+            public List<Vector2> Waypoints;
+            public float Speed;
+
+            public override Component Create (Entity owner) {
+                return new PlatformComponent(owner, Waypoints, Speed);
+            }
         }
     }
 }

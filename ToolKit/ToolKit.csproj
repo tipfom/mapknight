@@ -79,6 +79,9 @@
       <DependentUpon>CreateMapWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmbeddedAssemblies.cs" />
+    <Compile Include="EntityEditor.xaml.cs">
+      <DependentUpon>EntityEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="TileMapView.cs" />
@@ -138,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EntityEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -202,6 +209,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\undo-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\delete_sign-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\add_link-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\add_user_male-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
