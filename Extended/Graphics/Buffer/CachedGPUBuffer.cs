@@ -40,7 +40,7 @@ namespace mapKnight.Extended.Graphics.Buffer {
                 GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, new IntPtr(Bytes), Cache);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             } else {
-                Log.Print(this, "cache length didnt fit buffer, skipping");
+                Debug.Print(this, "cache length didnt fit buffer, skipping");
             }
         }
 

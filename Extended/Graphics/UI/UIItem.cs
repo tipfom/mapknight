@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Graphics.GUI {
-    public abstract class GUIItem {
+namespace mapKnight.Extended.Graphics.UI {
+    public abstract class UIItem {
         public const Anchor DEFAULT_ANCHOR = Anchor.Left | Anchor.Top;
         public const int DEFAULT_DEPTH = 3;
 
-        public delegate void HandleUpdate (GUIItem sender);
+        public delegate void HandleUpdate (UIItem sender);
         public event HandleUpdate Changed;
         public delegate void HandleItemClick ( );
         public event HandleItemClick Click;
@@ -27,8 +27,8 @@ namespace mapKnight.Extended.Graphics.GUI {
         public int Depth { get { return _Depth; } set { _Depth = value; DepthOnScreen = DEFAULT_DEPTH + value; RequestUpdate( ); } }
         protected int DepthOnScreen { get; private set; }
 
-        public GUIItem (Screen owner, Rectangle bounds, int depth, bool multiclick = false) {
-            GUIRenderer.Add(owner, this);
+        public UIItem (Screen owner, Rectangle bounds, int depth, bool multiclick = false) {
+            UIRenderer.Add(owner, this);
 
             this.Bounds = bounds;
             this.multiClick = multiclick;
@@ -36,17 +36,17 @@ namespace mapKnight.Extended.Graphics.GUI {
             this.DepthOnScreen = depth + DEFAULT_DEPTH;
         }
 
-        public virtual void HandleTouch (GUITouchAction action) {
+        public virtual void HandleTouch (UITouchAction action) {
             switch (action) {
-                case GUITouchAction.Begin:
-                case GUITouchAction.Enter:
+                case UITouchAction.Begin:
+                case UITouchAction.Enter:
                     if (!Clicked || multiClick) {
                         clickCount++;
                         Click?.Invoke( );
                     }
                     break;
-                case GUITouchAction.End:
-                case GUITouchAction.Leave:
+                case UITouchAction.End:
+                case UITouchAction.Leave:
                     if (Clicked) {
                         clickCount--;
                         if (!Clicked)

@@ -114,11 +114,6 @@ namespace mapKnight.Extended.Graphics {
         }
 
         public void Update (TimeSpan dt) {
-            if (buffer == null) {
-                buffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 3), new GPUBuffer(2, DrawSize.Area * 3, GenerateVertexCoords( )), new GPUBuffer(2, DrawSize.Area * 3));
-                ((EntityRenderer)Renderer).REINIT( );
-            }
-
             foreach (Entity entity in Entity.Entities)
                 entity.Update(dt);
             UpdateFocus( );

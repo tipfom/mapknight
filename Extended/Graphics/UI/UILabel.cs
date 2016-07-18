@@ -1,12 +1,25 @@
 using System.Collections.Generic;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Graphics.GUI {
-    public class GUILabel : GUIItem {
+namespace mapKnight.Extended.Graphics.UI {
+    public class UILabel : UIItem {
         public const int CHAR_WIDTH_PIXEL = 7;
         public const int CHAR_HEIGHT_PIXEL = 9;
         public const int CHAR_SPACING_PIXEL = 1;
         public const int DEFAULT_TEXT_DEPTH = -2;
+
+        private static Dictionary<char, float> charScales = new Dictionary<char, float>( );
+
+        static UILabel ( ) {
+            foreach (KeyValuePair<string, float[ ]> entry in UIRenderer.Texture.Sprites) {
+                char entryCharacter;
+                if (char.TryParse(entry.Key, out entryCharacter)) {
+                    float[ ] verticies = UIRenderer.Texture.Get(entry.Key);
+                    float scale = ((verticies[4] - verticies[0]) * UIRenderer.Texture.Width) / ((verticies[3] - verticies[1]) * UIRenderer.Texture.Height);
+                    charScales.Add(entryCharacter, scale);
+                }
+            }
+        }
 
         private string _Text;
         public string Text {
@@ -21,15 +34,15 @@ namespace mapKnight.Extended.Graphics.GUI {
 
         readonly float charSize;
 
-        public GUILabel (Screen owner, Vector2 position, float size, string text) : this(owner, position, DEFAULT_TEXT_DEPTH, size, text) {
+        public UILabel (Screen owner, Vector2 position, float size, string text) : this(owner, position, DEFAULT_TEXT_DEPTH, size, text) {
 
         }
 
-        public GUILabel (Screen owner, Vector2 position, int depth, float size, string text) : this(owner, position, depth, size, Color.White, text) {
+        public UILabel (Screen owner, Vector2 position, int depth, float size, string text) : this(owner, position, depth, size, Color.White, text) {
 
         }
 
-        public GUILabel (Screen owner, Vector2 position, int depth, float size, Color color, string text) : base(owner, new Rectangle(position, new Vector2(0f, 0f)), depth) {
+        public UILabel (Screen owner, Vector2 position, int depth, float size, Color color, string text) : base(owner, new Rectangle(position, new Vector2(0f, 0f)), depth) {
             // label needs no touch management
             this._Text = text;
             this._Color = color;
@@ -51,7 +64,7 @@ namespace mapKnight.Extended.Graphics.GUI {
 
             Vector2 currentPoint = position;
             foreach (char character in text.ToUpper( )) {
-                float characterWidth = GetCharScale(character) * charSize;
+                float characterWidth = charScales[character] * charSize;
                 if (character == '\n') {
                     currentPoint.X = position.X;
                     currentPoint.Y -= charSize;
@@ -88,18 +101,13 @@ namespace mapKnight.Extended.Graphics.GUI {
                         maxWidth = currentWidth;
                     currentWidth = 0;
                 } else {
-                    currentWidth += GetCharScale(character) * charSize;
+                    currentWidth += charScales[character] * charSize;
                 }
             }
             if (currentWidth > maxWidth)
                 maxWidth = currentWidth;
 
             return new Vector2(maxWidth, charSize * height);
-        }
-
-        private static float GetCharScale (char character) {
-            float[ ] verticies = GUIRenderer.Texture.Get(character.ToString( ));
-            return ((verticies[4] - verticies[0]) * GUIRenderer.Texture.Width) / ((verticies[3] - verticies[1]) * GUIRenderer.Texture.Height);
         }
     }
 }

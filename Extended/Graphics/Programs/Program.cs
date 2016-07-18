@@ -58,9 +58,11 @@ namespace mapKnight.Extended.Graphics.Programs {
 
             GL.LinkProgram(program);
 
-            Log.Print(typeof(Program), "Loaded new program (id = " + program.ToString( ) + ")");
-            Log.Print(typeof(Program), "Log = " + GL.GetProgramInfoLog(program));
-            Log.Print(typeof(Program), "GL.GLGetError returned " + GL.GetErrorCode( ).ToString( ));
+            string log = GL.GetProgramInfoLog(program);
+            Debug.Print(typeof(Program), $"program { program } loaded");
+            if (!string.IsNullOrWhiteSpace(log))
+                Debug.Print(typeof(Program), "log: " + log);
+            Debug.CheckGL(typeof(Program));
 
             return program;
         }

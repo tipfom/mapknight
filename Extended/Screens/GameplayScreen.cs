@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using mapKnight.Extended.Components;
 using mapKnight.Extended.Graphics;
-using mapKnight.Extended.Graphics.GUI;
+using mapKnight.Extended.Graphics.UI;
 
 namespace mapKnight.Extended.Screens {
     public class GameplayScreen : Screen, UserControlComponent.IInputProvider {
         Map map;
         Entity testEntity;
-        GUIButton leftButton, rightButton, jumpButton;
+        UIButton leftButton, rightButton, jumpButton;
 
         public bool Jump { get { return jumpButton.Clicked; } }
 
@@ -18,9 +18,9 @@ namespace mapKnight.Extended.Screens {
         public bool Right { get { return rightButton.Clicked; } }
 
         public override void Load ( ) {
-            jumpButton = new GUIButton(this, "J", new Core.Rectangle(-1f, 0, 0.3f, 0.3f));
-            leftButton = new GUIButton(this, "L", new Core.Rectangle(-1.6f, 0f, 0.3f, 0.3f));
-            rightButton = new GUIButton(this, "R", new Core.Rectangle(-1.3f, 0f, 0.3f, 0.3f));
+            jumpButton = new UIButton(this, "J", new Core.Rectangle(-1f, 0, 0.3f, 0.3f));
+            leftButton = new UIButton(this, "L", new Core.Rectangle(-1.6f, 0f, 0.3f, 0.3f));
+            rightButton = new UIButton(this, "R", new Core.Rectangle(-1.3f, 0f, 0.3f, 0.3f));
 
             map = Assets.Load<Map>("testMap");
             Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");

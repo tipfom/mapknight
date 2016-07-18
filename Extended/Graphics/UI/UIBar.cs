@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Graphics.GUI {
-    public class GUIBar : GUIItem {
+namespace mapKnight.Extended.Graphics.UI {
+    public class UIBar : UIItem {
         const float BORDER_BOUNDS_RATIO = 10f / 10f; // width / height of image
 
         private float currentPercent;
 
-        public GUIBar (Screen owner, Rectangle bounds, int depth) : base(owner, bounds, depth, false) {
+        public UIBar (Screen owner, Rectangle bounds, int depth) : base(owner, bounds, depth, false) {
             //binder.Changed += binder_Changed;
             //currentPercent = binder.Percent;
         }

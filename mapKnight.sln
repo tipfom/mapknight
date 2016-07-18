@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "Android\Android.csproj", "{D7E142F8-7BDF-4AB3-8A0B-CB0F585CAFE0}"
 EndProject
@@ -13,8 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolKit", "ToolKit\ToolKit.
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Extended\Extended.projitems*{41264171-a1a1-4b71-903e-79bf93330bc9}*SharedItemsImports = 13
 		Core\Core.projitems*{2de1ef79-27a4-4243-be4b-eb47c5d04824}*SharedItemsImports = 4
+		Extended\Extended.projitems*{41264171-a1a1-4b71-903e-79bf93330bc9}*SharedItemsImports = 13
 		Core\Core.projitems*{482c4f52-d450-4468-a1f3-d50b96a58d26}*SharedItemsImports = 13
 		Core\Core.projitems*{d7e142f8-7bdf-4ab3-8a0b-cb0f585cafe0}*SharedItemsImports = 4
 		Extended\Extended.projitems*{d7e142f8-7bdf-4ab3-8a0b-cb0f585cafe0}*SharedItemsImports = 4

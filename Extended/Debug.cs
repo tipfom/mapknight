@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Text;
 using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended {
-    public static class Log {
+#if DEBUG
+    public static class Debug {
         public static void Print (object sender, string message) {
             Print(sender.GetType( ), message);
         }
 
         public static void Print (Type sender, string message) {
-            Debug.WriteLine(sender.Name + ": " + message);
+            System.Diagnostics.Debug.WriteLine(sender.Name + ": " + message);
         }
 
         public static void Print (object sender, object message) {
@@ -31,4 +33,5 @@ namespace mapKnight.Extended {
             }
         }
     }
+#endif
 }

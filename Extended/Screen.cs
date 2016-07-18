@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using mapKnight.Extended.Graphics.GUI;
+using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Screens;
 
 namespace mapKnight.Extended {
     public class Screen : IDisposable {
         private static Screen _Active;
-        public static Screen Active { get { return _Active; } set { _Active.IsActive = false; value.IsActive = true; _Active = value; GUIRenderer.Prepare(value); value.Activated( ); } }
+        public static Screen Active { get { return _Active; } set { _Active.IsActive = false; value.IsActive = true; _Active = value; UIRenderer.Prepare(value); value.Activated( ); } }
 
         public static GameplayScreen Gameplay;
         public static MainMenuScreen MainMenu;
@@ -29,15 +29,15 @@ namespace mapKnight.Extended {
         }
 
         public virtual void Update (TimeSpan dt) {
-            GUIRenderer.Update(dt);
+            UIRenderer.Update(dt);
         }
 
         public virtual void Draw ( ) {
-            GUIRenderer.Draw( );
+            UIRenderer.Draw( );
         }
 
         public virtual void Dispose ( ) {
-            GUIRenderer.Delete(this);
+            UIRenderer.Delete(this);
         }
     }
 }

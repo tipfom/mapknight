@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Graphics.GUI {
-    public class GUIButton : GUIItem {
+namespace mapKnight.Extended.Graphics.UI {
+    public class UIButton : UIItem {
         const float DEFAULT_TEXT_SIZE = 0.1f;
 
         private string _Text;
@@ -11,15 +11,15 @@ namespace mapKnight.Extended.Graphics.GUI {
         public Color Color { get { return _Color; } set { _Color = value; RequestUpdate( ); } }
         private float charSize;
 
-        public GUIButton (Screen owner, string text, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, DEFAULT_DEPTH, Color.White, bounds) {
+        public UIButton (Screen owner, string text, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, DEFAULT_DEPTH, Color.White, bounds) {
 
         }
 
-        public GUIButton (Screen owner, string text, int depth, Color color, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, depth, color, bounds) {
+        public UIButton (Screen owner, string text, int depth, Color color, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, depth, color, bounds) {
 
         }
 
-        public GUIButton (Screen owner, string text, float textsize, int depth, Color color, Rectangle bounds) : base(owner, bounds, depth, false) {
+        public UIButton (Screen owner, string text, float textsize, int depth, Color color, Rectangle bounds) : base(owner, bounds, depth, false) {
             Text = text;
             Color = color;
             charSize = textsize;
@@ -39,9 +39,9 @@ namespace mapKnight.Extended.Graphics.GUI {
             List<VertexData> vertexData = new List<VertexData>( );
             vertexData.Add(new VertexData(Bounds.Verticies(DEFAULT_ANCHOR), (this.Clicked ? "button_pressed" : "button_idle"), DepthOnScreen, Color));
 
-            Vector2 textSize = GUILabel.MeasureText(this.Text, charSize);
+            Vector2 textSize = UILabel.MeasureText(this.Text, charSize);
             Vector2 centeredTextPosition = new Vector2(this.Bounds.Left + this.Bounds.Width / 2, this.Bounds.Top - this.Bounds.Height / 2) - (textSize / new Vector2(2, -2));
-            vertexData.AddRange(GUILabel.GetVertexData(this.Text, centeredTextPosition, charSize, DepthOnScreen, Color.White));
+            vertexData.AddRange(UILabel.GetVertexData(this.Text, centeredTextPosition, charSize, DepthOnScreen, Color.White));
             return vertexData;
         }
     }

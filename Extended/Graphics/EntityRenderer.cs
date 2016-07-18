@@ -20,11 +20,6 @@ namespace mapKnight.Extended.Graphics {
             buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(3, MAX_QUAD_COUNT), new ClientBuffer(4, MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT));
         }
 
-        [Obsolete("fix that opengl context thing!!!")]
-        public void REINIT ( ) {
-            buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(3, MAX_QUAD_COUNT), new ClientBuffer(4, MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT));
-        }
-
         public void AddTexture (int species, SpriteBatch entityTexture) {
             if (!entityTextures.ContainsKey(species)) {
                 entityTextures.Add(species, entityTexture);

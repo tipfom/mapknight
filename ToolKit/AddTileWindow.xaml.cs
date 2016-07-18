@@ -1,9 +1,9 @@
-﻿using mapKnight.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using mapKnight.Core;
 
 namespace mapKnight.ToolKit {
     /// <summary>
@@ -14,7 +14,7 @@ namespace mapKnight.ToolKit {
         public string Path;
         private IEnumerable<string> forbiddenNames;
 
-#if DEBUG
+#if log
         public AddTileWindow ( ) {
             InitializeComponent( );
         }
@@ -38,7 +38,7 @@ namespace mapKnight.ToolKit {
             image_tile.Source = image;
             textbox_name.Text = System.IO.Path.GetFileNameWithoutExtension(path);
         }
-        
+
         private void button_submit_Click (object sender, RoutedEventArgs e) {
             if (forbiddenNames.Contains(textbox_name.Text)) {
                 MessageBox.Show("name is allready present", "invalid name", MessageBoxButton.OK, MessageBoxImage.Error);

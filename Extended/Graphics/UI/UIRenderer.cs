@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using mapKnight.Extended.Graphics.Buffer;
 using static mapKnight.Extended.Graphics.Programs.ColorProgram;
 
-namespace mapKnight.Extended.Graphics.GUI {
-    public static class GUIRenderer {
+namespace mapKnight.Extended.Graphics.UI {
+    public static class UIRenderer {
         const int MAX_QUADS = 500;
 
-        private static float[ ] nullArray = new float[ ] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f };
-
         public static SpriteBatch Texture;
-        public static List<GUIItem> Current { get { return guiItems[currentScreen]; } }
+        public static List<UIItem> Current { get { return UIItems[currentScreen]; } }
 
         private static Screen currentScreen;
-        private static Dictionary<Screen, List<GUIItem>> guiItems;
-        private static Dictionary<GUIItem, Stack<int>> usedIndicies;
+        private static Dictionary<Screen, List<UIItem>> UIItems;
+        private static Dictionary<UIItem, Stack<int>> usedIndicies;
         private static Stack<int> freeIndicies;
         private static BufferBatch buffer;
         private static CachedGPUBuffer vertexBuffer { get { return (CachedGPUBuffer)buffer.VertexBuffer; } }
@@ -22,20 +20,20 @@ namespace mapKnight.Extended.Graphics.GUI {
         private static CachedGPUBuffer colorBuffer { get { return (CachedGPUBuffer)buffer.ColorBuffer; } }
         private static bool bufferUpdated = false;
 
-        static GUIRenderer ( ) {
+        static UIRenderer ( ) {
             buffer = new BufferBatch(new IndexBuffer(MAX_QUADS), new CachedGPUBuffer(2, MAX_QUADS), new CachedGPUBuffer(4, MAX_QUADS), new CachedGPUBuffer(2, MAX_QUADS));
-            guiItems = new Dictionary<Screen, List<GUIItem>>( );
+            UIItems = new Dictionary<Screen, List<UIItem>>( );
             ResetIndicies( );
         }
 
         public static void Prepare (Screen target) {
             currentScreen = target;
             ResetIndicies( );
-            vertexBuffer.Cache = new float[buffer.VertexBuffer.Length];
+            Array.Clear(vertexBuffer.Cache, 0, vertexBuffer.Cache.Length);
             vertexBuffer.Put( );
 
-            if (guiItems.ContainsKey(target)) {
-                foreach (GUIItem item in guiItems[target]) {
+            if (UIItems.ContainsKey(target)) {
+                foreach (UIItem item in UIItems[target]) {
                     usedIndicies.Add(item, new Stack<int>( ));
                     Update(item);
                 }
@@ -43,34 +41,34 @@ namespace mapKnight.Extended.Graphics.GUI {
         }
 
         private static void ResetIndicies ( ) {
-            usedIndicies = new Dictionary<GUIItem, Stack<int>>( );
+            usedIndicies = new Dictionary<UIItem, Stack<int>>( );
             freeIndicies = new Stack<int>( );
             for (int i = MAX_QUADS - 1; i >= 0; i--) {
                 freeIndicies.Push(i);
             }
         }
 
-        public static void Add (Screen screen, GUIItem item) {
-            if (!guiItems.ContainsKey(screen))
-                guiItems.Add(screen, new List<GUIItem>( ));
-            guiItems[screen].Add(item);
+        public static void Add (Screen screen, UIItem item) {
+            if (!UIItems.ContainsKey(screen))
+                UIItems.Add(screen, new List<UIItem>( ));
+            UIItems[screen].Add(item);
             usedIndicies.Add(item, new Stack<int>( ));
         }
 
         public static void Delete ( ) {
-            guiItems.Clear( );
+            UIItems.Clear( );
         }
 
         public static void Delete (Screen target) {
-            guiItems.Remove(target);
+            UIItems.Remove(target);
         }
 
-        public static void Update (GUIItem item) {
+        public static void Update (UIItem item) {
             bufferUpdated = true;
             while (usedIndicies[item].Count > 0) {
                 int index = usedIndicies[item].Pop( );
                 freeIndicies.Push(index);
-                Array.Copy(nullArray, 0, vertexBuffer.Cache, index * 8, 8);
+                Array.Clear(vertexBuffer.Cache, index * 8, 8);
             }
             if (!item.Visible)
                 return;
@@ -91,7 +89,7 @@ namespace mapKnight.Extended.Graphics.GUI {
                 colorBuffer.Put( );
                 textureBuffer.Put( );
             }
-            foreach (GUIItem item in guiItems[currentScreen])
+            foreach (UIItem item in UIItems[currentScreen])
                 item.Update(dt);
         }
 

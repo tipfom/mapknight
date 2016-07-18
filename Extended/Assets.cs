@@ -73,9 +73,10 @@ namespace mapKnight.Extended {
             GL.CompileShader(shader);
 
             string log = GL.GetShaderInfoLog(shader);
-            Log.Print(typeof(Assets), "Loaded new shader (id = " + shader.ToString( ) + ")");
-            Log.Print(typeof(Assets), "Log = " + log);
-            Log.Print(typeof(Assets), "GL.GLGetError returned " + GL.GetErrorCode( ).ToString( ));
+            Debug.Print(typeof(Assets), $"vertexshader {shader} loaded");
+            if (!string.IsNullOrWhiteSpace(log))
+                Debug.Print(typeof(Assets), "log: " + log);
+            Debug.CheckGL(typeof(Assets));
 
             return shader;
         }
@@ -90,9 +91,10 @@ namespace mapKnight.Extended {
             GL.CompileShader(shader);
 
             string log = GL.GetShaderInfoLog(shader);
-            Log.Print(typeof(Assets), "Loaded new shader (id = " + shader.ToString( ) + ")");
-            Log.Print(typeof(Assets), "Log = " + log);
-            Log.Print(typeof(Assets), "GL.GLGetError returned " + GL.GetErrorCode( ).ToString( ));
+            Debug.Print(typeof(Assets), $"fragmentshader {shader} loaded");
+            if (!string.IsNullOrWhiteSpace(log))
+                Debug.Print(typeof(Assets), "log: " + log);
+            Debug.CheckGL(typeof(Assets));
 
             return shader;
         }
