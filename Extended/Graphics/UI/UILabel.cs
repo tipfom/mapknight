@@ -10,7 +10,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public const int CHAR_SPACING_PIXEL = 1;
         public const int DEFAULT_TEXT_DEPTH = -2;
 
-        private static Dictionary<char, float> charScales = new Dictionary<char, float>( );
+        private static Dictionary<char, float> charScales = new Dictionary<char, float>( ) { [' '] = 1f };
 
         static UILabel ( ) {
             foreach (KeyValuePair<string, float[ ]> entry in UIRenderer.Texture.Sprites) {
@@ -53,11 +53,21 @@ namespace mapKnight.Extended.Graphics.UI {
             this.charSize = size;
             this.Text = text;
             this._Color = color;
+            this.Alignment = alignment;
             vmargin.Bind(this); hmargin.Bind(this);
         }
 
         public override List<VertexData> GetVertexData ( ) {
-            return GetVertexData(lines, Alignment, this.Position, this.charSize, DepthOnScreen, this.Color);
+            switch (Alignment) {
+                case UITextAlignment.Left:
+                    return GetVertexData(lines, Alignment, this.Position, this.charSize, DepthOnScreen, this.Color);
+                case UITextAlignment.Right:
+                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X, 0), this.charSize, DepthOnScreen, this.Color);
+                case UITextAlignment.Center:
+                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X * 0.5f, 0), this.charSize, DepthOnScreen, this.Color);
+                default:
+                    return null;
+            }
         }
 
         public Vector2 MeasureText ( ) {
@@ -95,25 +105,23 @@ namespace mapKnight.Extended.Graphics.UI {
                     }
                     break;
                 case UITextAlignment.Right:
-                    sizes = MeasureLines(lines, charSize);
-
                     for (int i = 0; i < lines.Length; i++) {
-                        currentPosition.X = position.X - sizes[i].X;
-                        foreach (char character in lines[i].ToUpper( )) {
+                        currentPosition.X = position.X;
+                        foreach (char character in lines[i].ToUpper( ).Reverse( )) {
                             if (character == ' ') {
-                                currentPosition.X += charSize;
+                                currentPosition.X -= charSize;
                             } else {
                                 float characterWidth = charScales[character] * charSize;
                                 vertexData.Add(new VertexData(
                                     new float[ ] {
-                                        currentPosition.X, currentPosition.Y,
+                                        currentPosition.X - characterWidth, currentPosition.Y,
+                                        currentPosition.X - characterWidth, currentPosition.Y - charSize,
                                         currentPosition.X, currentPosition.Y - charSize,
-                                        currentPosition.X + characterWidth, currentPosition.Y - charSize,
-                                        currentPosition.X + characterWidth, currentPosition.Y },
+                                        currentPosition.X, currentPosition.Y },
                                     character.ToString( ),
                                     depth,
                                     color));
-                                currentPosition.X += characterWidth;
+                                currentPosition.X -= characterWidth;
                             }
                         }
                         currentPosition.Y -= charSize;

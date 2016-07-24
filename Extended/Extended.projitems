@@ -33,9 +33,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\CachedGPUBuffer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IAttributeBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\ClientBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\GPUBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IAttributeBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IndexBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
