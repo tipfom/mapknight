@@ -38,7 +38,9 @@ namespace mapKnight.Extended {
             Screen.Active.Draw( );
             DrawTime = stopWatch.Elapsed;
 
+#if DEBUG
             Debug.Print(typeof(Manager), $"draw {DrawTime.TotalMilliseconds:0.000} update {UpdateTime.TotalMilliseconds:0.000} frame {FrameTime.TotalMilliseconds:00.000}");
+#endif
         }
 
         public static void Destroy ( ) {

@@ -56,8 +56,6 @@ namespace mapKnight.Extended {
         public static Texture2D GetTexture (params string[ ] path) {
             int pathhash = path.GetHashCode( );
             if (!textureCache.ContainsKey(pathhash)) {
-                Debug.CheckGL(typeof(GC));
-                Debug.Print(typeof(Assets), "loading texture " + path[path.Length - 1]);
                 int width, height, id = GL.GenTexture( );
                 GL.BindTexture(TextureTarget.Texture2D, id);
 #if __ANDROID__
@@ -75,8 +73,12 @@ namespace mapKnight.Extended {
 
                 textureCache.Add(pathhash, new Texture2D(id, new Size(width, height), path[path.Length - 1]));
 
+#if DEBUG
                 if (id == 0 || Debug.CheckGL(typeof(Assets)))
                     Debug.Print(typeof(Assets), "failed loading image " + path[path.Length - 1]);
+                else
+                    Debug.Print(typeof(Assets), "loaded image " + path[path.Length - 1]);
+#endif
             }
             return textureCache[pathhash];
         }
@@ -103,11 +105,13 @@ namespace mapKnight.Extended {
             GL.ShaderSource(shader, GetText("shader", "vertex", name + ".txt"));
             GL.CompileShader(shader);
 
+#if DEBUG
             string log = GL.GetShaderInfoLog(shader);
             Debug.Print(typeof(Assets), $"vertexshader {shader} loaded");
             if (!string.IsNullOrWhiteSpace(log))
                 Debug.Print(typeof(Assets), "log: " + log);
             Debug.CheckGL(typeof(Assets));
+#endif
 
             return shader;
         }
@@ -121,11 +125,13 @@ namespace mapKnight.Extended {
             GL.ShaderSource(shader, GetText("shader", "fragment", name + ".txt"));
             GL.CompileShader(shader);
 
+#if DEBUG
             string log = GL.GetShaderInfoLog(shader);
             Debug.Print(typeof(Assets), $"fragmentshader {shader} loaded");
             if (!string.IsNullOrWhiteSpace(log))
                 Debug.Print(typeof(Assets), "log: " + log);
             Debug.CheckGL(typeof(Assets));
+#endif
 
             return shader;
         }

@@ -14,7 +14,6 @@ namespace mapKnight.Extended.Screens {
         Entity testEntity;
         UIButton leftButton, rightButton, jumpButton;
         UILabel debugLabel;
-        int updateLabelCount;
 
         public bool Jump { get { return jumpButton.Clicked; } }
 
