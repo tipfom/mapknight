@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UILabel : UIItem {
@@ -34,19 +35,20 @@ namespace mapKnight.Extended.Graphics.UI {
 
         readonly float charSize;
 
-        public UILabel (Screen owner, Vector2 position, float size, string text) : this(owner, position, DEFAULT_TEXT_DEPTH, size, text) {
+        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, float size, string text) : this(owner, hmargin, vmargin, DEFAULT_TEXT_DEPTH, size, text) {
 
         }
 
-        public UILabel (Screen owner, Vector2 position, int depth, float size, string text) : this(owner, position, depth, size, Color.White, text) {
+        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, int depth, float size, string text) : this(owner, hmargin, vmargin, depth, size, Color.White, text) {
 
         }
 
-        public UILabel (Screen owner, Vector2 position, int depth, float size, Color color, string text) : base(owner, new Rectangle(position, new Vector2(0f, 0f)), depth) {
+        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, int depth, float size, Color color, string text) : base(owner, hmargin, vmargin, new Vector2(0, 0), depth) {
             // label needs no touch management
             this._Text = text;
             this._Color = color;
             this.charSize = size;
+            vmargin.Bind(this); hmargin.Bind(this);
         }
 
         public override List<VertexData> GetVertexData ( ) {

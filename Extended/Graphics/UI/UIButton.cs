@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIButton : UIItem {
@@ -11,20 +12,22 @@ namespace mapKnight.Extended.Graphics.UI {
         public Color Color { get { return _Color; } set { _Color = value; RequestUpdate( ); } }
         private float charSize;
 
-        public UIButton (Screen owner, string text, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, DEFAULT_DEPTH, Color.White, bounds) {
+        public UIButton (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string text) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, DEFAULT_DEPTH, Color.White) {
 
         }
 
-        public UIButton (Screen owner, string text, int depth, Color color, Rectangle bounds) : this(owner, text, DEFAULT_TEXT_SIZE, depth, color, bounds) {
+        public UIButton (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string text, int depth, Color color) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, depth, color) {
 
         }
 
-        public UIButton (Screen owner, string text, float textsize, int depth, Color color, Rectangle bounds) : base(owner, bounds, depth, false) {
+        public UIButton (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string text, float textsize, int depth, Color color) : base(owner, hmargin, vmargin, size, depth, false) {
             Text = text;
             Color = color;
             charSize = textsize;
             base.Click += this_Click;
             base.Release += this_Release;
+
+            vmargin.Bind(this); hmargin.Bind(this);
         }
 
         private void this_Release ( ) {
@@ -37,7 +40,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public override List<VertexData> GetVertexData ( ) {
             List<VertexData> vertexData = new List<VertexData>( );
-            vertexData.Add(new VertexData(Bounds.Verticies(DEFAULT_ANCHOR), (this.Clicked ? "button_pressed" : "button_idle"), DepthOnScreen, Color));
+            vertexData.Add(new VertexData(Bounds.Verticies(Anchor.Left | Anchor.Top), (this.Clicked ? "button_pressed" : "button_idle"), DepthOnScreen, Color));
 
             Vector2 textSize = UILabel.MeasureText(this.Text, charSize);
             Vector2 centeredTextPosition = new Vector2(this.Bounds.Left + this.Bounds.Width / 2, this.Bounds.Top - this.Bounds.Height / 2) - (textSize / new Vector2(2, -2));

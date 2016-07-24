@@ -53,6 +53,7 @@ namespace mapKnight.Extended.Graphics.UI {
                 UIItems.Add(screen, new List<UIItem>( ));
             UIItems[screen].Add(item);
             usedIndicies.Add(item, new Stack<int>( ));
+            item.Changed += Update;
         }
 
         public static void Delete ( ) {

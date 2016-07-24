@@ -14,8 +14,7 @@ namespace mapKnight.Android {
             base.OnCreate(bundle);
 
             // Create our OpenGL view, and display it
-            AssetProvider.Context = this;
-            Extended.Assets.AssetProvider = new AssetProvider( );
+            Extended.Assets.Context = this;
 
             view = new View(this);
             view.SetOnTouchListener(TouchHandler.Instance);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIBar : UIItem {
@@ -7,9 +8,10 @@ namespace mapKnight.Extended.Graphics.UI {
 
         private float currentPercent;
 
-        public UIBar (Screen owner, Rectangle bounds, int depth) : base(owner, bounds, depth, false) {
+        public UIBar (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
             //binder.Changed += binder_Changed;
             //currentPercent = binder.Percent;
+            vmargin.Bind(this); hmargin.Bind(this);
         }
 
         private void binder_Changed (object sender, float e) {

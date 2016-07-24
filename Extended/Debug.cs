@@ -26,11 +26,12 @@ namespace mapKnight.Extended {
             CheckGL(sender.GetType( ));
         }
 
-        public static void CheckGL (Type sender) {
+        public static bool CheckGL (Type sender) {
             ErrorCode error = GL.GetErrorCode( );
             if (error != ErrorCode.NoError) {
                 Print(sender, $"OPENGLERROR {error}");
             }
+            return error != ErrorCode.NoError;
         }
     }
 #endif
