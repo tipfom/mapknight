@@ -12,9 +12,13 @@ namespace mapKnight.Extended.Components {
 
         public bool IsReadOnly { get { return false; } }
 
+        private bool _HasChanged;
+        public bool HasChanged { get { if (_HasChanged) { _HasChanged = false; return true; } return false; } }
+
         public void Add (Component.Configuration item) {
             components.Add(item);
             Sort( );
+            _HasChanged = true;
         }
 
         public Component.Configuration this[int index] {

@@ -18,8 +18,6 @@ namespace mapKnight.Extended.Graphics {
         private float[ ][ ][ ] layerBuffer;
         private float yOffsetRaw;
         private float yOffsetTile;
-        private int lastSpecies = 0;
-        private int lastID = 0;
         private int focusEntityIndex = -1;
         private Vector2 focusCenter;
         private Vector2 updateTile = new Vector2(-1, -1);

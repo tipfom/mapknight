@@ -64,9 +64,7 @@ namespace mapKnight.Extended {
                 using (BitmapFactory.Options options = new BitmapFactory.Options( ) { InScaled = false })
                 using (Stream stream = GetStream(path))
                 using (Bitmap bitmap = BitmapFactory.DecodeStream(stream, null, options)) {
-                    Debug.CheckGL(typeof(Assets));
                     GLUtils.TexImage2D((int)TextureTarget.Texture2D, 0, bitmap, 0);
-                    Debug.CheckGL(typeof(Assets));
                     width = bitmap.Width;
                     height = bitmap.Height;
                 }
@@ -74,8 +72,6 @@ namespace mapKnight.Extended {
 
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
-                //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-                //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
 
                 textureCache.Add(pathhash, new Texture2D(id, new Size(width, height), path[path.Length - 1]));
 

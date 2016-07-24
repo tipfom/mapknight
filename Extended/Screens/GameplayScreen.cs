@@ -27,13 +27,13 @@ namespace mapKnight.Extended.Screens {
 
             map = Assets.Load<Map>("testMap");
             Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
-            mobConfig.Add(new PushComponent.Configuration( ) { Intervall = 300, ResetVelocity = true, Velocity = new Core.Vector2(0, 1.6f) });
+            mobConfig.Components.Add(new PushComponent.Configuration( ) { Intervall = 300, ResetVelocity = true, Velocity = new Core.Vector2(0, 1.6f) });
 
             for (int i = 0; i < 75; i++) {
                 mobConfig.Create(new Core.Vector2(5 + i / 10f, 5), map);
             }
             Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
-            testEntityConfig.Add(new UserControlComponent.Configuration(this));
+            testEntityConfig.Components.Add(new UserControlComponent.Configuration(this));
             testEntity = testEntityConfig.Create(new Core.Vector2(5, 5), map);
             map.Focus(testEntity.ID);
 

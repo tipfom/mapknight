@@ -6,8 +6,9 @@ namespace mapKnight.Extended.Graphics.UI {
     public class UIButton : UIItem {
         const float DEFAULT_TEXT_SIZE = 0.1f;
 
+        private string[ ] lines;
         private string _Text;
-        public string Text { get { return _Text; } set { _Text = value; RequestUpdate( ); } }
+        public string Text { get { return _Text; } set { _Text = value; lines = _Text.Split('\n'); RequestUpdate( ); } }
         private Color _Color;
         public Color Color { get { return _Color; } set { _Color = value; RequestUpdate( ); } }
         private float charSize;
@@ -42,9 +43,8 @@ namespace mapKnight.Extended.Graphics.UI {
             List<VertexData> vertexData = new List<VertexData>( );
             vertexData.Add(new VertexData(Bounds.Verticies(Anchor.Left | Anchor.Top), (this.Clicked ? "button_pressed" : "button_idle"), DepthOnScreen, Color));
 
-            Vector2 textSize = UILabel.MeasureText(this.Text, charSize);
-            Vector2 centeredTextPosition = new Vector2(this.Bounds.Left + this.Bounds.Width / 2, this.Bounds.Top - this.Bounds.Height / 2) - (textSize / new Vector2(2, -2));
-            vertexData.AddRange(UILabel.GetVertexData(this.Text, centeredTextPosition, charSize, DepthOnScreen, Color.White));
+            Vector2 textPosition = new Vector2(Position.X + Size.X * 0.5f, Position.Y - (Size.Y - lines.Length * charSize) * 0.5f);
+            vertexData.AddRange(UILabel.GetVertexData(new string[ ] { Text }, UITextAlignment.Center, textPosition, charSize, DepthOnScreen, Color.White));
             return vertexData;
         }
     }

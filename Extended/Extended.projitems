@@ -65,6 +65,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteBatch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Texture2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITextAlignment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IEntityWorld.cs" />
