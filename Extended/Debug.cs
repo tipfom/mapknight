@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using OpenTK.Graphics.ES20;
 
+#if __ANDROID__
+using Android.Util;
+#endif
+
 namespace mapKnight.Extended {
 #if DEBUG
     public static class Debug {
@@ -11,7 +15,11 @@ namespace mapKnight.Extended {
         }
 
         public static void Print (Type sender, string message) {
+#if __ANDROID__
+            Log.Debug(sender.Name, message);
+#else
             System.Diagnostics.Debug.WriteLine(sender.Name + ": " + message);
+#endif
         }
 
         public static void Print (object sender, object message) {
@@ -26,11 +34,12 @@ namespace mapKnight.Extended {
             CheckGL(sender.GetType( ));
         }
 
-        public static void CheckGL (Type sender) {
+        public static bool CheckGL (Type sender) {
             ErrorCode error = GL.GetErrorCode( );
             if (error != ErrorCode.NoError) {
                 Print(sender, $"OPENGLERROR {error}");
             }
+            return error != ErrorCode.NoError;
         }
     }
 #endif

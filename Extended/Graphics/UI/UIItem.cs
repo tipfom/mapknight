@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public abstract class UIItem {
         public const Anchor DEFAULT_ANCHOR = Anchor.Left | Anchor.Top;
         public const int DEFAULT_DEPTH = 3;
+
+        public event Action PositionChanged;
+        public event Action SizeChanged;
 
         public delegate void HandleUpdate (UIItem sender);
         public event HandleUpdate Changed;
@@ -16,21 +20,42 @@ namespace mapKnight.Extended.Graphics.UI {
         private bool multiClick;
         private int clickCount;
 
-        public Rectangle Bounds;
-        public Vector2 Position { get { return Bounds.Position; } set { Bounds.Position = value; RequestUpdate( ); } }
-        public Vector2 Size { get { return Bounds.Size; } set { Bounds.Size = value; RequestUpdate( ); } }
+        public Rectangle Bounds { get; private set; }
+        private UIMargin horizontalMargin;
+        private UIMargin verticalMargin;
+
+        private Vector2 _Position;
+        public Vector2 Position {
+            get { return _Position; }
+            private set { _Position = value; Bounds = new Rectangle(Position, Size); RequestUpdate( ); }
+        }
+        private Vector2 _Size;
+        public Vector2 Size {
+            get { return _Size; }
+            protected set { _Size = value; Bounds = new Rectangle(Position, value); SizeChanged?.Invoke( ); RequestUpdate( ); }
+        }
 
         private bool _Visible = true;
-        public bool Visible { get { return _Visible; } set { _Visible = value; RequestUpdate( ); } }
+        public bool Visible { get { return Owner.IsActive && _Visible; } set { _Visible = value; RequestUpdate( ); } }
 
         private int _Depth;
         public int Depth { get { return _Depth; } set { _Depth = value; DepthOnScreen = DEFAULT_DEPTH + value; RequestUpdate( ); } }
         protected int DepthOnScreen { get; private set; }
 
-        public UIItem (Screen owner, Rectangle bounds, int depth, bool multiclick = false) {
-            UIRenderer.Add(owner, this);
+        protected Screen Owner { get; }
 
-            this.Bounds = bounds;
+        public UIItem (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth, bool multiclick = false) {
+            UIRenderer.Add(owner, this);
+            Owner = owner;
+
+            vmargin.Changed += ( ) => {
+                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            };
+            hmargin.Changed += ( ) => {
+                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            };
+
+            this._Size = size;
             this.multiClick = multiclick;
             this._Depth = depth;
             this.DepthOnScreen = depth + DEFAULT_DEPTH;

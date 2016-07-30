@@ -38,7 +38,9 @@ namespace mapKnight.Extended.Graphics.Buffer {
                 GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, new IntPtr(Bytes), data);
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             } else {
+#if DEBUG
                 Debug.Print(this, "data length didnt fit buffer, skipping");
+#endif
             }
         }
 

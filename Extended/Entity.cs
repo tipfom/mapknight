@@ -101,22 +101,15 @@ namespace mapKnight.Extended {
         public class Configuration {
             public string Name;
             public Transform Transform;
-            [JsonProperty]
-            private ComponentList Components;
+            public ComponentList Components;
             private int entitySpecies = -1;
 
             public Entity Create (Vector2 spawnLocation, IEntityWorld container) {
-                if (entitySpecies == -1) {
+                if (entitySpecies == -1 || Components.HasChanged) {
                     entitySpecies = ++currentSpecies;
                     ResolveComponentDependencies( );
-                    //Components.Sort(Component.Configuration.Comparer);
                 }
                 return new Entity(Components, new Transform(spawnLocation, Transform.Bounds), container, Name, entitySpecies);
-            }
-
-            public void Add (Component.Configuration component) {
-                Components.Add(component);
-                entitySpecies = -1;
             }
 
             private void ResolveComponentDependencies ( ) {

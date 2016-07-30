@@ -59,10 +59,12 @@ namespace mapKnight.Extended.Graphics.Programs {
             GL.LinkProgram(program);
 
             string log = GL.GetProgramInfoLog(program);
+#if DEBUG
             Debug.Print(typeof(Program), $"program { program } loaded");
             if (!string.IsNullOrWhiteSpace(log))
                 Debug.Print(typeof(Program), "log: " + log);
             Debug.CheckGL(typeof(Program));
+#endif
 
             return program;
         }
