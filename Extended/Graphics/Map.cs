@@ -10,9 +10,9 @@ using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
 
 namespace mapKnight.Extended.Graphics {
     public class Map : Core.Map, IEntityWorld {
-        const float DRAW_WIDTH = 18;
+        const int DRAW_WIDTH = 18;
 
-        private BufferBatch buffer;
+        private BufferBatch mainBuffer, foregroundBuffer;
         private Texture2D texture;
         private Matrix matrix = new Matrix( );
         private float[ ][ ][ ] layerBuffer;
@@ -27,12 +27,12 @@ namespace mapKnight.Extended.Graphics {
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
 
-        public Vector2 Bounds { get; private set; }
+        private CachedGPUBuffer foregroundTextureBuffer { get { return (CachedGPUBuffer)foregroundBuffer.TextureBuffer; } }
+        private CachedGPUBuffer mainTextureBuffer { get { return (CachedGPUBuffer)mainBuffer.TextureBuffer; } }
 
         public Map (Stream input) : base(input) {
-            Bounds = new Vector2(Width, Height);
-            DrawSize = new Size((int)DRAW_WIDTH + 2, (int)Math.Ceiling(DRAW_WIDTH / Window.Ratio + 2));
-            VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
+            DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 2));
+            VertexSize = 2f * Window.Ratio / DRAW_WIDTH;
             InitTextureCoords( );
 
             texture = Assets.Load<Texture2D>(Texture);
@@ -41,21 +41,22 @@ namespace mapKnight.Extended.Graphics {
         }
 
         private void Window_Changed ( ) {
-            VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
-            if ((int)(DRAW_WIDTH / Window.Ratio) + 2 != DrawSize.Height) {
-                DrawSize = new Size((int)DRAW_WIDTH + 2, (int)(DRAW_WIDTH / Window.Ratio + 2));
-                buffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 3), new GPUBuffer(2, DrawSize.Area * 3, GenerateVertexCoords( )), new GPUBuffer(2, DrawSize.Area * 3));
+            if (2 * Window.Ratio / DRAW_WIDTH != VertexSize) {
+                VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
+                DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 2));
+                mainBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 2), new GPUBuffer(2, DrawSize.Area * 2, GenerateMainVerticies( )), new CachedGPUBuffer(2, DrawSize.Area * 2));
+                foregroundBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area), new GPUBuffer(2, DrawSize.Area, GenerateForegroundVerticies( )), new CachedGPUBuffer(2, DrawSize.Area));
             }
         }
 
-        private float[ ] GenerateVertexCoords ( ) {
+        private float[ ] GenerateMainVerticies ( ) {
             int tileCount = DrawSize.Area;
             float ystart = -(DrawSize.Height / 2f * VertexSize);
             yOffsetRaw = (VertexSize - Math.Abs(ystart + 1));
             yOffsetTile = yOffsetRaw / VertexSize;
 
-            float[ ] verticies = new float[tileCount * 3 * 8];
-            for (int i = 0; i < 3; i++) { // PR tile and overlay vertex
+            float[ ] verticies = new float[tileCount * 2 * 2 * 4];
+            for (int i = 0; i < 2; i++) { // PR tile and overlay vertex
                 for (int y = 0; y < DrawSize.Height; y++) {
                     for (int x = 0; x < DrawSize.Width; x++) {
                         verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 0] = -Window.Ratio - VertexSize + (x * VertexSize);
@@ -72,6 +73,28 @@ namespace mapKnight.Extended.Graphics {
             return verticies;
         }
 
+        private float[ ] GenerateForegroundVerticies ( ) {
+            int tileCount = DrawSize.Area;
+            float ystart = -(DrawSize.Height / 2f * VertexSize);
+            yOffsetRaw = (VertexSize - Math.Abs(ystart + 1));
+            yOffsetTile = yOffsetRaw / VertexSize;
+
+            float[ ] verticies = new float[tileCount * 1 * 2 * 4];
+            for (int y = 0; y < DrawSize.Height; y++) {
+                for (int x = 0; x < DrawSize.Width; x++) {
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 0] = -Window.Ratio - VertexSize + (x * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 1] = ystart + (y * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 2] = -Window.Ratio - VertexSize + (x * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 3] = ystart + ((y + 1) * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 4] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 5] = ystart + ((y + 1) * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 6] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 7] = ystart + (y * VertexSize);
+                }
+            }
+            return verticies;
+        }
+
         private void InitTextureCoords ( ) {
             // buffer tile coords
             layerBuffer = new float[3][ ][ ];
@@ -83,8 +106,8 @@ namespace mapKnight.Extended.Graphics {
             }
 
             for (int layer = 0; layer < 3; layer++) {
-                for (int y = 0; y < Size.Height; y++) {
-                    for (int x = 0; x < Size.Width; x++) {
+                for (int y = 0; y < base.Size.Height; y++) {
+                    for (int x = 0; x < base.Size.Width; x++) {
                         for (int c = 0; c < 8; c++) {
                             layerBuffer[layer][y][x * 8 + c] = this.GetTile(x, y, layer).Texture[c];
                         }
@@ -93,22 +116,28 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        private float[ ] GenerateTextureCoords ( ) {
-            float[ ] textureBuffer = new float[DrawSize.Area * 8 * 3];
-            // insert buffered tile coords to texturebuffer
-            for (int layer = 0; layer < 3; layer++) {
+        private void UpdateTextureBuffer ( ) {
+            for (int layer = 0; layer < 2; layer++) {
                 for (int ly = 0; ly < DrawSize.Height; ly++) {
-                    Array.Copy(layerBuffer[layer][ly + (int)updateTile.Y], (int)updateTile.X * 8, textureBuffer, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
+                    Array.Copy(layerBuffer[layer][ly + (int)updateTile.Y], (int)updateTile.X * 8, mainTextureBuffer.Cache, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
                 }
             }
-            return textureBuffer;
+            for (int ly = 0; ly < DrawSize.Height; ly++) {
+                Array.Copy(layerBuffer[2][ly + (int)updateTile.Y], (int)updateTile.X * 8, foregroundTextureBuffer.Cache, ly * DrawSize.Width * 8, DrawSize.Width * 8);
+            }
+
+            mainTextureBuffer.Apply( );
+            foregroundTextureBuffer.Apply( );
         }
 
         public void Draw ( ) {
             Program.Begin( );
-            Program.Draw(buffer, texture, matrix, true);
+            Program.Draw(mainBuffer, texture, matrix, true);
             Program.End( );
             ((EntityRenderer)Renderer).Draw( );
+            Program.Begin( );
+            Program.Draw(foregroundBuffer, texture, matrix, true);
+            Program.End( );
         }
 
         public void Update (TimeSpan dt) {
@@ -151,7 +180,7 @@ namespace mapKnight.Extended.Graphics {
                 Vector2 intNextTile = new Vector2((int)Mathf.Clamp(nextTile.X, 0, Width - DrawSize.Width), (int)Mathf.Clamp(nextTile.Y, 0, Height - DrawSize.Height));
                 if (updateTile != intNextTile) {
                     updateTile = intNextTile;
-                    ((GPUBuffer)buffer.TextureBuffer).Put(GenerateTextureCoords( ));
+                    UpdateTextureBuffer( );
                 }
             }
         }

@@ -6,7 +6,6 @@ using mapKnight.Extended.Graphics.UI.Layout;
 namespace mapKnight.Extended.Graphics.UI {
     public abstract class UIItem {
         public const Anchor DEFAULT_ANCHOR = Anchor.Left | Anchor.Top;
-        public const int DEFAULT_DEPTH = 3;
 
         public event Action PositionChanged;
         public event Action SizeChanged;
@@ -39,8 +38,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public bool Visible { get { return Owner.IsActive && _Visible; } set { _Visible = value; RequestUpdate( ); } }
 
         private int _Depth;
-        public int Depth { get { return _Depth; } set { _Depth = value; DepthOnScreen = DEFAULT_DEPTH + value; RequestUpdate( ); } }
-        protected int DepthOnScreen { get; private set; }
+        public int Depth { get { return _Depth; } set { _Depth = value; RequestUpdate( ); } }
 
         protected Screen Owner { get; }
 
@@ -48,17 +46,19 @@ namespace mapKnight.Extended.Graphics.UI {
             UIRenderer.Add(owner, this);
             Owner = owner;
 
-            vmargin.Changed += ( ) => {
-                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            };
-            hmargin.Changed += ( ) => {
-                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            };
-
             this._Size = size;
             this.multiClick = multiclick;
             this._Depth = depth;
-            this.DepthOnScreen = depth + DEFAULT_DEPTH;
+
+            vmargin.Bind(this);
+            vmargin.Changed += ( ) => {
+                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            };
+            hmargin.Bind(this);
+            hmargin.Changed += ( ) => {
+                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            };
+            Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
         }
 
         public virtual void HandleTouch (UITouchAction action) {
@@ -94,8 +94,6 @@ namespace mapKnight.Extended.Graphics.UI {
 
         }
 
-        public virtual List<VertexData> GetVertexData ( ) {
-            return new List<VertexData>( );
-        }
+        public abstract List<DepthVertexData> GetVertexData ( );
     }
 }

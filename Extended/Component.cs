@@ -17,6 +17,14 @@ namespace mapKnight.Extended {
             this.State = null;
         }
 
+        ~Component ( ) {
+            Destroy( );
+        }
+
+        public virtual void Destroy ( ) {
+
+        }
+
         public virtual void Update (TimeSpan dt) {
 
         }

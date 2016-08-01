@@ -19,6 +19,10 @@ namespace mapKnight.Extended.Graphics.Buffer {
 
         }
 
+        ~GPUBuffer ( ) {
+            Dispose( );
+        }
+
         public GPUBuffer (int dimensions, int quads, float[ ] initialData, BufferUsage usage = BufferUsage.DynamicDraw) {
             Dimensions = dimensions;
             Length = Dimensions * quads * 4;
@@ -50,7 +54,7 @@ namespace mapKnight.Extended.Graphics.Buffer {
 
         public void Bind (int location) {
             GL.BindBuffer(BufferTarget.ArrayBuffer, buffer);
-            GL.VertexAttribPointer(location, Dimensions, VertexAttribPointerType.Float, false, 0, 0);
+            GL.VertexAttribPointer(location, Dimensions, VertexAttribPointerType.Float, false, Stride, IntPtr.Zero);
         }
 
         public void Dispose ( ) {

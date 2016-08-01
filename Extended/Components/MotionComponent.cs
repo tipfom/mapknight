@@ -86,11 +86,11 @@ namespace mapKnight.Extended.Components {
             // returns true if any collision happened and modifies the transform
             if (targetTransform.Center.X > oldTransform.Center.X) {
                 // moves to the right
-                int xlimit = (int)Math.Floor(targetTransform.TR.X);
-                int ylimit = ((oldTransform.TR.Y == Math.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
+                int xlimit = Mathi.Floor(targetTransform.TR.X);
+                int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.TR.X; x <= xlimit; x++) {
                     for (int y = (int)oldTransform.BL.Y; y <= ylimit; y++) {
-                        if (x >= Owner.Owner.Bounds.X || Owner.Owner.HasCollider(x, y)) {
+                        if (x >= Owner.Owner.Size.Width || Owner.Owner.HasCollider(x, y)) {
                             targetTransform.TranslateX(x - targetTransform.Bounds.X / 2);
                             return true;
                         }
@@ -98,8 +98,8 @@ namespace mapKnight.Extended.Components {
                 }
             } else if (targetTransform.Center.X < oldTransform.Center.X) {
                 // moves to the left
-                int xlimit = (int)Math.Floor(targetTransform.BL.X);
-                int ylimit = ((oldTransform.TR.Y == Math.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
+                int xlimit = Mathi.Floor(targetTransform.BL.X);
+                int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.BL.X; x >= xlimit; x--) {
                     for (int y = (int)oldTransform.BL.Y; y <= ylimit; y++) {
                         if (x < 0 || Owner.Owner.HasCollider(x, y)) {
@@ -116,11 +116,11 @@ namespace mapKnight.Extended.Components {
         private bool moveVertically (Transform oldTransform, Transform targetTransform) {
             if (oldTransform.Center.Y < targetTransform.Center.Y) {
                 // goes up
-                int ylimit = (int)Math.Floor(targetTransform.TR.Y);
-                int xlimit = ((targetTransform.TR.X == Math.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
+                int ylimit = Mathi.Floor(targetTransform.TR.Y);
+                int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.TR.Y; y <= ylimit; y++) {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
-                        if (y >= Owner.Owner.Bounds.Y || Owner.Owner.HasCollider(x, y)) {
+                        if (y >= Owner.Owner.Size.Height || Owner.Owner.HasCollider(x, y)) {
                             targetTransform.TranslateY(y - targetTransform.Bounds.Y / 2f);
                             return true;
                         }
@@ -128,8 +128,8 @@ namespace mapKnight.Extended.Components {
                 }
             } else if (oldTransform.Center.Y > targetTransform.Center.Y) {
                 // goes down
-                int ylimit = (int)Math.Floor(targetTransform.BL.Y);
-                int xlimit = ((targetTransform.TR.X == Math.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
+                int ylimit = Mathi.Floor(targetTransform.BL.Y);
+                int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.BL.Y; y >= ylimit; y--) {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
                         if (y == -1 || Owner.Owner.HasCollider(x, y)) {

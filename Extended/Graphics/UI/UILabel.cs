@@ -8,7 +8,6 @@ namespace mapKnight.Extended.Graphics.UI {
         public const int CHAR_WIDTH_PIXEL = 7;
         public const int CHAR_HEIGHT_PIXEL = 9;
         public const int CHAR_SPACING_PIXEL = 1;
-        public const int DEFAULT_TEXT_DEPTH = -2;
 
         private static Dictionary<char, float> charScales = new Dictionary<char, float>( ) { [' '] = 1f };
 
@@ -26,7 +25,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private string _Text;
         public string Text {
             get { return _Text; }
-            set { _Text = value; lines = Text.Split('\n'); Size = MeasureText(value, charSize); RequestUpdate( ); }
+            set { _Text = value; lines = Text.Split('\n'); Size = MeasureText(value, charSize); } //size setting will call requupdate
         }
         private string[ ] lines;
 
@@ -41,7 +40,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         readonly float charSize;
 
-        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, float size, string text, UITextAlignment alignment = UITextAlignment.Left) : this(owner, hmargin, vmargin, DEFAULT_TEXT_DEPTH, size, text, alignment) {
+        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, float size, string text, UITextAlignment alignment = UITextAlignment.Left) : this(owner, hmargin, vmargin, 0, size, text, alignment) {
 
         }
 
@@ -50,21 +49,20 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, int depth, float size, Color color, string text, UITextAlignment alignment = UITextAlignment.Left) : base(owner, hmargin, vmargin, new Vector2(0, 0), depth) {
-            this.charSize = size;
-            this.Text = text;
-            this._Color = color;
-            this.Alignment = alignment;
-            vmargin.Bind(this); hmargin.Bind(this);
+            charSize = size;
+            Text = text;
+            Color = color;
+            Alignment = alignment;
         }
 
-        public override List<VertexData> GetVertexData ( ) {
+        public override List<DepthVertexData> GetVertexData ( ) {
             switch (Alignment) {
                 case UITextAlignment.Left:
-                    return GetVertexData(lines, Alignment, this.Position, this.charSize, DepthOnScreen, this.Color);
+                    return GetVertexData(lines, Alignment, this.Position, this.charSize, Depth, this.Color);
                 case UITextAlignment.Right:
-                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X, 0), this.charSize, DepthOnScreen, this.Color);
+                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X, 0), this.charSize, Depth, this.Color);
                 case UITextAlignment.Center:
-                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X * 0.5f, 0), this.charSize, DepthOnScreen, this.Color);
+                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X * 0.5f, 0), this.charSize, Depth, this.Color);
                 default:
                     return null;
             }
@@ -75,8 +73,8 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
 
-        public static List<VertexData> GetVertexData (string[ ] lines, UITextAlignment alignment, Vector2 position, float charSize, int depth, Color color) {
-            List<VertexData> vertexData = new List<VertexData>( );
+        public static List<DepthVertexData> GetVertexData (string[ ] lines, UITextAlignment alignment, Vector2 position, float charSize, int depth, Color color) {
+            List<DepthVertexData> vertexData = new List<DepthVertexData>( );
             Vector2 currentPosition = position;
             Vector2[ ] sizes;
 
@@ -88,7 +86,7 @@ namespace mapKnight.Extended.Graphics.UI {
                                 currentPosition.X += charSize;
                             } else {
                                 float characterWidth = charScales[character] * charSize;
-                                vertexData.Add(new VertexData(
+                                vertexData.Add(new DepthVertexData(
                                     new float[ ] {
                                         currentPosition.X, currentPosition.Y,
                                         currentPosition.X, currentPosition.Y - charSize,
@@ -112,7 +110,7 @@ namespace mapKnight.Extended.Graphics.UI {
                                 currentPosition.X -= charSize;
                             } else {
                                 float characterWidth = charScales[character] * charSize;
-                                vertexData.Add(new VertexData(
+                                vertexData.Add(new DepthVertexData(
                                     new float[ ] {
                                         currentPosition.X - characterWidth, currentPosition.Y,
                                         currentPosition.X - characterWidth, currentPosition.Y - charSize,
@@ -137,7 +135,7 @@ namespace mapKnight.Extended.Graphics.UI {
                                 currentPosition.X += charSize;
                             } else {
                                 float characterWidth = charScales[character] * charSize;
-                                vertexData.Add(new VertexData(
+                                vertexData.Add(new DepthVertexData(
                                     new float[ ] {
                                         currentPosition.X, currentPosition.Y,
                                         currentPosition.X, currentPosition.Y - charSize,

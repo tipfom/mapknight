@@ -19,11 +19,11 @@ namespace mapKnight.Core {
             return transformedVerticies;
         }
 
-        public static float[ ] Transform (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle, bool mirrored =  false) {
+        public static float[ ] Transform (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle, bool mirrored = false) {
             if (verticies.Length % 2 != 0)
                 return null;
 
-            angle *= (float)Math.PI / 180f; // convert to radians
+            angle *= PI / 180f; // convert to radians
 
             float[ ] transformedRotatedVerticies = new float[verticies.Length];
             for (int i = 0; i < verticies.Length / 2; i++) {
@@ -39,7 +39,9 @@ namespace mapKnight.Core {
         }
 
         public static float Clamp (float value, float min, float max) {
-            return Math.Min(Math.Max(value, min), max);
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
         }
 
         public static float Clamp01 (float value) {

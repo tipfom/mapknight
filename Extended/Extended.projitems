@@ -38,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IAttributeBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IndexBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\DepthVertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UITouchAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />

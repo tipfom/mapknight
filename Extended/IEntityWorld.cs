@@ -7,7 +7,7 @@ namespace mapKnight.Extended {
         IEntityRenderer Renderer { get; }
 
         Vector2 Gravity { get; }
-        Vector2 Bounds { get; }
+        Size Size { get; }
         Vector2 GetPositionOnScreen (Entity entity);
 
         bool HasCollider (int x, int y);

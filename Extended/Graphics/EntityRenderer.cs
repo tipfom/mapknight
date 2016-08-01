@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Graphics {
         private ClientBuffer colorBuffer { get { return (ClientBuffer)buffer.ColorBuffer; } }
 
         public EntityRenderer ( ) {
-            buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(3, MAX_QUAD_COUNT), new ClientBuffer(4, MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT));
+            buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT), new ClientBuffer(4, MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT));
         }
 
         public void AddTexture (int species, SpriteBatch entityTexture) {
@@ -40,13 +40,7 @@ namespace mapKnight.Extended.Graphics {
                 int currentIndex = 0;
                 while (frameVertexData[species].Count > 0) {
                     VertexData vertexData = frameVertexData[species].Dequeue( );
-                    float[ ] verticies = {
-                        vertexData.Verticies[0], vertexData.Verticies[1], vertexData.Depth,
-                        vertexData.Verticies[2], vertexData.Verticies[3], vertexData.Depth,
-                        vertexData.Verticies[4], vertexData.Verticies[5], vertexData.Depth,
-                        vertexData.Verticies[6], vertexData.Verticies[7], vertexData.Depth,
-                    };
-                    Array.Copy(verticies, 0, vertexBuffer.Data, currentIndex * 12, 12);
+                    Array.Copy(vertexData.Verticies, 0, vertexBuffer.Data, currentIndex * 8, 8);
                     Array.Copy(vertexData.Color.ToOpenGL( ), 0, colorBuffer.Data, currentIndex * 16, 16);
                     Array.Copy(entityTextures[species].Get(vertexData.Texture), 0, textureBuffer.Data, currentIndex * 8, 8);
                     currentIndex++;

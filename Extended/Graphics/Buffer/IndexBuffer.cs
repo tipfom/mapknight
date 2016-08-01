@@ -31,6 +31,10 @@ namespace mapKnight.Extended.Graphics.Buffer {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
+        ~IndexBuffer ( ) {
+            Dispose( );
+        }
+
         public void Bind ( ) {
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, buffer);
         }

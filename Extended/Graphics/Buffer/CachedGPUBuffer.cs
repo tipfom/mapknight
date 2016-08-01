@@ -34,7 +34,11 @@ namespace mapKnight.Extended.Graphics.Buffer {
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
-        public void Put ( ) {
+        ~CachedGPUBuffer ( ) {
+            Dispose( );
+        }
+
+        public void Apply ( ) {
             if (Cache.Length == Length) {
                 GL.BindBuffer(BufferTarget.ArrayBuffer, buffer);
                 GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, new IntPtr(Bytes), Cache);

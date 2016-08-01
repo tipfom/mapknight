@@ -15,11 +15,10 @@ namespace mapKnight.Extended.Graphics.UI {
 
             this.Click += ( ) => { RequestUpdate( ); };
             this.Release += ( ) => { RequestUpdate( ); };
-            vmargin.Bind(this); hmargin.Bind(this);
         }
 
-        public override List<VertexData> GetVertexData ( ) {
-            return new List<VertexData>( ) { new VertexData(Bounds.Verticies(DEFAULT_ANCHOR), this.Clicked ? textureClick : textureIdle, DepthOnScreen, ModificationColor) };
+        public override List<DepthVertexData> GetVertexData ( ) {
+            return new List<DepthVertexData>( ) { new DepthVertexData(Bounds.Verticies(DEFAULT_ANCHOR), this.Clicked ? textureClick : textureIdle, Depth, ModificationColor) };
         }
     }
 }

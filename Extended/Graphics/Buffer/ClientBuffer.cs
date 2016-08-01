@@ -22,6 +22,10 @@ namespace mapKnight.Extended.Graphics.Buffer {
             Data = new float[Length];
         }
 
+        ~ClientBuffer ( ) {
+            Dispose( );
+        }
+
         public void Bind (AttributeHandle attribute) {
             Bind(attribute.Location);
         }

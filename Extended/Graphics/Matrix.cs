@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenTK;
-using MatrixMath = Android.Opengl.Matrix;
+﻿using OpenTK;
 
 namespace mapKnight.Extended.Graphics {
     public class Matrix {
@@ -26,7 +22,7 @@ namespace mapKnight.Extended.Graphics {
         }
 
         public void UpdateProjection ( ) {
-            _Projection = Matrix4.CreateOrthographicOffCenter(-Window.Ratio, Window.Ratio, -1, 1, 3, 7);
+            _Projection = Matrix4.CreateOrthographicOffCenter(-Window.Ratio, Window.Ratio, -1, 1, -1, 3);
         }
 
         public void CalculateMVP ( ) {
@@ -37,8 +33,8 @@ namespace mapKnight.Extended.Graphics {
             _View = Matrix4.LookAt(0, 0, 3, 0f, 0f, 0f, 0f, 1f, 0f);
         }
 
-        public void TranslateView(float x, float y, float z) {
-            _View = Matrix4.Mult(_View , Matrix4.CreateTranslation(new Vector3(x, y, z)));
+        public void TranslateView (float x, float y, float z) {
+            _View = Matrix4.Mult(_View, Matrix4.CreateTranslation(new Vector3(x, y, z)));
         }
 
         public static Matrix Default { get; } = new Matrix( );

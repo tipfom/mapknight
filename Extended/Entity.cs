@@ -30,6 +30,7 @@ namespace mapKnight.Extended {
 
         public bool IsOnScreen { get { return Owner.IsOnScreen(this); } }
         public Vector2 PositionOnScreen { get { return Owner.GetPositionOnScreen(this); } }
+        public bool IsDestroyed { get; private set; } = false;
 
         public readonly string Name;
         public readonly int Species;
@@ -48,6 +49,19 @@ namespace mapKnight.Extended {
             }
 
             Add(this);
+        }
+
+        ~Entity ( ) {
+            Destroy( );
+        }
+
+        public void Destroy ( ) {
+            if (IsDestroyed)
+                return;
+            foreach (Component component in components.Values)
+                component.Destroy( );
+            Transform = null;
+            IsDestroyed = true;
         }
 
         public void Prepare ( ) {

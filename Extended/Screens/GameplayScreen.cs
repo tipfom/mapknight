@@ -28,6 +28,7 @@ namespace mapKnight.Extended.Screens {
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
 
             map = Assets.Load<Map>("testMap");
+
             Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
             mobConfig.Components.Add(new PushComponent.Configuration( ) { Intervall = 300, ResetVelocity = true, Velocity = new Core.Vector2(0, 1.6f) });
 
@@ -56,7 +57,7 @@ namespace mapKnight.Extended.Screens {
         public override void Update (TimeSpan dt) {
             map.Update(dt);
             base.Update(dt);
-            debugLabel.Text = $"frame: {Manager.DrawTime.TotalMilliseconds:00.0}\n" +
+            debugLabel.Text = $"frame: {Manager.FrameTime.TotalMilliseconds:00.0}\n" +
                                 $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
                                 $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}";
         }

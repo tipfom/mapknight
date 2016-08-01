@@ -34,7 +34,6 @@ namespace mapKnight.Extended.Components {
                     VertexData entryVertexData = new VertexData(
                         Mathf.Translate(entry.Value, 0, 0, positionOnScreen.X, positionOnScreen.Y),
                         spriteData[entry.Key],
-                        0,
                         colorData);
                     entityVertexData.Add(entryVertexData);
                 }

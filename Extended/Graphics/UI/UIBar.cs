@@ -11,7 +11,6 @@ namespace mapKnight.Extended.Graphics.UI {
         public UIBar (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
             //binder.Changed += binder_Changed;
             //currentPercent = binder.Percent;
-            vmargin.Bind(this); hmargin.Bind(this);
         }
 
         private void binder_Changed (object sender, float e) {
@@ -19,8 +18,8 @@ namespace mapKnight.Extended.Graphics.UI {
             RequestUpdate( );
         }
 
-        public override List<VertexData> GetVertexData ( ) {
-            List<VertexData> vertexData = new List<VertexData>( );
+        public override List<DepthVertexData> GetVertexData ( ) {
+            List<DepthVertexData> vertexData = new List<DepthVertexData>( );
 
             float borderWidthHalf = Size.Y * BORDER_BOUNDS_RATIO;
             float borderPosition = Position.X + Size.X * currentPercent;
@@ -42,9 +41,9 @@ namespace mapKnight.Extended.Graphics.UI {
                 borderPosition + borderWidthHalf,Position.Y
             };
 
-            vertexData.Add(new VertexData(filled_verticies, "bar_filled", DepthOnScreen, Color.White));
-            vertexData.Add(new VertexData(empty_verticies, "bar_empty", DepthOnScreen, Color.White));
-            vertexData.Add(new VertexData(border_verticies, "bar_border", DepthOnScreen, Color.White));
+            vertexData.Add(new DepthVertexData(filled_verticies, "bar_filled", Depth, Color.White));
+            vertexData.Add(new DepthVertexData(empty_verticies, "bar_empty", Depth, Color.White));
+            vertexData.Add(new DepthVertexData(border_verticies, "bar_border", Depth, Color.White));
 
             return vertexData;
         }

@@ -8,5 +8,8 @@ Shared/*
 *.apk
 *.exe
 *.db
+*.bak
+*-Skunk.*
+*-Tim-PC.*
 
 mapKnight.userprefs
