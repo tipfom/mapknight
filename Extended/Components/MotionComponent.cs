@@ -11,8 +11,9 @@ namespace mapKnight.Extended.Components {
 
         public Vector2 Velocity;
 
-        public bool IsOnGround;
-        public bool IsOnPlatform;
+        public bool IsOnGround { get; private set; }
+        public bool IsOnPlatform { get; private set; }
+        public bool IsAtWall { get; private set; }
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
 
@@ -46,13 +47,13 @@ namespace mapKnight.Extended.Components {
             if (HasPlatformCollider) {
                 bool wasOnPlatform = IsOnPlatform;
                 IsOnPlatform = false;
-                foreach (Entity platform in Entity.Platforms) {
-                    if (Owner.Transform.Touches(platform.Transform)) {
+                foreach (KeyValuePair<Entity, PlatformComponent> platform in Entity.Platforms) {
+                    if (Owner.Transform.Touches(platform.Key.Transform)) {
                         if (!wasOnPlatform) // align with platform
-                            Owner.Transform.Align(platform.Transform);
+                            Owner.Transform.Align(platform.Key.Transform);
 
                         IsOnPlatform = true;
-                        this.Velocity = (Vector2)platform.GetComponentState(ComponentEnum.Platform);
+                        this.Velocity = platform.Value.Velocity;
                         // player cant go below the platform so all velocities regarding to lower the y value of the player
                         // need to be removed
                         for (int i = 0; i < appliedVelocities.Count; i++)
@@ -70,7 +71,7 @@ namespace mapKnight.Extended.Components {
 
             Transform newTransform = new Transform(Owner.Transform.Center + Velocity * (float)dt.TotalSeconds, Owner.Transform.Bounds);
             if (HasMapCollider) {
-                moveHorizontally(Owner.Transform, newTransform);
+                IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
             }
 
@@ -78,8 +79,6 @@ namespace mapKnight.Extended.Components {
 
             if (IsOnGround)
                 this.Velocity.Y = 0;
-
-            this.State = Velocity;
         }
 
         private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {

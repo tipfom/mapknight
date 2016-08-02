@@ -9,6 +9,7 @@ namespace mapKnight.Extended.Components {
         private Vector2 velocity;
         private int lastPush;
         private bool resetLastVelocity;
+        private MotionComponent motionComponent;
 
         public PushComponent (Entity owner, int intervall, Vector2 velocity, bool resetlastvelocity) : base(owner) {
             this.intervall = intervall; // ms
@@ -18,13 +19,14 @@ namespace mapKnight.Extended.Components {
 
         public override void Prepare ( ) {
             this.lastPush = Environment.TickCount;
+            this.motionComponent = Owner.GetComponent<MotionComponent>( );
         }
 
         public override void Update (TimeSpan dt) {
             if (Environment.TickCount > lastPush + intervall) {
                 lastPush += intervall;
                 if (resetLastVelocity) {
-                    Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Push, ComponentData.Velocity, -(Vector2)Owner.GetComponentState(ComponentEnum.Motion) + velocity);
+                    Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Push, ComponentData.Velocity, -motionComponent.Velocity + velocity);
                 } else {
                     Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Push, ComponentData.Velocity, velocity);
                 }

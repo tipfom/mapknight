@@ -6,6 +6,8 @@ namespace mapKnight.Extended.Components {
     public class PlatformComponent : Component {
         const Interpolation interpolationMode = Interpolation.Linear;
 
+        public Vector2 Velocity = new Vector2( );
+
         private float speed; // tiles per second
         private List<Vector2> waypoints;
 
@@ -17,7 +19,6 @@ namespace mapKnight.Extended.Components {
         private int currentWaypointDuration;
 
         public PlatformComponent (Entity owner, List<Vector2> waypoints, float speed) : base(owner) {
-            this.State = new Vector2(0, 0);
             this.waypoints = waypoints;
             this.speed = (float)Math.Pow(speed, 2);
 
@@ -56,7 +57,7 @@ namespace mapKnight.Extended.Components {
         private void PrepareNextStep ( ) {
             currentWaypointDuration = GetCurrentWaypointDuration( );
             nextWaypointTime += currentWaypointDuration;
-            this.State = (nextWaypoint - currentWaypoint) / (currentWaypointDuration / 1000f); // current velocity
+            Velocity = (nextWaypoint - currentWaypoint) / (currentWaypointDuration / 1000f); // current velocity
         }
 
         public new class Configuration : Component.Configuration {

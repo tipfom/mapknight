@@ -8,6 +8,7 @@ namespace mapKnight.Extended.Components {
     [ComponentOrder(ComponentEnum.Motion)]
     public class SpeedComponent : Component {
         private Vector2 defaultSpeed;
+        public Vector2 Speed;
 
         public SpeedComponent (Entity owner, Vector2 defaultspeed) : base(owner) {
             defaultSpeed = defaultspeed;
@@ -16,9 +17,9 @@ namespace mapKnight.Extended.Components {
         public override void Update (TimeSpan dt) {
             if (Owner.HasComponentInfo(ComponentEnum.Speed)) {
                 Vector2 slowDown = (Vector2)Owner.GetComponentInfo(ComponentEnum.Speed).Data;
-                this.State = defaultSpeed * slowDown;
+                Speed = defaultSpeed * slowDown;
             } else {
-                this.State = defaultSpeed;
+                Speed = defaultSpeed;
             }
         }
 

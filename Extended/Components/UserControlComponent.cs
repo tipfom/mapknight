@@ -10,26 +10,30 @@ namespace mapKnight.Extended.Components {
     [ComponentOrder(ComponentEnum.Motion)]
     public class UserControlComponent : Component {
         private IInputProvider inputProvider;
+        private SpeedComponent speedComponent;
+        private MotionComponent motionComponent;
 
         public UserControlComponent (Entity owner, IInputProvider inputprovider) : base(owner) {
             inputProvider = inputprovider;
         }
 
+        public override void Prepare ( ) {
+            speedComponent = Owner.GetComponent<SpeedComponent>( );
+            motionComponent = Owner.GetComponent<MotionComponent>( );
+        }
+
         public override void Update (TimeSpan dt) {
-            Vector2 speed = (Vector2)Owner.GetComponentState(ComponentEnum.Speed);
-            if (inputProvider.Jump && ((MotionComponent)Owner.GetComponent(ComponentEnum.Motion)).IsOnGround) {
+            Vector2 speed = speedComponent.Speed;
+            if (inputProvider.Jump && motionComponent.IsOnGround) {
                 Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.UserControl, ComponentData.Velocity, new Vector2(0, speed.Y));
             }
-            if (Owner.GetComponentState(ComponentEnum.Motion) == null)
-                return;
 
-            Vector2 current = (Vector2)Owner.GetComponentState(ComponentEnum.Motion);
             if (inputProvider.Left) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.UserControl, ComponentData.Velocity, new Vector2(-speed.X - current.X, 0));
+                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.UserControl, ComponentData.Velocity, new Vector2(-speed.X - motionComponent.Velocity.X, 0));
             } else if (inputProvider.Right) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.UserControl, ComponentData.Velocity, new Vector2(speed.X - current.X, 0));
+                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.UserControl, ComponentData.Velocity, new Vector2(speed.X - motionComponent.Velocity.X, 0));
             } else {
-                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.UserControl, ComponentData.Velocity, new Vector2(-current.X, 0));
+                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.UserControl, ComponentData.Velocity, new Vector2(-motionComponent.Velocity.X, 0));
             }
         }
 

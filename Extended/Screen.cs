@@ -32,6 +32,10 @@ namespace mapKnight.Extended {
             UIRenderer.Update(dt);
         }
 
+        public virtual void Tick ( ) {
+
+        }
+
         public virtual void Draw ( ) {
             UIRenderer.Draw( );
         }

@@ -10,11 +10,8 @@ namespace mapKnight.Extended {
     public abstract class Component {
         protected Entity Owner;
 
-        public object State;
-
         public Component (Entity owner) {
             this.Owner = owner;
-            this.State = null;
         }
 
         ~Component ( ) {
@@ -26,6 +23,10 @@ namespace mapKnight.Extended {
         }
 
         public virtual void Update (TimeSpan dt) {
+
+        }
+
+        public virtual void Tick ( ) {
 
         }
 

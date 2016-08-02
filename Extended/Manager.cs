@@ -8,6 +8,8 @@ using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended {
     public static class Manager {
+        public const int TICKS_PER_SECOND = 8;
+
         public static void Initialize ( ) {
             ColorProgram.Program = new ColorProgram( );
             MatrixProgram.Program = new MatrixProgram( );
@@ -21,6 +23,8 @@ namespace mapKnight.Extended {
             GL.ClearColor(0f, 0f, 0f, 1f);
         }
 
+        private static float timeBetweenTicks = 1f / TICKS_PER_SECOND;
+        private static float nextTick = Environment.TickCount + timeBetweenTicks;
         private static Stopwatch stopWatch = new Stopwatch( );
         public static TimeSpan FrameTime { get; private set; }
         public static TimeSpan DrawTime { get; private set; }
@@ -32,15 +36,16 @@ namespace mapKnight.Extended {
 
             UpdateFrametime( );
 
+            if (Environment.TickCount > nextTick) {
+                nextTick += timeBetweenTicks;
+                Screen.Active.Tick( );
+            }
+
             Screen.Active.Update(FrameTime);
             UpdateTime = stopWatch.Elapsed; stopWatch.Restart( );
 
             Screen.Active.Draw( );
             DrawTime = stopWatch.Elapsed;
-
-#if DEBUG
-            Debug.Print(typeof(Manager), $"draw {DrawTime.TotalMilliseconds:0.000} update {UpdateTime.TotalMilliseconds:0.000} frame {FrameTime.TotalMilliseconds:00.000}");
-#endif
         }
 
         public static void Destroy ( ) {

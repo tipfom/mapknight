@@ -11,12 +11,12 @@ namespace mapKnight.Extended {
         #region static 
 
         public static List<Entity> Entities { get; } = new List<Entity>( );
-        public static List<Entity> Platforms { get; } = new List<Entity>( );
+        public static SortedList<Entity, PlatformComponent> Platforms { get; } = new SortedList<Entity, PlatformComponent>( );
 
         private static void Add (Entity entity) {
             Entities.Add(entity);
-            if (entity.HasComponent(ComponentEnum.Platform))
-                Platforms.Add(entity);
+            if (entity.HasComponent<PlatformComponent>( ))
+                Platforms.Add(entity, entity.GetComponent<PlatformComponent>( ));
         }
 
         private static int currentInstance { get; set; }
@@ -24,7 +24,7 @@ namespace mapKnight.Extended {
 
         #endregion
 
-        private Dictionary<ComponentEnum, Component> components = new Dictionary<ComponentEnum, Component>( );
+        private Component[ ] components;
         private Dictionary<ComponentEnum, Queue<ComponentInfo>> pendingComponentData = new Dictionary<ComponentEnum, Queue<ComponentInfo>>( );
         public IEntityWorld Owner { get; private set; }
 
@@ -44,8 +44,9 @@ namespace mapKnight.Extended {
             Species = species;
             ID = ++currentInstance;
 
-            foreach (Component.Configuration config in components) {
-                this.components.Add(config.Component, config.Create(this));
+            this.components = new Component[components.Count];
+            for (int i = 0; i < components.Count; i++) {
+                this.components[i] = components[i].Create(this);
             }
 
             Add(this);
@@ -58,24 +59,25 @@ namespace mapKnight.Extended {
         public void Destroy ( ) {
             if (IsDestroyed)
                 return;
-            foreach (Component component in components.Values)
+            foreach (Component component in components)
                 component.Destroy( );
             Transform = null;
             IsDestroyed = true;
         }
 
         public void Prepare ( ) {
-            foreach (Component component in components.Values) {
+            foreach (Component component in components)
                 component.Prepare( );
-            }
         }
 
-        public bool HasComponent (ComponentEnum component) {
-            return components.ContainsKey(component);
+        public bool HasComponent<T> ( ) where T : Component {
+            Type type = typeof(T);
+            return components.Any(c => c.GetType( ) == type);
         }
 
-        public Component GetComponent (ComponentEnum component) {
-            return components[component];
+        public T GetComponent<T> ( ) where T : Component {
+            Type type = typeof(T);
+            return (T)components.FirstOrDefault(c => c.GetType( ) == type);
         }
 
         public bool HasComponentInfo (ComponentEnum requester) {
@@ -87,13 +89,6 @@ namespace mapKnight.Extended {
             return pendingComponentData[requester].Dequeue( );
         }
 
-        public object GetComponentState (ComponentEnum id) {
-            if (HasComponent(id)) {
-                return components[id].State;
-            } else
-                return null;
-        }
-
         public void SetComponentInfo (ComponentEnum target, ComponentEnum sender, ComponentData ComponentAction, object data) {
             if (!pendingComponentData.ContainsKey(target))
                 pendingComponentData.Add(target, new Queue<ComponentInfo>( ));
@@ -101,15 +96,18 @@ namespace mapKnight.Extended {
         }
 
         public void Update (TimeSpan dt) {
-            foreach (Component component in components.Values) {
+            foreach (Component component in components)
                 component.Update(dt);
-            }
         }
 
         public void PostUpdate ( ) {
-            foreach (Component component in components.Values) {
+            foreach (Component component in components)
                 component.PostUpdate( );
-            }
+        }
+
+        public void Tick ( ) {
+            foreach (Component component in components)
+                component.Tick( );
         }
 
         public class Configuration {

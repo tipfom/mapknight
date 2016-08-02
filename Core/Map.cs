@@ -12,6 +12,10 @@ namespace mapKnight.Core {
         public static byte[ ] HEADER { get; } = { 133, 007, 042, 077, 064, 080 };
         public static short VERSION { get; } = 2;
 
+        #region default deserialization values
+        private static Vector2 DEFAULT_GRAVITY { get { return new Vector2(0, -60); } }
+        #endregion
+
         // x,y,layer
         public int[ , , ] Data;
 
@@ -208,7 +212,7 @@ namespace mapKnight.Core {
 
             Creator = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Name = reader.ReadBytes(reader.ReadInt16( )).Decode( );
-            Gravity = new Vector2(0, -10);
+            Gravity = DEFAULT_GRAVITY;
         }
 
         private void Deserialize00002 (BinaryReader reader) {
@@ -259,7 +263,7 @@ namespace mapKnight.Core {
             Creator = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Name = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Gravity = new Vector2(reader.ReadSingle( ), reader.ReadSingle( ));
-            Gravity = new Vector2(0, -10);
+            Gravity = DEFAULT_GRAVITY;
         }
         #endregion
     }

@@ -22,19 +22,13 @@ namespace mapKnight.Extended.Screens {
         public bool Right { get { return rightButton.Clicked; } }
 
         public override void Load ( ) {
-            jumpButton = new UIButton(this, new UILeftMargin(0.3f), new UIBottomMargin(0.4f), new Vector2(0.3f, 0.3f), "J");
-            leftButton = new UIButton(this, new UILeftMargin(0.6f), new UIBottomMargin(0.4f), new Vector2(0.3f, 0.3f), "L");
-            rightButton = new UIButton(this, new UILeftMargin(0.9f), new UIBottomMargin(0.4f), new Vector2(0.3f, 0.3f), "R");
+            jumpButton = new UIButton(this, new UILeftMargin(0.05f), new UIBottomMargin(0.05f), new Vector2(0.5f, 0.5f), "J");
+            leftButton = new UIButton(this, new UIRightMargin(0.5f), new UIBottomMargin(0.1f), new Vector2(0.4f, 0.4f), "L");
+            rightButton = new UIButton(this, new UIRightMargin(0.05f), new UIBottomMargin(0.1f), new Vector2(0.4f, 0.4f), "R");
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
 
             map = Assets.Load<Map>("testMap");
 
-            Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
-            mobConfig.Components.Add(new PushComponent.Configuration( ) { Intervall = 300, ResetVelocity = true, Velocity = new Core.Vector2(0, 1.6f) });
-
-            for (int i = 0; i < 75; i++) {
-                mobConfig.Create(new Core.Vector2(5 + i / 10f, 5), map);
-            }
             Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
             testEntityConfig.Components.Add(new UserControlComponent.Configuration(this));
             testEntity = testEntityConfig.Create(new Core.Vector2(5, 5), map);
@@ -52,6 +46,11 @@ namespace mapKnight.Extended.Screens {
         public override void Draw ( ) {
             map.Draw( );
             base.Draw( );
+        }
+
+        public override void Tick ( ) {
+            foreach (Entity entity in Entity.Entities)
+                entity.Tick( );
         }
 
         public override void Update (TimeSpan dt) {
