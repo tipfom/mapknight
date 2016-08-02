@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using mapKnight.Extended.Exceptions;
 
 namespace mapKnight.Extended.Components {
     public class ComponentList : ICollection<Component.Configuration> {
@@ -57,6 +58,26 @@ namespace mapKnight.Extended.Components {
             }
             components = sortedList;
         }
+
+        public void ResolveComponentDependencies ( ) {
+            HashSet<Type> instanciatedTypes = new HashSet<Type>(components.Select(config => config.GetType( )));
+            for (int i = 0; i < components.Count; i++) {
+                Type componentType = Type.GetType(components[i].GetType( ).FullName.Replace("+Configuration", ""));
+                ComponentRequirement[ ] requirements = (ComponentRequirement[ ])componentType.GetCustomAttributes(typeof(ComponentRequirement), false);
+                foreach (ComponentRequirement requirement in requirements) {
+                    Type componentConfigType = Type.GetType(requirement.Requiring.FullName + "+Configuration");
+                    if (!instanciatedTypes.Contains(componentConfigType)) {
+                        bool canBeInstanciated = requirement.Requiring.GetConstructor(new Type[ ] { typeof(Entity) }) != null;
+                        if (canBeInstanciated) {
+                            components.Add((Component.Configuration)Activator.CreateInstance(componentConfigType));
+                            instanciatedTypes.Add(componentConfigType);
+                        } else
+                            throw new ComponentDependencyException(ComponentEnum.Animation, requirement.Requiring);
+                    }
+                }
+            }
+        }
+
 
         public void Clear ( ) {
             components.Clear( );

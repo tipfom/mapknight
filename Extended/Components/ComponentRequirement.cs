@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace mapKnight.Extended.Components {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ComponentRequirement : Attribute {
         public Type Requiring { get; private set; }
 

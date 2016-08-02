@@ -29,6 +29,11 @@ namespace mapKnight.Extended.Screens {
 
             map = Assets.Load<Map>("testMap");
 
+            Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
+            mobConfig.Components.Add(new Components.AI._1Component.Configuration( ) { ScaredToFall = true });
+            mobConfig.Create(new Core.Vector2(5, 5), map);
+
+
             Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
             testEntityConfig.Components.Add(new UserControlComponent.Configuration(this));
             testEntity = testEntityConfig.Create(new Core.Vector2(5, 5), map);

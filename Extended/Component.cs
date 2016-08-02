@@ -61,7 +61,7 @@ namespace mapKnight.Extended {
             public abstract Component Create (Entity owner);
 
             public Configuration ( ) {
-                Component = (ComponentEnum)Enum.Parse(typeof(ComponentEnum), this.GetType( ).FullName.Substring(30).Replace("Component+Configuration", ""));
+                Component = (ComponentEnum)Enum.Parse(typeof(ComponentEnum), this.GetType( ).FullName.Substring(30).Replace("Component+Configuration", "").Replace(".", "_"));
             }
         }
     }

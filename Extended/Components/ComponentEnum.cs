@@ -1,5 +1,6 @@
 namespace mapKnight.Extended.Components {
     public enum ComponentEnum {
+        AI__1,
         Animation,
         Draw,
         Gravity,

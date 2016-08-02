@@ -119,28 +119,9 @@ namespace mapKnight.Extended {
             public Entity Create (Vector2 spawnLocation, IEntityWorld container) {
                 if (entitySpecies == -1 || Components.HasChanged) {
                     entitySpecies = ++currentSpecies;
-                    ResolveComponentDependencies( );
+                    Components.ResolveComponentDependencies( );
                 }
                 return new Entity(Components, new Transform(spawnLocation, Transform.Bounds), container, Name, entitySpecies);
-            }
-
-            private void ResolveComponentDependencies ( ) {
-                HashSet<Type> instanciatedTypes = new HashSet<Type>(Components.Select(config => config.GetType( )));
-                for (int i = 0; i < Components.Count; i++) {
-                    Type componentType = Type.GetType(Components[i].GetType( ).FullName.Replace("+Configuration", ""));
-                    ComponentRequirement[ ] requirements = (ComponentRequirement[ ])componentType.GetCustomAttributes(typeof(ComponentRequirement), false);
-                    foreach (ComponentRequirement requirement in requirements) {
-                        Type componentConfigType = Type.GetType(requirement.Requiring.FullName + "+Configuration");
-                        if (!instanciatedTypes.Contains(componentConfigType)) {
-                            bool canBeInstanciated = requirement.Requiring.GetConstructor(new Type[ ] { typeof(Entity) }) != null;
-                            if (canBeInstanciated) {
-                                Components.Add((Component.Configuration)Activator.CreateInstance(componentConfigType));
-                                instanciatedTypes.Add(componentConfigType);
-                            } else
-                                throw new ComponentDependencyException(ComponentEnum.Animation, requirement.Requiring);
-                        }
-                    }
-                }
             }
         }
     }
