@@ -16,6 +16,7 @@ namespace mapKnight.Extended.Components {
         public bool IsAtWall { get; private set; }
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
+        private bool wasOnPlatform = false;
 
         public MotionComponent (Entity owner) : this(owner, DEFAULT_COLLIDER_MAP, DEFAULT_COLLIDER_PLATFORM) { }
 
@@ -29,6 +30,9 @@ namespace mapKnight.Extended.Components {
             if (Math.Abs(dt.Milliseconds) > MAX_DELTA_TIME)
                 return;
 
+            wasOnPlatform = IsOnPlatform;
+            IsOnPlatform = false;
+
             Vector2 appliedAcceleration = new Vector2( ); // reset acceleration
             List<Vector2> appliedVelocities = new List<Vector2>( );
 
@@ -41,26 +45,6 @@ namespace mapKnight.Extended.Components {
                     case ComponentData.Acceleration:
                         appliedAcceleration += (Vector2)componentInfo.Data;
                         break;
-                }
-            }
-
-            if (HasPlatformCollider) {
-                bool wasOnPlatform = IsOnPlatform;
-                IsOnPlatform = false;
-                foreach (KeyValuePair<Entity, PlatformComponent> platform in Entity.Platforms) {
-                    if (Owner.Transform.Touches(platform.Key.Transform)) {
-                        if (!wasOnPlatform) // align with platform
-                            Owner.Transform.Align(platform.Key.Transform);
-
-                        IsOnPlatform = true;
-                        this.Velocity = platform.Value.Velocity;
-                        // player cant go below the platform so all velocities regarding to lower the y value of the player
-                        // need to be removed
-                        for (int i = 0; i < appliedVelocities.Count; i++)
-                            appliedVelocities[i] = new Vector2(appliedVelocities[i].X, Math.Min(0, appliedVelocities[i].Y));
-                        appliedAcceleration.Y = Math.Max(0, appliedAcceleration.Y);
-                        break;
-                    }
                 }
             }
 
@@ -140,6 +124,15 @@ namespace mapKnight.Extended.Components {
             }
             // no collision or no movement
             return false;
+        }
+
+        public override void Collision (Entity collidingEntity) {
+            if (HasPlatformCollider && collidingEntity.IsPlatform) {
+                IsOnPlatform = true;
+                PlatformComponent platform = collidingEntity.GetComponent<PlatformComponent>( );
+                Velocity.Y = platform.Velocity.Y;
+                Velocity.X += platform.Velocity.X;
+            }
         }
 
         public new class Configuration : Component.Configuration {

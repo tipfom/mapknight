@@ -8,15 +8,49 @@ using Newtonsoft.Json;
 
 namespace mapKnight.Extended {
     public class Entity {
+        const int TICKS_PER_SECOND = 4;
+
         #region static 
 
+        public static event Action EntitiesChanged;
         public static List<Entity> Entities { get; } = new List<Entity>( );
-        public static SortedList<Entity, PlatformComponent> Platforms { get; } = new SortedList<Entity, PlatformComponent>( );
+        private static Queue<Entity> destroyedEntitys = new Queue<Entity>( );
 
-        private static void Add (Entity entity) {
-            Entities.Add(entity);
-            if (entity.HasComponent<PlatformComponent>( ))
-                Platforms.Add(entity, entity.GetComponent<PlatformComponent>( ));
+        private static void CalculateCollisions ( ) {
+            int outerLoopsBounds = Entities.Count - 1;
+            for (int i = 0; i < outerLoopsBounds; i++) {
+                for (int l = i + 1; l < Entities.Count; l++) {
+                    if (Entities[i].Transform.Intersects(Entities[l].Transform)) {
+                        Entities[i].Collision(Entities[l]);
+                        Entities[l].Collision(Entities[i]);
+                    }
+                }
+            }
+        }
+
+        private static int timeBetweenTicks = 1000 / TICKS_PER_SECOND;
+        private static int nextTick = Environment.TickCount + timeBetweenTicks;
+        public static void UpdateAll (TimeSpan dt) {
+            while (destroyedEntitys.Count > 0) {
+                Entities.Remove(destroyedEntitys.Dequeue( ));
+                EntitiesChanged?.Invoke( );
+            }
+
+            if (Environment.TickCount > nextTick) {
+                nextTick += timeBetweenTicks;
+                for (int i = 0; i < Entities.Count; i++)
+                    Entities[i].Tick( );
+            }
+
+            for (int i = 0; i < Entities.Count; i++)
+                Entities[i].Update(dt);
+
+            CalculateCollisions( );
+        }
+
+        public static void PostUpdateAll ( ) {
+            for (int i = 0; i < Entities.Count; i++)
+                Entities[i].PostUpdate( );
         }
 
         private static int currentInstance { get; set; }
@@ -36,6 +70,9 @@ namespace mapKnight.Extended {
         public readonly int Species;
         public readonly int ID;
 
+        public readonly bool IsPlatform;
+        public readonly bool IsPlayer;
+
         public Transform Transform { get; set; }
         public Entity (ComponentList components, Transform transform, IEntityWorld owner, string name, int species) {
             Name = name;
@@ -49,7 +86,12 @@ namespace mapKnight.Extended {
                 this.components[i] = components[i].Create(this);
             }
 
-            Add(this);
+            // set entity informations
+            IsPlatform = components.Any(c => c.Component == ComponentEnum.Platform);
+            IsPlayer = components.Any(c => c.Component == ComponentEnum.UserControl);
+
+            Entities.Add(this);
+            EntitiesChanged?.Invoke( );
         }
 
         ~Entity ( ) {
@@ -61,8 +103,8 @@ namespace mapKnight.Extended {
                 return;
             foreach (Component component in components)
                 component.Destroy( );
-            Transform = null;
             IsDestroyed = true;
+            destroyedEntitys.Enqueue(this);
         }
 
         public void Prepare ( ) {
@@ -96,18 +138,24 @@ namespace mapKnight.Extended {
         }
 
         public void Update (TimeSpan dt) {
-            foreach (Component component in components)
-                component.Update(dt);
+            for (int i = 0; i < components.Length; i++)
+                components[i].Update(dt);
         }
 
         public void PostUpdate ( ) {
-            foreach (Component component in components)
-                component.PostUpdate( );
+            for (int i = 0; i < components.Length; i++)
+                components[i].PostUpdate( );
         }
 
         public void Tick ( ) {
-            foreach (Component component in components)
-                component.Tick( );
+            for (int i = 0; i < components.Length; i++)
+                components[i].Tick( );
+        }
+
+        public void Collision (Entity collidingEntity) {
+            for (int i = 0; i < components.Length; i++)
+                components[i].Collision(collidingEntity);
+            //Debug.Print(this, $"{Name}({ID}) colliding with {collidingEntity.Name}({collidingEntity.ID})");
         }
 
         public class Configuration {

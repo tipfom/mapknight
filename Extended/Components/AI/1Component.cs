@@ -26,7 +26,7 @@ namespace mapKnight.Extended.Components.AI {
         public override void Update (TimeSpan dt) {
             if (motionComponent.IsAtWall) {
                 speedMult *= -1;
-            } else if (IsScaredToFall) {
+            } else if (IsScaredToFall && Owner.Transform.BL.Y >= 1) {
                 if (speedMult == 1) {
                     // moves right 
                     if (!Owner.Owner.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y) - 1))
@@ -39,6 +39,18 @@ namespace mapKnight.Extended.Components.AI {
                 }
             }
             motionComponent.Velocity.X = speed.Speed.X * speedMult;
+        }
+
+        public override void Collision (Entity collidingEntity) {
+            if (collidingEntity.IsPlayer) {
+                if (collidingEntity.Transform.BL.Y > Owner.Transform.Center.Y) {
+                    Owner.Destroy( );
+                } else {
+                    // let player take damage
+                }
+            } else {
+                speedMult *= -1;
+            }
         }
 
         public new class Configuration : Component.Configuration {

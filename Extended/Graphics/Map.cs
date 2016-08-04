@@ -19,6 +19,7 @@ namespace mapKnight.Extended.Graphics {
         private float yOffsetRaw;
         private float yOffsetTile;
         private int focusEntityIndex = -1;
+        private int focusEntityID = -1;
         private Vector2 focusCenter;
         private Vector2 updateTile = new Vector2(-1, -1);
 
@@ -38,6 +39,7 @@ namespace mapKnight.Extended.Graphics {
             texture = Assets.Load<Texture2D>(Texture);
 
             Window.Changed += Window_Changed;
+            Entity.EntitiesChanged += ( ) => Focus(focusEntityID);
         }
 
         private void Window_Changed ( ) {
@@ -141,14 +143,13 @@ namespace mapKnight.Extended.Graphics {
         }
 
         public void Update (TimeSpan dt) {
-            foreach (Entity entity in Entity.Entities)
-                entity.Update(dt);
+            Entity.UpdateAll(dt);
             UpdateFocus( );
-            foreach (Entity entity in Entity.Entities)
-                entity.PostUpdate( );
+            Entity.PostUpdateAll( );
         }
 
         public void Focus (int entityID) {
+            focusEntityID = entityID;
             focusEntityIndex = Entity.Entities.FindIndex(entity => entity.ID == entityID);
         }
 

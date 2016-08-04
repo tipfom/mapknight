@@ -31,12 +31,13 @@ namespace mapKnight.Extended.Screens {
 
             Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
             mobConfig.Components.Add(new Components.AI._1Component.Configuration( ) { ScaredToFall = true });
-            mobConfig.Create(new Core.Vector2(5, 5), map);
+            for (int i = 0; i < 10; i++)
+                mobConfig.Create(new Vector2(5 + i * 5, 5), map);
 
 
             Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
             testEntityConfig.Components.Add(new UserControlComponent.Configuration(this));
-            testEntity = testEntityConfig.Create(new Core.Vector2(5, 5), map);
+            testEntity = testEntityConfig.Create(new Vector2(5, 5), map);
             map.Focus(testEntity.ID);
 
             base.Load( );
@@ -51,11 +52,6 @@ namespace mapKnight.Extended.Screens {
         public override void Draw ( ) {
             map.Draw( );
             base.Draw( );
-        }
-
-        public override void Tick ( ) {
-            foreach (Entity entity in Entity.Entities)
-                entity.Tick( );
         }
 
         public override void Update (TimeSpan dt) {

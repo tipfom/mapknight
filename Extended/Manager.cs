@@ -23,8 +23,6 @@ namespace mapKnight.Extended {
             GL.ClearColor(0f, 0f, 0f, 1f);
         }
 
-        private static float timeBetweenTicks = 1f / TICKS_PER_SECOND;
-        private static float nextTick = Environment.TickCount + timeBetweenTicks;
         private static Stopwatch stopWatch = new Stopwatch( );
         public static TimeSpan FrameTime { get; private set; }
         public static TimeSpan DrawTime { get; private set; }
@@ -35,11 +33,6 @@ namespace mapKnight.Extended {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             UpdateFrametime( );
-
-            if (Environment.TickCount > nextTick) {
-                nextTick += timeBetweenTicks;
-                Screen.Active.Tick( );
-            }
 
             Screen.Active.Update(FrameTime);
             UpdateTime = stopWatch.Elapsed; stopWatch.Restart( );

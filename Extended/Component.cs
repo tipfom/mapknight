@@ -38,6 +38,10 @@ namespace mapKnight.Extended {
 
         }
 
+        public virtual void Collision (Entity collidingEntity) {
+
+        }
+
         public override string ToString ( ) {
             return this.GetType( ).Name;
         }
