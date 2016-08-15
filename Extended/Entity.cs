@@ -30,7 +30,7 @@ namespace mapKnight.Extended {
 
         private static int timeBetweenTicks = 1000 / TICKS_PER_SECOND;
         private static int nextTick = Environment.TickCount + timeBetweenTicks;
-        public static void UpdateAll (TimeSpan dt) {
+        public static void UpdateAll (DeltaTime dt) {
             while (destroyedEntitys.Count > 0) {
                 Entities.Remove(destroyedEntitys.Dequeue( ));
                 EntitiesChanged?.Invoke( );
@@ -70,8 +70,7 @@ namespace mapKnight.Extended {
         public readonly int Species;
         public readonly int ID;
 
-        public readonly bool IsPlatform;
-        public readonly bool IsPlayer;
+        public readonly EntityInfo Info;
 
         public Transform Transform { get; set; }
         public Entity (ComponentList components, Transform transform, IEntityWorld owner, string name, int species) {
@@ -87,9 +86,14 @@ namespace mapKnight.Extended {
             }
 
             // set entity informations
-            IsPlatform = components.Any(c => c.Component == ComponentEnum.Platform);
-            IsPlayer = components.Any(c => c.Component == ComponentEnum.UserControl);
+            Info = new EntityInfo( ) {
+                IsPlatform = components.Any(c => c.Component == ComponentEnum.Platform),
+                IsPlayer = components.Any(c => c.Component == ComponentEnum.Player),
 
+                HasArmor = components.Any(c => c.Component == ComponentEnum.Stats_Armor),
+                HasDamage = components.Any(c => c.Component == ComponentEnum.Stats_Damage),
+                HasHealth = components.Any(c => c.Component == ComponentEnum.Stats_Health)
+            };
             Entities.Add(this);
             EntitiesChanged?.Invoke( );
         }
@@ -137,7 +141,7 @@ namespace mapKnight.Extended {
             pendingComponentData[target].Enqueue(new ComponentInfo( ) { Action = ComponentAction, Sender = sender, Data = data });
         }
 
-        public void Update (TimeSpan dt) {
+        public void Update (DeltaTime dt) {
             for (int i = 0; i < components.Length; i++)
                 components[i].Update(dt);
         }
@@ -156,6 +160,16 @@ namespace mapKnight.Extended {
             for (int i = 0; i < components.Length; i++)
                 components[i].Collision(collidingEntity);
             //Debug.Print(this, $"{Name}({ID}) colliding with {collidingEntity.Name}({collidingEntity.ID})");
+        }
+
+        public struct EntityInfo {
+            public bool IsPlatform;
+            public bool IsPlayer;
+
+            // Stats
+            public bool HasHealth;
+            public bool HasArmor;
+            public bool HasDamage;
         }
 
         public class Configuration {

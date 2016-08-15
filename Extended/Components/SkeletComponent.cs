@@ -26,7 +26,7 @@ namespace mapKnight.Extended.Components {
             }
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             Dictionary<string, float[ ]> currentVertexData;
             ComponentEnum sender = ComponentEnum.Skelet;
 

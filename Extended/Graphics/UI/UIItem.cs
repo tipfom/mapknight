@@ -90,7 +90,7 @@ namespace mapKnight.Extended.Graphics.UI {
                 Changed?.Invoke(this);
         }
 
-        public virtual void Update (TimeSpan dt) {
+        public virtual void Update (DeltaTime dt) {
 
         }
 

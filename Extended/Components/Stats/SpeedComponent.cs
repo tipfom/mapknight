@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Stats {
     [ComponentRequirement(typeof(MotionComponent))]
     [ComponentOrder(ComponentEnum.Motion)]
     public class SpeedComponent : Component {
@@ -14,9 +14,9 @@ namespace mapKnight.Extended.Components {
             defaultSpeed = defaultspeed;
         }
 
-        public override void Update (TimeSpan dt) {
-            if (Owner.HasComponentInfo(ComponentEnum.Speed)) {
-                Vector2 slowDown = (Vector2)Owner.GetComponentInfo(ComponentEnum.Speed).Data;
+        public override void Update (DeltaTime dt) {
+            if (Owner.HasComponentInfo(ComponentEnum.Stats_Speed)) {
+                Vector2 slowDown = (Vector2)Owner.GetComponentInfo(ComponentEnum.Stats_Speed).Data;
                 Speed = defaultSpeed * slowDown;
             } else {
                 Speed = defaultSpeed;

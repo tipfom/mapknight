@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using mapKnight.Core;
 using mapKnight.Extended.Graphics.Buffer;
 using static mapKnight.Extended.Graphics.Programs.ColorProgram;
 
@@ -106,7 +107,7 @@ namespace mapKnight.Extended.Graphics.UI {
             }
         }
 
-        public static void Update (TimeSpan dt) {
+        public static void Update (DeltaTime dt) {
             ApplyBufferUpdates( );
 
             foreach (UIItem item in uiItems[currentScreen])

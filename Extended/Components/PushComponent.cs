@@ -22,7 +22,7 @@ namespace mapKnight.Extended.Components {
             this.motionComponent = Owner.GetComponent<MotionComponent>( );
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             if (Environment.TickCount > lastPush + intervall) {
                 lastPush += intervall;
                 if (resetLastVelocity) {

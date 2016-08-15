@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using mapKnight.Core;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Screens;
 
@@ -28,7 +29,7 @@ namespace mapKnight.Extended {
 
         }
 
-        public virtual void Update (TimeSpan dt) {
+        public virtual void Update (DeltaTime dt) {
             UIRenderer.Update(dt);
         }
 

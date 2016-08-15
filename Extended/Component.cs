@@ -22,7 +22,7 @@ namespace mapKnight.Extended {
 
         }
 
-        public virtual void Update (TimeSpan dt) {
+        public virtual void Update (DeltaTime dt) {
 
         }
 

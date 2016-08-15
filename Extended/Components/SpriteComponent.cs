@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using mapKnight.Core;
 using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
@@ -17,7 +18,7 @@ namespace mapKnight.Extended.Components {
             Owner.Owner.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             foreach (string bone in sprites.Keys) {
                 sprites[bone].Update(dt.Milliseconds);
                 cachedResult[bone] = sprites[bone].Current;

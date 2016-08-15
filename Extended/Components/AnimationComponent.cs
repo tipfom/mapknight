@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Components {
             this.animations = animations;
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             while (Owner.HasComponentInfo(ComponentEnum.Animation)) {
                 ComponentInfo ComponentInfo = Owner.GetComponentInfo(ComponentEnum.Animation);
                 if (ComponentInfo.Action == ComponentData.Animation) {

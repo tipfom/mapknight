@@ -1,4 +1,5 @@
 using System;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Components {
     [ComponentRequirement(typeof(MotionComponent))]
@@ -10,7 +11,7 @@ namespace mapKnight.Extended.Components {
             this.gravityInfluence = gravityinfluence;
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             // say to the collisioncomponent to use a part of the global gravity when calculating movement
             // that the motioncomponent is contained by the entity needs to be handled by dependencies
             Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Gravity, ComponentData.Acceleration, Owner.Owner.Gravity * gravityInfluence);

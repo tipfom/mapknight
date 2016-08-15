@@ -142,7 +142,7 @@ namespace mapKnight.Extended.Graphics {
             Program.End( );
         }
 
-        public void Update (TimeSpan dt) {
+        public void Update (DeltaTime dt) {
             Entity.UpdateAll(dt);
             UpdateFocus( );
             Entity.PostUpdateAll( );

@@ -34,7 +34,7 @@ namespace mapKnight.Extended.Components {
             PrepareNextStep( );
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             if (Environment.TickCount >= nextWaypointTime) {
                 // next waypoint
                 currentWaypointIndex = nextWaypointIndex;

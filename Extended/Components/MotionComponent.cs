@@ -26,7 +26,7 @@ namespace mapKnight.Extended.Components {
             HasPlatformCollider = platformCollider;
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             if (Math.Abs(dt.Milliseconds) > MAX_DELTA_TIME)
                 return;
 
@@ -127,7 +127,7 @@ namespace mapKnight.Extended.Components {
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (HasPlatformCollider && collidingEntity.IsPlatform) {
+            if (HasPlatformCollider && collidingEntity.Info.IsPlatform) {
                 IsOnPlatform = true;
                 PlatformComponent platform = collidingEntity.GetComponent<PlatformComponent>( );
                 Velocity.Y = platform.Velocity.Y;

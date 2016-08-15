@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using mapKnight.Core;
 using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
@@ -18,7 +19,7 @@ namespace mapKnight.Extended.Components {
             Owner.Owner.Renderer.AddTexture(Owner.Species, texture);
         }
 
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             Owner.SetComponentInfo(ComponentEnum.Draw, ComponentEnum.Texture, ComponentData.Texture, textures);
         }
 

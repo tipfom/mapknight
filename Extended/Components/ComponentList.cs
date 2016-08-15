@@ -41,6 +41,7 @@ namespace mapKnight.Extended.Components {
                             nodeList.Add(new Node( ) { Item = components[i], Precursor = relation });
                         } else {
                             nodeList.Add(new Node( ) { Item = relation, Precursor = components[i] });
+                            nodeList.Add(new Node( ) { Item = components[i] });
                         }
                     }
                 }
