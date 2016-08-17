@@ -1,0 +1,96 @@
+﻿{
+			"Name": "Giggy",
+			"Transform": {
+						"Bounds": {
+									"X": 2,
+									"Y": 2
+						}
+			},
+			"Components": [
+						{
+									"$type": "Skelet",
+									"Bones": {
+												"body": {
+															"Position": {
+																		"X": 0.5,
+																		"Y": 0.5
+															},
+															"Size": {
+																		"X": 1,
+																		"Y": 1
+															}
+												}
+									}
+						},
+						{
+									"$type": "Animation",
+									"DefaultAnimation": "drot",
+									"Animations": [
+												{
+															"Name": "drot",
+															"Repeat": true,
+															"Steps": [
+																		{
+																					"Time": 800,
+																					"State": {
+																								"body": {
+																											"Position": {
+																														"X": 0.5,
+																														"Y": 0.5
+																											},
+																											"Size": {
+																														"X": 1,
+																														"Y": 1
+																											},
+																											"Rotation": 0
+																								}
+																					}
+																		},
+																		{
+																					"Time": 1,
+																					"State": {
+																								"body": {
+																											"Position": {
+																														"X": 0.5,
+																														"Y": 0.5
+																											},
+																											"Size": {
+																														"X": 1,
+																														"Y": 1
+																											},
+																											"Rotation": 360
+																								}
+																					}
+																		}
+															]
+												}
+									]
+						},
+						{
+									"$type": "Texture",
+									"Texture": "saw"
+						},
+						{
+									"$type": "Stats.Damage",
+									"OnTouch": "Infinity"
+						},
+						{
+									"$type": "AI.CircularSaw",
+									"Speed": 3,
+									"Waypoints": [
+												{
+															"X": 0,
+															"Y": 0
+												},
+												{
+															"X": 12,
+															"Y": 0
+												},
+												{
+															"X": 12,
+															"Y": 5
+												}
+									]
+						}
+			]
+}

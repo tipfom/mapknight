@@ -1,0 +1,40 @@
+﻿{
+	"Name": "Landus Minus",
+	"Transform": {
+		"Bounds": {
+			"X": 0.7,
+			"Y": 0.06
+		}
+	},
+	"Components": [
+		{
+			"$type": "Skelet",
+			"Bones": {
+				"body": {
+					"Position": {
+						"X": 0.5,
+						"Y": 0.5
+					},
+					"Size": {
+						"X": 1,
+						"Y": 1
+					}
+				}
+			}
+		},
+		{
+			"$type": "Texture",
+			"Texture": "landmine"
+		},
+		{
+			"$type": "AI.LandMine",
+			"ExplosionDelay": 500,
+			"ExplosionRadius": 5,
+			"ThrowBackSpeed": 42
+		},
+		{
+			"$type": "Stats.Damage",
+			"OnTouch": 5
+		}
+	]
+}
