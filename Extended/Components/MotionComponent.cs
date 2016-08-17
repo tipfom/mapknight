@@ -2,34 +2,39 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 
 namespace mapKnight.Extended.Components {
+
+    [Instantiatable]
     public class MotionComponent : Component {
-        const int MAX_DELTA_TIME = 100; // 0.1 sec
-        const bool DEFAULT_COLLIDER_MAP = true;
-        const bool DEFAULT_COLLIDER_PLATFORM = true;
-
-        public Vector2 Velocity;
-
-        public bool IsOnGround { get; private set; }
-        public bool IsOnPlatform { get; private set; }
-        public bool IsAtWall { get; private set; }
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
+        public float BouncyMultiplier;
+        public Vector2 Velocity;
         private bool wasOnPlatform = false;
 
-        public MotionComponent (Entity owner) : this(owner, DEFAULT_COLLIDER_MAP, DEFAULT_COLLIDER_PLATFORM) { }
-
-        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider) : base(owner) {
+        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult) : base(owner) {
             Velocity = new Vector2( );
             HasMapCollider = mapCollider;
             HasPlatformCollider = platformCollider;
+            BouncyMultiplier = bouncymult;
+        }
+
+        public bool IsAtWall { get; private set; }
+        public bool IsOnGround { get; private set; }
+        public bool IsOnPlatform { get; private set; }
+
+        public override void Collision (Entity collidingEntity) {
+            if (HasPlatformCollider && collidingEntity.Info.IsPlatform) {
+                IsOnPlatform = true;
+                PlatformComponent platform = collidingEntity.GetComponent<PlatformComponent>( );
+                Velocity.Y = platform.Velocity.Y;
+                Velocity.X += platform.Velocity.X;
+            }
         }
 
         public override void Update (DeltaTime dt) {
-            if (Math.Abs(dt.Milliseconds) > MAX_DELTA_TIME)
-                return;
-
             wasOnPlatform = IsOnPlatform;
             IsOnPlatform = false;
 
@@ -37,13 +42,14 @@ namespace mapKnight.Extended.Components {
             List<Vector2> appliedVelocities = new List<Vector2>( );
 
             while (Owner.HasComponentInfo(ComponentEnum.Motion)) {
-                ComponentInfo componentInfo = Owner.GetComponentInfo(ComponentEnum.Motion);
-                switch (componentInfo.Action) {
+                Tuple<ComponentData, Vector2> componentInfo = (Tuple<ComponentData, Vector2>)Owner.GetComponentInfo(ComponentEnum.Motion);
+                switch (componentInfo.Item1) {
                     case ComponentData.Velocity:
-                        appliedVelocities.Add((Vector2)componentInfo.Data);
+                        appliedVelocities.Add(componentInfo.Item2);
                         break;
+
                     case ComponentData.Acceleration:
-                        appliedAcceleration += (Vector2)componentInfo.Data;
+                        appliedAcceleration += componentInfo.Item2;
                         break;
                 }
             }
@@ -57,12 +63,11 @@ namespace mapKnight.Extended.Components {
             if (HasMapCollider) {
                 IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
+                if (IsOnGround)
+                    this.Velocity.Y = -Velocity.Y * BouncyMultiplier;
             }
 
             Owner.Transform = newTransform;
-
-            if (IsOnGround)
-                this.Velocity.Y = 0;
         }
 
         private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {
@@ -126,18 +131,13 @@ namespace mapKnight.Extended.Components {
             return false;
         }
 
-        public override void Collision (Entity collidingEntity) {
-            if (HasPlatformCollider && collidingEntity.Info.IsPlatform) {
-                IsOnPlatform = true;
-                PlatformComponent platform = collidingEntity.GetComponent<PlatformComponent>( );
-                Velocity.Y = platform.Velocity.Y;
-                Velocity.X += platform.Velocity.X;
-            }
-        }
-
         public new class Configuration : Component.Configuration {
+            public float BounceMultiplier = 0;
+            public bool MapCollider = true;
+            public bool PlatformCollider = false;
+
             public override Component Create (Entity owner) {
-                return new MotionComponent(owner);
+                return new MotionComponent(owner, MapCollider, PlatformCollider, BounceMultiplier);
             }
         }
     }

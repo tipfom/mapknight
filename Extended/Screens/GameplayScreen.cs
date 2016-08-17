@@ -4,6 +4,7 @@ using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
 using mapKnight.Extended.Components.AI;
+using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
@@ -12,10 +13,17 @@ using Map = mapKnight.Extended.Graphics.Map;
 namespace mapKnight.Extended.Screens {
 
     public class GameplayScreen : Screen, PlayerComponent.IInputProvider {
+        private const int MAX_TIME_BETWEEN_UPDATES = 100;
         private UILabel debugLabel;
         private UIButton leftButton, rightButton, jumpButton;
         private Map map;
         private Entity testEntity;
+        private HealthComponent testEntityHealth;
+
+        public GameplayScreen ( ) {
+            Entity.EntityAdded += (Entity obj) => { if (IsActive) obj.Prepare( ); };
+        }
+
         public bool Jump { get { return jumpButton.Clicked; } }
 
         public bool Left { get { return leftButton.Clicked; } }
@@ -35,30 +43,57 @@ namespace mapKnight.Extended.Screens {
 
             map = Assets.Load<Map>("testMap");
 
-            Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick2");
-            mobConfig.Components.Add(new _2Component.Configuration( ));
-            mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 5 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
-            mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 7 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
-            mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 10 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
+            //Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick2");
+            //mobConfig.Components.Add(new _2Component.Configuration( ));
+            //mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 5 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
+            //mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 7 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
+            //mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 10 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
 
-            Entity.Configuration mobConfig2 = Assets.Load<Entity.Configuration>("potatoe_patrick");
-            mobConfig2.Components.Add(new _1Component.Configuration( ) { ScaredToFall = true });
-            mobConfig2.Create(new Vector2(9, 12 + mobConfig2.Transform.BoundsHalf.Y), map);
+            //Entity.Configuration mobConfig2 = Assets.Load<Entity.Configuration>("potatoe_patrick");
+            //mobConfig2.Components.Add(new _1Component.Configuration( ) { ScaredToFall = true });
+            //mobConfig2.Create(new Vector2(9, 12 + mobConfig2.Transform.BoundsHalf.Y), map);
+
+            Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
+            Entity.Configuration standingTrowieConfig = Assets.Load<Entity.Configuration>("standing_trowie");
+            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
+            Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
+            Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
+            Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
+            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
+
+            sawConfig.Create(new Vector2(5, 2), map);
+            sawConfig.Create(new Vector2(10, 2), map);
+
+            standingTrowieConfig.Create(new Vector2(8, 16), map);
+
+            walkingTrowieConfig.Create(new Vector2(40, 10), map);
+
+            landMineConfig.Create(new Vector2(40, landMineConfig.Transform.BoundsHalf.Y), map);
+
+            turretConfig.Create(new Vector2(70, 3), map);
+
+            meatballConfig.Create(new Vector2(4, 14), map);
+
+            hastoConfig.Create(new Vector2(34, 2), map);
 
             Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
             testEntityConfig.Components.Add(new PlayerComponent.Configuration(this));
-            testEntity = testEntityConfig.Create(new Vector2(5 + testEntityConfig.Transform.BoundsHalf.X, 13 + testEntityConfig.Transform.BoundsHalf.Y), map);
+            testEntity = testEntityConfig.Create(new Vector2(8 + testEntityConfig.Transform.BoundsHalf.X, 13 + testEntityConfig.Transform.BoundsHalf.Y), map);
+            testEntityHealth = testEntity.GetComponent<HealthComponent>( );
             map.Focus(testEntity.ID);
 
             base.Load( );
         }
 
         public override void Update (DeltaTime dt) {
-            map.Update(dt);
-            base.Update(dt);
+            if (Math.Abs(Manager.FrameTime.Milliseconds) < MAX_TIME_BETWEEN_UPDATES) {
+                map.Update(dt);
+                base.Update(dt);
+            }
             debugLabel.Text = $"frame: {Manager.FrameTime.TotalMilliseconds:00.0}\n" +
                                 $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
-                                $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}";
+                                $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n" +
+                                $"health: {testEntityHealth.Current:00.0} ({testEntityHealth.Initial:00.0})";
         }
 
         protected override void Activated ( ) {

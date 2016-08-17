@@ -1,10 +1,11 @@
 ﻿using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
 
     [ComponentRequirement(typeof(SpeedComponent))]
-    [ComponentOrder(ComponentEnum.Stats_Speed, false)]
+    [UpdateAfter(ComponentEnum.Stats_Speed)]
     public class _2Component : Component {
         private Direction currentMoveDir;
         private Direction currentWallDir;

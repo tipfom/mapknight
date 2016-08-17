@@ -102,7 +102,18 @@
     <AndroidAsset Include="Assets\entities\test_platform.json" />
     <AndroidAsset Include="Assets\maps\test.map" />
     <AndroidAsset Include="Assets\maps\testMap.map" />
-    <AndroidAsset Include="Assets\entities\potatoe_patrick2.json" />
+    <AndroidAsset Include="Assets\entities\circularsaw.json" />
+    <AndroidAsset Include="Assets\textures\saw.json" />
+    <AndroidAsset Include="Assets\textures\s_trowie.json" />
+    <AndroidAsset Include="Assets\entities\walking_trowie.json" />
+    <AndroidAsset Include="Assets\entities\tourret.json" />
+    <AndroidAsset Include="Assets\entities\landmine.json" />
+    <AndroidAsset Include="Assets\textures\landmine.json" />
+    <AndroidAsset Include="Assets\textures\turret.json" />
+    <AndroidAsset Include="Assets\textures\turret_bullet.json" />
+    <AndroidAsset Include="Assets\textures\meatball.json" />
+    <AndroidAsset Include="Assets\entities\hasto.json" />
+    <AndroidAsset Include="Assets\textures\hasto.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -152,6 +163,34 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\testMap.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\entities\standing_trowie.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\saw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\s_trowie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\landmine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\turret.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\turret_bullet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\entities\meatball.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\meatball.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\hasto.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
+  <ProjectExtensions />
 </Project>

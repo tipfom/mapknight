@@ -22,9 +22,9 @@ namespace mapKnight.Extended.Components.Stats {
 
         public override void Update (DeltaTime dt) {
             while (Owner.HasComponentInfo(ComponentEnum.Stats_Health)) {
-                ComponentInfo info = Owner.GetComponentInfo(ComponentEnum.Stats_Health);
+                float info = (float)Owner.GetComponentInfo(ComponentEnum.Stats_Health);
                 if (!Invincible) {
-                    Current -= (int)info.Data * ((Owner.Info.HasArmor) ? armorComponent.PhysicalMultiplier : 1f);
+                    Current -= (info * ((Owner.Info.HasArmor) ? armorComponent.PhysicalMultiplier : 1f));
                     if (Current < 0)
                         Owner.Destroy( );
                 }

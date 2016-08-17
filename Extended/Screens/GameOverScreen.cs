@@ -11,11 +11,5 @@ namespace mapKnight.Extended.Screens {
         public override void Load ( ) {
             new UILabel(this, new UIHorizontalCenterMargin(0f), new UIVerticalCenterMargin(0f), 0.1f, "YOu Noob DIED!!11eleven");
         }
-
-        private void A ( ) {
-        }
-
-        private void Chekc ( ) {
-        }
     }
 }

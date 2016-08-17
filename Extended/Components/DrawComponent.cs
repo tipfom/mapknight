@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
-    public class DrawComponent : Component {
-        public DrawComponent (Entity owner) : base(owner) {
 
+    [Instantiatable]
+    public class DrawComponent : Component {
+
+        public DrawComponent (Entity owner) : base(owner) {
         }
 
         public override void PostUpdate ( ) {
@@ -17,14 +20,15 @@ namespace mapKnight.Extended.Components {
                 Color colorData = Color.White;
 
                 while (Owner.HasComponentInfo(ComponentEnum.Draw)) {
-                    ComponentInfo ComponentInfo = Owner.GetComponentInfo(ComponentEnum.Draw);
-                    switch (ComponentInfo.Action) {
+                    Tuple<ComponentData, object> ComponentInfo = (Tuple<ComponentData, object>)Owner.GetComponentInfo(ComponentEnum.Draw);
+                    switch (ComponentInfo.Item1) {
                         case ComponentData.Texture:
                             // bodypart name, sprite name
-                            spriteData = (Dictionary<string, string>)ComponentInfo.Data;
+                            spriteData = (Dictionary<string, string>)ComponentInfo.Item2;
                             break;
+
                         case ComponentData.Verticies:
-                            vertexData = (Dictionary<string, float[ ]>)ComponentInfo.Data;
+                            vertexData = (Dictionary<string, float[ ]>)ComponentInfo.Item2;
                             break;
                     }
                 }
@@ -47,6 +51,7 @@ namespace mapKnight.Extended.Components {
         }
 
         public new class Configuration : Component.Configuration {
+
             public override Component Create (Entity owner) {
                 return new DrawComponent(owner);
             }

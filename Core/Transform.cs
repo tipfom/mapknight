@@ -44,6 +44,14 @@ namespace mapKnight.Core {
                 this.BL.Y >= transform.TR.Y);      // on top of the other transform
         }
 
+        public bool Intersects (Vector2 point) {
+            return
+                this.BL.X <= point.X ||
+                this.TR.X >= point.X ||
+                this.TR.Y >= point.Y ||
+                this.BL.Y <= point.Y;
+        }
+
         public bool Touches (Transform transform) {
             return !(
                 this.BL.X > transform.TR.X ||   // ot. right of the other transform

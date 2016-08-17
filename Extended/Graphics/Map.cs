@@ -18,8 +18,7 @@ namespace mapKnight.Extended.Graphics {
         private float[ ][ ][ ] layerBuffer;
         private float yOffsetRaw;
         private float yOffsetTile;
-        private int focusEntityIndex = -1;
-        private int focusEntityID = -1;
+        private Entity focusEntity;
         private Vector2 focusCenter;
         private Vector2 updateTile = new Vector2(-1, -1);
 
@@ -39,7 +38,6 @@ namespace mapKnight.Extended.Graphics {
             texture = Assets.Load<Texture2D>(Texture);
 
             Window.Changed += Window_Changed;
-            Entity.EntitiesChanged += ( ) => Focus(focusEntityID);
         }
 
         private void Window_Changed ( ) {
@@ -149,13 +147,13 @@ namespace mapKnight.Extended.Graphics {
         }
 
         public void Focus (int entityID) {
-            focusEntityID = entityID;
-            focusEntityIndex = Entity.Entities.FindIndex(entity => entity.ID == entityID);
+            focusEntity = Entity.Entities.Find(entity => entity.ID == entityID);
+            focusEntity.Destroyed += ( ) => { Focus(Entity.Entities[0].ID); };
         }
 
         private void UpdateFocus ( ) {
-            if (focusEntityIndex > -1) {
-                Vector2 focusPoint = Entity.Entities[focusEntityIndex].Transform.Center;
+            if (focusEntity != null) {
+                Vector2 focusPoint = focusEntity.Transform.Center;
                 focusCenter = new Vector2(
                     Mathf.Clamp(focusPoint.X, DrawSize.Width / 2f - 1, Width - DrawSize.Width / 2f + 1),
                     Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f - 1 + yOffsetTile, Height - DrawSize.Height / 2f + 1 - yOffsetTile)

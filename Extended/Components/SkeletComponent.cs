@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components {
+
     [ComponentRequirement(typeof(DrawComponent))]
-    [ComponentOrder(ComponentEnum.Draw)]
+    [UpdateBefore(ComponentEnum.Draw)]
     public class SkeletComponent : Component {
-        Dictionary<string, float[ ]> defaultVertexData;
+        private Dictionary<string, float[ ]> defaultVertexData;
 
         public SkeletComponent (Entity owner, Dictionary<string, Bone> bones) : base(owner) {
             defaultVertexData = new Dictionary<string, float[ ]>( );
@@ -28,14 +30,12 @@ namespace mapKnight.Extended.Components {
 
         public override void Update (DeltaTime dt) {
             Dictionary<string, float[ ]> currentVertexData;
-            ComponentEnum sender = ComponentEnum.Skelet;
 
             if (!Owner.HasComponentInfo(ComponentEnum.Skelet))
                 currentVertexData = defaultVertexData.DeepClone( );
             else {
-                ComponentInfo ComponentInfo = Owner.GetComponentInfo(ComponentEnum.Skelet);
-                sender = ComponentInfo.Sender;
-                currentVertexData = (Dictionary<string, float[ ]>)ComponentInfo.Data;
+                Dictionary<string, float[ ]> info = (Dictionary<string, float[ ]>)Owner.GetComponentInfo(ComponentEnum.Skelet);
+                currentVertexData = info;
             }
 
             // update currentvertexdata based on the current transform
@@ -46,14 +46,14 @@ namespace mapKnight.Extended.Components {
                 }
             }
 
-            Owner.SetComponentInfo(ComponentEnum.Draw, sender, ComponentData.Verticies, currentVertexData);
+            Owner.SetComponentInfo(ComponentEnum.Draw, new Tuple<ComponentData, object>(ComponentData.Verticies, currentVertexData));
         }
 
         public struct Bone {
-            public Vector2 Position;
-            public Vector2 Size;
             public bool Mirrored;
+            public Vector2 Position;
             public float Rotation;
+            public Vector2 Size;
         }
 
         public new class Configuration : Component.Configuration {

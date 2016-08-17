@@ -2,20 +2,34 @@
 using System.Collections.Generic;
 using System.Text;
 using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Screens;
 
 namespace mapKnight.Extended.Components {
+
     [ComponentRequirement(typeof(SpeedComponent))]
-    [ComponentOrder(ComponentEnum.Stats_Speed, false)]
-    [ComponentOrder(ComponentEnum.Motion)]
+    [UpdateAfter(ComponentEnum.Stats_Speed)]
+    [UpdateBefore(ComponentEnum.Motion)]
     public class PlayerComponent : Component {
         private IInputProvider inputProvider;
-        private SpeedComponent speedComponent;
         private MotionComponent motionComponent;
+        private SpeedComponent speedComponent;
 
         public PlayerComponent (Entity owner, IInputProvider inputprovider) : base(owner) {
             inputProvider = inputprovider;
+        }
+
+        public interface IInputProvider {
+            bool Jump { get; }
+            bool Left { get; }
+            bool Right { get; }
+        }
+
+        public override void Destroy ( ) {
+            GameOverScreen gameOverScreen = new GameOverScreen( );
+            gameOverScreen.Load( );
+            Screen.Active = gameOverScreen;
         }
 
         public override void Prepare ( ) {
@@ -26,28 +40,16 @@ namespace mapKnight.Extended.Components {
         public override void Update (DeltaTime dt) {
             Vector2 speed = speedComponent.Speed;
             if (inputProvider.Jump && motionComponent.IsOnGround) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Player, ComponentData.Velocity, new Vector2(0, speed.Y));
+                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(0, speed.Y)));
             }
 
             if (inputProvider.Left) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Player, ComponentData.Velocity, new Vector2(-speed.X - motionComponent.Velocity.X, 0));
+                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(-speed.X - motionComponent.Velocity.X, 0)));
             } else if (inputProvider.Right) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Player, ComponentData.Velocity, new Vector2(speed.X - motionComponent.Velocity.X, 0));
+                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(speed.X - motionComponent.Velocity.X, 0)));
             } else {
-                Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Player, ComponentData.Velocity, new Vector2(-motionComponent.Velocity.X, 0));
+                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(-motionComponent.Velocity.X, 0)));
             }
-        }
-
-        public override void Destroy ( ) {
-            GameOverScreen gameOverScreen = new GameOverScreen( );
-            gameOverScreen.Load( );
-            Screen.Active = gameOverScreen;
-        }
-
-        public interface IInputProvider {
-            bool Jump { get; }
-            bool Left { get; }
-            bool Right { get; }
         }
 
         public new class Configuration : Component.Configuration {
