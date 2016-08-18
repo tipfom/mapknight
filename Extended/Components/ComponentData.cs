@@ -1,4 +1,5 @@
-namespace mapKnight.Extended.Components {
+﻿namespace mapKnight.Extended.Components {
+
     public enum ComponentData {
         None,
         Result,
@@ -6,6 +7,7 @@ namespace mapKnight.Extended.Components {
         //////////////////////////////////////////////////////////////////////////////////////////////
         // graphics
         Verticies,
+
         Texture,
         Color,
         Animation,
@@ -16,6 +18,7 @@ namespace mapKnight.Extended.Components {
         //////////////////////////////////////////////////////////////////////////////////////////////
         // physics
         Velocity,
+
         Acceleration
     }
 }
