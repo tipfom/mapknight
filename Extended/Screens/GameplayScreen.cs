@@ -14,8 +14,10 @@ namespace mapKnight.Extended.Screens {
 
     public class GameplayScreen : Screen, PlayerComponent.IInputProvider {
         private const int MAX_TIME_BETWEEN_UPDATES = 100;
+
         private UILabel debugLabel;
         private UIButton leftButton, rightButton, jumpButton;
+
         private Map map;
         private Entity testEntity;
         private HealthComponent testEntityHealth;
@@ -91,9 +93,9 @@ namespace mapKnight.Extended.Screens {
                 base.Update(dt);
             }
             debugLabel.Text = $"frame: {Manager.FrameTime.TotalMilliseconds:00.0}\n" +
-                                $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
-                                $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n" +
-                                $"health: {testEntityHealth.Current:00.0} ({testEntityHealth.Initial:00.0})";
+                              $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
+                            $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n" +
+                          $"health: {testEntityHealth.Current:00.0} ({testEntityHealth.Initial:00.0})";
         }
 
         protected override void Activated ( ) {

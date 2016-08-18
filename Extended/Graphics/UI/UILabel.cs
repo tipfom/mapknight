@@ -55,7 +55,7 @@ namespace mapKnight.Extended.Graphics.UI {
             Alignment = alignment;
         }
 
-        public override List<DepthVertexData> GetVertexData ( ) {
+        public override List<DepthVertexData> ConstructVertexData ( ) {
             switch (Alignment) {
                 case UITextAlignment.Left:
                     return GetVertexData(lines, Alignment, this.Position, this.charSize, Depth, this.Color);

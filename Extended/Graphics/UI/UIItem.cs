@@ -94,6 +94,6 @@ namespace mapKnight.Extended.Graphics.UI {
 
         }
 
-        public abstract List<DepthVertexData> GetVertexData ( );
+        public abstract List<DepthVertexData> ConstructVertexData ( );
     }
 }
