@@ -42,11 +42,11 @@ namespace mapKnight.Extended.Components.AI {
             } else if (IsScaredToFall && Owner.Transform.BL.Y >= 1) {
                 if (speedMult == 1) {
                     // moves right
-                    if (!Owner.Owner.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y) - 1))
+                    if (!Owner.World.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y) - 1))
                         speedMult *= -1;
                 } else {
                     // moves left
-                    if (!Owner.Owner.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 1))
+                    if (!Owner.World.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 1))
                         speedMult *= -1;
                 }
             }

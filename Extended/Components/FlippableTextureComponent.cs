@@ -25,7 +25,7 @@ namespace mapKnight.Extended.Components {
                 rotatedTextures.Add(texture_keys[i], texture_keys[i] + "*");
             }
 
-            Owner.Owner.Renderer.AddTexture(Owner.Species, texture);
+            Owner.World.Renderer.AddTexture(Owner.Species, texture);
             normalData = new Tuple<ComponentData, object>(ComponentData.Texture, normalTextures);
             rotatedData = new Tuple<ComponentData, object>(ComponentData.Texture, rotatedTextures);
         }

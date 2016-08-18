@@ -33,7 +33,7 @@ namespace mapKnight.Extended.Components {
 
             float progressPercent = 1f - (nextMoveTime - Environment.TickCount) / (float)currentMoveDuration;
             Vector2 nextPosition = currentWaypoint + currentMoveDistance * GetPositionInterpolationPercent(progressPercent);
-            Owner.Transform.Translate(nextPosition);
+            Owner.Transform.Center = nextPosition;
         }
 
         protected abstract int GetNextWaypoint ( );

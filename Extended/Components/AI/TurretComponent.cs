@@ -46,8 +46,8 @@ namespace mapKnight.Extended.Components.AI {
                 nextShot = Environment.TickCount + timeBetweenShots;
                 nextTurn = Environment.TickCount + lockTime;
                 bulletComponentConfig.Target = entity;
-                Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X + (Owner.Transform.BoundsHalf.X + bulletEntityConfig.Transform.BoundsHalf.X) * (IsFacingLeft ? 1 : -1), Owner.Transform.BL.Y + Owner.Transform.Bounds.Y * bulletSpawnpointYPercent);
-                bulletEntityConfig.Create(spawnPoint, Owner.Owner);
+                Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X + (Owner.Transform.HalfSize.X + bulletEntityConfig.Transform.HalfSize.X) * (IsFacingLeft ? 1 : -1), Owner.Transform.BL.Y + Owner.Transform.Size.Y * bulletSpawnpointYPercent);
+                bulletEntityConfig.Create(spawnPoint, Owner.World);
             }
         }
 

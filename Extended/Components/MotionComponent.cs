@@ -55,17 +55,18 @@ namespace mapKnight.Extended.Components {
             }
 
             // update velocity
-            this.Velocity += appliedAcceleration * (float)dt.TotalSeconds;
+            this.Velocity += appliedAcceleration * .5f * (float)dt.TotalSeconds;
             foreach (Vector2 velocity in appliedVelocities)
                 this.Velocity += velocity;
 
-            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * (float)dt.TotalSeconds, Owner.Transform.Bounds);
+            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * (float)dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
                 IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
-                if (IsOnGround)
-                    this.Velocity.Y = -Velocity.Y * BouncyMultiplier;
             }
+            this.Velocity += appliedAcceleration * .5f * dt.TotalSeconds;
+            if (IsOnGround)
+                this.Velocity.Y = -Velocity.Y * BouncyMultiplier;
 
             Owner.Transform = newTransform;
         }
@@ -78,8 +79,8 @@ namespace mapKnight.Extended.Components {
                 int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.TR.X; x <= xlimit; x++) {
                     for (int y = (int)oldTransform.BL.Y; y <= ylimit; y++) {
-                        if (x >= Owner.Owner.Size.Width || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateX(x - targetTransform.Bounds.X / 2);
+                        if (x >= Owner.World.Size.Width || Owner.World.HasCollider(x, y)) {
+                            targetTransform.X = x - targetTransform.Size.X / 2;
                             return true;
                         }
                     }
@@ -90,8 +91,8 @@ namespace mapKnight.Extended.Components {
                 int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.BL.X; x >= xlimit; x--) {
                     for (int y = (int)oldTransform.BL.Y; y <= ylimit; y++) {
-                        if (x < 0 || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateX(x + 1 + targetTransform.Bounds.X / 2);
+                        if (x < 0 || Owner.World.HasCollider(x, y)) {
+                            targetTransform.X = x + 1 + targetTransform.Size.X / 2;
                             return true;
                         }
                     }
@@ -108,8 +109,8 @@ namespace mapKnight.Extended.Components {
                 int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.TR.Y; y <= ylimit; y++) {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
-                        if (y >= Owner.Owner.Size.Height || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateY(y - targetTransform.Bounds.Y / 2f);
+                        if (y >= Owner.World.Size.Height || Owner.World.HasCollider(x, y)) {
+                            targetTransform.Y = y - targetTransform.Size.Y / 2f;
                             return true;
                         }
                     }
@@ -120,8 +121,8 @@ namespace mapKnight.Extended.Components {
                 int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.BL.Y; y >= ylimit; y--) {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
-                        if (y == -1 || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateY(y + 1 + targetTransform.Bounds.Y / 2f);
+                        if (y == -1 || Owner.World.HasCollider(x, y)) {
+                            targetTransform.Y = y + 1 + targetTransform.Size.Y / 2f;
                             return true;
                         }
                     }

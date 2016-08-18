@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Components {
             this.sprites = sprites;
             foreach (string key in sprites.Keys)
                 cachedResult.Add(key, "");
-            Owner.Owner.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
+            Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
         }
 
         public override void Update (DeltaTime dt) {

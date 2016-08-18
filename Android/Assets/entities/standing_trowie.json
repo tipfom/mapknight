@@ -1,155 +1,151 @@
 ﻿{
-	"Name": "Mighty Standing Trowie",
-	"Transform": {
-		"Bounds": {
-			"X": 1.5,
-			"Y": 1.5
-		}
-	},
-	"Components": [
-		{
-			"$type": "Gravity",
-			"Influence": 1
-		},
-		{
-			"$type": "Texture",
-			"Texture": "s_trowie"
-		},
-		{
-			"$type": "Skelet",
-			"Bones": {
-				"body": {
-					"Position": {
-						"X": 0.5,
-						"Y": 0.5
-					},
-					"Size": {
-						"X": 1,
-						"Y": 1
-					}
-				}
-			}
-		},
-		{
-			"$type": "AI.Trowie",
-			"ThrowRate": 2,
-			"Bullet": {
-				"Name": "Trowie Bullet",
-				"Transform": {
-					"Bounds": {
-						"X": 0.4,
-						"Y": 0.4
-					}
-				},
-				"Components": [
-					{
-						"$type": "Gravity",
-						"Influence": 1
-					},
-					{
-						"$type": "Stats.Speed",
-						"X": 5
-					},
-					{
-						"$type": "Stats.Damage",
-						"OnTouch": 0.7
-					},
-					{
-						"$type": "AI.Bullet"
-					},
-					{
-						"$type": "Sprite",
-						"Texture": "potatoe_patrick",
-						"Sprites": {
-							"body": {
-								"Delay": 80,
-								"Sprites": [ "anim1", "anim2", "anim3", "anim2" ]
-							}
-						}
-					},
-					{
-						"$type": "Skelet",
-						"Bones": {
-							"body": {
-								"Position": {
-									"X": 0.5,
-									"Y": 0.5
-								},
-								"Size": {
-									"X": 1,
-									"Y": 1
-								}
-							}
-						}
-					},
-					{
-						"$type": "Animation",
-						"Animations": [
-							{
-								"Name": "check_1234",
-								"Repeat": true,
-								"Steps": [
-									{
-										"Time": 2000,
-										"State": {
-											"body": {
-												"Position": {
-													"X": 0.3,
-													"Y": 0
-												},
-												"Size": {
-													"X": 1,
-													"Y": 1
-												}
-											}
-										}
-									},
-									{
-										"Time": 2000,
-										"State": {
-											"body": {
-												"Position": {
-													"X": 0.4,
-													"Y": 0.6
-												},
-												"Size": {
-													"X": 0.5,
-													"Y": 1
-												},
-												"Mirrored": false
-											}
-										}
-									},
-									{
-										"Time": 2000,
-										"State": {
-											"body": {
-												"Position": {
-													"X": 0.4,
-													"Y": 0.6
-												},
-												"Size": {
-													"X": 0.5,
-													"Y": 1
-												},
-												"Rotation": 100
-											}
-										}
-									}
-								]
-							}
-						]
-					}
-				]
-			}
-		},
-		{
-			"$type": "AI.Trigger",
-			"TriggerZone": {
-				"X": 8,
-				"Y": 3
-			},
-			"Offset": 1.5
-		}
-	]
+    "Name": "Mighty Standing Trowie",
+    "Transform": {
+        "Width": 1.5,
+        "Height": 1.5
+    },
+    "Components": [
+        {
+            "$type": "Gravity",
+            "Influence": 1
+        },
+        {
+            "$type": "Texture",
+            "Texture": "s_trowie"
+        },
+        {
+            "$type": "Skelet",
+            "Bones": {
+                "body": {
+                    "Position": {
+                        "X": 0.5,
+                        "Y": 0.5
+                    },
+                    "Size": {
+                        "X": 1,
+                        "Y": 1
+                    }
+                }
+            }
+        },
+        {
+            "$type": "AI.Trowie",
+            "ThrowRate": 2,
+            "Bullet": {
+                "Name": "Trowie Bullet",
+                "Transform": {
+                    "Width": 0.4,
+                    "Height": 0.4
+                },
+                "Components": [
+                    {
+                        "$type": "Gravity",
+                        "Influence": 1
+                    },
+                    {
+                        "$type": "Stats.Speed",
+                        "X": 5
+                    },
+                    {
+                        "$type": "Stats.Damage",
+                        "OnTouch": 0.7
+                    },
+                    {
+                        "$type": "AI.Bullet"
+                    },
+                    {
+                        "$type": "Sprite",
+                        "Texture": "potatoe_patrick",
+                        "Sprites": {
+                            "body": {
+                                "Delay": 80,
+                                "Sprites": [ "anim1", "anim2", "anim3", "anim2" ]
+                            }
+                        }
+                    },
+                    {
+                        "$type": "Skelet",
+                        "Bones": {
+                            "body": {
+                                "Position": {
+                                    "X": 0.5,
+                                    "Y": 0.5
+                                },
+                                "Size": {
+                                    "X": 1,
+                                    "Y": 1
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "$type": "Animation",
+                        "Animations": [
+                            {
+                                "Name": "check_1234",
+                                "Repeat": true,
+                                "Steps": [
+                                    {
+                                        "Time": 2000,
+                                        "State": {
+                                            "body": {
+                                                "Position": {
+                                                    "X": 0.3,
+                                                    "Y": 0
+                                                },
+                                                "Size": {
+                                                    "X": 1,
+                                                    "Y": 1
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Time": 2000,
+                                        "State": {
+                                            "body": {
+                                                "Position": {
+                                                    "X": 0.4,
+                                                    "Y": 0.6
+                                                },
+                                                "Size": {
+                                                    "X": 0.5,
+                                                    "Y": 1
+                                                },
+                                                "Mirrored": false
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "Time": 2000,
+                                        "State": {
+                                            "body": {
+                                                "Position": {
+                                                    "X": 0.4,
+                                                    "Y": 0.6
+                                                },
+                                                "Size": {
+                                                    "X": 0.5,
+                                                    "Y": 1
+                                                },
+                                                "Rotation": 100
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "$type": "AI.Trigger",
+            "TriggerZone": {
+                "X": 8,
+                "Y": 3
+            },
+            "Offset": 1.5
+        }
+    ]
 }

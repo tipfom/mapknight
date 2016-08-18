@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Components.AI {
             ((InternalTriggerComponent.Configuration)triggerEntityConfiguration.Components[0]).FollowEntity = Owner;
             ((InternalTriggerComponent.Configuration)triggerEntityConfiguration.Components[0]).TriggerOffset = offset;
             triggerEntityConfiguration.Transform = new Transform(new Vector2(0, 0), triggerZone);
-            triggerEntity = triggerEntityConfiguration.Create(new Vector2(0, 0), Owner.Owner);
+            triggerEntity = triggerEntityConfiguration.Create(new Vector2(0, 0), Owner.World);
             triggerEntity.GetComponent<InternalTriggerComponent>( ).Triggered += (Entity obj) => { Triggered?.Invoke(obj); };
         }
 
@@ -53,7 +53,7 @@ namespace mapKnight.Extended.Components.AI {
             }
 
             public override void Update (DeltaTime dt) {
-                Owner.Transform.Translate(followingEntity.Transform.Center.X, followingEntity.Transform.Center.Y + triggerOffset);
+                Owner.Transform.Center = new Vector2(followingEntity.Transform.Center.X, followingEntity.Transform.Center.Y + triggerOffset);
             }
 
             public new class Configuration : Component.Configuration {

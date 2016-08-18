@@ -1,10 +1,8 @@
 ﻿{
 	"Name": "Landus Minus",
 	"Transform": {
-		"Bounds": {
-			"X": 0.7,
-			"Y": 0.06
-		}
+			"Width": 0.7,
+			"Height": 0.06
 	},
 	"Components": [
 		{

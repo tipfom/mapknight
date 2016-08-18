@@ -52,7 +52,7 @@ namespace mapKnight.Extended.Components.AI {
             public Vector2[ ] Waypoints;
 
             public override Component Create (Entity owner) {
-                return new CircularSawComponent(owner, Waypoints, Speed, owner.Transform.BoundsHalf.X);
+                return new CircularSawComponent(owner, Waypoints, Speed, owner.Transform.HalfSize.X);
             }
         }
     }

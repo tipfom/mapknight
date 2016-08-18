@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
-using mapKnight.Extended.Exceptions;
-using Newtonsoft.Json;
 
 namespace mapKnight.Extended {
 
@@ -72,9 +70,9 @@ namespace mapKnight.Extended {
         private Component[ ] components;
         private Dictionary<ComponentEnum, Queue<object>> pendingComponentInfos = new Dictionary<ComponentEnum, Queue<object>>( );
 
-        public Entity (ComponentList components, Transform transform, IEntityWorld owner, string name, int species) {
+        public Entity (ComponentList components, Transform transform, IEntityWorld world, string name, int species) {
             Name = name;
-            Owner = owner;
+            World = world;
             Transform = transform;
             Species = species;
             ID = ++currentInstance;
@@ -105,10 +103,10 @@ namespace mapKnight.Extended {
         public event Action Destroyed;
 
         public bool IsDestroyed { get; private set; } = false;
-        public bool IsOnScreen { get { return Owner.IsOnScreen(this); } }
-        public IEntityWorld Owner { get; private set; }
-        public Vector2 PositionOnScreen { get { return Owner.GetPositionOnScreen(this); } }
+        public bool IsOnScreen { get { return World.IsOnScreen(this); } }
+        public Vector2 PositionOnScreen { get { return World.GetPositionOnScreen(this); } }
         public Transform Transform { get; set; }
+        public IEntityWorld World { get; private set; }
 
         public void Collision (Entity collidingEntity) {
             for (int i = 0; i < components.Length; i++)
@@ -189,12 +187,12 @@ namespace mapKnight.Extended {
             public Transform Transform;
             private int entitySpecies = -1;
 
-            public Entity Create (Vector2 spawnLocation, IEntityWorld container) {
+            public Entity Create (Vector2 spawnLocation, IEntityWorld world) {
                 if (entitySpecies == -1 || Components.HasChanged) {
                     entitySpecies = ++currentSpecies;
                     Components.ResolveComponentDependencies( );
                 }
-                return new Entity(Components, new Transform(spawnLocation, Transform.Bounds), container, Name, entitySpecies);
+                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Name, entitySpecies);
             }
         }
     }

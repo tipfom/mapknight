@@ -41,8 +41,8 @@ namespace mapKnight.Extended.Components {
             // update currentvertexdata based on the current transform
             foreach (string bone in currentVertexData.Keys) {
                 for (int i = 0; i < currentVertexData[bone].Length / 2; i++) {
-                    currentVertexData[bone][i * 2 + 0] = (currentVertexData[bone][i * 2 + 0] - 0.5f) * Owner.Transform.Bounds.X * Owner.Owner.VertexSize;
-                    currentVertexData[bone][i * 2 + 1] = (currentVertexData[bone][i * 2 + 1] - 0.5f) * Owner.Transform.Bounds.Y * Owner.Owner.VertexSize;
+                    currentVertexData[bone][i * 2 + 0] = (currentVertexData[bone][i * 2 + 0] - 0.5f) * Owner.Transform.Size.X * Owner.World.VertexSize;
+                    currentVertexData[bone][i * 2 + 1] = (currentVertexData[bone][i * 2 + 1] - 0.5f) * Owner.Transform.Size.Y * Owner.World.VertexSize;
                 }
             }
 

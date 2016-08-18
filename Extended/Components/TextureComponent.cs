@@ -20,7 +20,7 @@ namespace mapKnight.Extended.Components {
             textures = texture.Sprites.Keys.ToDictionary(spritename => spritename);
             data = new Tuple<ComponentData, object>(ComponentData.Texture, textures);
 
-            Owner.Owner.Renderer.AddTexture(Owner.Species, texture);
+            Owner.World.Renderer.AddTexture(Owner.Species, texture);
         }
 
         public override void Update (DeltaTime dt) {

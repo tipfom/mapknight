@@ -29,8 +29,8 @@ namespace mapKnight.Extended.Components.AI {
             if (entity.Info.IsPlayer && Environment.TickCount > nextThrow) {
                 nextThrow = Environment.TickCount + timeBetweenThrows;
                 bulletComponentConfiguration.Target = entity;
-                Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X, Owner.Transform.TR.Y + bulletEntityConfiguration.Transform.BoundsHalf.Y);
-                bulletEntityConfiguration.Create(spawnPoint, Owner.Owner);
+                Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X, Owner.Transform.TR.Y + bulletEntityConfiguration.Transform.HalfSize.Y);
+                bulletEntityConfiguration.Create(spawnPoint, Owner.World);
             }
         }
 

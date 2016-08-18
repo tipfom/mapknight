@@ -93,7 +93,6 @@ namespace mapKnight.Extended.Graphics.UI {
 
             foreach (KeyValuePair<int, List<DepthVertexData>> entry in data) {
                 indexUsage[entry.Key].Add(new Tuple<UIItem, int>(item, entry.Value.Count * 8));
-                bufferUpdated[entry.Key] = true;
                 foreach (DepthVertexData vertexData in entry.Value) {
                     CachedGPUBuffer vbuffer = ((CachedGPUBuffer)buffer[entry.Key].VertexBuffer);
                     Array.Copy(vertexData.Verticies, 0, vbuffer.Cache, vertexCount[entry.Key], 8);
@@ -104,6 +103,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     vertexCount[entry.Key] += 8;
                     renderCount[entry.Key] += 6;
                 }
+                bufferUpdated[entry.Key] = true;
             }
         }
 

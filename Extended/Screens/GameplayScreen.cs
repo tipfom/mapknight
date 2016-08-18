@@ -68,7 +68,7 @@ namespace mapKnight.Extended.Screens {
 
             walkingTrowieConfig.Create(new Vector2(40, 10), map);
 
-            landMineConfig.Create(new Vector2(40, landMineConfig.Transform.BoundsHalf.Y), map);
+            landMineConfig.Create(new Vector2(40, landMineConfig.Transform.HalfSize.Y), map);
 
             turretConfig.Create(new Vector2(70, 3), map);
 
@@ -78,7 +78,7 @@ namespace mapKnight.Extended.Screens {
 
             Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
             testEntityConfig.Components.Add(new PlayerComponent.Configuration(this));
-            testEntity = testEntityConfig.Create(new Vector2(8 + testEntityConfig.Transform.BoundsHalf.X, 13 + testEntityConfig.Transform.BoundsHalf.Y), map);
+            testEntity = testEntityConfig.Create(new Vector2(8 + testEntityConfig.Transform.HalfSize.X, 13 + testEntityConfig.Transform.HalfSize.Y), map);
             testEntityHealth = testEntity.GetComponent<HealthComponent>( );
             map.Focus(testEntity.ID);
 

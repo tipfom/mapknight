@@ -42,7 +42,7 @@ namespace mapKnight.Extended.Components {
                     entityVertexData.Add(entryVertexData);
                 }
 
-                Owner.Owner.Renderer.QueueVertexData(Owner.Species, entityVertexData);
+                Owner.World.Renderer.QueueVertexData(Owner.Species, entityVertexData);
             } else {
                 while (Owner.HasComponentInfo(ComponentEnum.Draw)) {
                     Owner.GetComponentInfo(ComponentEnum.Draw);

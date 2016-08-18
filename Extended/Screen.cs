@@ -6,14 +6,11 @@ using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Screens;
 
 namespace mapKnight.Extended {
-    public class Screen : IDisposable {
-        private static Screen _Active;
-        public static Screen Active { get { return _Active; } set { _Active.IsActive = false; value.IsActive = true; _Active = value; UIRenderer.Prepare(value); value.Activated( ); } }
 
+    public class Screen : IDisposable {
         public static GameplayScreen Gameplay;
         public static MainMenuScreen MainMenu;
-
-        public bool IsActive { get; private set; }
+        private static Screen _Active;
 
         static Screen ( ) {
             Gameplay = new GameplayScreen( );
@@ -21,24 +18,25 @@ namespace mapKnight.Extended {
             _Active = MainMenu;
         }
 
-        protected virtual void Activated ( ) {
+        public static Screen Active { get { return _Active; } set { _Active.IsActive = false; value.IsActive = true; UIRenderer.Prepare(value); value.Activated( ); _Active = value; } }
+        public bool IsActive { get; private set; }
 
-        }
-
-        public virtual void Load ( ) {
-
-        }
-
-        public virtual void Update (DeltaTime dt) {
-            UIRenderer.Update(dt);
+        public virtual void Dispose ( ) {
+            UIRenderer.Delete(this);
         }
 
         public virtual void Draw ( ) {
             UIRenderer.Draw( );
         }
 
-        public virtual void Dispose ( ) {
-            UIRenderer.Delete(this);
+        public virtual void Load ( ) {
+        }
+
+        public virtual void Update (DeltaTime dt) {
+            UIRenderer.Update(dt);
+        }
+
+        protected virtual void Activated ( ) {
         }
     }
 }

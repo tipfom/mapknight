@@ -32,33 +32,33 @@ namespace mapKnight.Extended.Components.AI {
         public override void Update (DeltaTime dt) {
             switch (currentMoveDir) {
                 case Direction.Left:
-                    Owner.Transform.TranslateX(Owner.Transform.Center.X - speedComponent.Speed.X * dt.TotalSeconds);
+                    Owner.Transform.X = Owner.Transform.Center.X - speedComponent.Speed.X * dt.TotalSeconds;
                     if (Owner.Transform.Center.X < targetLoc) {
-                        Owner.Transform.TranslateX(targetLoc);
+                        Owner.Transform.X = targetLoc;
                         FindWaypoint( );
                     }
                     break;
 
                 case Direction.Right:
-                    Owner.Transform.TranslateX(Owner.Transform.Center.X + speedComponent.Speed.X * dt.TotalSeconds);
+                    Owner.Transform.X = Owner.Transform.Center.X + speedComponent.Speed.X * dt.TotalSeconds;
                     if (Owner.Transform.Center.X > targetLoc) {
-                        Owner.Transform.TranslateX(targetLoc);
+                        Owner.Transform.X = targetLoc;
                         FindWaypoint( );
                     }
                     break;
 
                 case Direction.Up:
-                    Owner.Transform.TranslateY(Owner.Transform.Center.Y + speedComponent.Speed.Y * dt.TotalSeconds);
+                    Owner.Transform.Y = Owner.Transform.Center.Y + speedComponent.Speed.Y * dt.TotalSeconds;
                     if (Owner.Transform.Center.Y > targetLoc) {
-                        Owner.Transform.TranslateY(targetLoc);
+                        Owner.Transform.Y = targetLoc;
                         FindWaypoint( );
                     }
                     break;
 
                 case Direction.Down:
-                    Owner.Transform.TranslateY(Owner.Transform.Center.Y - speedComponent.Speed.Y * dt.TotalSeconds);
+                    Owner.Transform.Y = Owner.Transform.Center.Y - speedComponent.Speed.Y * dt.TotalSeconds;
                     if (Owner.Transform.Center.Y < targetLoc) {
-                        Owner.Transform.TranslateY(targetLoc);
+                        Owner.Transform.Y = targetLoc;
                         FindWaypoint( );
                     }
                     break;
@@ -70,17 +70,17 @@ namespace mapKnight.Extended.Components.AI {
             currentWallDir = nextWallDir;
             switch (currentMoveDir) {
                 case Direction.Left:
-                    targetLoc = Owner.Transform.BoundsHalf.X;
+                    targetLoc = Owner.Transform.HalfSize.X;
                     int ywalkingon = currentWallDir == Direction.Down ? Mathi.Floor(Owner.Transform.BL.Y) - 1 : Mathi.Floor(Owner.Transform.TR.Y);
                     int ywalkingagainst = currentWallDir == Direction.Down ? ywalkingon + 1 : ywalkingon - 1;
                     for (int x = Mathi.Floor(Owner.Transform.BL.X) - 1; x > -1; x--) {
-                        if (!Owner.Owner.HasCollider(x, ywalkingon)) {
-                            targetLoc = x + 1 - Owner.Transform.BoundsHalf.X;
+                        if (!Owner.World.HasCollider(x, ywalkingon)) {
+                            targetLoc = x + 1 - Owner.Transform.HalfSize.X;
                             nextMoveDir = currentWallDir;
                             nextWallDir = Direction.Right;
                             break;
-                        } else if (Owner.Owner.HasCollider(x, ywalkingagainst)) {
-                            targetLoc = x + 1 + Owner.Transform.BoundsHalf.X;
+                        } else if (Owner.World.HasCollider(x, ywalkingagainst)) {
+                            targetLoc = x + 1 + Owner.Transform.HalfSize.X;
                             nextMoveDir = 1 - currentWallDir;
                             nextWallDir = Direction.Left;
                             break;
@@ -89,17 +89,17 @@ namespace mapKnight.Extended.Components.AI {
                     break;
 
                 case Direction.Right:
-                    targetLoc = Owner.Owner.Size.Width - Owner.Transform.BoundsHalf.X;
+                    targetLoc = Owner.World.Size.Width - Owner.Transform.HalfSize.X;
                     ywalkingon = currentWallDir == Direction.Down ? Mathi.Floor(Owner.Transform.BL.Y) - 1 : Mathi.Floor(Owner.Transform.TR.Y);
                     ywalkingagainst = currentWallDir == Direction.Down ? ywalkingon + 1 : ywalkingon - 1;
-                    for (int x = Mathi.Floor(Owner.Transform.TR.X); x < Owner.Owner.Size.Width; x++) {
-                        if (!Owner.Owner.HasCollider(x, ywalkingon)) {
-                            targetLoc = x + Owner.Transform.BoundsHalf.X;
+                    for (int x = Mathi.Floor(Owner.Transform.TR.X); x < Owner.World.Size.Width; x++) {
+                        if (!Owner.World.HasCollider(x, ywalkingon)) {
+                            targetLoc = x + Owner.Transform.HalfSize.X;
                             nextMoveDir = currentWallDir;
                             nextWallDir = Direction.Left;
                             break;
-                        } else if (Owner.Owner.HasCollider(x, ywalkingagainst)) {
-                            targetLoc = x - Owner.Transform.BoundsHalf.X;
+                        } else if (Owner.World.HasCollider(x, ywalkingagainst)) {
+                            targetLoc = x - Owner.Transform.HalfSize.X;
                             nextMoveDir = 1 - currentWallDir;
                             nextWallDir = Direction.Right;
                             break;
@@ -108,17 +108,17 @@ namespace mapKnight.Extended.Components.AI {
                     break;
 
                 case Direction.Up:
-                    targetLoc = Owner.Owner.Size.Height - Owner.Transform.BoundsHalf.Y;
+                    targetLoc = Owner.World.Size.Height - Owner.Transform.HalfSize.Y;
                     int xwalkingon = currentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X) - 1 : Mathi.Floor(Owner.Transform.TR.X);
                     int xwalkingagainst = currentWallDir == Direction.Left ? xwalkingon + 1 : xwalkingon - 1;
-                    for (int y = Mathi.Floor(Owner.Transform.TR.Y); y < Owner.Owner.Size.Height; y++) {
-                        if (!Owner.Owner.HasCollider(xwalkingon, y)) {
-                            targetLoc = y + Owner.Transform.BoundsHalf.Y;
+                    for (int y = Mathi.Floor(Owner.Transform.TR.Y); y < Owner.World.Size.Height; y++) {
+                        if (!Owner.World.HasCollider(xwalkingon, y)) {
+                            targetLoc = y + Owner.Transform.HalfSize.Y;
                             nextMoveDir = currentWallDir;
                             nextWallDir = Direction.Down;
                             break;
-                        } else if (Owner.Owner.HasCollider(xwalkingagainst, y)) {
-                            targetLoc = y - Owner.Transform.BoundsHalf.Y;
+                        } else if (Owner.World.HasCollider(xwalkingagainst, y)) {
+                            targetLoc = y - Owner.Transform.HalfSize.Y;
                             nextMoveDir = 1 - currentWallDir;
                             nextWallDir = Direction.Up;
                             break;
@@ -127,17 +127,17 @@ namespace mapKnight.Extended.Components.AI {
                     break;
 
                 case Direction.Down:
-                    targetLoc = Owner.Transform.BoundsHalf.Y;
+                    targetLoc = Owner.Transform.HalfSize.Y;
                     xwalkingon = currentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X) - 1 : Mathi.Floor(Owner.Transform.TR.X);
                     xwalkingagainst = currentWallDir == Direction.Left ? xwalkingon + 1 : xwalkingon - 1;
                     for (int y = Mathi.Floor(Owner.Transform.BL.Y) - 1; y > -1; y--) {
-                        if (!Owner.Owner.HasCollider(xwalkingon, y)) {
-                            targetLoc = y + 1 - Owner.Transform.BoundsHalf.Y;
+                        if (!Owner.World.HasCollider(xwalkingon, y)) {
+                            targetLoc = y + 1 - Owner.Transform.HalfSize.Y;
                             nextMoveDir = currentWallDir;
                             nextWallDir = Direction.Up;
                             break;
-                        } else if (Owner.Owner.HasCollider(xwalkingagainst, y)) {
-                            targetLoc = y + 1 + Owner.Transform.BoundsHalf.Y;
+                        } else if (Owner.World.HasCollider(xwalkingagainst, y)) {
+                            targetLoc = y + 1 + Owner.Transform.HalfSize.Y;
                             nextMoveDir = 1 - currentWallDir;
                             nextWallDir = Direction.Down;
                             break;
