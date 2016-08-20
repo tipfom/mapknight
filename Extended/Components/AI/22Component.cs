@@ -145,7 +145,6 @@ namespace mapKnight.Extended.Components.AI {
                     }
                     break;
             }
-            Debug.Print(this, currentMoveDir + " " + currentWallDir + " " + targetLoc.ToString( ) + " " + nextMoveDir + " " + nextWallDir);
         }
 
         public new class Configuration : Component.Configuration {
