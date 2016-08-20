@@ -18,7 +18,7 @@ namespace mapKnight.Extended.Graphics.UI {
             RequestUpdate( );
         }
 
-        public override List<DepthVertexData> GetVertexData ( ) {
+        public override List<DepthVertexData> ConstructVertexData ( ) {
             List<DepthVertexData> vertexData = new List<DepthVertexData>( );
 
             float borderWidthHalf = Size.Y * BORDER_BOUNDS_RATIO;

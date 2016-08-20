@@ -9,7 +9,9 @@ Shared/*
 *.exe
 *.db
 *.bak
+*.user
 *-Skunk.*
 *-Tim-PC.*
 
 mapKnight.userprefs
+*.bak

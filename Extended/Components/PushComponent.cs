@@ -1,15 +1,17 @@
 using System;
 using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 
 namespace mapKnight.Extended.Components {
+
     [ComponentRequirement(typeof(MotionComponent))]
-    [ComponentOrder(ComponentEnum.Motion)]
+    [UpdateBefore(ComponentEnum.Motion)]
     public class PushComponent : Component {
         private int intervall;
-        private Vector2 velocity;
-        private int lastPush;
-        private bool resetLastVelocity;
         private MotionComponent motionComponent;
+        private int nextPush;
+        private bool resetLastVelocity;
+        private Vector2 velocity;
 
         public PushComponent (Entity owner, int intervall, Vector2 velocity, bool resetlastvelocity) : base(owner) {
             this.intervall = intervall; // ms
@@ -18,25 +20,25 @@ namespace mapKnight.Extended.Components {
         }
 
         public override void Prepare ( ) {
-            this.lastPush = Environment.TickCount;
+            this.nextPush = Environment.TickCount;
             this.motionComponent = Owner.GetComponent<MotionComponent>( );
         }
 
-        public override void Update (TimeSpan dt) {
-            if (Environment.TickCount > lastPush + intervall) {
-                lastPush += intervall;
+        public override void Update (DeltaTime dt) {
+            if (Environment.TickCount > nextPush) {
+                nextPush += intervall;
                 if (resetLastVelocity) {
-                    Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Push, ComponentData.Velocity, -motionComponent.Velocity + velocity);
+                    Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, -motionComponent.Velocity + velocity));
                 } else {
-                    Owner.SetComponentInfo(ComponentEnum.Motion, ComponentEnum.Push, ComponentData.Velocity, velocity);
+                    Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, velocity));
                 }
             }
         }
 
         public new class Configuration : Component.Configuration {
             public int Intervall;
-            public Vector2 Velocity;
             public bool ResetVelocity;
+            public Vector2 Velocity;
 
             public override Component Create (Entity owner) {
                 return new PushComponent(owner, Intervall, Velocity, ResetVelocity);

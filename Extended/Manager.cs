@@ -23,12 +23,10 @@ namespace mapKnight.Extended {
             GL.ClearColor(0f, 0f, 0f, 1f);
         }
 
-        private static float timeBetweenTicks = 1f / TICKS_PER_SECOND;
-        private static float nextTick = Environment.TickCount + timeBetweenTicks;
         private static Stopwatch stopWatch = new Stopwatch( );
-        public static TimeSpan FrameTime { get; private set; }
-        public static TimeSpan DrawTime { get; private set; }
-        public static TimeSpan UpdateTime { get; private set; }
+        public static DeltaTime FrameTime { get; private set; }
+        public static DeltaTime DrawTime { get; private set; }
+        public static DeltaTime UpdateTime { get; private set; }
 
         public static void Update ( ) {
             stopWatch.Restart( );
@@ -36,16 +34,11 @@ namespace mapKnight.Extended {
 
             UpdateFrametime( );
 
-            if (Environment.TickCount > nextTick) {
-                nextTick += timeBetweenTicks;
-                Screen.Active.Tick( );
-            }
-
             Screen.Active.Update(FrameTime);
-            UpdateTime = stopWatch.Elapsed; stopWatch.Restart( );
+            UpdateTime = new DeltaTime((float)stopWatch.Elapsed.TotalMilliseconds); stopWatch.Restart( );
 
             Screen.Active.Draw( );
-            DrawTime = stopWatch.Elapsed;
+            DrawTime = new DeltaTime((float)stopWatch.Elapsed.TotalMilliseconds);
         }
 
         public static void Destroy ( ) {
@@ -54,7 +47,7 @@ namespace mapKnight.Extended {
 
         private static int lastUpdate = Environment.TickCount;
         private static void UpdateFrametime ( ) {
-            FrameTime = new TimeSpan(0, 0, 0, 0, Environment.TickCount - lastUpdate);
+            FrameTime = new DeltaTime(Environment.TickCount - lastUpdate);
             lastUpdate = Environment.TickCount;
         }
     }

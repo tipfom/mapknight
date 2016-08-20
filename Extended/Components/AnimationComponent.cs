@@ -1,34 +1,36 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 using static mapKnight.Extended.Components.SkeletComponent;
 
 namespace mapKnight.Extended.Components {
+
     [ComponentRequirement(typeof(SkeletComponent))]
-    [ComponentOrder(ComponentEnum.Skelet)]
+    [UpdateBefore(ComponentEnum.Skelet)]
     public class AnimationComponent : Component {
         private List<Animation> animations;
         private int currentAnimation = -1;
+
+        public AnimationComponent (Entity owner, List<Animation> animations, string defaultanimation) : base(owner) {
+            this.animations = animations;
+            if (defaultanimation != null) setAnimation(defaultanimation);
+        }
+
         private Animation current { get { return animations[currentAnimation]; } }
         private bool isAnimating { get { return currentAnimation != -1; } set { currentAnimation = value ? currentAnimation : -1; } }
 
-        public AnimationComponent (Entity owner, List<Animation> animations) : base(owner) {
-            this.animations = animations;
-        }
-
-        public override void Update (TimeSpan dt) {
+        public override void Update (DeltaTime dt) {
             while (Owner.HasComponentInfo(ComponentEnum.Animation)) {
-                ComponentInfo ComponentInfo = Owner.GetComponentInfo(ComponentEnum.Animation);
-                if (ComponentInfo.Action == ComponentData.Animation) {
-                    setAnimation((string)ComponentInfo.Data);
-                }
+                string animationToPlay = (string)Owner.GetComponentInfo(ComponentEnum.Animation);
+                setAnimation(animationToPlay);
             }
 
             if (isAnimating) {
                 isAnimating = current.IsRunning;
                 if (!isAnimating)
                     return;
-                Owner.SetComponentInfo(ComponentEnum.Skelet, ComponentEnum.Animation, ComponentData.Verticies, animations[currentAnimation].Update(dt.Milliseconds));
+                Owner.SetComponentInfo(ComponentEnum.Skelet, animations[currentAnimation].Update(dt.Milliseconds));
             }
         }
 
@@ -38,15 +40,19 @@ namespace mapKnight.Extended.Components {
                 current.Reset( );
         }
 
-        public class Animation {
-            public bool Repeat;
-            public string Name;
-            public List<Step> Steps;
-            public bool IsRunning { get; private set; }
+        public struct Step {
+            public Dictionary<string, Bone> State;
+            public int Time;
+        }
 
-            private int nextStepTime;
+        public class Animation {
+            public string Name;
+            public bool Repeat;
+            public List<Step> Steps;
             private int currentStep;
             private int nextStep;
+            private int nextStepTime;
+            public bool IsRunning { get; private set; }
 
             public void Reset ( ) {
                 nextStepTime = Environment.TickCount + Steps[0].Time;
@@ -90,16 +96,12 @@ namespace mapKnight.Extended.Components {
             }
         }
 
-        public struct Step {
-            public int Time;
-            public Dictionary<string, Bone> State;
-        }
-
         public new class Configuration : Component.Configuration {
             public List<Animation> Animations;
+            public string DefaultAnimation;
 
             public override Component Create (Entity owner) {
-                return new AnimationComponent(owner, Animations);
+                return new AnimationComponent(owner, Animations, DefaultAnimation);
             }
         }
     }

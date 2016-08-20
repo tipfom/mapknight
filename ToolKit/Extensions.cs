@@ -1,9 +1,9 @@
-﻿using mapKnight.Core;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using mapKnight.Core;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace mapKnight.ToolKit {
     public static class Extensions {
@@ -49,7 +49,7 @@ namespace mapKnight.ToolKit {
         }
 
         public static Map MergeRotations (this Map map, float[ , , ] rotations) {
-            Map result = new Map(map.Size, map.Creator, map.Name) { Texture = map.Texture }; 
+            Map result = new Map(map.Size, map.Creator, map.Name) { Texture = map.Texture };
             Dictionary<int, bool[ ]> hasRotation = new Dictionary<int, bool[ ]>( );
             // get all available rotations
             for (int l = 0; l < 3; l++) {

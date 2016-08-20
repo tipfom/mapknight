@@ -2,83 +2,73 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using mapKnight.Core;
+using mapKnight.Extended.Components.Attributes;
 
 namespace mapKnight.Extended.Components {
+
+    [Instantiatable]
     public class MotionComponent : Component {
-        const int MAX_DELTA_TIME = 100; // 0.1 sec
-        const bool DEFAULT_COLLIDER_MAP = true;
-        const bool DEFAULT_COLLIDER_PLATFORM = true;
-
-        public Vector2 Velocity;
-
-        public bool IsOnGround { get; private set; }
-        public bool IsOnPlatform { get; private set; }
-        public bool IsAtWall { get; private set; }
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
+        public float BouncyMultiplier;
+        public Vector2 Velocity;
+        private bool wasOnPlatform = false;
 
-        public MotionComponent (Entity owner) : this(owner, DEFAULT_COLLIDER_MAP, DEFAULT_COLLIDER_PLATFORM) { }
-
-        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider) : base(owner) {
+        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult) : base(owner) {
             Velocity = new Vector2( );
             HasMapCollider = mapCollider;
             HasPlatformCollider = platformCollider;
+            BouncyMultiplier = bouncymult;
         }
 
-        public override void Update (TimeSpan dt) {
-            if (Math.Abs(dt.Milliseconds) > MAX_DELTA_TIME)
-                return;
+        public bool IsAtWall { get; private set; }
+        public bool IsOnGround { get; private set; }
+        public bool IsOnPlatform { get; private set; }
+
+        public override void Collision (Entity collidingEntity) {
+            if (HasPlatformCollider && collidingEntity.Info.IsPlatform) {
+                IsOnPlatform = true;
+                PlatformComponent platform = collidingEntity.GetComponent<PlatformComponent>( );
+                Velocity.Y = platform.Velocity.Y;
+                Velocity.X += platform.Velocity.X;
+            }
+        }
+
+        public override void Update (DeltaTime dt) {
+            wasOnPlatform = IsOnPlatform;
+            IsOnPlatform = false;
 
             Vector2 appliedAcceleration = new Vector2( ); // reset acceleration
             List<Vector2> appliedVelocities = new List<Vector2>( );
 
             while (Owner.HasComponentInfo(ComponentEnum.Motion)) {
-                ComponentInfo componentInfo = Owner.GetComponentInfo(ComponentEnum.Motion);
-                switch (componentInfo.Action) {
+                Tuple<ComponentData, Vector2> componentInfo = (Tuple<ComponentData, Vector2>)Owner.GetComponentInfo(ComponentEnum.Motion);
+                switch (componentInfo.Item1) {
                     case ComponentData.Velocity:
-                        appliedVelocities.Add((Vector2)componentInfo.Data);
+                        appliedVelocities.Add(componentInfo.Item2);
                         break;
+
                     case ComponentData.Acceleration:
-                        appliedAcceleration += (Vector2)componentInfo.Data;
+                        appliedAcceleration += componentInfo.Item2;
                         break;
-                }
-            }
-
-            if (HasPlatformCollider) {
-                bool wasOnPlatform = IsOnPlatform;
-                IsOnPlatform = false;
-                foreach (KeyValuePair<Entity, PlatformComponent> platform in Entity.Platforms) {
-                    if (Owner.Transform.Touches(platform.Key.Transform)) {
-                        if (!wasOnPlatform) // align with platform
-                            Owner.Transform.Align(platform.Key.Transform);
-
-                        IsOnPlatform = true;
-                        this.Velocity = platform.Value.Velocity;
-                        // player cant go below the platform so all velocities regarding to lower the y value of the player
-                        // need to be removed
-                        for (int i = 0; i < appliedVelocities.Count; i++)
-                            appliedVelocities[i] = new Vector2(appliedVelocities[i].X, Math.Min(0, appliedVelocities[i].Y));
-                        appliedAcceleration.Y = Math.Max(0, appliedAcceleration.Y);
-                        break;
-                    }
                 }
             }
 
             // update velocity
-            this.Velocity += appliedAcceleration * (float)dt.TotalSeconds;
+            this.Velocity += appliedAcceleration * .5f * (float)dt.TotalSeconds;
             foreach (Vector2 velocity in appliedVelocities)
                 this.Velocity += velocity;
 
-            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * (float)dt.TotalSeconds, Owner.Transform.Bounds);
+            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * (float)dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
                 IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
             }
+            this.Velocity += appliedAcceleration * .5f * dt.TotalSeconds;
+            if (IsOnGround)
+                this.Velocity.Y = -Velocity.Y * BouncyMultiplier;
 
             Owner.Transform = newTransform;
-
-            if (IsOnGround)
-                this.Velocity.Y = 0;
         }
 
         private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {
@@ -89,8 +79,8 @@ namespace mapKnight.Extended.Components {
                 int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.TR.X; x <= xlimit; x++) {
                     for (int y = (int)oldTransform.BL.Y; y <= ylimit; y++) {
-                        if (x >= Owner.Owner.Size.Width || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateX(x - targetTransform.Bounds.X / 2);
+                        if (x >= Owner.World.Size.Width || Owner.World.HasCollider(x, y)) {
+                            targetTransform.X = x - targetTransform.Size.X / 2;
                             return true;
                         }
                     }
@@ -101,8 +91,8 @@ namespace mapKnight.Extended.Components {
                 int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.BL.X; x >= xlimit; x--) {
                     for (int y = (int)oldTransform.BL.Y; y <= ylimit; y++) {
-                        if (x < 0 || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateX(x + 1 + targetTransform.Bounds.X / 2);
+                        if (x < 0 || Owner.World.HasCollider(x, y)) {
+                            targetTransform.X = x + 1 + targetTransform.Size.X / 2;
                             return true;
                         }
                     }
@@ -119,8 +109,8 @@ namespace mapKnight.Extended.Components {
                 int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.TR.Y; y <= ylimit; y++) {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
-                        if (y >= Owner.Owner.Size.Height || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateY(y - targetTransform.Bounds.Y / 2f);
+                        if (y >= Owner.World.Size.Height || Owner.World.HasCollider(x, y)) {
+                            targetTransform.Y = y - targetTransform.Size.Y / 2f;
                             return true;
                         }
                     }
@@ -131,8 +121,8 @@ namespace mapKnight.Extended.Components {
                 int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.BL.Y; y >= ylimit; y--) {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
-                        if (y == -1 || Owner.Owner.HasCollider(x, y)) {
-                            targetTransform.TranslateY(y + 1 + targetTransform.Bounds.Y / 2f);
+                        if (y == -1 || Owner.World.HasCollider(x, y)) {
+                            targetTransform.Y = y + 1 + targetTransform.Size.Y / 2f;
                             return true;
                         }
                     }
@@ -143,8 +133,12 @@ namespace mapKnight.Extended.Components {
         }
 
         public new class Configuration : Component.Configuration {
+            public float BounceMultiplier = 0;
+            public bool MapCollider = true;
+            public bool PlatformCollider = false;
+
             public override Component Create (Entity owner) {
-                return new MotionComponent(owner);
+                return new MotionComponent(owner, MapCollider, PlatformCollider, BounceMultiplier);
             }
         }
     }
