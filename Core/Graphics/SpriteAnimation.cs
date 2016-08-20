@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace mapKnight.Extended.Graphics {
+namespace mapKnight.Core.Graphics {
 
     public class SpriteAnimation {
         public int Delay;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Core.Graphics;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics;
 
@@ -11,7 +12,7 @@ namespace mapKnight.Extended.Components {
     public class SkeletComponent : Component {
         private Dictionary<string, float[ ]> defaultVertexData;
 
-        public SkeletComponent (Entity owner, Dictionary<string, Bone> bones) : base(owner) {
+        public SkeletComponent (Entity owner, Dictionary<string, VertexBone> bones) : base(owner) {
             defaultVertexData = new Dictionary<string, float[ ]>( );
             foreach (var entry in bones) {
                 defaultVertexData.Add(entry.Key,
@@ -49,15 +50,10 @@ namespace mapKnight.Extended.Components {
             Owner.SetComponentInfo(ComponentEnum.Draw, new Tuple<ComponentData, object>(ComponentData.Verticies, currentVertexData));
         }
 
-        public struct Bone {
-            public bool Mirrored;
-            public Vector2 Position;
-            public float Rotation;
-            public Vector2 Size;
-        }
+        
 
         public new class Configuration : Component.Configuration {
-            public Dictionary<string, Bone> Bones;
+            public Dictionary<string, VertexBone> Bones;
 
             public override Component Create (Entity owner) {
                 return new SkeletComponent(owner, Bones);

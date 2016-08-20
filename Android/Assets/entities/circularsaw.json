@@ -27,7 +27,7 @@
                 {
                     "Name": "drot",
                     "Repeat": true,
-                    "Steps": [
+                    "Frames": [
                         {
                             "Time": 800,
                             "State": {
