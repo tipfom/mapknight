@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace mapKnight.ToolKit {
+namespace mapKnight.ToolKit.Windows {
     /// <summary>
     /// Interaktionslogik für EditorWindow.xaml
     /// </summary>

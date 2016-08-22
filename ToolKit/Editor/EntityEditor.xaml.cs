@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace mapKnight.ToolKit {
+namespace mapKnight.ToolKit.Editor {
     /// <summary>
     /// Interaktionslogik für EntityEditor.xaml
     /// </summary>

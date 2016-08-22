@@ -1,9 +1,11 @@
-﻿<Window x:Class="mapKnight.ToolKit.EditorWindow"
+﻿<Window x:Class="mapKnight.ToolKit.Windows.EditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit"
+        xmlns:component="clr-namespace:mapKnight.ToolKit.Controls.Components"
+        xmlns:editor="clr-namespace:mapKnight.ToolKit.Editor"
         mc:Ignorable="d"
         Title="mapKnight ToolKit" Height="300" Width="300"
         Closing="Window_Closing" Loaded="Window_Loaded"
@@ -23,11 +25,11 @@
             <MenuItem Header="_ABOUT" Click="About_Click"/>
         </Menu>
         <TabControl Name="tabcontrol_editor">
-            <TabItem Header="MAP" Selector.Selected="Map_Selected">
-                <local:MapEditor x:Name="mapeditor"/>
+           <TabItem Header="MAP" Selector.Selected="Map_Selected">
+                <editor:MapEditor x:Name="mapeditor"/>
             </TabItem>
             <TabItem Header="ENTITY" Selector.Selected="Entity_Selected">
-                <local:EntityEditor x:Name="entityeditor"/>
+                <editor:EntityEditor x:Name="entityeditor"/>
             </TabItem>
         </TabControl>
     </DockPanel>

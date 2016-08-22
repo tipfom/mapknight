@@ -18,4 +18,20 @@
     <Image x:Key="image_entity_newentity" Source="../Resources/add_user_male-48.png"/>
     <BitmapImage x:Key="image_entity_addcomponent" UriSource="../Resources/add_link-48.png"/>
     <BitmapImage x:Key="image_entity_deletecomponent" UriSource="../Resources/delete_sign-48.png"/>
+
+    <BitmapImage x:Key="image_animationcomponent_frame" UriSource="../Resources/frame-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_bone" UriSource="../Resources/dog_bone-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_animation" UriSource="../Resources/video_playlist-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_repeat" UriSource="../Resources/repeat-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_mirror" UriSource="../Resources/person_in_a_mirror-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_down" UriSource="../Resources/down_arrow-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_up" UriSource="../Resources/up_arrow-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_delete" UriSource="../Resources/delete_sign-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_reset" UriSource="../Resources/recycling-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_startplay" UriSource="../Resources/play-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_resetplay" UriSource="../Resources/rotate_left-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_stopplay" UriSource="../Resources/stop-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_pauseplay" UriSource="../Resources/pause-48.png"/>
+
+    <BitmapImage x:Key="image_resizableimage_error" UriSource="../Resources/error-48.png"/>
 </ResourceDictionary>

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows;
 
-namespace mapKnight.ToolKit {
+namespace mapKnight.ToolKit.Windows {
     /// <summary>
     /// Interaktionslogik für AboutWindow.xaml
     /// </summary>

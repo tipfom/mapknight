@@ -9,7 +9,7 @@ using mapKnight.Core;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace mapKnight.ToolKit {
+namespace mapKnight.ToolKit.Windows {
     /// <summary>
     /// Interaktionslogik für CreateMapWindow.xaml
     /// </summary>

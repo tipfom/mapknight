@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace mapKnight.ToolKit.Xna {
+namespace mapKnight.ToolKit.Controls.Xna {
     /// <summary>
     /// A wrapper for a RenderTarget2D and WriteableBitmap 
     /// that handles taking the XNA rendering and moving it 

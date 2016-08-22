@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -65,39 +65,52 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddTileWindow.xaml.cs">
+    <Compile Include="Windows\AddTileWindow.xaml.cs">
       <DependentUpon>AddTileWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CreateMapWindow.xaml.cs">
+    <Compile Include="Controls\Components\AnimationControl.xaml.cs">
+      <DependentUpon>AnimationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Components\Animation\AnimationView.cs" />
+    <Compile Include="Controls\Components\Animation\MoveThumb.cs" />
+    <Compile Include="Controls\Components\Animation\ResizableImage.xaml.cs">
+      <DependentUpon>ResizableImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Components\Animation\ResizeThumb.cs" />
+    <Compile Include="Controls\Components\Animation\RotateThumb.cs" />
+    <Compile Include="Controls\Components\IComponentControl.cs" />
+    <Compile Include="Windows\CreateMapWindow.xaml.cs">
       <DependentUpon>CreateMapWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomCommands.cs" />
     <Compile Include="EmbeddedAssemblies.cs" />
-    <Compile Include="EntityEditor.xaml.cs">
+    <Compile Include="Editor\EntityEditor.xaml.cs">
       <DependentUpon>EntityEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Libraries\ObservableDictionary.cs" />
     <Compile Include="Project.cs" />
-    <Compile Include="TileMapView.cs" />
+    <Compile Include="Controls\TileMapView.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TileTemplateSerializer.cs" />
-    <Compile Include="Xna\GraphicsDeviceService.cs" />
-    <Compile Include="Xna\ImageSource.cs" />
-    <Compile Include="Xna\XnaControl.xaml.cs">
+    <Compile Include="Controls\Xna\GraphicsDeviceService.cs" />
+    <Compile Include="Controls\Xna\ImageSource.cs" />
+    <Compile Include="Controls\Xna\XnaControl.xaml.cs">
       <DependentUpon>XnaControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EditorWindow.xaml.cs">
+    <Compile Include="Windows\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MapEditor.xaml.cs">
+    <Compile Include="Editor\MapEditor.xaml.cs">
       <DependentUpon>MapEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -128,23 +141,31 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="AboutWindow.xaml">
+    <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AddTileWindow.xaml">
+    <Page Include="Windows\AddTileWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CreateMapWindow.xaml">
+    <Page Include="Controls\Components\AnimationControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Components\Animation\ResizableImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EditorWindow.xaml">
+    <Page Include="Windows\CreateMapWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EntityEditor.xaml">
+    <Page Include="Windows\EditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Editor\EntityEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -152,11 +173,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MapEditor.xaml">
+    <Page Include="Editor\MapEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Xna\XnaControl.xaml">
+    <Page Include="Controls\Xna\XnaControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -218,6 +239,43 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\add_user_male-48.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\video_playlist-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\frame-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\dog_bone-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\repeat-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\person_in_a_mirror-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\up_arrow-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\down_arrow-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\error-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\recycling-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\play-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pause-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\stop-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

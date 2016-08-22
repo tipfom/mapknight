@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading;
 
-namespace mapKnight.ToolKit.Xna {
+namespace mapKnight.ToolKit.Controls.Xna {
     /// <summary>
     /// Helper class responsible for creating and managing the GraphicsDevice.
     /// All GraphicsDeviceControl instances share the same GraphicsDeviceService,

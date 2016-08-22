@@ -1,5 +1,5 @@
 ﻿using mapKnight.Core;
-using mapKnight.ToolKit.Xna;
+using mapKnight.ToolKit.Controls.Xna;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using mapKnight.ToolKit.Controls.Xna;
 
 namespace mapKnight.ToolKit {
     public class Project {
