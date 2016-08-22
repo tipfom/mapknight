@@ -58,7 +58,7 @@
 				{
 					"Name": "check_1234",
 					"Repeat": true,
-					"Steps": [
+					"Frames": [
 						{
 							"Time": 2000,
 							"State": {

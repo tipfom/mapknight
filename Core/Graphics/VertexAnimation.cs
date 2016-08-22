@@ -1,12 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+#if WINDOWS
+using System.Collections.ObjectModel;
+#endif
 using System.Text;
 
 namespace mapKnight.Core.Graphics {
     public class VertexAnimation {
-        public string Name;
-        public bool Repeat;
-        public List<Frame> Frames;
+        public string Name { get; set; }
+        public bool Repeat
+#if __ANDROID__
+        ;
+#else
+        { get; set; }
+#endif
+#if __ANDROID__
+        public List<VertexAnimationFrame> Frames;
+#else
+        public ObservableCollection<VertexAnimationFrame> Frames { get; set; }
+#endif
         private int currentFrame;
         private int nextFrame;
         private int nextFrameTime;
@@ -53,9 +65,5 @@ namespace mapKnight.Core.Graphics {
             return result;
         }
 
-        public class Frame {
-            public Dictionary<string, VertexBone> State;
-            public int Time;
-        }
     }
 }

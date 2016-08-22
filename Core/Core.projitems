@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexAnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexBone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpolation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Map.cs" />

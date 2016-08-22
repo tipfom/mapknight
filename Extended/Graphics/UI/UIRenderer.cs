@@ -16,6 +16,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private static int[ ] renderCount = { 0, 0, 0 };
         private static Dictionary<Screen, List<UIItem>> uiItems;
         private static int[ ] vertexCount = { 0, 0, 0 };
+        private static Queue<UIItem> updateQueue = new Queue<UIItem>();
 
         static UIRenderer ( ) {
             IndexBuffer sharedIndexBuffer = new IndexBuffer(MAX_QUADS);
@@ -35,7 +36,7 @@ namespace mapKnight.Extended.Graphics.UI {
             if (!uiItems.ContainsKey(screen))
                 uiItems.Add(screen, new List<UIItem>( ));
             uiItems[screen].Add(item);
-            item.Changed += Update;
+            item.Changed += (UIItem e) => updateQueue.Enqueue(e);
         }
 
         public static void Delete ( ) {
@@ -59,6 +60,7 @@ namespace mapKnight.Extended.Graphics.UI {
             vertexCount = new int[ ] { 0, 0, 0 };
             renderCount = new int[ ] { 0, 0, 0 };
             indexUsage = new List<Tuple<UIItem, int>>[ ] { new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ) };
+            updateQueue.Clear( );
 
             if (uiItems.ContainsKey(target)) {
                 foreach (UIItem item in uiItems[target]) {
@@ -68,13 +70,12 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public static void Update (UIItem item) {
-            bool[ ] updatedBuffer = { false, false, false };
             for (int depth = 0; depth < 3; depth++) {
                 int current = 0;
                 for (int i = 0; i < indexUsage[depth].Count; i++) {
                     Tuple<UIItem, int> entry = indexUsage[depth][i];
                     if (entry.Item1 == item) {
-                        updatedBuffer[depth] = true;
+                        bufferUpdated[depth] = true;
                         indexUsage[depth].RemoveAt(i);
                         vertexCount[depth] -= entry.Item2;
                         renderCount[depth] -= entry.Item2 * 6 / 8;
@@ -111,14 +112,14 @@ namespace mapKnight.Extended.Graphics.UI {
                         vertexCount[entry.Key] += 8;
                         renderCount[entry.Key] += 6;
                     }
-                    updatedBuffer[entry.Key] = true;
+                    bufferUpdated[entry.Key] = true;
                 }
             }
-            for (int d = 0; d < 3; d++)
-                bufferUpdated[d] = bufferUpdated[d] || updatedBuffer[d];
         }
 
         public static void Update (DeltaTime dt) {
+            while (updateQueue.Count > 0)
+                Update(updateQueue.Dequeue( ));
             ApplyBufferUpdates( );
 
             foreach (UIItem item in uiItems[currentScreen])

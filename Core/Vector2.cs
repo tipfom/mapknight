@@ -90,15 +90,25 @@ namespace mapKnight.Core {
 
         #endregion
 
+#if __ANDROID__
         public float X;
         public float Y;
+#else
+        public float X { get; set; }
+        public float Y { get; set; }
+#endif
 
         public Vector2 (float x, float y) {
             X = x;
             Y = y;
         }
 
-        #region methods and functions
+        public Vector2(Vector2 vector) {
+            X = vector.X;
+            Y = vector.Y;
+        }
+
+#region methods and functions
 
         public Vector2 Abs ( ) {
             return new Vector2(Math.Abs(this.X), Math.Abs(this.Y));
@@ -127,9 +137,9 @@ namespace mapKnight.Core {
             };
         }
 
-        #endregion
+#endregion
 
-        #region overrides
+#region overrides
 
         public override bool Equals (object obj) {
             return (obj.GetType( ) == typeof(Vector2)) ? (((Vector2)obj) == this) : false;
@@ -143,6 +153,6 @@ namespace mapKnight.Core {
             return $"({X} {Y})";
         }
 
-        #endregion
+#endregion
     }
 }
