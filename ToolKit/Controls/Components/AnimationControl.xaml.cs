@@ -17,16 +17,16 @@ namespace mapKnight.ToolKit.Controls.Components {
     /// <summary>
     /// Interaktionslogik für AnimationControl.xaml
     /// </summary>
-    public partial class AnimationControl : UserControl {
+    public partial class AnimationControl : UserControl, IComponentControl {
         private static double[ ] greaterSizeEditorUsePercent = { 1d, 0.75f, 0.5d };
 
         private Dictionary<string, VertexBone> _Bones = new Dictionary<string, VertexBone>( );
         private Dictionary<string, BitmapImage> _Images = new Dictionary<string, BitmapImage>( );
         private double _TransformAspectRatio = 1.5d;
         private Dictionary<string, ResizableImage> boneImages = new Dictionary<string, ResizableImage>( );
-        private HashSet<VertexAnimation> requiredAnimations = new HashSet<VertexAnimation>( );
-        private VertexAnimationFrame currentFrame;
         private VertexAnimation currentAnimation;
+        private VertexAnimationFrame currentFrame;
+        private HashSet<VertexAnimation> requiredAnimations = new HashSet<VertexAnimation>( );
 
         public AnimationControl ( ) {
             InitializeComponent( );
@@ -38,6 +38,10 @@ namespace mapKnight.ToolKit.Controls.Components {
         public Dictionary<string, VertexBone> Bones { get { return _Bones; } set { _Bones = value; BonesChanged( ); } }
         public Dictionary<string, BitmapImage> Images { get { return _Images; } set { _Images = value; BonesChanged( ); } }
         public double TransformAspectRatio { get { return _TransformAspectRatio; } set { _TransformAspectRatio = value; AdjustEditor( ); } }
+
+        public List<Control> Menu { get; } = new List<Control>( );
+
+        public string Category { get { return "gfx"; } }
 
         private static TreeViewItem ContainerFromItem (ItemContainerGenerator containerGenerator, object item) {
             TreeViewItem container = (TreeViewItem)containerGenerator.ContainerFromItem(item);
@@ -78,8 +82,41 @@ namespace mapKnight.ToolKit.Controls.Components {
             if (currentFrame == null)
                 return;
             foreach (KeyValuePair<string, ResizableImage> kvpair in boneImages) {
-                UpdateBoneImage(kvpair.Key);    
+                UpdateBoneImage(kvpair.Key);
             }
+        }
+
+        private void BoneImage_CanvasLeftChanged (object sender, EventArgs e) {
+            UpdatePositionOfBone(boneImages.First(pair => pair.Value == sender).Key);
+        }
+
+        private void BoneImage_CanvasTopChanged (object sender, EventArgs e) {
+            UpdatePositionOfBone(boneImages.First(pair => pair.Value == sender).Key);
+        }
+
+        private void BoneImage_Rotated (ResizableImage obj) {
+            string key = boneImages.First(pair => pair.Value == obj).Key;
+            if (currentFrame == null)
+                return;
+            VertexBone bone = currentFrame.State[key];
+            bone.Rotation = obj.Rotation;
+            currentFrame.State.Remove(key);
+            currentFrame.State.Add(key, bone);
+        }
+
+        private void BoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
+            if (currentFrame == null) return;
+            ResizableImage image = (ResizableImage)sender;
+            float newsizex = (float)(image.Width / rectangle_player.Width);
+            float newsizey = (float)(image.Height / rectangle_player.Height);
+            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
+            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
+            string key = boneImages.First(pair => pair.Value == sender).Key;
+            VertexBone current = currentFrame.State[key];
+            current.Size = new Vector2(newsizex, newsizey);
+            current.Position = new Vector2(newpercentx, newpercenty);
+            currentFrame.State.Remove(key);
+            currentFrame.State.Add(key, current);
         }
 
         private void BonesChanged ( ) {
@@ -102,7 +139,7 @@ namespace mapKnight.ToolKit.Controls.Components {
                     Canvas.SetTop(image, Canvas.GetTop(border_rectangle_player) + image.Height / 2d);
                     image.SizeChanged += BoneImage_SizeChanged;
                     DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(ResizableImage));
-                    canvasleftproperty.AddValueChanged(image,BoneImage_CanvasLeftChanged);
+                    canvasleftproperty.AddValueChanged(image, BoneImage_CanvasLeftChanged);
                     DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
                     canvastopproperty.AddValueChanged(image, BoneImage_CanvasTopChanged);
                 }
@@ -130,49 +167,32 @@ namespace mapKnight.ToolKit.Controls.Components {
             treeview_animations.Items.Refresh( );
         }
 
-        private void BoneImage_Rotated (ResizableImage obj) {
-            string key = boneImages.First(pair => pair.Value == obj).Key;
-            if (currentFrame == null)
-                return;
-            VertexBone bone = currentFrame.State[key];
-            bone.Rotation = obj.Rotation;
-            currentFrame.State.Remove(key);
-            currentFrame.State.Add(key, bone);
-
+        private void ButtonBoneFlipped_Click (object sender, RoutedEventArgs e) {
+            KeyValuePair<string, VertexBone> kvpair = (KeyValuePair<string, VertexBone>)(((Control)sender).DataContext);
+            VertexBone bone = kvpair.Value;
+            VertexAnimationFrame frame = FindFrame(bone);
+            bone.Mirrored = !bone.Mirrored;
+            frame.State.Remove(kvpair.Key);
+            frame.State.Add(kvpair.Key, bone);
+            if (frame == currentFrame)
+                UpdateBoneImage(kvpair.Key);
         }
 
-        private void BoneImage_CanvasLeftChanged (object sender, EventArgs e) {
-            UpdatePositionOfBone( boneImages.First(pair => pair.Value == sender).Key);
+        private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
+            animationview.Pause( );
         }
 
-        private void BoneImage_CanvasTopChanged (object sender, EventArgs e) {
-            UpdatePositionOfBone(boneImages.First(pair => pair.Value == sender).Key);
+        private void ButtonResetPlay_Click (object sender, RoutedEventArgs e) {
+            animationview.Reset( );
         }
 
-        private void UpdatePositionOfBone(string key) {
-            if (currentFrame == null) return;
-            ResizableImage image = boneImages[key];
-            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
-            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
-            VertexBone current = currentFrame.State[key];
-            current.Position = new Vector2(newpercentx, newpercenty);
-            currentFrame.State.Remove(key);
-            currentFrame.State.Add(key, current);
+        private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
+            if (currentAnimation == null || currentAnimation.Frames.Count < 0) return;
+            animationview.Play(currentAnimation, (float)_TransformAspectRatio, boneImages.ToDictionary(entry => entry.Key, entry => entry.Value.Image));
         }
 
-        private void BoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
-            if (currentFrame == null) return;
-            ResizableImage image = (ResizableImage)sender;
-            float newsizex = (float)(image.Width / rectangle_player.Width);
-            float newsizey = (float)(image.Height / rectangle_player.Height);
-            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
-            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
-            string key = boneImages.First(pair => pair.Value == sender).Key;
-            VertexBone current = currentFrame.State[key];
-            current.Size = new Vector2(newsizex, newsizey);
-            current.Position = new Vector2(newpercentx, newpercenty);
-            currentFrame.State.Remove(key);
-            currentFrame.State.Add(key, current);
+        private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {
+            animationview.Stop( );
         }
 
         private void canvas_frame_SizeChanged (object sender, SizeChangedEventArgs e) {
@@ -228,7 +248,7 @@ namespace mapKnight.ToolKit.Controls.Components {
                 VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
                 if (animation != default(VertexAnimation)) {
                     int index = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem);
-                    animation.Frames.Add(new VertexAnimationFrame( ) { State = new ObservableDictionary<string, VertexBone>(animation.Frames[index].State.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, Size = new Vector2(entry.Value.Size)})), Time = animation.Frames[index].Time });
+                    animation.Frames.Add(new VertexAnimationFrame( ) { State = new ObservableDictionary<string, VertexBone>(animation.Frames[index].State.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, Size = new Vector2(entry.Value.Size) })), Time = animation.Frames[index].Time });
                 }
                 // TODO
                 Bones = new Dictionary<string, VertexBone>(Bones) { [Bones.Count.ToString( )] = new VertexBone( ) { Mirrored = (Bones.Count % 2) == 1, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.4f, 0.4f) } };
@@ -259,6 +279,16 @@ namespace mapKnight.ToolKit.Controls.Components {
                     animation.Frames.Move(index, index - 1);
                 }
             }
+        }
+
+        private VertexAnimationFrame FindFrame (VertexBone bone) {
+            foreach (VertexAnimation anim in Animations) {
+                foreach (VertexAnimationFrame frame in anim.Frames) {
+                    if (frame.State.Any(pair => pair.Value.Equals(bone)))
+                        return frame;
+                }
+            }
+            return null;
         }
 
         private void slider_zoom_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -296,7 +326,7 @@ namespace mapKnight.ToolKit.Controls.Components {
                 currentFrame = (VertexAnimationFrame)e.NewValue;
                 dockpanel_edit.Visibility = Visibility.Visible;
                 dockpanel_preview.Visibility = Visibility.Hidden;
-                foreach(string bone in boneImages.Keys) {
+                foreach (string bone in boneImages.Keys) {
                     UpdateBoneImage(bone);
                 }
             } else {
@@ -304,7 +334,15 @@ namespace mapKnight.ToolKit.Controls.Components {
             }
         }
 
-        private void UpdateBoneImage(string key) {
+        private void treeview_animations_TreeViewItemRightMouseButtonDown (object sender, MouseButtonEventArgs e) {
+            TreeViewItem item = sender as TreeViewItem;
+            if (item != null) {
+                item.Focus( );
+                e.Handled = true;
+            }
+        }
+
+        private void UpdateBoneImage (string key) {
             ResizableImage image = boneImages[key];
             VertexBone bone = currentFrame.State[key];
             image.Width = rectangle_player.Width * bone.Size.X;
@@ -317,50 +355,23 @@ namespace mapKnight.ToolKit.Controls.Components {
             Canvas.SetTop(image, newtop);
         }
 
-        private void treeview_animations_TreeViewItemRightMouseButtonDown (object sender, MouseButtonEventArgs e) {
-            TreeViewItem item = sender as TreeViewItem;
-            if (item != null) {
-                item.Focus( );
-                e.Handled = true;
-            }
+        private void UpdatePositionOfBone (string key) {
+            if (currentFrame == null) return;
+            ResizableImage image = boneImages[key];
+            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
+            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
+            VertexBone current = currentFrame.State[key];
+            current.Position = new Vector2(newpercentx, newpercenty);
+            currentFrame.State.Remove(key);
+            currentFrame.State.Add(key, current);
         }
 
-        private void ButtonBoneFlipped_Click (object sender, RoutedEventArgs e) {
-            KeyValuePair<string, VertexBone> kvpair = (KeyValuePair<    string, VertexBone>)(((Control)sender).DataContext);
-            VertexBone bone = kvpair.Value;
-            VertexAnimationFrame frame = FindFrame(bone);
-            bone.Mirrored = !bone.Mirrored;
-            frame.State.Remove(kvpair.Key);
-            frame.State.Add(kvpair.Key, bone);
-            if(frame == currentFrame) 
-                UpdateBoneImage(kvpair.Key);
+        public Dictionary<string, string> Compile ( ) {
+            throw new NotImplementedException( );
         }
 
-        private VertexAnimationFrame FindFrame(VertexBone bone) {
-            foreach(VertexAnimation anim in Animations) {
-                foreach(VertexAnimationFrame frame in anim.Frames) {
-                    if (frame.State.Any(pair => pair.Value.Equals( bone)))
-                        return frame;
-                }
-            }
-            return null;
-        }
-
-        private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
-            if (currentAnimation == null || currentAnimation.Frames.Count < 0) return;
-            animationview.Play(currentAnimation, (float)_TransformAspectRatio, boneImages.ToDictionary(entry => entry.Key, entry => entry.Value.Image));
-        }
-
-        private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
-            animationview.Pause( );
-        }
-
-        private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {
-            animationview.Stop( );
-        }
-
-        private void ButtonResetPlay_Click (object sender, RoutedEventArgs e) {
-            animationview.Reset( );
+        public override string ToString ( ) {
+            return "Animation Component";
         }
     }
 }

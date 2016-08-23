@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:mapKnight.ToolKit"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:components="clr-namespace:mapKnight.ToolKit.Controls.Components"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid Background="White">
@@ -15,26 +17,28 @@
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0">
             <TextBox x:Name="textbox_name" FontSize="13" DockPanel.Dock="Top" Margin="0,0,0,5"/>
-            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
-                <Button Height="22" Width="22" DockPanel.Dock="Right" Margin="5,0,0,0">
-                    <Image Source="{StaticResource ResourceKey=image_entity_addcomponent}"/>
-                </Button>
-                <ComboBox x:Name="combobox_components" HorizontalAlignment="Stretch" Margin="0,0,0,0"/>
-            </DockPanel>
-            <ListView x:Name="listview_components">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Height="20" Width="20" VerticalAlignment="Center" Click="DeleteComponentButton_Click">
-                                <Image Source="{StaticResource ResourceKey=image_entity_deletecomponent}"/>
-                            </Button>
-                            <Label Content="{Binding}" VerticalAlignment="Center"/>
-                        </StackPanel>
+           <ListBox x:Name="listbox_components" ItemsSource="{Binding}" ContextMenu="{DynamicResource contextmenu_default}" MouseDown="listbox_components_MouseDown" SelectionChanged="listbox_components_SelectionChanged">
+                <ListBox.Resources>
+                    <Style x:Key="style_contextmenuitem" TargetType="MenuItem">
+                        <Setter Property="Header">
+                            <Setter.Value>
+                                <TextBlock Text="{Binding}"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <ContextMenu x:Key="contextmenu_default" ItemsSource="{Binding}"/>
+                    <ContextMenu x:Key="contextmenu_component">
+                        <MenuItem Header="Remove Component" Click="MenuItemRemoveComponent_Click"/>
+                    </ContextMenu>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="components:IComponentControl">
+                        <TextBlock Text="{Binding}"/>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </DockPanel>
         <GridSplitter Grid.Column="1" Background="White" HorizontalAlignment="Stretch"/>
-        <UserControl x:Name="usercontrol_component" Grid.Column="2"/>
+        <ContentPresenter x:Name="contentpresenter_component" Grid.Column="2"/>
     </Grid>
 </UserControl>

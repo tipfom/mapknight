@@ -22,12 +22,12 @@ using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using Size = System.Drawing.Size;
 using Newtonsoft.Json;
 
-namespace mapKnight.ToolKit {
+namespace mapKnight.ToolKit.Controls.Components {
 
     /// <summary>
     /// Interaktionslogik für TextureCreationControl.xaml
     /// </summary>
-    public partial class TextureCreationControl : UserControl {
+    public partial class TextureCreationControl : UserControl, IComponentControl {
         /*
          * All texture packing algorithms where copied from
          * https://spritesheetpacker.codeplex.com/
@@ -36,6 +36,14 @@ namespace mapKnight.ToolKit {
 
         const int MAX_IMAGE_WIDTH = 4096;
         const int MAX_IMAGE_HEIGHT = 4096;
+
+        public List<Control> Menu {
+            get {
+                throw new NotImplementedException( );
+            }
+        }
+
+        public string Category { get { return "gfx"; } }
 
         public TextureCreationControl ( ) {
             InitializeComponent( );
@@ -47,14 +55,14 @@ namespace mapKnight.ToolKit {
             ImagePacker.PackImage(listbox_textures.Items.Cast<TextureItem>( ).Select(item => item.FullFileName), false, false, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, 1, true, out image, out dictionary);
             if (!Directory.Exists(App.Project.Home + @"\textures\"))
                 Directory.CreateDirectory(App.Project.Home + @"\textures\");
-            image.Save(App.Project.Home + @"\textures\" + textureName + ".png",ImageFormat.Png);
+            image.Save(App.Project.Home + @"\textures\" + textureName + ".png", ImageFormat.Png);
             // parse dictionary
-            Dictionary<string, int[ ]> dictionaryToSerialize = dictionary.ToDictionary(key => Path.GetFileNameWithoutExtension( key.Key), value => new int[ ] { value.Value.X, value.Value.Y, value.Value.Width, value.Value.Height });
+            Dictionary<string, int[ ]> dictionaryToSerialize = dictionary.ToDictionary(key => Path.GetFileNameWithoutExtension(key.Key), value => new int[ ] { value.Value.X, value.Value.Y, value.Value.Width, value.Value.Height });
             string dictionarySerialized = JsonConvert.SerializeObject(dictionaryToSerialize);
             File.WriteAllText(App.Project.Home + @"\textures\" + textureName + ".json", dictionarySerialized);
             MessageBox.Show("finished");
         }
-        
+
         private void button_discard_Click (object sender, RoutedEventArgs e) {
             listbox_textures.Items.Remove(((DockPanel)((Button)sender).Parent).DataContext);
         }
@@ -75,6 +83,10 @@ namespace mapKnight.ToolKit {
             }
         }
 
+        public Dictionary<string, string> Compile ( ) {
+            throw new NotImplementedException( );
+        }
+
         private struct TextureItem {
 
             public TextureItem (string filename) {
@@ -93,6 +105,10 @@ namespace mapKnight.ToolKit {
             public string FullFileName { get; }
             public BitmapImage Image { get; }
             public string SpriteName { get; }
+        }
+
+        public override string ToString ( ) {
+            return "Texture Component";
         }
 
         #region stolen part
@@ -197,12 +213,12 @@ namespace mapKnight.ToolKit {
                     });
 
                 // try to pack the images
-                if (!PackImageRectangles(imageSizes,imagePlacement, files, ref outputWidth, ref outputHeight, padding, requirePow2, requireSquare )) {
+                if (!PackImageRectangles(imageSizes, imagePlacement, files, ref outputWidth, ref outputHeight, padding, requirePow2, requireSquare)) {
                     MessageBox.Show("something went wrong while building the sprites.\nYou may check the texturesizes to not exceed 4096 by 4096 pixels.");
                     return;
                 }
                 // make our output image
-                outputImage = CreateOutputImage(outputWidth, outputHeight, files, imagePlacement );
+                outputImage = CreateOutputImage(outputWidth, outputHeight, files, imagePlacement);
                 if (outputImage == null) {
                     MessageBox.Show("something went wrong while building the sprites.\nIt seems like your GPU is confused.");
                     return;
@@ -243,7 +259,7 @@ namespace mapKnight.ToolKit {
                 return;
             }
 
-            private static Bitmap CreateOutputImage ( int outputWidth, int outputHeight, List<string> files, Dictionary<string, Rectangle> imagePlacement) {
+            private static Bitmap CreateOutputImage (int outputWidth, int outputHeight, List<string> files, Dictionary<string, Rectangle> imagePlacement) {
                 try {
                     Bitmap outputImage = new Bitmap(outputWidth, outputHeight, PixelFormat.Format32bppArgb);
 
@@ -270,7 +286,7 @@ namespace mapKnight.ToolKit {
             // This method does some trickery type stuff where we perform the TestPackingImages
             // method over and over, trying to reduce the image size until we have found the smallest
             // possible image we can fit.
-            private static bool PackImageRectangles (Dictionary<string, Size> imageSizes, Dictionary<string, Rectangle> imagePlacement, List<string> files, ref int outputWidth, ref int outputHeight, int padding , bool requirePow2, bool requireSquare) {
+            private static bool PackImageRectangles (Dictionary<string, Size> imageSizes, Dictionary<string, Rectangle> imagePlacement, List<string> files, ref int outputWidth, ref int outputHeight, int padding, bool requirePow2, bool requireSquare) {
                 // create a dictionary for our test image placements
                 Dictionary<string, Rectangle> testImagePlacement = new Dictionary<string, Rectangle>( );
 
@@ -294,7 +310,7 @@ namespace mapKnight.ToolKit {
                     testImagePlacement.Clear( );
 
                     // try to pack the images into our current test size
-                    if (!TestPackingImages(testWidth, testHeight, testImagePlacement,files, imageSizes, padding )) {
+                    if (!TestPackingImages(testWidth, testHeight, testImagePlacement, files, imageSizes, padding)) {
                         // if that failed...
 
                         // if we have no images in imagePlacement, i.e. we've never succeeded at

@@ -41,7 +41,7 @@ namespace mapKnight.ToolKit.Controls.Xna {
         }
 
         ~XnaControl ( ) {
-            imageSource.Dispose( );
+            imageSource?.Dispose( );
 
             // release on finalizer to clean up the graphics device
             if (GraphicsService != null)
@@ -58,9 +58,9 @@ namespace mapKnight.ToolKit.Controls.Xna {
                 imageSource.Dispose( );
                 imageSource = new ImageSource(
                     GraphicsDevice, (int)RenderSize.Width, (int)RenderSize.Height);
-                rootImage.Source = imageSource.WriteableBitmap; 
+                rootImage.Source = imageSource.WriteableBitmap;
+                Update( );
             }
-            Update( );
         }
 
         void XnaControl_Loaded (object sender, RoutedEventArgs e) {

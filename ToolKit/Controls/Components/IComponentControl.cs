@@ -9,5 +9,7 @@ namespace mapKnight.ToolKit.Controls.Components {
 
     public interface IComponentControl {
         List<Control> Menu { get; }
+        Dictionary<string, string> Compile ( );
+        string Category { get; }
     }
 }
