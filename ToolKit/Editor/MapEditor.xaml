@@ -49,7 +49,11 @@
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles"
                  ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_Selected" />
+                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_Selected" >
+                <ListBox.Background>
+                    <ImageBrush ImageSource="{StaticResource ResourceKey=image_draganddrop}" Stretch="None" AlignmentX="Center" AlignmentY="Center" Opacity="0.05"/>
+                </ListBox.Background>
+            </ListBox>
             <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
             <DockPanel Grid.Row="3">
                 <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2" />

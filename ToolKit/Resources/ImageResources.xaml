@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:mapKnight.ToolKit">
     <BitmapImage x:Key="logo" UriSource="../Resources/logo.png"/>
+    <BitmapImage x:Key="image_draganddrop" UriSource="../Resources/Ecommerce-Do-Not-Drop-icon.png"/>
 
     <Image x:Key="image_project_new" Source="../Resources/folder-48.png"/>
     <Image x:Key="image_project_load" Source="../Resources/opened_folder-48.png"/>

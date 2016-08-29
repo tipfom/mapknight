@@ -30,6 +30,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ListBox Grid.Row="0" Name="listbox_bones" DragEnter="listbox_bones_DragEnter" Drop="listbox_bones_Drop" AllowDrop="True">
+                <ListBox.Background>
+                    <ImageBrush ImageSource="{StaticResource ResourceKey=image_draganddrop}" Stretch="None" AlignmentX="Center" AlignmentY="Center" Opacity="0.05"/>                </ListBox.Background>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

@@ -416,7 +416,9 @@
   <ItemGroup>
     <Resource Include="Resources\add_user_male-48.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Ecommerce-Do-Not-Drop-icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\video_playlist-48.png" />
   </ItemGroup>

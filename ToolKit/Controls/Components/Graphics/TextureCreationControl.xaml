@@ -18,5 +18,9 @@
     </UserControl.Resources>
     <ListBox Name="listbox_textures" DockPanel.Dock="Top" ItemTemplate="{StaticResource ResourceKey=listbox_itemtemplate}"
                  DragEnter="listbox_textures_DragEnter" Drop="listbox_textures_Drop" AllowDrop="True"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" />
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" >
+        <ListBox.Background>
+            <ImageBrush ImageSource="{StaticResource ResourceKey=image_draganddrop}" Stretch="None" AlignmentX="Center" AlignmentY="Center" Opacity="0.05"/>
+        </ListBox.Background>
+    </ListBox>
 </UserControl>
