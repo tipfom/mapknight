@@ -8,6 +8,7 @@
     <Image x:Key="image_project_load" Source="../Resources/opened_folder-48.png"/>
     <Image x:Key="image_project_save" Source="../Resources/save-48.png"/>
 
+    <BitmapImage x:Key="image_map_settings" UriSource="../Resources/whale-48.png"/>
     <Image x:Key="image_map_new" Source="../Resources/create_new-48.png"/>
     <Image x:Key="image_map_pen" Source="../Resources/edit-48.png"/>
     <Image x:Key="image_map_fill" Source="../Resources/fill_color-48.png"/>

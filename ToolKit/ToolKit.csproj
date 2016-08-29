@@ -183,6 +183,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Windows\EditDefaultTileAttributesWindow.xaml.cs">
+      <DependentUpon>EditDefaultTileAttributesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
@@ -337,6 +340,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\EditDefaultTileAttributesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\EditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -454,6 +461,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\stop-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\whale-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

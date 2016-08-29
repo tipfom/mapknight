@@ -9,22 +9,22 @@
 //------------------------------------------------------------------------------
 
 namespace mapKnight.ToolKit.Properties {
-
-
-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
+    
+    
+    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings( ))));
-
+        
+        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+        
         public static Settings Default {
             get {
                 return defaultInstance;
             }
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute( )]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute( )]
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public double Top {
             get {
@@ -34,9 +34,9 @@ namespace mapKnight.ToolKit.Properties {
                 this["Top"] = value;
             }
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute( )]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute( )]
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("600")]
         public double Height {
             get {
@@ -46,9 +46,9 @@ namespace mapKnight.ToolKit.Properties {
                 this["Height"] = value;
             }
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute( )]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute( )]
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public double Left {
             get {
@@ -58,9 +58,9 @@ namespace mapKnight.ToolKit.Properties {
                 this["Left"] = value;
             }
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute( )]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute( )]
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("800")]
         public double Width {
             get {
@@ -70,9 +70,9 @@ namespace mapKnight.ToolKit.Properties {
                 this["Width"] = value;
             }
         }
-
-        [global::System.Configuration.UserScopedSettingAttribute( )]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute( )]
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool Maximized {
             get {
@@ -80,6 +80,18 @@ namespace mapKnight.ToolKit.Properties {
             }
             set {
                 this["Maximized"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("{}")]
+        public string DefaultTileAttributes {
+            get {
+                return ((string)(this["DefaultTileAttributes"]));
+            }
+            set {
+                this["DefaultTileAttributes"] = value;
             }
         }
     }

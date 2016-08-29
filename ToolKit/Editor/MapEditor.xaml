@@ -44,7 +44,10 @@
             </Grid.RowDefinitions>
             <DockPanel>
                 <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0" />
-                <Button Content="EXPORT TEMPLATE" Margin="0,0,0,3" Click="buttonexport_Click" VerticalAlignment="Center" />
+                <Button Margin="0,0,4,1" VerticalAlignment="Center" Click="ButtonSettings_Click">
+                    <Image Source="{StaticResource ResourceKey=image_map_settings}"/>
+                </Button>
+                <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" VerticalAlignment="Center"/>
             </DockPanel>
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles"

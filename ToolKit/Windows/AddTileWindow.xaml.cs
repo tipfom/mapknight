@@ -13,6 +13,7 @@ namespace mapKnight.ToolKit.Windows {
         public Tuple<Tile, BitmapImage> Created;
         public string Path;
         private IEnumerable<string> forbiddenNames;
+        private Dictionary<TileAttribute, string> defaultAttributes;
 
 #if log
         public AddTileWindow ( ) {
@@ -20,9 +21,10 @@ namespace mapKnight.ToolKit.Windows {
         }
 #endif
 
-        public AddTileWindow (string path, IEnumerable<string> forbiddennames) {
+        public AddTileWindow (string path, IEnumerable<string> forbiddennames, Dictionary<TileAttribute, string> defaultattributes) {
             Path = path;
             forbiddenNames = forbiddennames;
+            defaultAttributes = defaultattributes;
             InitializeComponent( );
             this.Owner = App.Current.MainWindow;
 
@@ -44,7 +46,7 @@ namespace mapKnight.ToolKit.Windows {
                 MessageBox.Show("name is allready present", "invalid name", MessageBoxButton.OK, MessageBoxImage.Error);
             } else {
                 Created = new Tuple<Tile, BitmapImage>(
-                    new Tile( ) { Name = textbox_name.Text, Attributes = new Dictionary<TileAttribute, string>( ) },
+                    new Tile( ) { Name = textbox_name.Text, Attributes = new Dictionary<TileAttribute, string>(defaultAttributes) },
                     (BitmapImage)image_tile.Source);
                 DialogResult = true;
             }

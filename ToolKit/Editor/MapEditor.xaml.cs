@@ -15,6 +15,7 @@ using mapKnight.ToolKit.Controls.Xna;
 using mapKnight.ToolKit.Windows;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using Point = System.Windows.Point;
@@ -54,22 +55,20 @@ namespace mapKnight.ToolKit.Editor {
         private Dictionary<Map, Stack<List<Tuple<Point, int, int, bool>>>> Cache = new Dictionary<Map, Stack<List<Tuple<Point, int, int, bool>>>>( );
 
         private int currentLayer = 1;
-
         private int currentlyEditingTile = -1;
-
         private int currentlyEditionTilesMap = -1;
-
         private Tool currentTool = Tool.Pen;
 
         private GraphicsDevice GraphicsDevice;
         private Point lastClickedTile = new Point(-1, -1);
-
         private Dictionary<Map, float[ , , ]> mapRotations = new Dictionary<Map, float[ , , ]>( );
         private Dictionary<Map, Dictionary<string, BitmapImage>> wpfTextures = new Dictionary<Map, Dictionary<string, BitmapImage>>( );
         private Dictionary<Map, Dictionary<string, Texture2D>> xnaTextures = new Dictionary<Map, Dictionary<string, Texture2D>>( );
+        private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
 
         public MapEditor ( ) {
             InitializeComponent( );
+            defaultAttributes = JsonConvert.DeserializeObject<Dictionary<TileAttribute, string>>(Properties.Settings.Default.DefaultTileAttributes);
 
             for (int i = 1; i < _Menu.Count; i++) {
                 if (_Menu[i].IsEnabled) {
@@ -127,6 +126,9 @@ namespace mapKnight.ToolKit.Editor {
                 App.Project.Saved += Save;
                 Reset( );
             };
+            App.Current.MainWindow.Closing += (sender, e) => {
+                Properties.Settings.Default.DefaultTileAttributes = JsonConvert.SerializeObject(defaultAttributes);
+            };
 
             IsVisibleChanged += (sender, e) => {
                 if (GraphicsDevice != null)
@@ -138,11 +140,8 @@ namespace mapKnight.ToolKit.Editor {
                     GraphicsDevice = GraphicsDeviceService.AddRef(source.Handle).GraphicsDevice;
                 }
             };
-            tilemapview.SetReceiveFuncs(GetXNATextures, (Map m, int x, int y, int l) => { return mapRotations[m][x, y, l]; });
-        }
 
-        private Dictionary<string, Texture2D> GetXNATextures (Map map) {
-            return xnaTextures[map];
+            tilemapview.SetReceiveFuncs(GetXNATextures, (Map m, int x, int y, int l) => { return mapRotations[m][x, y, l]; });
         }
 
         private enum Tool {
@@ -156,8 +155,11 @@ namespace mapKnight.ToolKit.Editor {
         public List<FrameworkElement> Menu { get { return _Menu; } }
 
         private Map currentMap { get { return (Map)((ComboBox)_Menu[1]).SelectedItem; } }
+
         private int currentMapIndex { get { return (int)((ComboBox)_Menu[1]).SelectedIndex; } }
+
         private Tile currentTile { get { return (wrappanel_tiles.SelectedIndex != -1) ? currentMap.Tiles[wrappanel_tiles.SelectedIndex] : currentMap.Tiles[0]; } }
+
         private int currentTileIndex { get { return wrappanel_tiles.SelectedIndex; } }
 
         public void ChangeTextureName (Map map, string oldname, string newname) {
@@ -263,6 +265,13 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
+        private void ButtonSettings_Click (object sender, RoutedEventArgs e) {
+            EditDefaultTileAttributesWindow dialog = new EditDefaultTileAttributesWindow(defaultAttributes);
+            if(dialog.ShowDialog() ?? false) {
+                defaultAttributes = dialog.NewDefault;
+            }
+        }
+
         private void create_map_Click (object sender, RoutedEventArgs e) {
             new CreateMapWindow(tilemapview.GraphicsDevice, AddMap, AddTexture).ShowDialog( );
             if (currentMap != null)
@@ -298,6 +307,10 @@ namespace mapKnight.ToolKit.Editor {
             foreach (object map in ((ComboBox)_Menu[1]).Items)
                 result.Add((Map)map);
             return result;
+        }
+
+        private Dictionary<string, Texture2D> GetXNATextures (Map map) {
+            return xnaTextures[map];
         }
 
         private void load_map_Click (object sender, RoutedEventArgs e) {
@@ -550,11 +563,11 @@ namespace mapKnight.ToolKit.Editor {
                             tileImage.EndInit( );
 
                             AddTexture(currentMap, tileName, tileImage);
-                            currentMap.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>( ), Name = tileName });
+                            currentMap.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes ), Name = tileName });
                             wrappanel_tiles.Items.Add(new ListViewEntry(tileImage));
                         } else {
                             // open add tile window
-                            AddTileWindow addTileDialog = new AddTileWindow(file, currentMap.Tiles.Select(t => t.Name));
+                            AddTileWindow addTileDialog = new AddTileWindow(file, currentMap.Tiles.Select(t => t.Name), defaultAttributes);
                             if (addTileDialog.ShowDialog( ) ?? false) {
                                 if (currentMap.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
                                     AddTexture(currentMap, addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2);
