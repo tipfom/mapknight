@@ -57,8 +57,9 @@ namespace mapKnight.ToolKit.Windows {
 
         private void button_create_Click (object sender, RoutedEventArgs e) {
             Core.Size mapSize = new Core.Size(0, 0);
-            if (ValidName( ) && ValidCreator( ) && ValidSize(ref mapSize)) {
-                Map createdMap = new Map(mapSize, textbox_creator.Text, textbox_name.Text);
+            Core.Vector2 gravity = new Vector2(0, 0);
+            if (ValidName( ) && ValidCreator( ) && ValidSize(ref mapSize) && ValidGravity(ref gravity)) {
+                Map createdMap = new Map(mapSize, textbox_creator.Text, textbox_name.Text) { Gravity = gravity };
                 AddMap(createdMap);
                 if (template != null) {
                     foreach (Tile tile in template.Item1) {
@@ -69,7 +70,7 @@ namespace mapKnight.ToolKit.Windows {
                     }
                 }
                 DialogResult = true;
-                this.Close( );
+                Close( );
             }
         }
 
