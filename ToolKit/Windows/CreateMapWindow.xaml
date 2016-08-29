@@ -9,27 +9,27 @@
     <StackPanel>
         <Grid Margin="5,5,5,5">
             <Label Content="Name" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_name" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189"/>
+            <TextBox x:Name="textbox_name" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Creator" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_creator" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189"/>
+            <TextBox x:Name="textbox_creator" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Width" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_width" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" PreviewTextInput="CheckNumericPreviewTextInput"/>
+            <TextBox x:Name="textbox_width" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" PreviewTextInput="CheckNumericPreviewTextInput" VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Height" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_height" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="189" PreviewTextInput="CheckNumericPreviewTextInput"/>
+            <TextBox x:Name="textbox_height" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="189" PreviewTextInput="CheckNumericPreviewTextInput" VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Gravity" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
             <StackPanel Width="189" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Label Content="X" Margin="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput"/>
+                <TextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
                 <Label Content="Y" Margin="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput"/>
+                <TextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
             </StackPanel>
         </Grid>
 
