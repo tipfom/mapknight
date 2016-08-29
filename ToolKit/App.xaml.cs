@@ -22,13 +22,7 @@ namespace mapKnight.ToolKit {
         public static void CreateNewProject (Control renderParent) {
             if (Project?.HasChanged ?? false)
                 ShowSaveDialog( );
-            Project = new Project(renderParent);
-        }
-
-        public static void LoadProject (Control renderParent, string path) {
-            if (Project?.HasChanged ?? false)
-                ShowSaveDialog( );
-            Project = new Project(renderParent, path);
+            Project = new Project();
         }
 
         public static void ShowSaveDialog ( ) {

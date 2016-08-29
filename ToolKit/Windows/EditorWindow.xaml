@@ -12,14 +12,12 @@
         Icon="{StaticResource ResourceKey=logo}">
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="NewCommand_CanExecute" Executed="NewCommand_Executed" />
-        <CommandBinding Command="Open" CanExecute="OpenCommand_CanExecute"  Executed="OpenCommand_Executed"/>
         <CommandBinding Command="Save" CanExecute="SaveCommand_CanExecute" Executed="SaveCommand_Executed"/>
     </Window.CommandBindings>
     <DockPanel>
         <Menu Name="menu_editor" IsMainMenu="True" DockPanel.Dock="Top" Height="24" Background="White">
             <MenuItem Header="_PROJECT" Height="24">
                 <MenuItem Header="NEW" Height="22" Command="New" Icon="{StaticResource ResourceKey=image_project_new }"/>
-                <MenuItem Header="OPEN" Height="22" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
                 <MenuItem Header="SAVE" Height="22" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
             </MenuItem>
             <MenuItem Header="_ABOUT" Click="About_Click"/>

@@ -7,8 +7,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using mapKnight.Core;
+using mapKnight.ToolKit.Controls.Xna;
 using mapKnight.ToolKit.Windows;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Graphics;
@@ -58,7 +60,12 @@ namespace mapKnight.ToolKit.Editor {
 
         private Tool currentTool = Tool.Pen;
 
+        private GraphicsDevice GraphicsDevice;
         private Point lastClickedTile = new Point(-1, -1);
+
+        private Dictionary<Map, float[ , , ]> mapRotations = new Dictionary<Map, float[ , , ]>( );
+        private Dictionary<Map, Dictionary<string, BitmapImage>> wpfTextures = new Dictionary<Map, Dictionary<string, BitmapImage>>( );
+        private Dictionary<Map, Dictionary<string, Texture2D>> xnaTextures = new Dictionary<Map, Dictionary<string, Texture2D>>( );
 
         public MapEditor ( ) {
             InitializeComponent( );
@@ -108,9 +115,25 @@ namespace mapKnight.ToolKit.Editor {
             };
 
             App.ProjectChanged += ( ) => {
-                App.Project.MapAdded += Project_MapAdded;
+                App.Project.Saved += Save;
                 Reset( );
             };
+
+            IsVisibleChanged += (sender, e) => {
+                if (GraphicsDevice != null)
+                    return;
+                if (IsVisible) {
+                    HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+                    if (source == null)
+                        return;
+                    GraphicsDevice = GraphicsDeviceService.AddRef(source.Handle).GraphicsDevice;
+                }
+            };
+            tilemapview.SetReceiveFuncs(GetXNATextures, (Map m, int x, int y, int l) => { return mapRotations[m][x, y, l]; });
+        }
+
+        private Dictionary<string, Texture2D> GetXNATextures (Map map) {
+            return xnaTextures[map];
         }
 
         private enum Tool {
@@ -127,17 +150,90 @@ namespace mapKnight.ToolKit.Editor {
         private int currentMapIndex { get { return (int)((ComboBox)_Menu[1]).SelectedIndex; } }
         private Tile currentTile { get { return (wrappanel_tiles.SelectedIndex != -1) ? currentMap.Tiles[wrappanel_tiles.SelectedIndex] : currentMap.Tiles[0]; } }
         private int currentTileIndex { get { return wrappanel_tiles.SelectedIndex; } }
-        private Dictionary<Map, float[ , , ]> mapRotations = new Dictionary<Map, float[ , , ]>( );
-        private Dictionary<Map, Dictionary<string, Texture2D>> xnaTextures = new Dictionary<Map, Dictionary<string, Texture2D>>( );
-        private Dictionary<Map, Dictionary<string, BitmapImage>> wpfTextures = new Dictionary<Map, Dictionary<string, BitmapImage>>( );
+
+        public void ChangeTextureName (Map map, string oldname, string newname) {
+            Texture2D texture = xnaTextures[map][oldname];
+            xnaTextures[map].Remove(oldname);
+            xnaTextures[map].Add(newname, texture);
+
+            BitmapImage image = wpfTextures[map][oldname];
+            wpfTextures[map].Remove(oldname);
+            wpfTextures[map].Add(newname, image);
+        }
+
+        public void Save (string path) {
+            string mapDirectory = Path.Combine(path, "maps");
+            if (!Directory.Exists(mapDirectory))
+                Directory.CreateDirectory(mapDirectory);
+
+            foreach (Map map in GetMaps( )) {
+                // build texture
+                string texturePath = Path.ChangeExtension(Path.Combine(mapDirectory, map.Name), "png");
+                string mapPath = Path.ChangeExtension(Path.Combine(mapDirectory, map.Name), "map");
+
+                Texture2D packedTexture = TileSerializer.BuildTexture(map.Tiles, xnaTextures[map], GraphicsDevice);
+                using (Stream stream = File.OpenWrite(texturePath))
+                    packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
+                map.Texture = Path.GetFileNameWithoutExtension(texturePath);
+                map.MergeRotations(mapRotations[map]).Serialize(File.OpenWrite(mapPath));
+            }
+        }
+
+        public void SetRotation (Map map, int x, int y, int layer, float value) {
+            float[ , , ] data = mapRotations[map];
+            data[x, y, layer] = value;
+            mapRotations[map] = data;
+        }
 
         public void UpdateListbox ( ) {
             wrappanel_tiles.Items.Clear( );
             foreach (Tile tile in currentMap.Tiles) {
-                wrappanel_tiles.Items.Add(new ListViewEntry(App.Project.GetMapWPFTextures(currentMap)[tile.Name]));
+                wrappanel_tiles.Items.Add(new ListViewEntry(wpfTextures[currentMap][tile.Name]));
             }
             if (wrappanel_tiles.HasItems)
                 wrappanel_tiles.SelectedIndex = 0;
+        }
+
+        private void AddMap (Map map) {
+            ((ComboBox)_Menu[1]).Items.Add(map);
+
+            if (!mapRotations.ContainsKey(map))
+                mapRotations.Add(map, new float[map.Width, map.Height, 3]);
+            if (!xnaTextures.ContainsKey(map)) {
+                xnaTextures.Add(map, new Dictionary<string, Texture2D>( ));
+                wpfTextures.Add(map, new Dictionary<string, BitmapImage>( ));
+            }
+
+            MemoryStream memoryStream = new MemoryStream( );
+            memoryStream.Position = 0;
+            new Bitmap(1, 1).Save(memoryStream, ImageFormat.Png);
+            BitmapImage emptyImage = new BitmapImage( );
+            emptyImage.BeginInit( );
+            emptyImage.StreamSource = memoryStream;
+            emptyImage.EndInit( );
+
+            if ((map.Tiles?.Length ?? 0) == 0) {
+                AddTexture(map, "None", emptyImage);
+                map.Tiles = new Tile[ ] { new Tile( ) { Name = "None", Attributes = new Dictionary<TileAttribute, string>( ) } };
+            }
+
+            ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
+            UpdateListbox( );
+            Cache.Add(map, new Stack<List<Tuple<Point, int, int, bool>>>( ));
+        }
+
+        private void AddTexture (Map map, string name, BitmapImage image) {
+            if (xnaTextures[map].ContainsKey(name))
+                return;
+            xnaTextures[map].Add(name, image.ToTexture2D(GraphicsDevice));
+            wpfTextures[map].Add(name, image);
+        }
+
+        private void AddTexture (Map map, string name, Texture2D image) {
+            if (xnaTextures[map].ContainsKey(name))
+                return;
+            xnaTextures[map].Add(name, image);
+            wpfTextures[map].Add(name, image.ToBitmapImage( ));
         }
 
         private void buttonexport_Click (object sender, RoutedEventArgs e) {
@@ -146,12 +242,12 @@ namespace mapKnight.ToolKit.Editor {
             exportDialog.Filter = "TileTemplate|*.mkttemplate";
             if (exportDialog.ShowDialog( ) ?? false) {
                 using (Stream stream = File.OpenWrite(exportDialog.FileName))
-                    TileSerializer.Serialize(stream, currentMap.Tiles, App.Project.GetMapXNATextures(currentMap), tilemapview.GraphicsDevice);
+                    TileSerializer.Serialize(stream, currentMap.Tiles, xnaTextures[currentMap], tilemapview.GraphicsDevice);
             }
         }
 
         private void create_map_Click (object sender, RoutedEventArgs e) {
-            new CreateMapWindow(tilemapview.GraphicsDevice).ShowDialog( );
+            new CreateMapWindow(tilemapview.GraphicsDevice, AddMap, AddTexture).ShowDialog( );
             if (currentMap != null)
                 UpdateListbox( );
         }
@@ -180,34 +276,33 @@ namespace mapKnight.ToolKit.Editor {
             return (tile.X >= 0 && tile.X < currentMap.Width && tile.Y >= 0 && tile.Y < currentMap.Height);
         }
 
+        private List<Map> GetMaps ( ) {
+            List<Map> result = new List<Map>( );
+            foreach (object map in ((ComboBox)_Menu[1]).Items)
+                result.Add((Map)map);
+            return result;
+        }
+
         private void load_map_Click (object sender, RoutedEventArgs e) {
             OpenFileDialog mapOpenDialog = new OpenFileDialog( );
             mapOpenDialog.Filter = "MAP-Files|*.map";
             mapOpenDialog.CheckFileExists = true;
             if (mapOpenDialog.ShowDialog( ) ?? false) {
-                App.Project.LoadMap(mapOpenDialog.FileName);
+                LoadMap(mapOpenDialog.FileName);
             }
         }
 
-        private void Project_MapAdded (Map obj) {
-            MemoryStream memoryStream = new MemoryStream( );
-            memoryStream.Position = 0;
-            new Bitmap(1, 1).Save(memoryStream, ImageFormat.Png);
-            BitmapImage emptyImage = new BitmapImage( );
-            emptyImage.BeginInit( );
-            emptyImage.StreamSource = memoryStream;
-            emptyImage.EndInit( );
-
-            if ((obj.Tiles?.Length ?? 0) == 0) {
-                App.Project.AddTexture(obj, "None", emptyImage);
-                obj.Tiles = new Tile[ ] { new Tile( ) { Name = "None", Attributes = new Dictionary<TileAttribute, string>( ) } };
+        private void LoadMap (string path) {
+            using (Stream mapStream = File.OpenRead(path)) {
+                Map loadedMap = new Map(mapStream);
+                mapRotations.Add(loadedMap, loadedMap.ExtractRotations( ));
+                using (Stream imageStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(path), loadedMap.Texture + ".png")))
+                    xnaTextures.Add(loadedMap, TileSerializer.ExtractTextures(Texture2D.FromStream(GraphicsDevice, imageStream), loadedMap.Tiles, GraphicsDevice));
+                wpfTextures.Add(loadedMap, new Dictionary<string, BitmapImage>( ));
+                foreach (var entry in xnaTextures[loadedMap])
+                    wpfTextures[loadedMap].Add(entry.Key, entry.Value.ToBitmapImage( ));
+                AddMap(loadedMap);
             }
-
-            ((ComboBox)_Menu[1]).Items.Add(obj);
-            ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
-
-            UpdateListbox( );
-            Cache.Add(obj, new Stack<List<Tuple<Point, int, int, bool>>>( ));
         }
 
         private void Reset ( ) {
@@ -218,8 +313,8 @@ namespace mapKnight.ToolKit.Editor {
             wrappanel_tiles.Items.Clear( );
             if (tilemapview.CurrentMap != null)
                 tilemapview.CurrentMap = null;
-            foreach (Map map in App.Project.GetMaps( )) {
-                Project_MapAdded(map);
+            foreach (object map in ((ComboBox)_Menu[1]).Items) {
+                AddMap((Map)map);
             }
         }
 
@@ -256,6 +351,7 @@ namespace mapKnight.ToolKit.Editor {
                             Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     new Tuple<Point, int, int,bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                            mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                             break;
 
                         case Tool.Filler:
@@ -272,6 +368,7 @@ namespace mapKnight.ToolKit.Editor {
                                     continue;
                                 if (currentMap.Data[(int)current.X, (int)current.Y, currentLayer] == searching) {
                                     currentMap.Data[(int)current.X, (int)current.Y, currentLayer] = replacing;
+                                    mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                                     changesForCache.Add(new Tuple<Point, int, int, bool>(current, currentLayer, searching, false));
 
                                     pointQueue.Enqueue(new Point(current.X - 1, current.Y));
@@ -287,6 +384,7 @@ namespace mapKnight.ToolKit.Editor {
                             Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     new Tuple<Point, int, int, bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
+                            mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                             break;
 
                         case Tool.Pointer:
@@ -294,12 +392,13 @@ namespace mapKnight.ToolKit.Editor {
                             break;
 
                         case Tool.Rotater:
-                            float tileRotation = currentMap.GetRotation((int)clickedTile.X, (int)clickedTile.Y, currentLayer);
+                            float tileRotation = mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
                             Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     new Tuple<Point, int, int, bool>(clickedTile,currentLayer, (int)(tileRotation * 2), true)});
                             tileRotation += 0.5f;
                             tileRotation %= 2f;
-                            currentMap.SetRotation((int)clickedTile.X, (int)clickedTile.Y, currentLayer, tileRotation);
+                            if (currentMap.GetTile((int)clickedTile.X, (int)clickedTile.Y).Name != "None")
+                                mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = tileRotation;
                             break;
                     }
                 }
@@ -339,12 +438,14 @@ namespace mapKnight.ToolKit.Editor {
                             Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     new Tuple<Point, int, int, bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                            mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                             break;
 
                         case Tool.Pen:
                             Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     new Tuple<Point, int, int, bool>(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
                             currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
+                            mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                             break;
 
                         case Tool.Pointer:
@@ -374,7 +475,7 @@ namespace mapKnight.ToolKit.Editor {
             foreach (Tuple<Point, int, int, bool> undoData in Cache[currentMap].Pop( )) {
                 if (undoData.Item4) {
                     // tile got rotated
-                    currentMap.SetRotation((int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2, undoData.Item3 / 2f);
+                    mapRotations[currentMap][(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3 / 2f;
                 } else {
                     // tile got changed
                     currentMap.Data[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3;
@@ -427,7 +528,7 @@ namespace mapKnight.ToolKit.Editor {
                             tileImage.UriSource = new Uri(file);
                             tileImage.EndInit( );
 
-                            App.Project.AddTexture(currentMap, tileName, tileImage);
+                            AddTexture(currentMap, tileName, tileImage);
                             currentMap.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>( ), Name = tileName });
                             wrappanel_tiles.Items.Add(new ListViewEntry(tileImage));
                         } else {
@@ -435,7 +536,7 @@ namespace mapKnight.ToolKit.Editor {
                             AddTileWindow addTileDialog = new AddTileWindow(file, currentMap.Tiles.Select(t => t.Name));
                             if (addTileDialog.ShowDialog( ) ?? false) {
                                 if (currentMap.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
-                                    App.Project.AddTexture(currentMap, addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2);
+                                    AddTexture(currentMap, addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2);
                                     currentMap.AddTile(addTileDialog.Created.Item1);
                                     wrappanel_tiles.Items.Add(new ListViewEntry(addTileDialog.Created.Item2));
                                 } else {
@@ -450,14 +551,14 @@ namespace mapKnight.ToolKit.Editor {
 
         private void wrappanel_tiles_Selected (object sender, RoutedEventArgs e) {
             if (currentlyEditingTile >= 0 || currentlyEditionTilesMap >= 0) {
-                if (App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles.Where(t => t.Name == textbox_tile_name.Text) != null) {
-                    App.Project.ChangeTextureName(App.Project.GetMaps( )[currentlyEditionTilesMap], App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name, textbox_tile_name.Text);
-                    App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name = textbox_tile_name.Text;
+                if (GetMaps( )[currentlyEditionTilesMap].Tiles.Where(t => t.Name == textbox_tile_name.Text) != null) {
+                    ChangeTextureName(GetMaps( )[currentlyEditionTilesMap], GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name, textbox_tile_name.Text);
+                    GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name = textbox_tile_name.Text;
                 }
-                App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Attributes.Clear( );
+                GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Attributes.Clear( );
                 foreach (AttributeListViewEntry entry in listview_tile_attributes.Items) {
                     if (entry.Active)
-                        App.Project.GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Attributes.Add((TileAttribute)Enum.Parse(typeof(TileAttribute), entry.Attribute), entry.Value);
+                        GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Attributes.Add((TileAttribute)Enum.Parse(typeof(TileAttribute), entry.Attribute), entry.Value);
                 }
             }
             if (currentMapIndex == -1 || currentTileIndex == -1)

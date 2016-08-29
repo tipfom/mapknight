@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using mapKnight.Core;
 using mapKnight.ToolKit.Controls.Xna;
@@ -63,6 +64,8 @@ namespace mapKnight.ToolKit.Controls {
 
         private Texture2D selectionTexture;
         private Texture2D spawnpointTexture;
+        private Func<Map, Dictionary<string, Texture2D>> GetXNATextures;
+        private Func<Map, int, int, int, float> GetRotation;
 
         public TileMapView ( ) {
             base.DeviceInitialized += ( ) => {
@@ -71,6 +74,11 @@ namespace mapKnight.ToolKit.Controls {
             Loaded += (sender, e) => {
                 this.Focus( );
             };
+        }
+
+        public void SetReceiveFuncs(Func<Map,Dictionary<string, Texture2D>> texfunc, Func<Map, int, int, int, float> rotfunc) {
+            GetXNATextures = texfunc;
+            GetRotation = rotfunc;
         }
 
         public bool IsLayerActive (int id) {
@@ -100,8 +108,8 @@ namespace mapKnight.ToolKit.Controls {
                     Rectangle drawingRectangle = new Rectangle((int)((x + 0.5f) * TileSize), (int)((y + 0.5f) * TileSize), TileSize, TileSize);
                     for (int l = 0; l < 3; l++) {
                         if (Layer[l]) {
-                            float rotation = CurrentMap.GetRotation(cx, cy, l) * (float)Math.PI;
-                            spriteBatch.Draw(App.Project.GetMapXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, null, Color.White, rotation, new Microsoft.Xna.Framework.Vector2(Map.TILE_PXL_SIZE / 2f, Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);
+                            float rotation = GetRotation(CurrentMap, cx, cy, l) * (float)Math.PI;
+                            spriteBatch.Draw(GetXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, null, Color.White, rotation, new Microsoft.Xna.Framework.Vector2(Map.TILE_PXL_SIZE / 2f, Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);
                         }
                     }
                 }

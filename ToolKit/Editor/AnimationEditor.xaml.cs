@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using mapKnight.ToolKit.Controls.Components.Graphics;
 using mapKnight.ToolKit.Windows;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
+using Path = System.IO.Path;
 
 namespace mapKnight.ToolKit.Editor {
     /// <summary>
@@ -42,6 +43,14 @@ namespace mapKnight.ToolKit.Editor {
             ((MenuItem)((MenuItem)_Menu[0]).Items[1]).Click += AnimationLoad_Click; ;
             ((ComboBox)_Menu[1]).SelectionChanged += ComboBoxAnimation_SelectionChanged;
             ((ComboBox)_Menu[1]).ItemsSource = animationControlStrings;
+
+            App.ProjectChanged += ( ) => {
+                App.Project.Saved += (path) => {
+                    string animpath = Path.Combine(path, "animations");
+                    foreach (AnimationControl animationControl in animationControls)
+                        animationControl.Save(animpath);
+                };
+            };
         }
 
         private void AnimationLoad_Click (object sender, RoutedEventArgs e) {

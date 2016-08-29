@@ -72,13 +72,6 @@ namespace mapKnight.ToolKit.Windows {
             e.CanExecute = true;
         }
 
-        private void OpenCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
-            FolderBrowserDialog projectopendialog = new FolderBrowserDialog( );
-            if (projectopendialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
-                App.LoadProject(this, projectopendialog.SelectedPath);
-            }
-        }
-
         private void SaveCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }

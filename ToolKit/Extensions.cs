@@ -36,18 +36,6 @@ namespace mapKnight.ToolKit {
             }
         }
 
-        public static float[ , , ] GetRotations (this Map map) {
-            return App.Project.GetRotations(map);
-        }
-
-        public static float GetRotation (this Map map, int x, int y, int layer) {
-            return App.Project.GetRotations(map)[x, y, layer];
-        }
-
-        public static void SetRotation (this Map map, int x, int y, int layer, float value) {
-            App.Project.SetRotation(map, x, y, layer, value);
-        }
-
         public static Map MergeRotations (this Map map, float[ , , ] rotations) {
             Map result = new Map(map.Size, map.Creator, map.Name) { Texture = map.Texture };
             Dictionary<int, bool[ ]> hasRotation = new Dictionary<int, bool[ ]>( );
@@ -64,16 +52,21 @@ namespace mapKnight.ToolKit {
             }
             // create new tiles
             List<Tile> mapTiles = new List<Tile>( );
-            Dictionary<int, int> startPositions = new Dictionary<int, int>( );
+            Dictionary<int, Dictionary<int, int>> startPositions = new Dictionary<int, Dictionary<int, int>>( );
             for (int tile = 0; tile < map.Tiles.Length; tile++) {
-                startPositions.Add(tile, mapTiles.Count);
-                mapTiles.Add(map.Tiles[tile]);
                 if (hasRotation.ContainsKey(tile)) {
+                    startPositions.Add(tile, new Dictionary<int, int>( ));
+                    if (hasRotation[tile][0])
+                        startPositions[tile].Add(0, mapTiles.Count);
+                    mapTiles.Add(map.Tiles[tile]);
                     for (int i = 1; i < 4; i++) {
                         if (hasRotation[tile][i]) {
+                            startPositions[tile].Add(i, mapTiles.Count);
                             mapTiles.Add(new Tile( ) { Name = map.Tiles[tile].Name + i + "~", Attributes = map.Tiles[tile].Attributes, Texture = ShiftTextureCoordinates(i / 2f, map.Tiles[tile].Texture) });
                         }
                     }
+                } else {
+                    mapTiles.Add(map.Tiles[tile]);
                 }
             }
             result.Tiles = mapTiles.ToArray( );
@@ -81,7 +74,7 @@ namespace mapKnight.ToolKit {
             for (int l = 0; l < 3; l++) {
                 for (int x = 0; x < map.Width; x++) {
                     for (int y = 0; y < map.Height; y++) {
-                        result.Data[x, y, l] = startPositions[map.Data[x, y, l]] + (int)(rotations[x, y, l] * 2);
+                        result.Data[x, y, l] = startPositions[map.Data[x, y, l]][(int)(rotations[x, y, l] * 2)];
                     }
                 }
             }

@@ -42,14 +42,16 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 AnimationMetaData metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(Path.Combine(pathtoload, "animation.meta")));
                 EntityName = metaData.Name;
                 foreach (string file in metaData.Bones) {
-                    if (File.Exists(file)) {
-                        BoneListBoxItem item = new BoneListBoxItem(file);
+                    if (File.Exists(Path.Combine(pathtoload,file))) {
+                        BoneListBoxItem item = new BoneListBoxItem(Path.Combine(pathtoload, file));
                         Bones.Add(item.Name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
                         Images.Add(item.Name, item.Image);
+                        listbox_bones.Items.Add(new BoneListBoxItem(Path.Combine(pathtoload, file)));
                     }
                 }
                 BonesChanged( );
-                Animations = new ObservableCollection<VertexAnimation>(JsonConvert.DeserializeObject<List<VertexAnimation>>(Path.Combine(pathtoload, "animation.json")));
+                Animations = new ObservableCollection<VertexAnimation>(JsonConvert.DeserializeObject<List<VertexAnimation>>(File.ReadAllText(Path.Combine(pathtoload, "animation.json"))));
+                treeview_animations.DataContext = Animations;
             }
         }
 
@@ -86,9 +88,9 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                     encoder.Save(fileStream);
                 metaData.Bones.Add(kvpair.Key + ".png");
             }
-            File.Create(Path.Combine(path, EntityName, "animation.meta"));
+            File.Create(Path.Combine(path, EntityName, "animation.meta")).Close();
             File.WriteAllText(Path.Combine(path, EntityName, "animation.meta"), JsonConvert.SerializeObject(metaData));
-            File.Create(Path.Combine(path, EntityName, "animation.json"));
+            File.Create(Path.Combine(path, EntityName, "animation.json")).Close();
             File.WriteAllText(Path.Combine(path, EntityName, "animation.json"), JsonConvert.SerializeObject(Animations));
         }
 
