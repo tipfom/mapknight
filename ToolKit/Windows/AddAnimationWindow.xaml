@@ -6,26 +6,24 @@
         xmlns:local="clr-namespace:mapKnight.ToolKit.Windows"
         mc:Ignorable="d"
         Title="AddAnimationWindow" SizeToContent="WidthAndHeight">
-    <DockPanel>
+    <DockPanel Margin="5,5,5,5">
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="71"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Name" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
-            <TextBlock Text="Entity Width" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
-            <TextBlock Text="Entity Height" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Name="textbox_name"/>
-            <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_width"/>
-            <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_height"/>
+            <TextBlock Text="Name" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Height="16" Margin="0,4,0,5"/>
+            <TextBlock Text="Entity Width" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Height="16" Margin="0,5,0,4"/>
+            <TextBlock Text="Entity Height" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Height="16" Margin="0,4,0,5"/>
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Name="textbox_name" Height="18" Margin="0,4,0,3"/>
+            <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_width" Height="18" Margin="0,3,0,4"/>
+            <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_height" Height="18" Margin="0,4,0,3"/>
         </Grid>
-        <Button Click="Button_Click">
-            OK
-        </Button>
+        <Button Click="Button_Click" Content="OK"/>
     </DockPanel>
 </Window>

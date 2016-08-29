@@ -263,7 +263,6 @@ namespace mapKnight.Core {
             Creator = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Name = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Gravity = new Vector2(reader.ReadSingle( ), reader.ReadSingle( ));
-            Gravity = DEFAULT_GRAVITY;
         }
         #endregion
     }
