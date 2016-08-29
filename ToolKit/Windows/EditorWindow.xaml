@@ -28,8 +28,11 @@
            <TabItem Header="MAP" Selector.Selected="Map_Selected">
                 <editor:MapEditor x:Name="mapeditor"/>
             </TabItem>
-            <TabItem Header="ENTITY" Selector.Selected="Entity_Selected">
-                <editor:EntityEditor x:Name="entityeditor"/>
+            <TabItem Header="ANIMATION" Selector.Selected="TabAnimation_Selected">
+                <editor:AnimationEditor x:Name="animationeditor"/>
+            </TabItem>
+            <TabItem Header="TEXTURE" Selector.Selected="TabItem_Selected_1">
+                <editor:TextureEditor/>
             </TabItem>
         </TabControl>
     </DockPanel>

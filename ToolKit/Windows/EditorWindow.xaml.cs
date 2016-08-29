@@ -60,10 +60,6 @@ namespace mapKnight.ToolKit.Windows {
             SetTabPageMenu(mapeditor.Menu);
         }
 
-        private void Entity_Selected (object sender, RoutedEventArgs e) {
-            SetTabPageMenu(entityeditor.Menu);
-        }
-
         private void NewCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }
@@ -97,6 +93,14 @@ namespace mapKnight.ToolKit.Windows {
 
         private void About_Click (object sender, RoutedEventArgs e) {
             new AboutWindow( ).ShowDialog( );
+        }
+
+        private void TabAnimation_Selected (object sender, RoutedEventArgs e) {
+            SetTabPageMenu(animationeditor.Menu);
+        }
+
+        private void TabItem_Selected_1 (object sender, RoutedEventArgs e) {
+
         }
     }
 }

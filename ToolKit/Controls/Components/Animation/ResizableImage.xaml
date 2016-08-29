@@ -34,7 +34,7 @@
         <local:RotateThumb x:Name="rotatethumb" Cursor="Hand" Width="10" Height="10" VerticalAlignment="Top" Margin="0,-15,0,0"/>
         <Control x:Name="control_thumbcontainer" Template="{StaticResource ResourceKey=ResizeThumbCollectionTemplate}"/>
         <Border BorderBrush="Black" BorderThickness="1">
-            <Image Name="image" Source="{Binding}" Stretch="Fill" RenderTransformOrigin="0.5,0.5" RenderOptions.BitmapScalingMode="NearestNeighbor" IsHitTestVisible="False"/>
+            <Image Name="image" Stretch="Fill" RenderTransformOrigin="0.5,0.5" RenderOptions.BitmapScalingMode="NearestNeighbor" IsHitTestVisible="False"/>
         </Border>
     </Grid>
 </ContentControl>

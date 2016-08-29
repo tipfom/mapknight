@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using mapKnight.ToolKit.Controls.Components;
+using mapKnight.ToolKit.Controls.Components.Graphics;
 
 namespace mapKnight.ToolKit.Editor {
     /// <summary>
@@ -31,8 +32,7 @@ namespace mapKnight.ToolKit.Editor {
         public List<UIElement> Menu { get { return _Menu; } }
 
         private ObservableCollection<IComponentControl> availableComponents { get; set; } = new ObservableCollection<IComponentControl>( ) {
-            new AnimationControl(),
-            new TextureCreationControl()
+            new AnimationControl()
         };
         private ObservableCollection<IComponentControl> components { get; set; } = new ObservableCollection<IComponentControl>( );
 

@@ -22,7 +22,7 @@ using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using Size = System.Drawing.Size;
 using Newtonsoft.Json;
 
-namespace mapKnight.ToolKit.Controls.Components {
+namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
     /// <summary>
     /// Interaktionslogik für TextureCreationControl.xaml
@@ -53,13 +53,11 @@ namespace mapKnight.ToolKit.Controls.Components {
             Bitmap image;
             Dictionary<string, Rectangle> dictionary;
             ImagePacker.PackImage(listbox_textures.Items.Cast<TextureItem>( ).Select(item => item.FullFileName), false, false, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, 1, true, out image, out dictionary);
-            if (!Directory.Exists(App.Project.Home + @"\textures\"))
-                Directory.CreateDirectory(App.Project.Home + @"\textures\");
-            image.Save(App.Project.Home + @"\textures\" + textureName + ".png", ImageFormat.Png);
+            image.Save(App.Project.Home + textureName + ".png", ImageFormat.Png);
             // parse dictionary
             Dictionary<string, int[ ]> dictionaryToSerialize = dictionary.ToDictionary(key => Path.GetFileNameWithoutExtension(key.Key), value => new int[ ] { value.Value.X, value.Value.Y, value.Value.Width, value.Value.Height });
             string dictionarySerialized = JsonConvert.SerializeObject(dictionaryToSerialize);
-            File.WriteAllText(App.Project.Home + @"\textures\" + textureName + ".json", dictionarySerialized);
+            File.WriteAllText(App.Project.Home + textureName + ".json", dictionarySerialized);
             MessageBox.Show("finished");
         }
 
@@ -77,10 +75,18 @@ namespace mapKnight.ToolKit.Controls.Components {
                 string[ ] files = (string[ ])e.Data.GetData(DataFormats.FileDrop);
                 foreach (string file in files) {
                     if (MiscHelper.IsImageFile(file)) {
-                        listbox_textures.Items.Add(new TextureItem(file));
+                        bool allreadyExists = false;
+                        foreach (object item in listbox_textures.Items)
+                            if (((TextureItem)item).SpriteName == Path.GetFileNameWithoutExtension(file)) allreadyExists = true;
+                        if (!allreadyExists)
+                            listbox_textures.Items.Add(new TextureItem(file));
                     }
                 }
             }
+        }
+
+        public void Clear ( ) {
+            listbox_textures.Items.Clear( );
         }
 
         public Dictionary<string, string> Compile ( ) {

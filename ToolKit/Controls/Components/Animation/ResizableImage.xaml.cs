@@ -22,7 +22,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         public bool ChangePositionOnResize { get; set; } = true;
         private BitmapImage _Image;
         private static BitmapImage defaultImage ;
-        public BitmapImage Image { get { return _Image ?? defaultImage; } set { _Image = value; } }
+        public BitmapImage Image { get { return _Image ?? defaultImage; } set { _Image = value; image.Source = Image; } }
         public bool IsFlipped { set { if (value) image.RenderTransform = new ScaleTransform( ) { ScaleX = -1 }; else image.RenderTransform = new ScaleTransform( ) { ScaleX = 1 }; } }
         public event Action<ResizableImage> Rotated;
         public float Rotation { get { return (float)((RotateTransform)RenderTransform).Angle; } set { ((RotateTransform)RenderTransform).Angle = value; } }
@@ -36,7 +36,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             rotatethumb.DataContext = this;
             rotatethumb.Rotated += ( ) => Rotated?.Invoke(this);
             control_thumbcontainer.DataContext = this;
-            image.DataContext = Image;
+            image.Source = Image;
         }
 
         private bool adjustedSize = false;

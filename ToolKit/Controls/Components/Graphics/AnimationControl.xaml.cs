@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,14 +11,16 @@ using System.Windows.Media.Imaging;
 using mapKnight.Core;
 using mapKnight.Core.Graphics;
 using mapKnight.ToolKit.Controls.Components.Animation;
+using Newtonsoft.Json;
 using Size = System.Windows.Size;
 
-namespace mapKnight.ToolKit.Controls.Components {
+namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
     /// <summary>
     /// Interaktionslogik für AnimationControl.xaml
     /// </summary>
     public partial class AnimationControl : UserControl, IComponentControl {
+        public readonly string EntityName;
         private static double[ ] greaterSizeEditorUsePercent = { 1d, 0.75f, 0.5d };
 
         private Dictionary<string, VertexBone> _Bones = new Dictionary<string, VertexBone>( );
@@ -34,14 +37,64 @@ namespace mapKnight.ToolKit.Controls.Components {
             rectangle_player.DataContext = TransformAspectRatio;
         }
 
+        public AnimationControl (string pathtoload) : this( ) {
+            if (File.Exists(Path.Combine(pathtoload, "animation.meta"))) {
+                AnimationMetaData metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(Path.Combine(pathtoload, "animation.meta")));
+                EntityName = metaData.Name;
+                foreach (string file in metaData.Bones) {
+                    if (File.Exists(file)) {
+                        BoneListBoxItem item = new BoneListBoxItem(file);
+                        Bones.Add(item.Name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
+                        Images.Add(item.Name, item.Image);
+                    }
+                }
+                BonesChanged( );
+                Animations = new ObservableCollection<VertexAnimation>(JsonConvert.DeserializeObject<List<VertexAnimation>>(Path.Combine(pathtoload, "animation.json")));
+            }
+        }
+
+        public AnimationControl (float ratio, string text) : this( ) {
+            TransformAspectRatio = ratio;
+            EntityName = text;
+        }
+
         public ObservableCollection<VertexAnimation> Animations { get; } = new ObservableCollection<VertexAnimation>( );
+
         public Dictionary<string, VertexBone> Bones { get { return _Bones; } set { _Bones = value; BonesChanged( ); } }
+
+        public string Category { get { return "gfx"; } }
+
         public Dictionary<string, BitmapImage> Images { get { return _Images; } set { _Images = value; BonesChanged( ); } }
-        public double TransformAspectRatio { get { return _TransformAspectRatio; } set { _TransformAspectRatio = value; AdjustEditor( ); } }
 
         public List<Control> Menu { get; } = new List<Control>( );
 
-        public string Category { get { return "gfx"; } }
+        public double TransformAspectRatio { get { return _TransformAspectRatio; } set { _TransformAspectRatio = value; AdjustEditor( ); } }
+
+        public Dictionary<string, string> Compile ( ) {
+            throw new NotImplementedException( );
+        }
+
+        public void Save (string path) {
+            AnimationMetaData metaData = new AnimationMetaData( ) { Ratio = TransformAspectRatio, Name = EntityName, Bones = new List<string>( ) };
+            if (Directory.Exists(Path.Combine(path, EntityName)))
+                Directory.Delete(Path.Combine(path, EntityName));
+            Directory.CreateDirectory(Path.Combine(path, EntityName));
+            foreach (KeyValuePair<string, BitmapImage> kvpair in Images) {
+                PngBitmapEncoder encoder = new PngBitmapEncoder( );
+                encoder.Frames.Add(BitmapFrame.Create(kvpair.Value));
+                using (Stream fileStream = File.Create(Path.Combine(path, EntityName, kvpair.Key + ".png")))
+                    encoder.Save(fileStream);
+                metaData.Bones.Add(kvpair.Key + ".png");
+            }
+            File.Create(Path.Combine(path, EntityName, "animation.meta"));
+            File.WriteAllText(Path.Combine(path, EntityName, "animation.meta"), JsonConvert.SerializeObject(metaData));
+            File.Create(Path.Combine(path, EntityName, "animation.json"));
+            File.WriteAllText(Path.Combine(path, EntityName, "animation.json"), JsonConvert.SerializeObject(Animations));
+        }
+
+        public override string ToString ( ) {
+            return "Animation Component";
+        }
 
         private static TreeViewItem ContainerFromItem (ItemContainerGenerator containerGenerator, object item) {
             TreeViewItem container = (TreeViewItem)containerGenerator.ContainerFromItem(item);
@@ -120,10 +173,12 @@ namespace mapKnight.ToolKit.Controls.Components {
         }
 
         private void BonesChanged ( ) {
+            currentAnimation = null;
+            currentFrame = null;
+
             foreach (ResizableImage image in boneImages.Values) {
                 canvas_frame.Children.Remove(image);
             }
-            boneImages.Clear( );
             Dictionary<string, ResizableImage> newBoneImages = new Dictionary<string, ResizableImage>( );
             foreach (string boneKey in _Bones.Keys) {
                 ResizableImage image;
@@ -143,12 +198,13 @@ namespace mapKnight.ToolKit.Controls.Components {
                     DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
                     canvastopproperty.AddValueChanged(image, BoneImage_CanvasTopChanged);
                 }
-                boneImages.Add(boneKey, image);
+                newBoneImages.Add(boneKey, image);
                 if (_Images.ContainsKey(boneKey)) {
                     image.Image = _Images[boneKey];
                 }
                 canvas_frame.Children.Add(image);
             }
+            boneImages = newBoneImages;
 
             foreach (VertexAnimation animation in Animations) {
                 foreach (VertexAnimationFrame frame in animation.Frames) {
@@ -180,6 +236,15 @@ namespace mapKnight.ToolKit.Controls.Components {
 
         private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
             animationview.Pause( );
+        }
+
+        private void ButtonRemoveBoneItem_Click (object sender, RoutedEventArgs e) {
+            string boneName = ((TextBlock)((StackPanel)((Button)sender).Parent).Children[2]).Text;
+            BoneListBoxItem item = (BoneListBoxItem)listbox_bones.Items[new List<string>(Bones.Keys.AsEnumerable( )).IndexOf(boneName)];
+            listbox_bones.Items.Remove(item);
+            Bones.Remove(item.Name);
+            Images.Remove(item.Name);
+            BonesChanged( );
         }
 
         private void ButtonResetPlay_Click (object sender, RoutedEventArgs e) {
@@ -250,8 +315,6 @@ namespace mapKnight.ToolKit.Controls.Components {
                     int index = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem);
                     animation.Frames.Add(new VertexAnimationFrame( ) { State = new ObservableDictionary<string, VertexBone>(animation.Frames[index].State.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, Size = new Vector2(entry.Value.Size) })), Time = animation.Frames[index].Time });
                 }
-                // TODO
-                Bones = new Dictionary<string, VertexBone>(Bones) { [Bones.Count.ToString( )] = new VertexBone( ) { Mirrored = (Bones.Count % 2) == 1, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.4f, 0.4f) } };
             }
         }
 
@@ -289,6 +352,27 @@ namespace mapKnight.ToolKit.Controls.Components {
                 }
             }
             return null;
+        }
+
+        private void listbox_bones_DragEnter (object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                e.Effects = DragDropEffects.Copy;
+            }
+        }
+
+        private void listbox_bones_Drop (object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                string[ ] files = (string[ ])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files) {
+                    if (file.EndsWith("png") && !Bones.ContainsKey(Path.GetFileNameWithoutExtension(file))) {
+                        BoneListBoxItem item = new BoneListBoxItem(file);
+                        listbox_bones.Items.Add(item);
+                        Bones.Add(item.Name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
+                        _Images.Add(item.Name, item.Image);
+                        BonesChanged( );
+                    }
+                }
+            }
         }
 
         private void slider_zoom_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -366,12 +450,23 @@ namespace mapKnight.ToolKit.Controls.Components {
             currentFrame.State.Add(key, current);
         }
 
-        public Dictionary<string, string> Compile ( ) {
-            throw new NotImplementedException( );
+        private struct AnimationMetaData {
+            public List<string> Bones;
+            public string Name;
+            public double Ratio;
         }
 
-        public override string ToString ( ) {
-            return "Animation Component";
+        private struct BoneListBoxItem {
+
+            public BoneListBoxItem (string file) : this( ) {
+                if (file.EndsWith("png")) {
+                    Image = new BitmapImage(new Uri(file));
+                    Name = Path.GetFileNameWithoutExtension(file);
+                }
+            }
+
+            public BitmapImage Image { get; set; }
+            public string Name { get; set; }
         }
     }
 }
