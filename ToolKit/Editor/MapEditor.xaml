@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit"
              xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="300" d:DesignWidth="600" IsEnabled="False">
     <UserControl.Resources>
         <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">

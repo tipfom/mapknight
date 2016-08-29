@@ -27,11 +27,11 @@ namespace mapKnight.ToolKit.Windows {
             }
         }
 
-        private void SetTabPageMenu (List<UIElement> items) {
+        private void SetTabPageMenu (List<FrameworkElement> items) {
             while (menu_editor.Items.Count > 2)
                 menu_editor.Items.RemoveAt(2);
 
-            foreach (UIElement item in items)
+            foreach (FrameworkElement item in items)
                 menu_editor.Items.Add(item);
         }
 

@@ -23,7 +23,7 @@ namespace mapKnight.ToolKit.Editor {
     /// Interaktionslogik für AnimationEditor.xaml
     /// </summary>
     public partial class AnimationEditor : UserControl {
-        private List<UIElement> _Menu = new List<UIElement>( ) {
+        private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
             new MenuItem() { Header = "ANIMATION", Items = {
                     new MenuItem() {Header="ADD" },
                     new MenuItem() {Header="LOAD" }
@@ -31,7 +31,7 @@ namespace mapKnight.ToolKit.Editor {
             new ComboBox() { VerticalAlignment = VerticalAlignment.Center, Width = 200 } 
         };
 
-        public List<UIElement> Menu { get { return _Menu; } }
+        public List<FrameworkElement> Menu { get { return _Menu; } }
 
         private ObservableCollection<AnimationControl> animationControls { get; set; } = new ObservableCollection<AnimationControl>( );
         private ObservableCollection<string> animationControlStrings { get; set; } = new ObservableCollection<string>( );

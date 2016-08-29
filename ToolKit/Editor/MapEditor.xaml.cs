@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
@@ -25,7 +26,7 @@ namespace mapKnight.ToolKit.Editor {
     /// </summary>
     public partial class MapEditor : UserControl {
 
-        private List<UIElement> _Menu = new List<UIElement>( ) {
+        private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
             new MenuItem( ) { Header = "MAP", Items = {
                     new MenuItem() { Header = "NEW", Height = 22, Icon = App.Current.FindResource("image_map_new") },
                     new MenuItem() { Header = "LOAD", Height = 22 }
@@ -69,6 +70,14 @@ namespace mapKnight.ToolKit.Editor {
 
         public MapEditor ( ) {
             InitializeComponent( );
+
+            for (int i = 1; i < _Menu.Count; i++) {
+                if (_Menu[i].IsEnabled) {
+                    _Menu[i].DataContext = this;
+                    Binding binding = new Binding( ) { Path = new PropertyPath("IsEnabled") };
+                    BindingOperations.SetBinding(_Menu[i], UIElement.IsEnabledProperty, binding);
+                }
+            }
 
             ((MenuItem)((MenuItem)_Menu[0]).Items[0]).Click += create_map_Click;
             ((MenuItem)((MenuItem)_Menu[0]).Items[1]).Click += load_map_Click;
@@ -144,7 +153,7 @@ namespace mapKnight.ToolKit.Editor {
             Rotater
         }
 
-        public List<UIElement> Menu { get { return _Menu; } }
+        public List<FrameworkElement> Menu { get { return _Menu; } }
 
         private Map currentMap { get { return (Map)((ComboBox)_Menu[1]).SelectedItem; } }
         private int currentMapIndex { get { return (int)((ComboBox)_Menu[1]).SelectedIndex; } }
@@ -195,6 +204,14 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void AddMap (Map map) {
+            if (!IsEnabled)
+                IsEnabled = true;
+            foreach (FrameworkElement element in _Menu) {
+                BindingExpression binding = element.GetBindingExpression(UIElement.IsEnabledProperty);
+                if (binding != null)
+                    binding.UpdateSource( );
+            }
+
             ((ComboBox)_Menu[1]).Items.Add(map);
 
             if (!mapRotations.ContainsKey(map))
@@ -306,6 +323,10 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void Reset ( ) {
+            IsEnabled = false;
+            scrollbar_horizontal.Value = 0;
+            scrollbar_vertical.Value = 0;
+
             ((ComboBox)_Menu[1]).Items.Clear( );
             Cache.Clear( );
             currentlyEditingTile = -1;
