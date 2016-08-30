@@ -15,22 +15,18 @@ namespace mapKnight.Extended.Components.Graphics {
         public override void PostUpdate ( ) {
             if (Owner.IsOnScreen) {
                 List<VertexData> entityVertexData = new List<VertexData>( );
-                Dictionary<string, string> spriteData = new Dictionary<string, string>( );
-                Dictionary<string, float[ ]> vertexData = new Dictionary<string, float[ ]>( );
-                Color colorData = Color.White;
-
-                if (Owner.HasComponentInfo(ComponentData.Texture))
-                    spriteData = (Dictionary<string, string>)Owner.GetComponentInfo(ComponentData.Texture)[0];
-                if (Owner.HasComponentInfo(ComponentData.Verticies))
-                    vertexData = (Dictionary<string, float[ ]>)Owner.GetComponentInfo(ComponentData.Verticies)[0];
-
+                string[ ] spriteData = (string[ ])Owner.GetComponentInfo(ComponentData.Texture);
+                float[ ][ ] vertexData = (float[ ][ ])Owner.GetComponentInfo(ComponentData.Verticies);
+                Color colorData =
+                    (Owner.HasComponentInfo(ComponentData.Color) ?
+                    (Color)Owner.GetComponentInfo(ComponentData.Color)[0] : Color.White);
 
                 Vector2 positionOnScreen = Owner.PositionOnScreen;
-                foreach (var entry in vertexData) {
+                for (int i = 0; i < vertexData.Length; i++) {
                     VertexData entryVertexData = new VertexData(
-                        Mathf.Translate(entry.Value, 0, 0, positionOnScreen.X, positionOnScreen.Y),
-                        spriteData[entry.Key],
-                        colorData);
+                                   Mathf.Translate(vertexData[i], 0, 0, positionOnScreen.X, positionOnScreen.Y),
+                                   spriteData[i],
+                                   colorData);
                     entityVertexData.Add(entryVertexData);
                 }
 
@@ -40,6 +36,8 @@ namespace mapKnight.Extended.Components.Graphics {
                     Owner.GetComponentInfo(ComponentData.Verticies);
                 while (Owner.HasComponentInfo(ComponentData.Texture))
                     Owner.GetComponentInfo(ComponentData.Texture);
+                while (Owner.HasComponentInfo(ComponentData.Color))
+                    Owner.GetComponentInfo(ComponentData.Color);
             }
         }
 

@@ -15,7 +15,7 @@ namespace mapKnight.Core.Graphics {
         { get; set; }
 #endif
 #if __ANDROID__
-        public List<VertexAnimationFrame> Frames;
+        public VertexAnimationFrame[ ] Frames;
 #else
         public ObservableCollection<VertexAnimationFrame> Frames { get; set; }
 #endif
@@ -31,9 +31,9 @@ namespace mapKnight.Core.Graphics {
             IsRunning = true;
         }
 
-        public Dictionary<string, float[ ]> Update (float dt) {
+        public float[ ][ ] Update (float dt) {
             if (Environment.TickCount > nextFrameTime) {
-                if (nextFrame + 1 < Frames.Count) {
+                if (nextFrame + 1 < Frames.Length) {
                     // if the next Frame isnt the last ont
                     currentFrame = nextFrame;
                     nextFrame++;
@@ -48,22 +48,21 @@ namespace mapKnight.Core.Graphics {
             }
             float progress = IsRunning ? (nextFrameTime - Environment.TickCount) / (float)Frames[currentFrame].Time : 1f;
 
-            Dictionary<string, float[ ]> result = new Dictionary<string, float[ ]>( );
+            float[ ][ ] result = new float[Frames[currentFrame].Bones.Length][ ];
 
-            foreach (string bone in Frames[currentFrame].State.Keys) {
-                Vector2 interpolatedSize = Mathf.Interpolate(Frames[nextFrame].State[bone].Size, Frames[currentFrame].State[bone].Size, progress);
-                Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].State[bone].Position, Frames[currentFrame].State[bone].Position, progress);
-                float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].State[bone].Rotation, Frames[currentFrame].State[bone].Rotation, progress);
+            for (int i = 0; i < result.Length; i++) {
+                Vector2 interpolatedSize = Mathf.Interpolate(Frames[nextFrame].Bones[i].Size, Frames[currentFrame].Bones[i].Size, progress);
+                Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].Bones[i].Position, Frames[currentFrame].Bones[i].Position, progress);
+                float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].Bones[i].Rotation, Frames[currentFrame].Bones[i].Rotation, progress);
 
-                result.Add(bone, Mathf.Transform(
+                result[i] = Mathf.Transform(
                     interpolatedSize.ToQuad( ),
                     interpolatedSize.X / 2, interpolatedSize.Y / 2,
                     interpolatedPosition.X, interpolatedPosition.Y,
-                    interpolatedRotation, Frames[currentFrame].State[bone].Mirrored));
+                    interpolatedRotation, Frames[currentFrame].Bones[i].Mirrored);
             }
 
             return result;
         }
-
     }
 }

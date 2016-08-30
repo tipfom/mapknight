@@ -48,9 +48,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\DrawComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\FlippableTextureComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SkeletComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\TextureComponent.cs" />

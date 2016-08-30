@@ -6,12 +6,12 @@
     },
     "Components": [
         {
-            "$type": "Graphics.FlippableTexture",
-            "Texture": "turret"
-        },
-        {
             "$type": "Movement.Gravity",
             "Influence": 1
+        },
+        {
+            "$type": "Graphics.Texture",
+            "Texture": "turret_bullet"
         },
         {
             "$type": "Graphics.Skelet",

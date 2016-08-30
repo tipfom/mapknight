@@ -4,8 +4,7 @@ using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI {
-
-    [ComponentRequirement(typeof(FlippableTextureComponent))]
+    
     [ComponentRequirement(typeof(TriggerComponent))]
     public class TurretComponent : Component {
         public bool IsFacingLeft = true;
@@ -15,7 +14,6 @@ namespace mapKnight.Extended.Components.AI {
         private int lockTime;
         private int nextShot;
         private int nextTurn;
-        private FlippableTextureComponent textureComponent;
         private int timeBetweenShots;
         private int timeBetweenTurns;
 
@@ -30,13 +28,11 @@ namespace mapKnight.Extended.Components.AI {
 
         public override void Prepare ( ) {
             Owner.GetComponent<TriggerComponent>( ).Triggered += Trigger_Triggered;
-            textureComponent = Owner.GetComponent<FlippableTextureComponent>( );
         }
 
         public override void Update (DeltaTime dt) {
             if (Environment.TickCount > nextTurn) {
                 IsFacingLeft = !IsFacingLeft;
-                textureComponent.Rotated = IsFacingLeft;
                 nextTurn += timeBetweenTurns;
             }
         }

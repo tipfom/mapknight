@@ -11,31 +11,38 @@ namespace mapKnight.Extended.Components.Graphics {
     [ComponentRequirement(typeof(DrawComponent))]
     [UpdateBefore(ComponentEnum.Draw)]
     public class SpriteComponent : Component {
-        private Dictionary<string, string> cachedResult = new Dictionary<string, string>( );
-        private Dictionary<string, SpriteAnimation> sprites;
+        private SpriteAnimation[ ] sprites;
+        private string[ ] result;
 
-        public SpriteComponent (Entity owner, Dictionary<string, SpriteAnimation> sprites, string texture) : base(owner) {
+        public SpriteComponent (Entity owner, SpriteAnimation[ ] sprites, string texture) : base(owner) {
             this.sprites = sprites;
-            foreach (string key in sprites.Keys)
-                cachedResult.Add(key, "");
+            result = new string[sprites.Length];
             Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
         }
 
         public override void Update (DeltaTime dt) {
-            foreach (string bone in sprites.Keys) {
-                sprites[bone].Update(dt.Milliseconds);
-                cachedResult[bone] = sprites[bone].Current;
+            for (int i = 0; i < sprites.Length; i++) {
+                sprites[i].Update(dt.Milliseconds);
+                result[i] = sprites[i].Current;
             }
 
-            Owner.SetComponentInfo(ComponentData.Texture, cachedResult);
+            Owner.SetComponentInfo(ComponentData.Texture, result);
         }
 
         public new class Configuration : Component.Configuration {
-            public Dictionary<string, SpriteAnimation> Sprites;
+            private SpriteAnimation[ ] internalSortedAnimations;
+            public Dictionary<string, SpriteAnimation> Sprites {
+                set {
+                    List<string> bones = new List<string>(value.Keys);
+                    bones.Sort( );
+                    internalSortedAnimations = bones.Select(item => value[item]).ToArray( );
+                }
+            }
+
             public string Texture;
 
             public override Component Create (Entity owner) {
-                return new SpriteComponent(owner, Sprites, Texture);
+                return new SpriteComponent(owner, internalSortedAnimations, Texture);
             }
         }
     }

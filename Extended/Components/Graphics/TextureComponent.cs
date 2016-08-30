@@ -10,13 +10,14 @@ namespace mapKnight.Extended.Components.Graphics {
     [ComponentRequirement(typeof(DrawComponent))]
     [UpdateBefore(ComponentEnum.Draw)]
     public class TextureComponent : Component {
-        private string textureName;
-        private Dictionary<string, string> textures;
+        private string[] textures;
 
         public TextureComponent (Entity owner, string texturename) : base(owner) {
             SpriteBatch texture = Assets.Load<SpriteBatch>(texturename);
-            textureName = texture.Name;
-            textures = texture.Sprites.Keys.ToDictionary(spritename => spritename);
+
+            List<string> sortedKeys = texture.Sprites.Keys.ToList( );
+            sortedKeys.Sort( );
+            textures = sortedKeys.ToArray( );
 
             Owner.World.Renderer.AddTexture(Owner.Species, texture);
         }
