@@ -40,15 +40,15 @@ namespace mapKnight.Extended.Components.Movement {
         public override void Update (DeltaTime dt) {
             Vector2 speed = speedComponent.Speed;
             if (inputProvider.Jump && motionComponent.IsOnGround) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(0, speed.Y)));
+                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(0, speed.Y));
             }
 
             if (inputProvider.Left) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(-speed.X - motionComponent.Velocity.X, 0)));
+                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(-speed.X - motionComponent.Velocity.X, 0));
             } else if (inputProvider.Right) {
-                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(speed.X - motionComponent.Velocity.X, 0)));
+                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(speed.X - motionComponent.Velocity.X, 0));
             } else {
-                Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, new Vector2(-motionComponent.Velocity.X, 0)));
+                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(-motionComponent.Velocity.X, 0));
             }
         }
 

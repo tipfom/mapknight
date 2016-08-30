@@ -21,8 +21,8 @@ namespace mapKnight.Extended.Components.Graphics {
         private bool isAnimating { get { return currentAnimation != -1; } set { currentAnimation = value ? currentAnimation : -1; } }
 
         public override void Update (DeltaTime dt) {
-            while (Owner.HasComponentInfo(ComponentEnum.Animation)) {
-                string animationToPlay = (string)Owner.GetComponentInfo(ComponentEnum.Animation);
+            while (Owner.HasComponentInfo(ComponentData.Animation)) {
+                string animationToPlay = (string)Owner.GetComponentInfo(ComponentData.Animation)[0];
                 setAnimation(animationToPlay);
             }
 
@@ -30,7 +30,8 @@ namespace mapKnight.Extended.Components.Graphics {
                 isAnimating = current.IsRunning;
                 if (!isAnimating)
                     return;
-                Owner.SetComponentInfo(ComponentEnum.Skelet, animations[currentAnimation].Update(dt.Milliseconds));
+                // temp
+                Owner.SetComponentInfo(ComponentData.VerticiesSkelet, animations[currentAnimation].Update(dt.Milliseconds));
             }
         }
 

@@ -28,9 +28,9 @@ namespace mapKnight.Extended.Components.Movement {
             if (Environment.TickCount > nextPush) {
                 nextPush += intervall;
                 if (resetLastVelocity) {
-                    Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, -motionComponent.Velocity + velocity));
+                    Owner.SetComponentInfo(ComponentData.Velocity, -motionComponent.Velocity + velocity);
                 } else {
-                    Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, velocity));
+                    Owner.SetComponentInfo(ComponentData.Velocity, velocity);
                 }
             }
         }

@@ -13,7 +13,7 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         public override void Collision (Entity collidingEntity) {
-            collidingEntity.SetComponentInfo(ComponentEnum.Stats_Health, damageComponent.OnTouch);
+            collidingEntity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
         }
 
         public override void Prepare ( ) {

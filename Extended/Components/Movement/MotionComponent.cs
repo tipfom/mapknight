@@ -41,18 +41,10 @@ namespace mapKnight.Extended.Components.Movement {
             Vector2 appliedAcceleration = new Vector2( ); // reset acceleration
             List<Vector2> appliedVelocities = new List<Vector2>( );
 
-            while (Owner.HasComponentInfo(ComponentEnum.Motion)) {
-                Tuple<ComponentData, Vector2> componentInfo = (Tuple<ComponentData, Vector2>)Owner.GetComponentInfo(ComponentEnum.Motion);
-                switch (componentInfo.Item1) {
-                    case ComponentData.Velocity:
-                        appliedVelocities.Add(componentInfo.Item2);
-                        break;
-
-                    case ComponentData.Acceleration:
-                        appliedAcceleration += componentInfo.Item2;
-                        break;
-                }
-            }
+            while (Owner.HasComponentInfo(ComponentData.Velocity))
+                appliedVelocities.Add((Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0]);
+            while (Owner.HasComponentInfo(ComponentData.Acceleration))
+                appliedAcceleration += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0];
 
             // update velocity
             this.Velocity += appliedAcceleration * .5f * (float)dt.TotalSeconds;

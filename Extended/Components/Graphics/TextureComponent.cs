@@ -10,7 +10,6 @@ namespace mapKnight.Extended.Components.Graphics {
     [ComponentRequirement(typeof(DrawComponent))]
     [UpdateBefore(ComponentEnum.Draw)]
     public class TextureComponent : Component {
-        private Tuple<ComponentData, object> data;
         private string textureName;
         private Dictionary<string, string> textures;
 
@@ -18,13 +17,12 @@ namespace mapKnight.Extended.Components.Graphics {
             SpriteBatch texture = Assets.Load<SpriteBatch>(texturename);
             textureName = texture.Name;
             textures = texture.Sprites.Keys.ToDictionary(spritename => spritename);
-            data = new Tuple<ComponentData, object>(ComponentData.Texture, textures);
 
             Owner.World.Renderer.AddTexture(Owner.Species, texture);
         }
 
         public override void Update (DeltaTime dt) {
-            Owner.SetComponentInfo(ComponentEnum.Draw, data);
+            Owner.SetComponentInfo(ComponentData.Texture, textures);
         }
 
         public new class Configuration : Component.Configuration {

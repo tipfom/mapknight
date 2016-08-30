@@ -19,19 +19,11 @@ namespace mapKnight.Extended.Components.Graphics {
                 Dictionary<string, float[ ]> vertexData = new Dictionary<string, float[ ]>( );
                 Color colorData = Color.White;
 
-                while (Owner.HasComponentInfo(ComponentEnum.Draw)) {
-                    Tuple<ComponentData, object> ComponentInfo = (Tuple<ComponentData, object>)Owner.GetComponentInfo(ComponentEnum.Draw);
-                    switch (ComponentInfo.Item1) {
-                        case ComponentData.Texture:
-                            // bodypart name, sprite name
-                            spriteData = (Dictionary<string, string>)ComponentInfo.Item2;
-                            break;
+                if (Owner.HasComponentInfo(ComponentData.Texture))
+                    spriteData = (Dictionary<string, string>)Owner.GetComponentInfo(ComponentData.Texture)[0];
+                if (Owner.HasComponentInfo(ComponentData.Verticies))
+                    vertexData = (Dictionary<string, float[ ]>)Owner.GetComponentInfo(ComponentData.Verticies)[0];
 
-                        case ComponentData.Verticies:
-                            vertexData = (Dictionary<string, float[ ]>)ComponentInfo.Item2;
-                            break;
-                    }
-                }
 
                 Vector2 positionOnScreen = Owner.PositionOnScreen;
                 foreach (var entry in vertexData) {
@@ -44,9 +36,10 @@ namespace mapKnight.Extended.Components.Graphics {
 
                 Owner.World.Renderer.QueueVertexData(Owner.Species, entityVertexData);
             } else {
-                while (Owner.HasComponentInfo(ComponentEnum.Draw)) {
-                    Owner.GetComponentInfo(ComponentEnum.Draw);
-                }
+                while (Owner.HasComponentInfo(ComponentData.Verticies))
+                    Owner.GetComponentInfo(ComponentData.Verticies);
+                while (Owner.HasComponentInfo(ComponentData.Texture))
+                    Owner.GetComponentInfo(ComponentData.Texture);
             }
         }
 

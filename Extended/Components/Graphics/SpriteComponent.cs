@@ -27,7 +27,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 cachedResult[bone] = sprites[bone].Current;
             }
 
-            Owner.SetComponentInfo(ComponentEnum.Draw, new Tuple<ComponentData, object>(ComponentData.Texture, cachedResult));
+            Owner.SetComponentInfo(ComponentData.Texture, cachedResult);
         }
 
         public new class Configuration : Component.Configuration {

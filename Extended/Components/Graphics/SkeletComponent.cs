@@ -32,10 +32,10 @@ namespace mapKnight.Extended.Components.Graphics {
         public override void Update (DeltaTime dt) {
             Dictionary<string, float[ ]> currentVertexData;
 
-            if (!Owner.HasComponentInfo(ComponentEnum.Skelet))
+            if (!Owner.HasComponentInfo(ComponentData.VerticiesSkelet))
                 currentVertexData = defaultVertexData.DeepClone( );
             else {
-                Dictionary<string, float[ ]> info = (Dictionary<string, float[ ]>)Owner.GetComponentInfo(ComponentEnum.Skelet);
+                Dictionary<string, float[ ]> info = (Dictionary<string, float[ ]>)Owner.GetComponentInfo(ComponentData.VerticiesSkelet)[0];
                 currentVertexData = info;
             }
 
@@ -47,7 +47,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 }
             }
 
-            Owner.SetComponentInfo(ComponentEnum.Draw, new Tuple<ComponentData, object>(ComponentData.Verticies, currentVertexData));
+            Owner.SetComponentInfo(ComponentData.Verticies, currentVertexData);
         }
 
         

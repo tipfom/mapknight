@@ -19,8 +19,8 @@ namespace mapKnight.Extended.Components.Stats {
         }
 
         public override void Update (DeltaTime dt) {
-            if (Owner.HasComponentInfo(ComponentEnum.Stats_Speed)) {
-                Vector2 slowDown = (Vector2)Owner.GetComponentInfo(ComponentEnum.Stats_Speed);
+            if (Owner.HasComponentInfo(ComponentData.SlowDown)) {
+                Vector2 slowDown = (Vector2)Owner.GetComponentInfo(ComponentData.SlowDown)[0];
                 Speed = defaultSpeed * slowDown;
             } else {
                 Speed = defaultSpeed;

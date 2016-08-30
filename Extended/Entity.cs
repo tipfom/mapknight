@@ -68,7 +68,7 @@ namespace mapKnight.Extended {
         #endregion static
 
         private Component[ ] components;
-        private Dictionary<ComponentEnum, Queue<object>> pendingComponentInfos = new Dictionary<ComponentEnum, Queue<object>>( );
+        private Dictionary<ComponentData, Queue<object[ ]>> pendingComponentInfos = new Dictionary<ComponentData, Queue<object[ ]>>( );
 
         public Entity (ComponentList components, Transform transform, IEntityWorld world, string name, int species) {
             Name = name;
@@ -81,6 +81,9 @@ namespace mapKnight.Extended {
             for (int i = 0; i < components.Count; i++) {
                 this.components[i] = components[i].Create(this);
             }
+
+            foreach (ComponentData componentDataValue in Enum.GetValues(typeof(ComponentData)))
+                pendingComponentInfos.Add(componentDataValue, new Queue<object[ ]>( ));
 
             // set entity informations
             Info = new EntityInfo( ) {
@@ -108,6 +111,28 @@ namespace mapKnight.Extended {
         public Transform Transform { get; set; }
         public IEntityWorld World { get; private set; }
 
+        public bool HasComponentInfo (ComponentData data) {
+            return pendingComponentInfos[data].Count > 0;
+        }
+
+        public object[ ] GetComponentInfo (ComponentData data) {
+            // not containing needs to be handled with HasComponentInfo
+            return pendingComponentInfos[data].Dequeue( );
+        }
+
+        public void SetComponentInfo (ComponentData target, params object[ ] data) {
+            pendingComponentInfos[target].Enqueue(data);
+        }
+
+        public bool HasComponent<T> ( ) where T : Component {
+            Type type = typeof(T);
+            return components.Any(c => c.GetType( ) == type);
+        }
+
+        public T GetComponent<T> ( ) where T : Component {
+            Type type = typeof(T);
+            return (T)components.FirstOrDefault(c => c.GetType( ) == type);
+        }
         public void Collision (Entity collidingEntity) {
             for (int i = 0; i < components.Length; i++)
                 components[i].Collision(collidingEntity);
@@ -124,25 +149,6 @@ namespace mapKnight.Extended {
             Destroyed?.Invoke( );
         }
 
-        public T GetComponent<T> ( ) where T : Component {
-            Type type = typeof(T);
-            return (T)components.FirstOrDefault(c => c.GetType( ) == type);
-        }
-
-        public object GetComponentInfo (ComponentEnum requester) {
-            // not containing needs to be handled with HasComponentInfo
-            return pendingComponentInfos[requester].Dequeue( );
-        }
-
-        public bool HasComponent<T> ( ) where T : Component {
-            Type type = typeof(T);
-            return components.Any(c => c.GetType( ) == type);
-        }
-
-        public bool HasComponentInfo (ComponentEnum requester) {
-            return pendingComponentInfos.ContainsKey(requester) && pendingComponentInfos[requester].Count > 0;
-        }
-
         public void PostUpdate ( ) {
             for (int i = 0; i < components.Length; i++)
                 components[i].PostUpdate( );
@@ -151,12 +157,6 @@ namespace mapKnight.Extended {
         public void Prepare ( ) {
             foreach (Component component in components)
                 component.Prepare( );
-        }
-
-        public void SetComponentInfo (ComponentEnum target, object data) {
-            if (!pendingComponentInfos.ContainsKey(target))
-                pendingComponentInfos.Add(target, new Queue<object>( ));
-            pendingComponentInfos[target].Enqueue(data);
         }
 
         public void Tick ( ) {

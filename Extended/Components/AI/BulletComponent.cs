@@ -21,7 +21,7 @@ namespace mapKnight.Extended.Components.AI {
         public override void Collision (Entity collidingEntity) {
             if (!collidingEntity.Info.IsTemporary && (Hit?.Invoke(collidingEntity) ?? true)) {
                 DamageComponent damageComponent = Owner.GetComponent<DamageComponent>( );
-                if (damageComponent != null) collidingEntity.SetComponentInfo(ComponentEnum.Stats_Health, damageComponent.OnTouch);
+                if (damageComponent != null) collidingEntity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
                 Owner.Destroy( );
             }
         }

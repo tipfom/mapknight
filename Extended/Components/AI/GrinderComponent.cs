@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Components.AI {
                 if (collidingEntity.Transform.BL.Y > Owner.Transform.Center.Y) {
                     Owner.Destroy( );
                 } else {
-                    collidingEntity.SetComponentInfo(ComponentEnum.Stats_Health, damageComponent.OnTouch);
+                    collidingEntity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
                 }
             }
         }

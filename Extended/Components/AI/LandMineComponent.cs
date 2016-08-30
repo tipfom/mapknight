@@ -46,8 +46,8 @@ namespace mapKnight.Extended.Components.AI {
             float distpercent = closestDist.MagnitudeSqr( ) / sqrExplosionRadius;
             if (distpercent <= 1) {
                 Vector2 appliedVel = impulsDir * (1.25f - distpercent) * throwBackSpeed;
-                entity.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Velocity, appliedVel));
-                entity.SetComponentInfo(ComponentEnum.Stats_Health, damageComponent.OnTouch);
+                entity.SetComponentInfo(ComponentData.Velocity, appliedVel);
+                entity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
             }
             Owner.Destroy( );
         }

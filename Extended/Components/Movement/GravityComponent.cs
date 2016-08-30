@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Components.Movement {
         public override void Update (DeltaTime dt) {
             // say to the collisioncomponent to use a part of the global gravity when calculating
             // movement that the motioncomponent is contained by the entity needs to be handled by dependencies
-            Owner.SetComponentInfo(ComponentEnum.Motion, new Tuple<ComponentData, Vector2>(ComponentData.Acceleration, Owner.World.Gravity * Influence));
+            Owner.SetComponentInfo(ComponentData.Acceleration, Owner.World.Gravity * Influence);
         }
 
         public new class Configuration : Component.Configuration {

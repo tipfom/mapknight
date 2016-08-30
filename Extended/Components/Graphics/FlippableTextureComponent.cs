@@ -11,9 +11,7 @@ namespace mapKnight.Extended.Components.Graphics {
     [UpdateBefore(ComponentEnum.Draw)]
     public class FlippableTextureComponent : Component {
         public bool Rotated = false;
-        private Tuple<ComponentData, object> normalData;
         private Dictionary<string, string> normalTextures = new Dictionary<string, string>( );
-        private Tuple<ComponentData, object> rotatedData;
         private Dictionary<string, string> rotatedTextures = new Dictionary<string, string>( );
 
         public FlippableTextureComponent (Entity owner, string texturename) : base(owner) {
@@ -26,16 +24,14 @@ namespace mapKnight.Extended.Components.Graphics {
             }
 
             Owner.World.Renderer.AddTexture(Owner.Species, texture);
-            normalData = new Tuple<ComponentData, object>(ComponentData.Texture, normalTextures);
-            rotatedData = new Tuple<ComponentData, object>(ComponentData.Texture, rotatedTextures);
         }
 
         public override void Prepare ( ) {
         }
 
         public override void Update (DeltaTime dt) {
-            if (Rotated) Owner.SetComponentInfo(ComponentEnum.Draw, normalData);
-            else Owner.SetComponentInfo(ComponentEnum.Draw, rotatedData);
+            if (Rotated) Owner.SetComponentInfo(ComponentData.Texture, normalTextures);
+            else Owner.SetComponentInfo(ComponentData.Texture, rotatedTextures);
         }
 
         private float[ ] FlipTexture (float[ ] coords) {
