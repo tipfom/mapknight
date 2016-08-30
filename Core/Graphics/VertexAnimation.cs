@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-#if WINDOWS
+#if __ANDROID__
+#else
 using System.Collections.ObjectModel;
 #endif
 using System.Text;
@@ -31,6 +32,7 @@ namespace mapKnight.Core.Graphics {
             IsRunning = true;
         }
 
+#if __ANDROID__
         public float[ ][ ] Update (float dt) {
             if (Environment.TickCount > nextFrameTime) {
                 if (nextFrame + 1 < Frames.Length) {
@@ -64,5 +66,6 @@ namespace mapKnight.Core.Graphics {
 
             return result;
         }
+#endif
     }
 }

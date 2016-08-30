@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
-#if WINDOWS
+#if __ANDROID__
+#else
 using System.Collections.ObjectModel;
 #endif
 
