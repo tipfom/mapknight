@@ -49,15 +49,15 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             InitializeComponent( );
         }
 
-        public void Build (string textureName) {
+        public void Build (string texturePath) {
             Bitmap image;
             Dictionary<string, Rectangle> dictionary;
             ImagePacker.PackImage(listbox_textures.Items.Cast<TextureItem>( ).Select(item => item.FullFileName), false, false, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, 1, true, out image, out dictionary);
-            image.Save(App.Project.Home + textureName + ".png", ImageFormat.Png);
+            image.Save(texturePath + ".png", ImageFormat.Png);
             // parse dictionary
             Dictionary<string, int[ ]> dictionaryToSerialize = dictionary.ToDictionary(key => Path.GetFileNameWithoutExtension(key.Key), value => new int[ ] { value.Value.X, value.Value.Y, value.Value.Width, value.Value.Height });
             string dictionarySerialized = JsonConvert.SerializeObject(dictionaryToSerialize);
-            File.WriteAllText(App.Project.Home + textureName + ".json", dictionarySerialized);
+            File.WriteAllText(texturePath + ".json", dictionarySerialized);
             MessageBox.Show("finished");
         }
 

@@ -37,7 +37,7 @@ namespace mapKnight.ToolKit.Editor {
             SaveFileDialog dialog = new SaveFileDialog( );
             dialog.OverwritePrompt = true;
             if (dialog.ShowDialog( ) ?? false) {
-                texturecreationcontrol.Build(Path.GetFileNameWithoutExtension(dialog.FileName));
+                texturecreationcontrol.Build(dialog.FileName);
             }
         }
     }
