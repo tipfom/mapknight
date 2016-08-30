@@ -4,6 +4,7 @@ using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
 using mapKnight.Extended.Components.AI;
+using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.UI;

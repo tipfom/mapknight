@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using mapKnight.Core;
 using mapKnight.Core.Graphics;
 using mapKnight.Extended.Components.Attributes;
-using static mapKnight.Extended.Components.SkeletComponent;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Graphics {
 
     [ComponentRequirement(typeof(SkeletComponent))]
     [UpdateBefore(ComponentEnum.Skelet)]

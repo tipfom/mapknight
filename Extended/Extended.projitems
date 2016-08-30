@@ -40,33 +40,33 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\TurretComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateAfter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\ComponentRequirement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\Instantiatable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateBefore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentList.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\DrawComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\FlippableTextureComponent.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\AnimationComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\DrawComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\FlippableTextureComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\GravityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SkeletComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\TextureComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentEnum.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\MotionComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\PlatformComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\PushComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\SkeletComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\GravityComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\MotionComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\PlatformComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\PlayerComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\PushComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\WaypointComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\ArmorComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\DamageComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\HealthComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\SpeedComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\TextureComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\PlayerComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\WaypointComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />

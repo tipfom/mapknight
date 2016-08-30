@@ -1,7 +1,7 @@
 using System;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Movement {
 
     public abstract class WaypointComponent : Component {
         public Vector2 Velocity;

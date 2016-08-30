@@ -2,7 +2,7 @@ using System;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Movement {
 
     [ComponentRequirement(typeof(MotionComponent))]
     [UpdateBefore(ComponentEnum.Motion)]

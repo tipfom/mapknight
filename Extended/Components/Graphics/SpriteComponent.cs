@@ -6,7 +6,7 @@ using mapKnight.Core.Graphics;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Graphics {
 
     [ComponentRequirement(typeof(DrawComponent))]
     [UpdateBefore(ComponentEnum.Draw)]

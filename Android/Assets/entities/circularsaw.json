@@ -6,7 +6,7 @@
     },
     "Components": [
         {
-            "$type": "Skelet",
+            "$type": "Graphics.Skelet",
             "Bones": {
                 "body": {
                     "Position": {
@@ -21,7 +21,7 @@
             }
         },
         {
-            "$type": "Animation",
+            "$type": "Graphics.Animation",
             "DefaultAnimation": "drot",
             "Animations": [
                 {
@@ -65,7 +65,7 @@
             ]
         },
         {
-            "$type": "Texture",
+            "$type": "Graphics.Texture",
             "Texture": "saw"
         },
         {

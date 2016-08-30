@@ -6,15 +6,15 @@
     },
     "Components": [
         {
-            "$type": "Gravity",
+            "$type": "Movement.Gravity",
             "Influence": 1
         },
         {
-            "$type": "Texture",
+            "$type": "Graphics.Texture",
             "Texture": "s_trowie"
         },
         {
-            "$type": "Skelet",
+            "$type": "Graphics.Skelet",
             "Bones": {
                 "body": {
                     "Position": {
@@ -39,7 +39,7 @@
                 },
                 "Components": [
                     {
-                        "$type": "Gravity",
+                        "$type": "Movement.Gravity",
                         "Influence": 1
                     },
                     {
@@ -54,7 +54,7 @@
                         "$type": "AI.Bullet"
                     },
                     {
-                        "$type": "Sprite",
+                        "$type": "Graphics.Sprite",
                         "Texture": "potatoe_patrick",
                         "Sprites": {
                             "body": {
@@ -64,7 +64,7 @@
                         }
                     },
                     {
-                        "$type": "Skelet",
+                        "$type": "Graphics.Skelet",
                         "Bones": {
                             "body": {
                                 "Position": {
@@ -79,7 +79,7 @@
                         }
                     },
                     {
-                        "$type": "Animation",
+                        "$type": "Graphics.Animation",
                         "Animations": [
                             {
                                 "Name": "check_1234",

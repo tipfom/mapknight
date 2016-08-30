@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Movement {
 
     public class PlatformComponent : WaypointComponent {
         private int currentWaypoint = 0;

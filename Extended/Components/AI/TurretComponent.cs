@@ -1,6 +1,7 @@
 using System;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI {
 

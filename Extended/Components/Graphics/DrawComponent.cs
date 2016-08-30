@@ -4,7 +4,7 @@ using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Graphics {
 
     [Instantiatable]
     public class DrawComponent : Component {

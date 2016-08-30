@@ -13,19 +13,19 @@
             "OnTouch": 1
         },
         {
-            "$type": "Gravity",
+            "$type": "Movement.Gravity",
             "Influence": 1
         },
         {
-            "$type": "Motion",
+            "$type": "Movement.Motion",
             "BounceMultiplier": 0.4
         },
         {
-            "$type": "Texture",
+            "$type": "Graphics.Texture",
             "Texture": "meatball"
         },
         {
-            "$type": "Skelet",
+            "$type": "Graphics.Skelet",
             "Bones": {
                 "body": {
                     "Position": {
@@ -40,7 +40,7 @@
             }
         },
         {
-            "$type": "Animation",
+            "$type": "Graphics.Animation",
             "DefaultAnimation": "drot",
             "Animations": [
                 {
@@ -84,7 +84,7 @@
             ]
         },
         {
-            "$type": "Push",
+            "$type": "Movement.Push",
             "Intervall": 2000000,
             "ResetVelocity": false,
             "Velocity": {

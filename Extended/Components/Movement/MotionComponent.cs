@@ -4,7 +4,7 @@ using System.Diagnostics;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Movement {
 
     [Instantiatable]
     public class MotionComponent : Component {

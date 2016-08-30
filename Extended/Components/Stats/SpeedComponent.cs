@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Components.Stats {
 

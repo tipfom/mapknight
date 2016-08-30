@@ -7,7 +7,7 @@
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	"Components": [
 		{
-			"$type": "Gravity",
+			"$type": "Movement.Gravity",
 			"Influence": 1
 		},
 		{
@@ -28,7 +28,7 @@
 			"OnTouch": 6
 		},
 		{
-			"$type": "Sprite",
+			"$type": "Graphics.Sprite",
 			"Texture": "potatoe_patrick",
 			"Sprites": {
 				"body": {
@@ -38,7 +38,7 @@
 			}
 		},
 		{
-			"$type": "Skelet",
+			"$type": "Graphics.Skelet",
 			"Bones": {
 				"body": {
 					"Position": {
@@ -53,7 +53,7 @@
 			}
 		},
 		{
-			"$type": "Animation",
+			"$type": "Graphics.Animation",
 			"Animations": [
 				{
 					"Name": "check_1234",

@@ -6,7 +6,7 @@ using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Screens;
 
-namespace mapKnight.Extended.Components {
+namespace mapKnight.Extended.Components.Movement {
 
     [ComponentRequirement(typeof(SpeedComponent))]
     [UpdateAfter(ComponentEnum.Stats_Speed)]
