@@ -1,53 +1,87 @@
-using System;
 using System.Collections.Generic;
+using System;
 using mapKnight.Core;
 using mapKnight.Core.Graphics;
 using mapKnight.Extended.Components.Attributes;
 
 namespace mapKnight.Extended.Components.Graphics {
 
-    [ComponentRequirement(typeof(SkeletComponent))]
-    [UpdateBefore(ComponentEnum.Skelet)]
+    [ComponentRequirement(typeof(DrawComponent))]
+    [UpdateBefore(ComponentEnum.Draw)]
     public class AnimationComponent : Component {
         private List<VertexAnimation> animations;
-        private int currentAnimation = -1;
+        private int currentAnimationIndex;
+        private int defaultAnimationIndex;
+
+        private AnimationCallback currentAnimationCallback;
+        private AnimationCallback queuedAnimationCallback;
+        private string queuedAnimation;
 
         public AnimationComponent (Entity owner, List<VertexAnimation> animations, string defaultanimation) : base(owner) {
             this.animations = animations;
-            if (defaultanimation != null) setAnimation(defaultanimation);
+            setAnimation(defaultanimation);
+            defaultAnimationIndex = animations.FindIndex(anim => anim.Name == defaultanimation);
+            currentAnimationIndex = defaultAnimationIndex;
+            if (defaultAnimationIndex == -1) throw new ArgumentException("invalid default animation at entity " + Owner.Name);
         }
 
-        private VertexAnimation current { get { return animations[currentAnimation]; } }
-        private bool isAnimating { get { return currentAnimation != -1; } set { currentAnimation = value ? currentAnimation : -1; } }
+        public delegate void AnimationCallback (bool success);
+
+        private VertexAnimation currentAnimation { get { return animations[currentAnimationIndex]; } }
 
         public override void Update (DeltaTime dt) {
-            while (Owner.HasComponentInfo(ComponentData.Animation)) {
-                string animationToPlay = (string)Owner.GetComponentInfo(ComponentData.Animation)[0];
-                setAnimation(animationToPlay);
+            while (Owner.HasComponentInfo(ComponentData.VertexAnimation)) {
+                object[ ] data = Owner.GetComponentInfo(ComponentData.VertexAnimation);
+                if ((bool)data[1]) {
+                    // force animation
+                    currentAnimationCallback(false);
+                    currentAnimationCallback = (AnimationCallback)data[2];
+                    setAnimation((string)data[0]);
+                } else {
+                    queuedAnimation = (string)data[0];
+                    if (data.Length == 3) queuedAnimationCallback = (AnimationCallback)data[2];
+                }
             }
 
-            if (isAnimating) {
-                isAnimating = current.IsRunning;
-                if (!isAnimating)
-                    return;
-                // temp
-                Owner.SetComponentInfo(ComponentData.VerticiesSkelet, animations[currentAnimation].Update(dt.Milliseconds));
+            if (!currentAnimation.IsRunning) {
+                if (!currentAnimation.CanRepeat) {
+                    currentAnimationCallback?.Invoke(true);
+                    if(queuedAnimation != null) {
+                        currentAnimationCallback = queuedAnimationCallback;
+                        setAnimation(queuedAnimation);
+                        queuedAnimation = null;
+                    } else {
+                        currentAnimationIndex = defaultAnimationIndex;
+                    }
+                }
+                currentAnimation.Reset( );
             }
+
+            float[ ][ ] vertexData = animations[currentAnimationIndex].Update(dt.Milliseconds);
+            for (int i = 0; i < vertexData.Length; i++) {
+                for (int j = 0; j < 4; j++) {
+                    vertexData[i][j * 2 + 0] = (vertexData[i][j * 2 + 0] - 0.5f) * Owner.Transform.Size.X * Owner.World.VertexSize;
+                    vertexData[i][j * 2 + 1] = (vertexData[i][j * 2 + 1] - 0.5f) * Owner.Transform.Size.Y * Owner.World.VertexSize;
+                }
+            }
+            Owner.SetComponentInfo(ComponentData.Verticies, vertexData);
         }
 
         private void setAnimation (string name) {
-            currentAnimation = animations.FindIndex(animation => animation.Name == name);
-            if (isAnimating)
-                current.Reset( );
+            currentAnimationIndex = animations.FindIndex(animation => animation.Name == name);
+            if (currentAnimationIndex == -1) {
+                currentAnimationIndex = defaultAnimationIndex;
+                currentAnimationCallback?.Invoke(false);
+            }
+            currentAnimation.Reset( );
         }
-
 
         public new class Configuration : Component.Configuration {
             public List<VertexAnimation> Animations;
-            public string DefaultAnimation;
+            public string Default;
 
             public override Component Create (Entity owner) {
-                return new AnimationComponent(owner, Animations, DefaultAnimation);
+                return new AnimationComponent(owner, Animations, Default);
             }
         }
     }

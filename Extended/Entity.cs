@@ -87,8 +87,8 @@ namespace mapKnight.Extended {
 
             // set entity informations
             Info = new EntityInfo( ) {
-                IsPlatform = components.Any(c => c.Component == ComponentEnum.Platform),
-                IsPlayer = components.Any(c => c.Component == ComponentEnum.Player),
+                IsPlatform = components.Any(c => c.Component == ComponentEnum.Movement_Platform),
+                IsPlayer = components.Any(c => c.Component == ComponentEnum.Movement_Player),
                 IsTemporary = components.Any(c => c.Component == ComponentEnum.AI_Trigger_InternalTrigger),
 
                 HasArmor = components.Any(c => c.Component == ComponentEnum.Stats_Armor),

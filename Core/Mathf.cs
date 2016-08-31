@@ -60,7 +60,7 @@ namespace mapKnight.Core {
             return transformedRotatedVerticies;
         }
 
-        public static float[ ] Translate (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY) {
+        public static float[ ] Translate (float[ ] verticies, float scaleX, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY) {
             if (verticies.Length % 2 != 0)
                 return null;
 
@@ -68,7 +68,7 @@ namespace mapKnight.Core {
             float shiftingX = newCenterX - oldCenterX;
             float shiftingY = newCenterY - oldCenterY;
             for (int i = 0; i < verticies.Length / 2; i++) {
-                transformedVerticies[i * 2 + 0] = verticies[i * 2 + 0] + shiftingX;
+                transformedVerticies[i * 2 + 0] = scaleX * verticies[i * 2 + 0] + shiftingX;
                 transformedVerticies[i * 2 + 1] = verticies[i * 2 + 1] + shiftingY;
             }
             return transformedVerticies;

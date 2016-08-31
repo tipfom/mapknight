@@ -2,7 +2,7 @@
     "Name": "Weak Walking Trowie",
     "Transform": {
         "Width": 1.5,
-        "Height": 1.5
+        "Height": 1.18085
     },
     "Components": [
         {
@@ -10,8 +10,65 @@
             "Influence": 1
         },
         {
-            "$type": "Graphics.Texture",
-            "Texture": "s_trowie"
+            "$type": "Graphics.Sprite",
+            "Texture": "trowie",
+            "Default": "idle",
+            "Animations": [
+                {
+                    "Name": "idle",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 1000,
+                            "State": {
+                                "body": "default"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "Name": "shot",
+                    "CanRepeat": false,
+                    "Frames": [
+                        {
+                            "Time": 100,
+                            "State": {
+                                "body": "default"
+                            }
+                        },
+                         {
+                            "Time": 200,
+                            "State": {
+                                "body": "throw"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "Name": "walk",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 200,
+                            "State": {
+                                "body": "default"
+                            }
+                        },
+                        {
+                            "Time": 200,
+                            "State": {
+                                "body": "walk_1"
+                            }
+                        },
+                        {
+                            "Time": 200,
+                            "State": {
+                                "body": "walk_2"
+                            }
+                        }
+                    ]
+                }
+            ]
         },
         {
             "$type": "Graphics.Skelet",
@@ -30,12 +87,12 @@
         },
         {
             "$type": "AI.Trowie",
-            "ThrowRate": 1,
+            "ThrowRate": 0.25,
             "Bullet": {
                 "Name": "Trowie Bullet",
                 "Transform": {
-                    "Width": 1,
-                    "Height": 1
+                    "Width": 0.4,
+                    "Height": 0.4
                 },
                 "Components": [
                     {
@@ -50,14 +107,8 @@
                         "$type": "AI.Bullet"
                     },
                     {
-                        "$type": "Graphics.Sprite",
-                        "Texture": "potatoe_patrick",
-                        "Sprites": {
-                            "body": {
-                                "Delay": 80,
-                                "Sprites": [ "anim1", "anim2", "anim3", "anim2" ]
-                            }
-                        }
+                        "$type": "Graphics.Texture",
+                        "Texture": "trowie_bullet"
                     },
                     {
                         "$type": "Graphics.Skelet",
@@ -68,8 +119,8 @@
                                     "Y": 0.5
                                 },
                                 "Size": {
-                                    "X": 0.4,
-                                    "Y": 0.4
+                                    "X": 1,
+                                    "Y": 1
                                 }
                             }
                         }

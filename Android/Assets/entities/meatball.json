@@ -25,23 +25,8 @@
             "Texture": "meatball"
         },
         {
-            "$type": "Graphics.Skelet",
-            "Bones": {
-                "body": {
-                    "Position": {
-                        "X": 0.5,
-                        "Y": 0.5
-                    },
-                    "Size": {
-                        "X": 1,
-                        "Y": 1
-                    }
-                }
-            }
-        },
-        {
             "$type": "Graphics.Animation",
-            "DefaultAnimation": "drot",
+            "Default": "drot",
             "Animations": [
                 {
                     "Name": "drot",

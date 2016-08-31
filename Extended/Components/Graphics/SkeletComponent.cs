@@ -18,21 +18,15 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void Update (DeltaTime dt) {
-            float[ ][ ] currentVertexData;
-
-            if (!Owner.HasComponentInfo(ComponentData.VerticiesSkelet)) {
-                currentVertexData = new float[defaultVertexData.Length][ ];
-                for (int i = 0; i < defaultVertexData.Length; i++)
-                    Array.Copy(defaultVertexData[i], currentVertexData[i] = new float[8], 8);
-            } else {
-                currentVertexData = (float[ ][ ])Owner.GetComponentInfo(ComponentData.VerticiesSkelet);
-            }
+            float[ ][ ] currentVertexData = new float[defaultVertexData.Length][ ];
+            for (int i = 0; i < defaultVertexData.Length; i++)
+                Array.Copy(defaultVertexData[i], currentVertexData[i] = new float[8], 8);
 
             // update currentvertexdata based on the current transform
             for (int i = 0; i < defaultVertexData.Length; i++) {
                 for (int j = 0; j < 4; j++) {
-                    currentVertexData[i][j * 2 + 0] = (currentVertexData[i][j * 2 + 0] - 0.5f) * Owner.Transform.Size.X * Owner.World.VertexSize;
-                    currentVertexData[i][j * 2 + 1] = (currentVertexData[i][j * 2 + 1] - 0.5f) * Owner.Transform.Size.Y * Owner.World.VertexSize;
+                    currentVertexData[i][j * 2 + 0] = currentVertexData[i][j * 2 + 0] * Owner.Transform.Size.X * Owner.World.VertexSize;
+                    currentVertexData[i][j * 2 + 1] = currentVertexData[i][j * 2 + 1] * Owner.Transform.Size.Y * Owner.World.VertexSize;
                 }
             }
 
@@ -51,14 +45,14 @@ namespace mapKnight.Extended.Components.Graphics {
 
             private float[ ] GetVerticies (VertexBone bone) {
                 return new float[ ] {
-                        bone.Position.X - bone.Size.X / 2,
-                        bone.Position.Y + bone.Size.Y / 2,
-                        bone.Position.X - bone.Size.X / 2,
-                        bone.Position.Y - bone.Size.Y / 2,
-                        bone.Position.X + bone.Size.X / 2,
-                        bone.Position.Y - bone.Size.Y / 2,
-                        bone.Position.X + bone.Size.X / 2,
-                        bone.Position.Y + bone.Size.Y / 2
+                        bone.Position.X - bone.Size.X / 2 - 0.5f,
+                        bone.Position.Y + bone.Size.Y / 2 - 0.5f,
+                        bone.Position.X - bone.Size.X / 2 - 0.5f,
+                        bone.Position.Y - bone.Size.Y / 2 - 0.5f,
+                        bone.Position.X + bone.Size.X / 2 - 0.5f,
+                        bone.Position.Y - bone.Size.Y / 2 - 0.5f,
+                        bone.Position.X + bone.Size.X / 2 - 0.5f,
+                        bone.Position.Y + bone.Size.Y / 2 - 0.5f
                     };
             }
 

@@ -35,6 +35,7 @@ namespace mapKnight.Extended.Components.AI {
                 IsFacingLeft = !IsFacingLeft;
                 nextTurn += timeBetweenTurns;
             }
+            Owner.SetComponentInfo(ComponentData.ScaleX, IsFacingLeft ? 1f : -1f);
         }
 
         private void Trigger_Triggered (Entity entity) {

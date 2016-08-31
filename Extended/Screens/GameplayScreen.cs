@@ -57,7 +57,7 @@ namespace mapKnight.Extended.Screens {
             //mobConfig2.Create(new Vector2(9, 12 + mobConfig2.Transform.BoundsHalf.Y), map);
 
             Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
-            Entity.Configuration standingTrowieConfig = Assets.Load<Entity.Configuration>("standing_trowie");
+            //Entity.Configuration standingTrowieConfig = Assets.Load<Entity.Configuration>("standing_trowie");
             Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
             Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
             Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
@@ -67,7 +67,7 @@ namespace mapKnight.Extended.Screens {
             sawConfig.Create(new Vector2(5, 2), map);
             sawConfig.Create(new Vector2(10, 2), map);
 
-            standingTrowieConfig.Create(new Vector2(8, 16), map);
+            //standingTrowieConfig.Create(new Vector2(8, 16), map);
 
             walkingTrowieConfig.Create(new Vector2(40, 10), map);
 

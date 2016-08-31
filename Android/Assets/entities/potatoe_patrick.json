@@ -28,32 +28,12 @@
 			"OnTouch": 6
 		},
 		{
-			"$type": "Graphics.Sprite",
+			"$type": "Graphics.Texture",
 			"Texture": "potatoe_patrick",
-			"Sprites": {
-				"body": {
-					"Delay": 80,
-					"Sprites": [ "anim1", "anim2", "anim3", "anim2" ]
-				}
-			}
-		},
-		{
-			"$type": "Graphics.Skelet",
-			"Bones": {
-				"body": {
-					"Position": {
-						"X": 0.5,
-						"Y": 0.5
-					},
-					"Size": {
-						"X": 1,
-						"Y": 1
-					}
-				}
-			}
 		},
 		{
 			"$type": "Graphics.Animation",
+			"Default":"check_1234",
 			"Animations": [
 				{
 					"Name": "check_1234",

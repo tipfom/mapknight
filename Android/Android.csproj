@@ -13,9 +13,9 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>mapKnight.Android</AssemblyName>
-    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -125,6 +125,8 @@
     <AndroidAsset Include="Assets\textures\meatball.json" />
     <AndroidAsset Include="Assets\entities\hasto.json" />
     <AndroidAsset Include="Assets\textures\hasto.json" />
+    <AndroidAsset Include="Assets\textures\trowie.json" />
+    <AndroidAsset Include="Assets\textures\trowie_bullet.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -200,6 +202,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\hasto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\trowie.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\trowie_bullet.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Components.AI {
         private DamageComponent damageComponent;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
-        private int speedMult = 1;
+        private float speedMult = 1f;
 
         public _1Component (Entity owner, bool scaredtofall) : base(owner) {
             IsScaredToFall = scaredtofall;
@@ -52,6 +52,7 @@ namespace mapKnight.Extended.Components.AI {
                 }
             }
             motionComponent.Velocity.X = speedComponent.Speed.X * speedMult;
+            Owner.SetComponentInfo(ComponentData.ScaleX, speedMult);
         }
 
         public new class Configuration : Component.Configuration {

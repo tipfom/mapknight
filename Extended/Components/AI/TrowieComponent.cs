@@ -1,6 +1,7 @@
 using System;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI {
 
@@ -10,6 +11,8 @@ namespace mapKnight.Extended.Components.AI {
         private Entity.Configuration bulletEntityConfiguration;
         private int nextThrow;
         private int timeBetweenThrows;
+        private bool isThrowing;
+        private Entity currentTarget;
 
         public TrowieComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows) : base(owner) {
             bulletEntityConfiguration = bullet;
@@ -26,13 +29,21 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void Trigger_Triggered (Entity entity) {
-            if (entity.Info.IsPlayer && Environment.TickCount > nextThrow) {
+            if (entity.Info.IsPlayer && Environment.TickCount > nextThrow && !isThrowing) {
                 nextThrow = Environment.TickCount + timeBetweenThrows;
-                bulletComponentConfiguration.Target = entity;
-                Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X, Owner.Transform.TR.Y + bulletEntityConfiguration.Transform.HalfSize.Y);
-                bulletEntityConfiguration.Create(spawnPoint, Owner.World);
+                isThrowing = true;
+                currentTarget = entity;
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "throw", true, (SpriteComponent.AnimationSuccessCallback)ThrowAnimationFinishedCallback);
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", false);
             }
         }
+
+        private void ThrowAnimationFinishedCallback(bool success) {
+            isThrowing = false;
+            bulletComponentConfiguration.Target = currentTarget;
+            Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X, Owner.Transform.TR.Y + bulletEntityConfiguration.Transform.HalfSize.Y);
+            bulletEntityConfiguration.Create(spawnPoint, Owner.World);
+       }
 
         public new class Configuration : Component.Configuration {
             public Entity.Configuration Bullet;

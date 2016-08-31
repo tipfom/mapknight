@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingMapIdentifierException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteAnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexAnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexBone.cs" />

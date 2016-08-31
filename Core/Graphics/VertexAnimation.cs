@@ -9,7 +9,7 @@ using System.Text;
 namespace mapKnight.Core.Graphics {
     public class VertexAnimation {
         public string Name { get; set; }
-        public bool Repeat
+        public bool CanRepeat
 #if __ANDROID__
         ;
 #else
@@ -39,10 +39,6 @@ namespace mapKnight.Core.Graphics {
                     // if the next Frame isnt the last ont
                     currentFrame = nextFrame;
                     nextFrame++;
-                    nextFrameTime += Frames[currentFrame].Time;
-                } else if (Repeat) {
-                    currentFrame = nextFrame;
-                    nextFrame = 0;
                     nextFrameTime += Frames[currentFrame].Time;
                 } else {
                     IsRunning = false;

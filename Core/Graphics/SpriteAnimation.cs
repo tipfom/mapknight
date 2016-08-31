@@ -3,20 +3,40 @@
 namespace mapKnight.Core.Graphics {
 
     public class SpriteAnimation {
-        public int Delay;
-        public string[ ] Sprites;
+        public string Name { get; set; }
+        public bool CanRepeat;
+        public bool IsRunning;
 
         private int currentSprite;
-        private int lastSwap = Environment.TickCount;
-        public string Current { get { return Sprites[currentSprite]; } }
+        private int nextSprite;
+        private int nextSpriteTime;
+
+        public SpriteAnimationFrame[ ] Frames;
+
+        public SpriteAnimationFrame CurrentFrame { get { return Frames[currentSprite]; } }
+
+        public void Reset ( ) {
+            currentSprite = 0;
+            nextSprite = Math.Max(Frames.Length - 1, 0);
+            nextSpriteTime = Environment.TickCount + Frames[currentSprite].Time;
+            IsRunning = true;
+        }
 
         public void Update (float dt) {
-            if (lastSwap + Delay < Environment.TickCount) {
-                lastSwap = Environment.TickCount;
-                currentSprite++;
-                if (currentSprite == Sprites.Length)
-                    currentSprite = 0;
+            if (Environment.TickCount > nextSpriteTime) {
+                currentSprite = nextSprite;
+                nextSprite++;
+                if (currentSprite == Frames.Length) {
+                    IsRunning = false;
+                    currentSprite = currentSprite - 1;
+                    return;
+                }
+                nextSpriteTime = Environment.TickCount + Frames[currentSprite].Time;
             }
+        }
+
+        public override bool Equals (object obj) {
+            return obj.GetType( ) == typeof(SpriteAnimation) && ((SpriteAnimation)obj).Name == Name;
         }
     }
 }

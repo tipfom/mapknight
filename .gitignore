@@ -3,6 +3,7 @@
 packages/
 Components/*
 Shared/*
+TestResults/*
 .vs/*
 *.sou
 *.apk

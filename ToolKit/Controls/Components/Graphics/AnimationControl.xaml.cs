@@ -308,7 +308,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         private void CommandEditorNew_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (treeview_animations.SelectedItem == null) {
-                Animations.Add(new VertexAnimation( ) { Name = "Default" + Animations.Where(a => a.Name.StartsWith("Default")).Count( ), Frames = new ObservableCollection<VertexAnimationFrame>( ), Repeat = false });
+                Animations.Add(new VertexAnimation( ) { Name = "Default" + Animations.Where(a => a.Name.StartsWith("Default")).Count( ), Frames = new ObservableCollection<VertexAnimationFrame>( ), CanRepeat = false });
             } else if (treeview_animations.SelectedItem is VertexAnimation) {
                 ((VertexAnimation)treeview_animations.SelectedItem).Frames.Add(new VertexAnimationFrame( ) { Time = 500, State = new ObservableDictionary<string, VertexBone>(_Bones.ToDictionary(entry => entry.Key, entry => entry.Value)) });
             } else if (treeview_animations.SelectedItem is VertexAnimationFrame) {

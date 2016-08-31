@@ -17,6 +17,9 @@ namespace mapKnight.Extended.Components.Graphics {
                 List<VertexData> entityVertexData = new List<VertexData>( );
                 string[ ] spriteData = (string[ ])Owner.GetComponentInfo(ComponentData.Texture);
                 float[ ][ ] vertexData = (float[ ][ ])Owner.GetComponentInfo(ComponentData.Verticies);
+                float scaleX =
+                    (Owner.HasComponentInfo(ComponentData.ScaleX) ?
+                    (float)Owner.GetComponentInfo(ComponentData.ScaleX)[0] : 1f);
                 Color colorData =
                     (Owner.HasComponentInfo(ComponentData.Color) ?
                     (Color)Owner.GetComponentInfo(ComponentData.Color)[0] : Color.White);
@@ -24,7 +27,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 Vector2 positionOnScreen = Owner.PositionOnScreen;
                 for (int i = 0; i < vertexData.Length; i++) {
                     VertexData entryVertexData = new VertexData(
-                                   Mathf.Translate(vertexData[i], 0, 0, positionOnScreen.X, positionOnScreen.Y),
+                                   Mathf.Translate(vertexData[i], scaleX, 0, 0, positionOnScreen.X, positionOnScreen.Y),
                                    spriteData[i],
                                    colorData);
                     entityVertexData.Add(entryVertexData);
@@ -38,6 +41,8 @@ namespace mapKnight.Extended.Components.Graphics {
                     Owner.GetComponentInfo(ComponentData.Texture);
                 while (Owner.HasComponentInfo(ComponentData.Color))
                     Owner.GetComponentInfo(ComponentData.Color);
+                while (Owner.HasComponentInfo(ComponentData.ScaleX))
+                    Owner.GetComponentInfo(ComponentData.ScaleX);
             }
         }
 

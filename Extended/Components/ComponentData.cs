@@ -9,7 +9,8 @@
         VerticiesSkelet, // temp
         Texture,
         Color,
-        Animation,
+        VertexAnimation,
+        SpriteAnimation,
 
         // stats
         Damage,
@@ -17,6 +18,7 @@
         // physics
         Velocity,
         Acceleration,
-        SlowDown
+        SlowDown,
+        ScaleX
     }
 }
