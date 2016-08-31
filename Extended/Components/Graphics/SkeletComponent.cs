@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Components.Graphics {
             defaultVertexData = defaultvertexdata;
         }
 
-        public override void Update (DeltaTime dt) {
+        public override void PostUpdate () {
             float[ ][ ] currentVertexData = new float[defaultVertexData.Length][ ];
             for (int i = 0; i < defaultVertexData.Length; i++)
                 Array.Copy(defaultVertexData[i], currentVertexData[i] = new float[8], 8);

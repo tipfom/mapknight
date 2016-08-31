@@ -60,7 +60,10 @@ namespace mapKnight.Extended.Components.Graphics {
                 currentAnimation.Reset( );
             }
             currentAnimation.Update(dt.TotalMilliseconds);
-            for (int i = 0; i < cache.Length; i ++)
+        }
+
+        public override void PostUpdate ( ) {
+            for (int i = 0; i < cache.Length; i++)
                 cache[i] = currentAnimation.CurrentFrame.Bones[i];
 
             Owner.SetComponentInfo(ComponentData.Texture, cache);

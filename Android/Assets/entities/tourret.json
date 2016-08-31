@@ -11,7 +11,7 @@
         },
         {
             "$type": "Graphics.Texture",
-            "Texture": "turret_bullet"
+            "Texture": "turret"
         },
         {
             "$type": "Graphics.Skelet",

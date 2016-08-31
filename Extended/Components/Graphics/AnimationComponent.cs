@@ -16,6 +16,7 @@ namespace mapKnight.Extended.Components.Graphics {
         private AnimationCallback currentAnimationCallback;
         private AnimationCallback queuedAnimationCallback;
         private string queuedAnimation;
+        private float currentDT;
 
         public AnimationComponent (Entity owner, List<VertexAnimation> animations, string defaultanimation) : base(owner) {
             this.animations = animations;
@@ -46,7 +47,7 @@ namespace mapKnight.Extended.Components.Graphics {
             if (!currentAnimation.IsRunning) {
                 if (!currentAnimation.CanRepeat) {
                     currentAnimationCallback?.Invoke(true);
-                    if(queuedAnimation != null) {
+                    if (queuedAnimation != null) {
                         currentAnimationCallback = queuedAnimationCallback;
                         setAnimation(queuedAnimation);
                         queuedAnimation = null;
@@ -56,8 +57,11 @@ namespace mapKnight.Extended.Components.Graphics {
                 }
                 currentAnimation.Reset( );
             }
+            currentDT = dt.Milliseconds;
+        }
 
-            float[ ][ ] vertexData = animations[currentAnimationIndex].Update(dt.Milliseconds);
+        public override void PostUpdate ( ) {
+            float[ ][ ] vertexData = animations[currentAnimationIndex].Update(currentDT);
             for (int i = 0; i < vertexData.Length; i++) {
                 for (int j = 0; j < 4; j++) {
                     vertexData[i][j * 2 + 0] = (vertexData[i][j * 2 + 0] - 0.5f) * Owner.Transform.Size.X * Owner.World.VertexSize;

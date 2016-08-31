@@ -22,7 +22,7 @@ namespace mapKnight.Extended.Components.Graphics {
             Owner.World.Renderer.AddTexture(Owner.Species, texture);
         }
 
-        public override void Update (DeltaTime dt) {
+        public override void PostUpdate () {
             Owner.SetComponentInfo(ComponentData.Texture, textures);
         }
 
