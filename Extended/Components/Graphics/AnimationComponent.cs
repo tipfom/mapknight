@@ -65,6 +65,9 @@ namespace mapKnight.Extended.Components.Graphics {
             Owner.SetComponentInfo(ComponentData.Verticies, animations[currentAnimationIndex].Update(currentDT,  Owner.Transform, Owner.World.VertexSize));
         }
 
+        public override void Prepare ( ) {
+            currentAnimation.Reset( );
+        }
         private void setAnimation (string name) {
             currentAnimationIndex = animations.FindIndex(animation => animation.Name == name);
             if (currentAnimationIndex == -1) {

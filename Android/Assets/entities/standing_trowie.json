@@ -18,8 +18,8 @@
             "Bones": {
                 "body": {
                     "Position": {
-                        "X": 0.5,
-                        "Y": 0.5
+                        "X": 0,
+                        "Y": 0
                     },
                     "Size": {
                         "X": 1,
@@ -68,8 +68,8 @@
                         "Bones": {
                             "body": {
                                 "Position": {
-                                    "X": 0.5,
-                                    "Y": 0.5
+                                    "X": 0,
+                                    "Y": 0
                                 },
                                 "Size": {
                                     "X": 1,
@@ -77,64 +77,6 @@
                                 }
                             }
                         }
-                    },
-                    {
-                        "$type": "Graphics.Animation",
-                        "Animations": [
-                            {
-                                "Name": "check_1234",
-                                "Repeat": true,
-                                "Steps": [
-                                    {
-                                        "Time": 2000,
-                                        "State": {
-                                            "body": {
-                                                "Position": {
-                                                    "X": 0.3,
-                                                    "Y": 0
-                                                },
-                                                "Size": {
-                                                    "X": 1,
-                                                    "Y": 1
-                                                }
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "Time": 2000,
-                                        "State": {
-                                            "body": {
-                                                "Position": {
-                                                    "X": 0.4,
-                                                    "Y": 0.6
-                                                },
-                                                "Size": {
-                                                    "X": 0.5,
-                                                    "Y": 1
-                                                },
-                                                "Mirrored": false
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "Time": 2000,
-                                        "State": {
-                                            "body": {
-                                                "Position": {
-                                                    "X": 0.4,
-                                                    "Y": 0.6
-                                                },
-                                                "Size": {
-                                                    "X": 0.5,
-                                                    "Y": 1
-                                                },
-                                                "Rotation": 100
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
-                        ]
                     }
                 ]
             }

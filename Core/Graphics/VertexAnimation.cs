@@ -56,9 +56,8 @@ namespace mapKnight.Core.Graphics {
                 Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].Bones[i].Position, Frames[currentFrame].Bones[i].Position, progress) * ownerTransform.Size * vsize;
                 float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].Bones[i].Rotation, Frames[currentFrame].Bones[i].Rotation, progress);
 
-                result[i] = Mathf.Transform(
+                result[i] = Mathf.TransformAtOrigin(
                     interpolatedSize.ToQuad( ),
-                    0, 0,
                     interpolatedPosition.X, interpolatedPosition.Y,
                     interpolatedRotation, Frames[currentFrame].Bones[i].Mirrored);
             }

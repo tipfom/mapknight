@@ -63,7 +63,6 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
             Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
             Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
-            Entity.Configuration rotTestConfig = Assets.Load<Entity.Configuration>("rot_test");
 
             sawConfig.Create(new Vector2(10, 2), map);
 

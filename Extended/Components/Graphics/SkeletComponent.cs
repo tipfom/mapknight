@@ -44,16 +44,7 @@ namespace mapKnight.Extended.Components.Graphics {
             }
 
             private float[ ] GetVerticies (VertexBone bone) {
-                return new float[ ] {
-                        bone.Position.X - bone.Size.X / 2 - 0.5f,
-                        bone.Position.Y + bone.Size.Y / 2 - 0.5f,
-                        bone.Position.X - bone.Size.X / 2 - 0.5f,
-                        bone.Position.Y - bone.Size.Y / 2 - 0.5f,
-                        bone.Position.X + bone.Size.X / 2 - 0.5f,
-                        bone.Position.Y - bone.Size.Y / 2 - 0.5f,
-                        bone.Position.X + bone.Size.X / 2 - 0.5f,
-                        bone.Position.Y + bone.Size.Y / 2 - 0.5f
-                    };
+                return Mathf.TransformAtOrigin(bone.Size.ToQuad( ), bone.Position.X, bone.Position.Y, bone.Rotation, bone.Mirrored);
             }
 
             public override Component Create (Entity owner) {
