@@ -129,11 +129,12 @@ namespace mapKnight.Core {
         }
 
         public float[ ] ToQuad ( ) {
+            float xh = X / 2f, yh = Y / 2f;
             return new float[ ] {
-                0, Y,
-                0, 0,
-                X, 0,
-                X, Y
+                -xh, yh,
+                -xh, -yh,
+                xh, -yh,
+                xh, yh
             };
         }
 

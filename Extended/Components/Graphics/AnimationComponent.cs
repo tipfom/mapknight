@@ -45,30 +45,24 @@ namespace mapKnight.Extended.Components.Graphics {
             }
 
             if (!currentAnimation.IsRunning) {
-                if (!currentAnimation.CanRepeat) {
-                    currentAnimationCallback?.Invoke(true);
-                    if (queuedAnimation != null) {
-                        currentAnimationCallback = queuedAnimationCallback;
-                        setAnimation(queuedAnimation);
-                        queuedAnimation = null;
-                    } else {
-                        currentAnimationIndex = defaultAnimationIndex;
-                    }
+                currentAnimationCallback?.Invoke(true);
+                if (queuedAnimation != null) {
+                    currentAnimationCallback = queuedAnimationCallback;
+                    setAnimation(queuedAnimation);
+                    queuedAnimation = null;
+                } else if (currentAnimation.CanRepeat) {
+                    currentAnimation.IsRunning = true;
+                } else {
+                    currentAnimationIndex = defaultAnimationIndex;
+                    currentAnimation.Reset( );
                 }
-                currentAnimation.Reset( );
+                
             }
             currentDT = dt.Milliseconds;
         }
 
         public override void PostUpdate ( ) {
-            float[ ][ ] vertexData = animations[currentAnimationIndex].Update(currentDT);
-            for (int i = 0; i < vertexData.Length; i++) {
-                for (int j = 0; j < 4; j++) {
-                    vertexData[i][j * 2 + 0] = (vertexData[i][j * 2 + 0] - 0.5f) * Owner.Transform.Size.X * Owner.World.VertexSize;
-                    vertexData[i][j * 2 + 1] = (vertexData[i][j * 2 + 1] - 0.5f) * Owner.Transform.Size.Y * Owner.World.VertexSize;
-                }
-            }
-            Owner.SetComponentInfo(ComponentData.Verticies, vertexData);
+            Owner.SetComponentInfo(ComponentData.Verticies, animations[currentAnimationIndex].Update(currentDT,  Owner.Transform, Owner.World.VertexSize));
         }
 
         private void setAnimation (string name) {
