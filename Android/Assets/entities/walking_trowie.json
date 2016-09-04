@@ -137,7 +137,7 @@
             "Offset": 1.5
         },
         {
-            "$type": "AI._1",
+            "$type": "AI.Ventosa",
             "IsScaredToFall": true
         },
         {

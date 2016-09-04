@@ -6,7 +6,7 @@ namespace mapKnight.Extended.Components.AI {
 
     [ComponentRequirement(typeof(SpeedComponent))]
     [UpdateAfter(ComponentEnum.Stats_Speed)]
-    public class _2Component : Component {
+    public class KlatrerComponent : Component {
         private Direction currentMoveDir;
         private Direction currentWallDir;
         private Direction nextMoveDir = Direction.Left;
@@ -14,7 +14,7 @@ namespace mapKnight.Extended.Components.AI {
         private SpeedComponent speedComponent;
         private float targetLoc;
 
-        public _2Component (Entity owner) : base(owner) {
+        public KlatrerComponent (Entity owner) : base(owner) {
         }
 
         private enum Direction : sbyte {
@@ -150,7 +150,7 @@ namespace mapKnight.Extended.Components.AI {
         public new class Configuration : Component.Configuration {
 
             public override Component Create (Entity owner) {
-                return new _2Component(owner);
+                return new KlatrerComponent(owner);
             }
         }
     }
