@@ -31,6 +31,8 @@ namespace mapKnight.Extended.Components.Graphics {
         private VertexAnimation currentAnimation { get { return animations[currentAnimationIndex]; } }
 
         public override void Update (DeltaTime dt) {
+            if (!Owner.IsOnScreen) return;
+
             while (Owner.HasComponentInfo(ComponentData.VertexAnimation)) {
                 object[ ] data = Owner.GetComponentInfo(ComponentData.VertexAnimation);
                 if ((bool)data[1]) {
@@ -62,6 +64,7 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void PostUpdate ( ) {
+            if (!Owner.IsOnScreen) return;
             Owner.SetComponentInfo(ComponentData.Verticies, animations[currentAnimationIndex].Update(currentDT,  Owner.Transform, Owner.World.VertexSize));
         }
 

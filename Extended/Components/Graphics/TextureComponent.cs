@@ -23,6 +23,8 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void PostUpdate () {
+            if (!Owner.IsOnScreen) return;
+
             Owner.SetComponentInfo(ComponentData.Texture, textures);
         }
 

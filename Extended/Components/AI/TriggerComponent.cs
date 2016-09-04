@@ -49,7 +49,8 @@ namespace mapKnight.Extended.Components.AI {
             public event Action<Entity> Triggered;
 
             public override void Collision (Entity collidingEntity) {
-                Triggered?.Invoke(collidingEntity);
+                if (collidingEntity != followingEntity)
+                    Triggered?.Invoke(collidingEntity);
             }
 
             public override void Update (DeltaTime dt) {

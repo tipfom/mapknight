@@ -18,6 +18,8 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void PostUpdate () {
+            if (!Owner.IsOnScreen) return;
+
             float[ ][ ] currentVertexData = new float[defaultVertexData.Length][ ];
             for (int i = 0; i < defaultVertexData.Length; i++)
                 Array.Copy(defaultVertexData[i], currentVertexData[i] = new float[8], 8);

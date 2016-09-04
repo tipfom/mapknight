@@ -31,6 +31,8 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void Update (DeltaTime dt) {
+            if (!Owner.IsOnScreen) return;
+
             while (Owner.HasComponentInfo(ComponentData.SpriteAnimation)) {
                 object[ ] data = Owner.GetComponentInfo(ComponentData.SpriteAnimation);
                 if ((bool)data[1]) {
