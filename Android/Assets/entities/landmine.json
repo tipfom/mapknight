@@ -77,7 +77,6 @@
 		},
 		{
 			"$type": "AI.LandMine",
-			"ExplosionDelay": 500,
 			"ExplosionRadius": 5,
 			"ThrowBackSpeed": 42
 		},

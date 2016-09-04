@@ -66,7 +66,6 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         public new class Configuration : Component.Configuration {
-            public int ExplosionDelay;
             public float ExplosionRadius;
             public float ThrowBackSpeed;
 
