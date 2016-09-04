@@ -17,7 +17,7 @@ namespace mapKnight.Core.Graphics {
 
         public void Reset ( ) {
             currentSprite = 0;
-            nextSprite = Math.Max(Frames.Length - 1, 0);
+            nextSprite = Math.Min(Frames.Length - 1, 1);
             nextSpriteTime = Environment.TickCount + Frames[currentSprite].Time;
             IsRunning = true;
         }
