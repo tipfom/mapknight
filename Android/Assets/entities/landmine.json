@@ -1,8 +1,8 @@
 ﻿{
 	"Name": "Landus Minus",
 	"Transform": {
-			"Width": 0.7,
-			"Height": 0.06
+		"Width": 0.7,
+		"Height": 0.21875
 	},
 	"Components": [
 		{
@@ -21,8 +21,59 @@
 			}
 		},
 		{
-			"$type": "Graphics.Texture",
-			"Texture": "landmine"
+			"$type": "Graphics.Sprite",
+			"Texture": "landmine",
+			"Default": "idle",
+			"Animations": [
+				{
+					"Name": "idle",
+					"CanRepeat": true,
+					"Frames": [
+						{
+							"Time": 10000000,
+							"State": {
+								"body": "default"
+							}
+						}
+					]
+				},
+				{
+					"Name": "explode",
+					"CanRepeat": false,
+					"Frames": [
+						{
+							"Time": 500,
+							"State": {
+								"body": "explode"
+							}
+						},
+						{
+							"Time": 400,
+							"State": {
+								"body": "default"
+							}
+						},
+						{
+							"Time": 300,
+							"State": {
+								"body": "explode"
+							}
+						},
+						{
+							"Time": 200,
+							"State": {
+								"body": "default"
+							}
+						},
+						{
+							"Time": 100,
+							"State": {
+								"body": "explode"
+							}
+						}
+					]
+				}
+			]
 		},
 		{
 			"$type": "AI.LandMine",

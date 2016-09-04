@@ -69,7 +69,7 @@ namespace mapKnight.Extended.Screens {
             //standingTrowieConfig.Create(new Vector2(8, 16), map);
             walkingTrowieConfig.Create(new Vector2(40, 10), map);
 
-            landMineConfig.Create(new Vector2(40, landMineConfig.Transform.HalfSize.Y), map);
+            landMineConfig.Create(new Vector2(10, 1 + landMineConfig.Transform.HalfSize.Y), map);
 
             turretConfig.Create(new Vector2(70, 3), map);
 

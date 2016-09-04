@@ -57,7 +57,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         public void Reset ( ) {
             if (currentAnimation == null) return;
-            currentAnimation.Reset( );
+            //currentAnimation.Reset( );
+            // TODO
         }
 
         public void Stop ( ) {

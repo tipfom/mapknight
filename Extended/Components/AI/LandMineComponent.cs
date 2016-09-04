@@ -2,6 +2,7 @@ using System;
 using System.Timers;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
@@ -10,26 +11,19 @@ namespace mapKnight.Extended.Components.AI {
     public class LandMineComponent : Component {
         public bool Exploding;
         private DamageComponent damageComponent;
-        private Timer explodeTimer;
         private float sqrExplosionRadius;
         private float throwBackSpeed;
 
         public LandMineComponent (Entity owner, int explosiondelay, float throwbackspeed, float explosionradius) : base(owner) {
             throwBackSpeed = throwbackspeed;
             sqrExplosionRadius = explosionradius * explosionradius;
-            explodeTimer = new Timer(explosiondelay);
         }
 
         public override void Collision (Entity collidingEntity) {
             if (!Exploding && collidingEntity.Info.IsPlayer) {
                 Exploding = true;
-                explodeTimer.Elapsed += (sender, e) => Explode(collidingEntity);
-                explodeTimer.Start( );
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "explode", true, (SpriteComponent.AnimationSuccessCallback)((bool success) => { Explode(collidingEntity); }));
             }
-        }
-
-        public override void Destroy ( ) {
-            explodeTimer.Dispose( );
         }
 
         public override void Prepare ( ) {
@@ -37,7 +31,6 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void Explode (Entity entity) {
-            explodeTimer.Dispose( );
             Vector2 closestDist = GetClosestDistanceVectorTo(entity.Transform);
             Vector2 impulsDir = entity.Transform.Center - Owner.Transform.Center;
             impulsDir /= Math.Max(impulsDir.X, impulsDir.Y);

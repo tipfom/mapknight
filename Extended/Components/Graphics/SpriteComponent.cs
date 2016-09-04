@@ -46,6 +46,7 @@ namespace mapKnight.Extended.Components.Graphics {
                     queuedAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
                     queuedAnimationCallback = (data.Length == 3) ? (AnimationSuccessCallback)data[2] : null;
                 }
+                currentAnimation.Reset( );
             }
 
             if (!currentAnimation.IsRunning) {
