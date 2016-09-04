@@ -63,12 +63,11 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
             Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
             Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
+            Entity.Configuration rotTestConfig = Assets.Load<Entity.Configuration>("rot_test");
 
-            sawConfig.Create(new Vector2(5, 2), map);
             sawConfig.Create(new Vector2(10, 2), map);
 
             //standingTrowieConfig.Create(new Vector2(8, 16), map);
-
             walkingTrowieConfig.Create(new Vector2(40, 10), map);
 
             landMineConfig.Create(new Vector2(40, landMineConfig.Transform.HalfSize.Y), map);
@@ -79,9 +78,9 @@ namespace mapKnight.Extended.Screens {
 
             hastoConfig.Create(new Vector2(34, 2), map);
 
-            Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
-            testEntityConfig.Components.Add(new PlayerComponent.Configuration(this));
-            testEntity = testEntityConfig.Create(new Vector2(8 + testEntityConfig.Transform.HalfSize.X, 13 + testEntityConfig.Transform.HalfSize.Y), map);
+            Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
+            playerConfig.Components.Add(new PlayerComponent.Configuration(this));
+            testEntity = playerConfig.Create(new Vector2(8 + playerConfig.Transform.HalfSize.X, 13 + playerConfig.Transform.HalfSize.Y), map);
             testEntityHealth = testEntity.GetComponent<HealthComponent>( );
             map.Focus(testEntity.ID);
 
