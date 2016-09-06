@@ -47,9 +47,10 @@ namespace mapKnight.Android {
                 case MotionEventActions.Move:
                     // user moved the finger
                     for (int i = 0; i < activeTouches.Count; i++) {
-                        Vector2 activeTouchPosition = new Vector2((e.GetX(pointerIndex) / Window.Size.Width - 0.5f) * 2 * Window.Ratio, (e.GetY(pointerIndex) / Window.Size.Height - 0.5f) * -2);
+                        Vector2 activeTouchPosition = new Vector2((e.GetX(e.FindPointerIndex(activeTouches[i].ID)) / Window.Size.Width - 0.5f) * 2 * Window.Ratio, (e.GetY(e.FindPointerIndex(activeTouches[i].ID)) / Window.Size.Height - 0.5f) * -2);
                         if (activeTouches[i].Position - activeTouchPosition != Vector2.Zero) {
                             // touch moved
+                            
                             foreach (UIItem UI in UIRenderer.Current) {
                                 if (UI.Collides(activeTouchPosition) && !UI.Collides(activeTouches[i].Position)) {
                                     // collides with the current position, but not with the last
