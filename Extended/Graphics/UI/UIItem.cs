@@ -4,7 +4,7 @@ using mapKnight.Core;
 using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
-    public abstract class UIItem {
+    public abstract class UIItem : IDisposable {
         public const Anchor DEFAULT_ANCHOR = Anchor.Left | Anchor.Top;
 
         public event Action PositionChanged;
@@ -35,16 +35,16 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         private bool _Visible = true;
-        public bool Visible { get { return Owner.IsActive && _Visible; } set { _Visible = value; RequestUpdate( ); } }
+        public bool Visible { get { return Screen.IsActive && _Visible; } set { _Visible = value; RequestUpdate( ); } }
 
         private int _Depth;
         public int Depth { get { return _Depth; } set { _Depth = value; RequestUpdate( ); } }
 
-        protected Screen Owner { get; }
+        public readonly Screen Screen;
 
         public UIItem (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth, bool multiclick = false) {
             UIRenderer.Add(owner, this);
-            Owner = owner;
+            Screen = owner;
 
             this._Size = size;
             this.multiClick = multiclick;
@@ -92,6 +92,10 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public virtual void Update (DeltaTime dt) {
 
+        }
+
+        public virtual void Dispose ( ) {
+            UIRenderer.Remove(this);
         }
 
         public abstract List<DepthVertexData> ConstructVertexData ( );

@@ -89,6 +89,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UILabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIPanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\AttributeHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\TextureHandle.cs" />

@@ -39,6 +39,12 @@ namespace mapKnight.Extended.Graphics.UI {
             item.Changed += (UIItem e) => updateQueue.Enqueue(e);
         }
 
+        public static void Remove (UIItem uiItem) {
+            if (!uiItems.ContainsKey(uiItem.Screen)) return;
+            uiItems[uiItem.Screen].Remove(uiItem);
+            if (uiItem.Screen.IsActive) Update(uiItem);
+        }
+
         public static void Delete ( ) {
             uiItems.Clear( );
         }

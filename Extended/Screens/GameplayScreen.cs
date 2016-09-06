@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Screens {
         private const int MAX_TIME_BETWEEN_UPDATES = 100;
 
         private UILabel debugLabel;
-        private UIButton leftButton, rightButton, jumpButton;
+        private UIPanel leftPanel, rightPanel, controlPanel;
 
         private Map map;
         private Entity testEntity;
@@ -27,11 +27,11 @@ namespace mapKnight.Extended.Screens {
             Entity.EntityAdded += (Entity obj) => { if (IsActive) obj.Prepare( ); };
         }
 
-        public bool Jump { get { return jumpButton.Clicked; } }
+        public bool Jump { get { return controlPanel.Clicked; } }
 
-        public bool Left { get { return leftButton.Clicked; } }
+        public bool Left { get { return leftPanel.Clicked; } }
 
-        public bool Right { get { return rightButton.Clicked; } }
+        public bool Right { get { return rightPanel.Clicked; } }
 
         public override void Draw ( ) {
             map.Draw( );
@@ -39,9 +39,18 @@ namespace mapKnight.Extended.Screens {
         }
 
         public override void Load ( ) {
-            jumpButton = new UIButton(this, new UILeftMargin(0.05f), new UIBottomMargin(0.05f), new Vector2(0.5f, 0.5f), "J");
-            leftButton = new UIButton(this, new UIRightMargin(0.5f), new UIBottomMargin(0.1f), new Vector2(0.4f, 0.4f), "L");
-            rightButton = new UIButton(this, new UIRightMargin(0.05f), new UIBottomMargin(0.1f), new Vector2(0.4f, 0.4f), "R");
+            controlPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 1));
+            leftPanel = new UIPanel(this, new UILeftMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 1));
+            rightPanel = new UIPanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 1));
+            Window.Changed += () => {
+                controlPanel.Dispose( );
+                leftPanel.Dispose( );
+                rightPanel.Dispose( );
+                controlPanel = new UIPanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2));
+                leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+                rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            };
+
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
 
             map = Assets.Load<Map>("beatiful_map");
@@ -74,7 +83,7 @@ namespace mapKnight.Extended.Screens {
 
             base.Load( );
         }
-
+        
         public override void Update (DeltaTime dt) {
             if (Math.Abs(Manager.FrameTime.Milliseconds) < MAX_TIME_BETWEEN_UPDATES) {
                 map.Update(dt);
