@@ -4,7 +4,7 @@ using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI {
-    
+
     [ComponentRequirement(typeof(TriggerComponent))]
     public class TurretComponent : Component {
         public bool IsFacingLeft = true;
@@ -14,8 +14,10 @@ namespace mapKnight.Extended.Components.AI {
         private int lockTime;
         private int nextShot;
         private int nextTurn;
+        private int lockedTill;
         private int timeBetweenShots;
         private int timeBetweenTurns;
+        private Entity currentTarget;
 
         public TurretComponent (Entity owner, Entity.Configuration bullet, int timebetweenshots, int timebetweenturns, int locktime, float bulletspawnpointypercent) : base(owner) {
             bulletEntityConfig = bullet;
@@ -31,7 +33,13 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         public override void Update (DeltaTime dt) {
-            if (Environment.TickCount > nextTurn) {
+            if (Environment.TickCount < lockedTill) {
+                bool nextIsFacingLeft = currentTarget.Transform.BL.X > Owner.Transform.TR.X; 
+                if(nextIsFacingLeft != IsFacingLeft) {
+                    IsFacingLeft = nextIsFacingLeft;
+                    nextTurn = Environment.TickCount + timeBetweenTurns;
+                }                  
+            } else if (Environment.TickCount > nextTurn) {
                 IsFacingLeft = !IsFacingLeft;
                 nextTurn += timeBetweenTurns;
             }
@@ -41,8 +49,9 @@ namespace mapKnight.Extended.Components.AI {
         private void Trigger_Triggered (Entity entity) {
             if (entity.Info.IsPlayer && Environment.TickCount > nextShot && ((IsFacingLeft && entity.Transform.BL.X > Owner.Transform.TR.X) || (!IsFacingLeft && entity.Transform.TR.X < Owner.Transform.BL.X))) {
                 // shot
+                currentTarget = entity;
                 nextShot = Environment.TickCount + timeBetweenShots;
-                nextTurn = Environment.TickCount + lockTime;
+                lockedTill = Environment.TickCount + lockTime;
                 bulletComponentConfig.Target = entity;
                 Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X + (Owner.Transform.HalfSize.X + bulletEntityConfig.Transform.HalfSize.X) * (IsFacingLeft ? 1 : -1), Owner.Transform.BL.Y + Owner.Transform.Size.Y * bulletSpawnpointYPercent);
                 bulletEntityConfig.Create(spawnPoint, Owner.World);
