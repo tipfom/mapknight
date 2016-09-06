@@ -14,7 +14,7 @@ namespace mapKnight.Extended.Components.AI {
         private float sqrExplosionRadius;
         private float throwBackSpeed;
 
-        public LandMineComponent (Entity owner, int explosiondelay, float throwbackspeed, float explosionradius) : base(owner) {
+        public LandMineComponent (Entity owner, float throwbackspeed, float explosionradius) : base(owner) {
             throwBackSpeed = throwbackspeed;
             sqrExplosionRadius = explosionradius * explosionradius;
         }
@@ -70,7 +70,7 @@ namespace mapKnight.Extended.Components.AI {
             public float ThrowBackSpeed;
 
             public override Component Create (Entity owner) {
-                return new LandMineComponent(owner, ExplosionDelay, ThrowBackSpeed, ExplosionRadius);
+                return new LandMineComponent(owner, ThrowBackSpeed, ExplosionRadius);
             }
         }
     }

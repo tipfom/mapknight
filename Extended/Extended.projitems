@@ -11,8 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\1Component.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\22Component.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\VentosaComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\KlatrerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\BulletComponent.cs">
       <SubType>Code</SubType>
     </Compile>

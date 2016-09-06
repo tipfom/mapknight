@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using mapKnight.Core.Exceptions;
 using Newtonsoft.Json;
 
@@ -43,7 +44,7 @@ namespace mapKnight.Core {
         }
 
         public Map (Stream input) {
-            using (BinaryReader reader = new BinaryReader(input)) {
+            using (BinaryReader reader = new BinaryReader(input, Encoding.UTF8, false)) {
                 // check for header
                 if (!reader.ReadBytes(HEADER.Length).SequenceEqual(HEADER))
                     throw new MissingMapIdentifierException( );
@@ -63,7 +64,7 @@ namespace mapKnight.Core {
         }
 
         public void Serialize (Stream stream) {
-            using (BinaryWriter writer = new BinaryWriter(stream)) {
+            using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8, true)) {
                 bool is32bit = (Size.Area >= Math.Pow(2, 16));
 
                 // write header
@@ -263,7 +264,6 @@ namespace mapKnight.Core {
             Creator = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Name = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Gravity = new Vector2(reader.ReadSingle( ), reader.ReadSingle( ));
-            Gravity = DEFAULT_GRAVITY;
         }
         #endregion
     }
