@@ -33,7 +33,7 @@
             "BulletSpawnpointYPercent": 0.75,
             "LockOnTargetTime": 3000,
             "FireRate": 3,
-            "TurnRate": 0.1,
+            "TurnRate": 0.2,
             "Bullet": {
                 "Name": "Turret Bullet",
                 "Transform": {
@@ -78,9 +78,9 @@
             "$type": "AI.Trigger",
             "TriggerZone": {
                 "X": 16,
-                "Y": 2
+                "Y": 0.15
             },
-            "Offset": 1
+            "Offset": 0.365
         }
     ]
 }
