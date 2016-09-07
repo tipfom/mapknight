@@ -12,6 +12,7 @@ using Path = System.IO.Path;
 using Android.Content;
 using Android.Graphics;
 using Android.Opengl;
+using Android.Gestures;
 #endif
 
 namespace mapKnight.Extended {
@@ -32,6 +33,10 @@ namespace mapKnight.Extended {
                 return (T)((object)GetEntityConfig(paths[0]));
             } else if (request == typeof(Graphics.Map) && paths.Length == 1) {
                 return (T)((object)GetMap(paths[0]));
+#if __ANDROID__
+            } else if (request == typeof(GestureStore) && paths.Length == 1) {
+                return (T)((object)GetGestureStore(paths[0]));
+#endif
             } else {
                 throw new TypeLoadException($"requested filetype { request.FullName } couldnt be loaded with { paths.Length } parameters");
             }
@@ -154,5 +159,13 @@ namespace mapKnight.Extended {
             return Context.Assets.Open(Path.Combine(path));
 #endif
         }
+
+#if __ANDROID__
+        public static GestureStore GetGestureStore (string name) {
+            GestureStore store = new GestureStore( );
+            store.Load(GetStream("gestures", name), true);
+            return store;
+        }
+#endif
     }
 }

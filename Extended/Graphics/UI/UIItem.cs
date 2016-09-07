@@ -61,7 +61,7 @@ namespace mapKnight.Extended.Graphics.UI {
             Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
         }
 
-        public virtual void HandleTouch (UITouchAction action) {
+        public virtual void HandleTouch (UITouchAction action, UITouch touch) {
             switch (action) {
                 case UITouchAction.Begin:
                 case UITouchAction.Enter:

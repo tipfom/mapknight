@@ -39,14 +39,14 @@ namespace mapKnight.Extended.Screens {
         }
 
         public override void Load ( ) {
-            controlPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 1));
-            leftPanel = new UIPanel(this, new UILeftMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 1));
-            rightPanel = new UIPanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 1));
+            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
+            leftPanel = new UIPanel(this, new UILeftMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 2));
+            rightPanel = new UIPanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 2));
             Window.Changed += () => {
                 controlPanel.Dispose( );
                 leftPanel.Dispose( );
                 rightPanel.Dispose( );
-                controlPanel = new UIPanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2));
+                controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
                 leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
                 rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
             };
