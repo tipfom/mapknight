@@ -103,7 +103,8 @@ namespace mapKnight.Extended.Components.Movement {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
                         if (y >= Owner.World.Size.Height || Owner.World.HasCollider(x, y)) {
                             targetTransform.Y = y - targetTransform.Size.Y / 2f;
-                            return true;
+                            Velocity.Y = 0;
+                            return false; // you dont want to be stuck at the rooms ceiling
                         }
                     }
                 }
