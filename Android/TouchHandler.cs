@@ -47,7 +47,7 @@ namespace mapKnight.Android {
                     // user moved the finger
                     for (int i = 0; i < activeTouches.Count; i++) {
                         int activePointerIndex = e.FindPointerIndex(activeTouches[i].ID);
-                        Vector2 activeTouchPosition = new Vector2(e.GetX(pointerIndex), e.GetY(pointerIndex));
+                        Vector2 activeTouchPosition = new Vector2(e.GetX(activePointerIndex), e.GetY(activePointerIndex));
                         if (activeTouches[i].Position - activeTouchPosition != Vector2.Zero) {
                             // touch moved
                             Vector2 activeTouchRelativePosition = new Vector2((activeTouchPosition.X / Window.Size.Width - 0.5f) * 2 * Window.Ratio, (activeTouchPosition.Y / Window.Size.Height - 0.5f) * -2);

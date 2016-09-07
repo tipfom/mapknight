@@ -30,6 +30,7 @@ namespace mapKnight.Extended.Components.AI {
 
         public override void Prepare ( ) {
             Owner.GetComponent<TriggerComponent>( ).Triggered += Trigger_Triggered;
+            nextTurn = Environment.TickCount;
         }
 
         public override void Update (DeltaTime dt) {
