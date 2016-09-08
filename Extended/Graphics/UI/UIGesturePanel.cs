@@ -11,9 +11,10 @@ namespace mapKnight.Extended.Graphics.UI {
 
         // CURRENTLY ONLY WITH SUPPORT FOR ANDROID
         private int currentTouchID;
-        private IList<GesturePoint> trackedGesturePoints = new List<GesturePoint>(100);
+        private IList<GesturePoint> trackedStrokeBuffer = new List<GesturePoint>(100);
         private GestureStore gestureStore;
 
+        public event Action<string> OnGesturePerformed;
         public UIGesturePanel (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, GestureStore gesturestore) : base(owner, hmargin, vmargin, size, false) {
             gestureStore = gesturestore;
         }
@@ -22,21 +23,22 @@ namespace mapKnight.Extended.Graphics.UI {
             switch (action) {
                 case UITouchAction.Move:
                     if (touch.ID == currentTouchID) {
-                        trackedGesturePoints.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                        trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
                     }
                     break;
                 case UITouchAction.Begin:
                 case UITouchAction.Enter:
                     if (currentTouchID == -1) {
                         currentTouchID = touch.ID;
-                        trackedGesturePoints.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                        trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
                     }
                     break;
                 case UITouchAction.End:
                 case UITouchAction.Leave:
                     if(touch.ID == currentTouchID) {
-                        trackedGesturePoints.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                        trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
                         GestureCompleted( );
+                        trackedStrokeBuffer.Clear( );
                         currentTouchID = -1;
                     }
                     break;
@@ -47,15 +49,13 @@ namespace mapKnight.Extended.Graphics.UI {
         private void GestureCompleted ( ) {
             // construct gesture
             Gesture gesture = new Gesture( );
-            gesture.AddStroke(new GestureStroke(trackedGesturePoints));
+            gesture.AddStroke(new GestureStroke(trackedStrokeBuffer));
 
             // compute gesture
             IList<Prediction> predictions = gestureStore.Recognize(gesture);
             if (predictions.Count > 0 && predictions[0].Score > SCORE_THRESHOLD) {
-                Debug.Print(this, predictions[0].Name);
-                global::Android.Widget.Toast.MakeText(Assets.Context, predictions[0].Name, global::Android.Widget.ToastLength.Short).Show();
+                OnGesturePerformed?.Invoke(predictions[0].Name);
             }
-            trackedGesturePoints.Clear( );
         }
     }
 }
