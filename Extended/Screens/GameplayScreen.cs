@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using mapKnight.Core;
-using mapKnight.Extended.Components;
-using mapKnight.Extended.Components.AI;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics;
@@ -17,17 +13,19 @@ namespace mapKnight.Extended.Screens {
         private const int MAX_TIME_BETWEEN_UPDATES = 100;
 
         private UILabel debugLabel;
-        private UIPanel leftPanel, rightPanel, controlPanel;
+        private UIPanel leftPanel, rightPanel;
+        private UIGesturePanel controlPanel;
 
         private Map map;
         private Entity testEntity;
         private HealthComponent testEntityHealth;
+        private bool _Jump;
 
         public GameplayScreen ( ) {
             Entity.EntityAdded += (Entity obj) => { if (IsActive) obj.Prepare( ); };
         }
 
-        public bool Jump { get { return controlPanel.Clicked; } }
+        public bool Jump { get { if (_Jump) { _Jump = false; return true; } return false; } }
 
         public bool Left { get { return leftPanel.Clicked; } }
 
@@ -47,6 +45,13 @@ namespace mapKnight.Extended.Screens {
                 leftPanel.Dispose( );
                 rightPanel.Dispose( );
                 controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
+                controlPanel.OnGesturePerformed += (string gesture) => {
+                    if(gesture == "Martin") {
+                        _Jump = true;
+                    } else {
+                        global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
+                    }
+                };
                 leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
                 rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
             };
@@ -62,7 +67,7 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
             Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
 
-            //sawConfig.Create(new Vector2(10, 2), map);
+            sawConfig.Create(new Vector2(3, 6), map);
 
             walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
