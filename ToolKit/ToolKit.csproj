@@ -181,6 +181,9 @@
     <Compile Include="Controls\Xna\XnaControl.xaml.cs">
       <DependentUpon>XnaControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ModifyMapWindow.xaml.cs">
+      <DependentUpon>ModifyMapWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Windows\EditDefaultTileAttributesWindow.xaml.cs">
@@ -364,6 +367,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\ModifyMapWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\fill_color-48.png" />
@@ -464,6 +471,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\whale-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\vertical_settings_mixer-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

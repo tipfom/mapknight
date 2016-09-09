@@ -1,11 +1,11 @@
-﻿<Window x:Class="mapKnight.ToolKit.Windows.CreateMapWindow"
+﻿<Window x:Class="mapKnight.ToolKit.Windows.ModifyMapWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:mapKnight.ToolKit"
+        xmlns:local="clr-namespace:mapKnight.ToolKit.Windows"
         mc:Ignorable="d"
-        Title="Create Map" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize">
+        Title="Modify Map" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
     <StackPanel>
         <Grid Margin="5,5,5,5">
             <Label Content="Name" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
@@ -14,14 +14,6 @@
         <Grid Margin="5,0,5,5">
             <Label Content="Creator" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
             <TextBox x:Name="textbox_creator" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" VerticalContentAlignment="Center"/>
-        </Grid>
-        <Grid Margin="5,0,5,5">
-            <Label Content="Width" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_width" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" PreviewTextInput="CheckNumericPreviewTextInput" VerticalContentAlignment="Center"/>
-        </Grid>
-        <Grid Margin="5,0,5,5">
-            <Label Content="Height" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_height" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="189" PreviewTextInput="CheckNumericPreviewTextInput" VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Gravity" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
@@ -33,9 +25,6 @@
             </StackPanel>
         </Grid>
 
-        <Button x:Name="button_import" Content="Import Template" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Top" Width="250" Click="button_import_Click"/>
-
-        <Label x:Name="label_template" Content="No Template selected" HorizontalAlignment="Left" Margin="0,-5,5,0" VerticalAlignment="Top" FontSize="9"/>
-        <Button x:Name="button_create" Content="Create" HorizontalAlignment="Stretch" Margin="5,0,5,5" VerticalAlignment="Top"  Height="32" Click="button_create_Click"/>
+        <Button x:Name="button_create" Content="Create" HorizontalAlignment="Stretch" Margin="5,0,5,5" VerticalAlignment="Top"  Height="32" Width="250" Click="button_create_Click"/>
     </StackPanel>
 </Window>

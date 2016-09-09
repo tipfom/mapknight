@@ -27,12 +27,15 @@ namespace mapKnight.ToolKit.Editor {
     /// </summary>
     public partial class MapEditor : UserControl {
 
+        private static Style imageStyle = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Value = false, Property = IsEnabledProperty, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } };
+
         private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
             new MenuItem( ) { Header = "MAP", Items = {
                     new MenuItem() { Header = "NEW", Height = 22, Icon = App.Current.FindResource("image_map_new") },
                     new MenuItem() { Header = "LOAD", Height = 22 }
                 } },
             new ComboBox() { Width = 260, Margin = new Thickness(-6, 0, -6, 0), VerticalAlignment = VerticalAlignment.Center },
+            new Image() { Source= (BitmapImage)App.Current.FindResource("image_map_mapsettings"), Style = imageStyle },
             new MenuItem() { Header = "SHOW LAYER", IsEnabled = false },
             new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
             new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
@@ -43,12 +46,12 @@ namespace mapKnight.ToolKit.Editor {
             new RadioButton() {IsChecked = true, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
             new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center },
             new Separator(),
-            new Border() { Child = (Image)App.Current.FindResource("image_map_undo"), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
-            new Border() { Child = (Image)App.Current.FindResource("image_map_pen"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
-            new Border() { Child = (Image)App.Current.FindResource("image_map_eraser"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0) },
-            new Border() { Child = (Image)App.Current.FindResource("image_map_fill"), BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0) },
-            new Border() { Child = (Image)App.Current.FindResource("image_map_pointer"), BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0)},
-            new Border() { Child = (Image)App.Current.FindResource("image_map_rotate"), BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0)}
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_undo"), Style = imageStyle }, Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pen"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_eraser"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0) },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_fill"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0) },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pointer"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_rotate"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) }
         };
 
         // Map Cache List von Koord Layer alter Wert IsRotation
@@ -82,44 +85,49 @@ namespace mapKnight.ToolKit.Editor {
             ((MenuItem)((MenuItem)_Menu[0]).Items[1]).Click += load_map_Click;
             ((ComboBox)_Menu[1]).SelectionChanged += CurrentMapChanged;
 
-            ((CheckBox)_Menu[3]).Checked += (sender, e) => { tilemapview.ShowBackground = true; };
-            ((CheckBox)_Menu[3]).Unchecked += (sender, e) => { tilemapview.ShowBackground = false; };
-            ((CheckBox)_Menu[4]).Checked += (sender, e) => { tilemapview.ShowMiddle = true; };
-            ((CheckBox)_Menu[4]).Unchecked += (sender, e) => { tilemapview.ShowMiddle = false; };
-            ((CheckBox)_Menu[5]).Checked += (sender, e) => { tilemapview.ShowForeground = true; };
-            ((CheckBox)_Menu[5]).Unchecked += (sender, e) => { tilemapview.ShowForeground = false; };
+            ((Image)_Menu[2]).MouseDown += (sender, e) => {
+                if (currentMap == null) return;
+                new ModifyMapWindow(currentMap).ShowDialog( );
+            };
 
-            ((RadioButton)_Menu[8]).Checked += (sender, e) => { currentLayer = 0; };
-            ((RadioButton)_Menu[9]).Checked += (sender, e) => { currentLayer = 1; };
-            ((RadioButton)_Menu[10]).Checked += (sender, e) => { currentLayer = 2; };
+            ((CheckBox)_Menu[4]).Checked += (sender, e) => { tilemapview.ShowBackground = true; };
+            ((CheckBox)_Menu[4]).Unchecked += (sender, e) => { tilemapview.ShowBackground = false; };
+            ((CheckBox)_Menu[5]).Checked += (sender, e) => { tilemapview.ShowMiddle = true; };
+            ((CheckBox)_Menu[5]).Unchecked += (sender, e) => { tilemapview.ShowMiddle = false; };
+            ((CheckBox)_Menu[6]).Checked += (sender, e) => { tilemapview.ShowForeground = true; };
+            ((CheckBox)_Menu[6]).Unchecked += (sender, e) => { tilemapview.ShowForeground = false; };
 
-            _Menu[12].MouseDown += (sender, e) => {
+            ((RadioButton)_Menu[9]).Checked += (sender, e) => { currentLayer = 0; };
+            ((RadioButton)_Menu[10]).Checked += (sender, e) => { currentLayer = 1; };
+            ((RadioButton)_Menu[11]).Checked += (sender, e) => { currentLayer = 2; };
+
+            _Menu[13].MouseDown += (sender, e) => {
                 UndoLast( );
             };
-            _Menu[13].MouseDown += (sender, e) => {
-                currentTool = Tool.Pen;
-                ResetToolBorders( );
-                ((Border)_Menu[13]).BorderThickness = new Thickness(1);
-            };
             _Menu[14].MouseDown += (sender, e) => {
-                currentTool = Tool.Eraser;
+                currentTool = Tool.Pen;
                 ResetToolBorders( );
                 ((Border)_Menu[14]).BorderThickness = new Thickness(1);
             };
             _Menu[15].MouseDown += (sender, e) => {
-                currentTool = Tool.Filler;
+                currentTool = Tool.Eraser;
                 ResetToolBorders( );
                 ((Border)_Menu[15]).BorderThickness = new Thickness(1);
             };
             _Menu[16].MouseDown += (sender, e) => {
-                currentTool = Tool.Pointer;
+                currentTool = Tool.Filler;
                 ResetToolBorders( );
                 ((Border)_Menu[16]).BorderThickness = new Thickness(1);
             };
             _Menu[17].MouseDown += (sender, e) => {
-                currentTool = Tool.Rotater;
+                currentTool = Tool.Pointer;
                 ResetToolBorders( );
                 ((Border)_Menu[17]).BorderThickness = new Thickness(1);
+            };
+            _Menu[18].MouseDown += (sender, e) => {
+                currentTool = Tool.Rotater;
+                ResetToolBorders( );
+                ((Border)_Menu[18]).BorderThickness = new Thickness(1);
             };
 
             App.ProjectChanged += ( ) => {
@@ -267,7 +275,7 @@ namespace mapKnight.ToolKit.Editor {
 
         private void ButtonSettings_Click (object sender, RoutedEventArgs e) {
             EditDefaultTileAttributesWindow dialog = new EditDefaultTileAttributesWindow(defaultAttributes);
-            if(dialog.ShowDialog() ?? false) {
+            if (dialog.ShowDialog( ) ?? false) {
                 defaultAttributes = dialog.NewDefault;
             }
         }
@@ -353,11 +361,11 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void ResetToolBorders ( ) {
-            ((Border)_Menu[13]).BorderThickness = new Thickness(0);
             ((Border)_Menu[14]).BorderThickness = new Thickness(0);
             ((Border)_Menu[15]).BorderThickness = new Thickness(0);
             ((Border)_Menu[16]).BorderThickness = new Thickness(0);
             ((Border)_Menu[17]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[18]).BorderThickness = new Thickness(0);
         }
 
         private void scrollbar_horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -563,7 +571,7 @@ namespace mapKnight.ToolKit.Editor {
                             tileImage.EndInit( );
 
                             AddTexture(currentMap, tileName, tileImage);
-                            currentMap.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes ), Name = tileName });
+                            currentMap.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes), Name = tileName });
                             wrappanel_tiles.Items.Add(new ListViewEntry(tileImage));
                         } else {
                             // open add tile window
