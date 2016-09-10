@@ -31,14 +31,15 @@
             </Grid.RowDefinitions>
             <ListBox Grid.Row="0" Name="listbox_bones" DragEnter="listbox_bones_DragEnter" Drop="listbox_bones_Drop" AllowDrop="True">
                 <ListBox.Background>
-                    <ImageBrush ImageSource="{StaticResource ResourceKey=image_draganddrop}" Stretch="None" AlignmentX="Center" AlignmentY="Center" Opacity="0.05"/>                </ListBox.Background>
+                    <ImageBrush ImageSource="{StaticResource ResourceKey=image_draganddrop}" Stretch="None" AlignmentX="Center" AlignmentY="Center" Opacity="0.05"/>
+                </ListBox.Background>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Image}" Height="25" Width="25"/>
                             <Button Content="Remove" Click="ButtonRemoveBoneItem_Click" Margin="5,0,5,0" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
-                        </StackPanel>                        
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -172,6 +173,9 @@
                 <Border x:Name="border_rectangle_player" BorderBrush="Black" BorderThickness="2">
                     <Rectangle x:Name="rectangle_player"/>
                 </Border>
+                <Grid Width="{Binding ActualWidth, ElementName=canvas_frame}" Height="{Binding ActualHeight, ElementName=canvas_frame}">
+                    <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="{StaticResource ResourceKey=image_animationcomponent_directionarrow}" Width="100" Height="100"/>
+                </Grid>
             </Canvas>
         </DockPanel>
         <DockPanel x:Name="dockpanel_preview" Grid.Column="2" Visibility="Hidden">

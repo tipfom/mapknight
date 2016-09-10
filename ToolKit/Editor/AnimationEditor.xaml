@@ -7,7 +7,10 @@
              xmlns:graphics="clr-namespace:mapKnight.ToolKit.Controls.Components.Graphics"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <TextBlock x:Key="textblock_default" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.5" Text="Add an animation first!"/>
+    </UserControl.Resources>
     <Grid>
-        <ContentPresenter Name="contentpresenter_animation"/>
+        <ContentPresenter Name="contentpresenter_animation" Content="{StaticResource textblock_default}"/>
     </Grid>
 </UserControl>

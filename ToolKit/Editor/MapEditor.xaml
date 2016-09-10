@@ -45,7 +45,19 @@
             <DockPanel>
                 <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0" />
                 <Button Margin="0,0,4,1" VerticalAlignment="Center" Click="ButtonSettings_Click">
-                    <Image Source="{StaticResource ResourceKey=image_map_settings}"/>
+                    <Image Name="image_settings" Source="{StaticResource ResourceKey=image_map_settings}">
+                        <Image.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <Trigger Property="Image.IsEnabled" Value="False">
+                                        <Trigger.Setters>
+                                            <Setter Property="Image.Opacity" Value="0.5"/>
+                                        </Trigger.Setters>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
                 </Button>
                 <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" VerticalAlignment="Center"/>
             </DockPanel>

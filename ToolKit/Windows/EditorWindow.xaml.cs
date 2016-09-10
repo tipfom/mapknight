@@ -92,8 +92,8 @@ namespace mapKnight.ToolKit.Windows {
             SetTabPageMenu(animationeditor.Menu);
         }
 
-        private void TabItem_Selected_1 (object sender, RoutedEventArgs e) {
-
+        private void TabItemTexture_Selected (object sender, RoutedEventArgs e) {
+            SetTabPageMenu(textureeditor.Menu);
         }
     }
 }

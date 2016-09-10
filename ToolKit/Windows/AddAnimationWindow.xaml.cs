@@ -20,6 +20,7 @@ namespace mapKnight.ToolKit.Windows {
         public float Ratio;
 
         public AddAnimationWindow ( ) {
+            this.Owner = App.Current.MainWindow;
             InitializeComponent( );
         }
 

@@ -216,6 +216,7 @@ namespace mapKnight.ToolKit.Editor {
         private void AddMap (Map map) {
             if (!IsEnabled)
                 IsEnabled = true;
+
             foreach (FrameworkElement element in _Menu) {
                 BindingExpression binding = element.GetBindingExpression(UIElement.IsEnabledProperty);
                 if (binding != null)

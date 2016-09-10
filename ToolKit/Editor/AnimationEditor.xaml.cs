@@ -25,10 +25,10 @@ namespace mapKnight.ToolKit.Editor {
     public partial class AnimationEditor : UserControl {
         private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
             new MenuItem() { Header = "ANIMATION", Items = {
-                    new MenuItem() {Header="ADD" },
+                    new MenuItem() {Header="NEW", Icon = App.Current.FindResource("image_animation_new") },
                     new MenuItem() {Header="LOAD" }
             } },
-            new ComboBox() { VerticalAlignment = VerticalAlignment.Center, Width = 200 } 
+            new ComboBox() { VerticalAlignment = VerticalAlignment.Center, Width = 200 }
         };
 
         public List<FrameworkElement> Menu { get { return _Menu; } }

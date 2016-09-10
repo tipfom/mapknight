@@ -95,7 +95,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         public override string ToString ( ) {
-            return "Animation Component";
+            return EntityName;
         }
 
         private static TreeViewItem ContainerFromItem (ItemContainerGenerator containerGenerator, object item) {

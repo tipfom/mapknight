@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit.Windows"
         mc:Ignorable="d"
-        Title="AddAnimationWindow" SizeToContent="WidthAndHeight">
+        Title="Create Animation" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Icon="{StaticResource ResourceKey=logo}">
     <DockPanel Margin="5,5,5,5">
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="71"/>
+                <ColumnDefinition Width="73"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -20,7 +20,7 @@
             <TextBlock Text="Name" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Height="16" Margin="0,4,0,5"/>
             <TextBlock Text="Entity Width" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Height="16" Margin="0,5,0,4"/>
             <TextBlock Text="Entity Height" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Height="16" Margin="0,4,0,5"/>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Name="textbox_name" Height="18" Margin="0,4,0,3"/>
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" MinWidth="150" Name="textbox_name" Height="18" Margin="0,4,0,3"/>
             <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_width" Height="18" Margin="0,3,0,4"/>
             <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_height" Height="18" Margin="0,4,0,3"/>
         </Grid>
