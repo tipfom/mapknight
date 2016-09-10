@@ -11,19 +11,20 @@ namespace mapKnight.Extended.Components.Movement {
     [ComponentRequirement(typeof(SpeedComponent))]
     [UpdateAfter(ComponentEnum.Stats_Speed)]
     [UpdateBefore(ComponentEnum.Motion)]
-    public class PlayerComponent : Component {
-        private IInputProvider inputProvider;
+    public class BaseComponent : Component {
+        [Flags]
+        public enum ActionMask {
+            None = 0,
+            Jump = 1 << 1,
+            Left = 1 << 2,
+            Right = 1 << 3,
+        }
+
+        public ActionMask Action;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
 
-        public PlayerComponent (Entity owner, IInputProvider inputprovider) : base(owner) {
-            inputProvider = inputprovider;
-        }
-
-        public interface IInputProvider {
-            bool Jump { get; }
-            bool Left { get; }
-            bool Right { get; }
+        public BaseComponent (Entity owner) : base(owner) {
         }
 
         public override void Destroy ( ) {
@@ -39,13 +40,14 @@ namespace mapKnight.Extended.Components.Movement {
 
         public override void Update (DeltaTime dt) {
             Vector2 speed = speedComponent.Speed;
-            if (inputProvider.Jump && motionComponent.IsOnGround) {
+            if (Action.HasFlag(ActionMask.Jump) && motionComponent.IsOnGround) {
                 Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(0, speed.Y));
+                Action &= ~ActionMask.Jump;
             }
 
-            if (inputProvider.Left) {
+            if (Action.HasFlag(ActionMask.Left)) {
                 Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(-speed.X - motionComponent.Velocity.X, 0));
-            } else if (inputProvider.Right) {
+            } else if (Action.HasFlag(ActionMask.Right)) {
                 Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(speed.X - motionComponent.Velocity.X, 0));
             } else {
                 Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(-motionComponent.Velocity.X, 0));
@@ -53,14 +55,8 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public new class Configuration : Component.Configuration {
-            private PlayerComponent.IInputProvider inputProvider;
-
-            public Configuration (PlayerComponent.IInputProvider inputprovider) {
-                inputProvider = inputprovider;
-            }
-
             public override Component Create (Entity owner) {
-                return new PlayerComponent(owner, inputProvider);
+                return new BaseComponent(owner);
             }
         }
     }

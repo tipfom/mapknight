@@ -373,34 +373,34 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\fill_color-48.png" />
+    <Resource Include="Resources\Images\fill_color-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\edit-48.png" />
+    <Resource Include="Resources\Images\edit-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\eraser-48.png" />
+    <Resource Include="Resources\Images\eraser-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\collapse-48.png" />
+    <Resource Include="Resources\Images\collapse-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\color_dropper-48.png" />
+    <Resource Include="Resources\Images\color_dropper-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\create_new-48.png" />
+    <Resource Include="Resources\Images\create_new-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\save-48.png" />
+    <Resource Include="Resources\Images\save-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\opened_folder-48.png" />
+    <Resource Include="Resources\Images\opened_folder-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\folder-48.png" />
+    <Resource Include="Resources\Images\folder-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\logo.png" />
+    <Resource Include="Resources\Images\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Libraries\MonoGame.Framework.dll" />
@@ -416,64 +416,64 @@
     <EmbeddedResource Include="Libraries\SharpDX.XInput.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\rotate_left-48.png" />
+    <Resource Include="Resources\Images\rotate_left-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\undo-48.png" />
+    <Resource Include="Resources\Images\undo-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\delete_sign-48.png" />
+    <Resource Include="Resources\Images\delete_sign-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\add_link-48.png" />
+    <Resource Include="Resources\Images\add_link-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\add_user_male-48.png" />
+    <Resource Include="Resources\Images\add_user_male-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Ecommerce-Do-Not-Drop-icon.png" />
+    <Resource Include="Resources\Images\Ecommerce-Do-Not-Drop-icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\video_playlist-48.png" />
+    <Resource Include="Resources\Images\video_playlist-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\frame-48.png" />
+    <Resource Include="Resources\Images\frame-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\dog_bone-48.png" />
+    <Resource Include="Resources\Images\dog_bone-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\repeat-48.png" />
+    <Resource Include="Resources\Images\repeat-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\person_in_a_mirror-48.png" />
+    <Resource Include="Resources\Images\person_in_a_mirror-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\up_arrow-48.png" />
+    <Resource Include="Resources\Images\up_arrow-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\down_arrow-48.png" />
+    <Resource Include="Resources\Images\down_arrow-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\error-48.png" />
+    <Resource Include="Resources\Images\error-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\recycling-48.png" />
+    <Resource Include="Resources\Images\recycling-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\play-48.png" />
+    <Resource Include="Resources\Images\play-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\pause-48.png" />
+    <Resource Include="Resources\Images\pause-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\stop-48.png" />
+    <Resource Include="Resources\Images\stop-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\whale-48.png" />
+    <Resource Include="Resources\Images\whale-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\vertical_settings_mixer-48.png" />
+    <Resource Include="Resources\Images\vertical_settings_mixer-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
