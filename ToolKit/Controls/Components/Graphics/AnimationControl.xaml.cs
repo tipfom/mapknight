@@ -30,11 +30,11 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         private VertexAnimation currentAnimation;
         private VertexAnimationFrame currentFrame;
         private HashSet<VertexAnimation> requiredAnimations = new HashSet<VertexAnimation>( );
+        private string defaultSizeBone = null;
 
         public AnimationControl ( ) {
             InitializeComponent( );
             treeview_animations.DataContext = Animations;
-            rectangle_player.DataContext = TransformAspectRatio;
         }
 
         public AnimationControl (string pathtoload) : this( ) {
@@ -42,11 +42,11 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 AnimationMetaData metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(Path.Combine(pathtoload, "animation.meta")));
                 EntityName = metaData.Name;
                 foreach (string file in metaData.Bones) {
-                    if (File.Exists(Path.Combine(pathtoload,file))) {
-                        BoneListBoxItem item = new BoneListBoxItem(Path.Combine(pathtoload, file));
-                        Bones.Add(item.Name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
-                        Images.Add(item.Name, item.Image);
-                        listbox_bones.Items.Add(new BoneListBoxItem(Path.Combine(pathtoload, file)));
+                    if (File.Exists(Path.Combine(pathtoload, file))) {
+                        // BoneListBoxItem item = new BoneListBoxItem(Path.Combine(pathtoload, file));
+                        // Bones.Add(item.Name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
+                        //Images.Add(item.Name, item.Image);
+                        // listbox_bones.Items.Add(new BoneListBoxItem(Path.Combine(pathtoload, file)));
                     }
                 }
                 BonesChanged( );
@@ -88,9 +88,9 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                     encoder.Save(fileStream);
                 metaData.Bones.Add(kvpair.Key + ".png");
             }
-            File.Create(Path.Combine(path, EntityName, "animation.meta")).Close();
+            File.Create(Path.Combine(path, EntityName, "animation.meta")).Close( );
             File.WriteAllText(Path.Combine(path, EntityName, "animation.meta"), JsonConvert.SerializeObject(metaData));
-            File.Create(Path.Combine(path, EntityName, "animation.json")).Close();
+            File.Create(Path.Combine(path, EntityName, "animation.json")).Close( );
             File.WriteAllText(Path.Combine(path, EntityName, "animation.json"), JsonConvert.SerializeObject(Animations));
         }
 
@@ -126,13 +126,21 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 // width > height
                 rectangle_player.Width = greaterSizeEditorUsePercent[(int)slider_zoom.Value] * canvas_frame.RenderSize.Width;
                 rectangle_player.Height = rectangle_player.Width / TransformAspectRatio;
+
+                rectangle_entity_default.Width = canvas_bones.RenderSize.Width;
+                rectangle_entity_default.Height = canvas_bones.RenderSize.Width / TransformAspectRatio;
             } else {
                 // height > width
                 rectangle_player.Height = greaterSizeEditorUsePercent[(int)slider_zoom.Value] * canvas_frame.RenderSize.Height;
                 rectangle_player.Width = TransformAspectRatio * rectangle_player.Height;
+
+                rectangle_entity_default.Height = canvas_bones.RenderSize.Height;
+                rectangle_entity_default.Width = canvas_bones.RenderSize.Height * TransformAspectRatio;
             }
             Canvas.SetLeft(border_rectangle_player, (canvas_frame.RenderSize.Width - rectangle_player.Width) / 2d);
             Canvas.SetTop(border_rectangle_player, (canvas_frame.RenderSize.Height - rectangle_player.Height) / 2d);
+            Canvas.SetLeft(border_rectangle_entity_default, (canvas_bones.RenderSize.Width - rectangle_entity_default.Width) / 2d);
+            Canvas.SetTop(border_rectangle_entity_default, (canvas_bones.RenderSize.Height - rectangle_entity_default.Height) / 2d);
 
             if (currentFrame == null)
                 return;
@@ -238,15 +246,6 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
             animationview.Pause( );
-        }
-
-        private void ButtonRemoveBoneItem_Click (object sender, RoutedEventArgs e) {
-            string boneName = ((TextBlock)((StackPanel)((Button)sender).Parent).Children[2]).Text;
-            BoneListBoxItem item = (BoneListBoxItem)listbox_bones.Items[new List<string>(Bones.Keys.AsEnumerable( )).IndexOf(boneName)];
-            listbox_bones.Items.Remove(item);
-            Bones.Remove(item.Name);
-            Images.Remove(item.Name);
-            BonesChanged( );
         }
 
         private void ButtonResetPlay_Click (object sender, RoutedEventArgs e) {
@@ -356,27 +355,6 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             return null;
         }
 
-        private void listbox_bones_DragEnter (object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-                e.Effects = DragDropEffects.Copy;
-            }
-        }
-
-        private void listbox_bones_Drop (object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-                string[ ] files = (string[ ])e.Data.GetData(DataFormats.FileDrop);
-                foreach (string file in files) {
-                    if (file.EndsWith("png") && !Bones.ContainsKey(Path.GetFileNameWithoutExtension(file))) {
-                        BoneListBoxItem item = new BoneListBoxItem(file);
-                        listbox_bones.Items.Add(item);
-                        Bones.Add(item.Name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
-                        _Images.Add(item.Name, item.Image);
-                        BonesChanged( );
-                    }
-                }
-            }
-        }
-
         private void slider_zoom_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
             AdjustEditor( );
         }
@@ -458,17 +436,136 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             public double Ratio;
         }
 
-        private struct BoneListBoxItem {
+        private void canvas_bones_DragEnter (object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                e.Effects = DragDropEffects.Copy;
+            }
+        }
 
-            public BoneListBoxItem (string file) : this( ) {
-                if (file.EndsWith("png")) {
-                    Image = new BitmapImage(new Uri(file));
-                    Name = Path.GetFileNameWithoutExtension(file);
+        private void canvas_bones_Drop (object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                string[ ] files = (string[ ])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string file in files) {
+                    if (file.EndsWith("png") && !Bones.ContainsKey(Path.GetFileNameWithoutExtension(file))) {
+                        string name = Path.GetFileNameWithoutExtension(file);
+                        BitmapImage image = new BitmapImage(new Uri(file));
+
+                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ) };
+                        defaultBoneImage.ContextMenu = new ContextMenu( ) {
+                            DataContext = defaultBoneImage,
+                            Items = {
+                                new MenuItem() { Header = "Delete", Icon = new Image() { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_delete") } }
+                            }
+                        };
+                        ((MenuItem)defaultBoneImage.ContextMenu.Items[0]).Click += MenuItemDelete_Click;
+                        defaultBoneImage.MouseDoubleClick += DefaultBoneImage_MouseDoubleClick;
+
+                        defaultBoneImage.SizeChanged += DefaultBoneImage_SizeChanged;
+                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(ResizableImage));
+                        canvasleftproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasLeftChanged);
+                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
+                        canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
+
+                        canvas_bones.Children.Add(defaultBoneImage);
+                        Bones.Add(name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
+                        _Images.Add(name, image);
+
+                        if (!string.IsNullOrEmpty(defaultSizeBone)) {
+                            Vector2 percentPerPixel = new Vector2((float)(Bones[defaultSizeBone].Size.X / Images[defaultSizeBone].Width), (float)(Bones[defaultSizeBone].Size.Y / Images[defaultSizeBone].Height));
+                            defaultBoneImage.Width = percentPerPixel.X * image.Width * rectangle_player.Width;
+                            defaultBoneImage.Height = percentPerPixel.Y * image.Height * rectangle_player.Height;
+                        } else {
+                            defaultBoneImage.Width = 100;
+                            defaultBoneImage.Height = 100 * image.Height / image.Width;
+                        }
+                        Canvas.SetLeft(defaultBoneImage, (canvas_bones.RenderSize.Width - defaultBoneImage.Width) / 2d);
+                        Canvas.SetTop(defaultBoneImage, (canvas_bones.RenderSize.Height - defaultBoneImage.Width) / 2d);
+                        BonesChanged( );
+                    }
                 }
             }
+        }
 
-            public BitmapImage Image { get; set; }
-            public string Name { get; set; }
+        private void DefaultBoneImage_MouseDoubleClick (object sender, MouseButtonEventArgs e) {
+            defaultSizeBone = Path.GetFileNameWithoutExtension(((ResizableImage)sender).Image.UriSource.AbsolutePath);
+            UpdateDefaultSizes( );
+        }
+
+        private void UpdateDefaultSizes ( ) {
+            if (defaultSizeBone == null) return;
+
+            // rescale bones
+            Vector2 percentPerPixel = new Vector2((float)(Bones[defaultSizeBone].Size.X / Images[defaultSizeBone].Width), (float)(Bones[defaultSizeBone].Size.Y / Images[defaultSizeBone].Height));
+            foreach (string bone in Images.Keys) {
+                if (bone == defaultSizeBone) continue;
+                Bones[bone] = new VertexBone( ) {
+                    Position = Bones[bone].Position,
+                    Mirrored = Bones[bone].Mirrored,
+                    Rotation = Bones[bone].Rotation,
+                    Size = new Vector2(
+                        (float)Images[bone].Width * percentPerPixel.X,
+                        (float)Images[bone].Height * percentPerPixel.Y)
+                };
+            }
+
+            // apply changes to images
+            foreach (UIElement element in canvas_bones.Children) {
+                ResizableImage image = element as ResizableImage;
+                if (image != null) {
+                    string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
+                    if (bone != defaultSizeBone) {
+                        image.Width = rectangle_entity_default.Width * Bones[bone].Size.X;
+                        image.Height = rectangle_entity_default.Height * Bones[bone].Size.Y;
+                       // Canvas.SetLeft(image, Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width * (Bones[bone].Position.X + 0.5f) - image.Width / 2f);
+                       // Canvas.SetTop(image, Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height * (Bones[bone].Position.Y + 0.5f) - image.Height / 2f);
+                    }
+                }
+            }
+        }
+
+        private void DefaultBoneImage_CanvasLeftChanged (object sender, EventArgs e) {
+            UpdatePositionOfDefaultBone((ResizableImage)sender);
+        }
+
+        private void DefaultBoneImage_CanvasTopChanged (object sender, EventArgs e) {
+            UpdatePositionOfDefaultBone((ResizableImage)sender);
+        }
+
+        private void UpdatePositionOfDefaultBone(ResizableImage image) {
+            if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
+            string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
+            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
+            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
+            VertexBone current = Bones[bone];
+            current.Position = new Vector2(newpercentx, newpercenty);
+            Bones[bone] = current;
+        }
+
+        private void DefaultBoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
+            ResizableImage image = (ResizableImage)sender;
+            if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
+
+            string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
+            float newsizex = (float)(image.Width / rectangle_entity_default.Width);
+            float newsizey = (float)(image.Height / rectangle_entity_default.Height);
+            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
+            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
+
+            VertexBone current = Bones[bone];
+            current.Size = new Vector2(newsizex, newsizey);
+            current.Position = new Vector2(newpercentx, newpercenty);
+            Bones[bone] = current;
+        }
+
+        private void MenuItemDelete_Click (object sender, RoutedEventArgs e) {
+            ResizableImage image = ((sender as Control).Parent as Control).DataContext as ResizableImage;
+            if (image != null) {
+                canvas_bones.Children.Remove(image);
+                string bonename = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
+                _Images.Remove(bonename);
+                Bones.Remove(bonename);
+                BonesChanged( );
+            }
         }
     }
 }

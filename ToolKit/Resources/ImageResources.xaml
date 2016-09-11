@@ -30,13 +30,14 @@
     <BitmapImage x:Key="image_animationcomponent_mirror" UriSource="../Resources/Images/person_in_a_mirror-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_down" UriSource="../Resources/Images/down_arrow-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_up" UriSource="../Resources/Images/up_arrow-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_delete" UriSource="../Resources/Images/delete_sign-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_delete" UriSource="../Resources/Images/delete-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_reset" UriSource="../Resources/Images/recycling-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_startplay" UriSource="../Resources/Images/play-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_resetplay" UriSource="../Resources/Images/rotate_left-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_stopplay" UriSource="../Resources/Images/stop-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_pauseplay" UriSource="../Resources/Images/pause-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_directionarrow" UriSource="../Resources/Images/arrow-19.png"/>
+    <BitmapImage x:Key="image_animationcomponent_setasdefault" UriSource="../Resources/Images/old_man-48.png"/>
 
     <BitmapImage x:Key="image_resizableimage_error" UriSource="../Resources/Images/error-48.png"/>
 </ResourceDictionary>
