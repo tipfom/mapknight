@@ -23,7 +23,6 @@ namespace mapKnight.Extended.Components {
 
         public void Add (Component.Configuration item) {
             components.Add(item);
-            Sort( );
             _HasChanged = true;
         }
 
@@ -69,45 +68,39 @@ namespace mapKnight.Extended.Components {
                             components.Add((Component.Configuration)Activator.CreateInstance(componentConfigType));
                             instanciatedTypes.Add(componentConfigType);
                         } else
-                            throw new ComponentDependencyException(components[i].Component, requirement.Requiring);
+                            throw new ComponentDependencyException(components[i].GetType(), requirement.Requiring);
                     }
                 }
             }
         }
 
         public void Sort ( ) {
-            List<Node> nodeList = new List<Node>( );
-            List<Component.Configuration> sortedList = new List<Component.Configuration>( );
+            Dictionary<Type, Component.Configuration> typeMap = components.ToDictionary(item => Type.GetType(item.GetType( ).FullName.Replace("+Configuration", "")), item => item);
+            Dictionary<Component.Configuration, List<Component.Configuration>> relations = components.ToDictionary(item => item, item => new List<Component.Configuration>( ));
             // structure into nodes
             for (int i = 0; i < components.Count; i++) {
                 UpdateAfter[ ] afterAttribute = (UpdateAfter[ ])Type.GetType(components[i].GetType( ).FullName.Replace("+Configuration", "")).GetCustomAttributes(typeof(UpdateAfter), false);
                 UpdateBefore[ ] beforeAttribute = (UpdateBefore[ ])Type.GetType(components[i].GetType( ).FullName.Replace("+Configuration", "")).GetCustomAttributes(typeof(UpdateBefore), false);
 
-                if (beforeAttribute.Length + afterAttribute.Length == 0) {
-                    nodeList.Add(new Node( ) { Item = components[i] });
-                } else {
+                if (beforeAttribute.Length + afterAttribute.Length > 0) {
                     foreach (UpdateAfter attr in afterAttribute) {
-                        Component.Configuration relation = components.Find(component => component.Component == attr.Relation);
-                        nodeList.Add(new Node( ) { Item = components[i], Precursor = relation });
+                        Component.Configuration relation = typeMap[attr.Relation];
+                        relations[components[i]].Add(relation);
                     }
                     foreach (UpdateBefore attr in beforeAttribute) {
-                        Component.Configuration relation = components.Find(component => component.Component == attr.Relation);
-                        if (relation == null) {
-                            nodeList.Add(new Node( ) { Item = components[i] });
-                        } else {
-                            nodeList.Add(new Node( ) { Item = relation, Precursor = components[i] });
-                            nodeList.Add(new Node( ) { Item = components[i] });
-                        }
+                        Component.Configuration relation = typeMap[attr.Relation];
+                        relations[relation].Add(components[i]);
                     }
                 }
             }
-            while (nodeList.Count > 0) {
-                for (int i = 0; i < nodeList.Count; i++) {
-                    bool isLastInChain = !nodeList.Any(node => node.Precursor == nodeList[i].Item);
+
+            List<Component.Configuration> sortedList = new List<Component.Configuration>(components.Count);
+            while (sortedList.Count < relations.Count) {
+                for (int i = 0; i < components.Count; i++) {
+                    bool isLastInChain = !relations[components[i]].Any(item => !sortedList.Contains(item));
                     if (isLastInChain) {
-                        if (!sortedList.Contains(nodeList[i].Item))
-                            sortedList.Add(nodeList[i].Item);
-                        nodeList.RemoveAt(i);
+                        sortedList.Add(components[i]);
+                        components.RemoveAt(i);
                         break;
                     }
                 }

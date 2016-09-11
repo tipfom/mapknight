@@ -8,8 +8,7 @@ using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended.Components.Graphics {
 
-    [ComponentRequirement(typeof(DrawComponent))]
-    [UpdateBefore(ComponentEnum.Draw)]
+    [UpdateBefore(typeof(DrawComponent))]
     public class SkeletComponent : Component {
         private float[ ][ ] defaultVertexData;
 

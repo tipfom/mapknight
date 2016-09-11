@@ -5,10 +5,10 @@ using System.Text;
 namespace mapKnight.Extended.Components.Attributes {
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class UpdateBefore : Attribute {
-        public ComponentEnum Relation;
+    public class UpdateBefore : ComponentRequirement {
+        public Type Relation;
 
-        public UpdateBefore (ComponentEnum relation) {
+        public UpdateBefore (Type relation) : base(relation) {
             Relation = relation;
         }
     }

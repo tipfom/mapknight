@@ -9,9 +9,8 @@ using mapKnight.Extended.Screens;
 
 namespace mapKnight.Extended.Components.Player {
 
-    [ComponentRequirement(typeof(SpeedComponent))]
-    [UpdateAfter(ComponentEnum.Stats_Speed)]
-    [UpdateBefore(ComponentEnum.Motion)]
+    [UpdateAfter(typeof(SpeedComponent))]
+    [UpdateBefore(typeof(MotionComponent))]
     public class BaseComponent : Component {
         [Flags]
         public enum ActionMask {

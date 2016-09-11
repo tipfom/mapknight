@@ -37,7 +37,7 @@ namespace mapKnight.Extended.Components.AI {
             }
         }
 
-        private class InternalTriggerComponent : Component {
+        public class InternalTriggerComponent : Component {
             private Entity followingEntity;
             private float triggerOffset;
 

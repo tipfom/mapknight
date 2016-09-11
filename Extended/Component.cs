@@ -1,6 +1,5 @@
 using System;
 using mapKnight.Core;
-using mapKnight.Extended.Components;
 using Newtonsoft.Json;
 
 namespace mapKnight.Extended {
@@ -41,17 +40,6 @@ namespace mapKnight.Extended {
         }
 
         public abstract class Configuration {
-            public readonly ComponentEnum Component;
-
-            public Configuration ( ) {
-                string shortedName = this.GetType( ).FullName.Substring(30).Replace("Component", "").Replace("+Configuration", "").Replace(".", "_").Replace("+", "_");
-                if (!Enum.TryParse(shortedName, out Component)) {
-#if DEBUG
-                    Debug.Print(this, "Error parsing " + shortedName + "Component to an ComponentEnum Entry");
-#endif
-                    Component = ComponentEnum.None;
-                }
-            }
 
             public abstract Component Create (Entity owner);
         }

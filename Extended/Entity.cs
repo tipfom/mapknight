@@ -3,32 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
+using mapKnight.Extended.Components.AI;
+using mapKnight.Extended.Components.Movement;
+using mapKnight.Extended.Components.Player;
+using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended {
 
     public class Entity {
         public readonly int ID;
         public readonly EntityInfo Info;
-        public readonly string Name;
         public readonly int Species;
         private const int TICKS_PER_SECOND = 4;
 
         #region static
 
         private static Queue<Entity> destroyedEntitys = new Queue<Entity>( );
-
         private static int nextTick = Environment.TickCount + timeBetweenTicks;
-
         private static int timeBetweenTicks = 1000 / TICKS_PER_SECOND;
 
+        private static int currentInstance;
+        private static int currentSpecies;
+        private static Dictionary<int, string> entityNames = new Dictionary<int, string>( );
+
+        public static List<Entity> Entities = new List<Entity>( );
+
         public static event Action<Entity> EntityAdded;
-
         public static event Action EntityRemoved;
-
-        public static List<Entity> Entities { get; } = new List<Entity>( );
-        private static int currentInstance { get; set; }
-
-        private static int currentSpecies { get; set; }
 
         public static void PostUpdateAll ( ) {
             for (int i = 0; i < Entities.Count; i++)
@@ -70,11 +71,11 @@ namespace mapKnight.Extended {
         private Component[ ] components;
         private Dictionary<ComponentData, Queue<object[ ]>> pendingComponentInfos = new Dictionary<ComponentData, Queue<object[ ]>>( );
 
-        public Entity (ComponentList components, Transform transform, IEntityWorld world, string name, int species) {
-            Name = name;
+        public Entity (ComponentList components, Transform transform, IEntityWorld world, int species, EntityInfo info) {
             World = world;
             Transform = transform;
             Species = species;
+            Info = info;
             ID = ++currentInstance;
 
             this.components = new Component[components.Count];
@@ -85,16 +86,6 @@ namespace mapKnight.Extended {
             foreach (ComponentData componentDataValue in Enum.GetValues(typeof(ComponentData)))
                 pendingComponentInfos.Add(componentDataValue, new Queue<object[ ]>( ));
 
-            // set entity informations
-            Info = new EntityInfo( ) {
-                IsPlatform = components.Any(c => c.Component == ComponentEnum.Movement_Platform),
-                IsPlayer = components.Any(c => c.Component == ComponentEnum.Movement_Player),
-                IsTemporary = components.Any(c => c.Component == ComponentEnum.AI_Trigger_InternalTrigger),
-
-                HasArmor = components.Any(c => c.Component == ComponentEnum.Stats_Armor),
-                HasDamage = components.Any(c => c.Component == ComponentEnum.Stats_Damage),
-                HasHealth = components.Any(c => c.Component == ComponentEnum.Stats_Health)
-            };
             Entities.Add(this);
             EntityAdded?.Invoke(this);
         }
@@ -110,6 +101,7 @@ namespace mapKnight.Extended {
         public Vector2 PositionOnScreen { get { return World.GetPositionOnScreen(this); } }
         public Transform Transform { get; set; }
         public IEntityWorld World { get; private set; }
+        public string Name { get { return entityNames[Species]; } }
 
         public bool HasComponentInfo (ComponentData data) {
             return pendingComponentInfos[data].Count > 0;
@@ -136,7 +128,6 @@ namespace mapKnight.Extended {
         public void Collision (Entity collidingEntity) {
             for (int i = 0; i < components.Length; i++)
                 components[i].Collision(collidingEntity);
-            //Debug.Print(this, $"{Name}({ID}) colliding with {collidingEntity.Name}({collidingEntity.ID})");
         }
 
         public void Destroy ( ) {
@@ -170,9 +161,6 @@ namespace mapKnight.Extended {
         }
 
         public struct EntityInfo {
-            public bool HasArmor;
-            public bool HasDamage;
-
             // Stats
             public bool HasHealth;
 
@@ -182,6 +170,7 @@ namespace mapKnight.Extended {
         }
 
         public class Configuration {
+            private EntityInfo info;
             public ComponentList Components;
             public string Name;
             public Transform Transform;
@@ -190,9 +179,22 @@ namespace mapKnight.Extended {
             public Entity Create (Vector2 spawnLocation, IEntityWorld world) {
                 if (entitySpecies == -1 || Components.HasChanged) {
                     entitySpecies = ++currentSpecies;
+                    entityNames.Add(entitySpecies, Name);
                     Components.ResolveComponentDependencies( );
+                    Components.Sort( );
                 }
-                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Name, entitySpecies);
+                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, entitySpecies, info);
+            }
+
+            private void UpdateInfo ( ) {
+                HashSet<Type> typeSet = new HashSet<Type>(Components.Select(item => item.GetType( )));
+                info = new EntityInfo( ) {
+                    IsPlatform = typeSet.Contains(typeof(PlatformComponent.Configuration)),
+                    IsPlayer = typeSet.Any(type => type.IsSubclassOf(typeof(BaseComponent.Configuration))),
+                    IsTemporary = typeSet.Contains(typeof(TriggerComponent.InternalTriggerComponent.Configuration)),
+
+                    HasHealth = typeSet.Contains(typeof(HealthComponent.Configuration))
+                };
             }
         }
     }

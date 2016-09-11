@@ -6,8 +6,7 @@ using mapKnight.Extended.Components.Attributes;
 
 namespace mapKnight.Extended.Components.Graphics {
 
-    [ComponentRequirement(typeof(DrawComponent))]
-    [UpdateBefore(ComponentEnum.Draw)]
+    [UpdateBefore(typeof(DrawComponent))]
     public class AnimationComponent : Component {
         private List<VertexAnimation> animations;
         private int currentAnimationIndex;

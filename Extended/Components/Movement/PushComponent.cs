@@ -4,8 +4,7 @@ using mapKnight.Extended.Components.Attributes;
 
 namespace mapKnight.Extended.Components.Movement {
 
-    [ComponentRequirement(typeof(MotionComponent))]
-    [UpdateBefore(ComponentEnum.Motion)]
+    [UpdateBefore(typeof(MotionComponent))]
     public class PushComponent : Component {
         private int intervall;
         private MotionComponent motionComponent;

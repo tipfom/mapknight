@@ -8,9 +8,8 @@ using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
 
-    [ComponentRequirement(typeof(MotionComponent))]
-    [ComponentRequirement(typeof(SpeedComponent))]
-    [UpdateBefore(ComponentEnum.Motion)]
+    [UpdateBefore(typeof(MotionComponent))]
+    [UpdateAfter(typeof(SpeedComponent))]
     public class VentosaComponent : Component {
         public readonly bool IsScaredToFall;
         private DamageComponent damageComponent;
@@ -34,7 +33,7 @@ namespace mapKnight.Extended.Components.AI {
         public override void Prepare ( ) {
             motionComponent = Owner.GetComponent<MotionComponent>( );
             speedComponent = Owner.GetComponent<SpeedComponent>( );
-            if (Owner.Info.HasDamage) damageComponent = Owner.GetComponent<DamageComponent>( );
+            if (Owner.HasComponent<DamageComponent>( )) damageComponent = Owner.GetComponent<DamageComponent>( );
         }
 
         public override void Update (DeltaTime dt) {

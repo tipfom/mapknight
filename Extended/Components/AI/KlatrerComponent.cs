@@ -4,8 +4,7 @@ using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
 
-    [ComponentRequirement(typeof(SpeedComponent))]
-    [UpdateAfter(ComponentEnum.Stats_Speed)]
+    [UpdateAfter(typeof(SpeedComponent))]
     public class KlatrerComponent : Component {
         private Direction currentMoveDir;
         private Direction currentWallDir;
