@@ -38,14 +38,5 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             control_thumbcontainer.DataContext = this;
             image.Source = Image;
         }
-
-        private bool adjustedSize = false;
-        private void ContentControl_SizeChanged (object sender, SizeChangedEventArgs e) {
-            if((Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) && !adjustedSize) {
-                Height = Image.Height / Image.Width * Width;
-            } else {
-                adjustedSize = false;
-            }
-        }
     }
 }

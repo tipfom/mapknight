@@ -5,26 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:mapKnight.ToolKit.Controls.Components.Animation"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" SizeChanged="ContentControl_SizeChanged" RenderTransformOrigin="0.5,0.5">
+             d:DesignHeight="300" d:DesignWidth="300" RenderTransformOrigin="0.5,0.5">
     <ContentControl.Resources>
         <ControlTemplate x:Key="ResizeThumbCollectionTemplate" TargetType="Control"
              xmlns:local="clr-namespace:mapKnight.ToolKit.Controls.Components.Animation">
             <Grid>
-                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0" Opacity="0" 
+                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0" Opacity="0" SnapRatioOnShiftDown="True" 
           VerticalAlignment="Top" HorizontalAlignment="Stretch" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0" Opacity="0" 
+                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0" Opacity="0" SnapRatioOnShiftDown="True" 
           VerticalAlignment="Stretch" HorizontalAlignment="Left" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0" Opacity="0" 
+                <local:ResizeThumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0" Opacity="0" SnapRatioOnShiftDown="True" 
           VerticalAlignment="Stretch" HorizontalAlignment="Right" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4" Opacity="0" 
+                <local:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4" Opacity="0" SnapRatioOnShiftDown="True" 
           VerticalAlignment="Bottom"  HorizontalAlignment="Stretch" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-3 -3 0 0" 
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-3 -3 0 0" SnapRatioOnShiftDown="True"
           VerticalAlignment="Top" HorizontalAlignment="Left" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -3 -3 0" 
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -3 -3 0" SnapRatioOnShiftDown="True"
           VerticalAlignment="Top" HorizontalAlignment="Right" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="-3 0 0 -3" 
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="-3 0 0 -3" SnapRatioOnShiftDown="True" 
           VerticalAlignment="Bottom" HorizontalAlignment="Left" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -3 -3" 
+                <local:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -3 -3" SnapRatioOnShiftDown="True"
           VerticalAlignment="Bottom" HorizontalAlignment="Right" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
             </Grid>
         </ControlTemplate>
