@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
 
@@ -10,12 +8,12 @@ namespace mapKnight.Extended.Components.Movement {
     public class MotionComponent : Component {
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
+        public Vector2 AimedVelocity;
         public float BouncyMultiplier;
-        public Vector2 Velocity;
-        private bool wasOnPlatform = false;
+        private Vector2 enforcedVelocity;
+        private PlatformComponent platformStandingOn;
 
         public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult) : base(owner) {
-            Velocity = new Vector2( );
             HasMapCollider = mapCollider;
             HasPlatformCollider = platformCollider;
             BouncyMultiplier = bouncymult;
@@ -24,20 +22,18 @@ namespace mapKnight.Extended.Components.Movement {
         public bool IsAtWall { get; private set; }
         public bool IsOnGround { get; private set; }
         public bool IsOnPlatform { get; private set; }
+        public Vector2 TotalVelocity { get; private set; } = new Vector2( );
 
         public override void Collision (Entity collidingEntity) {
             if (HasPlatformCollider && collidingEntity.Info.IsPlatform) {
                 IsOnPlatform = true;
-                PlatformComponent platform = collidingEntity.GetComponent<PlatformComponent>( );
-                Velocity.Y = platform.Velocity.Y;
-                Velocity.X += platform.Velocity.X;
+                platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
+                enforcedVelocity.Y = platformStandingOn.Velocity.Y;
+                enforcedVelocity.X += platformStandingOn.Velocity.X;
             }
         }
 
         public override void Update (DeltaTime dt) {
-            wasOnPlatform = IsOnPlatform;
-            IsOnPlatform = false;
-
             Vector2 appliedAcceleration = new Vector2( ); // reset acceleration
             List<Vector2> appliedVelocities = new List<Vector2>( );
 
@@ -47,20 +43,23 @@ namespace mapKnight.Extended.Components.Movement {
                 appliedAcceleration += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0];
 
             // update velocity
-            this.Velocity += appliedAcceleration * .5f * (float)dt.TotalSeconds;
+            enforcedVelocity += appliedAcceleration * .5f * (float)dt.TotalSeconds;
             foreach (Vector2 velocity in appliedVelocities)
-                this.Velocity += velocity;
+                enforcedVelocity += velocity;
+            TotalVelocity = enforcedVelocity + AimedVelocity;
 
-            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * (float)dt.TotalSeconds, Owner.Transform.Size);
+            if (IsOnGround)
+                enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
+
+            Transform newTransform = new Transform(Owner.Transform.Center + TotalVelocity * (float)dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
                 IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
             }
-            this.Velocity += appliedAcceleration * .5f * dt.TotalSeconds;
-            if (IsOnGround)
-                this.Velocity.Y = -Velocity.Y * BouncyMultiplier;
+            enforcedVelocity += appliedAcceleration * .5f * dt.TotalSeconds;
 
             Owner.Transform = newTransform;
+            IsOnPlatform = false;
         }
 
         private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {
@@ -103,7 +102,8 @@ namespace mapKnight.Extended.Components.Movement {
                     for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
                         if (y >= Owner.World.Size.Height || Owner.World.HasCollider(x, y)) {
                             targetTransform.Y = y - targetTransform.Size.Y / 2f;
-                            Velocity.Y = 0;
+                            enforcedVelocity.Y = 0;
+                            AimedVelocity.Y = 0;
                             return false; // you dont want to be stuck at the rooms ceiling
                         }
                     }

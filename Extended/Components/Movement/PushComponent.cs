@@ -10,13 +10,11 @@ namespace mapKnight.Extended.Components.Movement {
         private int intervall;
         private MotionComponent motionComponent;
         private int nextPush;
-        private bool resetLastVelocity;
         private Vector2 velocity;
 
-        public PushComponent (Entity owner, int intervall, Vector2 velocity, bool resetlastvelocity) : base(owner) {
+        public PushComponent (Entity owner, int intervall, Vector2 velocity) : base(owner) {
             this.intervall = intervall; // ms
             this.velocity = velocity;
-            this.resetLastVelocity = resetlastvelocity;
         }
 
         public override void Prepare ( ) {
@@ -27,21 +25,16 @@ namespace mapKnight.Extended.Components.Movement {
         public override void Update (DeltaTime dt) {
             if (Environment.TickCount > nextPush) {
                 nextPush += intervall;
-                if (resetLastVelocity) {
-                    Owner.SetComponentInfo(ComponentData.Velocity, -motionComponent.Velocity + velocity);
-                } else {
-                    Owner.SetComponentInfo(ComponentData.Velocity, velocity);
-                }
+                motionComponent.AimedVelocity = velocity;
             }
         }
 
         public new class Configuration : Component.Configuration {
             public int Intervall;
-            public bool ResetVelocity;
             public Vector2 Velocity;
 
             public override Component Create (Entity owner) {
-                return new PushComponent(owner, Intervall, Velocity, ResetVelocity);
+                return new PushComponent(owner, Intervall, Velocity);
             }
         }
     }

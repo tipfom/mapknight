@@ -1,6 +1,8 @@
 ﻿using System;
 using mapKnight.Core;
+using mapKnight.Extended.Components;
 using mapKnight.Extended.Components.Movement;
+using mapKnight.Extended.Components.Player;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.UI;
@@ -9,7 +11,7 @@ using Map = mapKnight.Extended.Graphics.Map;
 
 namespace mapKnight.Extended.Screens {
 
-    public class GameplayScreen : Screen, PlayerComponent.IInputProvider {
+    public class GameplayScreen : Screen {
         private const int MAX_TIME_BETWEEN_UPDATES = 100;
 
         private UILabel debugLabel;
@@ -19,17 +21,10 @@ namespace mapKnight.Extended.Screens {
         private Map map;
         private Entity testEntity;
         private HealthComponent testEntityHealth;
-        private bool _Jump;
 
         public GameplayScreen ( ) {
             Entity.EntityAdded += (Entity obj) => { if (IsActive) obj.Prepare( ); };
         }
-
-        public bool Jump { get { if (_Jump) { _Jump = false; return true; } return false; } }
-
-        public bool Left { get { return leftPanel.Clicked; } }
-
-        public bool Right { get { return rightPanel.Clicked; } }
 
         public override void Draw ( ) {
             map.Draw( );
@@ -37,29 +32,15 @@ namespace mapKnight.Extended.Screens {
         }
 
         public override void Load ( ) {
-            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
-            leftPanel = new UIPanel(this, new UILeftMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 2));
-            rightPanel = new UIPanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 1f / 3f, 2));
-            Window.Changed += () => {
-                controlPanel.Dispose( );
-                leftPanel.Dispose( );
-                rightPanel.Dispose( );
-                controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
-                controlPanel.OnGesturePerformed += (string gesture) => {
-                    if(gesture == "Martin") {
-                        _Jump = true;
-                    } else {
-                        global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
-                    }
-                };
-                leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
-                rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            SetupControls( );
+            Window.Changed += ( ) => {
+                SetupControls( );
             };
 
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
 
             map = Assets.Load<Map>("beatiful_map");
-            
+
             Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
             Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
             Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
@@ -81,14 +62,41 @@ namespace mapKnight.Extended.Screens {
             hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
 
             Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
-            playerConfig.Components.Add(new PlayerComponent.Configuration(this));
             testEntity = playerConfig.Create(map.SpawnPoint, map);
             testEntityHealth = testEntity.GetComponent<HealthComponent>( );
             map.Focus(testEntity.ID);
 
             base.Load( );
         }
-        
+
+        private void SetupControls ( ) {
+            controlPanel?.Dispose( );
+            leftPanel?.Dispose( );
+            rightPanel?.Dispose( );
+            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
+            controlPanel.OnGesturePerformed += (string gesture) => {
+                if (gesture == "SUp") {
+                    testEntity.SetComponentInfo(ComponentData.InputInclude, BaseComponent.ActionMask.Jump);
+                } else {
+                    global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
+                }
+            };
+            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            leftPanel.Click += ( ) => {
+                testEntity.SetComponentInfo(ComponentData.InputInclude, BaseComponent.ActionMask.Left);
+            };
+            leftPanel.Release += ( ) => {
+                testEntity.SetComponentInfo(ComponentData.InputExclude, BaseComponent.ActionMask.Left);
+            };
+            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            rightPanel.Click += ( ) => {
+                testEntity.SetComponentInfo(ComponentData.InputInclude, BaseComponent.ActionMask.Right);
+            };
+            rightPanel.Release += ( ) => {
+                testEntity.SetComponentInfo(ComponentData.InputExclude, BaseComponent.ActionMask.Right);
+            };
+        }
+
         public override void Update (DeltaTime dt) {
             if (Math.Abs(Manager.FrameTime.Milliseconds) < MAX_TIME_BETWEEN_UPDATES) {
                 map.Update(dt);

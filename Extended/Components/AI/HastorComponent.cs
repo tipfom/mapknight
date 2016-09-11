@@ -41,7 +41,7 @@ namespace mapKnight.Extended.Components.AI {
             if (motionComponent.IsAtWall && !stunned) {
                 hasting = false;
                 stunned = true;
-                motionComponent.Velocity.X = -hastingDirection * frenzySpeedPercent * speedComponent.Speed.X;
+                motionComponent.AimedVelocity.X = -hastingDirection * frenzySpeedPercent * speedComponent.Speed.X;
                 stunnedTimer.Start( );
             }
         }
@@ -49,13 +49,13 @@ namespace mapKnight.Extended.Components.AI {
         private void StunnedTimer_Elapsed (object sender, ElapsedEventArgs e) {
             stunnedTimer.Stop( );
             stunned = false;
-            motionComponent.Velocity.X = 0;
+            motionComponent.AimedVelocity.X = 0;
         }
 
         private void Trigger_Triggered (Entity entity) {
             if (!(hasting || stunned) && entity.Info.IsPlayer) {
                 hastingDirection = (entity.Transform.BL.X > Owner.Transform.TR.X) ? 1 : -1;
-                motionComponent.Velocity.X = speedComponent.Speed.X * hastingDirection;
+                motionComponent.AimedVelocity.X = speedComponent.Speed.X * hastingDirection;
                 hasting = true;
             }
         }

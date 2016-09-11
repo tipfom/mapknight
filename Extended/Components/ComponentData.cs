@@ -4,9 +4,12 @@
         None,
         Result,
 
+        // player
+        InputInclude,
+        InputExclude,
+
         // graphics
         Verticies,
-        VerticiesSkelet, // temp
         Texture,
         Color,
         VertexAnimation,

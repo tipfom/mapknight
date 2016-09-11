@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Screens;
 
-namespace mapKnight.Extended.Components.Movement {
+namespace mapKnight.Extended.Components.Player {
 
     [ComponentRequirement(typeof(SpeedComponent))]
     [UpdateAfter(ComponentEnum.Stats_Speed)]
@@ -39,18 +40,23 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Update (DeltaTime dt) {
+            while (Owner.HasComponentInfo(ComponentData.InputInclude))
+                Action |= (ActionMask)Owner.GetComponentInfo(ComponentData.InputInclude)[0];
+            while (Owner.HasComponentInfo(ComponentData.InputExclude))
+                Action &= ~(ActionMask)Owner.GetComponentInfo(ComponentData.InputExclude)[0];
+
             Vector2 speed = speedComponent.Speed;
             if (Action.HasFlag(ActionMask.Jump) && motionComponent.IsOnGround) {
-                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(0, speed.Y));
+                motionComponent.AimedVelocity.Y = speed.Y;
                 Action &= ~ActionMask.Jump;
             }
 
             if (Action.HasFlag(ActionMask.Left)) {
-                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(-speed.X - motionComponent.Velocity.X, 0));
+                motionComponent.AimedVelocity.X = -speed.X;
             } else if (Action.HasFlag(ActionMask.Right)) {
-                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(speed.X - motionComponent.Velocity.X, 0));
+                motionComponent.AimedVelocity.X = speed.X;
             } else {
-                Owner.SetComponentInfo(ComponentData.Velocity, new Vector2(-motionComponent.Velocity.X, 0));
+                motionComponent.AimedVelocity.X = 0;
             }
         }
 
