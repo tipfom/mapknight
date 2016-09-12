@@ -21,6 +21,8 @@ using Rectangle = System.Drawing.Rectangle;
 using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using Size = System.Drawing.Size;
 using Newtonsoft.Json;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
@@ -45,14 +47,16 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         public string Category { get { return "gfx"; } }
 
+
         public TextureCreationControl ( ) {
             InitializeComponent( );
+            listbox_textures.ItemsSource = new ObservableCollection<TextureItem>();
         }
 
         public void Build (string texturePath) {
             Bitmap image;
             Dictionary<string, Rectangle> dictionary;
-            ImagePacker.PackImage(listbox_textures.Items.Cast<TextureItem>( ).Select(item => item.FullFileName), false, false, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, 1, true, out image, out dictionary);
+            ImagePacker.PackImage(listbox_textures.ItemsSource.Cast<TextureItem>().Select(item => item.FullFileName), false, false, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, 1, true, out image, out dictionary);
             image.Save(texturePath + ".png", ImageFormat.Png);
             // parse dictionary
             Dictionary<string, int[ ]> dictionaryToSerialize = dictionary.ToDictionary(key => Path.GetFileNameWithoutExtension(key.Key), value => new int[ ] { value.Value.X, value.Value.Y, value.Value.Width, value.Value.Height });
@@ -62,7 +66,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void button_discard_Click (object sender, RoutedEventArgs e) {
-            listbox_textures.Items.Remove(((DockPanel)((Button)sender).Parent).DataContext);
+            ((Collection<TextureItem>)listbox_textures.ItemsSource).Remove((TextureItem)((DockPanel)((Button)sender).Parent).DataContext);
         }
 
         private void listbox_textures_DragEnter (object sender, DragEventArgs e) {
@@ -76,17 +80,18 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 foreach (string file in files) {
                     if (MiscHelper.IsImageFile(file)) {
                         bool allreadyExists = false;
-                        foreach (object item in listbox_textures.Items)
+                        foreach (object item in listbox_textures.ItemsSource)
                             if (((TextureItem)item).SpriteName == Path.GetFileNameWithoutExtension(file)) allreadyExists = true;
                         if (!allreadyExists)
-                            listbox_textures.Items.Add(new TextureItem(file));
+                            ((Collection<TextureItem>)listbox_textures.ItemsSource).Add(new TextureItem(file));
                     }
                 }
+                listbox_textures.ItemsSource = new ObservableCollection<TextureItem>(((Collection<TextureItem>)listbox_textures.ItemsSource).OrderBy(item => item.SpriteName));
             }
         }
 
         public void Clear ( ) {
-            listbox_textures.Items.Clear( );
+            ((Collection<TextureItem>)listbox_textures.ItemsSource).Clear( );
         }
 
         public Dictionary<string, string> Compile ( ) {
@@ -101,8 +106,6 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 Image.BeginInit( );
                 Image.CacheOption = BitmapCacheOption.OnLoad;
                 Image.CreateOptions = BitmapCreateOptions.None;
-                Image.DecodePixelHeight = 30;
-                Image.DecodePixelWidth = 30;
                 Image.UriSource = new Uri(filename);
                 Image.EndInit( );
                 SpriteName = Path.GetFileNameWithoutExtension(filename);
@@ -111,6 +114,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             public string FullFileName { get; }
             public BitmapImage Image { get; }
             public string SpriteName { get; }
+
+            public override string ToString ( ) {
+                return SpriteName;
+            }
         }
 
         public override string ToString ( ) {
