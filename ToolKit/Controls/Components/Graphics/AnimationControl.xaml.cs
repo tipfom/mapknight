@@ -126,26 +126,47 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 // width > height
                 rectangle_player.Width = greaterSizeEditorUsePercent[(int)slider_zoom.Value] * canvas_frame.RenderSize.Width;
                 rectangle_player.Height = rectangle_player.Width / TransformAspectRatio;
-
+                if (rectangle_player.Height > canvas_frame.RenderSize.Height) {
+                    rectangle_player.Height = canvas_frame.RenderSize.Height;
+                    rectangle_player.Width = canvas_frame.RenderSize.Height * TransformAspectRatio;
+                }
                 rectangle_entity_default.Width = canvas_bones.RenderSize.Width;
                 rectangle_entity_default.Height = canvas_bones.RenderSize.Width / TransformAspectRatio;
+                if (rectangle_entity_default.Height > canvas_bones.RenderSize.Height) {
+                    rectangle_entity_default.Height = canvas_bones.RenderSize.Height;
+                    rectangle_entity_default.Width = canvas_bones.RenderSize.Height * TransformAspectRatio;
+                }
             } else {
                 // height > width
                 rectangle_player.Height = greaterSizeEditorUsePercent[(int)slider_zoom.Value] * canvas_frame.RenderSize.Height;
                 rectangle_player.Width = TransformAspectRatio * rectangle_player.Height;
-
+                if (rectangle_player.Width > canvas_frame.RenderSize.Width) {
+                    rectangle_player.Width = canvas_frame.RenderSize.Width;
+                    rectangle_player.Height = canvas_frame.RenderSize.Width / TransformAspectRatio;
+                }
                 rectangle_entity_default.Height = canvas_bones.RenderSize.Height;
                 rectangle_entity_default.Width = canvas_bones.RenderSize.Height * TransformAspectRatio;
+                if (rectangle_entity_default.Width > canvas_bones.RenderSize.Width) {
+                    rectangle_entity_default.Width = canvas_bones.RenderSize.Width;
+                    rectangle_entity_default.Height = canvas_bones.RenderSize.Width / TransformAspectRatio;
+                }
             }
             Canvas.SetLeft(border_rectangle_player, (canvas_frame.RenderSize.Width - rectangle_player.Width) / 2d);
             Canvas.SetTop(border_rectangle_player, (canvas_frame.RenderSize.Height - rectangle_player.Height) / 2d);
             Canvas.SetLeft(border_rectangle_entity_default, (canvas_bones.RenderSize.Width - rectangle_entity_default.Width) / 2d);
             Canvas.SetTop(border_rectangle_entity_default, (canvas_bones.RenderSize.Height - rectangle_entity_default.Height) / 2d);
 
+            foreach (UIElement element in canvas_bones.Children) {
+                ResizableImage image = element as ResizableImage;
+                if (image != null) {
+                    UpdateBoneImage(image, Bones[Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath)], rectangle_entity_default, border_rectangle_entity_default);
+                }
+            }
+
             if (currentFrame == null)
                 return;
             foreach (KeyValuePair<string, ResizableImage> kvpair in boneImages) {
-                UpdateBoneImage(kvpair.Key);
+                UpdateBoneImage(kvpair.Value, currentFrame.State[kvpair.Key], rectangle_player, border_rectangle_player);
             }
         }
 
@@ -241,7 +262,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             frame.State.Remove(kvpair.Key);
             frame.State.Add(kvpair.Key, bone);
             if (frame == currentFrame)
-                UpdateBoneImage(kvpair.Key);
+                UpdateBoneImage(boneImages[kvpair.Key], currentFrame.State[kvpair.Key], rectangle_player, border_rectangle_player);
         }
 
         private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
@@ -391,7 +412,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 dockpanel_edit.Visibility = Visibility.Visible;
                 dockpanel_preview.Visibility = Visibility.Hidden;
                 foreach (string bone in boneImages.Keys) {
-                    UpdateBoneImage(bone);
+                    UpdateBoneImage(boneImages[bone], currentFrame.State[bone], rectangle_player, border_rectangle_player);
                 }
             } else {
                 treeview_animations.ContextMenu = null;
@@ -406,15 +427,13 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             }
         }
 
-        private void UpdateBoneImage (string key) {
-            ResizableImage image = boneImages[key];
-            VertexBone bone = currentFrame.State[key];
-            image.Width = rectangle_player.Width * bone.Size.X;
-            image.Height = rectangle_player.Height * bone.Size.Y;
+        private void UpdateBoneImage (ResizableImage image, VertexBone bone, System.Windows.Shapes.Rectangle rect, Border border) {
+            image.Width = rect.Width * bone.Size.X;
+            image.Height = rect.Height * bone.Size.Y;
             image.IsFlipped = bone.Mirrored;
             image.Rotation = bone.Rotation;
-            double newleft = Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d + bone.Position.X * rectangle_player.Width - image.Width / 2d;
-            double newtop = Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d + bone.Position.Y * rectangle_player.Height - image.Height / 2d;
+            double newleft = Canvas.GetLeft(border) + rect.Width / 2d + bone.Position.X * rect.Width - image.Width / 2d;
+            double newtop = Canvas.GetTop(border) + rect.Height / 2d + bone.Position.Y * rect.Height - image.Height / 2d;
             Canvas.SetLeft(image, newleft);
             Canvas.SetTop(image, newtop);
         }
@@ -470,10 +489,12 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         Bones.Add(name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
                         _Images.Add(name, image);
 
+                        Canvas.SetTop(defaultBoneImage, 0);
+                        Canvas.SetLeft(defaultBoneImage, 0);
                         if (!string.IsNullOrEmpty(defaultSizeBone)) {
                             Vector2 percentPerPixel = new Vector2((float)(Bones[defaultSizeBone].Size.X / Images[defaultSizeBone].Width), (float)(Bones[defaultSizeBone].Size.Y / Images[defaultSizeBone].Height));
-                            defaultBoneImage.Width = percentPerPixel.X * image.Width * rectangle_player.Width;
-                            defaultBoneImage.Height = percentPerPixel.Y * image.Height * rectangle_player.Height;
+                            defaultBoneImage.Width = percentPerPixel.X * image.Width * rectangle_entity_default.Width;
+                            defaultBoneImage.Height = percentPerPixel.Y * image.Height * rectangle_entity_default.Height;
                         } else {
                             defaultBoneImage.Width = 100;
                             defaultBoneImage.Height = 100 * image.Height / image.Width;
@@ -516,8 +537,8 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                     if (bone != defaultSizeBone) {
                         image.Width = rectangle_entity_default.Width * Bones[bone].Size.X;
                         image.Height = rectangle_entity_default.Height * Bones[bone].Size.Y;
-                       // Canvas.SetLeft(image, Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width * (Bones[bone].Position.X + 0.5f) - image.Width / 2f);
-                       // Canvas.SetTop(image, Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height * (Bones[bone].Position.Y + 0.5f) - image.Height / 2f);
+                        // Canvas.SetLeft(image, Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width * (Bones[bone].Position.X + 0.5f) - image.Width / 2f);
+                        // Canvas.SetTop(image, Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height * (Bones[bone].Position.Y + 0.5f) - image.Height / 2f);
                     }
                 }
             }
@@ -531,7 +552,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             UpdatePositionOfDefaultBone((ResizableImage)sender);
         }
 
-        private void UpdatePositionOfDefaultBone(ResizableImage image) {
+        private void UpdatePositionOfDefaultBone (ResizableImage image) {
             if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
             string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
@@ -566,6 +587,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 Bones.Remove(bonename);
                 BonesChanged( );
             }
+        }
+
+        private void canvas_bones_SizeChanged (object sender, SizeChangedEventArgs e) {
+            AdjustEditor( );
         }
     }
 }

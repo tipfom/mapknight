@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="Gray" BorderThickness="1">
                 <Canvas Name="canvas_bones" Grid.Row="0" AllowDrop="True"
-                    DragEnter="canvas_bones_DragEnter" Drop="canvas_bones_Drop">
+                    DragEnter="canvas_bones_DragEnter" Drop="canvas_bones_Drop" SizeChanged="canvas_bones_SizeChanged">
                     <Grid Width="{Binding ActualWidth, ElementName=canvas_bones}" Height="{Binding ActualHeight, ElementName=canvas_bones}">
                         <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0" Text="Double Click to Scale relative to Size" Opacity="0.4"/>
                         <Image Source="{StaticResource ResourceKey=image_draganddrop}" Stretch="None" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.05"/>
