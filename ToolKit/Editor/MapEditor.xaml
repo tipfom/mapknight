@@ -7,6 +7,13 @@
              xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="600" IsEnabled="False">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:CustomCommands.EditorUndo" Executed="CommandBinding_Undo_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltA" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltS" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltD" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltF" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+    </UserControl.CommandBindings>
     <UserControl.Resources>
         <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">

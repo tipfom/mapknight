@@ -27,6 +27,15 @@ namespace mapKnight.ToolKit {
             }
             );
 
+        public static readonly RoutedUICommand EditorUndo = new RoutedUICommand(
+            "EditorUndo",
+            "EditorUndo",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.Z, ModifierKeys.Control)
+            }
+            );
+
         public static readonly RoutedUICommand EditorOpen = new RoutedUICommand(
             "EditorOpen",
             "EditorOpen",
@@ -60,6 +69,42 @@ namespace mapKnight.ToolKit {
             typeof(CustomCommands),
             new InputGestureCollection( ) {
                 new KeyGesture(Key.R, ModifierKeys.Control |ModifierKeys.Shift)
+            }
+            );
+
+        public static readonly RoutedUICommand EditorAltA = new RoutedUICommand(
+            "EditorAltA",
+            "EditorAltA",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.A, ModifierKeys.Alt)
+            }
+            );
+
+        public static readonly RoutedUICommand EditorAltS = new RoutedUICommand(
+            "EditorAltS",
+            "EditorAltS",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.S, ModifierKeys.Alt)
+            }
+            );
+
+        public static readonly RoutedUICommand EditorAltD = new RoutedUICommand(
+            "EditorAltD",
+            "EditorAltD",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.D, ModifierKeys.Alt)
+            }
+            );
+
+        public static readonly RoutedUICommand EditorAltF = new RoutedUICommand(
+            "EditorAltF",
+            "EditorAltF",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.F, ModifierKeys.Alt)
             }
             );
     }

@@ -26,7 +26,6 @@ namespace mapKnight.ToolKit.Editor {
     /// Interaktionslogik für MapEditor.xaml
     /// </summary>
     public partial class MapEditor : UserControl {
-
         private static Style imageStyle = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Value = false, Property = IsEnabledProperty, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } };
 
         private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
@@ -62,12 +61,12 @@ namespace mapKnight.ToolKit.Editor {
         private int currentlyEditionTilesMap = -1;
         private Tool currentTool = Tool.Pen;
 
+        private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
         private GraphicsDevice GraphicsDevice;
         private Point lastClickedTile = new Point(-1, -1);
         private Dictionary<Map, float[ , , ]> mapRotations = new Dictionary<Map, float[ , , ]>( );
         private Dictionary<Map, Dictionary<string, BitmapImage>> wpfTextures = new Dictionary<Map, Dictionary<string, BitmapImage>>( );
         private Dictionary<Map, Dictionary<string, Texture2D>> xnaTextures = new Dictionary<Map, Dictionary<string, Texture2D>>( );
-        private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
 
         public MapEditor ( ) {
             InitializeComponent( );
@@ -101,34 +100,13 @@ namespace mapKnight.ToolKit.Editor {
             ((RadioButton)_Menu[10]).Checked += (sender, e) => { currentLayer = 1; };
             ((RadioButton)_Menu[11]).Checked += (sender, e) => { currentLayer = 2; };
 
-            _Menu[13].MouseDown += (sender, e) => {
-                UndoLast( );
-            };
-            _Menu[14].MouseDown += (sender, e) => {
-                currentTool = Tool.Pen;
-                ResetToolBorders( );
-                ((Border)_Menu[14]).BorderThickness = new Thickness(1);
-            };
-            _Menu[15].MouseDown += (sender, e) => {
-                currentTool = Tool.Eraser;
-                ResetToolBorders( );
-                ((Border)_Menu[15]).BorderThickness = new Thickness(1);
-            };
-            _Menu[16].MouseDown += (sender, e) => {
-                currentTool = Tool.Filler;
-                ResetToolBorders( );
-                ((Border)_Menu[16]).BorderThickness = new Thickness(1);
-            };
-            _Menu[17].MouseDown += (sender, e) => {
-                currentTool = Tool.Pointer;
-                ResetToolBorders( );
-                ((Border)_Menu[17]).BorderThickness = new Thickness(1);
-            };
-            _Menu[18].MouseDown += (sender, e) => {
-                currentTool = Tool.Rotater;
-                ResetToolBorders( );
-                ((Border)_Menu[18]).BorderThickness = new Thickness(1);
-            };
+            _Menu[13].MouseDown += (sender, e) => UndoLast( );
+
+            _Menu[14].MouseDown += (sender, e) => SelectTool(Tool.Pen);
+            _Menu[15].MouseDown += (sender, e) => SelectTool(Tool.Eraser);
+            _Menu[16].MouseDown += (sender, e) => SelectTool(Tool.Filler);
+            _Menu[17].MouseDown += (sender, e) => SelectTool(Tool.Pointer);
+            _Menu[18].MouseDown += (sender, e) => SelectTool(Tool.Rotater);
 
             App.ProjectChanged += ( ) => {
                 App.Project.Saved += Save;
@@ -153,11 +131,11 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private enum Tool {
-            Pen,
-            Eraser,
-            Filler,
-            Pointer,
-            Rotater
+            Pen = 0,
+            Eraser = 1,
+            Filler = 2,
+            Pointer = 3,
+            Rotater = 4
         }
 
         public List<FrameworkElement> Menu { get { return _Menu; } }
@@ -281,6 +259,23 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
+        private void CommandBinding_CanExecuteAlways (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = true;
+        }
+
+        private void CommandBinding_ToolSelection_Executed (object sender, ExecutedRoutedEventArgs e) {
+            switch (((RoutedUICommand)e.Command).Name.Last( )) {
+                case 'A': SelectTool(Tool.Pen); break;
+                case 'S': SelectTool(Tool.Eraser); break;
+                case 'D': SelectTool(Tool.Filler); break;
+                case 'F': SelectTool(Tool.Rotater); break;
+            }
+        }
+
+        private void CommandBinding_Undo_Executed (object sender, ExecutedRoutedEventArgs e) {
+            UndoLast( );
+        }
+
         private void create_map_Click (object sender, RoutedEventArgs e) {
             new CreateMapWindow(tilemapview.GraphicsDevice, AddMap, AddTexture).ShowDialog( );
             if (currentMap != null)
@@ -375,6 +370,12 @@ namespace mapKnight.ToolKit.Editor {
 
         private void scrollbar_vertical_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
             tilemapview.Offset = new Microsoft.Xna.Framework.Point(tilemapview.Offset.X, (int)scrollbar_vertical.Value);
+        }
+
+        private void SelectTool (Tool tool) {
+            currentTool = tool;
+            ResetToolBorders( );
+            ((Border)_Menu[14 + (int)tool]).BorderThickness = new Thickness(1);
         }
 
         private void tilemapview_MouseDown (object sender, MouseButtonEventArgs e) {
