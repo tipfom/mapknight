@@ -41,12 +41,33 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             if (File.Exists(Path.Combine(pathtoload, "animation.meta"))) {
                 AnimationMetaData metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(Path.Combine(pathtoload, "animation.meta")));
                 EntityName = metaData.Name;
-                foreach (string file in metaData.Bones) {
-                    if (File.Exists(Path.Combine(pathtoload, file))) {
-                        // BoneListBoxItem item = new BoneListBoxItem(Path.Combine(pathtoload, file));
-                        // Bones.Add(item.Name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
-                        //Images.Add(item.Name, item.Image);
-                        // listbox_bones.Items.Add(new BoneListBoxItem(Path.Combine(pathtoload, file)));
+                defaultSizeBone = metaData.DefaultBoneName;
+                TransformAspectRatio = metaData.Ratio;
+                Bones = metaData.Bones;
+                foreach (KeyValuePair<string, VertexBone> kvpair in metaData.Bones) {
+                    if (File.Exists(Path.Combine(pathtoload, kvpair.Key + ".png"))) {
+                        BitmapImage image = new BitmapImage(new Uri(Path.Combine(pathtoload, kvpair.Key + ".png")));
+
+                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ) };
+                        defaultBoneImage.ContextMenu = new ContextMenu( ) {
+                            DataContext = defaultBoneImage,
+                            Items = {
+                                new MenuItem() { Header = "Delete", Icon = new Image() { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_delete") } }
+                            }
+                        };
+                        UpdateBoneImage(defaultBoneImage, kvpair.Value, rectangle_entity_default, border_rectangle_entity_default);
+
+                        ((MenuItem)defaultBoneImage.ContextMenu.Items[0]).Click += MenuItemDelete_Click;
+                        defaultBoneImage.MouseDoubleClick += DefaultBoneImage_MouseDoubleClick;
+
+                        defaultBoneImage.SizeChanged += DefaultBoneImage_SizeChanged;
+                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(ResizableImage));
+                        canvasleftproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasLeftChanged);
+                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
+                        canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
+
+                        canvas_bones.Children.Add(defaultBoneImage);
+                        Images.Add(kvpair.Key, image);
                     }
                 }
                 BonesChanged( );
@@ -77,7 +98,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         public void Save (string path) {
-            AnimationMetaData metaData = new AnimationMetaData( ) { Ratio = TransformAspectRatio, Name = EntityName, Bones = new List<string>( ) };
+            AnimationMetaData metaData = new AnimationMetaData( ) { Ratio = TransformAspectRatio, Name = EntityName, Bones = Bones, DefaultBoneName = defaultSizeBone };
             if (Directory.Exists(Path.Combine(path, EntityName)))
                 Directory.Delete(Path.Combine(path, EntityName));
             Directory.CreateDirectory(Path.Combine(path, EntityName));
@@ -86,7 +107,6 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 encoder.Frames.Add(BitmapFrame.Create(kvpair.Value));
                 using (Stream fileStream = File.Create(Path.Combine(path, EntityName, kvpair.Key + ".png")))
                     encoder.Save(fileStream);
-                metaData.Bones.Add(kvpair.Key + ".png");
             }
             File.Create(Path.Combine(path, EntityName, "animation.meta")).Close( );
             File.WriteAllText(Path.Combine(path, EntityName, "animation.meta"), JsonConvert.SerializeObject(metaData));
@@ -450,9 +470,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private struct AnimationMetaData {
-            public List<string> Bones;
             public string Name;
             public double Ratio;
+            public Dictionary<string, VertexBone> Bones;
+            public string DefaultBoneName;
         }
 
         private void canvas_bones_DragEnter (object sender, DragEventArgs e) {
