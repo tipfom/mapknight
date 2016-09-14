@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace mapKnight.ToolKit.Windows {
 
         private void Button_Click (object sender, RoutedEventArgs e) {
             float width, height;
-            if(float.TryParse(textbox_width.Text, out width) && float.TryParse(textbox_height.Text, out height)) {
+            if(float.TryParse(textbox_width.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out width) && float.TryParse(textbox_height.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out height)) {
                 Ratio = width / height;
                 DialogResult = true;
                 Close( );
