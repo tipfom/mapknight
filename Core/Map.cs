@@ -11,7 +11,7 @@ namespace mapKnight.Core {
     public class Map {
         public const int TILE_PXL_SIZE = 18;
         public static byte[ ] HEADER { get; } = { 133, 007, 042, 077, 064, 080 };
-        public static short VERSION { get; } = 2;
+        public static short VERSION { get; } = 3;
 
         #region default deserialization values
         private static Vector2 DEFAULT_GRAVITY { get { return new Vector2(0, -60); } }
@@ -56,6 +56,9 @@ namespace mapKnight.Core {
                         break;
                     case 2:
                         Deserialize00002(reader);
+                        break;
+                    case 3:
+                        Deserialize00003(reader);
                         break;
                     default:
                         throw new FileLoadException($"map version {version} is not known.");
@@ -132,13 +135,10 @@ namespace mapKnight.Core {
                 writer.Write(tilesraw);
 
                 // write texturename
-                writer.Write((short)Texture.Length);
                 writer.Write(Texture.Encode( ));
 
                 // write info
-                writer.Write((short)Creator.Length);
                 writer.Write(Creator.Encode( ));
-                writer.Write((short)Name.Length);
                 writer.Write(Name.Encode( ));
                 writer.Write(Gravity.X);
                 writer.Write(Gravity.Y);
@@ -265,6 +265,57 @@ namespace mapKnight.Core {
             Name = reader.ReadBytes(reader.ReadInt16( )).Decode( );
             Gravity = new Vector2(reader.ReadSingle( ), reader.ReadSingle( ));
         }
+
+        private void Deserialize00003 (BinaryReader reader) {
+            bool is32bit = reader.ReadBoolean( );
+
+            Size = new Size(reader.ReadInt16( ), reader.ReadInt16( ));
+            SpawnPoint = new Vector2(reader.ReadInt16( ), reader.ReadInt16( ));
+
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            // load data
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            Data = new int[Width, Height, 3];
+
+            int currenttile;
+            int currentlayer = 0;
+            while ((currenttile = is32bit ? reader.ReadInt32( ) : reader.ReadInt16( )) != 0) {
+                while (currentlayer < 3) {
+                    int data = (is32bit ? reader.ReadInt32( ) : reader.ReadInt16( )) - 1;
+                    if (data == -1) {
+                        currentlayer++;
+                    } else {
+                        int y = (int)(data / Width);
+                        int x = data - (int)(y * Width);
+                        Data[x, y, currentlayer] = currenttile;
+                    }
+                }
+                currentlayer = 0;
+            }
+
+            // uncompress mapdata
+            int[ ] currentTile = new int[ ] { -1, -1, -1 };
+            for (int y = 0; y < Height; y++) {
+                for (int x = 0; x < Width; x++) {
+                    for (int layer = 0; layer < 3; layer++) {
+                        if (Data[x, y, layer] != currentTile[layer] && Data[x, y, layer] != 0) {
+                            currentTile[layer] = Data[x, y, layer];
+                        } else {
+                            Data[x, y, layer] = currentTile[layer];
+                        }
+                        Data[x, y, layer] -= 1;
+                    }
+                }
+            }
+
+            Tiles = JsonConvert.DeserializeObject<Tile[ ]>(reader.ReadBytes(reader.ReadInt16( )).Decode( ).Decompress( ));
+            Texture = reader.ReadString( );
+
+            Creator = reader.ReadString( );
+            Name = reader.ReadString( );
+            Gravity = new Vector2(reader.ReadSingle( ), reader.ReadSingle( ));
+        }
+
         #endregion
     }
 }
