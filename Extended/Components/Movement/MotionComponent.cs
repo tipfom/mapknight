@@ -43,7 +43,7 @@ namespace mapKnight.Extended.Components.Movement {
                 appliedAcceleration += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0];
 
             // update velocity
-            enforcedVelocity += appliedAcceleration * .5f * (float)dt.TotalSeconds;
+            enforcedVelocity += appliedAcceleration * dt.TotalSeconds;
             foreach (Vector2 velocity in appliedVelocities)
                 enforcedVelocity += velocity;
             TotalVelocity = enforcedVelocity + AimedVelocity;
@@ -51,12 +51,17 @@ namespace mapKnight.Extended.Components.Movement {
             if (IsOnGround)
                 enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
 
-            Transform newTransform = new Transform(Owner.Transform.Center + TotalVelocity * (float)dt.TotalSeconds, Owner.Transform.Size);
+            Transform newTransform = new Transform(Owner.Transform.Center + TotalVelocity * dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
                 IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
+
+                if (IsOnGround) enforcedVelocity.X = 0;
+                if (IsAtWall) {
+                    enforcedVelocity.X = 0;
+                    AimedVelocity.X = 0;
+                }
             }
-            enforcedVelocity += appliedAcceleration * .5f * dt.TotalSeconds;
 
             Owner.Transform = newTransform;
             IsOnPlatform = false;
