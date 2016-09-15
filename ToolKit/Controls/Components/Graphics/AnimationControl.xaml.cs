@@ -214,7 +214,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             float newsizex = (float)(image.Width / rectangle_player.Width);
             float newsizey = (float)(image.Height / rectangle_player.Height);
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
-            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
+            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
             string key = boneImages.First(pair => pair.Value == sender).Key;
             VertexBone current = currentFrame.State[key];
             current.Size = new Vector2(newsizex, newsizey);
@@ -453,7 +453,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             image.IsFlipped = bone.Mirrored;
             image.Rotation = bone.Rotation;
             double newleft = Canvas.GetLeft(border) + rect.Width / 2d + bone.Position.X * rect.Width - image.Width / 2d;
-            double newtop = Canvas.GetTop(border) + rect.Height / 2d + bone.Position.Y * rect.Height - image.Height / 2d;
+            double newtop = Canvas.GetTop(border) + rect.Height / 2d - bone.Position.Y * rect.Height - image.Height / 2d;
             Canvas.SetLeft(image, newleft);
             Canvas.SetTop(image, newtop);
         }
@@ -462,7 +462,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             if (currentFrame == null) return;
             ResizableImage image = boneImages[key];
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
-            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
+            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
             VertexBone current = currentFrame.State[key];
             current.Position = new Vector2(newpercentx, newpercenty);
             currentFrame.State.Remove(key);
@@ -577,7 +577,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
             string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
-            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
+            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
             VertexBone current = Bones[bone];
             current.Position = new Vector2(newpercentx, newpercenty);
             Bones[bone] = current;
@@ -591,7 +591,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             float newsizex = (float)(image.Width / rectangle_entity_default.Width);
             float newsizey = (float)(image.Height / rectangle_entity_default.Height);
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
-            float newpercenty = (float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
+            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
 
             VertexBone current = Bones[bone];
             current.Size = new Vector2(newsizex, newsizey);

@@ -182,6 +182,7 @@ namespace mapKnight.Extended {
                     entityNames.Add(entitySpecies, Name);
                     Components.ResolveComponentDependencies( );
                     Components.Sort( );
+                    UpdateInfo( );
                 }
                 return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, entitySpecies, info);
             }
@@ -190,7 +191,7 @@ namespace mapKnight.Extended {
                 HashSet<Type> typeSet = new HashSet<Type>(Components.Select(item => item.GetType( )));
                 info = new EntityInfo( ) {
                     IsPlatform = typeSet.Contains(typeof(PlatformComponent.Configuration)),
-                    IsPlayer = typeSet.Any(type => type.IsSubclassOf(typeof(BaseComponent.Configuration))),
+                    IsPlayer = typeSet.Any(type => type.IsSubclassOf(typeof(BaseComponent.Configuration)) || type == typeof(BaseComponent.Configuration)),
                     IsTemporary = typeSet.Contains(typeof(TriggerComponent.InternalTriggerComponent.Configuration)),
 
                     HasHealth = typeSet.Contains(typeof(HealthComponent.Configuration))
