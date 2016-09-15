@@ -60,6 +60,8 @@ namespace mapKnight.Extended.Components.Movement {
 
             Owner.Transform = newTransform;
             IsOnPlatform = false;
+
+            if (TotalVelocity.X < 0) Owner.SetComponentInfo(ComponentData.ScaleX, -1f);
         }
 
         private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {

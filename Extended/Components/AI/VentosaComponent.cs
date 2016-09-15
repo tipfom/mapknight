@@ -51,7 +51,6 @@ namespace mapKnight.Extended.Components.AI {
                 }
             }
             motionComponent.AimedVelocity.X = speedComponent.Speed.X * speedMult;
-            Owner.SetComponentInfo(ComponentData.ScaleX, speedMult);
         }
 
         public new class Configuration : Component.Configuration {
