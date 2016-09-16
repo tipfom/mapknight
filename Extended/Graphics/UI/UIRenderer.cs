@@ -8,23 +8,26 @@ namespace mapKnight.Extended.Graphics.UI {
 
     public static class UIRenderer {
         public static SpriteBatch Texture;
-        private const int MAX_QUADS = 400;
-        private static BufferBatch[ ] buffer;
-        private static bool[ ] bufferUpdated = { false, false, false };
+        private const int MAX_QUADS = 800;
+        private static BufferBatch buffer;
         private static Screen currentScreen;
         private static List<Tuple<UIItem, int>>[ ] indexUsage;
-        private static int[ ] renderCount = { 0, 0, 0 };
+        private static int renderCount = 0;
         private static Dictionary<Screen, List<UIItem>> uiItems;
-        private static int[ ] vertexCount = { 0, 0, 0 };
-        private static Queue<UIItem> updateQueue = new Queue<UIItem>();
+        private static int vertexCount = 0;
+        private static Queue<UIItem> updateQueue = new Queue<UIItem>( );
+        private static int[ ] startPositions = { 0, 0, 0 };
+
+        private static CachedGPUBuffer vertexBuffer;
+        private static CachedGPUBuffer textureBuffer;
+        private static CachedGPUBuffer colorBuffer;
 
         static UIRenderer ( ) {
             IndexBuffer sharedIndexBuffer = new IndexBuffer(MAX_QUADS);
-            buffer = new BufferBatch[ ] {
-                new BufferBatch(sharedIndexBuffer, new CachedGPUBuffer(2, MAX_QUADS), new CachedGPUBuffer(4, MAX_QUADS), new CachedGPUBuffer(2, MAX_QUADS)),
-                new BufferBatch(sharedIndexBuffer, new CachedGPUBuffer(2, MAX_QUADS), new CachedGPUBuffer(4, MAX_QUADS), new CachedGPUBuffer(2, MAX_QUADS)),
-                new BufferBatch(sharedIndexBuffer, new CachedGPUBuffer(2, MAX_QUADS), new CachedGPUBuffer(4, MAX_QUADS), new CachedGPUBuffer(2, MAX_QUADS))
-            };
+            vertexBuffer = new CachedGPUBuffer(2, MAX_QUADS);
+            textureBuffer = new CachedGPUBuffer(2, MAX_QUADS);
+            colorBuffer = new CachedGPUBuffer(4, MAX_QUADS);
+            buffer = new BufferBatch(sharedIndexBuffer, vertexBuffer, colorBuffer, textureBuffer);
 
             uiItems = new Dictionary<Screen, List<UIItem>>( );
             indexUsage = new List<Tuple<UIItem, int>>[ ] { new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ) };
@@ -54,17 +57,19 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public static void Draw ( ) {
             Program.Begin( );
-            Program.Draw(buffer[0], Texture, Matrix.Default, renderCount[0], 0, true);
-            Program.Draw(buffer[1], Texture, Matrix.Default, renderCount[1], 0, true);
-            Program.Draw(buffer[2], Texture, Matrix.Default, renderCount[2], 0, true);
+            Program.Draw(buffer, Texture, Matrix.Default, renderCount, 0, true);
             Program.End( );
         }
 
         public static void Prepare (Screen target) {
             currentScreen = target;
-            vertexCount = new int[ ] { 0, 0, 0 };
-            renderCount = new int[ ] { 0, 0, 0 };
-            indexUsage = new List<Tuple<UIItem, int>>[ ] { new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ) };
+            vertexCount = 0;
+            renderCount = 0;
+            Array.Clear(startPositions, 0, 3);
+
+            indexUsage[0].Clear( );
+            indexUsage[1].Clear( );
+            indexUsage[2].Clear( );
             updateQueue.Clear( );
 
             if (uiItems.ContainsKey(target)) {
@@ -78,82 +83,89 @@ namespace mapKnight.Extended.Graphics.UI {
             updateQueue.Enqueue(item);
         }
 
-        private static void UpdateBuffer(UIItem item) {
-            for (int depth = 0; depth < 3; depth++) {
-                int current = 0;
-                for (int i = 0; i < indexUsage[depth].Count; i++) {
-                    Tuple<UIItem, int> entry = indexUsage[depth][i];
-                    if (entry.Item1 == item) {
-                        bufferUpdated[depth] = true;
-                        indexUsage[depth].RemoveAt(i);
-                        vertexCount[depth] -= entry.Item2;
-                        renderCount[depth] -= entry.Item2 * 6 / 8;
-                        int end = current + entry.Item2;
-                        CachedGPUBuffer vbuffer = ((CachedGPUBuffer)buffer[depth].VertexBuffer);
-                        Array.Copy(vbuffer.Cache, end, vbuffer.Cache, current, vbuffer.Cache.Length - end);
-                        CachedGPUBuffer tbuffer = ((CachedGPUBuffer)buffer[depth].TextureBuffer);
-                        Array.Copy(tbuffer.Cache, end, tbuffer.Cache, current, tbuffer.Cache.Length - end);
-                        CachedGPUBuffer cbuffer = ((CachedGPUBuffer)buffer[depth].ColorBuffer);
-                        Array.Copy(cbuffer.Cache, end * 2, cbuffer.Cache, current * 2, cbuffer.Cache.Length - end * 2);
-                        break;
-                    } else {
-                        current += entry.Item2;
-                    }
-                }
-            }
+        private static void UpdateBuffer (UIItem item) {
             if (item.Visible) {
-                Dictionary<int, List<DepthVertexData>> data = new Dictionary<int, List<DepthVertexData>>( );
+                Queue<DepthVertexData>[ ] data = { new Queue<DepthVertexData>( ), new Queue<DepthVertexData>( ), new Queue<DepthVertexData>( ) };
                 foreach (DepthVertexData vertexData in item.ConstructVertexData( )) {
-                    if (!data.ContainsKey(vertexData.Depth))
-                        data.Add(vertexData.Depth, new List<DepthVertexData>( ));
-                    data[vertexData.Depth].Add(vertexData);
+                    data[vertexData.Depth].Enqueue(vertexData);
                 }
 
-                foreach (KeyValuePair<int, List<DepthVertexData>> entry in data) {
-                    indexUsage[entry.Key].Add(new Tuple<UIItem, int>(item, entry.Value.Count * 8));
-                    foreach (DepthVertexData vertexData in entry.Value) {
-                        CachedGPUBuffer vbuffer = ((CachedGPUBuffer)buffer[entry.Key].VertexBuffer);
-                        Array.Copy(vertexData.Verticies, 0, vbuffer.Cache, vertexCount[entry.Key], 8);
-                        CachedGPUBuffer tbuffer = ((CachedGPUBuffer)buffer[entry.Key].TextureBuffer);
-                        Array.Copy(Texture.Get(vertexData.Texture), 0, tbuffer.Cache, vertexCount[entry.Key], 8);
-                        CachedGPUBuffer cbuffer = ((CachedGPUBuffer)buffer[entry.Key].ColorBuffer);
-                        Array.Copy(vertexData.Color.ToOpenGL( ), 0, cbuffer.Cache, vertexCount[entry.Key] * 2, 16);
-                        vertexCount[entry.Key] += 8;
-                        renderCount[entry.Key] += 6;
+                for (int d = 0; d < 3; d++) {
+                    Queue<DepthVertexData> queue = data[d];
+                    int verticies = queue.Count * 8;
+                    int position, index = FindCurrentIndex(item, d, out position);
+                    int delta = verticies - ((index == -1) ? 0 : indexUsage[d][index].Item2);
+
+                    if (delta != 0) {
+                        // create space
+                        int oldend = position + ((index == -1) ? 0 : indexUsage[d][index].Item2), newend = position + verticies, length = Math.Max(oldend, newend);
+                        Array.Copy(vertexBuffer.Cache, oldend, vertexBuffer.Cache, newend, vertexBuffer.Cache.Length - length);
+                        Array.Copy(textureBuffer.Cache, oldend, textureBuffer.Cache, newend, textureBuffer.Cache.Length - length);
+                        Array.Copy(colorBuffer.Cache, oldend * 2, colorBuffer.Cache, newend * 2, colorBuffer.Cache.Length - length * 2);
                     }
-                    bufferUpdated[entry.Key] = true;
+
+                    if (index != -1) indexUsage[d][index] = new Tuple<UIItem, int>(item, verticies);
+                    else indexUsage[d].Add(new Tuple<UIItem, int>(item, verticies));
+
+                    vertexCount += delta;
+                    renderCount += delta * 6 / 8;
+                    while (queue.Count > 0) {
+                        DepthVertexData vertexData = queue.Dequeue( );
+                        Array.Copy(vertexData.Verticies, 0, vertexBuffer.Cache, position, 8);
+                        Array.Copy(Texture.Get(vertexData.Texture), 0, textureBuffer.Cache, position, 8);
+                        Array.Copy(vertexData.Color.ToOpenGL( ), 0, colorBuffer.Cache, position * 2, 16);
+                        position += 8;
+                    }
+                    for (int di = d; di < 3; di++) startPositions[di] += delta;
+                }
+            } else {
+                int index;
+                int position;
+                for (int d = 0; d < 3; d++) {
+                    index = FindCurrentIndex(item, d, out position);
+                    if (index > -1) {
+                        int verticiesToClear = indexUsage[d][index].Item2;
+                        indexUsage[d].RemoveAt(index);
+                        vertexCount -= verticiesToClear;
+                        renderCount -= verticiesToClear * 6 / 8;
+                        for (int di = d; di < 3; di++) startPositions[di] -= verticiesToClear;
+                        int end = position + verticiesToClear;
+                        Array.Copy(vertexBuffer.Cache, end, vertexBuffer.Cache, position, vertexBuffer.Cache.Length - end);
+                        Array.Copy(textureBuffer.Cache, end, textureBuffer.Cache, position, textureBuffer.Cache.Length - end);
+                        Array.Copy(colorBuffer.Cache, end * 2, colorBuffer.Cache, position * 2, colorBuffer.Cache.Length - end * 2);
+                    }
                 }
             }
         }
 
+        private static int FindCurrentIndex (UIItem item, int depth, out int position) {
+            position = (depth == 0) ? 0 : startPositions[depth - 1];
+            for (int i = 0; i < indexUsage[depth].Count; i++) {
+                Tuple<UIItem, int> entry = indexUsage[depth][i];
+                if (entry.Item1 == item) {
+                    return i;
+                } else {
+                    position += entry.Item2;
+                }
+            }
+            return -1;
+        }
+
         public static void Update (DeltaTime dt) {
-            while (updateQueue.Count > 0)
-                UpdateBuffer(updateQueue.Dequeue( ));
-            ApplyBufferUpdates( );
+            if (updateQueue.Count > 0) {
+                while (updateQueue.Count > 0)
+                    UpdateBuffer(updateQueue.Dequeue( ));
+                ApplyBufferUpdates( );
+            }
 
             foreach (UIItem item in uiItems[currentScreen])
                 item.Update(dt);
         }
 
         private static void ApplyBufferUpdates ( ) {
-            if (bufferUpdated[0]) {
-                bufferUpdated[0] = false;
-                ((CachedGPUBuffer)buffer[0].VertexBuffer).Apply( );
-                ((CachedGPUBuffer)buffer[0].TextureBuffer).Apply( );
-                ((CachedGPUBuffer)buffer[0].ColorBuffer).Apply( );
-            }
-            if (bufferUpdated[1]) {
-                bufferUpdated[1] = false;
-                ((CachedGPUBuffer)buffer[1].VertexBuffer).Apply( );
-                ((CachedGPUBuffer)buffer[1].TextureBuffer).Apply( );
-                ((CachedGPUBuffer)buffer[1].ColorBuffer).Apply( );
-            }
-            if (bufferUpdated[2]) {
-                bufferUpdated[2] = false;
-                ((CachedGPUBuffer)buffer[2].VertexBuffer).Apply( );
-                ((CachedGPUBuffer)buffer[2].TextureBuffer).Apply( );
-                ((CachedGPUBuffer)buffer[2].ColorBuffer).Apply( );
-            }
+            vertexBuffer.Apply( );
+            textureBuffer.Apply( );
+            colorBuffer.Apply( );
         }
     }
 }

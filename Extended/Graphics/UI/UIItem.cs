@@ -95,6 +95,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     PositionChanged?.Invoke( );
                 }
                 UIRenderer.Update(this);
+                IsDirty = false;
             }
         }
 
