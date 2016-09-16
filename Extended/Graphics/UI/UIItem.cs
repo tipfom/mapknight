@@ -5,8 +5,6 @@ using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public abstract class UIItem : IDisposable {
-        public const Anchor DEFAULT_ANCHOR = Anchor.Left | Anchor.Top;
-
         public event Action PositionChanged;
         public event Action SizeChanged;
 
@@ -19,26 +17,28 @@ namespace mapKnight.Extended.Graphics.UI {
         private bool multiClick;
         private int clickCount;
 
-        public Rectangle Bounds { get; private set; }
+        private Rectangle _Bounds;
+        public Rectangle Bounds { get { return _Bounds; } }
         private UIMargin horizontalMargin;
         private UIMargin verticalMargin;
 
         private Vector2 _Position;
         public Vector2 Position {
             get { return _Position; }
-            private set { _Position = value; Bounds = new Rectangle(Position, Size); RequestUpdate( ); }
         }
         private Vector2 _Size;
         public Vector2 Size {
             get { return _Size; }
-            protected set { _Size = value; Bounds = new Rectangle(Position, value); SizeChanged?.Invoke( ); RequestUpdate( ); }
+            protected set { _Size = value; _Bounds.Size = _Size; SizeChanged?.Invoke( ); IsDirty = true; }
         }
 
         private bool _Visible = true;
-        public bool Visible { get { return Screen.IsActive && _Visible; } set { _Visible = value; RequestUpdate( ); } }
+        public bool Visible { get { return Screen.IsActive && _Visible; } set { _Visible = value; IsDirty = true; } }
 
         private int _Depth;
-        public int Depth { get { return _Depth; } set { _Depth = value; RequestUpdate( ); } }
+        public int Depth { get { return _Depth; } set { _Depth = value; IsDirty = true; } }
+
+        protected bool IsDirty;
 
         public readonly Screen Screen;
 
@@ -50,15 +50,16 @@ namespace mapKnight.Extended.Graphics.UI {
             this.multiClick = multiclick;
             this._Depth = depth;
 
-            vmargin.Bind(this);
-            vmargin.Changed += ( ) => {
-                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            };
-            hmargin.Bind(this);
-            hmargin.Changed += ( ) => {
-                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            };
-            Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            verticalMargin = vmargin;
+            verticalMargin.Bind(this);
+            verticalMargin.Changed += ( ) => IsDirty = true;
+
+            horizontalMargin = hmargin;
+            horizontalMargin.Bind(this);
+            horizontalMargin.Changed += ( ) => IsDirty = true;
+
+            _Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            _Bounds = new Rectangle(_Position, _Size);
         }
 
         public virtual void HandleTouch (UITouchAction action, UITouch touch) {
@@ -85,13 +86,16 @@ namespace mapKnight.Extended.Graphics.UI {
             return Bounds.Collides(touchPosition);
         }
 
-        protected void RequestUpdate ( ) {
-            if (this.Visible)
-                Changed?.Invoke(this);
-        }
-
         public virtual void Update (DeltaTime dt) {
-
+            if (IsDirty) {
+                if(horizontalMargin.IsDirty || verticalMargin.IsDirty) {
+                    _Position.X = horizontalMargin.ScreenPosition;
+                    _Position.Y = verticalMargin.ScreenPosition;
+                    _Bounds.Position = _Position;
+                    PositionChanged?.Invoke( );
+                }
+                UIRenderer.Update(this);
+            }
         }
 
         public virtual void Dispose ( ) {

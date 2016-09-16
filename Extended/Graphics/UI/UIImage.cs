@@ -7,18 +7,18 @@ namespace mapKnight.Extended.Graphics.UI {
         private string textureIdle;
         private string textureClick;
         private Color _ModificationColor;
-        public Color ModificationColor { get { return _ModificationColor; } set { _ModificationColor = value; RequestUpdate( ); } }
+        public Color ModificationColor { get { return _ModificationColor; } set { _ModificationColor = value; IsDirty = true; } }
 
         public UIImage (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string idletexture, string clicktexture, int depth, Color modificationcolor) : base(owner, hmargin, vmargin, size, depth) {
             textureIdle = idletexture;
             textureClick = clicktexture;
 
-            this.Click += ( ) => { RequestUpdate( ); };
-            this.Release += ( ) => { RequestUpdate( ); };
+            this.Click += ( ) => { IsDirty = true; };
+            this.Release += ( ) => { IsDirty = true; };
         }
 
         public override List<DepthVertexData> ConstructVertexData ( ) {
-            return new List<DepthVertexData>( ) { new DepthVertexData(Bounds.Verticies(DEFAULT_ANCHOR), this.Clicked ? textureClick : textureIdle, Depth, ModificationColor) };
+            return new List<DepthVertexData>( ) { new DepthVertexData(Bounds.Verticies(Anchor.Left | Anchor.Top), this.Clicked ? textureClick : textureIdle, Depth, ModificationColor) };
         }
     }
 }

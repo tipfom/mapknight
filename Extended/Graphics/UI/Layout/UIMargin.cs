@@ -16,6 +16,8 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
         private float _Margin;
         public float Margin { get { return _Margin; } set { _Margin = value; CalculateScreenPosition( ); } }
 
+        public bool IsDirty;
+
         public UIMargin (float margin, bool updateonscreenchange) {
             _Margin = margin;
             updateOnScreenChange = updateonscreenchange;
@@ -25,7 +27,9 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
             Dispose( );
         }
 
-        protected abstract void CalculateScreenPosition ( );
+        protected virtual void CalculateScreenPosition ( ) {
+            IsDirty = true;
+        }
 
         public void Bind (UIItem owner) {
             if (allreadyBound) {

@@ -27,8 +27,8 @@ namespace mapKnight.Extended.Graphics.UI {
             base.Release += this_Release;
         }
 
-        public Color Color { get { return _Color; } set { _Color = value; RequestUpdate( ); } }
-        public string Text { get { return _Text; } set { _Text = value; lines = _Text.Split('\n'); RequestUpdate( ); } }
+        public Color Color { get { return _Color; } set { _Color = value; IsDirty = true; ; } }
+        public string Text { get { return _Text; } set { _Text = value; lines = _Text.Split('\n'); IsDirty = true; } }
 
         public override List<DepthVertexData> ConstructVertexData ( ) {
             List<DepthVertexData> vertexData = new List<DepthVertexData>( );
@@ -40,11 +40,11 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         private void this_Click ( ) {
-            RequestUpdate( );
+            IsDirty = true;
         }
 
         private void this_Release ( ) {
-            RequestUpdate( );
+            IsDirty = true; 
         }
     }
 }

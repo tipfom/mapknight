@@ -36,7 +36,6 @@ namespace mapKnight.Extended.Graphics.UI {
             if (!uiItems.ContainsKey(screen))
                 uiItems.Add(screen, new List<UIItem>( ));
             uiItems[screen].Add(item);
-            item.Changed += (UIItem e) => updateQueue.Enqueue(e);
         }
 
         public static void Remove (UIItem uiItem) {
@@ -76,6 +75,10 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public static void Update (UIItem item) {
+            updateQueue.Enqueue(item);
+        }
+
+        private static void UpdateBuffer(UIItem item) {
             for (int depth = 0; depth < 3; depth++) {
                 int current = 0;
                 for (int i = 0; i < indexUsage[depth].Count; i++) {
@@ -125,7 +128,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public static void Update (DeltaTime dt) {
             while (updateQueue.Count > 0)
-                Update(updateQueue.Dequeue( ));
+                UpdateBuffer(updateQueue.Dequeue( ));
             ApplyBufferUpdates( );
 
             foreach (UIItem item in uiItems[currentScreen])
