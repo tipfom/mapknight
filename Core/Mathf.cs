@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 
 namespace mapKnight.Core {
 
@@ -464,6 +465,27 @@ namespace mapKnight.Core {
             if (a > 180) a = 360 - a;
             if (a > 90) return -sinLookUpTable[(int)((180 - a) * 4)];
             return sinLookUpTable[(int)(a * 4)];
+        }
+
+        public static float Sqrt (float z) {
+            // http://blog.wouldbetheologian.com/2011/11/fast-approximate-sqrt-method-in-c.html
+            if (z == 0) return 0;
+            FloatIntUnion u;
+            u.tmp = 0;
+            float xhalf = 0.5f * z;
+            u.f = z;
+            u.tmp = 0x5f375a86 - (u.tmp >> 1);
+            u.f = u.f * (1.5f - xhalf * u.f * u.f);
+            return u.f * z;
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        private struct FloatIntUnion {
+            [FieldOffset(0)]
+            public float f;
+
+            [FieldOffset(0)]
+            public int tmp;
         }
     }
 }
