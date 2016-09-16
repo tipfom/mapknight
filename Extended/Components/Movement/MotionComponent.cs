@@ -13,7 +13,7 @@ namespace mapKnight.Extended.Components.Movement {
         public float BouncyMultiplier;
         private Vector2 enforcedVelocity;
         private PlatformComponent platformStandingOn;
-        private float scaleX;
+        private float scaleX = 1f;
 
         public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult) : base(owner) {
             HasMapCollider = mapCollider;

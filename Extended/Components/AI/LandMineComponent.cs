@@ -11,12 +11,12 @@ namespace mapKnight.Extended.Components.AI {
     public class LandMineComponent : Component {
         public bool Exploding;
         private DamageComponent damageComponent;
-        private float sqrExplosionRadius;
+        private float explosionRadius;
         private float throwBackSpeed;
 
         public LandMineComponent (Entity owner, float throwbackspeed, float explosionradius) : base(owner) {
             throwBackSpeed = throwbackspeed;
-            sqrExplosionRadius = explosionradius * explosionradius;
+            explosionRadius = explosionradius;
         }
 
         public override void Collision (Entity collidingEntity) {
@@ -32,11 +32,8 @@ namespace mapKnight.Extended.Components.AI {
 
         private void Explode (Entity entity) {
             Vector2 closestDist = GetClosestDistanceVectorTo(entity.Transform);
-            Vector2 impulsDir = entity.Transform.Center - Owner.Transform.Center;
-            impulsDir /= Math.Max(impulsDir.X, impulsDir.Y);
-            if (float.IsNaN(impulsDir.X)) impulsDir.X = 0;
-            if (float.IsNaN(impulsDir.Y)) impulsDir.Y = 1;
-            float distpercent = closestDist.MagnitudeSqr( ) / sqrExplosionRadius;
+            Vector2 impulsDir = (entity.Transform.Center - Owner.Transform.Center).Normalize( );
+            float distpercent = closestDist.Magnitude( ) / explosionRadius;
             if (distpercent <= 1) {
                 Vector2 appliedVel = impulsDir * (1.25f - distpercent) * throwBackSpeed;
                 entity.SetComponentInfo(ComponentData.Velocity, appliedVel);
