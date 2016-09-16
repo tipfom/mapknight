@@ -58,7 +58,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\WaypointComponent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Player\ActionMask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\BaseComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Player\KneightComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\ArmorComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\DamageComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\HealthComponent.cs" />

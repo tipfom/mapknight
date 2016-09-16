@@ -48,7 +48,7 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
             Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
 
-            sawConfig.Create(new Vector2(3, 6), map);
+            //sawConfig.Create(new Vector2(3, 6), map);
 
             walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
@@ -75,26 +75,26 @@ namespace mapKnight.Extended.Screens {
             rightPanel?.Dispose( );
             controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
-                if (gesture == "SUp") {
-                    testEntity.SetComponentInfo(ComponentData.InputInclude, BaseComponent.ActionMask.Jump);
-                } else {
-                    global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
+                global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
+                switch (gesture) {
+                    case "SUp":
+                        testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
+                        break;
+                    case "SRight":
+                        testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.DashRight);
+                        break;
+                    case "SLeft":
+                        testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.DashLeft);
+                        break;
                 }
             };
             leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
-            leftPanel.Click += ( ) => {
-                testEntity.SetComponentInfo(ComponentData.InputInclude, BaseComponent.ActionMask.Left);
-            };
-            leftPanel.Release += ( ) => {
-                testEntity.SetComponentInfo(ComponentData.InputExclude, BaseComponent.ActionMask.Left);
-            };
+            leftPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
+            leftPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
+
             rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
-            rightPanel.Click += ( ) => {
-                testEntity.SetComponentInfo(ComponentData.InputInclude, BaseComponent.ActionMask.Right);
-            };
-            rightPanel.Release += ( ) => {
-                testEntity.SetComponentInfo(ComponentData.InputExclude, BaseComponent.ActionMask.Right);
-            };
+            rightPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
+            rightPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
         }
 
         public override void Update (DeltaTime dt) {

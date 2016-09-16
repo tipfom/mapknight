@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
@@ -12,6 +13,7 @@ namespace mapKnight.Extended.Components.Movement {
         public float BouncyMultiplier;
         private Vector2 enforcedVelocity;
         private PlatformComponent platformStandingOn;
+        private float scaleX;
 
         public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult) : base(owner) {
             HasMapCollider = mapCollider;
@@ -66,7 +68,9 @@ namespace mapKnight.Extended.Components.Movement {
             Owner.Transform = newTransform;
             IsOnPlatform = false;
 
-            if (TotalVelocity.X < 0) Owner.SetComponentInfo(ComponentData.ScaleX, -1f);
+            if (TotalVelocity.X > 0) scaleX = 1;
+            else if (TotalVelocity.X < 0) scaleX = -1;
+            Owner.SetComponentInfo(ComponentData.ScaleX, scaleX);
         }
 
         private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {
