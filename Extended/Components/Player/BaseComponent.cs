@@ -11,15 +11,7 @@ namespace mapKnight.Extended.Components.Player {
 
     [UpdateAfter(typeof(SpeedComponent))]
     [UpdateBefore(typeof(MotionComponent))]
-    public class BaseComponent : Component {
-        [Flags]
-        public enum ActionMask {
-            None = 0,
-            Jump = 1 << 1,
-            Left = 1 << 2,
-            Right = 1 << 3,
-        }
-
+    public abstract class BaseComponent : Component {
         public ActionMask Action;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
@@ -45,9 +37,13 @@ namespace mapKnight.Extended.Components.Player {
                 Action &= ~(ActionMask)Owner.GetComponentInfo(ComponentData.InputExclude)[0];
 
             Vector2 speed = speedComponent.Speed;
-            if (Action.HasFlag(ActionMask.Jump) && motionComponent.IsOnGround) {
-                motionComponent.AimedVelocity.Y = speed.Y;
-                Action &= ~ActionMask.Jump;
+            if (motionComponent.IsOnGround) {
+                if (Action.HasFlag(ActionMask.Jump)) {
+                    motionComponent.AimedVelocity.Y = speed.Y;
+                    Action &= ~ActionMask.Jump;
+                } else {
+                    motionComponent.AimedVelocity.Y = 0;
+                }
             }
 
             if (Action.HasFlag(ActionMask.Left)) {
@@ -56,12 +52,6 @@ namespace mapKnight.Extended.Components.Player {
                 motionComponent.AimedVelocity.X = speed.X;
             } else {
                 motionComponent.AimedVelocity.X = 0;
-            }
-        }
-
-        public new class Configuration : Component.Configuration {
-            public override Component Create (Entity owner) {
-                return new BaseComponent(owner);
             }
         }
     }
