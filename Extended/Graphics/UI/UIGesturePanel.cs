@@ -7,7 +7,11 @@ using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIGesturePanel : UIPanel {
+        public const string SWIPE_LEFT = "SL", SWIPE_RIGHT = "SR", SWIPE_UP = "SU", SWIPE_DOWN = "SD";
+
         const double SCORE_THRESHOLD = 1.0;
+        const int SWIPE_TIME = 400;
+        const int SWIPE_MIN_DIST = 100;
 
         // CURRENTLY ONLY WITH SUPPORT FOR ANDROID
         private int currentTouchID;
@@ -35,7 +39,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     break;
                 case UITouchAction.End:
                 case UITouchAction.Leave:
-                    if(touch.ID == currentTouchID) {
+                    if (touch.ID == currentTouchID) {
                         trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
                         GestureCompleted( );
                         trackedStrokeBuffer.Clear( );
@@ -47,14 +51,33 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         private void GestureCompleted ( ) {
-            // construct gesture
-            Gesture gesture = new Gesture( );
-            gesture.AddStroke(new GestureStroke(trackedStrokeBuffer));
+            // check if its a complex gesture or a swipe
+            if (trackedStrokeBuffer[trackedStrokeBuffer.Count - 1].Timestamp - trackedStrokeBuffer[0].Timestamp < SWIPE_TIME) {
+                GesturePoint first = trackedStrokeBuffer[0], last = trackedStrokeBuffer[trackedStrokeBuffer.Count - 1];
+                float dx = Math.Abs(first.X - last.X), dy = Math.Abs(first.Y - last.Y);
+                if (dx > dy && dx > SWIPE_MIN_DIST) {
+                    if (first.X < last.X) {
+                        OnGesturePerformed?.Invoke(SWIPE_RIGHT);
+                    } else {
+                        OnGesturePerformed?.Invoke(SWIPE_LEFT);
+                    }
+                } else if (dy > dx && dy > SWIPE_MIN_DIST) {
+                    if (first.Y < last.Y) {
+                        OnGesturePerformed?.Invoke(SWIPE_DOWN);
+                    } else {
+                        OnGesturePerformed?.Invoke(SWIPE_UP);
+                    }
+                }
+            } else {
+                // construct gesture
+                Gesture gesture = new Gesture( );
+                gesture.AddStroke(new GestureStroke(trackedStrokeBuffer));
 
-            // compute gesture
-            IList<Prediction> predictions = gestureStore.Recognize(gesture);
-            if (predictions.Count > 0 && predictions[0].Score > SCORE_THRESHOLD) {
-                OnGesturePerformed?.Invoke(predictions[0].Name);
+                // compute gesture
+                IList<Prediction> predictions = gestureStore.Recognize(gesture);
+                if (predictions.Count > 0 && predictions[0].Score > SCORE_THRESHOLD) {
+                    OnGesturePerformed?.Invoke(predictions[0].Name);
+                }
             }
         }
     }

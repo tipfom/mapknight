@@ -36,29 +36,24 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Update (DeltaTime dt) {
-            Vector2 appliedAcceleration = new Vector2( ); // reset acceleration
-            List<Vector2> appliedVelocities = new List<Vector2>( );
-
             while (Owner.HasComponentInfo(ComponentData.Velocity))
-                appliedVelocities.Add((Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0]);
+                enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
             while (Owner.HasComponentInfo(ComponentData.Acceleration))
-                appliedAcceleration += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0];
+                enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0] * dt.TotalSeconds;
 
-            // update velocity
-            enforcedVelocity += appliedAcceleration * dt.TotalSeconds;
-            foreach (Vector2 velocity in appliedVelocities)
-                enforcedVelocity += velocity;
-            TotalVelocity = enforcedVelocity + AimedVelocity;
+            TotalVelocity = AimedVelocity + enforcedVelocity;
 
-            if (IsOnGround)
-                enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
+            if (IsOnGround && BouncyMultiplier > 0) enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
 
             Transform newTransform = new Transform(Owner.Transform.Center + TotalVelocity * dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
                 IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
 
-                if (IsOnGround) enforcedVelocity.X = 0;
+                if (IsOnGround) {
+                    enforcedVelocity.X = 0;
+                    enforcedVelocity.Y = 0;
+                }
                 if (IsAtWall) {
                     enforcedVelocity.X = 0;
                     AimedVelocity.X = 0;

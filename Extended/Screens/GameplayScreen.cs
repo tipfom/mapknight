@@ -77,13 +77,13 @@ namespace mapKnight.Extended.Screens {
             controlPanel.OnGesturePerformed += (string gesture) => {
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
                 switch (gesture) {
-                    case "SUp":
+                    case UIGesturePanel.SWIPE_UP:
                         testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
                         break;
-                    case "SRight":
+                    case UIGesturePanel.SWIPE_RIGHT:
                         testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.DashRight);
                         break;
-                    case "SLeft":
+                    case UIGesturePanel.SWIPE_LEFT:
                         testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.DashLeft);
                         break;
                 }
