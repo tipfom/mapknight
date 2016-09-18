@@ -191,7 +191,7 @@ namespace mapKnight.Extended {
                 HashSet<Type> typeSet = new HashSet<Type>(Components.Select(item => item.GetType( )));
                 info = new EntityInfo( ) {
                     IsPlatform = typeSet.Contains(typeof(PlatformComponent.Configuration)),
-                    IsPlayer = typeSet.Any(type => type.IsSubclassOf(typeof(BaseComponent.Configuration)) || type == typeof(BaseComponent.Configuration)),
+                    IsPlayer = typeSet.Contains(typeof(PlayerComponent.Configuration)),
                     IsTemporary = typeSet.Contains(typeof(TriggerComponent.InternalTriggerComponent.Configuration)),
 
                     HasHealth = typeSet.Contains(typeof(HealthComponent.Configuration))

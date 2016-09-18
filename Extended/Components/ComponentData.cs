@@ -7,6 +7,7 @@
         // player
         InputInclude,
         InputExclude,
+        InputGesture,
 
         // graphics
         Verticies,

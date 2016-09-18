@@ -41,7 +41,7 @@ namespace mapKnight.Extended.Graphics.UI {
                 case UITouchAction.Leave:
                     if (touch.ID == currentTouchID) {
                         trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
-                        GestureCompleted( );
+                        OnGesturePerformed?.Invoke(ComputeGesture( ));
                         trackedStrokeBuffer.Clear( );
                         currentTouchID = -1;
                     }
@@ -50,22 +50,22 @@ namespace mapKnight.Extended.Graphics.UI {
             base.HandleTouch(action, touch);
         }
 
-        private void GestureCompleted ( ) {
+        private string ComputeGesture ( ) {
             // check if its a complex gesture or a swipe
             if (trackedStrokeBuffer[trackedStrokeBuffer.Count - 1].Timestamp - trackedStrokeBuffer[0].Timestamp < SWIPE_TIME) {
                 GesturePoint first = trackedStrokeBuffer[0], last = trackedStrokeBuffer[trackedStrokeBuffer.Count - 1];
                 float dx = Math.Abs(first.X - last.X), dy = Math.Abs(first.Y - last.Y);
                 if (dx > dy && dx > SWIPE_MIN_DIST) {
                     if (first.X < last.X) {
-                        OnGesturePerformed?.Invoke(SWIPE_RIGHT);
+                        return SWIPE_RIGHT;
                     } else {
-                        OnGesturePerformed?.Invoke(SWIPE_LEFT);
+                        return SWIPE_LEFT;
                     }
                 } else if (dy > dx && dy > SWIPE_MIN_DIST) {
                     if (first.Y < last.Y) {
-                        OnGesturePerformed?.Invoke(SWIPE_DOWN);
+                        return SWIPE_DOWN;
                     } else {
-                        OnGesturePerformed?.Invoke(SWIPE_UP);
+                        return SWIPE_UP;
                     }
                 }
             } else {
@@ -76,9 +76,10 @@ namespace mapKnight.Extended.Graphics.UI {
                 // compute gesture
                 IList<Prediction> predictions = gestureStore.Recognize(gesture);
                 if (predictions.Count > 0 && predictions[0].Score > SCORE_THRESHOLD) {
-                    OnGesturePerformed?.Invoke(predictions[0].Name);
+                    return predictions[0].Name;
                 }
             }
+            return string.Empty;
         }
     }
 }

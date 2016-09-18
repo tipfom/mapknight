@@ -13,8 +13,7 @@ namespace mapKnight.Android {
         private List<UITouch> activeTouches = new List<UITouch>( );
         
         public bool OnTouch (global::Android.Views.View v, MotionEvent e) {
-            int pointerIndex = ((int)(e.Action & MotionEventActions.PointerIdMask) >>
-                               (int)MotionEventActions.PointerIdShift);
+            int pointerIndex = ((int)(e.Action & MotionEventActions.PointerIdMask) >> (int)MotionEventActions.PointerIdShift);
             int pointerId = e.GetPointerId(pointerIndex);
 
             switch (e.Action & MotionEventActions.Mask) {

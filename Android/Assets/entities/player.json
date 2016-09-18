@@ -10,9 +10,8 @@
       "Influence": 1
     },
     {
-      "$type": "Player.Kneight",
-      "DashDistance": 5,
-      "DashTime": 200
+      "$type": "Player.Player",
+      "Weapon": "Swords.WoodySword"
     },
     {
       "$type": "Stats.Speed",

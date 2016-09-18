@@ -73,21 +73,16 @@ namespace mapKnight.Extended.Screens {
             controlPanel?.Dispose( );
             leftPanel?.Dispose( );
             rightPanel?.Dispose( );
+
             controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
-                switch (gesture) {
-                    case UIGesturePanel.SWIPE_UP:
-                        testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
-                        break;
-                    case UIGesturePanel.SWIPE_RIGHT:
-                        testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.DashRight);
-                        break;
-                    case UIGesturePanel.SWIPE_LEFT:
-                        testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.DashLeft);
-                        break;
-                }
+                if (gesture == UIGesturePanel.SWIPE_UP)
+                    testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
+                else
+                    testEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
             };
+
             leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
             leftPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
             leftPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
