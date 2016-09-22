@@ -93,10 +93,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                             Canvas.SetTop(item, top);
                             Canvas.SetLeft(item, left);
                         } else {
-                            Canvas.SetLeft(item, Canvas.GetLeft(item) + deltaHorizontal);
                             item.Width -= deltaHorizontal;
                         }
-                        item.Width -= deltaHorizontal;
                         break;
                     default:
                         break;

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:mapKnight.ToolKit.Controls.Components.Animation"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" RenderTransformOrigin="0.5,0.5">
+             d:DesignHeight="300" d:DesignWidth="300" RenderTransformOrigin="0.5,0.5" MinWidth="1" MinHeight="1">
     <ContentControl.Resources>
         <ControlTemplate x:Key="ResizeThumbCollectionTemplate" TargetType="Control"
              xmlns:local="clr-namespace:mapKnight.ToolKit.Controls.Components.Animation">
@@ -36,5 +36,6 @@
         <Border BorderBrush="Black" BorderThickness="1">
             <Image Name="image" Stretch="Fill" RenderTransformOrigin="0.5,0.5" RenderOptions.BitmapScalingMode="NearestNeighbor" IsHitTestVisible="False"/>
         </Border>
+        <local:MoveableRenderTransformOrigin x:Name="rendertransformoriginthumb" Width="10" Height="10" Cursor="Hand" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </ContentControl>

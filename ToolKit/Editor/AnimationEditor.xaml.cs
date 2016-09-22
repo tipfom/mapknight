@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using mapKnight.ToolKit.Controls.Components.Graphics;
 using mapKnight.ToolKit.Windows;
+using Microsoft.Win32;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using Path = System.IO.Path;
 
@@ -54,9 +55,11 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void AnimationLoad_Click (object sender, RoutedEventArgs e) {
-            FolderBrowserDialog dialog = new FolderBrowserDialog( );
-            if (dialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
-                animationControls.Add(new AnimationControl(dialog.SelectedPath));
+            OpenFileDialog openFileDialog = new OpenFileDialog( );
+            openFileDialog.CheckFileExists = true;
+            openFileDialog.Filter = "Animation-Meta File|animation.meta";
+            if (openFileDialog.ShowDialog( ) ?? false) {
+                animationControls.Add(new AnimationControl(openFileDialog.FileName));
                 animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
                 ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
             }

@@ -87,6 +87,7 @@
     <Compile Include="Controls\Components\AI\SpikeControl.xaml.cs">
       <DependentUpon>SpikeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Components\Animation\MoveableRenderTransformOrigin.cs" />
     <Compile Include="Controls\Components\GeneralComponent.xaml.cs">
       <DependentUpon>GeneralComponent.xaml</DependentUpon>
     </Compile>

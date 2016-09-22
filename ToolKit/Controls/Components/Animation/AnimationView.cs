@@ -99,7 +99,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                 Texture2D texture = textures[entry.Key];
                 Rectangle boneDrawRectangle = new Rectangle(
                     (int)(entityDrawRectangle.Center.X + entry.Value.Position.X * entityDrawRectangle.Width),
-                    (int)(entityDrawRectangle.Center.Y + entry.Value.Position.Y * entityDrawRectangle.Height),
+                    (int)(entityDrawRectangle.Center.Y - entry.Value.Position.Y * entityDrawRectangle.Height),
                     (int)(entry.Value.Size.X * entityDrawRectangle.Width),
                     (int)(entry.Value.Size.Y * entityDrawRectangle.Height)
                     );

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using mapKnight.Core;
@@ -37,9 +38,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             treeview_animations.DataContext = Animations;
         }
 
-        public AnimationControl (string pathtoload) : this( ) {
-            if (File.Exists(Path.Combine(pathtoload, "animation.meta"))) {
-                AnimationMetaData metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(Path.Combine(pathtoload, "animation.meta")));
+        public AnimationControl (string metafile) : this( ) {
+            if (File.Exists(metafile)) {
+                string pathtoload = Path.GetDirectoryName(metafile);
+                AnimationMetaData metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
                 EntityName = metaData.Name;
                 defaultSizeBone = metaData.DefaultBoneName;
                 TransformAspectRatio = metaData.Ratio;
@@ -204,8 +206,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 return;
             VertexBone bone = currentFrame.State[key];
             bone.Rotation = obj.Rotation;
-            currentFrame.State.Remove(key);
-            currentFrame.State.Add(key, bone);
+            currentFrame.State[key] = bone;
         }
 
         private void BoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
@@ -239,6 +240,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 } else {
                     image = new ResizableImage( );
                     image.Rotated += BoneImage_Rotated;
+                    image.MouseDoubleClick += BoneImage_MouseDoubleClick;
                     image.Height = 100;
                     image.Width = 100;
                     Canvas.SetLeft(image, Canvas.GetLeft(border_rectangle_player) + image.Width / 2d);
@@ -274,15 +276,13 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             treeview_animations.Items.Refresh( );
         }
 
-        private void ButtonBoneFlipped_Click (object sender, RoutedEventArgs e) {
-            KeyValuePair<string, VertexBone> kvpair = (KeyValuePair<string, VertexBone>)(((Control)sender).DataContext);
-            VertexBone bone = kvpair.Value;
-            VertexAnimationFrame frame = FindFrame(bone);
+        private void BoneImage_MouseDoubleClick (object sender, MouseButtonEventArgs e) {
+            string key = boneImages.First(pair => pair.Value == (ResizableImage)sender).Key;
+            if (currentFrame == null) return;
+            VertexBone bone = currentFrame.State[key];
             bone.Mirrored = !bone.Mirrored;
-            frame.State.Remove(kvpair.Key);
-            frame.State.Add(kvpair.Key, bone);
-            if (frame == currentFrame)
-                UpdateBoneImage(boneImages[kvpair.Key], currentFrame.State[kvpair.Key], rectangle_player, border_rectangle_player);
+            currentFrame.State[key] = bone;
+            UpdateBoneImage(boneImages[key], currentFrame.State[key], rectangle_player, border_rectangle_player);
         }
 
         private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
@@ -365,6 +365,13 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void CommandEditorR_Executed (object sender, ExecutedRoutedEventArgs e) {
+            if (currentFrame == null) return;
+            string[ ] keys = Bones.Keys.ToArray();
+            for(int i = 0; i< keys.Length;i++) {
+                string bone = keys[i];
+                currentFrame.State[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, Size = Bones[bone].Size }; 
+                UpdateBoneImage(boneImages[bone], currentFrame.State[bone], rectangle_player, border_rectangle_player);
+            }
         }
 
         private void CommandEditorUp_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -471,6 +478,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         private struct AnimationMetaData {
             public string Name;
+            public string DefaultAnimation;
             public double Ratio;
             public Dictionary<string, VertexBone> Bones;
             public string DefaultBoneName;
@@ -612,6 +620,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         private void canvas_bones_SizeChanged (object sender, SizeChangedEventArgs e) {
             AdjustEditor( );
+        }
+
+        private void treeview_animations_MouseRightButtonDown (object sender, MouseButtonEventArgs e) {
+            treeview_animations.Focus( );
         }
     }
 }
