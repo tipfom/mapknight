@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using mapKnight.Core;
@@ -50,13 +49,14 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                     if (File.Exists(Path.Combine(pathtoload, kvpair.Key + ".png"))) {
                         BitmapImage image = new BitmapImage(new Uri(Path.Combine(pathtoload, kvpair.Key + ".png")));
 
-                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ) };
+                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
                         defaultBoneImage.ContextMenu = new ContextMenu( ) {
                             DataContext = defaultBoneImage,
                             Items = {
                                 new MenuItem() { Header = "Delete", Icon = new Image() { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_delete") } }
                             }
                         };
+                        defaultBoneImage.RenderTransformOriginChanged += (origin) => UpdateOrigin(boneImages[kvpair.Key], origin);
                         UpdateBoneImage(defaultBoneImage, kvpair.Value, rectangle_entity_default, border_rectangle_entity_default);
 
                         ((MenuItem)defaultBoneImage.ContextMenu.Items[0]).Click += MenuItemDelete_Click;
@@ -238,7 +238,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                     image = boneImages[boneKey];
                     image.Image = null;
                 } else {
-                    image = new ResizableImage( );
+                    image = new ResizableImage( ) { CanChangeRenderTransformOrigin = false };
                     image.Rotated += BoneImage_Rotated;
                     image.MouseDoubleClick += BoneImage_MouseDoubleClick;
                     image.Height = 100;
@@ -366,10 +366,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         private void CommandEditorR_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (currentFrame == null) return;
-            string[ ] keys = Bones.Keys.ToArray();
-            for(int i = 0; i< keys.Length;i++) {
+            string[ ] keys = Bones.Keys.ToArray( );
+            for (int i = 0; i < keys.Length; i++) {
                 string bone = keys[i];
-                currentFrame.State[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, Size = Bones[bone].Size }; 
+                currentFrame.State[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, Size = Bones[bone].Size };
                 UpdateBoneImage(boneImages[bone], currentFrame.State[bone], rectangle_player, border_rectangle_player);
             }
         }
@@ -498,13 +498,14 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         string name = Path.GetFileNameWithoutExtension(file);
                         BitmapImage image = new BitmapImage(new Uri(file));
 
-                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ) };
+                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
                         defaultBoneImage.ContextMenu = new ContextMenu( ) {
                             DataContext = defaultBoneImage,
                             Items = {
                                 new MenuItem() { Header = "Delete", Icon = new Image() { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_delete") } }
                             }
                         };
+                        defaultBoneImage.RenderTransformOriginChanged += (origin) => UpdateOrigin(boneImages[name], origin);
                         ((MenuItem)defaultBoneImage.ContextMenu.Items[0]).Click += MenuItemDelete_Click;
                         defaultBoneImage.MouseDoubleClick += DefaultBoneImage_MouseDoubleClick;
 
@@ -624,6 +625,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         private void treeview_animations_MouseRightButtonDown (object sender, MouseButtonEventArgs e) {
             treeview_animations.Focus( );
+        }
+
+        private void UpdateOrigin (ResizableImage image, Point origin) {
+            image.RenderTransformOrigin = origin;
         }
     }
 }
