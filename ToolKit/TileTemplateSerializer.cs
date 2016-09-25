@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using mapKnight.Core;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Color = Microsoft.Xna.Framework.Color;

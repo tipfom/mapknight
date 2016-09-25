@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using mapKnight.Core.Graphics;
 using mapKnight.ToolKit.Controls.Xna;
 using Microsoft.Xna.Framework;
 using Vector2 = mapKnight.Core.Vector2;
@@ -95,15 +91,15 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             spriteBatch.Draw(entityTexture, entityDrawRectangle, Color.White);
             spriteBatch.Draw(groundTexture, new Rectangle(0, entityDrawRectangle.Bottom, (int)RenderSize.Width, 10), Color.White);
 
-            foreach (KeyValuePair<string, VertexBone> entry in InterpolateAnimation()) {
+            foreach (KeyValuePair<string, VertexBone> entry in InterpolateAnimation( )) {
                 Texture2D texture = textures[entry.Key];
                 Rectangle boneDrawRectangle = new Rectangle(
                     (int)(entityDrawRectangle.Center.X + entry.Value.Position.X * entityDrawRectangle.Width),
                     (int)(entityDrawRectangle.Center.Y - entry.Value.Position.Y * entityDrawRectangle.Height),
-                    (int)(entry.Value.Size.X * entityDrawRectangle.Width),
-                    (int)(entry.Value.Size.Y * entityDrawRectangle.Height)
+                    (int)(entry.Value.AbsoluteSize.X * entityDrawRectangle.Width),
+                    (int)(entry.Value.AbsoluteSize.Y * entityDrawRectangle.Height)
                     );
-                spriteBatch.Draw(texture, boneDrawRectangle,null, Color.White,(float)(entry.Value.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2() / 2f,entry.Value.Mirrored ?  SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, boneDrawRectangle, null, Color.White, (float)(entry.Value.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2( ) / 2f, entry.Value.Mirrored ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }
             renderTimer.Start( );
         }
@@ -123,7 +119,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                     currentFrame = nextFrame;
                     nextFrame = 0;
                     nextFrameTime += currentAnimation.Frames[currentFrame].Time;
-                } 
+                }
             }
             float progress = (nextFrameTime - Environment.TickCount) / (float)currentAnimation.Frames[currentFrame].Time;
 
@@ -133,17 +129,17 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                 Vector2 interpolatedSize = Interpolate(currentAnimation.Frames[nextFrame].State[bone].Size, currentAnimation.Frames[currentFrame].State[bone].Size, progress);
                 Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[nextFrame].State[bone].Position, currentAnimation.Frames[currentFrame].State[bone].Position, progress);
                 float interpolatedRotation = Interpolate(currentAnimation.Frames[nextFrame].State[bone].Rotation, currentAnimation.Frames[currentFrame].State[bone].Rotation, progress);
-                result.Add(bone, new VertexBone( ) { Position = interpolatedPosition, Rotation = interpolatedRotation, Size = interpolatedSize, Mirrored = currentAnimation.Frames[currentFrame].State[bone].Mirrored });
+                result.Add(bone, new VertexBone( ) { Position = interpolatedPosition, Rotation = interpolatedRotation, AbsoluteSize = interpolatedSize, Mirrored = currentAnimation.Frames[currentFrame].State[bone].Mirrored });
             }
 
             return result;
         }
 
-        private Vector2 Interpolate(Vector2 v1, Vector2 v2, float progress) {
+        private Vector2 Interpolate (Vector2 v1, Vector2 v2, float progress) {
             return new Vector2(v1.X + (v2.X - v1.X) * progress, v1.Y + (v2.Y - v1.Y) * progress);
         }
 
-        private float Interpolate(float v1, float v2, float progress) {
+        private float Interpolate (float v1, float v2, float progress) {
             return v1 + (v2 - v1) * progress;
         }
     }

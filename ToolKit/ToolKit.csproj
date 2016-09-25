@@ -66,72 +66,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\Components\AI\BulletControl.xaml.cs">
-      <DependentUpon>BulletControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\CircularSawControl.xaml.cs">
-      <DependentUpon>CircularSawControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\GrinderControl.xaml.cs">
-      <DependentUpon>GrinderControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\HastorControl.xaml.cs">
-      <DependentUpon>HastorControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\KlatrerControl.xaml.cs">
-      <DependentUpon>KlatrerControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\LandMineControl.xaml.cs">
-      <DependentUpon>LandMineControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\SpikeControl.xaml.cs">
-      <DependentUpon>SpikeControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Animation\MoveableRenderTransformOrigin.cs" />
-    <Compile Include="Controls\Components\GeneralComponent.xaml.cs">
-      <DependentUpon>GeneralComponent.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Graphics\FlippableTextureControl.xaml.cs">
-      <DependentUpon>FlippableTextureControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Graphics\TextureControl.xaml.cs">
-      <DependentUpon>TextureControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Physics\GravityControl.xaml.cs">
-      <DependentUpon>GravityControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Physics\MotionControl.xaml.cs">
-      <DependentUpon>MotionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Physics\PushControl.xaml.cs">
-      <DependentUpon>PushControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Stats\ArmorControl.xaml.cs">
-      <DependentUpon>ArmorControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Stats\DamageControl.xaml.cs">
-      <DependentUpon>DamageControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Stats\HealthControl.xaml.cs">
-      <DependentUpon>HealthControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Stats\SpeedControl.xaml.cs">
-      <DependentUpon>SpeedControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\Graphics\TextureCreationControl.xaml.cs">
+    <Compile Include="Controls\Animation\MoveableRenderTransformOrigin.cs" />
+    <Compile Include="Controls\Animation\VertexAnimation.cs" />
+    <Compile Include="Controls\Animation\VertexAnimationFrame.cs" />
+    <Compile Include="Controls\Animation\VertexBone.cs" />
+    <Compile Include="Controls\TextureCreationControl.xaml.cs">
       <DependentUpon>TextureCreationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\TriggerControl.xaml.cs">
-      <DependentUpon>TriggerControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\TrowieControl.xaml.cs">
-      <DependentUpon>TrowieControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\TurretControl.xaml.cs">
-      <DependentUpon>TurretControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Components\AI\VentosaControl.xaml.cs">
-      <DependentUpon>VentosaControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Editor\AnimationEditor.xaml.cs">
       <DependentUpon>AnimationEditor.xaml</DependentUpon>
@@ -142,35 +82,31 @@
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddAnimationWindow.xaml.cs">
-      <DependentUpon>AddAnimationWindow.xaml</DependentUpon>
+    <Compile Include="Windows\Dialogs\AddAnimationDialog.xaml.cs">
+      <DependentUpon>AddAnimationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddTileWindow.xaml.cs">
-      <DependentUpon>AddTileWindow.xaml</DependentUpon>
+    <Compile Include="Windows\Dialogs\AddTileDialog.xaml.cs">
+      <DependentUpon>AddTileDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\Components\Graphics\AnimationControl.xaml.cs">
+    <Compile Include="Controls\AnimationControl.xaml.cs">
       <DependentUpon>AnimationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Components\Animation\AnimationView.cs" />
-    <Compile Include="Controls\Components\Animation\MoveThumb.cs" />
-    <Compile Include="Controls\Components\Animation\ResizableImage.xaml.cs">
+    <Compile Include="Controls\Animation\AnimationView.cs" />
+    <Compile Include="Controls\Animation\MoveThumb.cs" />
+    <Compile Include="Controls\Animation\ResizableImage.xaml.cs">
       <DependentUpon>ResizableImage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Components\Animation\ResizeThumb.cs" />
-    <Compile Include="Controls\Components\Animation\RotateThumb.cs" />
-    <Compile Include="Controls\Components\IComponentControl.cs" />
-    <Compile Include="Windows\CreateMapWindow.xaml.cs">
-      <DependentUpon>CreateMapWindow.xaml</DependentUpon>
+    <Compile Include="Controls\Animation\ResizeThumb.cs" />
+    <Compile Include="Controls\Animation\RotateThumb.cs" />
+    <Compile Include="Windows\Dialogs\AddMapDialog.xaml.cs">
+      <DependentUpon>AddMapDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomCommands.cs" />
     <Compile Include="EmbeddedAssemblies.cs" />
-    <Compile Include="Editor\EntityEditor.xaml.cs">
-      <DependentUpon>EntityEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="Libraries\ObservableDictionary.cs" />
     <Compile Include="Project.cs" />
@@ -182,13 +118,13 @@
     <Compile Include="Controls\Xna\XnaControl.xaml.cs">
       <DependentUpon>XnaControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\ModifyMapWindow.xaml.cs">
-      <DependentUpon>ModifyMapWindow.xaml</DependentUpon>
+    <Compile Include="Windows\Dialogs\EditMapDialog.xaml.cs">
+      <DependentUpon>EditMapDialog.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Windows\EditDefaultTileAttributesWindow.xaml.cs">
-      <DependentUpon>EditDefaultTileAttributesWindow.xaml</DependentUpon>
+    <Compile Include="Windows\Dialogs\EditDefaultTileAttributesDialog.xaml.cs">
+      <DependentUpon>EditDefaultTileAttributesDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
@@ -224,93 +160,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\Components\AI\BulletControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\CircularSawControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\GrinderControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\HastorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\KlatrerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\LandMineControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\SpikeControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\GeneralComponent.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Graphics\FlippableTextureControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Graphics\TextureControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Physics\GravityControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Physics\MotionControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Physics\PushControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Stats\ArmorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Stats\DamageControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Stats\HealthControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Stats\SpeedControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\Graphics\TextureCreationControl.xaml">
+    <Page Include="Controls\TextureCreationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Components\AI\TriggerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\TrowieControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\TurretControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Components\AI\VentosaControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Editor\AnimationEditor.xaml">
       <SubType>Designer</SubType>
@@ -324,35 +176,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\AddAnimationWindow.xaml">
+    <Page Include="Windows\Dialogs\AddAnimationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\AddTileWindow.xaml">
+    <Page Include="Windows\Dialogs\AddTileDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Components\Graphics\AnimationControl.xaml">
+    <Page Include="Controls\AnimationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Components\Animation\ResizableImage.xaml">
+    <Page Include="Controls\Animation\ResizableImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\CreateMapWindow.xaml">
+    <Page Include="Windows\Dialogs\AddMapDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\EditDefaultTileAttributesWindow.xaml">
+    <Page Include="Windows\Dialogs\EditDefaultTileAttributesDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\EditorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Editor\EntityEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -368,7 +216,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\ModifyMapWindow.xaml">
+    <Page Include="Windows\Dialogs\EditMapDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,34 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-#if __ANDROID__
-#else
-using System.Collections.ObjectModel;
-#endif
-using System.Text;
 using Newtonsoft.Json;
 
 namespace mapKnight.Core.Graphics {
     public class VertexAnimation {
-        public string Name { get; set; }
-        public bool CanRepeat
-#if __ANDROID__
-        ;
-#else
-        { get; set; }
-#endif
-#if __ANDROID__
+        public string Name;
+        public bool CanRepeat;
         public VertexAnimationFrame[ ] Frames;
-#else
-        public ObservableCollection<VertexAnimationFrame> Frames { get; set; }
-#endif
-        private int currentFrame;
-        private int nextFrame;
-        private int nextFrameTime;
+
+        private int currentFrame = 0;
+        private int nextFrame = 0;
+        private int nextFrameTime = 0;
         [JsonIgnore]
         public bool IsRunning;
 
-#if __ANDROID__
         public void Reset ( ) {
             nextFrameTime = Environment.TickCount + Frames[0].Time;
             currentFrame = 0;
@@ -49,21 +33,20 @@ namespace mapKnight.Core.Graphics {
             }
             float progress = Mathf.Clamp01((nextFrameTime - Environment.TickCount) / (float)Frames[currentFrame].Time);
 
-            float[ ][ ] result = new float[Frames[currentFrame].Bones.Length][ ];
+            float[ ][ ] result = new float[Frames[currentFrame].State.Length][ ];
 
             for (int i = 0; i < result.Length; i++) {
-                Vector2 interpolatedSize = Mathf.Interpolate(Frames[nextFrame].Bones[i].Size, Frames[currentFrame].Bones[i].Size, progress) * ownerTransform.Size * vsize;
-                Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].Bones[i].Position, Frames[currentFrame].Bones[i].Position, progress) * ownerTransform.Size * vsize;
-                float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].Bones[i].Rotation, Frames[currentFrame].Bones[i].Rotation, progress);
+                Vector2 interpolatedSize = Mathf.Interpolate(Frames[nextFrame].State[i].Size, Frames[currentFrame].State[i].Size, progress) * ownerTransform.Size * vsize;
+                Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].State[i].Position, Frames[currentFrame].State[i].Position, progress) * ownerTransform.Size * vsize;
+                float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].State[i].Rotation, Frames[currentFrame].State[i].Rotation, progress);
 
                 result[i] = Mathf.TransformAtOrigin(
                     interpolatedSize.ToQuad( ),
                     interpolatedPosition.X, interpolatedPosition.Y,
-                    interpolatedRotation, Frames[currentFrame].Bones[i].Mirrored);
+                    interpolatedRotation, Frames[currentFrame].State[i].Mirrored);
             }
 
             return result;
         }
-#endif
     }
 }

@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using mapKnight.Core;
-using mapKnight.Core.Graphics;
 using mapKnight.ToolKit.Controls.Components.Animation;
 using Newtonsoft.Json;
 using Size = System.Windows.Size;
@@ -19,7 +18,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
     /// <summary>
     /// Interaktionslogik für AnimationControl.xaml
     /// </summary>
-    public partial class AnimationControl : UserControl, IComponentControl {
+    public partial class AnimationControl : UserControl {
         public readonly string EntityName;
         private static double[ ] greaterSizeEditorUsePercent = { 1d, 0.75f, 0.5d };
 
@@ -44,10 +43,11 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 EntityName = metaData.Name;
                 defaultSizeBone = metaData.DefaultBoneName;
                 TransformAspectRatio = metaData.Ratio;
-                Bones = metaData.Bones;
+                Bones .Clear();
                 foreach (KeyValuePair<string, VertexBone> kvpair in metaData.Bones) {
                     if (File.Exists(Path.Combine(pathtoload, kvpair.Key + ".png"))) {
                         BitmapImage image = new BitmapImage(new Uri(Path.Combine(pathtoload, kvpair.Key + ".png")));
+                        kvpair.Value.TextureSize = new Vector2(image.PixelWidth, image.PixelHeight);
 
                         ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
                         defaultBoneImage.ContextMenu = new ContextMenu( ) {
@@ -68,6 +68,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
                         canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
 
+                        Bones.Add(kvpair.Key, kvpair.Value);
                         canvas_bones.Children.Add(defaultBoneImage);
                         Images.Add(kvpair.Key, image);
                     }
@@ -218,7 +219,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
             string key = boneImages.First(pair => pair.Value == sender).Key;
             VertexBone current = currentFrame.State[key];
-            current.Size = new Vector2(newsizex, newsizey);
+            current.AbsoluteSize = new Vector2(newsizex, newsizey);
             current.Position = new Vector2(newpercentx, newpercenty);
             currentFrame.State.Remove(key);
             currentFrame.State.Add(key, current);
@@ -266,7 +267,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         if (frame.State.ContainsKey(bone.Key)) {
                             newframestate.Add(bone.Key, frame.State[bone.Key]);
                         } else {
-                            newframestate.Add(bone.Key, new VertexBone( ) { Mirrored = bone.Value.Mirrored, Size = new Vector2(bone.Value.Size), Rotation = bone.Value.Rotation, Position = new Vector2(bone.Value.Position) });
+                            newframestate.Add(bone.Key, new VertexBone( ) { Mirrored = bone.Value.Mirrored, AbsoluteSize = new Vector2(bone.Value.Size), Rotation = bone.Value.Rotation, Position = new Vector2(bone.Value.Position) , TextureSize = bone.Value.TextureSize});
                         }
                     }
                     frame.State = newframestate;
@@ -355,7 +356,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
                 if (animation != default(VertexAnimation)) {
                     int index = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem);
-                    animation.Frames.Add(new VertexAnimationFrame( ) { State = new ObservableDictionary<string, VertexBone>(animation.Frames[index].State.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, Size = new Vector2(entry.Value.Size) })), Time = animation.Frames[index].Time });
+                    animation.Frames.Add(new VertexAnimationFrame( ) { State = new ObservableDictionary<string, VertexBone>(animation.Frames[index].State.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, AbsoluteSize = new Vector2(entry.Value.Size) , TextureSize = entry.Value.TextureSize})), Time = animation.Frames[index].Time });
                 }
             }
         }
@@ -369,7 +370,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             string[ ] keys = Bones.Keys.ToArray( );
             for (int i = 0; i < keys.Length; i++) {
                 string bone = keys[i];
-                currentFrame.State[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, Size = Bones[bone].Size };
+                currentFrame.State[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, AbsoluteSize = Bones[bone].Size , TextureSize = new Vector2(Images[bone].PixelWidth, Images[bone].PixelHeight)};
                 UpdateBoneImage(boneImages[bone], currentFrame.State[bone], rectangle_player, border_rectangle_player);
             }
         }
@@ -455,8 +456,8 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void UpdateBoneImage (ResizableImage image, VertexBone bone, System.Windows.Shapes.Rectangle rect, Border border) {
-            image.Width = rect.Width * bone.Size.X;
-            image.Height = rect.Height * bone.Size.Y;
+            image.Width = rect.Width * bone.AbsoluteSize.X;
+            image.Height = rect.Height * bone.AbsoluteSize.Y;
             image.IsFlipped = bone.Mirrored;
             image.Rotation = bone.Rotation;
             double newleft = Canvas.GetLeft(border) + rect.Width / 2d + bone.Position.X * rect.Width - image.Width / 2d;
@@ -516,7 +517,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
 
                         canvas_bones.Children.Add(defaultBoneImage);
-                        Bones.Add(name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, Size = new Vector2(0.25f, 0.25f) });
+                        Bones.Add(name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, AbsoluteSize = new Vector2(0.25f, 0.25f), TextureSize = new Vector2(image.PixelWidth, image.PixelHeight) });
                         _Images.Add(name, image);
 
                         Canvas.SetTop(defaultBoneImage, 0);
@@ -553,9 +554,10 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                     Position = Bones[bone].Position,
                     Mirrored = Bones[bone].Mirrored,
                     Rotation = Bones[bone].Rotation,
-                    Size = new Vector2(
-                        (float)Images[bone].Width * percentPerPixel.X,
-                        (float)Images[bone].Height * percentPerPixel.Y)
+                    TextureSize = new Vector2((float)Images[bone].PixelWidth, (float)Images[bone].PixelHeight),
+                    AbsoluteSize = new Vector2(
+                    (float)Images[bone].Width * percentPerPixel.X,
+                    (float)Images[bone].Height * percentPerPixel.Y)
                 };
             }
 
@@ -603,7 +605,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
 
             VertexBone current = Bones[bone];
-            current.Size = new Vector2(newsizex, newsizey);
+            current.AbsoluteSize = new Vector2(newsizex, newsizey);
             current.Position = new Vector2(newpercentx, newpercenty);
             Bones[bone] = current;
         }

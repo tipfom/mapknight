@@ -1,35 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Newtonsoft.Json;
+using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using Path = System.IO.Path;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Point = System.Drawing.Point;
 using Rectangle = System.Drawing.Rectangle;
-using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using Size = System.Drawing.Size;
-using Newtonsoft.Json;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
 
-namespace mapKnight.ToolKit.Controls.Components.Graphics {
+namespace mapKnight.ToolKit.Controls {
 
     /// <summary>
     /// Interaktionslogik für TextureCreationControl.xaml
     /// </summary>
-    public partial class TextureCreationControl : UserControl, IComponentControl {
+    public partial class TextureCreationControl : UserControl {
         /*
          * All texture packing algorithms where copied from
          * https://spritesheetpacker.codeplex.com/
