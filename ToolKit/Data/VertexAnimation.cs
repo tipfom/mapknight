@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mapKnight.ToolKit.Controls.Components.Animation {
+namespace mapKnight.ToolKit.Data {
     public class VertexAnimation {
         public string Name { get; set; }
         public bool CanRepeat { get; set; }

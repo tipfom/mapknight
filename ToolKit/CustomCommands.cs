@@ -9,6 +9,26 @@ namespace mapKnight.ToolKit {
 
     public class CustomCommands {
 
+        public static readonly RoutedUICommand Up = new RoutedUICommand(
+            "Up",
+            "Up",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.Up),
+                new KeyGesture(Key.PageUp)
+            }
+            );
+
+        public static readonly RoutedUICommand Down = new RoutedUICommand(
+            "Down",
+            "Down",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.Down),
+                new KeyGesture(Key.PageDown)
+            }
+            );
+
         public static readonly RoutedUICommand EditorDelete = new RoutedUICommand(
             "EditorDelete",
             "EditorDelete",
@@ -19,7 +39,7 @@ namespace mapKnight.ToolKit {
             );
 
         public static readonly RoutedUICommand EditorNew = new RoutedUICommand(
-                    "EditorNew",
+            "EditorNew",
             "EditorNew",
             typeof(CustomCommands),
             new InputGestureCollection( ) {
@@ -105,6 +125,15 @@ namespace mapKnight.ToolKit {
             typeof(CustomCommands),
             new InputGestureCollection( ) {
                 new KeyGesture(Key.F, ModifierKeys.Alt)
+            }
+            );
+
+        public static readonly RoutedUICommand Settings = new RoutedUICommand(
+            "Settings",
+            "Settings",
+            typeof(CustomCommands),
+            new InputGestureCollection( ) {
+                new KeyGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Shift)
             }
             );
     }

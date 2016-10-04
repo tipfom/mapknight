@@ -14,6 +14,7 @@ namespace mapKnight.ToolKit.Windows {
             InitializeComponent( );
             LoadConfig( );
             App.Current.MainWindow = this;
+            animationeditor.MenuChanged += ( ) => SetTabPageMenu(animationeditor.Menu);
         }
 
         private void LoadConfig ( ) {

@@ -16,7 +16,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         }
 
         private void ResizeThumb_DragDelta (object sender, DragDeltaEventArgs e) {
-            ResizableImage item = (this.DataContext as Control).DataContext as ResizableImage;
+            BoneImage item = (this.DataContext as Control).DataContext as BoneImage;
 
             if (item != null) {
                 double deltaVertical, deltaHorizontal;
@@ -28,7 +28,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                         if (SnapRatioOnShiftDown && shiftPressed) {
                             double right = Canvas.GetLeft(item) + item.Width, left = Canvas.GetLeft(item), top = Canvas.GetTop(item);
                             item.Height -= deltaVertical;
-                            item.Width = item.Height * item.Image.Width / item.Image.Height;
+                            item.Width = item.Height * item.Image.Image.Width / item.Image.Image.Height;
                             Canvas.SetTop(item, top);
                             switch (HorizontalAlignment) {
                                 case HorizontalAlignment.Left:
@@ -48,7 +48,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                         if (SnapRatioOnShiftDown && shiftPressed) {
                             double right = Canvas.GetLeft(item) + item.Width, left = Canvas.GetLeft(item), bottom = Canvas.GetTop(item) + item.Height;
                             item.Height -= deltaVertical;
-                            item.Width = item.Height * item.Image.Width / item.Image.Height;
+                            item.Width = item.Height * item.Image.Image.Width / item.Image.Image.Height;
                             Canvas.SetTop(item, bottom - item.Height);
                             switch (HorizontalAlignment) {
                                 case HorizontalAlignment.Left:
@@ -76,7 +76,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                         if (SnapRatioOnShiftDown && shiftPressed) {
                             double right = Canvas.GetLeft(item) + item.Width, top = Canvas.GetTop(item);
                             item.Width -= deltaHorizontal;
-                            item.Height = item.Width * item.Image.Height / item.Image.Width;
+                            item.Height = item.Width * item.Image.Image.Height / item.Image.Image.Width;
                             Canvas.SetTop(item, top);
                             Canvas.SetLeft(item, right - item.Width);
                         } else {
@@ -89,7 +89,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                         if (SnapRatioOnShiftDown && shiftPressed) {
                             double left = Canvas.GetLeft(item), top = Canvas.GetTop(item);
                             item.Width -= deltaHorizontal;
-                            item.Height = item.Width * item.Image.Height / item.Image.Width;
+                            item.Height = item.Width * item.Image.Image.Height / item.Image.Image.Width;
                             Canvas.SetTop(item, top);
                             Canvas.SetLeft(item, left);
                         } else {

@@ -8,6 +8,7 @@ using mapKnight.ToolKit.Controls.Xna;
 using Microsoft.Xna.Framework;
 using Vector2 = mapKnight.Core.Vector2;
 using Microsoft.Xna.Framework.Graphics;
+using mapKnight.ToolKit.Data;
 
 namespace mapKnight.ToolKit.Controls.Components.Animation {
     public class AnimationView : XnaControl {
@@ -46,7 +47,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             currentAnimation = animation;
             entityRatio = entityratio;
             nextFrameTime = Environment.TickCount;
-            nextFrame = 1;
+            nextFrame = Math.Min(1, animation.Frames.Count - 1);
             currentFrame = 0;
             renderTimer.Start( );
         }
@@ -91,15 +92,15 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             spriteBatch.Draw(entityTexture, entityDrawRectangle, Color.White);
             spriteBatch.Draw(groundTexture, new Rectangle(0, entityDrawRectangle.Bottom, (int)RenderSize.Width, 10), Color.White);
 
-            foreach (KeyValuePair<string, VertexBone> entry in InterpolateAnimation( )) {
-                Texture2D texture = textures[entry.Key];
+            foreach (VertexBone entry in InterpolateAnimation( )) {
+                Texture2D texture = textures[entry.Image];
                 Rectangle boneDrawRectangle = new Rectangle(
-                    (int)(entityDrawRectangle.Center.X + entry.Value.Position.X * entityDrawRectangle.Width),
-                    (int)(entityDrawRectangle.Center.Y - entry.Value.Position.Y * entityDrawRectangle.Height),
-                    (int)(entry.Value.AbsoluteSize.X * entityDrawRectangle.Width),
-                    (int)(entry.Value.AbsoluteSize.Y * entityDrawRectangle.Height)
+                    (int)(entityDrawRectangle.Center.X + entry.Position.X * entityDrawRectangle.Width),
+                    (int)(entityDrawRectangle.Center.Y - entry.Position.Y * entityDrawRectangle.Height),
+                    (int)(entry.Scale * texture.Width * entityDrawRectangle.Width),
+                    (int)(entry.Scale * texture.Height * entityDrawRectangle.Height)
                     );
-                spriteBatch.Draw(texture, boneDrawRectangle, null, Color.White, (float)(entry.Value.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2( ) / 2f, entry.Value.Mirrored ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, boneDrawRectangle, null, Color.White, (float)(entry.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2( ) / 2f, entry.Mirrored ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }
             renderTimer.Start( );
         }
@@ -108,7 +109,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         private int nextFrameTime;
         private int currentFrame;
         private int pauseBegin;
-        private Dictionary<string, VertexBone> InterpolateAnimation ( ) {
+        private IEnumerable<VertexBone> InterpolateAnimation ( ) {
             if (Environment.TickCount > nextFrameTime) {
                 if (nextFrame + 1 < currentAnimation.Frames.Count) {
                     // if the next Frame isnt the last ont
@@ -123,16 +124,11 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             }
             float progress = (nextFrameTime - Environment.TickCount) / (float)currentAnimation.Frames[currentFrame].Time;
 
-            Dictionary<string, VertexBone> result = new Dictionary<string, VertexBone>( );
-
-            foreach (string bone in currentAnimation.Frames[currentFrame].State.Keys) {
-                Vector2 interpolatedSize = Interpolate(currentAnimation.Frames[nextFrame].State[bone].Size, currentAnimation.Frames[currentFrame].State[bone].Size, progress);
-                Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[nextFrame].State[bone].Position, currentAnimation.Frames[currentFrame].State[bone].Position, progress);
-                float interpolatedRotation = Interpolate(currentAnimation.Frames[nextFrame].State[bone].Rotation, currentAnimation.Frames[currentFrame].State[bone].Rotation, progress);
-                result.Add(bone, new VertexBone( ) { Position = interpolatedPosition, Rotation = interpolatedRotation, AbsoluteSize = interpolatedSize, Mirrored = currentAnimation.Frames[currentFrame].State[bone].Mirrored });
+            for (int i = 0; i < currentAnimation.Frames[0].Bones.Count; i++) {
+                Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[currentFrame].Bones[i].Position, currentAnimation.Frames[nextFrame].Bones[i].Position, progress);
+                float interpolatedRotation = Interpolate(currentAnimation.Frames[currentFrame].Bones[i].Rotation, currentAnimation.Frames[nextFrame].Bones[i].Rotation, progress);
+                yield return new VertexBone( ) { Position = interpolatedPosition, Rotation = interpolatedRotation, Mirrored = currentAnimation.Frames[nextFrame].Bones[i].Mirrored, Image = currentAnimation.Frames[nextFrame].Bones[i].Image, Scale = currentAnimation.Frames[nextFrame].Bones[i].Scale };
             }
-
-            return result;
         }
 
         private Vector2 Interpolate (Vector2 v1, Vector2 v2, float progress) {

@@ -8,10 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using mapKnight.Core;
+using mapKnight.ToolKit.Data;
 using mapKnight.ToolKit.Controls.Components.Animation;
 using Newtonsoft.Json;
 using Size = System.Windows.Size;
+using mapKnight.Core;
 
 namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
@@ -25,7 +26,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         private Dictionary<string, VertexBone> _Bones = new Dictionary<string, VertexBone>( );
         private Dictionary<string, BitmapImage> _Images = new Dictionary<string, BitmapImage>( );
         private double _TransformAspectRatio = 1.5d;
-        private Dictionary<string, ResizableImage> boneImages = new Dictionary<string, ResizableImage>( );
+        private Dictionary<string, BoneImage> boneImages = new Dictionary<string, BoneImage>( );
         private VertexAnimation currentAnimation;
         private VertexAnimationFrame currentFrame;
         private HashSet<VertexAnimation> requiredAnimations = new HashSet<VertexAnimation>( );
@@ -49,7 +50,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         BitmapImage image = new BitmapImage(new Uri(Path.Combine(pathtoload, kvpair.Key + ".png")));
                         kvpair.Value.TextureSize = new Vector2(image.PixelWidth, image.PixelHeight);
 
-                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
+                        BoneImage defaultBoneImage = new BoneImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
                         defaultBoneImage.ContextMenu = new ContextMenu( ) {
                             DataContext = defaultBoneImage,
                             Items = {
@@ -63,9 +64,9 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         defaultBoneImage.MouseDoubleClick += DefaultBoneImage_MouseDoubleClick;
 
                         defaultBoneImage.SizeChanged += DefaultBoneImage_SizeChanged;
-                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(ResizableImage));
+                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(BoneImage));
                         canvasleftproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasLeftChanged);
-                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
+                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(BoneImage));
                         canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
 
                         Bones.Add(kvpair.Key, kvpair.Value);
@@ -87,8 +88,6 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         public ObservableCollection<VertexAnimation> Animations { get; } = new ObservableCollection<VertexAnimation>( );
 
         public Dictionary<string, VertexBone> Bones { get { return _Bones; } set { _Bones = value; BonesChanged( ); } }
-
-        public string Category { get { return "gfx"; } }
 
         public Dictionary<string, BitmapImage> Images { get { return _Images; } set { _Images = value; BonesChanged( ); } }
 
@@ -180,7 +179,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             Canvas.SetTop(border_rectangle_entity_default, (canvas_bones.RenderSize.Height - rectangle_entity_default.Height) / 2d);
 
             foreach (UIElement element in canvas_bones.Children) {
-                ResizableImage image = element as ResizableImage;
+                BoneImage image = element as BoneImage;
                 if (image != null) {
                     UpdateBoneImage(image, Bones[Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath)], rectangle_entity_default, border_rectangle_entity_default);
                 }
@@ -188,8 +187,8 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
             if (currentFrame == null)
                 return;
-            foreach (KeyValuePair<string, ResizableImage> kvpair in boneImages) {
-                UpdateBoneImage(kvpair.Value, currentFrame.State[kvpair.Key], rectangle_player, border_rectangle_player);
+            foreach (KeyValuePair<string, BoneImage> kvpair in boneImages) {
+                UpdateBoneImage(kvpair.Value, currentFrame.Bones[kvpair.Key], rectangle_player, border_rectangle_player);
             }
         }
 
@@ -201,45 +200,45 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             UpdatePositionOfBone(boneImages.First(pair => pair.Value == sender).Key);
         }
 
-        private void BoneImage_Rotated (ResizableImage obj) {
+        private void BoneImage_Rotated (BoneImage obj) {
             string key = boneImages.First(pair => pair.Value == obj).Key;
             if (currentFrame == null)
                 return;
-            VertexBone bone = currentFrame.State[key];
+            VertexBone bone = currentFrame.Bones[key];
             bone.Rotation = obj.Rotation;
-            currentFrame.State[key] = bone;
+            currentFrame.Bones[key] = bone;
         }
 
         private void BoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
             if (currentFrame == null) return;
-            ResizableImage image = (ResizableImage)sender;
+            BoneImage image = (BoneImage)sender;
             float newsizex = (float)(image.Width / rectangle_player.Width);
             float newsizey = (float)(image.Height / rectangle_player.Height);
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
             float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
             string key = boneImages.First(pair => pair.Value == sender).Key;
-            VertexBone current = currentFrame.State[key];
+            VertexBone current = currentFrame.Bones[key];
             current.AbsoluteSize = new Vector2(newsizex, newsizey);
             current.Position = new Vector2(newpercentx, newpercenty);
-            currentFrame.State.Remove(key);
-            currentFrame.State.Add(key, current);
+            currentFrame.Bones.Remove(key);
+            currentFrame.Bones.Add(key, current);
         }
 
         private void BonesChanged ( ) {
             currentAnimation = null;
             currentFrame = null;
 
-            foreach (ResizableImage image in boneImages.Values) {
+            foreach (BoneImage image in boneImages.Values) {
                 canvas_frame.Children.Remove(image);
             }
-            Dictionary<string, ResizableImage> newBoneImages = new Dictionary<string, ResizableImage>( );
+            Dictionary<string, BoneImage> newBoneImages = new Dictionary<string, BoneImage>( );
             foreach (string boneKey in _Bones.Keys) {
-                ResizableImage image;
+                BoneImage image;
                 if (boneImages.ContainsKey(boneKey)) {
                     image = boneImages[boneKey];
                     image.Image = null;
                 } else {
-                    image = new ResizableImage( ) { CanChangeRenderTransformOrigin = false };
+                    image = new BoneImage( ) { CanChangeRenderTransformOrigin = false };
                     image.Rotated += BoneImage_Rotated;
                     image.MouseDoubleClick += BoneImage_MouseDoubleClick;
                     image.Height = 100;
@@ -247,9 +246,9 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                     Canvas.SetLeft(image, Canvas.GetLeft(border_rectangle_player) + image.Width / 2d);
                     Canvas.SetTop(image, Canvas.GetTop(border_rectangle_player) + image.Height / 2d);
                     image.SizeChanged += BoneImage_SizeChanged;
-                    DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(ResizableImage));
+                    DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(BoneImage));
                     canvasleftproperty.AddValueChanged(image, BoneImage_CanvasLeftChanged);
-                    DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
+                    DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(BoneImage));
                     canvastopproperty.AddValueChanged(image, BoneImage_CanvasTopChanged);
                 }
                 newBoneImages.Add(boneKey, image);
@@ -264,13 +263,13 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 foreach (VertexAnimationFrame frame in animation.Frames) {
                     ObservableDictionary<string, VertexBone> newframestate = new ObservableDictionary<string, VertexBone>( );
                     foreach (KeyValuePair<string, VertexBone> bone in _Bones) {
-                        if (frame.State.ContainsKey(bone.Key)) {
-                            newframestate.Add(bone.Key, frame.State[bone.Key]);
+                        if (frame.Bones.ContainsKey(bone.Key)) {
+                            newframestate.Add(bone.Key, frame.Bones[bone.Key]);
                         } else {
                             newframestate.Add(bone.Key, new VertexBone( ) { Mirrored = bone.Value.Mirrored, AbsoluteSize = new Vector2(bone.Value.Size), Rotation = bone.Value.Rotation, Position = new Vector2(bone.Value.Position) , TextureSize = bone.Value.TextureSize});
                         }
                     }
-                    frame.State = newframestate;
+                    frame.Bones = newframestate;
                 }
             }
 
@@ -278,12 +277,12 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void BoneImage_MouseDoubleClick (object sender, MouseButtonEventArgs e) {
-            string key = boneImages.First(pair => pair.Value == (ResizableImage)sender).Key;
+            string key = boneImages.First(pair => pair.Value == (BoneImage)sender).Key;
             if (currentFrame == null) return;
-            VertexBone bone = currentFrame.State[key];
+            VertexBone bone = currentFrame.Bones[key];
             bone.Mirrored = !bone.Mirrored;
-            currentFrame.State[key] = bone;
-            UpdateBoneImage(boneImages[key], currentFrame.State[key], rectangle_player, border_rectangle_player);
+            currentFrame.Bones[key] = bone;
+            UpdateBoneImage(boneImages[key], currentFrame.Bones[key], rectangle_player, border_rectangle_player);
         }
 
         private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
@@ -351,12 +350,12 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             if (treeview_animations.SelectedItem == null) {
                 Animations.Add(new VertexAnimation( ) { Name = "Default" + Animations.Where(a => a.Name.StartsWith("Default")).Count( ), Frames = new ObservableCollection<VertexAnimationFrame>( ), CanRepeat = false });
             } else if (treeview_animations.SelectedItem is VertexAnimation) {
-                ((VertexAnimation)treeview_animations.SelectedItem).Frames.Add(new VertexAnimationFrame( ) { Time = 500, State = new ObservableDictionary<string, VertexBone>(_Bones.ToDictionary(entry => entry.Key, entry => entry.Value)) });
+                ((VertexAnimation)treeview_animations.SelectedItem).Frames.Add(new VertexAnimationFrame( ) { Time = 500, Bones = new ObservableDictionary<string, VertexBone>(_Bones.ToDictionary(entry => entry.Key, entry => entry.Value)) });
             } else if (treeview_animations.SelectedItem is VertexAnimationFrame) {
                 VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
                 if (animation != default(VertexAnimation)) {
                     int index = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem);
-                    animation.Frames.Add(new VertexAnimationFrame( ) { State = new ObservableDictionary<string, VertexBone>(animation.Frames[index].State.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, AbsoluteSize = new Vector2(entry.Value.Size) , TextureSize = entry.Value.TextureSize})), Time = animation.Frames[index].Time });
+                    animation.Frames.Add(new VertexAnimationFrame( ) { Bones = new ObservableDictionary<string, VertexBone>(animation.Frames[index].Bones.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, AbsoluteSize = new Vector2(entry.Value.Size) , TextureSize = entry.Value.TextureSize})), Time = animation.Frames[index].Time });
                 }
             }
         }
@@ -370,8 +369,8 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             string[ ] keys = Bones.Keys.ToArray( );
             for (int i = 0; i < keys.Length; i++) {
                 string bone = keys[i];
-                currentFrame.State[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, AbsoluteSize = Bones[bone].Size , TextureSize = new Vector2(Images[bone].PixelWidth, Images[bone].PixelHeight)};
-                UpdateBoneImage(boneImages[bone], currentFrame.State[bone], rectangle_player, border_rectangle_player);
+                currentFrame.Bones[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, AbsoluteSize = Bones[bone].Size , TextureSize = new Vector2(Images[bone].PixelWidth, Images[bone].PixelHeight)};
+                UpdateBoneImage(boneImages[bone], currentFrame.Bones[bone], rectangle_player, border_rectangle_player);
             }
         }
 
@@ -397,7 +396,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         private VertexAnimationFrame FindFrame (VertexBone bone) {
             foreach (VertexAnimation anim in Animations) {
                 foreach (VertexAnimationFrame frame in anim.Frames) {
-                    if (frame.State.Any(pair => pair.Value.Equals(bone)))
+                    if (frame.Bones.Any(pair => pair.Value.Equals(bone)))
                         return frame;
                 }
             }
@@ -440,7 +439,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                 dockpanel_edit.Visibility = Visibility.Visible;
                 dockpanel_preview.Visibility = Visibility.Hidden;
                 foreach (string bone in boneImages.Keys) {
-                    UpdateBoneImage(boneImages[bone], currentFrame.State[bone], rectangle_player, border_rectangle_player);
+                    UpdateBoneImage(boneImages[bone], currentFrame.Bones[bone], rectangle_player, border_rectangle_player);
                 }
             } else {
                 treeview_animations.ContextMenu = null;
@@ -455,7 +454,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             }
         }
 
-        private void UpdateBoneImage (ResizableImage image, VertexBone bone, System.Windows.Shapes.Rectangle rect, Border border) {
+        private void UpdateBoneImage (BoneImage image, VertexBone bone, System.Windows.Shapes.Rectangle rect, Border border) {
             image.Width = rect.Width * bone.AbsoluteSize.X;
             image.Height = rect.Height * bone.AbsoluteSize.Y;
             image.IsFlipped = bone.Mirrored;
@@ -468,13 +467,13 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
         private void UpdatePositionOfBone (string key) {
             if (currentFrame == null) return;
-            ResizableImage image = boneImages[key];
+            BoneImage image = boneImages[key];
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
             float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
-            VertexBone current = currentFrame.State[key];
+            VertexBone current = currentFrame.Bones[key];
             current.Position = new Vector2(newpercentx, newpercenty);
-            currentFrame.State.Remove(key);
-            currentFrame.State.Add(key, current);
+            currentFrame.Bones.Remove(key);
+            currentFrame.Bones.Add(key, current);
         }
 
         private struct AnimationMetaData {
@@ -499,7 +498,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         string name = Path.GetFileNameWithoutExtension(file);
                         BitmapImage image = new BitmapImage(new Uri(file));
 
-                        ResizableImage defaultBoneImage = new ResizableImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
+                        BoneImage defaultBoneImage = new BoneImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
                         defaultBoneImage.ContextMenu = new ContextMenu( ) {
                             DataContext = defaultBoneImage,
                             Items = {
@@ -511,9 +510,9 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
                         defaultBoneImage.MouseDoubleClick += DefaultBoneImage_MouseDoubleClick;
 
                         defaultBoneImage.SizeChanged += DefaultBoneImage_SizeChanged;
-                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(ResizableImage));
+                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(BoneImage));
                         canvasleftproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasLeftChanged);
-                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(ResizableImage));
+                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(BoneImage));
                         canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
 
                         canvas_bones.Children.Add(defaultBoneImage);
@@ -539,7 +538,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void DefaultBoneImage_MouseDoubleClick (object sender, MouseButtonEventArgs e) {
-            defaultSizeBone = Path.GetFileNameWithoutExtension(((ResizableImage)sender).Image.UriSource.AbsolutePath);
+            defaultSizeBone = Path.GetFileNameWithoutExtension(((BoneImage)sender).Image.UriSource.AbsolutePath);
             UpdateDefaultSizes( );
         }
 
@@ -563,7 +562,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
 
             // apply changes to images
             foreach (UIElement element in canvas_bones.Children) {
-                ResizableImage image = element as ResizableImage;
+                BoneImage image = element as BoneImage;
                 if (image != null) {
                     string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
                     if (bone != defaultSizeBone) {
@@ -577,14 +576,14 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void DefaultBoneImage_CanvasLeftChanged (object sender, EventArgs e) {
-            UpdatePositionOfDefaultBone((ResizableImage)sender);
+            UpdatePositionOfDefaultBone((BoneImage)sender);
         }
 
         private void DefaultBoneImage_CanvasTopChanged (object sender, EventArgs e) {
-            UpdatePositionOfDefaultBone((ResizableImage)sender);
+            UpdatePositionOfDefaultBone((BoneImage)sender);
         }
 
-        private void UpdatePositionOfDefaultBone (ResizableImage image) {
+        private void UpdatePositionOfDefaultBone (BoneImage image) {
             if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
             string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
             float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
@@ -595,7 +594,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void DefaultBoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
-            ResizableImage image = (ResizableImage)sender;
+            BoneImage image = (BoneImage)sender;
             if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
 
             string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
@@ -611,7 +610,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void MenuItemDelete_Click (object sender, RoutedEventArgs e) {
-            ResizableImage image = ((sender as Control).Parent as Control).DataContext as ResizableImage;
+            BoneImage image = ((sender as Control).Parent as Control).DataContext as BoneImage;
             if (image != null) {
                 canvas_bones.Children.Remove(image);
                 string bonename = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
@@ -629,7 +628,7 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             treeview_animations.Focus( );
         }
 
-        private void UpdateOrigin (ResizableImage image, Point origin) {
+        private void UpdateOrigin (BoneImage image, Point origin) {
             image.RenderTransformOrigin = origin;
         }
     }

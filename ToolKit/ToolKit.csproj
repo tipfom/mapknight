@@ -66,10 +66,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AnimationControl2.xaml.cs">
+      <DependentUpon>AnimationControl2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Animation\MoveableRenderTransformOrigin.cs" />
-    <Compile Include="Controls\Animation\VertexAnimation.cs" />
-    <Compile Include="Controls\Animation\VertexAnimationFrame.cs" />
-    <Compile Include="Controls\Animation\VertexBone.cs" />
+    <Compile Include="Controls\IntegerTextbox.xaml.cs">
+      <DependentUpon>IntegerTextbox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\AnimationMetaData.cs" />
+    <Compile Include="Data\VertexAnimation.cs" />
+    <Compile Include="Data\VertexAnimationFrame.cs" />
+    <Compile Include="Data\VertexBone.cs" />
     <Compile Include="Controls\TextureCreationControl.xaml.cs">
       <DependentUpon>TextureCreationControl.xaml</DependentUpon>
     </Compile>
@@ -92,13 +99,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\AnimationControl.xaml.cs">
-      <DependentUpon>AnimationControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Animation\AnimationView.cs" />
     <Compile Include="Controls\Animation\MoveThumb.cs" />
-    <Compile Include="Controls\Animation\ResizableImage.xaml.cs">
-      <DependentUpon>ResizableImage.xaml</DependentUpon>
+    <Compile Include="Controls\Animation\BoneImage.xaml.cs">
+      <DependentUpon>BoneImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Animation\ResizeThumb.cs" />
     <Compile Include="Controls\Animation\RotateThumb.cs" />
@@ -125,6 +129,9 @@
   <ItemGroup>
     <Compile Include="Windows\Dialogs\EditDefaultTileAttributesDialog.xaml.cs">
       <DependentUpon>EditDefaultTileAttributesDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Dialogs\EditBonesDialog.xaml.cs">
+      <DependentUpon>EditBonesDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
@@ -160,6 +167,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\AnimationControl2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\IntegerTextbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\TextureCreationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -184,11 +199,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\AnimationControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Animation\ResizableImage.xaml">
+    <Page Include="Controls\Animation\BoneImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -197,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Dialogs\EditDefaultTileAttributesDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Dialogs\EditBonesDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -247,9 +262,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\folder-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Libraries\MonoGame.Framework.dll" />
@@ -332,6 +344,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\old_man-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\minus_2_math-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\plus_2_math-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\logo.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
