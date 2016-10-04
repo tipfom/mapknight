@@ -131,7 +131,7 @@ namespace mapKnight.ToolKit.Controls {
 
         private void CommandSettings_Executed (object sender, ExecutedRoutedEventArgs e) {
             editBonesDialog.ShowDialog( );
-            foreach(VertexBone bone in bones) {
+            foreach (VertexBone bone in bones) {
                 BoneImage.LoadImage(bone.Image, this);
             }
         }
@@ -170,12 +170,12 @@ namespace mapKnight.ToolKit.Controls {
 
         private void EditBonesDialog_ScaleChanged (VertexBone bone, double scale) {
             int index = bones.IndexOf(bone);
-            foreach(VertexAnimation animation in animations) {
-                foreach(VertexAnimationFrame frame in animation.Frames) {
+            foreach (VertexAnimation animation in animations) {
+                foreach (VertexAnimationFrame frame in animation.Frames) {
                     frame.Bones[index].Scale = (float)scale;
                 }
             }
-            
+
             BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == index);
             if (image != null) image.Update( );
         }
@@ -274,8 +274,22 @@ namespace mapKnight.ToolKit.Controls {
             animationView.Reset( );
         }
 
-        public void Save (string path) {
+        public void Save (Project project) {
+            using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, ".meta"))
+            using (StreamWriter writer = new StreamWriter(stream))
+                writer.WriteLine(JsonConvert.SerializeObject(metaData));
 
+            using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "animations.json"))
+            using (StreamWriter writer = new StreamWriter(stream))
+                writer.WriteLine(JsonConvert.SerializeObject(animations));
+
+            foreach (KeyValuePair<string, BoneImage.ImageData> kvpair in BoneImage.Data[this]) {
+                using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "textures", kvpair.Key, ".png"))
+                    kvpair.Value.Image.SaveToStream(stream);
+                using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "textures", kvpair.Key, ".data"))
+                using (StreamWriter writer = new StreamWriter(stream))
+                    writer.WriteLine(JsonConvert.SerializeObject(kvpair.Value.TransformOrigin));
+            }
         }
 
         private void slider_zoom_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {

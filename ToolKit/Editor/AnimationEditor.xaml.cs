@@ -38,14 +38,6 @@ namespace mapKnight.ToolKit.Editor {
             ((MenuItem)((MenuItem)_Menu[0]).Items[1]).Click += AnimationLoad_Click; ;
             ((ComboBox)_Menu[1]).SelectionChanged += ComboBoxAnimation_SelectionChanged;
             ((ComboBox)_Menu[1]).ItemsSource = animationControlStrings;
-
-            App.ProjectChanged += ( ) => {
-                App.Project.Saved += (path) => {
-                    string animpath = Path.Combine(path, "animations");
-                    foreach (AnimationControl2 animationControl in animationControls)
-                        animationControl.Save(animpath);
-                };
-            };
         }
 
         private void AnimationLoad_Click (object sender, RoutedEventArgs e) {
@@ -71,6 +63,11 @@ namespace mapKnight.ToolKit.Editor {
         private void ComboBoxAnimation_SelectionChanged (object sender, SelectionChangedEventArgs e) {
             contentpresenter_animation.Content = animationControls[((ComboBox)_Menu[1]).SelectedIndex];
             MenuChanged?.Invoke( );
+        }
+
+        public void Save(Project project) {
+            foreach (AnimationControl2 animcontrol in animationControls)
+                animcontrol.Save(project);
         }
     }
 }

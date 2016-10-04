@@ -108,10 +108,6 @@ namespace mapKnight.ToolKit.Editor {
             _Menu[17].MouseDown += (sender, e) => SelectTool(Tool.Pointer);
             _Menu[18].MouseDown += (sender, e) => SelectTool(Tool.Rotater);
 
-            App.ProjectChanged += ( ) => {
-                App.Project.Saved += Save;
-                Reset( );
-            };
             App.Current.MainWindow.Closing += (sender, e) => {
                 Properties.Settings.Default.DefaultTileAttributes = JsonConvert.SerializeObject(defaultAttributes);
             };
@@ -158,21 +154,16 @@ namespace mapKnight.ToolKit.Editor {
             wpfTextures[map].Add(newname, image);
         }
 
-        public void Save (string path) {
-            string mapDirectory = Path.Combine(path, "maps");
-            if (!Directory.Exists(mapDirectory))
-                Directory.CreateDirectory(mapDirectory);
-
+        public void Save (Project project) {
             foreach (Map map in GetMaps( )) {
                 // build texture
-                string texturePath = Path.ChangeExtension(Path.Combine(mapDirectory, map.Name), "png");
-                string mapPath = Path.ChangeExtension(Path.Combine(mapDirectory, map.Name), "map");
-
                 Texture2D packedTexture = TileSerializer.BuildTexture(map.Tiles, xnaTextures[map], GraphicsDevice);
-                using (Stream stream = File.OpenWrite(texturePath))
+                using (Stream stream = project.GetOrCreateStream("maps", map.Name, map.Name + ".png"))
                     packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
-                map.Texture = Path.GetFileNameWithoutExtension(texturePath);
-                map.MergeRotations(mapRotations[map]).Serialize(File.OpenWrite(mapPath));
+
+                map.Texture = Path.GetFileNameWithoutExtension(map.Name + ".png");
+                using (Stream stream = project.GetOrCreateStream("maps", map.Name, map.Name + ".map"))
+                    map.MergeRotations(mapRotations[map]).Serialize(stream);
             }
         }
 
@@ -446,7 +437,6 @@ namespace mapKnight.ToolKit.Editor {
                             break;
                     }
                 }
-                App.Project.HasChanged = e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed;
                 tilemapview.Update( );
             }
         }
@@ -499,7 +489,6 @@ namespace mapKnight.ToolKit.Editor {
                     update = update || (currentTool != Tool.Filler && currentTool != Tool.Rotater);
                 }
             }
-            App.Project.HasChanged = update && ((e.LeftButton == MouseButtonState.Pressed && currentTool != Tool.Filler) || e.RightButton == MouseButtonState.Pressed);
             if (update)
                 tilemapview.Update( );
         }
@@ -559,7 +548,6 @@ namespace mapKnight.ToolKit.Editor {
                 string[ ] files = (string[ ])e.Data.GetData(DataFormats.FileDrop);
                 foreach (string file in files) {
                     if (Path.GetExtension(file) == ".png") {
-                        App.Project.HasChanged = true;
                         if (checkbox_auto.IsChecked ?? false && currentMap.Tiles.Where(t => t.Name == Path.GetFileNameWithoutExtension(file)) != null) {
                             // add tile
                             string tileName = Path.GetFileNameWithoutExtension(file);

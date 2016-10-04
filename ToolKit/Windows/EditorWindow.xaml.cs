@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace mapKnight.ToolKit.Windows {
     /// <summary>
     /// Interaktionslogik für EditorWindow.xaml
     /// </summary>
     public partial class EditorWindow : Window {
-        public const string PROJECT_FILTER = "PROJECT-Files|*.mkproj";
+        public const string PROJECT_FILTER = "PROJECT-Files|" + Project.EXTENSION;
+
+        private Project project;
 
         public EditorWindow ( ) {
             InitializeComponent( );
@@ -53,8 +55,6 @@ namespace mapKnight.ToolKit.Windows {
             }
 
             Properties.Settings.Default.Save( );
-            if (App.Project?.HasChanged ?? false)
-                App.ShowSaveDialog( );
         }
 
         private void Map_Selected (object sender, RoutedEventArgs e) {
@@ -66,7 +66,7 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void NewCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
-            App.CreateNewProject(this);
+            project = new Project();
         }
 
         private void OpenCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -78,11 +78,22 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void SaveCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
-            App.SaveProject( );
+            mapeditor.Save(project);
+            animationeditor.Save(project);
+
+            if (!project.HasPath) {
+                SaveFileDialog savedialog = new SaveFileDialog( ) { CheckFileExists = false, CheckPathExists = true, Filter = PROJECT_FILTER, OverwritePrompt = true };
+                if (savedialog.ShowDialog() ?? false) {
+                    project.Path = savedialog.FileName;
+                    project.Save( );
+                }
+            } else {
+                project.Save( );
+            }
         }
 
         private void Window_Loaded (object sender, RoutedEventArgs e) {
-            App.CreateNewProject(this);
+            project = new Project();
         }
 
         private void About_Click (object sender, RoutedEventArgs e) {
@@ -95,6 +106,14 @@ namespace mapKnight.ToolKit.Windows {
 
         private void TabItemTexture_Selected (object sender, RoutedEventArgs e) {
             SetTabPageMenu(textureeditor.Menu);
+        }
+
+        private void CommandOpen_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            
+        }
+
+        private void CommandOpen_Executed (object sender, ExecutedRoutedEventArgs e) {
+
         }
     }
 }

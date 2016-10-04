@@ -115,20 +115,24 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         private void ApplyImage (string path) {
             LoadImage(path, animControl);
-            Image = Data[animControl][path];
-            dataContextBone.Image = path;
+
+            string name = Path.GetFileNameWithoutExtension(path);
+            Image = Data[animControl][name];
+            dataContextBone.Image = name;
             image.Source = Image.Image;
+            RenderTransformOrigin = Image.TransformOrigin;
         }
 
         public static void LoadImage (string path, AnimationControl2 animControl) {
-            if (!Data[animControl].ContainsKey(path)) {
+            string name = Path.GetFileNameWithoutExtension(path);
+            if (!Data[animControl].ContainsKey(name)) {
                 BitmapImage loadedImage = new BitmapImage( );
                 loadedImage.BeginInit( );
                 loadedImage.UriSource = new Uri(path);
                 loadedImage.CacheOption = BitmapCacheOption.OnLoad;
                 loadedImage.EndInit( );
 
-                Data[animControl].Add(path, new ImageData( ) { TransformOrigin = new Point(0.5, 0.5), Image = loadedImage });
+                Data[animControl].Add(name, new ImageData( ) { TransformOrigin = new Point(0.5, 0.5), Image = loadedImage });
             }
         }
 

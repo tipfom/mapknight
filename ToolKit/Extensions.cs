@@ -29,11 +29,15 @@ namespace mapKnight.ToolKit {
             }
         }
 
+        public static void SaveToStream(this BitmapImage image, Stream stream) {
+            PngBitmapEncoder encoder = new PngBitmapEncoder( );
+            encoder.Frames.Add(BitmapFrame.Create(image));
+            encoder.Save(stream);
+        }
+
         public static Texture2D ToTexture2D (this BitmapImage image, GraphicsDevice g) {
             using (MemoryStream ms = new MemoryStream( )) {
-                PngBitmapEncoder encoder = new PngBitmapEncoder( );
-                encoder.Frames.Add(BitmapFrame.Create(image));
-                encoder.Save(ms);
+                image.SaveToStream(ms);
 
                 return Texture2D.FromStream(g, ms);
             }
