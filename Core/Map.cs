@@ -135,11 +135,11 @@ namespace mapKnight.Core {
                 writer.Write(tilesraw);
 
                 // write texturename
-                writer.Write(Texture.Encode( ));
+                writer.Write(Texture);
 
                 // write info
-                writer.Write(Creator.Encode( ));
-                writer.Write(Name.Encode( ));
+                writer.Write(Creator);
+                writer.Write(Name);
                 writer.Write(Gravity.X);
                 writer.Write(Gravity.Y);
             }
