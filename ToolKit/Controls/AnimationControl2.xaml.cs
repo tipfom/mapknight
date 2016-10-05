@@ -57,6 +57,22 @@ namespace mapKnight.ToolKit.Controls {
             metaData.Ratio = ratio;
         }
 
+        public AnimationControl2 (Project project, string animationdirectory) : this( ) {
+            foreach (string texturedir in project.GetAllEntries(animationdirectory, "textures")) {
+                if (System.IO.Path.GetFileName(texturedir) == ".png") {
+                    string name = new DirectoryInfo(System.IO.Path.GetDirectoryName(texturedir)).Name;
+                    BoneImage.LoadImage(name, project.GetOrCreateStream(texturedir), project.GetOrCreateStream(System.IO.Path.ChangeExtension(texturedir, ".data")), this, false);
+                }
+            }
+
+            using (Stream stream = project.GetOrCreateStream(animationdirectory, ".meta"))
+                metaData = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
+            using (Stream stream = project.GetOrCreateStream(animationdirectory, "bones.json"))
+                bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
+            using (Stream stream = project.GetOrCreateStream(animationdirectory, "animations.json"))
+                animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
+        }
+
         public List<FrameworkElement> Menu { get { return menu; } }
 
         public override string ToString ( ) {
@@ -131,16 +147,18 @@ namespace mapKnight.ToolKit.Controls {
 
         private void CommandSettings_Executed (object sender, ExecutedRoutedEventArgs e) {
             editBonesDialog.ShowDialog( );
-            foreach (VertexBone bone in bones) {
-                BoneImage.LoadImage(bone.Image, this);
-            }
         }
 
         private void EditBonesDialog_BoneAdded (VertexBone addedBone) {
+            BoneImage.LoadImage(addedBone.Image, this);
             bones.Add(addedBone);
+
+            string name = System.IO.Path.GetFileNameWithoutExtension(addedBone.Image);
             for (int i = 0; i < animations.Count; i++) {
                 for (int j = 0; j < animations[i].Frames.Count; j++) {
-                    animations[i].Frames[j].Bones.Add(addedBone.Clone( ));
+                    VertexBone bone = addedBone.Clone( );
+                    bone.Image = name;
+                    animations[i].Frames[j].Bones.Add(bone);
                 }
             }
         }
@@ -177,7 +195,7 @@ namespace mapKnight.ToolKit.Controls {
             }
 
             BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == index);
-            if (image != null) image.Update( );
+            if (image != null && currentFrame != null) image.Update( );
         }
 
         private void treeview_animations_MouseDown (object sender, MouseButtonEventArgs e) {
@@ -282,6 +300,10 @@ namespace mapKnight.ToolKit.Controls {
             using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "animations.json"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(animations));
+
+            using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "bones.json"))
+            using (StreamWriter writer = new StreamWriter(stream))
+                writer.WriteLine(JsonConvert.SerializeObject(bones));
 
             foreach (KeyValuePair<string, BoneImage.ImageData> kvpair in BoneImage.Data[this]) {
                 using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "textures", kvpair.Key, ".png"))

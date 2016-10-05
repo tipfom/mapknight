@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -172,6 +173,10 @@ namespace mapKnight.ToolKit {
                     return container;
             }
             return null;
+        }
+
+        public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items) {
+            foreach (T item in items) collection.Add(item);
         }
     }
 }

@@ -62,6 +62,27 @@ namespace mapKnight.ToolKit.Editor {
         private Tool currentTool = Tool.Pen;
 
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
+
+        public void Load (Project project) {
+            xnaTextures.Clear( );
+            wpfTextures.Clear( );
+            mapRotations.Clear( );
+
+            foreach (string mapfile in project.GetAllEntries("maps")) {
+                if (Path.GetExtension(mapfile) == ".map") {
+                    string dir = Path.GetDirectoryName(mapfile);
+                    string name = Path.GetFileNameWithoutExtension(mapfile);
+
+                    using (Stream mapStream = project.GetOrCreateStream(mapfile)) {
+                        Map map = LoadMap(mapStream);
+                        using (Stream imageStream = project.GetOrCreateStream(Path.Combine(dir, name + ".png")))
+                            LoadImages(imageStream, map);
+                        AddMap(map);
+                    }
+                }
+            }
+        }
+
         private GraphicsDevice GraphicsDevice;
         private Point lastClickedTile = new Point(-1, -1);
         private Dictionary<Map, float[ , , ]> mapRotations = new Dictionary<Map, float[ , , ]>( );
@@ -319,15 +340,24 @@ namespace mapKnight.ToolKit.Editor {
 
         private void LoadMap (string path) {
             using (Stream mapStream = File.OpenRead(path)) {
-                Map loadedMap = new Map(mapStream);
-                mapRotations.Add(loadedMap, loadedMap.ExtractRotations( ));
-                using (Stream imageStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(path), loadedMap.Texture + ".png")))
-                    xnaTextures.Add(loadedMap, TileSerializer.ExtractTextures(Texture2D.FromStream(GraphicsDevice, imageStream), loadedMap.Tiles, GraphicsDevice));
-                wpfTextures.Add(loadedMap, new Dictionary<string, BitmapImage>( ));
-                foreach (var entry in xnaTextures[loadedMap])
-                    wpfTextures[loadedMap].Add(entry.Key, entry.Value.ToBitmapImage( ));
-                AddMap(loadedMap);
+                Map map = LoadMap(mapStream);
+                using (Stream imageStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(path), map.Texture + ".png")))
+                    LoadImages(imageStream, map);
+                AddMap(map);
             }
+        }
+
+        private Map LoadMap (Stream mapStream) {
+            Map loadedMap = new Map(mapStream);
+            mapRotations.Add(loadedMap, loadedMap.ExtractRotations( ));
+            return loadedMap;
+        }
+
+        private void LoadImages (Stream imageStream, Map map) {
+            xnaTextures.Add(map, TileSerializer.ExtractTextures(Texture2D.FromStream(GraphicsDevice, imageStream), map.Tiles, GraphicsDevice));
+            wpfTextures.Add(map, new Dictionary<string, BitmapImage>( ));
+            foreach (var entry in xnaTextures[map])
+                wpfTextures[map].Add(entry.Key, entry.Value.ToBitmapImage( ));
         }
 
         private void Reset ( ) {

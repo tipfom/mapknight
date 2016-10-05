@@ -62,12 +62,24 @@ namespace mapKnight.ToolKit.Editor {
 
         private void ComboBoxAnimation_SelectionChanged (object sender, SelectionChangedEventArgs e) {
             contentpresenter_animation.Content = animationControls[((ComboBox)_Menu[1]).SelectedIndex];
-            MenuChanged?.Invoke( );
+            if (Visibility == Visibility.Visible) MenuChanged?.Invoke( );
         }
 
-        public void Save(Project project) {
+        public void Save (Project project) {
             foreach (AnimationControl2 animcontrol in animationControls)
                 animcontrol.Save(project);
+        }
+
+        public void Load (Project project) {
+            animationControls.Clear( );
+            animationControlStrings.Clear( );
+            foreach (string animationdirectory in project.GetAllEntries("animations")) {
+                if (Path.GetFileName(animationdirectory) == ".meta") {
+                    animationControls.Add(new AnimationControl2(project, Path.GetDirectoryName(animationdirectory)));
+                    animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
+                }
+            }
+            if (animationControls.Count > 0) ((ComboBox)_Menu[1]).SelectedIndex = 0;
         }
     }
 }

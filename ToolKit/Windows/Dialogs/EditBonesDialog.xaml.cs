@@ -1,14 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using mapKnight.ToolKit.Controls.Components.Animation;
 using mapKnight.ToolKit.Data;
 using Microsoft.Win32;
 
 namespace mapKnight.ToolKit.Windows.Dialogs {
     public partial class EditBonesDialog : Window {
+        private static readonly double[ ] CLAMP_VALUES = { 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1 };
+
         public event Action<VertexBone, double> ScaleChanged;
         public event Action<VertexBone> BoneAdded;
         public event Action<int> BoneDeleted;
@@ -65,17 +72,18 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
         }
 
         private void Slider_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
+            VertexBone bone = (VertexBone)((Control)sender).DataContext;
             if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
                 // clamp slider value
                 Slider slider = (Slider)sender;
-                double clampedValue = Math.Round(slider.Value * 2, 1) / 2d;
+                double clampedValue = new List<double>(CLAMP_VALUES).Concat(new[ ] { 1d / BitmapFrame.Create(new Uri(bone.Image), BitmapCreateOptions.DelayCreation, BitmapCacheOption.None).PixelWidth }).Min(value => Math.Abs(value - slider.Value)) + slider.Value;
                 if (slider.Value != clampedValue) slider.Value = clampedValue;
             }
-            ScaleChanged?.Invoke((VertexBone)((Control)sender).DataContext, ((Slider)sender).Value);
+            ScaleChanged?.Invoke(bone, ((Slider)sender).Value);
         }
 
         protected override void OnClosing (CancelEventArgs e) {
-            if (Visibility != Visibility.Hidden) {
+            if (Visibility == Visibility.Visible) {
                 e.Cancel = true;
                 Visibility = Visibility.Hidden;
             }

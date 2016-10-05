@@ -54,7 +54,7 @@ namespace mapKnight.ToolKit {
             return archive.Entries.Any(entry => entry.FullName == path);
         }
 
-        public IEnumerator<string> GetAllEntriesInDirectory (params string[ ] path) {
+        public IEnumerable<string> GetAllEntries (params string[ ] path) {
             string internalpath = System.IO.Path.Combine(path);
             foreach (ZipArchiveEntry entry in archive.Entries) {
                 if (entry.FullName.StartsWith(internalpath)) yield return entry.FullName;

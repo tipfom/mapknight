@@ -39,7 +39,7 @@
                 <DataTemplate DataType="data:VertexBone">
                     <StackPanel Orientation="Horizontal" Margin="0,3,0,3">
                         <Image Height="30" Width="30" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="{Binding Image}"/>
-                        <Slider Width="220" Maximum="0.1" Minimum="0" Value="{Binding Scale}" TickFrequency="0.001" ValueChanged="Slider_ValueChanged" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <Slider Width="220" Maximum="0.1" Minimum="0.001" Value="{Binding Scale}" TickFrequency="0.001" ValueChanged="Slider_ValueChanged" VerticalAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

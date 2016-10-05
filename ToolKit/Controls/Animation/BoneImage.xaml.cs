@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using mapKnight.Core;
 using mapKnight.ToolKit.Data;
+using Newtonsoft.Json;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace mapKnight.ToolKit.Controls.Components.Animation {
@@ -79,6 +80,29 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             dataContextBone.Position = new Vector2((float)position.X, (float)position.Y);
         }
 
+        public static void LoadImage (string name, Stream imageStream, Stream dataStream, AnimationControl2 animationControl, bool leaveOpen) {
+            BitmapImage image = new BitmapImage( );
+            image.BeginInit( );
+            image.StreamSource = imageStream;
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit( );
+
+            Point transformOrigin = JsonConvert.DeserializeObject<Point>(new StreamReader(dataStream).ReadToEnd( ));
+
+            if (!Data.ContainsKey(animationControl)) Data.Add(animationControl, new Dictionary<string, ImageData>( ));
+
+            if (Data[animationControl].ContainsKey(name)) {
+                Data[animationControl][name] = new ImageData( ) { Image = image, TransformOrigin = transformOrigin };
+            } else {
+                Data[animationControl].Add(name, new ImageData( ) { Image = image, TransformOrigin = transformOrigin });
+            }
+
+            if (!leaveOpen) {
+                imageStream.Close( );
+                dataStream.Close( );
+            }
+        }
+
         public void Update ( ) {
             ApplyImage(dataContextBone.Image);
             if (RefRectangle.Width == 0 || RefRectangle.Height == 0) return;
@@ -125,6 +149,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         public static void LoadImage (string path, AnimationControl2 animControl) {
             string name = Path.GetFileNameWithoutExtension(path);
+            if (!Data.ContainsKey(animControl)) Data.Add(animControl, new Dictionary<string, ImageData>( ));
             if (!Data[animControl].ContainsKey(name)) {
                 BitmapImage loadedImage = new BitmapImage( );
                 loadedImage.BeginInit( );

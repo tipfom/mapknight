@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:mapKnight.ToolKit"
         xmlns:editor="clr-namespace:mapKnight.ToolKit.Editor"
         mc:Ignorable="d"
-        Title="mapKnight ToolKit" Height="300" Width="300"
+        Title="Pluto Alpha" Height="300" Width="300"
         Closing="Window_Closing" Loaded="Window_Loaded"
         Icon="{StaticResource ResourceKey=logo}">
     <Window.CommandBindings>

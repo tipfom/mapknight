@@ -8,15 +8,17 @@ namespace mapKnight.ToolKit.Windows {
     /// Interaktionslogik für EditorWindow.xaml
     /// </summary>
     public partial class EditorWindow : Window {
-        public const string PROJECT_FILTER = "PROJECT-Files|" + Project.EXTENSION;
+        public const string PROJECT_FILTER = "PROJECT-Files|*" + Project.EXTENSION;
 
         private Project project;
+        private SaveFileDialog saveDialog = new SaveFileDialog( ) { Filter = PROJECT_FILTER, OverwritePrompt = true, AddExtension = false };
+        private OpenFileDialog openDialog = new OpenFileDialog( ) { Filter = PROJECT_FILTER, Multiselect = false, AddExtension = false, ReadOnlyChecked = false };
 
         public EditorWindow ( ) {
             InitializeComponent( );
             LoadConfig( );
             App.Current.MainWindow = this;
-            animationeditor.MenuChanged += ( ) => SetTabPageMenu(animationeditor.Menu);
+            animationeditor.MenuChanged += ( ) => { if (tabcontrol_editor.SelectedItem == animationeditor) SetTabPageMenu(animationeditor.Menu); };
         }
 
         private void LoadConfig ( ) {
@@ -66,7 +68,7 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void NewCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
-            project = new Project();
+            project = new Project( );
         }
 
         private void OpenCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -82,9 +84,8 @@ namespace mapKnight.ToolKit.Windows {
             animationeditor.Save(project);
 
             if (!project.HasPath) {
-                SaveFileDialog savedialog = new SaveFileDialog( ) { CheckFileExists = false, CheckPathExists = true, Filter = PROJECT_FILTER, OverwritePrompt = true };
-                if (savedialog.ShowDialog() ?? false) {
-                    project.Path = savedialog.FileName;
+                if (saveDialog.ShowDialog( ) ?? false) {
+                    project.Path = saveDialog.FileName;
                     project.Save( );
                 }
             } else {
@@ -93,7 +94,7 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void Window_Loaded (object sender, RoutedEventArgs e) {
-            project = new Project();
+            project = new Project( );
         }
 
         private void About_Click (object sender, RoutedEventArgs e) {
@@ -109,11 +110,15 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void CommandOpen_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            
+            e.CanExecute = true;
         }
 
         private void CommandOpen_Executed (object sender, ExecutedRoutedEventArgs e) {
-
+            if (openDialog.ShowDialog( ) ?? false) {
+                project = new Project(openDialog.FileName);
+                mapeditor.Load(project);
+                animationeditor.Load(project);
+            }
         }
     }
 }
