@@ -16,6 +16,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         private VertexAnimation currentAnimation;
         private bool paused = false;
         private Dictionary<string, Texture2D> textures;
+        private Dictionary<string, Microsoft.Xna.Framework.Vector2> transformOrigins;
         private Texture2D entityTexture;
         private Texture2D groundTexture;
         private float entityRatio;
@@ -41,9 +42,10 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             groundTexture.SetData(new Color[ ] { new Color(0, 153, 51, 255) });
         }
 
-        public void Play (VertexAnimation animation, float entityratio, Dictionary<string, BitmapImage> images) {
+        public void Play (VertexAnimation animation, float entityratio, Dictionary<string, BoneImage.ImageData> imagedata) {
             paused = false;
-            textures = images.ToDictionary(entry => entry.Key, entry => entry.Value.ToTexture2D(GraphicsDevice));
+            textures = imagedata.ToDictionary(entry => entry.Key, entry => entry.Value.Image.ToTexture2D(GraphicsDevice));
+            transformOrigins = imagedata.ToDictionary(entry => entry.Key, entry => new Microsoft.Xna.Framework.Vector2((float)entry.Value.TransformOrigin.X, (float)entry.Value.TransformOrigin.Y));
             currentAnimation = animation;
             entityRatio = entityratio;
             nextFrameTime = Environment.TickCount;
@@ -94,13 +96,12 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
             foreach (VertexBone entry in InterpolateAnimation( )) {
                 Texture2D texture = textures[entry.Image];
-                Rectangle boneDrawRectangle = new Rectangle(
-                    (int)(entityDrawRectangle.Center.X + entry.Position.X * entityDrawRectangle.Width),
-                    (int)(entityDrawRectangle.Center.Y - entry.Position.Y * entityDrawRectangle.Height),
-                    (int)(entry.Scale * texture.Width * entityDrawRectangle.Width),
-                    (int)(entry.Scale * texture.Height * entityDrawRectangle.Height)
-                    );
-                spriteBatch.Draw(texture, boneDrawRectangle, null, Color.White, (float)(entry.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2( ) / 2f, entry.Mirrored ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+                int width = (int)(entry.Scale * texture.Width * entityDrawRectangle.Width);
+                int height = (int)(entry.Scale * texture.Height * entityDrawRectangle.Height);
+                int x = (int)(entityDrawRectangle.Center.X + entry.Position.X * entityDrawRectangle.Width - (0.5f - transformOrigins[entry.Image].X) * width);
+                int y = (int)(entityDrawRectangle.Center.Y - entry.Position.Y * entityDrawRectangle.Height - (0.5f - transformOrigins[entry.Image].Y) * height);
+
+                spriteBatch.Draw(texture, new Rectangle(x, y, width, height), null, Color.White, (float)(entry.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2( ) * transformOrigins[entry.Image], entry.Mirrored ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }
             renderTimer.Start( );
         }
@@ -116,13 +117,13 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                     currentFrame = nextFrame;
                     nextFrame++;
                     nextFrameTime += currentAnimation.Frames[currentFrame].Time;
-                } else {
+                } else if (currentAnimation.CanRepeat) {
                     currentFrame = nextFrame;
                     nextFrame = 0;
                     nextFrameTime += currentAnimation.Frames[currentFrame].Time;
                 }
             }
-            float progress = (nextFrameTime - Environment.TickCount) / (float)currentAnimation.Frames[currentFrame].Time;
+            float progress = Core.Mathf.Clamp01((nextFrameTime - Environment.TickCount) / (float)currentAnimation.Frames[currentFrame].Time);
 
             for (int i = 0; i < currentAnimation.Frames[0].Bones.Count; i++) {
                 Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[currentFrame].Bones[i].Position, currentAnimation.Frames[nextFrame].Bones[i].Position, progress);

@@ -274,7 +274,7 @@ namespace mapKnight.ToolKit.Controls {
 
         private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
             AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            animationView.Play(currentAnimation, (float)metaData.Ratio, BoneImage.Data[this].ToDictionary(item => item.Key, item => item.Value.Image));
+            animationView.Play(currentAnimation, (float)metaData.Ratio, BoneImage.Data[this]);
         }
 
         private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {

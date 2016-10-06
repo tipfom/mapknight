@@ -127,7 +127,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0,1,0,1">
                         <RadioButton GroupName="radiobutton_animationdefault" VerticalAlignment="Center"/>
                         <Image  Width="20" Height="20" VerticalAlignment="Center" Source="{StaticResource ResourceKey=image_animationcomponent_animation}" />
-                        <CheckBox  IsChecked="{Binding Repeat}" VerticalAlignment="Center" Margin="7,1,7,1" Height="18" Width="18">
+                        <CheckBox  IsChecked="{Binding CanRepeat}" VerticalAlignment="Center" Margin="7,1,7,1" Height="18" Width="18">
                             <CheckBox.Template>
                                 <ControlTemplate TargetType="CheckBox">
                                     <Grid>

@@ -38,12 +38,17 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                     dragDelta = rotateTransform.Transform(dragDelta);
                 }
 
-                double x = Math.Round(Math.Min(1, Math.Max(0, item.RenderTransformOrigin.X + dragDelta.X / item.Width)) * item.Image.Image.PixelWidth) / item.Image.Image.PixelWidth;
-                double y = Math.Round(Math.Min(1, Math.Max(0, item.RenderTransformOrigin.Y + dragDelta.Y / item.Height)) * item.Image.Image.PixelHeight) / item.Image.Image.PixelHeight;
+                Point newRenderTransformOrigin = new Point(
+                    Math.Min(1, Math.Max(0, item.RenderTransformOrigin.X + dragDelta.X / item.Width)),
+                    Math.Min(1, Math.Max(0, item.RenderTransformOrigin.Y + dragDelta.Y / item.Height)));
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
-                    x = Math.Round(x * 6d) / 6d;
-                    y = Math.Round(y * 6d) / 6d;
+                    newRenderTransformOrigin.X = Math.Round(newRenderTransformOrigin.X * 5d) / 5d;
+                    newRenderTransformOrigin.Y = Math.Round(newRenderTransformOrigin.Y * 5d) / 5d;
                 }
+
+                double x = Math.Round(newRenderTransformOrigin.X * item.Image.Image.PixelWidth) / item.Image.Image.PixelWidth;
+                double y = Math.Round(newRenderTransformOrigin.Y * item.Image.Image.PixelHeight) / item.Image.Image.PixelHeight;
+
                 item.RenderTransformOrigin = new Point(x, y);
                 Margin = new Thickness(x * item.Width - Width / 2d, y * item.Height - Height / 2d, 0, 0);
                 RenderTransformOriginChanged?.Invoke(item.RenderTransformOrigin);

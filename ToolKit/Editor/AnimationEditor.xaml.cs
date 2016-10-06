@@ -61,8 +61,9 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void ComboBoxAnimation_SelectionChanged (object sender, SelectionChangedEventArgs e) {
+            if (((ComboBox)_Menu[1]).SelectedIndex == -1) return;
             contentpresenter_animation.Content = animationControls[((ComboBox)_Menu[1]).SelectedIndex];
-            if (Visibility == Visibility.Visible) MenuChanged?.Invoke( );
+            MenuChanged?.Invoke( );
         }
 
         public void Save (Project project) {
@@ -71,8 +72,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         public void Load (Project project) {
-            animationControls.Clear( );
-            animationControlStrings.Clear( );
+            Clear( );
             foreach (string animationdirectory in project.GetAllEntries("animations")) {
                 if (Path.GetFileName(animationdirectory) == ".meta") {
                     animationControls.Add(new AnimationControl2(project, Path.GetDirectoryName(animationdirectory)));
@@ -80,6 +80,11 @@ namespace mapKnight.ToolKit.Editor {
                 }
             }
             if (animationControls.Count > 0) ((ComboBox)_Menu[1]).SelectedIndex = 0;
+        }
+
+        public void Clear ( ) {
+            animationControls.Clear( );
+            animationControlStrings.Clear( );
         }
     }
 }

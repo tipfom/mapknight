@@ -21,7 +21,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
         public event Action<int> BoneDeleted;
         public event Action<int, int> BonePositionChanged;
 
-        private OpenFileDialog openImageDialog = new OpenFileDialog( ) { Multiselect = false, ValidateNames = true, CheckFileExists = true, Filter = "Images|*.png;*.jpg;*.jpeg" };
+        private OpenFileDialog openImageDialog = new OpenFileDialog( ) { Multiselect = true, ValidateNames = true, CheckFileExists = true, Filter = "Images|*.png;*.jpg;*.jpeg" };
 
         public EditBonesDialog ( ) {
             InitializeComponent( );
@@ -58,8 +58,11 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
 
         private void CommandNew_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (openImageDialog.ShowDialog( ) ?? false) {
-                VertexBone bone = new VertexBone( ) { Image = openImageDialog.FileName, Scale = 0.05f, Position = new Core.Vector2(0, 0), Mirrored = false, Rotation = 0 };
-                BoneAdded?.Invoke(bone);
+                foreach(string file in openImageDialog.FileNames) {
+                    VertexBone bone = new VertexBone( ) { Image = file, Scale = 0.05f, Position = new Core.Vector2(0, 0), Mirrored = false, Rotation = 0 };
+                    BoneAdded?.Invoke(bone);
+
+                }
             }
         }
 

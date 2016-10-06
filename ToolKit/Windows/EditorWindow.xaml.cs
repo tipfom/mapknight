@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Win32;
 
@@ -18,7 +19,9 @@ namespace mapKnight.ToolKit.Windows {
             InitializeComponent( );
             LoadConfig( );
             App.Current.MainWindow = this;
-            animationeditor.MenuChanged += ( ) => { if (tabcontrol_editor.SelectedItem == animationeditor) SetTabPageMenu(animationeditor.Menu); };
+            animationeditor.MenuChanged += ( ) => {
+                if ((string)((TabItem)tabcontrol_editor.SelectedItem).Header == "ANIMATION") SetTabPageMenu(animationeditor.Menu);
+            };
         }
 
         private void LoadConfig ( ) {
@@ -69,6 +72,8 @@ namespace mapKnight.ToolKit.Windows {
 
         private void NewCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
             project = new Project( );
+            animationeditor.Clear( );
+            mapeditor.Reset( );
         }
 
         private void OpenCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
