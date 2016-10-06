@@ -26,6 +26,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
         public EditBonesDialog ( ) {
             InitializeComponent( );
             App.Current.MainWindow.Closed += (sender, e) => Close( );
+            this.Topmost = true;
         }
 
         public EditBonesDialog (ObservableCollection<VertexBone> bonelist) : this( ) {

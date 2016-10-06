@@ -146,7 +146,7 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void CommandSettings_Executed (object sender, ExecutedRoutedEventArgs e) {
-            editBonesDialog.ShowDialog( );
+            editBonesDialog.Show( );
         }
 
         private void EditBonesDialog_BoneAdded (VertexBone addedBone) {
@@ -222,7 +222,9 @@ namespace mapKnight.ToolKit.Controls {
 
                 currentAnimation = (VertexAnimation)treeview_animations.SelectedItem;
 
+                contentpresenter.ApplyTemplate( );
                 ((Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter))?.Children.Clear( );
+
                 contentpresenter.ContentTemplate = (DataTemplate)FindResource("preview");
             } else if (selectedType == typeof(VertexAnimationFrame)) {
                 treeview_animations.ContextMenu = (ContextMenu)treeview_animations.Resources["contextmenu_frame"];
