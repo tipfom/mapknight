@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Controls\AnimationControl2.xaml.cs">
       <DependentUpon>AnimationControl2.xaml</DependentUpon>
     </Compile>
@@ -117,7 +118,7 @@
     <Compile Include="Project.cs" />
     <Compile Include="Controls\TileMapView.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="TileTemplateSerializer.cs" />
+    <Compile Include="Serializer\TileTemplateSerializer.cs" />
     <Compile Include="Controls\Xna\GraphicsDeviceService.cs" />
     <Compile Include="Controls\Xna\ImageSource.cs" />
     <Compile Include="Controls\Xna\XnaControl.xaml.cs">

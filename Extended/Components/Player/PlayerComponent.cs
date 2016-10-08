@@ -21,6 +21,7 @@ namespace mapKnight.Extended.Components.Player {
 
         public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
             Weapon = weapon;
+            Owner.SetComponentInfo(ComponentData.BoneTexture, "newtex");
         }
 
         public override void Destroy ( ) {

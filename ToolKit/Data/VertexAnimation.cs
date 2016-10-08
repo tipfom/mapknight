@@ -9,6 +9,7 @@ namespace mapKnight.ToolKit.Data {
     public class VertexAnimation {
         public string Name { get; set; }
         public bool CanRepeat { get; set; }
+        public bool IsDefault { get; set; }
         public ObservableCollection<VertexAnimationFrame> Frames { get; set; }
     }
 }

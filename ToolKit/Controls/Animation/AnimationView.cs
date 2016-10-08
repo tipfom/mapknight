@@ -97,7 +97,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             foreach (VertexBone entry in InterpolateAnimation( )) {
                 Texture2D texture = textures[entry.Image];
                 int width = (int)(entry.Scale * texture.Width * entityDrawRectangle.Width);
-                int height = (int)(entry.Scale * texture.Height * entityDrawRectangle.Height);
+                int height = (int)(entry.Scale * texture.Height * entityDrawRectangle.Width);
                 int x = (int)(entityDrawRectangle.Center.X + entry.Position.X * entityDrawRectangle.Width - (0.5f - transformOrigins[entry.Image].X) * width);
                 int y = (int)(entityDrawRectangle.Center.Y - entry.Position.Y * entityDrawRectangle.Height - (0.5f - transformOrigins[entry.Image].Y) * height);
 
@@ -126,8 +126,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             float progress = Core.Mathf.Clamp01((nextFrameTime - Environment.TickCount) / (float)currentAnimation.Frames[currentFrame].Time);
 
             for (int i = 0; i < currentAnimation.Frames[0].Bones.Count; i++) {
-                Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[currentFrame].Bones[i].Position, currentAnimation.Frames[nextFrame].Bones[i].Position, progress);
-                float interpolatedRotation = Interpolate(currentAnimation.Frames[currentFrame].Bones[i].Rotation, currentAnimation.Frames[nextFrame].Bones[i].Rotation, progress);
+                Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[nextFrame].Bones[i].Position, currentAnimation.Frames[currentFrame].Bones[i].Position, progress);
+                float interpolatedRotation = Interpolate(currentAnimation.Frames[nextFrame].Bones[i].Rotation, currentAnimation.Frames[currentFrame].Bones[i].Rotation, progress);
                 yield return new VertexBone( ) { Position = interpolatedPosition, Rotation = interpolatedRotation, Mirrored = currentAnimation.Frames[nextFrame].Bones[i].Mirrored, Image = currentAnimation.Frames[nextFrame].Bones[i].Image, Scale = currentAnimation.Frames[nextFrame].Bones[i].Scale };
             }
         }

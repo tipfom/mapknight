@@ -39,32 +39,36 @@ namespace mapKnight.Extended.Screens {
 
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
 
+            int begin = Environment.TickCount;
             map = Assets.Load<Map>("beatiful_map");
+            Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
+            begin = Environment.TickCount;
 
-            Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
-            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
-            Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
-            Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
-            Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
-            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
+            //Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
+            //Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
+            //Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
+            //Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
+            //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
+            //Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
 
-            //sawConfig.Create(new Vector2(3, 6), map);
+            ////sawConfig.Create(new Vector2(3, 6), map);
 
-            walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
+            //walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
-            landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
-            landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
+            //landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
+            //landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
 
-            turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
+            //turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
 
-            meatballConfig.Create(new Vector2(3, 10), map);
+            //meatballConfig.Create(new Vector2(3, 10), map);
 
-            hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
+            //hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
 
             Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
             testEntity = playerConfig.Create(map.SpawnPoint, map);
             testEntityHealth = testEntity.GetComponent<HealthComponent>( );
             map.Focus(testEntity.ID);
+            Debug.Print(this, $"player loading took {Environment.TickCount - begin} ms");
 
             base.Load( );
         }
@@ -104,8 +108,8 @@ namespace mapKnight.Extended.Screens {
         }
 
         protected override void Activated ( ) {
-            foreach (Entity entity in Entity.Entities)
-                entity.Prepare( );
+            for(int i = 0; i < Entity.Entities.Count;i++)
+                Entity.Entities[0].Prepare( );
             base.Activated( );
         }
     }

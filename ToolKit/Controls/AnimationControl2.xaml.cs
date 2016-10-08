@@ -12,6 +12,9 @@ using mapKnight.ToolKit.Controls.Components.Animation;
 using mapKnight.ToolKit.Data;
 using mapKnight.ToolKit.Windows.Dialogs;
 using Newtonsoft.Json;
+using Path = System.IO.Path;
+using mapKnight.ToolKit.Serializer;
+using System.Collections.Specialized;
 
 namespace mapKnight.ToolKit.Controls {
     public partial class AnimationControl2 : UserControl {
@@ -24,7 +27,7 @@ namespace mapKnight.ToolKit.Controls {
         private VertexAnimationFrame currentFrame = null;
         private EditBonesDialog editBonesDialog;
         private List<FrameworkElement> menu = new List<FrameworkElement>( );
-        private AnimationMetaData metaData = new AnimationMetaData( );
+        public AnimationMetaData MetaData = new AnimationMetaData( );
 
         public AnimationControl2 ( ) {
             InitializeComponent( );
@@ -44,17 +47,17 @@ namespace mapKnight.ToolKit.Controls {
             bones.CollectionChanged += Bones_CollectionChanged;
         }
 
-        private void Bones_CollectionChanged (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            BonesChanged( );
+        private void Bones_CollectionChanged (object sender, NotifyCollectionChangedEventArgs e) {
+            if (e.Action != NotifyCollectionChangedAction.Move) BonesChanged( );
         }
 
         public AnimationControl2 (string metafile) : this( ) {
-            metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
+            MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
         }
 
         public AnimationControl2 (double ratio, string entity) : this( ) {
-            metaData.Entity = entity;
-            metaData.Ratio = ratio;
+            MetaData.Entity = entity;
+            MetaData.Ratio = ratio;
         }
 
         public AnimationControl2 (Project project, string animationdirectory) : this( ) {
@@ -66,7 +69,7 @@ namespace mapKnight.ToolKit.Controls {
             }
 
             using (Stream stream = project.GetOrCreateStream(animationdirectory, ".meta"))
-                metaData = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
+                MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
             using (Stream stream = project.GetOrCreateStream(animationdirectory, "bones.json"))
                 bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
             using (Stream stream = project.GetOrCreateStream(animationdirectory, "animations.json"))
@@ -76,7 +79,7 @@ namespace mapKnight.ToolKit.Controls {
         public List<FrameworkElement> Menu { get { return menu; } }
 
         public override string ToString ( ) {
-            return metaData.Entity;
+            return MetaData.Entity;
         }
 
         private void CommandEditorDelete_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -85,6 +88,14 @@ namespace mapKnight.ToolKit.Controls {
             } else if (currentAnimation != null) {
                 e.CanExecute = animations.Count > 1;
             }
+        }
+
+        public void Compile (string animationpath) {
+            string basedirectory = Path.Combine(animationpath, MetaData.Entity);
+            if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
+
+            using (Stream stream = File.Open(Path.Combine(basedirectory, "animation.json"), FileMode.Create))
+                AnimationSerizalizer.Serialize(animations, stream);
         }
 
         private void CommandEditorDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
@@ -121,7 +132,8 @@ namespace mapKnight.ToolKit.Controls {
                 animations.Add(new VertexAnimation( ) {
                     CanRepeat = true,
                     Frames = new ObservableCollection<VertexAnimationFrame>(new[ ] { new VertexAnimationFrame( ) { Bones = firstFramesBones, Time = 500 } }),
-                    Name = "Default_" + animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( )
+                    Name = "Default_" + animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( ),
+                    IsDefault = animations.Count == 0
                 });
             } else if (currentFrame == null) {
                 // add new frame
@@ -276,7 +288,7 @@ namespace mapKnight.ToolKit.Controls {
 
         private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
             AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            animationView.Play(currentAnimation, (float)metaData.Ratio, BoneImage.Data[this]);
+            animationView.Play(currentAnimation, (float)MetaData.Ratio, BoneImage.Data[this]);
         }
 
         private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {
@@ -295,22 +307,23 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         public void Save (Project project) {
-            using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, ".meta"))
+            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, ".meta"))
             using (StreamWriter writer = new StreamWriter(stream))
-                writer.WriteLine(JsonConvert.SerializeObject(metaData));
+                writer.WriteLine(JsonConvert.SerializeObject(MetaData));
 
-            using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "animations.json"))
+            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "animations.json"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(animations));
 
-            using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "bones.json"))
+            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "bones.json"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(bones));
 
+            if (!BoneImage.Data.ContainsKey(this)) return;
             foreach (KeyValuePair<string, BoneImage.ImageData> kvpair in BoneImage.Data[this]) {
-                using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "textures", kvpair.Key, ".png"))
+                using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "textures", kvpair.Key, ".png"))
                     kvpair.Value.Image.SaveToStream(stream);
-                using (Stream stream = project.GetOrCreateStream("animations", metaData.Entity, "textures", kvpair.Key, ".data"))
+                using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "textures", kvpair.Key, ".data"))
                 using (StreamWriter writer = new StreamWriter(stream))
                     writer.WriteLine(JsonConvert.SerializeObject(kvpair.Value.TransformOrigin));
             }
@@ -331,9 +344,13 @@ namespace mapKnight.ToolKit.Controls {
             Canvas canvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
 
             double ultrascale = scales[(int)((Slider)contentpresenter.ContentTemplate.FindName("slider_zoom", contentpresenter)).Value];
-            double scale = Math.Min(canvas.RenderSize.Width / metaData.Ratio, canvas.RenderSize.Height * metaData.Ratio) * ultrascale;
-            rect.Width = scale * metaData.Ratio;
-            rect.Height = scale / metaData.Ratio;
+            if (canvas.RenderSize.Width / canvas.RenderSize.Height > MetaData.Ratio) {
+                rect.Width = canvas.RenderSize.Height * MetaData.Ratio * ultrascale;
+                rect.Height = canvas.RenderSize.Height * ultrascale;
+            } else {
+                rect.Width = canvas.RenderSize.Width * ultrascale;
+                rect.Height = canvas.RenderSize.Width / MetaData.Ratio * ultrascale;
+            }
 
             Canvas.SetLeft(border, (canvas.RenderSize.Width - rect.Width) / 2d);
             Canvas.SetTop(border, (canvas.RenderSize.Height - rect.Height) / 2d);

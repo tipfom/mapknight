@@ -32,6 +32,9 @@ namespace mapKnight.Extended {
         public virtual void Tick ( ) {
         }
 
+        public virtual void Load ( ) {
+        }
+
         public override string ToString ( ) {
             return this.GetType( ).Name;
         }

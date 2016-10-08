@@ -125,7 +125,7 @@
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type data:VertexAnimation}" ItemsSource="{Binding Frames}">
                     <StackPanel Orientation="Horizontal" Margin="0,1,0,1">
-                        <RadioButton GroupName="radiobutton_animationdefault" VerticalAlignment="Center"/>
+                        <RadioButton GroupName="radiobutton_animationdefault" IsChecked="{Binding IsDefault}" VerticalAlignment="Center"/>
                         <Image  Width="20" Height="20" VerticalAlignment="Center" Source="{StaticResource ResourceKey=image_animationcomponent_animation}" />
                         <CheckBox  IsChecked="{Binding CanRepeat}" VerticalAlignment="Center" Margin="7,1,7,1" Height="18" Width="18">
                             <CheckBox.Template>

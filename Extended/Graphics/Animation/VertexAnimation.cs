@@ -1,7 +1,8 @@
 ﻿using System;
+using mapKnight.Core;
 using Newtonsoft.Json;
 
-namespace mapKnight.Core.Graphics {
+namespace mapKnight.Extended.Graphics.Animation {
     public class VertexAnimation {
         public string Name;
         public bool CanRepeat;
@@ -13,14 +14,22 @@ namespace mapKnight.Core.Graphics {
         [JsonIgnore]
         public bool IsRunning;
 
+        [JsonIgnore]
+        public float[ ][ ] Verticies;
+        [JsonIgnore]
+        public string[ ] Textures;
+
         public void Reset ( ) {
             nextFrameTime = Environment.TickCount + Frames[0].Time;
             currentFrame = 0;
             nextFrame = Math.Min(1, Frames.Length - 1);
             IsRunning = true;
+
+            Verticies = new float[Frames[0].State.Length][ ];
+            Textures = new string[Frames[0].State.Length];
         }
 
-        public float[ ][ ] Update (float dt, Transform ownerTransform, float vsize) {
+        public void Update (float dt, Transform ownerTransform, float vsize, float[ ][ ] verticies) {
             if (IsRunning && Environment.TickCount > nextFrameTime) {
                 currentFrame = nextFrame;
                 nextFrame++;
@@ -33,20 +42,17 @@ namespace mapKnight.Core.Graphics {
             }
             float progress = Mathf.Clamp01((nextFrameTime - Environment.TickCount) / (float)Frames[currentFrame].Time);
 
-            float[ ][ ] result = new float[Frames[currentFrame].State.Length][ ];
-
-            for (int i = 0; i < result.Length; i++) {
-                Vector2 interpolatedSize = Mathf.Interpolate(Frames[nextFrame].State[i].Size, Frames[currentFrame].State[i].Size, progress) * ownerTransform.Size * vsize;
+            for (int i = 0; i < Verticies.Length; i++) {
                 Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].State[i].Position, Frames[currentFrame].State[i].Position, progress) * ownerTransform.Size * vsize;
                 float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].State[i].Rotation, Frames[currentFrame].State[i].Rotation, progress);
 
-                result[i] = Mathf.TransformAtOrigin(
-                    interpolatedSize.ToQuad( ),
+                Verticies[i] = verticies[i];
+                Verticies[i] = Mathf.TransformAtOrigin(
+                    verticies[i],
                     interpolatedPosition.X, interpolatedPosition.Y,
-                    interpolatedRotation, Frames[currentFrame].State[i].Mirrored);
+                    interpolatedRotation, ownerTransform.Size * vsize, Frames[currentFrame].State[i].Mirrored);
+                Textures[i] = Frames[currentFrame].State[i].Texture;
             }
-
-            return result;
         }
     }
 }

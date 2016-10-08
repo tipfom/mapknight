@@ -61,16 +61,16 @@ namespace mapKnight.Core {
             return transformedRotatedVerticies;
         }
 
-        public static float[ ] TransformAtOrigin (float[ ] verticies, float x, float y, float angle, bool mirrored) {
+        public static float[ ] TransformAtOrigin (float[ ] verticies, float x, float y, float angle, Vector2 scale, bool mirrored) {
             float[ ] transformedRotatedVerticies = new float[verticies.Length];
             float s = Sin(angle), c = Cos(angle);
             for (int i = 0; i < verticies.Length; i += 2) {
                 if (mirrored) {
-                    transformedRotatedVerticies[i + 0] = x - verticies[i] * c + verticies[i + 1] * s;
-                    transformedRotatedVerticies[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
+                    transformedRotatedVerticies[i + 0] = x - verticies[i] * scale.X * c + verticies[i + 1] * scale.Y * s;
+                    transformedRotatedVerticies[i + 1] = y + verticies[i] * scale.X * s + verticies[i + 1] * scale.Y * c;
                 } else {
-                    transformedRotatedVerticies[i + 0] = x + verticies[i] * c - verticies[i + 1] * s;
-                    transformedRotatedVerticies[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
+                    transformedRotatedVerticies[i + 0] = x + verticies[i] * scale.X * c - verticies[i + 1] * scale.Y * s;
+                    transformedRotatedVerticies[i + 1] = y + verticies[i] * scale.X * s + verticies[i + 1] * scale.Y * c;
                 }
             }
             return transformedRotatedVerticies;

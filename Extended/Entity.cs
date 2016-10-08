@@ -78,13 +78,17 @@ namespace mapKnight.Extended {
             Info = info;
             ID = ++currentInstance;
 
+            foreach (ComponentData componentDataValue in Enum.GetValues(typeof(ComponentData)))
+                pendingComponentInfos.Add(componentDataValue, new Queue<object[ ]>( ));
+
             this.components = new Component[components.Count];
             for (int i = 0; i < components.Count; i++) {
                 this.components[i] = components[i].Create(this);
             }
 
-            foreach (ComponentData componentDataValue in Enum.GetValues(typeof(ComponentData)))
-                pendingComponentInfos.Add(componentDataValue, new Queue<object[ ]>( ));
+            for(int i = 0; i < components.Count; i++) {
+                this.components[i].Load( );
+            }
 
             Entities.Add(this);
             EntityAdded?.Invoke(this);

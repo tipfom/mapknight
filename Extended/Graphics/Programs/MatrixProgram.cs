@@ -29,19 +29,18 @@ namespace mapKnight.Extended.Graphics.Programs {
             GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
 
-        public static MatrixProgram Program { get; set; }
+        public static MatrixProgram Program;
 
         public class BufferBatch {
-            public IndexBuffer IndexBuffer { get; set; }
-            public IAttributeBuffer VertexBuffer { get; set; }
-            public IAttributeBuffer TextureBuffer { get; set; }
+            public IndexBuffer IndexBuffer;
+            public IAttributeBuffer VertexBuffer;
+            public IAttributeBuffer TextureBuffer;
 
             public BufferBatch (IndexBuffer indexbuffer, IAttributeBuffer vertexbuffer, IAttributeBuffer texturebuffer) {
                 IndexBuffer = indexbuffer;
                 VertexBuffer = vertexbuffer;
                 TextureBuffer = texturebuffer;
             }
-
         }
     }
 }

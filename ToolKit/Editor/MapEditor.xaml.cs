@@ -12,6 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using mapKnight.Core;
 using mapKnight.ToolKit.Controls.Xna;
+using mapKnight.ToolKit.Serializer;
 using mapKnight.ToolKit.Windows;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Graphics;
@@ -80,6 +81,21 @@ namespace mapKnight.ToolKit.Editor {
                         AddMap(map);
                     }
                 }
+            }
+        }
+
+        public void Compile (string mappath) {
+            foreach (Map map in GetMaps( )) {
+                string basedirectory = Path.Combine(mappath, map.Name);
+                if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
+                // build texture
+                Texture2D packedTexture = TileSerializer.BuildTexture(map.Tiles, xnaTextures[map], GraphicsDevice);
+                using (Stream stream = File.Open(Path.Combine(basedirectory, map.Name + ".png"), FileMode.Create))
+                    packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
+
+                map.Texture = Path.GetFileNameWithoutExtension(map.Name + ".png");
+                using (Stream stream = File.Open(Path.Combine(basedirectory, map.Name + ".map"), FileMode.Create))
+                    map.MergeRotations(mapRotations[map]).Serialize(stream);
             }
         }
 

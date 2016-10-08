@@ -27,7 +27,7 @@ namespace mapKnight.ToolKit.Windows {
 
         private void TextBoxFloat_PreviewTextInput (object sender, TextCompositionEventArgs e) {
             float value;
-            e.Handled = !(float.TryParse(((TextBox)sender).Text + e.Text, out value) && value > 0);
+            e.Handled = !(float.TryParse(((TextBox)sender).Text + e.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out value) && value > 0);
         }
 
         private void Button_Click (object sender, RoutedEventArgs e) {

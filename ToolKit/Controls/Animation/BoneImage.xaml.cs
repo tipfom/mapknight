@@ -109,7 +109,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
             Image = Data[animControl][dataContextBone.Image];
             Width = RefRectangle.Width * dataContextBone.Scale * Image.Image.PixelWidth;
-            Height = RefRectangle.Height * dataContextBone.Scale * Image.Image.PixelHeight;
+            Height = RefRectangle.Width * dataContextBone.Scale * Image.Image.PixelHeight;
             IsFlipped = dataContextBone.Mirrored;
             Rotation = dataContextBone.Rotation;
 

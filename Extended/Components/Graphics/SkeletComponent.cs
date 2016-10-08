@@ -5,6 +5,7 @@ using mapKnight.Core;
 using mapKnight.Core.Graphics;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics;
+using mapKnight.Extended.Graphics.Animation;
 
 namespace mapKnight.Extended.Components.Graphics {
 
@@ -45,7 +46,7 @@ namespace mapKnight.Extended.Components.Graphics {
             }
 
             private float[ ] GetVerticies (VertexBone bone) {
-                return Mathf.TransformAtOrigin(bone.Size.ToQuad( ), bone.Position.X, bone.Position.Y, bone.Rotation, bone.Mirrored);
+                return null; // Mathf.TransformAtOrigin(bone.Size.ToQuad( ), bone.Position.X, bone.Position.Y, bone.Rotation, bone.Mirrored);
             }
 
             public override Component Create (Entity owner) {

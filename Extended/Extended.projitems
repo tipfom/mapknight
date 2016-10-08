@@ -68,6 +68,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\Compiler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimationFrame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexAnimationFrame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexBone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\CachedGPUBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\ClientBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\GPUBuffer.cs" />
@@ -76,6 +82,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IndexBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\DepthVertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Framebuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIHorizontalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILeftMargin.cs" />

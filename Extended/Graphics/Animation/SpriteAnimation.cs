@@ -3,7 +3,7 @@
 namespace mapKnight.Core.Graphics {
 
     public class SpriteAnimation {
-        public string Name { get; set; }
+        public string Name;
         public bool CanRepeat;
         public bool IsRunning;
 
@@ -33,10 +33,6 @@ namespace mapKnight.Core.Graphics {
                 }
                 nextSpriteTime = Environment.TickCount + Frames[currentSprite].Time;
             }
-        }
-
-        public override bool Equals (object obj) {
-            return obj.GetType( ) == typeof(SpriteAnimation) && ((SpriteAnimation)obj).Name == Name;
         }
     }
 }

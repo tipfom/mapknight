@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using mapKnight.Core;
+using mapKnight.ToolKit.Serializer;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Graphics;
 

@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
-using Microsoft.Win32;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using System.IO;
 
 namespace mapKnight.ToolKit.Windows {
     /// <summary>
@@ -14,6 +17,7 @@ namespace mapKnight.ToolKit.Windows {
         private Project project;
         private SaveFileDialog saveDialog = new SaveFileDialog( ) { Filter = PROJECT_FILTER, OverwritePrompt = true, AddExtension = false };
         private OpenFileDialog openDialog = new OpenFileDialog( ) { Filter = PROJECT_FILTER, Multiselect = false, AddExtension = false, ReadOnlyChecked = false };
+        private FolderBrowserDialog compileDialog = new FolderBrowserDialog( ) { ShowNewFolderButton = true };
 
         public EditorWindow ( ) {
             InitializeComponent( );
@@ -123,6 +127,19 @@ namespace mapKnight.ToolKit.Windows {
                 project = new Project(openDialog.FileName);
                 mapeditor.Load(project);
                 animationeditor.Load(project);
+            }
+        }
+
+        private void MenuItemCompile_Click (object sender, RoutedEventArgs e) {
+            if (compileDialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
+                string mappath = Path.Combine(compileDialog.SelectedPath, "maps");
+                string animationpath = Path.Combine(compileDialog.SelectedPath, "animations");
+                if (!Directory.Exists(mappath)) Directory.CreateDirectory(mappath);
+                if (!Directory.Exists(animationpath)) Directory.CreateDirectory(animationpath);
+
+                mapeditor.Compile(mappath);
+                animationeditor.Compile(animationpath);
+                System.Windows.MessageBox.Show("Finished!", "Success!", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
             }
         }
     }

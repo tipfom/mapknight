@@ -13,8 +13,7 @@ namespace mapKnight.ToolKit.Editor {
     public partial class AnimationEditor : UserControl {
         private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
             new MenuItem() { Header = "ANIMATION", Items = {
-                    new MenuItem() {Header="NEW", Icon = App.Current.FindResource("image_animation_new") },
-                    new MenuItem() {Header="LOAD" }
+                    new MenuItem() {Header="NEW", Icon = App.Current.FindResource("image_animation_new") }
             } },
             new ComboBox() { VerticalAlignment = VerticalAlignment.Center, Width = 200 }
         };
@@ -35,28 +34,20 @@ namespace mapKnight.ToolKit.Editor {
             InitializeComponent( );
 
             ((MenuItem)((MenuItem)_Menu[0]).Items[0]).Click += AnimationAdd_Click; ;
-            ((MenuItem)((MenuItem)_Menu[0]).Items[1]).Click += AnimationLoad_Click; ;
             ((ComboBox)_Menu[1]).SelectionChanged += ComboBoxAnimation_SelectionChanged;
             ((ComboBox)_Menu[1]).ItemsSource = animationControlStrings;
         }
 
-        private void AnimationLoad_Click (object sender, RoutedEventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog( );
-            openFileDialog.CheckFileExists = true;
-            openFileDialog.Filter = "Animation-Meta File|animation.meta";
-            if (openFileDialog.ShowDialog( ) ?? false) {
-                animationControls.Add(new AnimationControl2(openFileDialog.FileName));
-                animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
-                ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
-            }
-        }
-
         private void AnimationAdd_Click (object sender, RoutedEventArgs e) {
             AddAnimationWindow dialog = new AddAnimationWindow( );
-            if (dialog.ShowDialog( ) ?? false) {
-                animationControls.Add(new AnimationControl2(dialog.Ratio, dialog.textbox_name.Text));
-                animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
-                ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
+            if (dialog.ShowDialog( ) ?? false ) {
+                if(!animationControls.Any(item => item.MetaData.Entity == dialog.textbox_name.Text)) {
+                    animationControls.Add(new AnimationControl2(dialog.Ratio, dialog.textbox_name.Text));
+                    animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
+                    ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
+                } else {
+                    MessageBox.Show("please dont add entities with the same name");
+                }
             }
         }
 
@@ -85,6 +76,11 @@ namespace mapKnight.ToolKit.Editor {
         public void Clear ( ) {
             animationControls.Clear( );
             animationControlStrings.Clear( );
+        }
+
+        public void Compile (string animationpath) {
+            foreach (AnimationControl2 animcontrol in animationControls)
+                animcontrol.Compile(animationpath);
         }
     }
 }

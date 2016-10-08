@@ -15,7 +15,7 @@
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>mapKnight.Android</AssemblyName>
-    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -93,7 +93,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
-    <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TouchHandler.cs" />
@@ -105,11 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface.json" />
-    <AndroidAsset Include="Assets\config\content.json" />
-    <AndroidAsset Include="Assets\config\game.json" />
     <AndroidAsset Include="Assets\entities\potatoe_patrick.json" />
     <AndroidAsset Include="Assets\textures\potatoe_patrick.json" />
-    <AndroidAsset Include="Assets\tilesets\debug_tileset.tileset" />
     <AndroidAsset Include="Assets\entities\test_platform.json" />
     <AndroidAsset Include="Assets\maps\test.map" />
     <AndroidAsset Include="Assets\maps\testMap.map" />
@@ -131,12 +127,15 @@
     <AndroidAsset Include="Assets\textures\player.json" />
     <AndroidAsset Include="Assets\maps\beatiful_map.map" />
     <AndroidAsset Include="Assets\gestures\gestures" />
+    <AndroidAsset Include="Assets\textures\newtex.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\newtex.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface.png" />

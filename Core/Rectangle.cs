@@ -1,4 +1,6 @@
-﻿namespace mapKnight.Core {
+﻿using System;
+
+namespace mapKnight.Core {
     public struct Rectangle {
         public Vector2 Position;
 
@@ -41,7 +43,7 @@
             float rightMultiplier = anchor.HasFlag(Anchor.Left) ? 1 : anchor.HasFlag(Anchor.Right) ? 0 : 0.5f;
             float topMultiplier = anchor.HasFlag(Anchor.Top) ? 0 : anchor.HasFlag(Anchor.Bottom) ? 1 : 0.5f;
             float bottomMultiplier = anchor.HasFlag(Anchor.Top) ? 1 : anchor.HasFlag(Anchor.Bottom) ? 0 : 0.5f;
-            
+
             return new float[ ] {
                 Position.X - leftMultiplier * Size.X, Position.Y + topMultiplier * Size.Y,
                 Position.X - leftMultiplier * Size.X, Position.Y - bottomMultiplier * Size.Y,

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace mapKnight.ToolKit {
+namespace mapKnight.ToolKit.Serializer {
     public static class TileSerializer {
         public static void Serialize (Stream stream, Tile[ ] tiles, Dictionary<string, Texture2D> textures, GraphicsDevice g) {
             Tile[ ] tilesClone = new Tile[tiles.Length];
