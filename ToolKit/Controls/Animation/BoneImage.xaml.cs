@@ -73,8 +73,10 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             if (RefRectangle.Width == 0 || RefRectangle.Height == 0) return;
 
             Vector position = new Vector(
-                 ((Canvas.GetLeft(this) + Width / 2d) - (Canvas.GetLeft(RefBorder) + RefRectangle.Width / 2d)) / RefRectangle.Width,
-                -((Canvas.GetTop(this) + Height / 2d) - (Canvas.GetTop(RefBorder) + RefRectangle.Height / 2d)) / RefRectangle.Height);
+                 ((Canvas.GetLeft(this) + Width * RenderTransformOrigin.X) - (Canvas.GetLeft(RefBorder) + RefRectangle.Width / 2d)) / RefRectangle.Width,
+                -((Canvas.GetTop(this) + Height * RenderTransformOrigin.Y) - (Canvas.GetTop(RefBorder) + RefRectangle.Height / 2d)) / RefRectangle.Height);
+
+            Console.WriteLine(position);
 
             if (double.IsNaN(position.X) || double.IsNaN(position.Y)) return;
             dataContextBone.Position = new Vector2((float)position.X, (float)position.Y);
@@ -113,8 +115,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             IsFlipped = dataContextBone.Mirrored;
             Rotation = dataContextBone.Rotation;
 
-            double left = Canvas.GetLeft(RefBorder) + RefRectangle.Width / 2d + dataContextBone.Position.X * RefRectangle.Width - Width / 2d;
-            double top = Canvas.GetTop(RefBorder) + RefRectangle.Height / 2d - dataContextBone.Position.Y * RefRectangle.Height - Height / 2d;
+            double left = Canvas.GetLeft(RefBorder) + RefRectangle.Width / 2d + dataContextBone.Position.X * RefRectangle.Width - Width * RenderTransformOrigin.X;
+            double top = Canvas.GetTop(RefBorder) + RefRectangle.Height / 2d - dataContextBone.Position.Y * RefRectangle.Height - Height * RenderTransformOrigin.Y;
             Canvas.SetLeft(this, left);
             Canvas.SetTop(this, top);
         }

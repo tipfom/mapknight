@@ -45,6 +45,7 @@
     <BitmapImage x:Key="image_editbones_down" UriSource="../Resources/Images/down_arrow-48.png"/>
     <BitmapImage x:Key="image_editbones_new" UriSource="../Resources/Images/plus_2_math-48.png"/>
     <BitmapImage x:Key="image_editbones_delete" UriSource="../Resources/Images/minus_2_math-48.png"/>
+    <BitmapImage x:Key="image_editbones_resetsize" UriSource="../Resources/Images/original_size-48.png"/>
 
     <BitmapImage x:Key="image_resizableimage_error" UriSource="../Resources/Images/error-48.png"/>
 </ResourceDictionary>

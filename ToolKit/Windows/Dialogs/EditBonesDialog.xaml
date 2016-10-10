@@ -10,6 +10,7 @@
         <CommandBinding Command="Delete" CanExecute="CommandDelete_CanExecute" Executed="CommandDelete_Executed"/>
         <CommandBinding x:Name="up_command" Command="l:CustomCommands.Up" CanExecute="CommandUp_CanExecute" Executed="CommandUp_Executed"/>
         <CommandBinding Command="l:CustomCommands.Down" CanExecute="CommandDown_CanExecute" Executed="CommandDown_Executed"/>
+        <CommandBinding Command="l:CustomCommands.EditorR" CanExecute="CommandEditorR_CanExecute" Executed="CommandEditorR_Executed"/>
     </Window.CommandBindings>
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
@@ -33,6 +34,9 @@
             </Button>
             <Button Height="40" Background="Transparent" Margin="0,5,0,0" Command="l:CustomCommands.Down" BorderThickness="0">
                 <Image Source="{StaticResource ResourceKey=image_editbones_down}" Margin="-7" RenderOptions.BitmapScalingMode="Linear"/>
+            </Button>
+            <Button Height="40" Background="Transparent" Margin="0,5,0,0" Command="l:CustomCommands.EditorR" BorderThickness="0">
+                <Image Source="{StaticResource ResourceKey=image_editbones_resetsize}" Margin="-4" RenderOptions.BitmapScalingMode="Linear"/>
             </Button>
         </StackPanel>
         <ListBox DockPanel.Dock="Left" Width="300" x:Name="listbox_bones" BorderThickness="0">

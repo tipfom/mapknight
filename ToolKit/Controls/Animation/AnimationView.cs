@@ -20,6 +20,10 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         private Texture2D entityTexture;
         private Texture2D groundTexture;
         private float entityRatio;
+        private int nextFrame;
+        private int nextFrameTime;
+        private int currentFrame;
+        private int pauseBegin;
 
         public AnimationView ( ) {
             renderTimer.Tick += (sender, e) => Update( );
@@ -48,16 +52,15 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             transformOrigins = imagedata.ToDictionary(entry => entry.Key, entry => new Microsoft.Xna.Framework.Vector2((float)entry.Value.TransformOrigin.X, (float)entry.Value.TransformOrigin.Y));
             currentAnimation = animation;
             entityRatio = entityratio;
-            nextFrameTime = Environment.TickCount;
-            nextFrame = Math.Min(1, animation.Frames.Count - 1);
-            currentFrame = 0;
+            Reset( );
             renderTimer.Start( );
         }
 
         public void Reset ( ) {
             if (currentAnimation == null) return;
-            //currentAnimation.Reset( );
-            // TODO
+            currentFrame = 0;
+            nextFrame = Math.Min(1, currentAnimation.Frames.Count - 1);
+            nextFrameTime = Environment.TickCount + currentAnimation.Frames[currentFrame].Time;
         }
 
         public void Stop ( ) {
@@ -76,8 +79,9 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         }
 
         protected override void Render (SpriteBatch spriteBatch) {
-            if (paused || currentAnimation == null) return;
             renderTimer.Stop( );
+            if (paused || currentAnimation == null) return;
+
             // draw player and ground
             Rectangle entityDrawRectangle = new Rectangle( );
             if (entityRatio > 1f) {
@@ -106,10 +110,6 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             renderTimer.Start( );
         }
 
-        private int nextFrame;
-        private int nextFrameTime;
-        private int currentFrame;
-        private int pauseBegin;
         private IEnumerable<VertexBone> InterpolateAnimation ( ) {
             if (Environment.TickCount > nextFrameTime) {
                 if (nextFrame + 1 < currentAnimation.Frames.Count) {

@@ -23,7 +23,7 @@ namespace mapKnight.ToolKit.Serializer {
                         Time = fame.Time,
                         State = fame.Bones.Select(bone => new SerializedBone( ) {
                             Mirrored = bone.Mirrored,
-                            Rotation = bone.Rotation,
+                            Rotation = -bone.Rotation,
                             Position = bone.Position,
                             Texture = bone.Image
                         }).ToArray()

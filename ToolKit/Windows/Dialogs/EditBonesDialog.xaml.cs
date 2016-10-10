@@ -53,13 +53,26 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             BonePositionChanged?.Invoke(listbox_bones.SelectedIndex + 1, listbox_bones.SelectedIndex);
         }
 
+        private void CommandEditorR_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = listbox_bones != null && listbox_bones.SelectedItem != null;
+        }
+
+        private void CommandEditorR_Executed (object sender, ExecutedRoutedEventArgs e) {
+            float scale = ((VertexBone)listbox_bones.SelectedItem).Scale;
+            for (int i = 0; i < listbox_bones.Items.Count; i++) {
+                ScaleChanged?.Invoke((VertexBone)listbox_bones.Items[i], scale);
+                ((VertexBone)listbox_bones.Items[i]).Scale = scale;
+            }
+            listbox_bones.Items.Refresh( );
+        }
+
         private void CommandNew_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }
 
         private void CommandNew_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (openImageDialog.ShowDialog( ) ?? false) {
-                foreach(string file in openImageDialog.FileNames) {
+                foreach (string file in openImageDialog.FileNames) {
                     VertexBone bone = new VertexBone( ) { Image = file, Scale = 0.05f, Position = new Core.Vector2(0, 0), Mirrored = false, Rotation = 0 };
                     BoneAdded?.Invoke(bone);
 
@@ -87,7 +100,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
         }
 
         protected override void OnClosing (CancelEventArgs e) {
-            if (Visibility == Visibility.Visible) {
+            if (App.Current.MainWindow != null) {
                 e.Cancel = true;
                 Visibility = Visibility.Hidden;
             }
