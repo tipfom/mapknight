@@ -19,8 +19,8 @@
         },
         {
             "$type": "Graphics.Skelet",
-            "Bones": {
-                "body": {
+            "Bones": [
+                {
                     "Position": {
                         "X": 0,
                         "Y": 0
@@ -30,7 +30,7 @@
                         "Y": 1
                     }
                 }
-            }
+            ]
         },
         {
             "$type": "AI.Trigger",

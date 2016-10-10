@@ -12,7 +12,6 @@
         {
             "$type": "Graphics.Sprite",
             "Texture": "trowie",
-            "Default": "idle",
             "Animations": [
                 {
                     "Name": "idle",
@@ -20,9 +19,9 @@
                     "Frames": [
                         {
                             "Time": 1000,
-                            "State": {
-                                "body": "default"
-                            }
+                            "Bones": [
+                                "default"
+                            ]
                         }
                     ]
                 },
@@ -32,15 +31,15 @@
                     "Frames": [
                         {
                             "Time": 100,
-                            "State": {
-                                "body": "default"
-                            }
+                            "Bones": [
+                                "default"
+                            ]
                         },
-                         {
+                        {
                             "Time": 200,
-                            "State": {
-                                "body": "throw"
-                            }
+                            "Bones": [
+                                "throw"
+                            ]
                         }
                     ]
                 },
@@ -50,21 +49,21 @@
                     "Frames": [
                         {
                             "Time": 200,
-                            "State": {
-                                "body": "default"
-                            }
+                            "Bones": [
+                              "default"
+                            ]
                         },
                         {
                             "Time": 200,
-                            "State": {
-                                "body": "walk_1"
-                            }
+                            "Bones": [
+                                "walk_1"
+                            ]
                         },
                         {
                             "Time": 200,
-                            "State": {
-                                "body": "walk_2"
-                            }
+                            "Bones": [
+                                "walk_2"
+                            ]
                         }
                     ]
                 }
@@ -72,8 +71,8 @@
         },
         {
             "$type": "Graphics.Skelet",
-            "Bones": {
-                "body": {
+            "Bones": [
+                {
                     "Position": {
                         "X": 0,
                         "Y": 0
@@ -83,7 +82,7 @@
                         "Y": 1
                     }
                 }
-            }
+            ]
         },
         {
             "$type": "AI.Trowie",
@@ -112,8 +111,8 @@
                     },
                     {
                         "$type": "Graphics.Skelet",
-                        "Bones": {
-                            "body": {
+                        "Bones": [
+                            {
                                 "Position": {
                                     "X": 0,
                                     "Y": 0
@@ -123,7 +122,7 @@
                                     "Y": 1
                                 }
                             }
-                        }
+                        ]
                     }
                 ]
             }

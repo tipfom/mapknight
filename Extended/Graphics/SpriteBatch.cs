@@ -45,6 +45,7 @@ namespace mapKnight.Extended.Graphics {
 
             buffer.Bind( );
             FBOProgram.Program.Begin( );
+            GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             IndexBuffer indexBuffer = new IndexBuffer(1);
             ClientBuffer vertexBuffer = new ClientBuffer(2, 1);
@@ -56,18 +57,20 @@ namespace mapKnight.Extended.Graphics {
                 // vertex buffer füllen
                 float vleft = -1f + 2 * position / (float)size.Width;
                 float vright = -1f + 2 * (position + children[i].Width) / (float)size.Width;
-                vertexBuffer.Data = new[ ] { vleft, 1f, vleft, -1f, vright, -1f, vright, 1f };
+                float vtop = -1f + 2f * (children[i].Height / (float)size.Height);
+                vertexBuffer.Data = new[ ] { vleft, vtop, vleft, -1f, vright, -1f, vright, vtop };
                 FBOProgram.Program.Draw(indexBuffer, vertexBuffer, textureBuffer, children[i], 6, true);
 
                 float tleft = position / (float)size.Width;
+                float theight = children[i].Height / (float)size.Height;
                 float twidth = children[i].Width / (float)size.Width;
                 foreach (KeyValuePair<string, float[ ]> entry in children[i].Sprites) {
                     // sprites einfügen
                     result.Sprites.Add(entry.Key, new[ ] {
-                        tleft + entry.Value[0] * twidth, entry.Value[1],
-                        tleft + entry.Value[2] * twidth, entry.Value[3],
-                        tleft + entry.Value[4] * twidth, entry.Value[5],
-                        tleft + entry.Value[6] * twidth, entry.Value[7] });
+                        tleft + entry.Value[0] * twidth, entry.Value[1] * theight,
+                        tleft + entry.Value[2] * twidth, entry.Value[3] * theight,
+                        tleft + entry.Value[4] * twidth, entry.Value[5] * theight,
+                        tleft + entry.Value[6] * twidth, entry.Value[7] * theight});
                 }
                 position += children[i].Width;
             }

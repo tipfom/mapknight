@@ -32,7 +32,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public override List<DepthVertexData> ConstructVertexData ( ) {
             List<DepthVertexData> vertexData = new List<DepthVertexData>( );
-            vertexData.Add(new DepthVertexData(Bounds.Verticies(Anchor.Left | Anchor.Top), (this.Clicked ? "button_pressed" : "button_idle"), Depth, Color));
+            vertexData.Add(new DepthVertexData(Bounds.Verticies, (this.Clicked ? "button_pressed" : "button_idle"), Depth, Color));
 
             Vector2 textPosition = new Vector2(Position.X + Size.X * 0.5f, Position.Y - (Size.Y - lines.Length * charSize) * 0.5f);
             vertexData.AddRange(UILabel.GetVertexData(new string[ ] { Text }, UITextAlignment.Center, textPosition, charSize, Depth, Color.White));

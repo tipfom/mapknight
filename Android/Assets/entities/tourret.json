@@ -6,17 +6,13 @@
     },
     "Components": [
         {
-            "$type": "Movement.Gravity",
-            "Influence": 1
-        },
-        {
             "$type": "Graphics.Texture",
             "Texture": "turret"
         },
         {
             "$type": "Graphics.Skelet",
-            "Bones": {
-                "body": {
+            "Bones": [
+                {
                     "Position": {
                         "X": 0,
                         "Y": 0
@@ -26,7 +22,7 @@
                         "Y": 1
                     }
                 }
-            }
+            ]
         },
         {
             "$type": "AI.Turret",
@@ -50,8 +46,8 @@
                     },
                     {
                         "$type": "Graphics.Skelet",
-                        "Bones": {
-                            "body": {
+                        "Bones": [
+                            {
                                 "Position": {
                                     "X": 0,
                                     "Y": 0
@@ -61,7 +57,7 @@
                                     "Y": 1
                                 }
                             }
-                        }
+                        ]
                     },
                     {
                         "$type": "Graphics.Texture",
@@ -83,8 +79,8 @@
             "Offset": 0.365
         },
         {
-            "$type":"Stats.Health",
-            "Value":10
+            "$type": "Stats.Health",
+            "Value": 10
         }
     ]
 }

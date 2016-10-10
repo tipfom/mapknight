@@ -21,7 +21,20 @@ namespace mapKnight.Extended.Components.Player {
 
         public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
             Weapon = weapon;
-            Owner.SetComponentInfo(ComponentData.BoneTexture, "newtex");
+
+            // hardcoded, im sorry god :(
+            Owner.SetComponentInfo(ComponentData.BoneTexture, "player");
+            Owner.SetComponentInfo(ComponentData.BoneTexture, "Sword(2)");
+
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("body", new Vector2(9, 5)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("feet1", new Vector2(3, 2.5f)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("feet2", new Vector2(3, 2.5f)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("hand1", new Vector2(2, 2)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("hand2", new Vector2(2, 2)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm1", new Vector2(2, 1.5f)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm2", new Vector2(2, 1.5f)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("head", new Vector2(9, 9)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("Sword(2)", new Vector2(5, 18)));
         }
 
         public override void Destroy ( ) {

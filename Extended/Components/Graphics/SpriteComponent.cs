@@ -19,13 +19,11 @@ namespace mapKnight.Extended.Components.Graphics {
         private SpriteAnimation currentAnimation;
         private SpriteAnimation queuedAnimation;
         private AnimationSuccessCallback queuedAnimationCallback;
-        private SpriteAnimation defaultAnimation;
 
-        public SpriteComponent (Entity owner, SpriteAnimation[ ] animations, string defaultanimation, string texture) : base(owner) {
+        public SpriteComponent (Entity owner, SpriteAnimation[ ] animations, string texture) : base(owner) {
             this.animations = animations;
-            this.defaultAnimation = animations.First(anim => anim.Name == defaultanimation);
-            this.currentAnimation = defaultAnimation;
-            this.cache = new string[defaultAnimation.Frames[0].Bones.Length];
+            this.currentAnimation = animations[0];
+            this.cache = new string[currentAnimation.Frames[0].Bones.Length];
             Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
         }
 
@@ -37,7 +35,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 if ((bool)data[1]) {
                     // force animation
                     currentAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
-                    if (currentAnimation == null) currentAnimation = defaultAnimation;
+                    if (currentAnimation == null) currentAnimation = animations[0];
                     currentAnimationCallback = (data.Length == 3) ? (AnimationSuccessCallback)data[2] : null;
                     queuedAnimation = null;
                 } else {
@@ -56,7 +54,7 @@ namespace mapKnight.Extended.Components.Graphics {
                     currentAnimationCallback = queuedAnimationCallback;
                     queuedAnimationCallback = null;
                 } else if (!currentAnimation.CanRepeat) {
-                    currentAnimation = defaultAnimation;
+                    currentAnimation = animations[0];
                     currentAnimationCallback = null;
                 }
                 currentAnimation.Reset( );
@@ -74,10 +72,9 @@ namespace mapKnight.Extended.Components.Graphics {
         public new class Configuration : Component.Configuration {
             public SpriteAnimation[ ] Animations;
             public string Texture;
-            public string Default;
 
             public override Component Create (Entity owner) {
-                return new SpriteComponent(owner, Animations, Default, Texture);
+                return new SpriteComponent(owner, Animations, Texture);
             }
         }
     }

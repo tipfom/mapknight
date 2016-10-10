@@ -1,7 +1,6 @@
 using System;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI {
 
@@ -35,12 +34,9 @@ namespace mapKnight.Extended.Components.AI {
 
         public override void Update (DeltaTime dt) {
             if (Environment.TickCount < lockedTill) {
-                bool nextIsFacingLeft = currentTarget.Transform.BL.X > Owner.Transform.TR.X; 
-                if(nextIsFacingLeft != IsFacingLeft) {
-                    IsFacingLeft = nextIsFacingLeft;
-                    nextTurn = Environment.TickCount + timeBetweenTurns;
-                }                  
+                IsFacingLeft = currentTarget.Transform.BL.X > Owner.Transform.TR.X; 
             } else if (Environment.TickCount > nextTurn) {
+                Debug.Print(this, "turn");
                 IsFacingLeft = !IsFacingLeft;
                 nextTurn += timeBetweenTurns;
             }
@@ -53,6 +49,7 @@ namespace mapKnight.Extended.Components.AI {
                 currentTarget = entity;
                 nextShot = Environment.TickCount + timeBetweenShots;
                 lockedTill = Environment.TickCount + lockTime;
+                nextTurn = lockedTill + timeBetweenTurns;
                 bulletComponentConfig.Target = entity;
                 Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X + (Owner.Transform.HalfSize.X + bulletEntityConfig.Transform.HalfSize.X) * (IsFacingLeft ? 1 : -1), Owner.Transform.BL.Y + Owner.Transform.Size.Y * bulletSpawnpointYPercent);
                 bulletEntityConfig.Create(spawnPoint, Owner.World);

@@ -50,7 +50,7 @@ namespace mapKnight.Extended.Graphics.Animation {
                 Verticies[i] = Mathf.TransformAtOrigin(
                     verticies[i],
                     interpolatedPosition.X, interpolatedPosition.Y,
-                    interpolatedRotation, ownerTransform.Size * vsize, Frames[currentFrame].State[i].Mirrored);
+                    interpolatedRotation, Frames[currentFrame].State[i].Mirrored, ownerTransform.Size * vsize);
                 Textures[i] = Frames[currentFrame].State[i].Texture;
             }
         }

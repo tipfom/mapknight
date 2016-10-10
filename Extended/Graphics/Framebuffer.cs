@@ -12,13 +12,13 @@ namespace mapKnight.Extended.Graphics {
 
         public Framebuffer (int width, int height, bool disposetexture) {
             Size = new Size(width, height);
-            disposeTexture = disposeTexture;
+            disposeTexture = disposetexture;
 
             GL.GenFramebuffers(1, out framebuffer);
             Texture = GL.GenTexture( );
 
             GL.BindTexture(TextureTarget.Texture2D, Texture);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, width, height, 0, PixelFormat.Rgb, PixelType.UnsignedByte, IntPtr.Zero);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
 

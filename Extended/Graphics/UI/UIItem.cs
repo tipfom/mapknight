@@ -17,8 +17,8 @@ namespace mapKnight.Extended.Graphics.UI {
         private bool multiClick;
         private int clickCount;
 
-        private Rectangle _Bounds;
-        public Rectangle Bounds { get { return _Bounds; } }
+        private UIRectangle _Bounds;
+        public UIRectangle Bounds { get { return _Bounds; } }
         private UIMargin horizontalMargin;
         private UIMargin verticalMargin;
 
@@ -59,7 +59,7 @@ namespace mapKnight.Extended.Graphics.UI {
             horizontalMargin.Changed += ( ) => IsDirty = true;
 
             _Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            _Bounds = new Rectangle(_Position, _Size);
+            _Bounds = new UIRectangle(_Position, _Size);
         }
 
         public virtual void HandleTouch (UITouchAction action, UITouch touch) {

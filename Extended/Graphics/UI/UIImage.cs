@@ -18,7 +18,7 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override List<DepthVertexData> ConstructVertexData ( ) {
-            return new List<DepthVertexData>( ) { new DepthVertexData(Bounds.Verticies(Anchor.Left | Anchor.Top), this.Clicked ? textureClick : textureIdle, Depth, ModificationColor) };
+            return new List<DepthVertexData>( ) { new DepthVertexData(Bounds.Verticies, this.Clicked ? textureClick : textureIdle, Depth, ModificationColor) };
         }
     }
 }

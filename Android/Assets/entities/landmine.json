@@ -7,8 +7,8 @@
 	"Components": [
 		{
 			"$type": "Graphics.Skelet",
-			"Bones": {
-				"body": {
+			"Bones": [
+				{
 					"Position": {
 						"X": 0,
 						"Y": 0
@@ -18,12 +18,11 @@
 						"Y": 1
 					}
 				}
-			}
+			]
 		},
 		{
 			"$type": "Graphics.Sprite",
 			"Texture": "landmine",
-			"Default": "idle",
 			"Animations": [
 				{
 					"Name": "idle",
@@ -31,9 +30,9 @@
 					"Frames": [
 						{
 							"Time": 10000000,
-							"State": {
-								"body": "default"
-							}
+							"Bones": [
+								"default"
+							]
 						}
 					]
 				},
@@ -43,33 +42,33 @@
 					"Frames": [
 						{
 							"Time": 500,
-							"State": {
-								"body": "explode"
-							}
+							"Bones": [
+								"explode"
+							]
 						},
 						{
 							"Time": 400,
-							"State": {
-								"body": "default"
-							}
+							"Bones": [
+								"default"
+							]
 						},
 						{
 							"Time": 300,
-							"State": {
-								"body": "explode"
-							}
+							"Bones": [
+								"explode"
+							]
 						},
 						{
 							"Time": 200,
-							"State": {
-								"body": "default"
-							}
+							"Bones": [
+								"default"
+							]
 						},
 						{
 							"Time": 100,
-							"State": {
-								"body": "explode"
-							}
+							"Bones": [
+								"explode"
+							]
 						}
 					]
 				}

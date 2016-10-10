@@ -45,24 +45,24 @@ namespace mapKnight.Extended.Screens {
             begin = Environment.TickCount;
 
             //Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
-            //Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
-            //Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
-            //Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
+            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
+            Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
+            Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
             //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
-            //Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
+            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
 
             ////sawConfig.Create(new Vector2(3, 6), map);
 
-            //walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
+            walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
-            //landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
-            //landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
+            landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
+            landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
 
-            //turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
+            turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
 
             //meatballConfig.Create(new Vector2(3, 10), map);
 
-            //hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
+            hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
 
             Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
             testEntity = playerConfig.Create(map.SpawnPoint, map);
@@ -109,7 +109,7 @@ namespace mapKnight.Extended.Screens {
 
         protected override void Activated ( ) {
             for(int i = 0; i < Entity.Entities.Count;i++)
-                Entity.Entities[0].Prepare( );
+                Entity.Entities[i].Prepare( );
             base.Activated( );
         }
     }

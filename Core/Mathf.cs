@@ -61,7 +61,7 @@ namespace mapKnight.Core {
             return transformedRotatedVerticies;
         }
 
-        public static float[ ] TransformAtOrigin (float[ ] verticies, float x, float y, float angle, Vector2 scale, bool mirrored) {
+        public static float[ ] TransformAtOrigin (float[ ] verticies, float x, float y, float angle, bool mirrored, Vector2 scale) {
             float[ ] transformedRotatedVerticies = new float[verticies.Length];
             float s = Sin(angle), c = Cos(angle);
             for (int i = 0; i < verticies.Length; i += 2) {
@@ -75,18 +75,28 @@ namespace mapKnight.Core {
             }
             return transformedRotatedVerticies;
         }
-        public static float[ ] Translate (float[ ] verticies, float scaleX, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY) {
-            if (verticies.Length % 2 != 0)
-                return null;
 
-            float[ ] transformedVerticies = new float[verticies.Length];
-            float shiftingX = newCenterX - oldCenterX;
-            float shiftingY = newCenterY - oldCenterY;
-            for (int i = 0; i < verticies.Length / 2; i++) {
-                transformedVerticies[i * 2 + 0] = scaleX * verticies[i * 2 + 0] + shiftingX;
-                transformedVerticies[i * 2 + 1] = verticies[i * 2 + 1] + shiftingY;
+        public static float[ ] TransformAtOrigin (float[ ] verticies, float x, float y, float angle, bool mirrored) {
+            float[ ] transformedRotatedVerticies = new float[verticies.Length];
+            float s = Sin(angle), c = Cos(angle);
+            for (int i = 0; i < verticies.Length; i += 2) {
+                if (mirrored) {
+                    transformedRotatedVerticies[i + 0] = x - verticies[i] * c + verticies[i + 1] * s;
+                    transformedRotatedVerticies[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
+                } else {
+                    transformedRotatedVerticies[i + 0] = x + verticies[i] * c - verticies[i + 1] * s;
+                    transformedRotatedVerticies[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
+                }
             }
-            return transformedVerticies;
+            return transformedRotatedVerticies;
+        }
+
+        public static float[ ] TranslateAndScale (float[ ] verticies, float x, float y, float scalex, float scaley) {
+            for (int i = 0; i < verticies.Length; i += 2) {
+                verticies[i] = verticies[i] * scalex + x;
+                verticies[i + 1] = verticies[i + 1] * scaley + y;
+            }
+            return verticies;
         }
 
         #region lookup table

@@ -27,7 +27,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 Vector2 positionOnScreen = Owner.PositionOnScreen;
                 for (int i = 0; i < vertexData.Length; i++) {
                     VertexData entryVertexData = new VertexData(
-                                   Mathf.Translate(vertexData[i], scaleX, 0, 0, positionOnScreen.X, positionOnScreen.Y),
+                                   Mathf.TranslateAndScale(vertexData[i], positionOnScreen.X, positionOnScreen.Y, scaleX, 1),
                                    spriteData[i],
                                    colorData);
                     entityVertexData.Add(entryVertexData);

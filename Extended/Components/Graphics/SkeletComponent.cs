@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
-using mapKnight.Core.Graphics;
 using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Graphics;
-using mapKnight.Extended.Graphics.Animation;
 
 namespace mapKnight.Extended.Components.Graphics {
 
@@ -17,7 +13,7 @@ namespace mapKnight.Extended.Components.Graphics {
             defaultVertexData = defaultvertexdata;
         }
 
-        public override void PostUpdate () {
+        public override void PostUpdate ( ) {
             if (!Owner.IsOnScreen) return;
 
             float[ ][ ] currentVertexData = new float[defaultVertexData.Length][ ];
@@ -37,17 +33,7 @@ namespace mapKnight.Extended.Components.Graphics {
 
         public new class Configuration : Component.Configuration {
             private float[ ][ ] internalParsedBones;
-            public Dictionary<string, VertexBone> Bones {
-                set {
-                    List<string> sortedBones = new List<string>(value.Keys);
-                    sortedBones.Sort( );
-                    internalParsedBones = value.Keys.Select(key => GetVerticies(value[key])).ToArray( );
-                }
-            }
-
-            private float[ ] GetVerticies (VertexBone bone) {
-                return null; // Mathf.TransformAtOrigin(bone.Size.ToQuad( ), bone.Position.X, bone.Position.Y, bone.Rotation, bone.Mirrored);
-            }
+            public Rectangle[ ] Bones { set { internalParsedBones = value.Select(item => item.Verticies( )).ToArray( ); } }
 
             public override Component Create (Entity owner) {
                 return new SkeletComponent(owner, internalParsedBones);
