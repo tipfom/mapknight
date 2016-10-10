@@ -5,7 +5,13 @@ using Android.Views;
 using mapKnight.Extended;
 
 namespace mapKnight.Android {
-    [Activity(Label = "mapKnight", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden, MainLauncher = true, ScreenOrientation = ScreenOrientation.SensorLandscape, Icon = "@drawable/icon", Theme = "@style/thisTheme")]
+    [Activity(
+        Label = "@string/app_name", 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden, 
+        ScreenOrientation = ScreenOrientation.SensorLandscape, 
+        Icon = "@drawable/icon", 
+        Theme = "@style/thisTheme",
+        HardwareAccelerated = true)]
     public class MainActivity : Activity {
         View view;
 
@@ -19,7 +25,6 @@ namespace mapKnight.Android {
             view = new View(this);
             view.SetOnTouchListener(TouchHandler.Instance);
             SetContentView(view);
-            HideNavBar( );
         }
 
         protected override void OnStop ( ) {
@@ -28,7 +33,6 @@ namespace mapKnight.Android {
 
         protected override void OnResume ( ) {
             base.OnResume( );
-            HideNavBar( );
         }
 
         protected override void OnDestroy ( ) {
@@ -36,14 +40,16 @@ namespace mapKnight.Android {
             base.OnDestroy( );
         }
 
-        public void HideNavBar ( ) {
-            //versteckt die Navigationsleiste
-            global::Android.Views.View decorView = base.Window.DecorView;
-            int newUiOptions = (int)decorView.WindowSystemUiVisibility;
-            newUiOptions |= (int)SystemUiFlags.Fullscreen;
-            newUiOptions |= (int)SystemUiFlags.HideNavigation;
-            newUiOptions |= (int)SystemUiFlags.ImmersiveSticky;
-            decorView.SystemUiVisibility = (StatusBarVisibility)newUiOptions;
+        public override void OnWindowFocusChanged (bool hasFocus) {
+            base.OnWindowFocusChanged(hasFocus);
+            if (hasFocus) {
+                base.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(
+                    SystemUiFlags.LayoutFullscreen |
+                    SystemUiFlags.Fullscreen | 
+                    SystemUiFlags.LayoutHideNavigation|
+                    SystemUiFlags.HideNavigation| 
+                    SystemUiFlags.ImmersiveSticky);
+            }
         }
     }
 }
