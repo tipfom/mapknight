@@ -38,8 +38,8 @@ namespace mapKnight.Extended.Components.AI {
             float t = Math.Abs(d) / speedComponent.Speed.X; // time
             float vx = speedComponent.Speed.X * Math.Sign(d);
             float vy = 0;
-            if (Owner.HasComponent<GravityComponent>( ))
-                vy = (c - 0.5f * Owner.World.Gravity.Y * Owner.GetComponent<GravityComponent>( ).Influence * t * t) / t;
+            if (motionComponent.GravityInfluence > 0)
+                vy = (c - 0.5f * Owner.World.Gravity.Y * motionComponent.GravityInfluence * t * t) / t;
             motionComponent.AimedVelocity = new Vector2(vx, vy);
         }
 

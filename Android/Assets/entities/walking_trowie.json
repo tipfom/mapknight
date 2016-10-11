@@ -6,8 +6,7 @@
     },
     "Components": [
         {
-            "$type": "Movement.Gravity",
-            "Influence": 1
+            "$type": "Movement.Motion"
         },
         {
             "$type": "Graphics.Sprite",
@@ -50,7 +49,7 @@
                         {
                             "Time": 200,
                             "Bones": [
-                              "default"
+                                "default"
                             ]
                         },
                         {
@@ -95,8 +94,8 @@
                 },
                 "Components": [
                     {
-                        "$type": "Movement.Gravity",
-                        "Influence": 1
+                        "$type": "Movement.Motion",
+                        "GravityInfluence": 1
                     },
                     {
                         "$type": "Stats.Speed",

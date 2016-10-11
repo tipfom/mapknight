@@ -6,8 +6,7 @@
     },
     "Components": [
         {
-            "$type": "Movement.Gravity",
-            "Influence": 1
+            "$type": "Movement.Motion"
         },
         {
             "$type": "Graphics.Texture",

@@ -50,6 +50,7 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
             //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
             Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
+            Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
 
             ////sawConfig.Create(new Vector2(3, 6), map);
 
@@ -63,6 +64,8 @@ namespace mapKnight.Extended.Screens {
             //meatballConfig.Create(new Vector2(3, 10), map);
 
             hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
+
+            platformConfig.Create(map.SpawnPoint - new Vector2(0,5), map);
 
             Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
             testEntity = playerConfig.Create(map.SpawnPoint, map);

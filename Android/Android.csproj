@@ -15,7 +15,7 @@
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>mapKnight.Android</AssemblyName>
-    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -117,6 +117,8 @@
     <AndroidAsset Include="Assets\maps\beatiful_map.map" />
     <AndroidAsset Include="Assets\gestures\gestures" />
     <AndroidAsset Include="Assets\textures\Sword%282%29.json" />
+    <AndroidAsset Include="Assets\entities\platforms\copper.json" />
+    <AndroidAsset Include="Assets\textures\platforms\copper.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -197,6 +199,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\Sword%282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\platforms\copper.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

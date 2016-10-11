@@ -7,7 +7,6 @@ using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
 
-    [ComponentRequirement(typeof(GravityComponent))]
     [ComponentRequirement(typeof(SpeedComponent))]
     [ComponentRequirement(typeof(TriggerComponent))]
     public class HastorComponent : Component {

@@ -7,45 +7,57 @@ namespace mapKnight.Extended.Components.Movement {
 
     [Instantiatable]
     public class MotionComponent : Component {
-        public readonly bool HasMapCollider;
-        public readonly bool HasPlatformCollider;
         public Vector2 AimedVelocity;
-        public float BouncyMultiplier;
-        private Vector2 enforcedVelocity;
-        private PlatformComponent platformStandingOn;
         public float ScaleX = 1f;
 
-        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult) : base(owner) {
+        public readonly bool HasMapCollider;
+        public readonly bool HasPlatformCollider;
+        public readonly float BouncyMultiplier;
+        public readonly float GravityInfluence;
+
+        private bool enforcedVelocityLocked;
+        private Vector2 enforcedVelocity;
+        private PlatformComponent platformStandingOn;
+
+        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult, float gravityinfluence) : base(owner) {
             HasMapCollider = mapCollider;
             HasPlatformCollider = platformCollider;
             BouncyMultiplier = bouncymult;
+            GravityInfluence = gravityinfluence;
         }
 
         public bool IsAtWall { get; private set; }
         public bool IsOnGround { get; private set; }
         public bool IsOnPlatform { get; private set; }
-        public Vector2 TotalVelocity { get; private set; } = new Vector2( );
+        public Vector2 Velocity { get; private set; } = new Vector2( );
 
         public override void Collision (Entity collidingEntity) {
             if (HasPlatformCollider && collidingEntity.Info.IsPlatform) {
                 IsOnPlatform = true;
+                Owner.Transform.Align(collidingEntity.Transform);
                 platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
+                enforcedVelocityLocked = true;
                 enforcedVelocity.Y = platformStandingOn.Velocity.Y;
-                enforcedVelocity.X += platformStandingOn.Velocity.X;
+                enforcedVelocity.X = platformStandingOn.Velocity.X;
             }
         }
 
         public override void Update (DeltaTime dt) {
-            while (Owner.HasComponentInfo(ComponentData.Velocity))
-                enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
-            while (Owner.HasComponentInfo(ComponentData.Acceleration))
-                enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0] * dt.TotalSeconds;
+            while (Owner.HasComponentInfo(ComponentData.Velocity)) {
+                if (!enforcedVelocityLocked)
+                    enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
+            }
+            while (Owner.HasComponentInfo(ComponentData.Acceleration)) {
+                if (!enforcedVelocityLocked)
+                    enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0] * dt.TotalSeconds;
+            }
+            if (!enforcedVelocityLocked) enforcedVelocity += Owner.World.Gravity * GravityInfluence * dt.TotalSeconds;
 
-            TotalVelocity = AimedVelocity + enforcedVelocity;
+            Velocity = AimedVelocity + enforcedVelocity;
 
             if (IsOnGround && BouncyMultiplier > 0) enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
 
-            Transform newTransform = new Transform(Owner.Transform.Center + TotalVelocity * dt.TotalSeconds, Owner.Transform.Size);
+            Transform newTransform = new Transform(Owner.Transform.Center + Velocity * dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
                 IsAtWall = moveHorizontally(Owner.Transform, newTransform);
                 IsOnGround = moveVertically(Owner.Transform, newTransform);
@@ -62,9 +74,10 @@ namespace mapKnight.Extended.Components.Movement {
 
             Owner.Transform = newTransform;
             IsOnPlatform = false;
+            enforcedVelocityLocked = false;
 
-            if (TotalVelocity.X > 0) ScaleX = 1;
-            else if (TotalVelocity.X < 0) ScaleX = -1;
+            if (Velocity.X > 0) ScaleX = 1;
+            else if (Velocity.X < 0) ScaleX = -1;
             Owner.SetComponentInfo(ComponentData.ScaleX, ScaleX);
         }
 
@@ -132,12 +145,13 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public new class Configuration : Component.Configuration {
-            public float BounceMultiplier = 0;
+            public float BounceMultiplier = 0f;
+            public float GravityInfluence = 1f;
             public bool MapCollider = true;
             public bool PlatformCollider = false;
 
             public override Component Create (Entity owner) {
-                return new MotionComponent(owner, MapCollider, PlatformCollider, BounceMultiplier);
+                return new MotionComponent(owner, MapCollider, PlatformCollider, BounceMultiplier, GravityInfluence);
             }
         }
     }

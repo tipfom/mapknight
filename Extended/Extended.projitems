@@ -51,7 +51,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SkeletComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\TextureComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\GravityComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\MotionComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\PlatformComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\PushComponent.cs" />
