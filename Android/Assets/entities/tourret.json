@@ -1,8 +1,8 @@
 ﻿{
     "Name": "Tourretti Turret",
     "Transform": {
-        "Width": 1,
-        "Height": 0.88
+        "Width": 1.2,
+        "Height": 0.85161
     },
     "Components": [
         {
@@ -26,17 +26,21 @@
         },
         {
             "$type": "AI.Turret",
-            "BulletSpawnpointYPercent": 0.75,
+            "BulletSpawnpointYPercent": 0.71,
             "LockOnTargetTime": 3000,
             "FireRate": 3,
             "TurnRate": 0.2,
             "Bullet": {
                 "Name": "Turret Bullet",
                 "Transform": {
-                    "Width": 0.15,
-                    "Height": 0.15
+                    "Width": 0.4,
+                    "Height": 0.4
                 },
                 "Components": [
+                    {
+                        "$type": "Movement.Motion",
+                        "GravityInfluence": 0
+                    },
                     {
                         "$type": "Stats.Speed",
                         "X": 7
