@@ -14,8 +14,8 @@ namespace mapKnight.Extended.Graphics.Buffer {
 
         private int buffer;
 
-        public GPUBuffer (int dimensions, int quads, BufferUsage usage = BufferUsage.DynamicDraw) :
-            this(dimensions, quads, new float[4 * quads * dimensions], usage) {
+        public GPUBuffer (int dimensions, int count, PrimitiveType type, BufferUsage usage = BufferUsage.DynamicDraw) :
+            this(dimensions, count, type, null, usage) {
 
         }
 
@@ -23,9 +23,9 @@ namespace mapKnight.Extended.Graphics.Buffer {
             Dispose( );
         }
 
-        public GPUBuffer (int dimensions, int quads, float[ ] initialData, BufferUsage usage = BufferUsage.DynamicDraw) {
+        public GPUBuffer (int dimensions, int count, PrimitiveType type, float[ ] initialData, BufferUsage usage = BufferUsage.DynamicDraw) {
             Dimensions = dimensions;
-            Length = Dimensions * quads * 4;
+            Length = Dimensions * count * (int)type;
             Bytes = Length * sizeof(float);
             Stride = Dimensions * sizeof(float);
 
