@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mapKnight.Core.Graphics {
+namespace mapKnight.Extended.Graphics.Animation {
 
     public class SpriteAnimation {
         public string Name;

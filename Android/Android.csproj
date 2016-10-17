@@ -203,6 +203,12 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\platforms\copper.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\particle.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\particle.txt" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
   <ProjectExtensions />

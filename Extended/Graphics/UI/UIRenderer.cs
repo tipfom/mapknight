@@ -24,9 +24,9 @@ namespace mapKnight.Extended.Graphics.UI {
 
         static UIRenderer ( ) {
             IndexBuffer sharedIndexBuffer = new IndexBuffer(MAX_QUADS);
-            vertexBuffer = new CachedGPUBuffer(2, MAX_QUADS);
-            textureBuffer = new CachedGPUBuffer(2, MAX_QUADS);
-            colorBuffer = new CachedGPUBuffer(4, MAX_QUADS);
+            vertexBuffer = new CachedGPUBuffer(2, MAX_QUADS, PrimitiveType.Quad);
+            textureBuffer = new CachedGPUBuffer(2, MAX_QUADS, PrimitiveType.Quad);
+            colorBuffer = new CachedGPUBuffer(4, MAX_QUADS, PrimitiveType.Quad);
             buffer = new BufferBatch(sharedIndexBuffer, vertexBuffer, colorBuffer, textureBuffer);
 
             uiItems = new Dictionary<Screen, List<UIItem>>( );

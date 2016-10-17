@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System;
 using mapKnight.Core;
 using System.Linq;
-using mapKnight.Core.Graphics;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics.Animation;
 using mapKnight.Extended.Graphics;

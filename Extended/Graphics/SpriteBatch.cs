@@ -48,8 +48,8 @@ namespace mapKnight.Extended.Graphics {
             GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             IndexBuffer indexBuffer = new IndexBuffer(1);
-            ClientBuffer vertexBuffer = new ClientBuffer(2, 1);
-            ClientBuffer textureBuffer = new ClientBuffer(2, 1);
+            ClientBuffer vertexBuffer = new ClientBuffer(2, 1, PrimitiveType.Quad);
+            ClientBuffer textureBuffer = new ClientBuffer(2, 1, PrimitiveType.Quad);
             textureBuffer.Data = new[ ] { 0f, 1f, 0f, 0f, 1f, 0f, 1f, 1f };
             int position = 0;
 

@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Graphics {
         private ClientBuffer colorBuffer { get { return (ClientBuffer)buffer.ColorBuffer; } }
 
         public EntityRenderer ( ) {
-            buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT), new ClientBuffer(4, MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT));
+            buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT, PrimitiveType.Quad), new ClientBuffer(4, MAX_QUAD_COUNT, PrimitiveType.Quad), new ClientBuffer(2, MAX_QUAD_COUNT, PrimitiveType.Quad));
         }
 
         public void AddTexture (int species, SpriteBatch entityTexture) {
