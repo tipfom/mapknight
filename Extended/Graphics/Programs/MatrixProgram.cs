@@ -6,7 +6,7 @@ using OpenTK;
 using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Programs {
-    public class MatrixProgram : Program {
+    public class MatrixProgram : TextureProgram {
         private UniformMatrixHandle mvpMatrixHandle;
 
         public MatrixProgram ( ) : base(Assets.GetVertexShader("matrix"), Assets.GetFragmentShader("normal")) {
@@ -22,9 +22,8 @@ namespace mapKnight.Extended.Graphics.Programs {
         }
 
         public void Draw (IndexBuffer indexbuffer, IAttributeBuffer vertexbuffer, IAttributeBuffer texturebuffer, Texture2D texture, Matrix matrix, int count, bool alphablending = true) {
-            Apply(texture.ID, vertexbuffer, texturebuffer, alphablending);
+            Apply(texture.ID,indexbuffer, vertexbuffer, texturebuffer, alphablending);
             mvpMatrixHandle.Set(matrix.MVP);
-            indexbuffer.Bind( );
 
             GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
