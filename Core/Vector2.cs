@@ -108,6 +108,11 @@ namespace mapKnight.Core {
             Y = vector.Y;
         }
 
+        public Vector2 (Range<Vector2> velocity) : this( ) {
+            X = Mathf.Random(velocity.Min.X, velocity.Max.X);
+            Y = Mathf.Random(velocity.Min.Y, velocity.Max.Y);
+        }
+
         #region methods and functions
 
         /// <returns>

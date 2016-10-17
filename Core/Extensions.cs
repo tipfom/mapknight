@@ -122,31 +122,7 @@ namespace mapKnight.Core {
         }
 
         #endregion Array
-
-        #region Random
-
-        public static double NextDouble (this Random random, double maxValue) {
-            return random.NextDouble( ) * maxValue;
-        }
-
-        public static double NextDouble (this Random random, double minValue, double maxValue) {
-            return random.NextDouble(maxValue - minValue) + minValue;
-        }
-
-        public static float NextFloat (this Random random) {
-            return (float)random.NextDouble(float.MinValue, float.MaxValue);
-        }
-
-        public static float NextFloat (this Random random, float maxValue) {
-            return (float)random.NextDouble(maxValue);
-        }
-
-        public static float NextFloat (this Random random, float minValue, float maxValue) {
-            return (float)random.NextDouble(minValue, maxValue);
-        }
-
-        #endregion Random
-
+        
         #region Queue
 
         public static void Enqueue<T> (this Queue<T> queue, IEnumerable<T> collection) {

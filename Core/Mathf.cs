@@ -489,6 +489,18 @@ namespace mapKnight.Core {
             return u.f * z;
         }
 
+        public static float Random ( ) {
+            return Mathi.Random( ) / (float)int.MaxValue;
+        }
+
+        public static float Random(float max) {
+            return Random( ) * max;
+        }
+
+        public static float Random(float min, float max) {
+            return min + Random( ) * (max - min);
+        }
+
         [StructLayout(LayoutKind.Explicit)]
         private struct FloatIntUnion {
             [FieldOffset(0)]

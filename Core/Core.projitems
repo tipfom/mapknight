@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Map.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Range.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rectangle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Size.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tile.cs" />
