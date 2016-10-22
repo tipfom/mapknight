@@ -4,6 +4,8 @@ using static mapKnight.Extended.Graphics.Programs.ParticleProgram;
 
 namespace mapKnight.Extended.Graphics.Particles {
     public class Emitter {
+        public static Matrix Matrix;
+
         private Particle[ ] particles;
         private BufferBatch batch;
         private ClientBuffer vertexbuffer;

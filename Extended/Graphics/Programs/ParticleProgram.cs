@@ -1,6 +1,7 @@
 ﻿using System;
 using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Handle;
+using mapKnight.Extended.Graphics.Particles;
 using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Programs
@@ -8,11 +9,12 @@ namespace mapKnight.Extended.Graphics.Programs
     public class ParticleProgram : Program {
         private AttributeHandle sizeHandle;
         private AttributeHandle colorHandle;
+        private UniformMatrixHandle matrixHandle;
 
         public ParticleProgram () : base(Assets.GetVertexShader("particle"), Assets.GetFragmentShader("particle")) {
             sizeHandle = new AttributeHandle(glProgram, "a_size");
             colorHandle = new AttributeHandle(glProgram, "a_color");
-            Debug.CheckGL(this );
+            matrixHandle = new UniformMatrixHandle(glProgram, "u_mvpmatrix");
         }
 
         public override void Begin ( ) {
@@ -39,6 +41,7 @@ namespace mapKnight.Extended.Graphics.Programs
             Apply(vertexbuffer, alphablending);
             sizebuffer.Bind(sizeHandle);
             colorbuffer.Bind(colorHandle);
+            matrixHandle.Set(Emitter.Matrix.MVP);
 
             GL.DrawArrays(BeginMode.Points, 0, count);
         }

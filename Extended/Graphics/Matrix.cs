@@ -1,4 +1,5 @@
 ﻿using OpenTK;
+using Vector2 = mapKnight.Core.Vector2;
 
 namespace mapKnight.Extended.Graphics {
     public class Matrix {
@@ -11,18 +12,14 @@ namespace mapKnight.Extended.Graphics {
         private Matrix4 _MVP;
         public Matrix4 MVP { get { return _MVP; } }
 
-        public Matrix ( ) {
+        public Matrix (Vector2 projectionsize) {
             ResetView( );
-            UpdateProjection( );
+            UpdateProjection(projectionsize);
             CalculateMVP( );
-            Window.Changed += ( ) => {
-                UpdateProjection( );
-                CalculateMVP( );
-            };
         }
 
-        public void UpdateProjection ( ) {
-            _Projection = Matrix4.CreateOrthographicOffCenter(-Window.Ratio, Window.Ratio, -1, 1, -1, 3);
+        public void UpdateProjection (Vector2 projectionsize) {
+            _Projection = Matrix4.CreateOrthographicOffCenter(-projectionsize.X, projectionsize.X, -projectionsize.Y, projectionsize.Y, -1, 3);
         }
 
         public void CalculateMVP ( ) {
@@ -33,10 +30,14 @@ namespace mapKnight.Extended.Graphics {
             _View = Matrix4.LookAt(0, 0, 3, 0f, 0f, 0f, 0f, 1f, 0f);
         }
 
-        public void TranslateView (float x, float y, float z) {
-            _View = Matrix4.Mult(_View, Matrix4.CreateTranslation(new Vector3(x, y, z)));
+        public void ResetView (float x, float y) {
+            _View = Matrix4.LookAt(0, 0, 3, -x, y, 0f, 0f, 1f, 0f);
         }
 
-        public static Matrix Default { get; } = new Matrix( );
+        public void TranslateView (float x, float y, float z) {
+            _View = Matrix4.Mult(_View, Matrix4.CreateTranslation(x, y, z));
+        }
+
+        public static Matrix Default { get; set; } = new Matrix(new Vector2(Window.Ratio, 1));
     }
 }
