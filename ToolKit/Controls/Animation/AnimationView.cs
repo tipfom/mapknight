@@ -102,8 +102,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                 Texture2D texture = textures[entry.Image];
                 int width = (int)(entry.Scale * texture.Width * entityDrawRectangle.Width);
                 int height = (int)(entry.Scale * texture.Height * entityDrawRectangle.Width);
-                int x = (int)(entityDrawRectangle.Center.X + entry.Position.X * entityDrawRectangle.Width - (0.5f - transformOrigins[entry.Image].X) * width);
-                int y = (int)(entityDrawRectangle.Center.Y - entry.Position.Y * entityDrawRectangle.Height - (0.5f - transformOrigins[entry.Image].Y) * height);
+                int x = (int)(entityDrawRectangle.Center.X + entry.Position.X * entityDrawRectangle.Width);// - (0.5f - transformOrigins[entry.Image].X) * width);
+                int y = (int)(entityDrawRectangle.Center.Y - entry.Position.Y * entityDrawRectangle.Height);// - (0.5f - transformOrigins[entry.Image].Y) * height);
 
                 spriteBatch.Draw(texture, new Rectangle(x, y, width, height), null, Color.White, (float)(entry.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2( ) * transformOrigins[entry.Image], entry.Mirrored ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }
