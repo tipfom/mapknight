@@ -72,7 +72,7 @@ namespace mapKnight.Core {
             Center += delta;
         }
 
-        public void Translatef (float dx, float dy) {
+        public void Translate (float dx, float dy) {
             Translate(new Vector2(dx, dy));
         }
     }

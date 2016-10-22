@@ -15,7 +15,6 @@ namespace mapKnight.Extended.Components.Movement {
         public readonly float BouncyMultiplier;
         public readonly float GravityInfluence;
 
-        private bool enforcedVelocityLocked;
         private Vector2 enforcedVelocity;
         private PlatformComponent platformStandingOn;
 
@@ -32,26 +31,27 @@ namespace mapKnight.Extended.Components.Movement {
         public Vector2 Velocity { get; private set; } = new Vector2( );
 
         public override void Collision (Entity collidingEntity) {
-            if (HasPlatformCollider && collidingEntity.Info.IsPlatform) {
-                IsOnPlatform = true;
-                Owner.Transform.Align(collidingEntity.Transform);
-                platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
-                enforcedVelocityLocked = true;
-                enforcedVelocity.Y = platformStandingOn.Velocity.Y;
-                enforcedVelocity.X = platformStandingOn.Velocity.X;
+            if (HasPlatformCollider && collidingEntity.Info.IsPlatform && !IsOnPlatform) {
+                if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y - 0.3) {
+                    Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, collidingEntity.Transform.TR.Y + Owner.Transform.HalfSize.Y);
+                    platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
+
+                    IsOnPlatform = true;
+                }
             }
         }
 
         public override void Update (DeltaTime dt) {
+            if (IsOnPlatform) enforcedVelocity.X = platformStandingOn.Velocity.X;
+
             while (Owner.HasComponentInfo(ComponentData.Velocity)) {
-                if (!enforcedVelocityLocked)
-                    enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
+                enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
             }
             while (Owner.HasComponentInfo(ComponentData.Acceleration)) {
-                if (!enforcedVelocityLocked)
-                    enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0] * dt.TotalSeconds;
+                enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0] * dt.TotalSeconds;
             }
-            if (!enforcedVelocityLocked) enforcedVelocity += Owner.World.Gravity * GravityInfluence * dt.TotalSeconds;
+            if (!IsOnPlatform) enforcedVelocity += Owner.World.Gravity * GravityInfluence * dt.TotalSeconds;
+            if (IsOnPlatform) enforcedVelocity.Y = Math.Max(platformStandingOn.Velocity.Y, enforcedVelocity.Y);
 
             Velocity = AimedVelocity + enforcedVelocity;
 
@@ -74,10 +74,9 @@ namespace mapKnight.Extended.Components.Movement {
 
             Owner.Transform = newTransform;
             IsOnPlatform = false;
-            enforcedVelocityLocked = false;
 
-            if (Velocity.X > 0) ScaleX = 1;
-            else if (Velocity.X < 0) ScaleX = -1;
+            if (AimedVelocity.X > 0) ScaleX = 1;
+            else if (AimedVelocity.X < 0) ScaleX = -1;
             Owner.SetComponentInfo(ComponentData.ScaleX, ScaleX);
         }
 

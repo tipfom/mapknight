@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace mapKnight.Extended {
 
     public abstract class Component {
-        protected Entity Owner;
+        public readonly Entity Owner;
 
         public Component (Entity owner) {
             this.Owner = owner;

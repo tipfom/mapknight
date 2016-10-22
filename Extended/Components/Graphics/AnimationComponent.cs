@@ -33,19 +33,6 @@ namespace mapKnight.Extended.Components.Graphics {
         public override void Update (DeltaTime dt) {
             if (!Owner.IsOnScreen) return;
 
-            while (Owner.HasComponentInfo(ComponentData.VertexAnimation)) {
-                object[ ] data = Owner.GetComponentInfo(ComponentData.VertexAnimation);
-                if ((bool)data[1]) {
-                    // force animation
-                    currentAnimationCallback(false);
-                    currentAnimationCallback = (AnimationCallback)data[2];
-                    SetAnimation(FindAnimationIndex((string)data[0]));
-                } else {
-                    queuedAnimationIndex = FindAnimationIndex((string)data[0]);
-                    if (data.Length == 3) queuedAnimationCallback = (AnimationCallback)data[2];
-                }
-            }
-
             if (!currentAnimation.IsRunning) {
                 currentAnimationCallback?.Invoke(true);
                 if (queuedAnimationIndex > -1) {
@@ -58,7 +45,19 @@ namespace mapKnight.Extended.Components.Graphics {
                     currentAnimationIndex = 0;
                     currentAnimation.Reset( );
                 }
+            }
 
+            while (Owner.HasComponentInfo(ComponentData.VertexAnimation)) {
+                object[ ] data = Owner.GetComponentInfo(ComponentData.VertexAnimation);
+                if ((bool)data[1]) {
+                    // force animation
+                    currentAnimationCallback?.Invoke (false);
+                    if (data.Length == 3) currentAnimationCallback = (AnimationCallback)data[2];
+                    SetAnimation(FindAnimationIndex((string)data[0]));
+                } else {
+                    queuedAnimationIndex = FindAnimationIndex((string)data[0]);
+                    if (data.Length == 3) queuedAnimationCallback = (AnimationCallback)data[2];
+                }
             }
             animations[currentAnimationIndex].Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, boneVerticies);
         }

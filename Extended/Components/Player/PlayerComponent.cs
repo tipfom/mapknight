@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Screens;
@@ -19,6 +20,8 @@ namespace mapKnight.Extended.Components.Player {
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
 
+        private bool isJumping = false, startedJumping = false;
+
         public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
             Weapon = weapon;
 
@@ -34,7 +37,7 @@ namespace mapKnight.Extended.Components.Player {
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm1", new Vector2(2, 1.5f)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm2", new Vector2(2, 1.5f)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("head", new Vector2(9, 9)));
-            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("Sword(2)", new Vector2(5, 18)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("weapon", new Vector2(5, 18)));
         }
 
         public override void Destroy ( ) {
@@ -57,17 +60,19 @@ namespace mapKnight.Extended.Components.Player {
 
             while (Owner.HasComponentInfo(ComponentData.InputGesture)) {
                 string data = (string)Owner.GetComponentInfo(ComponentData.InputGesture)[0];
-                if (data == string.Empty) Weapon.Attack( );
-                else Weapon.Special(data);
+                if (data == string.Empty) {
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit_prepare", true, (AnimationComponent.AnimationCallback)AnimationCallbackContinueAttack);
+                } else Weapon.Special(data);
             }
 
             Vector2 speed = speedComponent.Speed;
-            if (motionComponent.IsOnGround) {
+            if (!isJumping && (motionComponent.IsOnGround || motionComponent.IsOnPlatform)) {
                 if (Action.HasFlag(ActionMask.Jump)) {
-                    motionComponent.AimedVelocity.Y = speed.Y;
-                    Action &= ~ActionMask.Jump;
+                    isJumping = true;
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "jump", true, (AnimationComponent.AnimationCallback)AnimationCallbackFinishJumping);
                 } else {
-                    motionComponent.AimedVelocity.Y = 0;
+                    if (!startedJumping) motionComponent.AimedVelocity.Y = 0;
+                    startedJumping = false;
                 }
             }
 
@@ -77,6 +82,32 @@ namespace mapKnight.Extended.Components.Player {
                 motionComponent.AimedVelocity.X = speed.X;
             } else {
                 motionComponent.AimedVelocity.X = 0;
+            }
+
+            if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
+                if (motionComponent.AimedVelocity.X != 0) {
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", false);
+                } else {
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", false);
+                }
+            } else {
+                Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", false);
+            }
+        }
+
+        private void AnimationCallbackFinishJumping (bool success) {
+            if (success) {
+                motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
+                Action &= ~ActionMask.Jump;
+                isJumping = false;
+                startedJumping = true;
+            }
+        }
+
+        private void AnimationCallbackContinueAttack (bool success) {
+            if (success) {
+                Weapon.Attack( );
+                Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit_finish", true);
             }
         }
 
