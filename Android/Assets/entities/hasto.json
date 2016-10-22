@@ -1,33 +1,144 @@
 ﻿{
-    "Name": "Hairy Hastor",
+    "Name": "Bully the Shell",
     "Transform": {
         "Width": 0.75,
-        "Height": 0.5
+        "Height": 0.875
     },
     "Components": [
         {
             "$type": "Movement.Motion"
         },
         {
-            "$type": "Graphics.Texture",
-            "Texture": "hasto"
-        },
-        {
             "$type": "Stats.Speed",
             "X": 6.35
         },
         {
-            "$type": "Graphics.Skelet",
-            "Bones": [
+            "$type": "Graphics.Animation",
+            "Scales": [
+                0.055555555555555555555555
+            ],
+            "Animations": [
                 {
-                    "Position": {
-                        "X": 0,
-                        "Y": 0
-                    },
-                    "Size": {
-                        "X": 1,
-                        "Y": 1
-                    }
+                    "Name": "idle",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 400,
+                            "State": [
+                                {
+                                    "Texture": "shell"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "walk",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1"
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2"
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "prepare",
+                    "CanRepeat": false,
+                    "Frames": [
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell"
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "def"
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "atk"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "attack",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 460,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": -360
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 460,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": 360
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "frenzy",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 1440,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": 360
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 460,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": -360
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },

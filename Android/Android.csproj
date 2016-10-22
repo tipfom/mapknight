@@ -119,6 +119,7 @@
     <AndroidAsset Include="Assets\textures\Sword%282%29.json" />
     <AndroidAsset Include="Assets\entities\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\platforms\copper.json" />
+    <AndroidAsset Include="Assets\textures\shell.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -208,6 +209,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\vertex\particle.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\shell.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

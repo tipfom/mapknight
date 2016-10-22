@@ -51,12 +51,20 @@ namespace mapKnight.Extended.Components.Graphics {
                 object[ ] data = Owner.GetComponentInfo(ComponentData.VertexAnimation);
                 if ((bool)data[1]) {
                     // force animation
-                    currentAnimationCallback?.Invoke (false);
-                    if (data.Length == 3) currentAnimationCallback = (AnimationCallback)data[2];
+                    currentAnimationCallback?.Invoke(false);
+                    if (data.Length == 3) {
+                        currentAnimationCallback = (AnimationCallback)data[2];
+                    } else {
+                        currentAnimationCallback = null;
+                    }
                     SetAnimation(FindAnimationIndex((string)data[0]));
                 } else {
                     queuedAnimationIndex = FindAnimationIndex((string)data[0]);
-                    if (data.Length == 3) queuedAnimationCallback = (AnimationCallback)data[2];
+                    if (data.Length == 3) {
+                        queuedAnimationCallback = (AnimationCallback)data[2];
+                    } else {
+                        queuedAnimationCallback = null;
+                    }
                 }
             }
             animations[currentAnimationIndex].Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, boneVerticies);

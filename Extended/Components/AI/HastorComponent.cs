@@ -2,10 +2,11 @@ using System;
 using System.Timers;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 
-namespace mapKnight.Extended.Components.AI {
+namespace mapKnight.Extended.Components.AI { 
 
     [ComponentRequirement(typeof(SpeedComponent))]
     [ComponentRequirement(typeof(TriggerComponent))]
@@ -16,16 +17,13 @@ namespace mapKnight.Extended.Components.AI {
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private bool stunned;
-        private Timer stunnedTimer;
+        private Entity target;
 
-        public HastorComponent (Entity owner, int stunduration, float frenzyspeedpercent) : base(owner) {
-            stunnedTimer = new Timer(stunduration);
-            stunnedTimer.Elapsed += StunnedTimer_Elapsed;
+        public HastorComponent (Entity owner, float frenzyspeedpercent) : base(owner) {
             frenzySpeedPercent = frenzyspeedpercent;
-        }
 
-        public override void Destroy ( ) {
-            stunnedTimer.Dispose( );
+            Owner.SetComponentInfo(ComponentData.BoneTexture, "shell");
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("shell", new Vector2(9.5f, 12.5f)));
         }
 
         public override void Prepare ( ) {
@@ -41,30 +39,35 @@ namespace mapKnight.Extended.Components.AI {
                 hasting = false;
                 stunned = true;
                 motionComponent.AimedVelocity.X = -hastingDirection * frenzySpeedPercent * speedComponent.Speed.X;
-                stunnedTimer.Start( );
+                Owner.SetComponentInfo(ComponentData.VertexAnimation, "frenzy", true, (AnimationComponent.AnimationCallback)AnimationCallbackFrenzy);
             }
-        }
-
-        private void StunnedTimer_Elapsed (object sender, ElapsedEventArgs e) {
-            stunnedTimer.Stop( );
-            stunned = false;
-            motionComponent.AimedVelocity.X = 0;
         }
 
         private void Trigger_Triggered (Entity entity) {
             if (!(hasting || stunned) && entity.Info.IsPlayer) {
-                hastingDirection = (entity.Transform.BL.X > Owner.Transform.TR.X) ? 1 : -1;
-                motionComponent.AimedVelocity.X = speedComponent.Speed.X * hastingDirection;
-                hasting = true;
+                target = entity;
+                Owner.SetComponentInfo(ComponentData.VertexAnimation, "prepare", true, (AnimationComponent.AnimationCallback)AnimationCallbackPrepare);
             }
+        }
+
+        private void AnimationCallbackPrepare(bool success) {
+            hastingDirection = (target.Transform.BL.X > Owner.Transform.TR.X) ? 1 : -1;
+            motionComponent.AimedVelocity.X = speedComponent.Speed.X * hastingDirection;
+            hasting = true;
+            Owner.SetComponentInfo(ComponentData.VertexAnimation, "attack", true);
+        }
+
+        private void AnimationCallbackFrenzy(bool success) {
+            stunned = false;
+            motionComponent.AimedVelocity.X = 0;
+            Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
         }
 
         public new class Configuration : Component.Configuration {
             public float FrenzySpeedPercent;
-            public int StunDuration;
 
             public override Component Create (Entity owner) {
-                return new HastorComponent(owner, StunDuration, FrenzySpeedPercent);
+                return new HastorComponent(owner, FrenzySpeedPercent);
             }
         }
     }
