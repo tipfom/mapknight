@@ -7,6 +7,7 @@ using mapKnight.Extended.Graphics.Programs;
 using Newtonsoft.Json;
 using OpenTK.Graphics.ES20;
 using Path = System.IO.Path;
+using mapKnight.Extended.Graphics.Particles;
 
 #if __ANDROID__
 using Android.Content;
@@ -33,6 +34,8 @@ namespace mapKnight.Extended {
                 return (T)((object)GetEntityConfig(paths[0]));
             } else if (request == typeof(Graphics.Map) && paths.Length == 1) {
                 return (T)((object)GetMap(paths[0]));
+            } else if (request == typeof(Emitter) && paths.Length == 1) {
+                return (T)((object)GetEmitter(paths[0]));
 #if __ANDROID__
             } else if (request == typeof(GestureStore) && paths.Length == 1) {
                 return (T)((object)GetGestureStore(paths[0]));
@@ -40,6 +43,12 @@ namespace mapKnight.Extended {
             } else {
                 throw new TypeLoadException($"requested filetype { request.FullName } couldnt be loaded with { paths.Length } parameters");
             }
+        }
+
+        public static Emitter GetEmitter (string path) {
+            Emitter emitter = JsonConvert.DeserializeObject<Emitter>(GetText("paticlesystems", path));
+            emitter.Setup( );
+            return emitter;
         }
 
         public static void Destroy ( ) {
