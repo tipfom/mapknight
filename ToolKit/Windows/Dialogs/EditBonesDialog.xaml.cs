@@ -26,15 +26,13 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
         public EditBonesDialog ( ) {
             InitializeComponent( );
             App.Current.MainWindow.Closed += (sender, e) => Close( );
+            App.Current.MainWindow.Deactivated += (sender, e) => Topmost = false;
+            App.Current.MainWindow.Activated += (sender, e) => Topmost = true;
             this.Topmost = true;
         }
 
         public EditBonesDialog (ObservableCollection<VertexBone> bonelist) : this( ) {
-            bonelist.CollectionChanged += (sender, e) => {
-                listbox_bones.Items.Clear( );
-                foreach (VertexBone bone in bonelist)
-                    listbox_bones.Items.Add(bone);
-            };
+            listbox_bones.ItemsSource = bonelist;
         }
 
         private void CommandDelete_CanExecute (object sender, CanExecuteRoutedEventArgs e) {

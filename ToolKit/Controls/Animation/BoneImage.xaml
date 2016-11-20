@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit.Controls.Components.Animation"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" RenderTransformOrigin="0.5,0.5" MinWidth="1" MinHeight="1" AllowDrop="True"
-                DragEnter="BoneImage_DragEnter" Drop="BoneImage_Drop">
+                DragEnter="BoneImage_DragEnter" Drop="BoneImage_Drop" MouseDown="BoneImage_MouseDown" PreviewMouseDown="BoneImage_MouseDown">
     <ContentControl.RenderTransform>
         <RotateTransform/>
     </ContentControl.RenderTransform>

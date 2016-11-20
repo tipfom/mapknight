@@ -12,7 +12,7 @@ using mapKnight.ToolKit.Data;
 
 namespace mapKnight.ToolKit.Controls.Components.Animation {
     public class AnimationView : XnaControl {
-        private DispatcherTimer renderTimer = new DispatcherTimer( ) { Interval = new TimeSpan(0), IsEnabled = false };
+        private DispatcherTimer renderTimer = new DispatcherTimer( ) { Interval = new TimeSpan(0,0,0,0,15), IsEnabled = false };
         private VertexAnimation currentAnimation;
         private bool paused = false;
         private Dictionary<string, Texture2D> textures;
@@ -125,7 +125,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             }
             float progress = Core.Mathf.Clamp01((nextFrameTime - Environment.TickCount) / (float)currentAnimation.Frames[currentFrame].Time);
 
-            for (int i = 0; i < currentAnimation.Frames[0].Bones.Count; i++) {
+            for (int i = currentAnimation.Frames[0].Bones.Count-1; i > -1; i--) {
                 Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[nextFrame].Bones[i].Position, currentAnimation.Frames[currentFrame].Bones[i].Position, progress);
                 float interpolatedRotation = Interpolate(currentAnimation.Frames[nextFrame].Bones[i].Rotation, currentAnimation.Frames[currentFrame].Bones[i].Rotation, progress);
                 yield return new VertexBone( ) { Position = interpolatedPosition, Rotation = interpolatedRotation, Mirrored = currentAnimation.Frames[nextFrame].Bones[i].Mirrored, Image = currentAnimation.Frames[nextFrame].Bones[i].Image, Scale = currentAnimation.Frames[nextFrame].Bones[i].Scale };

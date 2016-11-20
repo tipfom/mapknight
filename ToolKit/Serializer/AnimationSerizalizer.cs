@@ -26,7 +26,7 @@ namespace mapKnight.ToolKit.Serializer {
                             Rotation = -bone.Rotation,
                             Position = bone.Position,
                             Texture = bone.Image
-                        }).ToArray()
+                        }).Reverse( ).ToArray()
                     }).ToArray()
                 });
             }

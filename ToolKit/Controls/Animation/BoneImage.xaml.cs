@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using mapKnight.Core;
 using mapKnight.ToolKit.Data;
@@ -14,7 +16,9 @@ using Rectangle = System.Windows.Shapes.Rectangle;
 namespace mapKnight.ToolKit.Controls.Components.Animation {
     public partial class BoneImage : ContentControl {
         public static Dictionary<AnimationControl2, Dictionary<string, ImageData>> Data = new Dictionary<AnimationControl2, Dictionary<string, ImageData>>( );
-
+        public static event Action BackupChanges;
+        private static event Action<BoneImage> FocusChanged;
+        
         public Visibility ResizerVisibility { get; set; } = Visibility.Visible;
         public ImageData Image { get; set; }
         public bool IsFlipped { set { if (value) image.RenderTransform = new ScaleTransform( ) { ScaleX = -1 }; else image.RenderTransform = new ScaleTransform( ) { ScaleX = 1 }; } }
@@ -23,7 +27,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         public Rectangle RefRectangle { get; set; }
         public Border RefBorder { get; set; }
-
+        
         private AnimationControl2 animControl;
         private VertexBone dataContextBone;
 
@@ -38,13 +42,45 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
             // hook up events
             rendertransformoriginthumb.RenderTransformOriginChanged += BoneImage_RenderTransformOriginChanged;
-            rotatethumb.Rotated += BoneImage_Rotated;
-            DependencyPropertyDescriptor canvasLeftPropertyDesc = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(BoneImage));
-            canvasLeftPropertyDesc.AddValueChanged(this, BoneImage_PositionChanged);
-            DependencyPropertyDescriptor canvasTopPropertyDesc = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(BoneImage));
-            canvasTopPropertyDesc.AddValueChanged(this, BoneImage_PositionChanged);
+
+            rotatethumb.DragCompleted += Rotatethumb_DragCompleted;
+            movethumb.DragCompleted += Movethumb_DragCompleted;
+            
+            movethumb.DragStarted += Movethumb_DragStarted; 
+            rotatethumb.DragStarted += Rotatethumb_DragStarted; 
+            rendertransformoriginthumb.DragStarted += Rendertransformoriginthumb_DragStarted;
 
             DataContextChanged += BoneImage_DataContextChanged;
+
+            FocusChanged += BoneImage_FocusChanged;
+        }
+
+        private void Movethumb_DragCompleted (object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
+            RecalculatePosition ( );
+        }
+
+        private void Rotatethumb_DragCompleted (object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
+            dataContextBone.Rotation = Rotation;
+        }
+
+        private void Rendertransformoriginthumb_DragStarted (object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
+            BackupChanges?.Invoke( );
+        }
+
+        private void Rotatethumb_DragStarted (object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
+            BackupChanges?.Invoke( );
+        }
+
+        private void Movethumb_DragStarted (object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
+            BackupChanges?.Invoke( );
+        }
+        
+        private void BoneImage_FocusChanged (BoneImage obj) {
+            if(obj == this) {
+                image.Effect = new DropShadowEffect( ) { Color = Colors.Cyan, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance};
+            } else {
+                image.Effect = null;
+            }
         }
 
         public BoneImage (AnimationControl2 animationcontrol) : this( ) {
@@ -56,15 +92,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             dataContextBone = (VertexBone)DataContext;
             Update( );
         }
-
-        private void BoneImage_Rotated ( ) {
-            dataContextBone.Rotation = Rotation;
-        }
-
-        private void BoneImage_PositionChanged (object sender, EventArgs e) {
-            RecalculatePosition( );
-        }
-
+        
         private void BoneImage_RenderTransformOriginChanged (Point origin) {
             Image.TransformOrigin = origin;
         }
@@ -137,6 +165,10 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                     }
                 }
             }
+        }
+
+        private void BoneImage_MouseDown (object sender, MouseButtonEventArgs e) {
+            FocusChanged?.Invoke(this);
         }
 
         private void ApplyImage (string path) {

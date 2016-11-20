@@ -27,6 +27,7 @@ namespace mapKnight.ToolKit.Controls {
         private VertexAnimationFrame currentFrame = null;
         private EditBonesDialog editBonesDialog;
         private List<FrameworkElement> menu = new List<FrameworkElement>( );
+        private Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>> undoStack = new Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>>( );
         public AnimationMetaData MetaData = new AnimationMetaData( );
 
         public AnimationControl2 ( ) {
@@ -45,6 +46,18 @@ namespace mapKnight.ToolKit.Controls {
             editBonesDialog.ScaleChanged += EditBonesDialog_ScaleChanged;
 
             bones.CollectionChanged += Bones_CollectionChanged;
+
+            BoneImage.BackupChanges += BoneImage_BackupChanges;
+        }
+
+        private void BoneImage_BackupChanges ( ) {
+            if (!undoStack.ContainsKey(currentAnimation)) {
+                undoStack.Add(currentAnimation, new Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>( ));
+            }
+            if (!undoStack[currentAnimation].ContainsKey(currentFrame)) {
+                undoStack[currentAnimation].Add(currentFrame, new Stack<ObservableCollection<VertexBone>>( ));
+            }
+            undoStack[currentAnimation][currentFrame].Push(new ObservableCollection<VertexBone>(currentFrame.Bones.Select(bone => bone.Clone( ))));
         }
 
         private void Bones_CollectionChanged (object sender, NotifyCollectionChangedEventArgs e) {
@@ -185,15 +198,20 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void EditBonesDialog_BonePositionChanged (int newz, int oldz) {
-            BoneImage imageAtNewZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == newz);
-            BoneImage imageAtOldZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == oldz);
-            if (imageAtOldZ != null) Canvas.SetZIndex(imageAtOldZ, newz);
-            if (imageAtNewZ != null) Canvas.SetZIndex(imageAtNewZ, oldz);
+            BoneImage imageAtNewZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -newz);
+            BoneImage imageAtOldZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -oldz);
+            if (imageAtOldZ != null) Canvas.SetZIndex(imageAtOldZ, -newz);
+            if (imageAtNewZ != null) Canvas.SetZIndex(imageAtNewZ, -oldz);
 
             bones.Move(oldz, newz);
             foreach (VertexAnimation animation in animations) {
                 foreach (VertexAnimationFrame frame in animation.Frames) {
                     frame.Bones.Move(oldz, newz);
+                    if (undoStack.ContainsKey(animation) && undoStack[animation].ContainsKey(frame)) {
+                        foreach (ObservableCollection<VertexBone> collection in undoStack[animation][frame]) {
+                            collection.Move(oldz, newz);
+                        }
+                    }
                 }
             }
         }
@@ -206,7 +224,7 @@ namespace mapKnight.ToolKit.Controls {
                 }
             }
 
-            BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == index);
+            BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == -index);
             if (image != null && currentFrame != null) image.Update( );
         }
 
@@ -253,7 +271,7 @@ namespace mapKnight.ToolKit.Controls {
                 Canvas canvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
                 for (int i = 0; i < boneImages.Count; i++) {
                     if (addBoneImagesToCanvas) canvas.Children.Add(boneImages[i]);
-                    Canvas.SetZIndex(boneImages[i], i);
+                    Canvas.SetZIndex(boneImages[i], -i);
                     boneImages[i].RefBorder = border;
                     boneImages[i].RefRectangle = rect;
                     boneImages[i].DataContext = currentFrame.Bones[i];
@@ -360,6 +378,19 @@ namespace mapKnight.ToolKit.Controls {
                 image.RefRectangle = rect;
                 image.Update( );
             }
+        }
+
+        private void CommandEditorUndo_Executed (object sender, ExecutedRoutedEventArgs e) {
+            currentFrame.Bones = undoStack[currentAnimation][currentFrame].Pop( );
+
+            for (int i = 0; i < boneImages.Count; i++) {
+                Canvas.SetZIndex(boneImages[i], -i);
+                boneImages[i].DataContext = currentFrame.Bones[i];
+            }
+        }
+
+        private void CommandEditorUndo_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = currentAnimation != null && undoStack.ContainsKey(currentAnimation) && undoStack[currentAnimation].ContainsKey(currentFrame) && undoStack[currentAnimation][currentFrame].Count > 0;
         }
     }
 }
