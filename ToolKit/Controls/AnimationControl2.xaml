@@ -45,7 +45,7 @@
                         ValueChanged="slider_zoom_ValueChanged"/>
                 </DockPanel>
                 <Canvas DockPanel.Dock="Top" x:Name="canvas_frame" SizeChanged="canvas_frame_SizeChanged" Background="AliceBlue" Margin="3,0,0,3">
-                    <Border x:Name="border_rectangle_entity" BorderBrush="Black" BorderThickness="2">
+                    <Border x:Name="border_rectangle_entity" BorderBrush="Black" BorderThickness="2" Canvas.ZIndex="-100">
                         <Rectangle x:Name="rectangle_entity"/>
                     </Border>
                     <Grid Width="{Binding ActualWidth, ElementName=canvas_frame}" Height="{Binding ActualHeight, ElementName=canvas_frame}" Panel.ZIndex="-10000">
@@ -153,6 +153,7 @@
                         <HierarchicalDataTemplate DataType="{x:Type data:VertexAnimationFrame}">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
                                 <Image Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" Source="{StaticResource ResourceKey=image_animationcomponent_frame}"/>
+                                <TextBlock Text="{Binding Index, StringFormat={}Frame {0}}" Margin="3,0"/>
                                 <controls:IntegerTextbox Width="72" TextAlignment="Right" Text="{Binding Time}"/>
                                 <TextBlock>ms</TextBlock>
                             </StackPanel>

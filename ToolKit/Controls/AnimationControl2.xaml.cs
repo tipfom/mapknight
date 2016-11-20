@@ -48,6 +48,10 @@ namespace mapKnight.ToolKit.Controls {
             bones.CollectionChanged += Bones_CollectionChanged;
 
             BoneImage.BackupChanges += BoneImage_BackupChanges;
+
+            VertexAnimationFrame.GetIndex = (frame) => {
+                return animations.FirstOrDefault(anim => anim.Frames.Contains(frame))?.Frames.IndexOf(frame) ?? -1;
+            };
         }
 
         private void BoneImage_BackupChanges ( ) {
@@ -114,6 +118,9 @@ namespace mapKnight.ToolKit.Controls {
         private void CommandEditorDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (currentFrame != null) {
                 currentAnimation.Frames.Remove(currentFrame);
+                foreach (VertexAnimationFrame frame in currentAnimation.Frames)
+                    frame.OnPropertyChanged("Index");
+
                 currentFrame = null;
             } else if (currentAnimation != null) {
                 animations.Remove(currentAnimation);
