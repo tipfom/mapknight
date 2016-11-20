@@ -17,7 +17,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
     public partial class BoneImage : ContentControl {
         public static Dictionary<AnimationControl2, Dictionary<string, ImageData>> Data = new Dictionary<AnimationControl2, Dictionary<string, ImageData>>( );
         public static event Action BackupChanges;
-        private static event Action<BoneImage> FocusChanged;
+        public static event Action<BoneImage> FocusChanged;
         
         public Visibility ResizerVisibility { get; set; } = Visibility.Visible;
         public ImageData Image { get; set; }

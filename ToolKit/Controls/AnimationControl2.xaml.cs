@@ -48,10 +48,19 @@ namespace mapKnight.ToolKit.Controls {
             bones.CollectionChanged += Bones_CollectionChanged;
 
             BoneImage.BackupChanges += BoneImage_BackupChanges;
+            BoneImage.FocusChanged += BoneImage_FocusChanged;
 
             VertexAnimationFrame.GetIndex = (frame) => {
                 return animations.FirstOrDefault(anim => anim.Frames.Contains(frame))?.Frames.IndexOf(frame) ?? -1;
             };
+
+            
+        }
+
+        private void BoneImage_FocusChanged (BoneImage obj) {
+            if (boneImages.Contains(obj)) {
+                editBonesDialog.listbox_bones.SelectedIndex = currentFrame.Bones.IndexOf((VertexBone)obj.DataContext);
+            }
         }
 
         private void BoneImage_BackupChanges ( ) {
