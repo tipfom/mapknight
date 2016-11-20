@@ -295,6 +295,14 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void BonesChanged ( ) {
+            // to prevent crashing
+            try {
+                object animationView = contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+                (animationView as AnimationView)?.Stop( );
+            } catch {
+
+            }
+            
             currentAnimation = null;
             currentFrame = null;
 
@@ -312,8 +320,10 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
-            AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            animationView.Play(currentAnimation, (float)MetaData.Ratio, BoneImage.Data[this]);
+            if (BoneImage.Data.ContainsKey(this)) {
+                AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+                animationView.Play(currentAnimation, (float)MetaData.Ratio, BoneImage.Data[this]);
+            }
         }
 
         private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {
