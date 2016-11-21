@@ -13,12 +13,12 @@ namespace mapKnight.Extended.Components.Graphics {
         private SpriteAnimation[ ] animations;
         private string[] cache;
 
-        public delegate void AnimationSuccessCallback (bool success);
+        public delegate void AnimationCallback (bool success);
 
-        private AnimationSuccessCallback currentAnimationCallback;
+        private AnimationCallback currentAnimationCallback;
         private SpriteAnimation currentAnimation;
         private SpriteAnimation queuedAnimation;
-        private AnimationSuccessCallback queuedAnimationCallback;
+        private AnimationCallback queuedAnimationCallback;
 
         public SpriteComponent (Entity owner, SpriteAnimation[ ] animations, string texture) : base(owner) {
             this.animations = animations;
@@ -36,12 +36,12 @@ namespace mapKnight.Extended.Components.Graphics {
                     // force animation
                     currentAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
                     if (currentAnimation == null) currentAnimation = animations[0];
-                    currentAnimationCallback = (data.Length == 3) ? (AnimationSuccessCallback)data[2] : null;
+                    currentAnimationCallback = (data.Length == 3) ? (AnimationCallback)data[2] : null;
                     queuedAnimation = null;
                 } else {
                     // queue animation
                     queuedAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
-                    queuedAnimationCallback = (data.Length == 3) ? (AnimationSuccessCallback)data[2] : null;
+                    queuedAnimationCallback = (data.Length == 3) ? (AnimationCallback)data[2] : null;
                 }
                 currentAnimation.Reset( );
             }
