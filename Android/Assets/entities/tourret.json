@@ -78,7 +78,7 @@
             "$type": "AI.Trigger",
             "TriggerZone": {
                 "X": 16,
-                "Y": 0.15
+                "Y": 0.4
             },
             "Offset": 0.365
         },

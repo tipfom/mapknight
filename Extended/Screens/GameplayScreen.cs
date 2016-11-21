@@ -45,12 +45,13 @@ namespace mapKnight.Extended.Screens {
             begin = Environment.TickCount;
 
             //Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
-            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
+            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("plugger");
             Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
             Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
             //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
             Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
             Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
+            Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
 
             ////sawConfig.Create(new Vector2(3, 6), map);
 
@@ -66,6 +67,8 @@ namespace mapKnight.Extended.Screens {
             hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
 
             platformConfig.Create(map.SpawnPoint - new Vector2(0,5), map);
+
+            seplingConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
 
             Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
             testEntity = playerConfig.Create(map.SpawnPoint, map);

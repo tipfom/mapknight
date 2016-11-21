@@ -10,7 +10,7 @@
         },
         {
             "$type": "Stats.Speed",
-            "X": 6.35
+            "X": 1
         },
         {
             "$type": "Graphics.Animation",
@@ -23,10 +23,14 @@
                     "CanRepeat": true,
                     "Frames": [
                         {
-                            "Time": 400,
+                            "Time": 1000,
                             "State": [
                                 {
-                                    "Texture": "shell"
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         }
@@ -40,7 +44,11 @@
                             "Time": 100,
                             "State": [
                                 {
-                                    "Texture": "w1"
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         },
@@ -48,7 +56,11 @@
                             "Time": 100,
                             "State": [
                                 {
-                                    "Texture": "w2"
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         },
@@ -56,7 +68,227 @@
                             "Time": 100,
                             "State": [
                                 {
-                                    "Texture": "shell"
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         }
@@ -70,7 +302,11 @@
                             "Time": 100,
                             "State": [
                                 {
-                                    "Texture": "shell"
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         },
@@ -78,7 +314,11 @@
                             "Time": 100,
                             "State": [
                                 {
-                                    "Texture": "def"
+                                    "Texture": "def",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         },
@@ -86,7 +326,11 @@
                             "Time": 100,
                             "State": [
                                 {
-                                    "Texture": "atk"
+                                    "Texture": "atk",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         }
@@ -101,7 +345,11 @@
                             "State": [
                                 {
                                     "Texture": "atk",
-                                    "Rotation": -360
+                                    "Rotation": -360,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         },
@@ -110,7 +358,11 @@
                             "State": [
                                 {
                                     "Texture": "atk",
-                                    "Rotation": 360
+                                    "Rotation": 360,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         }
@@ -125,7 +377,11 @@
                             "State": [
                                 {
                                     "Texture": "atk",
-                                    "Rotation": 360
+                                    "Rotation": 360,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         },
@@ -134,7 +390,11 @@
                             "State": [
                                 {
                                     "Texture": "atk",
-                                    "Rotation": -360
+                                    "Rotation": 180,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
                                 }
                             ]
                         }
@@ -152,7 +412,8 @@
         },
         {
             "$type": "AI.Hastor",
-            "FrenzySpeedPercent": 0.07,
+            "FrenzySpeed": 0.4,
+            "AttackSpeed": 6.35,
             "StunDuration": 3000
         }
     ]

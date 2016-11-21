@@ -22,7 +22,7 @@ namespace mapKnight.Extended.Components.AI {
         public override void Collision (Entity collidingEntity) {
             if (!Exploding && collidingEntity.Info.IsPlayer) {
                 Exploding = true;
-                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "explode", true, (SpriteComponent.AnimationSuccessCallback)((bool success) => { Explode(collidingEntity); }));
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "explode", true, (SpriteComponent.AnimationCallback)((bool success) => { Explode(collidingEntity); }));
             }
         }
 

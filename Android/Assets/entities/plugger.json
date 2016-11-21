@@ -1,8 +1,8 @@
 ﻿{
-    "Name": "Weak Walking Trowie",
+    "Name": "Plugger",
     "Transform": {
-        "Width": 1.5,
-        "Height": 1.18085
+        "Width": 1.35,
+        "Height": 1
     },
     "Components": [
         {
@@ -10,16 +10,22 @@
         },
         {
             "$type": "Graphics.Sprite",
-            "Texture": "trowie",
+            "Texture": "plugger",
             "Animations": [
                 {
-                    "Name": "idle",
+                    "Name": "walk",
                     "CanRepeat": true,
                     "Frames": [
                         {
-                            "Time": 1000,
+                            "Time": 200,
                             "Bones": [
-                                "default"
+                                "walk0"
+                            ]
+                        },
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "walk1"
                             ]
                         }
                     ]
@@ -31,37 +37,13 @@
                         {
                             "Time": 100,
                             "Bones": [
-                                "default"
+                                "shot0"
                             ]
                         },
                         {
                             "Time": 200,
                             "Bones": [
-                                "throw"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Name": "walk",
-                    "CanRepeat": true,
-                    "Frames": [
-                        {
-                            "Time": 200,
-                            "Bones": [
-                                "default"
-                            ]
-                        },
-                        {
-                            "Time": 200,
-                            "Bones": [
-                                "walk_1"
-                            ]
-                        },
-                        {
-                            "Time": 200,
-                            "Bones": [
-                                "walk_2"
+                                "shot1"
                             ]
                         }
                     ]
@@ -87,7 +69,7 @@
             "$type": "AI.Trowie",
             "ThrowRate": 0.25,
             "Bullet": {
-                "Name": "Trowie Bullet",
+                "Name": "Pluggullet",
                 "Transform": {
                     "Width": 0.4,
                     "Height": 0.4
@@ -106,7 +88,7 @@
                     },
                     {
                         "$type": "Graphics.Texture",
-                        "Texture": "trowie_bullet"
+                        "Texture": "plugger_bullet"
                     },
                     {
                         "$type": "Graphics.Skelet",

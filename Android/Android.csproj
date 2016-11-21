@@ -101,7 +101,6 @@
     <AndroidAsset Include="Assets\entities\circularsaw.json" />
     <AndroidAsset Include="Assets\textures\saw.json" />
     <AndroidAsset Include="Assets\textures\s_trowie.json" />
-    <AndroidAsset Include="Assets\entities\walking_trowie.json" />
     <AndroidAsset Include="Assets\entities\tourret.json" />
     <AndroidAsset Include="Assets\entities\landmine.json" />
     <AndroidAsset Include="Assets\textures\landmine.json" />
@@ -110,8 +109,6 @@
     <AndroidAsset Include="Assets\textures\meatball.json" />
     <AndroidAsset Include="Assets\entities\hasto.json" />
     <AndroidAsset Include="Assets\textures\hasto.json" />
-    <AndroidAsset Include="Assets\textures\trowie.json" />
-    <AndroidAsset Include="Assets\textures\trowie_bullet.json" />
     <AndroidAsset Include="Assets\entities\player.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
     <AndroidAsset Include="Assets\maps\beatiful_map.map" />
@@ -120,6 +117,12 @@
     <AndroidAsset Include="Assets\entities\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\shell.json" />
+    <AndroidAsset Include="Assets\textures\plugger_bullet.json" />
+    <AndroidAsset Include="Assets\textures\plugger.json" />
+    <AndroidAsset Include="Assets\entities\plugger.json" />
+    <AndroidAsset Include="Assets\entities\sepling.json" />
+    <AndroidAsset Include="Assets\textures\sepling\bullet.json" />
+    <AndroidAsset Include="Assets\textures\sepling\body.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -182,12 +185,6 @@
     <AndroidAsset Include="Assets\textures\hasto.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\trowie.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\trowie_bullet.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\textures\player.png" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +209,18 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\shell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\plugger_bullet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\plugger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\sepling\bullet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\sepling\body.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

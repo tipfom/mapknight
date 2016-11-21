@@ -33,7 +33,7 @@ namespace mapKnight.Extended.Components.AI {
                 nextThrow = Environment.TickCount + timeBetweenThrows;
                 isThrowing = true;
                 currentTarget = entity;
-                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "throw", true, (SpriteComponent.AnimationSuccessCallback)ThrowAnimationFinishedCallback);
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "shot", true, (SpriteComponent.AnimationCallback)ThrowAnimationFinishedCallback);
                 Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", false);
             }
         }
