@@ -75,7 +75,7 @@
             }
         },
         {
-            "$type": "AI.Trigger",
+            "$type": "AI.Basics.Trigger",
             "TriggerZone": {
                 "X": 16,
                 "Y": 0.4

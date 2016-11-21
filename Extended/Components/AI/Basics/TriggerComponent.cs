@@ -1,7 +1,7 @@
 using System;
 using mapKnight.Core;
 
-namespace mapKnight.Extended.Components.AI {
+namespace mapKnight.Extended.Components.AI.Basics {
 
     public class TriggerComponent : Component {
         private static Entity.Configuration triggerEntityConfiguration;

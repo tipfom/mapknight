@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
-using mapKnight.Extended.Components.AI;
+using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Player;
 using mapKnight.Extended.Components.Stats;

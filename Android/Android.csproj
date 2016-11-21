@@ -107,7 +107,6 @@
     <AndroidAsset Include="Assets\textures\turret.json" />
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
     <AndroidAsset Include="Assets\textures\meatball.json" />
-    <AndroidAsset Include="Assets\entities\hasto.json" />
     <AndroidAsset Include="Assets\textures\hasto.json" />
     <AndroidAsset Include="Assets\entities\player.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
@@ -123,6 +122,7 @@
     <AndroidAsset Include="Assets\entities\sepling.json" />
     <AndroidAsset Include="Assets\textures\sepling\bullet.json" />
     <AndroidAsset Include="Assets\textures\sepling\body.json" />
+    <AndroidAsset Include="Assets\entities\shell.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>

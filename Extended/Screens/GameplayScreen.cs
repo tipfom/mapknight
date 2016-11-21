@@ -49,7 +49,7 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
             Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
             //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
-            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
+            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("shell");
             Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
             Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
 

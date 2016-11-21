@@ -4,6 +4,7 @@ using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Extended.Components.AI.Basics;
 
 namespace mapKnight.Extended.Components.AI {
     [UpdateBefore(typeof(MotionComponent))]

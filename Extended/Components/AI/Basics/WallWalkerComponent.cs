@@ -2,10 +2,10 @@
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Stats;
 
-namespace mapKnight.Extended.Components.AI {
+namespace mapKnight.Extended.Components.AI.Basics {
 
     [UpdateAfter(typeof(SpeedComponent))]
-    public class KlatrerComponent : Component {
+    public class WallWalkerComponent : Component {
         private Direction currentMoveDir;
         private Direction currentWallDir;
         private Direction nextMoveDir = Direction.Left;
@@ -13,7 +13,7 @@ namespace mapKnight.Extended.Components.AI {
         private SpeedComponent speedComponent;
         private float targetLoc;
 
-        public KlatrerComponent (Entity owner) : base(owner) {
+        public WallWalkerComponent (Entity owner) : base(owner) {
         }
 
         private enum Direction : sbyte {
@@ -149,7 +149,7 @@ namespace mapKnight.Extended.Components.AI {
         public new class Configuration : Component.Configuration {
 
             public override Component Create (Entity owner) {
-                return new KlatrerComponent(owner);
+                return new WallWalkerComponent(owner);
             }
         }
     }

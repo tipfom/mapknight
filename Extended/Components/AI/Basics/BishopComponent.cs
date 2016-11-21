@@ -6,18 +6,18 @@ using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 
-namespace mapKnight.Extended.Components.AI {
+namespace mapKnight.Extended.Components.AI.Basics {
 
     [UpdateBefore(typeof(MotionComponent))]
     [UpdateAfter(typeof(SpeedComponent))]
-    public class VentosaComponent : Component {
+    public class BishopComponent : Component {
         public readonly bool IsScaredToFall;
         private DamageComponent damageComponent;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private float speedMult = 1f;
 
-        public VentosaComponent (Entity owner, bool scaredtofall) : base(owner) {
+        public BishopComponent (Entity owner, bool scaredtofall) : base(owner) {
             IsScaredToFall = scaredtofall;
         }
 
@@ -57,7 +57,7 @@ namespace mapKnight.Extended.Components.AI {
             public bool IsScaredToFall;
 
             public override Component Create (Entity owner) {
-                return new VentosaComponent(owner, IsScaredToFall);
+                return new BishopComponent(owner, IsScaredToFall);
             }
         }
     }

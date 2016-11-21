@@ -1,12 +1,13 @@
 using System;
 using mapKnight.Core;
+using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI {
 
     [ComponentRequirement(typeof(TriggerComponent))]
-    public class TrowieComponent : Component {
+    public class PluggerComponent : Component {
         private BulletComponent.Configuration bulletComponentConfiguration;
         private Entity.Configuration bulletEntityConfiguration;
         private int nextThrow;
@@ -14,7 +15,7 @@ namespace mapKnight.Extended.Components.AI {
         private bool isThrowing;
         private Entity currentTarget;
 
-        public TrowieComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows) : base(owner) {
+        public PluggerComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows) : base(owner) {
             bulletEntityConfiguration = bullet;
             bulletComponentConfiguration = bulletEntityConfiguration.Components.GetConfiguration<BulletComponent.Configuration>( );
             timeBetweenThrows = timebetweenthrows;
@@ -51,7 +52,7 @@ namespace mapKnight.Extended.Components.AI {
             public float ThrowRate { get { return 1000f / TimeBetweenThrows; } set { TimeBetweenThrows = (int)(1f / value * 1000); } }
 
             public override Component Create (Entity owner) {
-                return new TrowieComponent(owner, Bullet, TimeBetweenThrows);
+                return new PluggerComponent(owner, Bullet, TimeBetweenThrows);
             }
         }
     }

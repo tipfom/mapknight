@@ -1,6 +1,7 @@
 using System;
 using System.Timers;
 using mapKnight.Core;
+using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
@@ -10,7 +11,7 @@ namespace mapKnight.Extended.Components.AI {
 
     [ComponentRequirement(typeof(SpeedComponent))]
     [ComponentRequirement(typeof(TriggerComponent))]
-    public class HastorComponent : Component {
+    public class ShellComponent : Component {
         private float frenzySpeed;
         private float attackSpeed;
         private bool hasting;
@@ -21,7 +22,7 @@ namespace mapKnight.Extended.Components.AI {
         private Entity target;
         private float walkpossibility = 1f;
 
-        public HastorComponent (Entity owner, float frenzyspeed, float attackspeed) : base(owner) {
+        public ShellComponent (Entity owner, float frenzyspeed, float attackspeed) : base(owner) {
             frenzySpeed = frenzyspeed;
             attackSpeed = attackspeed;
 
@@ -93,7 +94,7 @@ namespace mapKnight.Extended.Components.AI {
             public float AttackSpeed;
 
             public override Component Create (Entity owner) {
-                return new HastorComponent(owner, FrenzySpeed, AttackSpeed);
+                return new ShellComponent(owner, FrenzySpeed, AttackSpeed);
             }
         }
     }

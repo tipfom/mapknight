@@ -403,7 +403,7 @@
             ]
         },
         {
-            "$type": "AI.Trigger",
+            "$type": "AI.Basics.Trigger",
             "TriggerZone": {
                 "X": 18,
                 "Y": 0.5
@@ -411,7 +411,7 @@
             "Offset": 0
         },
         {
-            "$type": "AI.Hastor",
+            "$type": "AI.Shell",
             "FrenzySpeed": 0.4,
             "AttackSpeed": 6.35,
             "StunDuration": 3000
