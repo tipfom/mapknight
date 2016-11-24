@@ -8,9 +8,9 @@ namespace mapKnight.Extended.Components.AI {
     [ComponentRequirement(typeof(TriggerComponent))]
     public class TurretComponent : Component {
         public bool IsFacingLeft = true;
-        private BulletComponent.Configuration bulletComponentConfig;
         private Entity.Configuration bulletEntityConfig;
         private float bulletSpawnpointYPercent;
+        private float bulletSpeed;
         private int lockTime;
         private int nextShot;
         private int nextTurn;
@@ -19,13 +19,13 @@ namespace mapKnight.Extended.Components.AI {
         private int timeBetweenTurns;
         private Entity currentTarget;
 
-        public TurretComponent (Entity owner, Entity.Configuration bullet, int timebetweenshots, int timebetweenturns, int locktime, float bulletspawnpointypercent) : base(owner) {
+        public TurretComponent (Entity owner, Entity.Configuration bullet, int timebetweenshots, int timebetweenturns, int locktime, float bulletspawnpointypercent, float bulletspeed) : base(owner) {
             bulletEntityConfig = bullet;
-            bulletComponentConfig = bullet.Components.GetConfiguration<BulletComponent.Configuration>( );
             timeBetweenShots = timebetweenshots;
             timeBetweenTurns = timebetweenturns;
             lockTime = locktime;
             bulletSpawnpointYPercent = bulletspawnpointypercent;
+            bulletSpeed = bulletspeed;
         }
 
         public override void Prepare ( ) {
@@ -41,7 +41,7 @@ namespace mapKnight.Extended.Components.AI {
                 IsFacingLeft = !IsFacingLeft;
                 nextTurn += timeBetweenTurns;
             }
-            Owner.SetComponentInfo(ComponentData.ScaleX, IsFacingLeft ? 1f : -1f);
+            Owner.SetComponentInfo(ComponentData.ScaleX, IsFacingLeft ? -1f : 1f);
         }
 
         private void Trigger_Triggered (Entity entity) {
@@ -51,9 +51,8 @@ namespace mapKnight.Extended.Components.AI {
                 nextShot = Environment.TickCount + timeBetweenShots;
                 lockedTill = Environment.TickCount + lockTime;
                 nextTurn = lockedTill + timeBetweenTurns;
-                bulletComponentConfig.Target = entity;
                 Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X + (Owner.Transform.HalfSize.X + bulletEntityConfig.Transform.HalfSize.X) * (IsFacingLeft ? 1 : -1), Owner.Transform.BL.Y + Owner.Transform.Size.Y * bulletSpawnpointYPercent);
-                bulletEntityConfig.Create(spawnPoint, Owner.World);
+                bulletEntityConfig.Create(spawnPoint, Owner.World).GetComponent< Movement.MotionComponent>().AimedVelocity.X = (IsFacingLeft ? -1f : 1f) * bulletSpeed;
             }
         }
 
@@ -63,11 +62,10 @@ namespace mapKnight.Extended.Components.AI {
             public int LockOnTargetTime;
             public int TimeBetweenShots;
             public int TimeBetweenTurns;
-            public float FireRate { get { return 1000f / TimeBetweenShots; } set { TimeBetweenShots = (int)(1f / value * 1000); } }
-            public float TurnRate { get { return 1000f / TimeBetweenTurns; } set { TimeBetweenTurns = (int)(1f / value * 1000); } }
+            public float BulletSpeed;
 
             public override Component Create (Entity owner) {
-                return new TurretComponent(owner, Bullet, TimeBetweenShots, TimeBetweenTurns, LockOnTargetTime, BulletSpawnpointYPercent);
+                return new TurretComponent(owner, Bullet, TimeBetweenShots, TimeBetweenTurns, LockOnTargetTime, BulletSpawnpointYPercent, BulletSpeed);
             }
         }
     }

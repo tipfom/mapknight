@@ -32,7 +32,7 @@ namespace mapKnight.Extended.Components.Graphics {
 
             while (Owner.HasComponentInfo(ComponentData.SpriteAnimation)) {
                 object[ ] data = Owner.GetComponentInfo(ComponentData.SpriteAnimation);
-                if ((bool)data[1]) {
+                if ((bool)data[1] && currentAnimation.Name != (string)data[0]) {
                     // force animation
                     currentAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
                     if (currentAnimation == null) currentAnimation = animations[0];

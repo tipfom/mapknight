@@ -121,8 +121,8 @@
     <AndroidAsset Include="Assets\entities\plugger.json" />
     <AndroidAsset Include="Assets\entities\sepling.json" />
     <AndroidAsset Include="Assets\textures\sepling\bullet.json" />
-    <AndroidAsset Include="Assets\textures\sepling\body.json" />
     <AndroidAsset Include="Assets\entities\shell.json" />
+    <AndroidAsset Include="Assets\textures\sepling\body.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>

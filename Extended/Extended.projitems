@@ -17,10 +17,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\BishopComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\BulletComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SeplingComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\BulletComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\CircularSawComponent.cs">
       <SubType>Code</SubType>
     </Compile>

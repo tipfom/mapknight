@@ -68,7 +68,6 @@ namespace mapKnight.Extended.Components.Movement {
                 }
                 if (IsAtWall) {
                     enforcedVelocity.X = 0;
-                    AimedVelocity.X = 0;
                 }
             }
 

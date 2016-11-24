@@ -3,22 +3,23 @@ using mapKnight.Core;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
+using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Components.AI {
 
     [ComponentRequirement(typeof(TriggerComponent))]
     public class PluggerComponent : Component {
-        private BulletComponent.Configuration bulletComponentConfiguration;
         private Entity.Configuration bulletEntityConfiguration;
+        private float bulletSpeed;
         private int nextThrow;
         private int timeBetweenThrows;
         private bool isThrowing;
         private Entity currentTarget;
 
-        public PluggerComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows) : base(owner) {
+        public PluggerComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows, float bulletspeed) : base(owner) {
             bulletEntityConfiguration = bullet;
-            bulletComponentConfiguration = bulletEntityConfiguration.Components.GetConfiguration<BulletComponent.Configuration>( );
             timeBetweenThrows = timebetweenthrows;
+            bulletSpeed = bulletspeed;
         }
 
         public override void Prepare ( ) {
@@ -39,20 +40,32 @@ namespace mapKnight.Extended.Components.AI {
             }
         }
 
-        private void ThrowAnimationFinishedCallback(bool success) {
+        private void ThrowAnimationFinishedCallback (bool success) {
             isThrowing = false;
-            bulletComponentConfiguration.Target = currentTarget;
+
+            // calc velocity of the bullet to hit the player
+            float c = currentTarget.Transform.Center.Y - Owner.Transform.Center.Y; // distance y axis
+            float d = currentTarget.Transform.Center.X - Owner.Transform.Center.X; // distance x axis
+            if (float.IsNaN(c) || float.IsNaN(d)) {
+                return;
+            }
+
             Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X, Owner.Transform.TR.Y + bulletEntityConfiguration.Transform.HalfSize.Y);
-            bulletEntityConfiguration.Create(spawnPoint, Owner.World);
-       }
+            MotionComponent motionComponent = bulletEntityConfiguration.Create(spawnPoint, Owner.World).GetComponent<MotionComponent>( );
+
+            float t = Math.Abs(d) / bulletSpeed; // time
+            float vx = bulletSpeed * Math.Sign(d);
+            float vy = (c - 0.5f * Owner.World.Gravity.Y * motionComponent.GravityInfluence * t * t) / t;
+            motionComponent.AimedVelocity = new Vector2(vx, vy);
+        }
 
         public new class Configuration : Component.Configuration {
             public Entity.Configuration Bullet;
+            public float BulletSpeed;
             public int TimeBetweenThrows;
-            public float ThrowRate { get { return 1000f / TimeBetweenThrows; } set { TimeBetweenThrows = (int)(1f / value * 1000); } }
 
             public override Component Create (Entity owner) {
-                return new PluggerComponent(owner, Bullet, TimeBetweenThrows);
+                return new PluggerComponent(owner, Bullet, TimeBetweenThrows, BulletSpeed);
             }
         }
     }

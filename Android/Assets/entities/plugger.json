@@ -67,7 +67,8 @@
         },
         {
             "$type": "AI.Plugger",
-            "ThrowRate": 0.25,
+            "TimeBetweenThrows": 4000,
+												"BulletSpeed":  0.75,
             "Bullet": {
                 "Name": "Pluggullet",
                 "Transform": {
@@ -78,10 +79,6 @@
                     {
                         "$type": "Movement.Motion",
                         "GravityInfluence": 1
-                    },
-                    {
-                        "$type": "Stats.Speed",
-                        "X": 5
                     },
                     {
                         "$type": "AI.Bullet"
