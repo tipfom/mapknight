@@ -63,11 +63,10 @@ namespace mapKnight.ToolKit.Controls.Animation {
         private void MLGCanvas_PreviewMouseMove (object sender, MouseEventArgs e) {
             if (clickedBoneImage != null) {
                 Point newPosition = e.GetPosition(this);
-                Point delta = (e.GetPosition(this) - lastPosition).ToPoint( );
+                Point delta = new Point(newPosition.X - lastPosition.X, newPosition.Y - lastPosition.Y);
                 switch (clickState) {
                     case ClickedMouseButton.Left:
                         // move
-                        delta = clickedTransform.Transform(delta);
                         Canvas.SetLeft(clickedBoneImage, Canvas.GetLeft(clickedBoneImage) + delta.X);
                         Canvas.SetTop(clickedBoneImage, Canvas.GetTop(clickedBoneImage) + delta.Y);
                         lastPosition = newPosition;
