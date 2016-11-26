@@ -15,19 +15,28 @@ using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace mapKnight.ToolKit.Controls.Components.Animation {
     public partial class BoneImage : ContentControl {
+        public enum HitResult {
+            NoHit,
+            VisualChildHit,
+            Hit,
+        }
+
         public static Dictionary<AnimationControl2, Dictionary<string, ImageData>> Data = new Dictionary<AnimationControl2, Dictionary<string, ImageData>>( );
         public static event Action BackupChanges;
-        public static event Action<BoneImage> FocusChanged;
-        
+
+        private static readonly Effect MOVE_EFFECT = new DropShadowEffect( ) { Color = Colors.Cyan, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
+        private static readonly Effect ROTATE_EFFECT = new DropShadowEffect( ) { Color = Colors.Red, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
+
         public Visibility ResizerVisibility { get; set; } = Visibility.Visible;
         public ImageData Image { get; set; }
         public bool IsFlipped { set { if (value) image.RenderTransform = new ScaleTransform( ) { ScaleX = -1 }; else image.RenderTransform = new ScaleTransform( ) { ScaleX = 1 }; } }
         public float Rotation { get { return (float)((RotateTransform)RenderTransform).Angle; } set { ((RotateTransform)RenderTransform).Angle = value; } }
         public bool CanChangeRenderTransformOrigin { get { return rendertransformoriginthumb.Visibility == Visibility.Visible; } set { rendertransformoriginthumb.Visibility = value ? Visibility.Visible : Visibility.Hidden; } }
+        public bool AllowInput = false;
 
         public Rectangle RefRectangle { get; set; }
         public Border RefBorder { get; set; }
-        
+
         private AnimationControl2 animControl;
         private VertexBone dataContextBone;
 
@@ -35,52 +44,19 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             InitializeComponent( );
 
             // set references
-            movethumb.DataContext = this;
-            rotatethumb.DataContext = this;
             rendertransformoriginthumb.DataContext = this;
             image.DataContext = Image;
 
             // hook up events
             rendertransformoriginthumb.RenderTransformOriginChanged += BoneImage_RenderTransformOriginChanged;
 
-            rotatethumb.DragCompleted += Rotatethumb_DragCompleted;
-            movethumb.DragCompleted += Movethumb_DragCompleted;
-            
-            movethumb.DragStarted += Movethumb_DragStarted; 
-            rotatethumb.DragStarted += Rotatethumb_DragStarted; 
             rendertransformoriginthumb.DragStarted += Rendertransformoriginthumb_DragStarted;
 
             DataContextChanged += BoneImage_DataContextChanged;
-
-            FocusChanged += BoneImage_FocusChanged;
-        }
-
-        private void Movethumb_DragCompleted (object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
-            RecalculatePosition ( );
-        }
-
-        private void Rotatethumb_DragCompleted (object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e) {
-            dataContextBone.Rotation = Rotation;
         }
 
         private void Rendertransformoriginthumb_DragStarted (object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
             BackupChanges?.Invoke( );
-        }
-
-        private void Rotatethumb_DragStarted (object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
-            BackupChanges?.Invoke( );
-        }
-
-        private void Movethumb_DragStarted (object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
-            BackupChanges?.Invoke( );
-        }
-        
-        private void BoneImage_FocusChanged (BoneImage obj) {
-            if(obj == this) {
-                image.Effect = new DropShadowEffect( ) { Color = Colors.Cyan, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance};
-            } else {
-                image.Effect = null;
-            }
         }
 
         public BoneImage (AnimationControl2 animationcontrol) : this( ) {
@@ -92,12 +68,16 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             dataContextBone = (VertexBone)DataContext;
             Update( );
         }
-        
+
         private void BoneImage_RenderTransformOriginChanged (Point origin) {
             Image.TransformOrigin = origin;
         }
 
-        private void RecalculatePosition ( ) {
+        public void PositionOrRotationChangeBegan ( ) {
+            BackupChanges?.Invoke( );
+        }
+
+        public void PositionChangeCompleted ( ) {
             if (RefRectangle.Width == 0 || RefRectangle.Height == 0) return;
 
             Vector position = new Vector(
@@ -108,6 +88,10 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
             if (double.IsNaN(position.X) || double.IsNaN(position.Y)) return;
             dataContextBone.Position = new Vector2((float)position.X, (float)position.Y);
+        }
+
+        public void RotationChangeCompleted (double rotation) {
+            dataContextBone.Rotation = (float)rotation;
         }
 
         public static void LoadImage (string name, Stream imageStream, Stream dataStream, AnimationControl2 animationControl, bool leaveOpen) {
@@ -167,10 +151,6 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             }
         }
 
-        private void BoneImage_MouseDown (object sender, MouseButtonEventArgs e) {
-            FocusChanged?.Invoke(this);
-        }
-
         private void ApplyImage (string path) {
             LoadImage(path, animControl);
 
@@ -195,9 +175,44 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             }
         }
 
+        public void SetMoveEffect ( ) {
+            image.Effect = MOVE_EFFECT;
+        }
+
+        public void SetRotateEffect ( ) {
+            image.Effect = ROTATE_EFFECT;
+        }
+
+        public void SetNoEffect ( ) {
+            image.Effect = null;
+        }
+
         public class ImageData {
             public BitmapImage Image;
             public Point TransformOrigin;
+        }
+
+        public HitResult EvaluateHit (Point position) {
+            Point rendertransformoriginthumbposition = rendertransformoriginthumb.PointFromScreen(this.PointToScreen(position));
+            if (Math.Abs(rendertransformoriginthumbposition.X) < rendertransformoriginthumb.RenderSize.Width &&
+                Math.Abs(rendertransformoriginthumbposition.Y) < rendertransformoriginthumb.RenderSize.Height) return HitResult.VisualChildHit;
+
+            if (image.Source == null) return HitResult.NoHit;
+             var source = (BitmapSource)image.Source;
+
+            // Get the pixel of the source that was hit
+            double x = position.X / ActualWidth * source.PixelWidth;
+            double y = position.Y / ActualHeight * source.PixelHeight;
+
+            if (x < 0 || y < 0 || x >= source.PixelWidth || y >= source.PixelHeight) return HitResult.NoHit;
+
+            // Copy the single pixel into a new byte array representing RGBA
+            var pixel = new byte[4];
+            source.CopyPixels(new Int32Rect((int)Math.Floor(x), (int)Math.Floor(y), 1, 1), pixel, 4, 0);
+
+            // Check the alpha (transparency) of the pixel
+            // - threshold can be adjusted from 0 to 255
+            return pixel[3] > 10 ? HitResult.Hit : HitResult.NoHit;
         }
     }
 }

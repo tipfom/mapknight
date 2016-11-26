@@ -6,6 +6,7 @@
              xmlns:toolkit="clr-namespace:mapKnight.ToolKit"
              xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
              xmlns:content="clr-namespace:mapKnight.ToolKit.Controls.Components.Animation"
+             xmlns:realcontent ="clr-namespace:mapKnight.ToolKit.Controls.Animation"
              xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -44,14 +45,15 @@
                     <Slider x:Name="slider_zoom" DockPanel.Dock="Right" Orientation="Horizontal" Minimum="0" Maximum="6" Value="0" IsSnapToTickEnabled="True"
                         ValueChanged="slider_zoom_ValueChanged"/>
                 </DockPanel>
-                <Canvas DockPanel.Dock="Top" x:Name="canvas_frame" SizeChanged="canvas_frame_SizeChanged" Background="AliceBlue" Margin="3,0,0,3">
+                <realcontent:MLGCanvas DockPanel.Dock="Top" x:Name="canvas_frame" ClipToBounds="True" Background="AliceBlue" Margin="3,0,0,3"
+                        SizeChanged="canvas_frame_SizeChanged">
                     <Border x:Name="border_rectangle_entity" BorderBrush="Black" BorderThickness="2" Canvas.ZIndex="-100">
                         <Rectangle x:Name="rectangle_entity"/>
                     </Border>
                     <Grid Width="{Binding ActualWidth, ElementName=canvas_frame}" Height="{Binding ActualHeight, ElementName=canvas_frame}" Panel.ZIndex="-10000">
                         <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="{StaticResource ResourceKey=image_animationcomponent_directionarrow}" Width="100" Height="100"/>
                     </Grid>
-                </Canvas>
+                </realcontent:MLGCanvas>
             </DockPanel>
         </DataTemplate>
         <DataTemplate x:Key="none">

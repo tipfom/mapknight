@@ -6,16 +6,12 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit.Controls.Components.Animation"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" RenderTransformOrigin="0.5,0.5" MinWidth="1" MinHeight="1" AllowDrop="True"
-                DragEnter="BoneImage_DragEnter" Drop="BoneImage_Drop" MouseDown="BoneImage_MouseDown" PreviewMouseDown="BoneImage_MouseDown">
+             DragEnter="BoneImage_DragEnter" Drop="BoneImage_Drop">
     <ContentControl.RenderTransform>
         <RotateTransform/>
     </ContentControl.RenderTransform>
     <Grid x:Name="gridtest">
-        <local:MoveThumb x:Name="movethumb" Cursor="SizeAll" Opacity="0"/>
-        <local:RotateThumb x:Name="rotatethumb" Cursor="Hand" Width="10" Height="10" VerticalAlignment="Top" Margin="0,-15,0,0"/>
-        <Border BorderBrush="Black" BorderThickness="1">
-            <Image Name="image" Stretch="Fill" RenderTransformOrigin="0.5,0.5" RenderOptions.BitmapScalingMode="NearestNeighbor" IsHitTestVisible="False"/>
-        </Border>
+        <Image x:Name="image" Stretch="Fill" RenderTransformOrigin="0.5,0.5" RenderOptions.BitmapScalingMode="NearestNeighbor" IsHitTestVisible="True"/>
         <local:MoveableRenderTransformOrigin x:Name="rendertransformoriginthumb" Width="10" Height="10" Cursor="Hand" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </ContentControl>

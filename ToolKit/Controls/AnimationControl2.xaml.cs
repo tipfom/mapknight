@@ -15,6 +15,8 @@ using Newtonsoft.Json;
 using Path = System.IO.Path;
 using mapKnight.ToolKit.Serializer;
 using System.Collections.Specialized;
+using System.Windows.Media;
+using mapKnight.ToolKit.Controls.Animation;
 
 namespace mapKnight.ToolKit.Controls {
     public partial class AnimationControl2 : UserControl {
@@ -48,16 +50,15 @@ namespace mapKnight.ToolKit.Controls {
             bones.CollectionChanged += Bones_CollectionChanged;
 
             BoneImage.BackupChanges += BoneImage_BackupChanges;
-            BoneImage.FocusChanged += BoneImage_FocusChanged;
+
+            MLGCanvas.SelectedBoneImageChanged += MLGCanvas_SelectedBoneImageChanged;
 
             VertexAnimationFrame.GetIndex = (frame) => {
                 return animations.FirstOrDefault(anim => anim.Frames.Contains(frame))?.Frames.IndexOf(frame) ?? -1;
             };
-
-            
         }
 
-        private void BoneImage_FocusChanged (BoneImage obj) {
+        private void MLGCanvas_SelectedBoneImageChanged (BoneImage obj) {
             if (boneImages.Contains(obj)) {
                 editBonesDialog.listbox_bones.SelectedIndex = currentFrame.Bones.IndexOf((VertexBone)obj.DataContext);
             }

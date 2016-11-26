@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Animation\MLGCanvas.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Controls\AnimationControl2.xaml.cs">
       <DependentUpon>AnimationControl2.xaml</DependentUpon>
@@ -102,12 +103,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\Animation\AnimationView.cs" />
-    <Compile Include="Controls\Animation\MoveThumb.cs" />
     <Compile Include="Controls\Animation\BoneImage.xaml.cs">
       <DependentUpon>BoneImage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Animation\ResizeThumb.cs" />
-    <Compile Include="Controls\Animation\RotateThumb.cs" />
     <Compile Include="Windows\Dialogs\AddMapDialog.xaml.cs">
       <DependentUpon>AddMapDialog.xaml</DependentUpon>
     </Compile>
