@@ -7,16 +7,20 @@ namespace mapKnight.ToolKit.Windows {
     /// Interaktionslogik für AboutWindow.xaml
     /// </summary>
     public partial class AboutWindow : Window {
-        Version supportingVersion = new Version(2, 1, 106);
-
         public AboutWindow ( ) {
             this.Owner = App.Current.MainWindow;
             InitializeComponent( );
         }
 
         private void Window_Loaded (object sender, RoutedEventArgs e) {
-            label_version.Text += " " + Assembly.GetExecutingAssembly( ).GetName( ).Version.ToString(3);
-            label_mkversion.Text += " " + supportingVersion.ToString(3);
+            Version version = Assembly.GetExecutingAssembly( ).GetName( ).Version;
+            label_version.Text += " " + version.ToString(3) + " built on " + new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2) +
+#if DEBUG
+                " - Debug"
+#else
+                " - Release"
+#endif
+                ;
         }
     }
 }
