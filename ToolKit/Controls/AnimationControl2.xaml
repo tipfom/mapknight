@@ -45,7 +45,7 @@
                     <Slider x:Name="slider_zoom" DockPanel.Dock="Right" Orientation="Horizontal" Minimum="0" Maximum="6" Value="0" IsSnapToTickEnabled="True"
                         ValueChanged="slider_zoom_ValueChanged"/>
                 </DockPanel>
-                <realcontent:MLGCanvas DockPanel.Dock="Top" x:Name="canvas_frame" ClipToBounds="True" Background="AliceBlue" Margin="3,0,0,3"
+                <realcontent:MLGCanvas DockPanel.Dock="Top" x:Name="canvas_frame" ClipToBounds="True" Margin="3,0,0,3"
                         SizeChanged="canvas_frame_SizeChanged">
                     <Border x:Name="border_rectangle_entity" BorderBrush="Black" BorderThickness="2" Canvas.ZIndex="-100">
                         <Rectangle x:Name="rectangle_entity"/>
