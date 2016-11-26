@@ -164,7 +164,7 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="White"/>
         <ContentPresenter x:Name="contentpresenter" ContentTemplate="{StaticResource none}" Grid.Column="2"/>
     </Grid>
 </UserControl>
