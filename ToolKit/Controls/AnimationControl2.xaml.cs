@@ -398,9 +398,10 @@ namespace mapKnight.ToolKit.Controls {
                 rect.Width = canvas.RenderSize.Width * ultrascale;
                 rect.Height = canvas.RenderSize.Width / MetaData.Ratio * ultrascale;
             }
-
-            Canvas.SetLeft(border, (canvas.RenderSize.Width - rect.Width) / 2d);
-            Canvas.SetTop(border, (canvas.RenderSize.Height - rect.Height) / 2d);
+            rect.Height -= border.BorderThickness.Bottom + border.BorderThickness.Top;
+            rect.Width -= border.BorderThickness.Left + border.BorderThickness.Right;
+            Canvas.SetLeft(border, (canvas.RenderSize.Width - rect.Width - (border.BorderThickness.Bottom + border.BorderThickness.Top)) / 2d);
+            Canvas.SetTop(border, (canvas.RenderSize.Height - rect.Height - (border.BorderThickness.Left + border.BorderThickness.Right)) / 2d);
 
             foreach (BoneImage image in boneImages) {
                 image.RefBorder = border;
