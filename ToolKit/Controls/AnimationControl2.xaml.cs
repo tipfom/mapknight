@@ -110,7 +110,7 @@ namespace mapKnight.ToolKit.Controls {
 
         private void CommandEditorDelete_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             if (currentFrame != null) {
-                e.CanExecute = currentAnimation.Frames.Count > 1;
+                e.CanExecute = currentAnimation != null && currentAnimation.Frames.Count > 1;
             } else if (currentAnimation != null) {
                 e.CanExecute = animations.Count > 1;
             }
@@ -145,6 +145,8 @@ namespace mapKnight.ToolKit.Controls {
         private void CommandEditorDown_Executed (object sender, ExecutedRoutedEventArgs e) {
             int index = currentAnimation.Frames.IndexOf(currentFrame);
             currentAnimation.Frames.Move(index, index + 1);
+            foreach (VertexAnimationFrame frame in currentAnimation.Frames)
+                frame.OnPropertyChanged("Index");
         }
 
         private void CommandEditorNew_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
