@@ -11,7 +11,7 @@
         <RotateTransform/>
     </ContentControl.RenderTransform>
     <Grid x:Name="gridtest">
-        <Image x:Name="image" Stretch="Fill" RenderTransformOrigin="0.5,0.5" RenderOptions.BitmapScalingMode="NearestNeighbor" IsHitTestVisible="True"/>
+        <Image x:Name="image" Stretch="Fill" RenderOptions.BitmapScalingMode="NearestNeighbor" IsHitTestVisible="True"/>
         <local:MoveableRenderTransformOrigin x:Name="rendertransformoriginthumb" Width="10" Height="10" Cursor="Hand" VerticalAlignment="Top" HorizontalAlignment="Left"/>
     </Grid>
 </ContentControl>

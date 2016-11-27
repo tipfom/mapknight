@@ -26,6 +26,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         private static readonly Effect MOVE_EFFECT = new DropShadowEffect( ) { Color = Colors.Cyan, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
         private static readonly Effect ROTATE_EFFECT = new DropShadowEffect( ) { Color = Colors.Red, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
+        private static readonly Effect NONE_EFFECT = new DropShadowEffect( ) { Color = Colors.White, ShadowDepth = 0, Opacity = 0, BlurRadius = 0, RenderingBias = RenderingBias.Performance };
 
         public Visibility ResizerVisibility { get; set; } = Visibility.Visible;
         public ImageData Image { get; set; }
@@ -42,6 +43,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         private BoneImage ( ) {
             InitializeComponent( );
+
+            image.Effect = NONE_EFFECT;
 
             // set references
             rendertransformoriginthumb.DataContext = this;
@@ -184,7 +187,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         }
 
         public void SetNoEffect ( ) {
-            image.Effect = null;
+            image.Effect = NONE_EFFECT;
         }
 
         public class ImageData {
