@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:mapKnight.ToolKit"
         xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
-        Title="Edit" SizeToContent="Width" WindowStyle="ToolWindow" Height="300" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize"
+        Title="Bones" SizeToContent="Width" WindowStyle="ToolWindow" Height="300" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize"
         Topmost="{Binding Source={x:Static Application.Current},Path=MainWindow.IsActive,Mode=OneWay}">
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="CommandNew_CanExecute" Executed="CommandNew_Executed"/>
