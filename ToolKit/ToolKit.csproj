@@ -352,13 +352,13 @@
     <Resource Include="Resources\Images\plus_2_math-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\settings-48.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\original_size-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\icon.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
