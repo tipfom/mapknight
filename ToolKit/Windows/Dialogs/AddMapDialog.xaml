@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit"
         mc:Ignorable="d"
-        Title="Create Map" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize">
+        Title="Create Map" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize" ShowInTaskbar="False">
     <StackPanel>
         <Grid Margin="5,5,5,5">
             <Label Content="Name" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>

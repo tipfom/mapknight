@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit"
         mc:Ignorable="d"
-        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize">
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize" ShowInTaskbar="False">
     <StackPanel>
         <Image x:Name="image_tile" Margin="10,10,10,0" Width="200" Height="200" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
         <TextBox x:Name="textbox_name" Margin="10,10,10,10" Text="NAME"/>
