@@ -17,3 +17,5 @@ TestResults/*
 
 mapKnight.userprefs
 *.bak
+
+!assoc.exe

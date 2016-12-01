@@ -15,6 +15,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
             None,
             Left,
             Right,
+            Middle,
         }
 
         public static event Action<BoneImage> SelectedBoneImageChanged;
@@ -117,7 +118,10 @@ namespace mapKnight.ToolKit.Controls.Animation {
                         initialAngle = clickedTransform.Angle;
                         clickedBoneImage.SetRotateEffect( );
                         clickedBoneImage.PositionOrRotationChangeBegan( );
-                    } else {
+                    } else if(e.MiddleButton == MouseButtonState.Pressed) {
+                        // FLIPP
+                    }
+                    else {
                         clickState = ClickedMouseButton.None;
                     }
                     return;

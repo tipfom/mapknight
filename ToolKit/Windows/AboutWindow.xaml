@@ -9,5 +9,15 @@
     <StackPanel Margin="10">
         <TextBlock Margin="0,0,0,5" Text="Pluto Alpha made by Central Potato Unit Studios"/>
         <TextBlock Margin="0" x:Name="label_version" Text="Version"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Margin="5" Content="Link"
+                    Click="ButtonLink_Click"/>
+            <Button Grid.Column="1" Margin="5" Content="Unlink"
+                    Click="ButtonUnlink_Click"/>
+        </Grid>
     </StackPanel>
 </Window>

@@ -403,6 +403,9 @@
   <ItemGroup>
     <Resource Include="Resources\Images\checkmark-48.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\assoc.exe" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

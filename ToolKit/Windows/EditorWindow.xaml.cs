@@ -103,7 +103,13 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void Window_Loaded (object sender, RoutedEventArgs e) {
-            project = new Project( );
+            if(App.StartupFile != null && Path.GetExtension(App.StartupFile) == ".mkproj" && File.Exists(App.StartupFile)) {
+                project = new Project(App.StartupFile);
+                mapeditor.Load(project);
+                animationeditor.Load(project);
+            } else {
+                project = new Project( );
+            }
         }
 
         private void About_Click (object sender, RoutedEventArgs e) {

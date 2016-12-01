@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 
@@ -7,6 +9,8 @@ namespace mapKnight.ToolKit.Windows {
     /// Interaktionslogik für AboutWindow.xaml
     /// </summary>
     public partial class AboutWindow : Window {
+        private Stream A;
+
         public AboutWindow ( ) {
             this.Owner = App.Current.MainWindow;
             InitializeComponent( );
@@ -21,6 +25,24 @@ namespace mapKnight.ToolKit.Windows {
                 " - Release"
 #endif
                 ;
+        }
+
+        private void ButtonLink_Click (object sender, RoutedEventArgs e) {
+            RunAssoc($"-a .mkproj \"{Assembly.GetExecutingAssembly( ).Location}\" toolkit -d \"MapKnight Project\" -i \"{Assembly.GetExecutingAssembly( ).Location}\"");
+        }
+
+        private void ButtonUnlink_Click (object sender, RoutedEventArgs e) {
+            RunAssoc($"-r .mkproj toolkit");
+        }
+
+        private void RunAssoc (string args) {
+            string path = Path.ChangeExtension(Path.GetTempFileName( ), "exe");
+            using (Stream stream = Assembly.GetExecutingAssembly( ).GetManifestResourceStream("mapKnight.ToolKit.Resources.assoc.exe")) {
+                byte[ ] bytes = new byte[(int)stream.Length];
+                stream.Read(bytes, 0, bytes.Length);
+                File.WriteAllBytes(path, bytes);
+            }
+            Process.Start(path, args);
         }
     }
 }
