@@ -58,22 +58,18 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
 
         private void thumb_left_DragDelta (object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
             Canvas.SetLeft(thumb_left, Math.Max(0, Math.Min(canvas.ActualWidth, Canvas.GetLeft(thumb_left) + e.HorizontalChange)));
-            App.Current.MainWindow.Title = Canvas.GetLeft(thumb_left) + " " + Canvas.GetLeft(rectangle_entity);
         }
 
         private void thumb_top_DragDelta (object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
             Canvas.SetTop(thumb_top, Math.Max(0, Math.Min(canvas.ActualHeight, Canvas.GetTop(thumb_top) + e.VerticalChange)));
-            App.Current.MainWindow.Title = Canvas.GetTop(thumb_top) + " " + Canvas.GetTop(rectangle_entity);
         }
 
         private void thumb_right_DragDelta (object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
             Canvas.SetLeft(thumb_right, Math.Max(0, Math.Min(canvas.ActualWidth, Canvas.GetLeft(thumb_right) + e.HorizontalChange)));
-            App.Current.MainWindow.Title = Canvas.GetLeft(thumb_right) + " " + (Canvas.GetLeft(rectangle_entity) + rectangle_entity.Width);
         }
 
         private void thumb_bottom_DragDelta (object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e) {
             Canvas.SetTop(thumb_bottom, Math.Max(0, Math.Min(canvas.ActualHeight, Canvas.GetTop(thumb_bottom) + e.VerticalChange)));
-            App.Current.MainWindow.Title = Canvas.GetTop(thumb_bottom) + " " + (Canvas.GetTop(rectangle_entity) + rectangle_entity.Height);
         }
 
         private void Image_MouseDown (object sender, System.Windows.Input.MouseButtonEventArgs e) {
