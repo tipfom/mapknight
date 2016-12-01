@@ -37,8 +37,12 @@ namespace mapKnight.ToolKit.Controls {
             treeview_animations.DataContext = animations;
 
             // init menu
-            Button settingButton = new Button( ) { Command = CustomCommands.Settings, Content = new Image( ) { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_settings"), Style = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Property = Button.IsEnabledProperty, Value = false, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } } } };
+            Style imageStyle = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Property = Button.IsEnabledProperty, Value = false, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } };
+            Button settingButton = new Button( ) { Command = CustomCommands.Settings, Content = new Image( ) { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_settings"), Style = imageStyle } };
             menu.Add(settingButton);
+            Button scissorButton = new Button( ) { Content = new Image( ) { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_scissors"), Style = imageStyle } };
+            scissorButton.Click += ScissorButton_Click;
+            menu.Add(scissorButton);
 
             // init editbonesdialog
             editBonesDialog = new EditBonesDialog(bones);
@@ -56,6 +60,38 @@ namespace mapKnight.ToolKit.Controls {
             VertexAnimationFrame.GetIndex = (frame) => {
                 return animations.FirstOrDefault(anim => anim.Frames.Contains(frame))?.Frames.IndexOf(frame) ?? -1;
             };
+        }
+
+        private void ScissorButton_Click (object sender, RoutedEventArgs e) {
+            ResizeEntityDialog dialog = new ResizeEntityDialog(MetaData.Ratio, currentFrame?.Bones ?? bones, this);
+            if (dialog.ShowDialog( ) ?? false) {
+                double centerShiftXReal = 0.5d + dialog.TrimRight - (1 + dialog.TrimLeft + dialog.TrimRight) / 2d;
+                double centerShiftYReal = 0.5d + dialog.TrimTop - (1 + dialog.TrimTop + dialog.TrimBottom) / 2d;
+                double scaleX = (1 + dialog.TrimLeft + dialog.TrimRight);
+                double scaleY = (1 + dialog.TrimTop + dialog.TrimBottom);
+                // double centerShiftXAbs = centerShiftXReal * scaleX;
+                // double centerShiftYAbs = centerShiftYReal * MetaData.Ratio / scaleY;
+                MessageBox.Show($"L:{dialog.TrimLeft}\nR:{dialog.TrimRight}\nT:{dialog.TrimTop}\nB:{dialog.TrimBottom}\nXR:{centerShiftXReal}\nYR:{centerShiftYReal}\nXA:{/*centerShiftXAbs*/0}\nYA:{/*centerShiftYAbs*/0}SX:{scaleX}\nSY:{scaleY}");
+
+                foreach (VertexBone bone in bones) {
+                    bone.Position = new Core.Vector2(
+                        (float)((bone.Position.X - centerShiftXReal) * scaleX),
+                        (float)((bone.Position.Y - centerShiftYReal) / scaleY));
+                    bone.Scale /= (float)(scaleX);
+                }
+                foreach (VertexAnimation animation in animations) {
+                    foreach (VertexAnimationFrame frame in animation.Frames) {
+                        foreach (VertexBone bone in frame.Bones) {
+                            bone.Position = new Core.Vector2(
+                                (float)((bone.Position.X - centerShiftXReal) * scaleX),
+                                (float)((bone.Position.Y - centerShiftYReal) / scaleY));
+                            bone.Scale /= (float)(scaleX);
+                        }
+                    }
+                }
+                MetaData.Ratio *= scaleX / scaleY;
+                ResetEditor( );
+            }
         }
 
         private void MLGCanvas_SelectedBoneImageChanged (BoneImage obj) {
@@ -314,7 +350,7 @@ namespace mapKnight.ToolKit.Controls {
             } catch {
 
             }
-            
+
             currentAnimation = null;
             currentFrame = null;
 

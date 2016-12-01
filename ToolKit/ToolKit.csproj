@@ -133,6 +133,9 @@
     <Compile Include="Windows\Dialogs\EditBonesDialog.xaml.cs">
       <DependentUpon>EditBonesDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Dialogs\ResizeEntityDialog.xaml.cs">
+      <DependentUpon>ResizeEntityDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
@@ -212,6 +215,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Dialogs\EditBonesDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Dialogs\ResizeEntityDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -359,6 +366,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 und x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\scissors-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\checkmark-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
