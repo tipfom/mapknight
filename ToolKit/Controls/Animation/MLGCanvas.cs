@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using mapKnight.ToolKit.Controls.Components.Animation;
 
 namespace mapKnight.ToolKit.Controls.Animation {
     public class MLGCanvas : Canvas {

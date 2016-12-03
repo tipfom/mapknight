@@ -27,7 +27,7 @@ namespace mapKnight.ToolKit.Editor {
 
         public event Action MenuChanged;
 
-        private ObservableCollection<AnimationControl2> animationControls { get; set; } = new ObservableCollection<AnimationControl2>( );
+        private ObservableCollection<AnimationControl> animationControls { get; set; } = new ObservableCollection<AnimationControl>( );
         private ObservableCollection<string> animationControlStrings { get; set; } = new ObservableCollection<string>( );
 
         public AnimationEditor ( ) {
@@ -42,7 +42,7 @@ namespace mapKnight.ToolKit.Editor {
             AddAnimationWindow dialog = new AddAnimationWindow( );
             if (dialog.ShowDialog( ) ?? false) {
                 if (!animationControls.Any(item => item.MetaData.Entity == dialog.textbox_name.Text)) {
-                    animationControls.Add(new AnimationControl2(dialog.Ratio, dialog.textbox_name.Text));
+                    animationControls.Add(new AnimationControl(dialog.Ratio, dialog.textbox_name.Text));
                     animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
                     ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;
                 } else {
@@ -58,7 +58,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         public void Save (Project project) {
-            foreach (AnimationControl2 animcontrol in animationControls)
+            foreach (AnimationControl animcontrol in animationControls)
                 animcontrol.Save(project);
         }
 
@@ -66,7 +66,7 @@ namespace mapKnight.ToolKit.Editor {
             Clear( );
             foreach (string animationdirectory in project.GetAllEntries("animations")) {
                 if (Path.GetFileName(animationdirectory) == ".meta") {
-                    animationControls.Add(new AnimationControl2(project, Path.GetDirectoryName(animationdirectory)));
+                    animationControls.Add(new AnimationControl(project, Path.GetDirectoryName(animationdirectory)));
                     animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
                 }
             }
@@ -79,7 +79,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         public void Compile (string animationpath) {
-            foreach (AnimationControl2 animcontrol in animationControls)
+            foreach (AnimationControl animcontrol in animationControls)
                 animcontrol.Compile(animationpath);
         }
     }

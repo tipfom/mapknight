@@ -13,7 +13,7 @@ using mapKnight.ToolKit.Data;
 using Newtonsoft.Json;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
-namespace mapKnight.ToolKit.Controls.Components.Animation {
+namespace mapKnight.ToolKit.Controls.Animation {
     public partial class BoneImage : ContentControl {
         public enum HitResult {
             NoHit,
@@ -21,7 +21,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             Hit,
         }
 
-        public static Dictionary<AnimationControl2, Dictionary<string, ImageData>> Data = new Dictionary<AnimationControl2, Dictionary<string, ImageData>>( );
+        public static Dictionary<AnimationControl, Dictionary<string, ImageData>> Data = new Dictionary<AnimationControl, Dictionary<string, ImageData>>( );
         public static event Action BackupChanges;
         public static event Action DumpChanges;
 
@@ -38,7 +38,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         public Rectangle RefRectangle { get; set; }
 
-        private AnimationControl2 animControl;
+        private AnimationControl animControl;
         private VertexBone dataContextBone;
 
         private BoneImage ( ) {
@@ -62,7 +62,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             BackupChanges?.Invoke( );
         }
 
-        public BoneImage (AnimationControl2 animationcontrol) : this( ) {
+        public BoneImage (AnimationControl animationcontrol) : this( ) {
             if (!Data.ContainsKey(animationcontrol)) Data.Add(animationcontrol, new Dictionary<string, ImageData>( ));
             animControl = animationcontrol;
         }
@@ -99,7 +99,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             dataContextBone.Rotation = (float)rotation;
         }
 
-        public static void LoadImage (string name, Stream imageStream, Stream dataStream, AnimationControl2 animationControl, bool leaveOpen) {
+        public static void LoadImage (string name, Stream imageStream, Stream dataStream, AnimationControl animationControl, bool leaveOpen) {
             BitmapImage image = new BitmapImage( );
             image.BeginInit( );
             image.StreamSource = imageStream;
@@ -166,7 +166,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             RenderTransformOrigin = Image.TransformOrigin;
         }
 
-        public static void LoadImage (string path, AnimationControl2 animControl) {
+        public static void LoadImage (string path, AnimationControl animControl) {
             string name = Path.GetFileNameWithoutExtension(path);
             if (!Data.ContainsKey(animControl)) Data.Add(animControl, new Dictionary<string, ImageData>( ));
             if (!Data[animControl].ContainsKey(name)) {

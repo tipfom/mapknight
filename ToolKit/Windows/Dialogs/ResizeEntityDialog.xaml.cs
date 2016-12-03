@@ -6,9 +6,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using mapKnight.ToolKit.Controls;
-using mapKnight.ToolKit.Controls.Components.Animation;
+using mapKnight.ToolKit.Controls.Animation;
 using mapKnight.ToolKit.Data;
-using static mapKnight.ToolKit.Controls.Components.Animation.BoneImage;
+using static mapKnight.ToolKit.Controls.Animation.BoneImage;
 
 namespace mapKnight.ToolKit.Windows.Dialogs {
     /// <summary>
@@ -21,7 +21,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             InitializeComponent( );
         }
 
-        public ResizeEntityDialog (double ratio, IList<VertexBone> bones, AnimationControl2 parent) : this( ) {
+        public ResizeEntityDialog (double ratio, IList<VertexBone> bones, AnimationControl parent) : this( ) {
             if (ratio < 1) {
                 // height > width
                 rectangle_entity.Height = canvas.Height / 2d;

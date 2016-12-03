@@ -10,7 +10,7 @@ using Vector2 = mapKnight.Core.Vector2;
 using Microsoft.Xna.Framework.Graphics;
 using mapKnight.ToolKit.Data;
 
-namespace mapKnight.ToolKit.Controls.Components.Animation {
+namespace mapKnight.ToolKit.Controls.Animation {
     public class AnimationView : XnaControl {
         private DispatcherTimer renderTimer = new DispatcherTimer( ) { Interval = new TimeSpan(0,0,0,0,15), IsEnabled = false };
         private VertexAnimation currentAnimation;

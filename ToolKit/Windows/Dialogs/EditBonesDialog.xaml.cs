@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using mapKnight.ToolKit.Controls.Components.Animation;
 using mapKnight.ToolKit.Data;
 using Microsoft.Win32;
 

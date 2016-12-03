@@ -8,7 +8,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace mapKnight.ToolKit.Controls.Components.Animation {
+namespace mapKnight.ToolKit.Controls.Animation {
     public class MoveableRenderTransformOrigin : Thumb {
         public event Action<Point> RenderTransformOriginChanged;
 

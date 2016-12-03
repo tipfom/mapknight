@@ -1,345 +1,196 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using mapKnight.ToolKit.Data;
-using mapKnight.ToolKit.Controls.Components.Animation;
+using mapKnight.ToolKit.Windows.Dialogs;
 using Newtonsoft.Json;
-using Size = System.Windows.Size;
-using mapKnight.Core;
+using Path = System.IO.Path;
+using mapKnight.ToolKit.Serializer;
+using mapKnight.ToolKit.Controls.Animation;
 
-namespace mapKnight.ToolKit.Controls.Components.Graphics {
-
-    /// <summary>
-    /// Interaktionslogik für AnimationControl.xaml
-    /// </summary>
+namespace mapKnight.ToolKit.Controls {
     public partial class AnimationControl : UserControl {
-        public readonly string EntityName;
-        private static double[ ] greaterSizeEditorUsePercent = { 1d, 0.75f, 0.5d };
+        private static readonly double[ ] scales = { 1d, 0.9d, 0.8d, 0.7d, 0.6d, 0.5d, 0.4d };
 
-        private Dictionary<string, VertexBone> _Bones = new Dictionary<string, VertexBone>( );
-        private Dictionary<string, BitmapImage> _Images = new Dictionary<string, BitmapImage>( );
-        private double _TransformAspectRatio = 1.5d;
-        private Dictionary<string, BoneImage> boneImages = new Dictionary<string, BoneImage>( );
-        private VertexAnimation currentAnimation;
-        private VertexAnimationFrame currentFrame;
-        private HashSet<VertexAnimation> requiredAnimations = new HashSet<VertexAnimation>( );
-        private string defaultSizeBone = null;
+        private ObservableCollection<VertexAnimation> animations = new ObservableCollection<VertexAnimation>( );
+        private List<BoneImage> boneImages = new List<BoneImage>( );
+        private ObservableCollection<VertexBone> bones = new ObservableCollection<VertexBone>( );
+        private VertexAnimation currentAnimation = null;
+        private VertexAnimationFrame currentFrame = null;
+        private EditBonesDialog editBonesDialog;
+        private List<FrameworkElement> menu = new List<FrameworkElement>( );
+        private Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>> undoStack = new Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>>( );
+        public AnimationMetaData MetaData = new AnimationMetaData( );
 
         public AnimationControl ( ) {
             InitializeComponent( );
-            treeview_animations.DataContext = Animations;
+            treeview_animations.DataContext = animations;
+
+            // init menu
+            Style imageStyle = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Property = Button.IsEnabledProperty, Value = false, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } };
+            Image settingButton = new Image( ) {
+                Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_settings"),
+                Style = imageStyle
+            };
+            settingButton.MouseDown += SettingButton_MouseDown;
+            menu.Add(settingButton);
+            Image scissorButton = new Image( ) {
+                Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_scissors"),
+                Style = imageStyle
+            };
+            scissorButton.MouseDown += ScissorButton_MouseDown;
+            menu.Add(scissorButton);
+
+            // init editbonesdialog
+            editBonesDialog = new EditBonesDialog(bones);
+            editBonesDialog.BoneAdded += EditBonesDialog_BoneAdded;
+            editBonesDialog.BoneDeleted += EditBonesDialog_BoneDeleted;
+            editBonesDialog.BonePositionChanged += EditBonesDialog_BonePositionChanged;
+            editBonesDialog.ScaleChanged += EditBonesDialog_ScaleChanged;
+
+            BoneImage.BackupChanges += BoneImage_BackupChanges;
+            BoneImage.DumpChanges += BoneImage_DumpChanges;
+
+            MLGCanvas.SelectedBoneImageChanged += MLGCanvas_SelectedBoneImageChanged;
+
+            VertexAnimationFrame.GetIndex = (frame) => {
+                return animations.FirstOrDefault(anim => anim.Frames.Contains(frame))?.Frames.IndexOf(frame) ?? -1;
+            };
+        }
+
+        private void BoneImage_DumpChanges ( ) {
+            if (undoStack.ContainsKey(currentAnimation) && undoStack[currentAnimation].ContainsKey(currentFrame)) {
+                undoStack[currentAnimation][currentFrame].Pop( );
+            }
+        }
+
+        private void SettingButton_MouseDown (object sender, MouseButtonEventArgs e) {
+            editBonesDialog.Show( );
+        }
+
+        private void ScissorButton_MouseDown (object sender, RoutedEventArgs e) {
+            ResizeEntityDialog dialog = new ResizeEntityDialog(MetaData.Ratio, currentFrame?.Bones ?? bones, this);
+            if (dialog.ShowDialog( ) ?? false) {
+                double centerShiftXReal = 0.5d + dialog.TrimRight - (1 + dialog.TrimLeft + dialog.TrimRight) / 2d;
+                double centerShiftYReal = 0.5d + dialog.TrimTop - (1 + dialog.TrimTop + dialog.TrimBottom) / 2d;
+                double scaleX = (1 + dialog.TrimLeft + dialog.TrimRight);
+                double scaleY = (1 + dialog.TrimTop + dialog.TrimBottom);
+
+                foreach (VertexBone bone in bones) {
+                    bone.Position = new Core.Vector2(
+                        (float)((bone.Position.X - centerShiftXReal) / scaleX),
+                        (float)((bone.Position.Y - centerShiftYReal) / scaleY));
+                    bone.Scale /= (float)(scaleX);
+                }
+                foreach (VertexAnimation animation in animations) {
+                    foreach (VertexAnimationFrame frame in animation.Frames) {
+                        foreach (VertexBone bone in frame.Bones) {
+                            bone.Position = new Core.Vector2(
+                                (float)((bone.Position.X - centerShiftXReal) / scaleX),
+                                (float)((bone.Position.Y - centerShiftYReal) / scaleY));
+                            bone.Scale /= (float)(scaleX);
+                        }
+                    }
+                }
+                MetaData.Ratio *= scaleX / scaleY;
+                ResetEditor( );
+            }
+        }
+
+        private void MLGCanvas_SelectedBoneImageChanged (BoneImage obj) {
+            if (boneImages.Contains(obj)) {
+                editBonesDialog.listbox_bones.SelectedIndex = currentFrame.Bones.IndexOf((VertexBone)obj.DataContext);
+            }
+        }
+
+        private void BoneImage_BackupChanges ( ) {
+            if (!undoStack.ContainsKey(currentAnimation)) {
+                undoStack.Add(currentAnimation, new Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>( ));
+            }
+            if (!undoStack[currentAnimation].ContainsKey(currentFrame)) {
+                undoStack[currentAnimation].Add(currentFrame, new Stack<ObservableCollection<VertexBone>>( ));
+            }
+            undoStack[currentAnimation][currentFrame].Push(new ObservableCollection<VertexBone>(currentFrame.Bones.Select(bone => bone.Clone( ))));
         }
 
         public AnimationControl (string metafile) : this( ) {
-            if (File.Exists(metafile)) {
-                string pathtoload = Path.GetDirectoryName(metafile);
-                AnimationMetaData metaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
-                EntityName = metaData.Name;
-                defaultSizeBone = metaData.DefaultBoneName;
-                TransformAspectRatio = metaData.Ratio;
-                Bones .Clear();
-                foreach (KeyValuePair<string, VertexBone> kvpair in metaData.Bones) {
-                    if (File.Exists(Path.Combine(pathtoload, kvpair.Key + ".png"))) {
-                        BitmapImage image = new BitmapImage(new Uri(Path.Combine(pathtoload, kvpair.Key + ".png")));
-                        kvpair.Value.TextureSize = new Vector2(image.PixelWidth, image.PixelHeight);
+            MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
+        }
 
-                        BoneImage defaultBoneImage = new BoneImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
-                        defaultBoneImage.ContextMenu = new ContextMenu( ) {
-                            DataContext = defaultBoneImage,
-                            Items = {
-                                new MenuItem() { Header = "Delete", Icon = new Image() { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_delete") } }
-                            }
-                        };
-                        defaultBoneImage.RenderTransformOriginChanged += (origin) => UpdateOrigin(boneImages[kvpair.Key], origin);
-                        UpdateBoneImage(defaultBoneImage, kvpair.Value, rectangle_entity_default, border_rectangle_entity_default);
+        public AnimationControl (double ratio, string entity) : this( ) {
+            MetaData.Entity = entity;
+            MetaData.Ratio = ratio;
+        }
 
-                        ((MenuItem)defaultBoneImage.ContextMenu.Items[0]).Click += MenuItemDelete_Click;
-                        defaultBoneImage.MouseDoubleClick += DefaultBoneImage_MouseDoubleClick;
-
-                        defaultBoneImage.SizeChanged += DefaultBoneImage_SizeChanged;
-                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(BoneImage));
-                        canvasleftproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasLeftChanged);
-                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(BoneImage));
-                        canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
-
-                        Bones.Add(kvpair.Key, kvpair.Value);
-                        canvas_bones.Children.Add(defaultBoneImage);
-                        Images.Add(kvpair.Key, image);
-                    }
+        public AnimationControl (Project project, string animationdirectory) : this( ) {
+            foreach (string texturedir in project.GetAllEntries(animationdirectory, "textures")) {
+                if (System.IO.Path.GetFileName(texturedir) == ".png") {
+                    string name = new DirectoryInfo(System.IO.Path.GetDirectoryName(texturedir)).Name;
+                    BoneImage.LoadImage(name, project.GetOrCreateStream(texturedir), project.GetOrCreateStream(System.IO.Path.ChangeExtension(texturedir, ".data")), this, false);
                 }
-                BonesChanged( );
-                Animations = new ObservableCollection<VertexAnimation>(JsonConvert.DeserializeObject<List<VertexAnimation>>(File.ReadAllText(Path.Combine(pathtoload, "animation.json"))));
-                treeview_animations.DataContext = Animations;
             }
+
+            using (Stream stream = project.GetOrCreateStream(animationdirectory, ".meta"))
+                MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
+            using (Stream stream = project.GetOrCreateStream(animationdirectory, "bones.json"))
+                bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
+            using (Stream stream = project.GetOrCreateStream(animationdirectory, "animations.json"))
+                animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
+            BonesChanged( );
         }
 
-        public AnimationControl (float ratio, string text) : this( ) {
-            TransformAspectRatio = ratio;
-            EntityName = text;
-        }
-
-        public ObservableCollection<VertexAnimation> Animations { get; } = new ObservableCollection<VertexAnimation>( );
-
-        public Dictionary<string, VertexBone> Bones { get { return _Bones; } set { _Bones = value; BonesChanged( ); } }
-
-        public Dictionary<string, BitmapImage> Images { get { return _Images; } set { _Images = value; BonesChanged( ); } }
-
-        public List<Control> Menu { get; } = new List<Control>( );
-
-        public double TransformAspectRatio { get { return _TransformAspectRatio; } set { _TransformAspectRatio = value; AdjustEditor( ); } }
-
-        public Dictionary<string, string> Compile ( ) {
-            throw new NotImplementedException( );
-        }
-
-        public void Save (string path) {
-            AnimationMetaData metaData = new AnimationMetaData( ) { Ratio = TransformAspectRatio, Name = EntityName, Bones = Bones, DefaultBoneName = defaultSizeBone };
-            if (Directory.Exists(Path.Combine(path, EntityName)))
-                Directory.Delete(Path.Combine(path, EntityName));
-            Directory.CreateDirectory(Path.Combine(path, EntityName));
-            foreach (KeyValuePair<string, BitmapImage> kvpair in Images) {
-                PngBitmapEncoder encoder = new PngBitmapEncoder( );
-                encoder.Frames.Add(BitmapFrame.Create(kvpair.Value));
-                using (Stream fileStream = File.Create(Path.Combine(path, EntityName, kvpair.Key + ".png")))
-                    encoder.Save(fileStream);
-            }
-            File.Create(Path.Combine(path, EntityName, "animation.meta")).Close( );
-            File.WriteAllText(Path.Combine(path, EntityName, "animation.meta"), JsonConvert.SerializeObject(metaData));
-            File.Create(Path.Combine(path, EntityName, "animation.json")).Close( );
-            File.WriteAllText(Path.Combine(path, EntityName, "animation.json"), JsonConvert.SerializeObject(Animations));
-        }
+        public List<FrameworkElement> Menu { get { return menu; } }
 
         public override string ToString ( ) {
-            return EntityName;
-        }
-
-        private static TreeViewItem ContainerFromItem (ItemContainerGenerator containerGenerator, object item) {
-            TreeViewItem container = (TreeViewItem)containerGenerator.ContainerFromItem(item);
-            if (container != null)
-                return container;
-
-            foreach (object childItem in containerGenerator.Items) {
-                TreeViewItem parent = containerGenerator.ContainerFromItem(childItem) as TreeViewItem;
-                if (parent == null)
-                    continue;
-
-                container = parent.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
-                if (container != null)
-                    return container;
-
-                container = ContainerFromItem(parent.ItemContainerGenerator, item);
-                if (container != null)
-                    return container;
-            }
-            return null;
-        }
-
-        private void AdjustEditor ( ) {
-            Size oldRectangleSize = rectangle_player.DesiredSize;
-            Point oldRectanglePos = new Point(Canvas.GetLeft(border_rectangle_player), Canvas.GetTop(border_rectangle_player));
-            if (TransformAspectRatio > 1d) {
-                // width > height
-                rectangle_player.Width = greaterSizeEditorUsePercent[(int)slider_zoom.Value] * canvas_frame.RenderSize.Width;
-                rectangle_player.Height = rectangle_player.Width / TransformAspectRatio;
-                if (rectangle_player.Height > canvas_frame.RenderSize.Height) {
-                    rectangle_player.Height = canvas_frame.RenderSize.Height;
-                    rectangle_player.Width = canvas_frame.RenderSize.Height * TransformAspectRatio;
-                }
-                rectangle_entity_default.Width = canvas_bones.RenderSize.Width;
-                rectangle_entity_default.Height = canvas_bones.RenderSize.Width / TransformAspectRatio;
-                if (rectangle_entity_default.Height > canvas_bones.RenderSize.Height) {
-                    rectangle_entity_default.Height = canvas_bones.RenderSize.Height;
-                    rectangle_entity_default.Width = canvas_bones.RenderSize.Height * TransformAspectRatio;
-                }
-            } else {
-                // height > width
-                rectangle_player.Height = greaterSizeEditorUsePercent[(int)slider_zoom.Value] * canvas_frame.RenderSize.Height;
-                rectangle_player.Width = TransformAspectRatio * rectangle_player.Height;
-                if (rectangle_player.Width > canvas_frame.RenderSize.Width) {
-                    rectangle_player.Width = canvas_frame.RenderSize.Width;
-                    rectangle_player.Height = canvas_frame.RenderSize.Width / TransformAspectRatio;
-                }
-                rectangle_entity_default.Height = canvas_bones.RenderSize.Height;
-                rectangle_entity_default.Width = canvas_bones.RenderSize.Height * TransformAspectRatio;
-                if (rectangle_entity_default.Width > canvas_bones.RenderSize.Width) {
-                    rectangle_entity_default.Width = canvas_bones.RenderSize.Width;
-                    rectangle_entity_default.Height = canvas_bones.RenderSize.Width / TransformAspectRatio;
-                }
-            }
-            Canvas.SetLeft(border_rectangle_player, (canvas_frame.RenderSize.Width - rectangle_player.Width) / 2d);
-            Canvas.SetTop(border_rectangle_player, (canvas_frame.RenderSize.Height - rectangle_player.Height) / 2d);
-            Canvas.SetLeft(border_rectangle_entity_default, (canvas_bones.RenderSize.Width - rectangle_entity_default.Width) / 2d);
-            Canvas.SetTop(border_rectangle_entity_default, (canvas_bones.RenderSize.Height - rectangle_entity_default.Height) / 2d);
-
-            foreach (UIElement element in canvas_bones.Children) {
-                BoneImage image = element as BoneImage;
-                if (image != null) {
-                    UpdateBoneImage(image, Bones[Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath)], rectangle_entity_default, border_rectangle_entity_default);
-                }
-            }
-
-            if (currentFrame == null)
-                return;
-            foreach (KeyValuePair<string, BoneImage> kvpair in boneImages) {
-                UpdateBoneImage(kvpair.Value, currentFrame.Bones[kvpair.Key], rectangle_player, border_rectangle_player);
-            }
-        }
-
-        private void BoneImage_CanvasLeftChanged (object sender, EventArgs e) {
-            UpdatePositionOfBone(boneImages.First(pair => pair.Value == sender).Key);
-        }
-
-        private void BoneImage_CanvasTopChanged (object sender, EventArgs e) {
-            UpdatePositionOfBone(boneImages.First(pair => pair.Value == sender).Key);
-        }
-
-        private void BoneImage_Rotated (BoneImage obj) {
-            string key = boneImages.First(pair => pair.Value == obj).Key;
-            if (currentFrame == null)
-                return;
-            VertexBone bone = currentFrame.Bones[key];
-            bone.Rotation = obj.Rotation;
-            currentFrame.Bones[key] = bone;
-        }
-
-        private void BoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
-            if (currentFrame == null) return;
-            BoneImage image = (BoneImage)sender;
-            float newsizex = (float)(image.Width / rectangle_player.Width);
-            float newsizey = (float)(image.Height / rectangle_player.Height);
-            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
-            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
-            string key = boneImages.First(pair => pair.Value == sender).Key;
-            VertexBone current = currentFrame.Bones[key];
-            current.AbsoluteSize = new Vector2(newsizex, newsizey);
-            current.Position = new Vector2(newpercentx, newpercenty);
-            currentFrame.Bones.Remove(key);
-            currentFrame.Bones.Add(key, current);
-        }
-
-        private void BonesChanged ( ) {
-            currentAnimation = null;
-            currentFrame = null;
-
-            foreach (BoneImage image in boneImages.Values) {
-                canvas_frame.Children.Remove(image);
-            }
-            Dictionary<string, BoneImage> newBoneImages = new Dictionary<string, BoneImage>( );
-            foreach (string boneKey in _Bones.Keys) {
-                BoneImage image;
-                if (boneImages.ContainsKey(boneKey)) {
-                    image = boneImages[boneKey];
-                    image.Image = null;
-                } else {
-                    image = new BoneImage( ) { CanChangeRenderTransformOrigin = false };
-                    image.Rotated += BoneImage_Rotated;
-                    image.MouseDoubleClick += BoneImage_MouseDoubleClick;
-                    image.Height = 100;
-                    image.Width = 100;
-                    Canvas.SetLeft(image, Canvas.GetLeft(border_rectangle_player) + image.Width / 2d);
-                    Canvas.SetTop(image, Canvas.GetTop(border_rectangle_player) + image.Height / 2d);
-                    image.SizeChanged += BoneImage_SizeChanged;
-                    DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(BoneImage));
-                    canvasleftproperty.AddValueChanged(image, BoneImage_CanvasLeftChanged);
-                    DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(BoneImage));
-                    canvastopproperty.AddValueChanged(image, BoneImage_CanvasTopChanged);
-                }
-                newBoneImages.Add(boneKey, image);
-                if (_Images.ContainsKey(boneKey)) {
-                    image.Image = _Images[boneKey];
-                }
-                canvas_frame.Children.Add(image);
-            }
-            boneImages = newBoneImages;
-
-            foreach (VertexAnimation animation in Animations) {
-                foreach (VertexAnimationFrame frame in animation.Frames) {
-                    ObservableDictionary<string, VertexBone> newframestate = new ObservableDictionary<string, VertexBone>( );
-                    foreach (KeyValuePair<string, VertexBone> bone in _Bones) {
-                        if (frame.Bones.ContainsKey(bone.Key)) {
-                            newframestate.Add(bone.Key, frame.Bones[bone.Key]);
-                        } else {
-                            newframestate.Add(bone.Key, new VertexBone( ) { Mirrored = bone.Value.Mirrored, AbsoluteSize = new Vector2(bone.Value.Size), Rotation = bone.Value.Rotation, Position = new Vector2(bone.Value.Position) , TextureSize = bone.Value.TextureSize});
-                        }
-                    }
-                    frame.Bones = newframestate;
-                }
-            }
-
-            treeview_animations.Items.Refresh( );
-        }
-
-        private void BoneImage_MouseDoubleClick (object sender, MouseButtonEventArgs e) {
-            string key = boneImages.First(pair => pair.Value == (BoneImage)sender).Key;
-            if (currentFrame == null) return;
-            VertexBone bone = currentFrame.Bones[key];
-            bone.Mirrored = !bone.Mirrored;
-            currentFrame.Bones[key] = bone;
-            UpdateBoneImage(boneImages[key], currentFrame.Bones[key], rectangle_player, border_rectangle_player);
-        }
-
-        private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
-            animationview.Pause( );
-        }
-
-        private void ButtonResetPlay_Click (object sender, RoutedEventArgs e) {
-            animationview.Reset( );
-        }
-
-        private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
-            if (currentAnimation == null || currentAnimation.Frames.Count < 0) return;
-            animationview.Play(currentAnimation, (float)_TransformAspectRatio, boneImages.ToDictionary(entry => entry.Key, entry => entry.Value.Image));
-        }
-
-        private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {
-            animationview.Stop( );
-        }
-
-        private void canvas_frame_SizeChanged (object sender, SizeChangedEventArgs e) {
-            AdjustEditor( );
+            return MetaData.Entity;
         }
 
         private void CommandEditorDelete_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            if (treeview_animations.SelectedItem is VertexAnimation) {
-                e.CanExecute = !requiredAnimations.Contains((VertexAnimation)treeview_animations.SelectedItem);
-            } else if (treeview_animations.SelectedItem is VertexAnimationFrame) {
-                e.CanExecute = Animations.First(a => a.Frames.Contains((VertexAnimationFrame)treeview_animations.SelectedItem)).Frames.Count > 2;
+            if (currentFrame != null) {
+                e.CanExecute = currentAnimation != null && currentAnimation.Frames.Count > 1;
+            } else if (currentAnimation != null) {
+                e.CanExecute = animations.Count > 1;
             }
         }
 
+        public void Compile (string animationpath) {
+            string basedirectory = Path.Combine(animationpath, MetaData.Entity);
+            if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
+
+            using (Stream stream = File.Open(Path.Combine(basedirectory, "animation.json"), FileMode.Create))
+                AnimationSerizalizer.Serialize(animations, stream);
+        }
+
         private void CommandEditorDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (treeview_animations.SelectedItem is VertexAnimation) {
-                Animations.Remove((VertexAnimation)treeview_animations.SelectedItem);
-            } else if (treeview_animations.SelectedItem is VertexAnimationFrame) {
-                VertexAnimation anim = Animations.First(a => a.Frames.Contains((VertexAnimationFrame)treeview_animations.SelectedItem));
-                anim.Frames.Remove((VertexAnimationFrame)treeview_animations.SelectedItem);
+            if (currentFrame != null) {
+                currentAnimation.Frames.Remove(currentFrame);
+                foreach (VertexAnimationFrame frame in currentAnimation.Frames)
+                    frame.OnPropertyChanged("Index");
+
+                currentFrame = null;
+            } else if (currentAnimation != null) {
+                animations.Remove(currentAnimation);
+                currentAnimation = null;
+                currentFrame = null;
             }
         }
 
         private void CommandEditorDown_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = true;
-            if (treeview_animations.SelectedItem is VertexAnimationFrame) {
-                VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
-                if (animation != default(VertexAnimation))
-                    e.CanExecute = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem) < animation.Frames.Count - 1;
-            }
+            e.CanExecute = currentAnimation.Frames.IndexOf(currentFrame) < currentAnimation.Frames.Count - 1;
         }
 
         private void CommandEditorDown_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (treeview_animations.SelectedItem is VertexAnimationFrame) {
-                VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
-                if (animation != default(VertexAnimation)) {
-                    int index = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem);
-                    animation.Frames.Move(index, index + 1);
-                }
-            }
+            int index = currentAnimation.Frames.IndexOf(currentFrame);
+            currentAnimation.Frames.Move(index, index + 1);
+            foreach (VertexAnimationFrame frame in currentAnimation.Frames)
+                frame.OnPropertyChanged("Index");
         }
 
         private void CommandEditorNew_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -347,102 +198,140 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
         }
 
         private void CommandEditorNew_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (treeview_animations.SelectedItem == null) {
-                Animations.Add(new VertexAnimation( ) { Name = "Default" + Animations.Where(a => a.Name.StartsWith("Default")).Count( ), Frames = new ObservableCollection<VertexAnimationFrame>( ), CanRepeat = false });
-            } else if (treeview_animations.SelectedItem is VertexAnimation) {
-                ((VertexAnimation)treeview_animations.SelectedItem).Frames.Add(new VertexAnimationFrame( ) { Time = 500, Bones = new ObservableDictionary<string, VertexBone>(_Bones.ToDictionary(entry => entry.Key, entry => entry.Value)) });
-            } else if (treeview_animations.SelectedItem is VertexAnimationFrame) {
-                VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
-                if (animation != default(VertexAnimation)) {
-                    int index = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem);
-                    animation.Frames.Add(new VertexAnimationFrame( ) { Bones = new ObservableDictionary<string, VertexBone>(animation.Frames[index].Bones.ToDictionary(entry => entry.Key, entry => new VertexBone( ) { Mirrored = entry.Value.Mirrored, Position = new Vector2(entry.Value.Position), Rotation = entry.Value.Rotation, AbsoluteSize = new Vector2(entry.Value.Size) , TextureSize = entry.Value.TextureSize})), Time = animation.Frames[index].Time });
-                }
-            }
-        }
+            if (currentAnimation == null) {
+                // add new animation
+                ObservableCollection<VertexBone> firstFramesBones = (animations.Count == 0) ?
+                    new ObservableCollection<VertexBone>(bones.Select(item => item.Clone( ))) : // set reference to the default bones
+                    new ObservableCollection<VertexBone>(animations[0].Frames[0].Bones.Select(item => item.Clone( ))); // cheap clone :D
 
-        private void CommandEditorR_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = treeview_animations.SelectedItem is VertexAnimationFrame;
-        }
-
-        private void CommandEditorR_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (currentFrame == null) return;
-            string[ ] keys = Bones.Keys.ToArray( );
-            for (int i = 0; i < keys.Length; i++) {
-                string bone = keys[i];
-                currentFrame.Bones[bone] = new VertexBone( ) { Mirrored = Bones[bone].Mirrored, Position = Bones[bone].Position, Rotation = Bones[bone].Rotation, AbsoluteSize = Bones[bone].Size , TextureSize = new Vector2(Images[bone].PixelWidth, Images[bone].PixelHeight)};
-                UpdateBoneImage(boneImages[bone], currentFrame.Bones[bone], rectangle_player, border_rectangle_player);
+                animations.Add(new VertexAnimation( ) {
+                    CanRepeat = true,
+                    Frames = new ObservableCollection<VertexAnimationFrame>(new[ ] { new VertexAnimationFrame( ) { Bones = firstFramesBones, Time = 500 } }),
+                    Name = "Default_" + animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( ),
+                    IsDefault = animations.Count == 0
+                });
+            } else if (currentFrame == null) {
+                // add new frame
+                currentAnimation.Frames.Add(currentAnimation.Frames[0].Clone( ));
+            } else {
+                // copy frame
+                currentAnimation.Frames.Add(currentFrame.Clone( ));
             }
         }
 
         private void CommandEditorUp_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = true;
-            if (treeview_animations.SelectedItem is VertexAnimationFrame) {
-                VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
-                if (animation != default(VertexAnimation))
-                    e.CanExecute = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem) > 0;
-            }
+            e.CanExecute = currentAnimation.Frames.IndexOf(currentFrame) > 0;
         }
 
         private void CommandEditorUp_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (treeview_animations.SelectedItem is VertexAnimationFrame) {
-                VertexAnimation animation = Animations.FirstOrDefault(anim => anim.Frames.Contains(treeview_animations.SelectedItem));
-                if (animation != default(VertexAnimation)) {
-                    int index = animation.Frames.IndexOf((VertexAnimationFrame)treeview_animations.SelectedItem);
-                    animation.Frames.Move(index, index - 1);
+            int index = currentAnimation.Frames.IndexOf(currentFrame);
+            currentAnimation.Frames.Move(index, index - 1);
+        }
+
+        private void EditBonesDialog_BoneAdded (VertexBone addedBone) {
+            BoneImage.LoadImage(addedBone.Image, this);
+            bones.Add(addedBone);
+
+            string name = System.IO.Path.GetFileNameWithoutExtension(addedBone.Image);
+            for (int i = 0; i < animations.Count; i++) {
+                for (int j = 0; j < animations[i].Frames.Count; j++) {
+                    VertexBone bone = addedBone.Clone( );
+                    bone.Image = name;
+                    animations[i].Frames[j].Bones.Add(bone);
+                }
+            }
+
+            BonesChanged( );
+        }
+
+        private void EditBonesDialog_BoneDeleted (int deletedBoneIndex) {
+            bones.RemoveAt(deletedBoneIndex);
+            foreach (VertexAnimation animation in animations) {
+                foreach (VertexAnimationFrame frame in animation.Frames) {
+                    frame.Bones.RemoveAt(deletedBoneIndex);
+                }
+            }
+
+            BonesChanged( );
+        }
+
+        private void EditBonesDialog_BonePositionChanged (int newz, int oldz) {
+            BoneImage imageAtNewZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -newz);
+            BoneImage imageAtOldZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -oldz);
+            if (imageAtOldZ != null) Canvas.SetZIndex(imageAtOldZ, -newz);
+            if (imageAtNewZ != null) Canvas.SetZIndex(imageAtNewZ, -oldz);
+
+            bones.Move(oldz, newz);
+            foreach (VertexAnimation animation in animations) {
+                foreach (VertexAnimationFrame frame in animation.Frames) {
+                    frame.Bones.Move(oldz, newz);
+                    if (undoStack.ContainsKey(animation) && undoStack[animation].ContainsKey(frame)) {
+                        foreach (ObservableCollection<VertexBone> collection in undoStack[animation][frame]) {
+                            collection.Move(oldz, newz);
+                        }
+                    }
                 }
             }
         }
 
-        private VertexAnimationFrame FindFrame (VertexBone bone) {
-            foreach (VertexAnimation anim in Animations) {
-                foreach (VertexAnimationFrame frame in anim.Frames) {
-                    if (frame.Bones.Any(pair => pair.Value.Equals(bone)))
-                        return frame;
+        private void EditBonesDialog_ScaleChanged (VertexBone bone, double scale) {
+            int index = bones.IndexOf(bone);
+            foreach (VertexAnimation animation in animations) {
+                foreach (VertexAnimationFrame frame in animation.Frames) {
+                    frame.Bones[index].Scale = (float)scale;
                 }
             }
-            return null;
-        }
 
-        private void slider_zoom_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
-            AdjustEditor( );
-        }
-
-        private void TextBox_IntegerTextInput (object sender, TextCompositionEventArgs e) {
-            int i;
-            if (!int.TryParse(((TextBox)sender).Text + e.Text, out i) || i < 0)
-                e.Handled = true;
+            BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == -index);
+            if (image != null && currentFrame != null) image.Update( );
         }
 
         private void treeview_animations_MouseDown (object sender, MouseButtonEventArgs e) {
-            if (treeview_animations.SelectedItem != null && e.LeftButton == MouseButtonState.Pressed) {
-                ContainerFromItem(treeview_animations.ItemContainerGenerator, treeview_animations.SelectedItem).IsSelected = false;
+            if (e.RightButton == MouseButtonState.Pressed) {
+                // deselect item on button press
+                if (treeview_animations.SelectedItem != null)
+                    treeview_animations.FindContainer(treeview_animations.SelectedItem).IsSelected = false;
                 treeview_animations.Focus( );
             }
         }
 
         private void treeview_animations_SelectedItemChanged (object sender, RoutedPropertyChangedEventArgs<object> e) {
-            if (e.NewValue == null) {
+            currentAnimation = null;
+            currentFrame = null;
+
+            if (treeview_animations.SelectedItem == null) {
                 treeview_animations.ContextMenu = (ContextMenu)treeview_animations.Resources["contextmenu_default"];
-                currentFrame = null;
-                currentAnimation = null;
-                dockpanel_edit.Visibility = Visibility.Hidden;
-                dockpanel_preview.Visibility = Visibility.Hidden;
-            } else if (e.NewValue is VertexAnimation) {
+                return;
+            }
+
+            Type selectedType = treeview_animations.SelectedItem.GetType( );
+            if (selectedType == typeof(VertexAnimation)) {
                 treeview_animations.ContextMenu = (ContextMenu)treeview_animations.Resources["contextmenu_animation"];
-                currentFrame = null;
-                currentAnimation = (VertexAnimation)e.NewValue;
-                dockpanel_edit.Visibility = Visibility.Hidden;
-                dockpanel_preview.Visibility = Visibility.Visible;
-            } else if (e.NewValue is VertexAnimationFrame) {
+
+                currentAnimation = (VertexAnimation)treeview_animations.SelectedItem;
+
+                contentpresenter.ApplyTemplate( );
+                ((Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter))?.Children.Clear( );
+
+                contentpresenter.ContentTemplate = (DataTemplate)FindResource("preview");
+            } else if (selectedType == typeof(VertexAnimationFrame)) {
                 treeview_animations.ContextMenu = (ContextMenu)treeview_animations.Resources["contextmenu_frame"];
-                currentFrame = (VertexAnimationFrame)e.NewValue;
-                dockpanel_edit.Visibility = Visibility.Visible;
-                dockpanel_preview.Visibility = Visibility.Hidden;
-                foreach (string bone in boneImages.Keys) {
-                    UpdateBoneImage(boneImages[bone], currentFrame.Bones[bone], rectangle_player, border_rectangle_player);
+
+                currentFrame = (VertexAnimationFrame)treeview_animations.SelectedItem;
+                currentAnimation = animations.First(anim => anim.Frames.Contains(currentFrame));
+
+                bool addBoneImagesToCanvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter) == null;
+                contentpresenter.ContentTemplate = (DataTemplate)FindResource("edit");
+                contentpresenter.ApplyTemplate( );
+
+                Rectangle rect = (Rectangle)contentpresenter.ContentTemplate.FindName("rectangle_entity", contentpresenter);
+                Canvas canvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
+                for (int i = 0; i < boneImages.Count; i++) {
+                    if (addBoneImagesToCanvas) canvas.Children.Add(boneImages[i]);
+                    Canvas.SetZIndex(boneImages[i], -i);
+                    boneImages[i].RefRectangle = rect;
+                    boneImages[i].DataContext = currentFrame.Bones[i];
                 }
-            } else {
-                treeview_animations.ContextMenu = null;
             }
         }
 
@@ -454,182 +343,121 @@ namespace mapKnight.ToolKit.Controls.Components.Graphics {
             }
         }
 
-        private void UpdateBoneImage (BoneImage image, VertexBone bone, System.Windows.Shapes.Rectangle rect, Border border) {
-            image.Width = rect.Width * bone.AbsoluteSize.X;
-            image.Height = rect.Height * bone.AbsoluteSize.Y;
-            image.IsFlipped = bone.Mirrored;
-            image.Rotation = bone.Rotation;
-            double newleft = Canvas.GetLeft(border) + rect.Width / 2d + bone.Position.X * rect.Width - image.Width / 2d;
-            double newtop = Canvas.GetTop(border) + rect.Height / 2d - bone.Position.Y * rect.Height - image.Height / 2d;
-            Canvas.SetLeft(image, newleft);
-            Canvas.SetTop(image, newtop);
+        private void BonesChanged ( ) {
+            // to prevent crashing
+            try {
+                object animationView = contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+                (animationView as AnimationView)?.Stop( );
+            } catch {
+
+            }
+
+            if (bones.Count > boneImages.Count) {
+                for (int i = 0; i < bones.Count - boneImages.Count; i++) {
+                    boneImages.Add(new BoneImage(this) { });
+                }
+            } else {
+                for (int i = 0; i < boneImages.Count - bones.Count; i++) {
+                    boneImages.RemoveAt(i);
+                }
+            }
+
+            if (currentFrame != null) {
+                ResetEditor( );
+            }
         }
 
-        private void UpdatePositionOfBone (string key) {
+        private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
+            if (BoneImage.Data.ContainsKey(this)) {
+                AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+                animationView.Play(currentAnimation, (float)MetaData.Ratio, BoneImage.Data[this]);
+            }
+        }
+
+        private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {
+            AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+            animationView.Stop( );
+        }
+
+        private void ButtonPausePlay_Click (object sender, RoutedEventArgs e) {
+            AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+            animationView.Pause( );
+        }
+
+        private void ButtonResetPlay_Click (object sender, RoutedEventArgs e) {
+            AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+            animationView.Reset( );
+        }
+
+        public void Save (Project project) {
+            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, ".meta"))
+            using (StreamWriter writer = new StreamWriter(stream))
+                writer.WriteLine(JsonConvert.SerializeObject(MetaData));
+
+            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "animations.json"))
+            using (StreamWriter writer = new StreamWriter(stream))
+                writer.WriteLine(JsonConvert.SerializeObject(animations));
+
+            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "bones.json"))
+            using (StreamWriter writer = new StreamWriter(stream))
+                writer.WriteLine(JsonConvert.SerializeObject(bones));
+
+            if (!BoneImage.Data.ContainsKey(this)) return;
+            foreach (KeyValuePair<string, BoneImage.ImageData> kvpair in BoneImage.Data[this]) {
+                using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "textures", kvpair.Key, ".png"))
+                    kvpair.Value.Image.SaveToStream(stream);
+                using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "textures", kvpair.Key, ".data"))
+                using (StreamWriter writer = new StreamWriter(stream))
+                    writer.WriteLine(JsonConvert.SerializeObject(kvpair.Value.TransformOrigin));
+            }
+        }
+
+        private void slider_zoom_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
+            ResetEditor( );
+        }
+
+        private void canvas_frame_SizeChanged (object sender, SizeChangedEventArgs e) {
+            ResetEditor( );
+        }
+
+        private void ResetEditor ( ) {
             if (currentFrame == null) return;
-            BoneImage image = boneImages[key];
-            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_player) + rectangle_player.Width / 2d)) / rectangle_player.Width);
-            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_player) + rectangle_player.Height / 2d)) / rectangle_player.Height);
-            VertexBone current = currentFrame.Bones[key];
-            current.Position = new Vector2(newpercentx, newpercenty);
-            currentFrame.Bones.Remove(key);
-            currentFrame.Bones.Add(key, current);
-        }
+            Rectangle rect = (Rectangle)contentpresenter.ContentTemplate.FindName("rectangle_entity", contentpresenter);
+            Canvas canvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
 
-        private struct AnimationMetaData {
-            public string Name;
-            public string DefaultAnimation;
-            public double Ratio;
-            public Dictionary<string, VertexBone> Bones;
-            public string DefaultBoneName;
-        }
+            double ultrascale = scales[(int)((Slider)contentpresenter.ContentTemplate.FindName("slider_zoom", contentpresenter)).Value];
+            if (canvas.RenderSize.Width / canvas.RenderSize.Height > MetaData.Ratio) {
+                rect.Width = canvas.RenderSize.Height * MetaData.Ratio * ultrascale;
+                rect.Height = canvas.RenderSize.Height * ultrascale;
+            } else {
+                rect.Width = canvas.RenderSize.Width * ultrascale;
+                rect.Height = canvas.RenderSize.Width / MetaData.Ratio * ultrascale;
+            }
+            rect.Height -= rect.StrokeThickness * 2;
+            rect.Width -= rect.StrokeThickness * 2;
+            Canvas.SetLeft(rect, (canvas.RenderSize.Width - rect.Width - (rect.StrokeThickness * 2)) / 2d);
+            Canvas.SetTop(rect, (canvas.RenderSize.Height - rect.Height - (rect.StrokeThickness * 2)) / 2d);
 
-        private void canvas_bones_DragEnter (object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-                e.Effects = DragDropEffects.Copy;
+            for (int i = 0; i < boneImages.Count; i++) {
+                if (!canvas.Children.Contains(boneImages[i])) canvas.Children.Add(boneImages[i]);
+                Canvas.SetZIndex(boneImages[i], -i);
+                boneImages[i].RefRectangle = rect;
+                boneImages[i].DataContext = currentFrame.Bones[i];
+                boneImages[i].Update( );
             }
         }
 
-        private void canvas_bones_Drop (object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-                string[ ] files = (string[ ])e.Data.GetData(DataFormats.FileDrop);
-                foreach (string file in files) {
-                    if (file.EndsWith("png") && !Bones.ContainsKey(Path.GetFileNameWithoutExtension(file))) {
-                        string name = Path.GetFileNameWithoutExtension(file);
-                        BitmapImage image = new BitmapImage(new Uri(file));
+        private void CommandEditorUndo_Executed (object sender, ExecutedRoutedEventArgs e) {
+            currentFrame.Bones = undoStack[currentAnimation][currentFrame].Pop( );
 
-                        BoneImage defaultBoneImage = new BoneImage( ) { Image = image, ContextMenu = new ContextMenu( ), CanChangeRenderTransformOrigin = true };
-                        defaultBoneImage.ContextMenu = new ContextMenu( ) {
-                            DataContext = defaultBoneImage,
-                            Items = {
-                                new MenuItem() { Header = "Delete", Icon = new Image() { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_delete") } }
-                            }
-                        };
-                        defaultBoneImage.RenderTransformOriginChanged += (origin) => UpdateOrigin(boneImages[name], origin);
-                        ((MenuItem)defaultBoneImage.ContextMenu.Items[0]).Click += MenuItemDelete_Click;
-                        defaultBoneImage.MouseDoubleClick += DefaultBoneImage_MouseDoubleClick;
-
-                        defaultBoneImage.SizeChanged += DefaultBoneImage_SizeChanged;
-                        DependencyPropertyDescriptor canvasleftproperty = DependencyPropertyDescriptor.FromProperty(Canvas.LeftProperty, typeof(BoneImage));
-                        canvasleftproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasLeftChanged);
-                        DependencyPropertyDescriptor canvastopproperty = DependencyPropertyDescriptor.FromProperty(Canvas.TopProperty, typeof(BoneImage));
-                        canvastopproperty.AddValueChanged(defaultBoneImage, DefaultBoneImage_CanvasTopChanged);
-
-                        canvas_bones.Children.Add(defaultBoneImage);
-                        Bones.Add(name, new VertexBone( ) { Mirrored = false, Position = new Vector2(0, 0), Rotation = 0, AbsoluteSize = new Vector2(0.25f, 0.25f), TextureSize = new Vector2(image.PixelWidth, image.PixelHeight) });
-                        _Images.Add(name, image);
-
-                        Canvas.SetTop(defaultBoneImage, 0);
-                        Canvas.SetLeft(defaultBoneImage, 0);
-                        if (!string.IsNullOrEmpty(defaultSizeBone)) {
-                            Vector2 percentPerPixel = new Vector2((float)(Bones[defaultSizeBone].Size.X / Images[defaultSizeBone].Width), (float)(Bones[defaultSizeBone].Size.Y / Images[defaultSizeBone].Height));
-                            defaultBoneImage.Width = percentPerPixel.X * image.Width * rectangle_entity_default.Width;
-                            defaultBoneImage.Height = percentPerPixel.Y * image.Height * rectangle_entity_default.Height;
-                        } else {
-                            defaultBoneImage.Width = 100;
-                            defaultBoneImage.Height = 100 * image.Height / image.Width;
-                        }
-                        Canvas.SetLeft(defaultBoneImage, (canvas_bones.RenderSize.Width - defaultBoneImage.Width) / 2d);
-                        Canvas.SetTop(defaultBoneImage, (canvas_bones.RenderSize.Height - defaultBoneImage.Width) / 2d);
-                        BonesChanged( );
-                    }
-                }
+            for (int i = 0; i < boneImages.Count; i++) {
+                Canvas.SetZIndex(boneImages[i], -i);
+                boneImages[i].DataContext = currentFrame.Bones[i];
             }
         }
 
-        private void DefaultBoneImage_MouseDoubleClick (object sender, MouseButtonEventArgs e) {
-            defaultSizeBone = Path.GetFileNameWithoutExtension(((BoneImage)sender).Image.UriSource.AbsolutePath);
-            UpdateDefaultSizes( );
-        }
-
-        private void UpdateDefaultSizes ( ) {
-            if (defaultSizeBone == null) return;
-
-            // rescale bones
-            Vector2 percentPerPixel = new Vector2((float)(Bones[defaultSizeBone].Size.X / Images[defaultSizeBone].Width), (float)(Bones[defaultSizeBone].Size.Y / Images[defaultSizeBone].Height));
-            foreach (string bone in Images.Keys) {
-                if (bone == defaultSizeBone) continue;
-                Bones[bone] = new VertexBone( ) {
-                    Position = Bones[bone].Position,
-                    Mirrored = Bones[bone].Mirrored,
-                    Rotation = Bones[bone].Rotation,
-                    TextureSize = new Vector2((float)Images[bone].PixelWidth, (float)Images[bone].PixelHeight),
-                    AbsoluteSize = new Vector2(
-                    (float)Images[bone].Width * percentPerPixel.X,
-                    (float)Images[bone].Height * percentPerPixel.Y)
-                };
-            }
-
-            // apply changes to images
-            foreach (UIElement element in canvas_bones.Children) {
-                BoneImage image = element as BoneImage;
-                if (image != null) {
-                    string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
-                    if (bone != defaultSizeBone) {
-                        image.Width = rectangle_entity_default.Width * Bones[bone].Size.X;
-                        image.Height = rectangle_entity_default.Height * Bones[bone].Size.Y;
-                        // Canvas.SetLeft(image, Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width * (Bones[bone].Position.X + 0.5f) - image.Width / 2f);
-                        // Canvas.SetTop(image, Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height * (Bones[bone].Position.Y + 0.5f) - image.Height / 2f);
-                    }
-                }
-            }
-        }
-
-        private void DefaultBoneImage_CanvasLeftChanged (object sender, EventArgs e) {
-            UpdatePositionOfDefaultBone((BoneImage)sender);
-        }
-
-        private void DefaultBoneImage_CanvasTopChanged (object sender, EventArgs e) {
-            UpdatePositionOfDefaultBone((BoneImage)sender);
-        }
-
-        private void UpdatePositionOfDefaultBone (BoneImage image) {
-            if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
-            string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
-            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
-            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
-            VertexBone current = Bones[bone];
-            current.Position = new Vector2(newpercentx, newpercenty);
-            Bones[bone] = current;
-        }
-
-        private void DefaultBoneImage_SizeChanged (object sender, SizeChangedEventArgs e) {
-            BoneImage image = (BoneImage)sender;
-            if (double.IsNaN(Canvas.GetLeft(image)) || double.IsNaN(Canvas.GetTop(image))) return;
-
-            string bone = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
-            float newsizex = (float)(image.Width / rectangle_entity_default.Width);
-            float newsizey = (float)(image.Height / rectangle_entity_default.Height);
-            float newpercentx = (float)(((Canvas.GetLeft(image) + image.Width / 2d) - (Canvas.GetLeft(border_rectangle_entity_default) + rectangle_entity_default.Width / 2d)) / rectangle_entity_default.Width);
-            float newpercenty = -(float)(((Canvas.GetTop(image) + image.Height / 2d) - (Canvas.GetTop(border_rectangle_entity_default) + rectangle_entity_default.Height / 2d)) / rectangle_entity_default.Height);
-
-            VertexBone current = Bones[bone];
-            current.AbsoluteSize = new Vector2(newsizex, newsizey);
-            current.Position = new Vector2(newpercentx, newpercenty);
-            Bones[bone] = current;
-        }
-
-        private void MenuItemDelete_Click (object sender, RoutedEventArgs e) {
-            BoneImage image = ((sender as Control).Parent as Control).DataContext as BoneImage;
-            if (image != null) {
-                canvas_bones.Children.Remove(image);
-                string bonename = Path.GetFileNameWithoutExtension(image.Image.UriSource.AbsolutePath);
-                _Images.Remove(bonename);
-                Bones.Remove(bonename);
-                BonesChanged( );
-            }
-        }
-
-        private void canvas_bones_SizeChanged (object sender, SizeChangedEventArgs e) {
-            AdjustEditor( );
-        }
-
-        private void treeview_animations_MouseRightButtonDown (object sender, MouseButtonEventArgs e) {
-            treeview_animations.Focus( );
-        }
-
-        private void UpdateOrigin (BoneImage image, Point origin) {
-            image.RenderTransformOrigin = origin;
+        private void CommandEditorUndo_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = currentAnimation != null && undoStack.ContainsKey(currentAnimation) && undoStack[currentAnimation].ContainsKey(currentFrame) && undoStack[currentAnimation][currentFrame].Count > 0;
         }
     }
 }

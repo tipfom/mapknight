@@ -87,8 +87,8 @@
     </ApplicationDefinition>
     <Compile Include="Controls\Animation\MLGCanvas.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
-    <Compile Include="Controls\AnimationControl2.xaml.cs">
-      <DependentUpon>AnimationControl2.xaml</DependentUpon>
+    <Compile Include="Controls\AnimationControl.xaml.cs">
+      <DependentUpon>AnimationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Animation\MoveableRenderTransformOrigin.cs" />
     <Compile Include="Controls\IntegerTextbox.xaml.cs">
@@ -188,7 +188,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\AnimationControl2.xaml">
+    <Page Include="Controls\AnimationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
