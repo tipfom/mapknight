@@ -28,7 +28,7 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void ButtonLink_Click (object sender, RoutedEventArgs e) {
-            RunAssoc($"-a .mkproj \"{Assembly.GetExecutingAssembly( ).Location}\" toolkit -d \"MapKnight Project\" -i \"{Assembly.GetExecutingAssembly( ).Location}\"");
+            RunAssoc($"-a .mkproj \"{Assembly.GetExecutingAssembly( ).Location}\" toolkit -fd \"MapKnight Project\" -pd \"Pluto\"");
         }
 
         private void ButtonUnlink_Click (object sender, RoutedEventArgs e) {
