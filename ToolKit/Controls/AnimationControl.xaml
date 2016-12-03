@@ -50,7 +50,7 @@
             </DockPanel>
         </DataTemplate>
         <DataTemplate x:Key="none">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="LuL"/>
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Nothing Selected" Foreground="Gray"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
