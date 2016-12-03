@@ -353,7 +353,8 @@ namespace mapKnight.ToolKit.Controls {
             }
 
             if (bones.Count > boneImages.Count) {
-                for (int i = 0; i < bones.Count - boneImages.Count; i++) {
+                int bonesToAdd = bones.Count - boneImages.Count;
+                for (int i = 0; i < bonesToAdd; i++) {
                     boneImages.Add(new BoneImage(this) { });
                 }
             } else {
