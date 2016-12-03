@@ -47,9 +47,6 @@
                 <realcontent:MLGCanvas DockPanel.Dock="Top" x:Name="canvas_frame" ClipToBounds="True" Margin="3,0,0,3"
                         SizeChanged="canvas_frame_SizeChanged">
                     <Rectangle x:Name="rectangle_entity" Canvas.ZIndex ="-100" Stroke="Black" StrokeThickness="2" Opacity="0.5"/>
-                    <Grid Width="{Binding ActualWidth, ElementName=canvas_frame}" Height="{Binding ActualHeight, ElementName=canvas_frame}" Panel.ZIndex="-10000">
-                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Source="{StaticResource ResourceKey=image_animationcomponent_directionarrow}" Width="100" Height="100"/>
-                    </Grid>
                 </realcontent:MLGCanvas>
             </DockPanel>
         </DataTemplate>
