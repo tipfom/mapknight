@@ -321,12 +321,10 @@ namespace mapKnight.ToolKit.Controls {
                 contentpresenter.ApplyTemplate( );
 
                 Rectangle rect = (Rectangle)contentpresenter.ContentTemplate.FindName("rectangle_entity", contentpresenter);
-                Border border = (Border)contentpresenter.ContentTemplate.FindName("border_rectangle_entity", contentpresenter);
                 Canvas canvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
                 for (int i = 0; i < boneImages.Count; i++) {
                     if (addBoneImagesToCanvas) canvas.Children.Add(boneImages[i]);
                     Canvas.SetZIndex(boneImages[i], -i);
-                    boneImages[i].RefBorder = border;
                     boneImages[i].RefRectangle = rect;
                     boneImages[i].DataContext = currentFrame.Bones[i];
                 }
@@ -421,7 +419,6 @@ namespace mapKnight.ToolKit.Controls {
         private void ResetEditor ( ) {
             if (currentFrame == null) return;
             Rectangle rect = (Rectangle)contentpresenter.ContentTemplate.FindName("rectangle_entity", contentpresenter);
-            Border border = (Border)contentpresenter.ContentTemplate.FindName("border_rectangle_entity", contentpresenter);
             Canvas canvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
 
             double ultrascale = scales[(int)((Slider)contentpresenter.ContentTemplate.FindName("slider_zoom", contentpresenter)).Value];
@@ -432,15 +429,14 @@ namespace mapKnight.ToolKit.Controls {
                 rect.Width = canvas.RenderSize.Width * ultrascale;
                 rect.Height = canvas.RenderSize.Width / MetaData.Ratio * ultrascale;
             }
-            rect.Height -= border.BorderThickness.Bottom + border.BorderThickness.Top;
-            rect.Width -= border.BorderThickness.Left + border.BorderThickness.Right;
-            Canvas.SetLeft(border, (canvas.RenderSize.Width - rect.Width - (border.BorderThickness.Bottom + border.BorderThickness.Top)) / 2d);
-            Canvas.SetTop(border, (canvas.RenderSize.Height - rect.Height - (border.BorderThickness.Left + border.BorderThickness.Right)) / 2d);
+            rect.Height -= rect.StrokeThickness *2;
+            rect.Width -= rect.StrokeThickness *2;
+            Canvas.SetLeft(rect, (canvas.RenderSize.Width - rect.Width - (rect.StrokeThickness * 2)) / 2d);
+            Canvas.SetTop(rect, (canvas.RenderSize.Height - rect.Height - (rect.StrokeThickness * 2)) / 2d);
 
             for (int i = 0; i < boneImages.Count; i++) {
                 if (!canvas.Children.Contains(boneImages[i])) canvas.Children.Add(boneImages[i]);
                 Canvas.SetZIndex(boneImages[i], -i);
-                boneImages[i].RefBorder = border;
                 boneImages[i].RefRectangle = rect;
                 boneImages[i].DataContext = currentFrame.Bones[i];
                 boneImages[i].Update( );

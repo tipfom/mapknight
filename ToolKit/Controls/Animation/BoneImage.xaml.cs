@@ -36,7 +36,6 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
         public bool AllowInput = false;
 
         public Rectangle RefRectangle { get; set; }
-        public Border RefBorder { get; set; }
 
         private AnimationControl2 animControl;
         private VertexBone dataContextBone;
@@ -84,8 +83,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             if (RefRectangle.Width == 0 || RefRectangle.Height == 0) return;
 
             Vector position = new Vector(
-                 ((Canvas.GetLeft(this) + Width * RenderTransformOrigin.X) - (Canvas.GetLeft(RefBorder) + RefRectangle.Width / 2d)) / RefRectangle.Width,
-                -((Canvas.GetTop(this) + Height * RenderTransformOrigin.Y) - (Canvas.GetTop(RefBorder) + RefRectangle.Height / 2d)) / RefRectangle.Height);
+                 ((Canvas.GetLeft(this) + Width * RenderTransformOrigin.X) - (Canvas.GetLeft(RefRectangle) + RefRectangle.Width / 2d)) / RefRectangle.Width,
+                -((Canvas.GetTop(this) + Height * RenderTransformOrigin.Y) - (Canvas.GetTop(RefRectangle) + RefRectangle.Height / 2d)) / RefRectangle.Height);
 
             Console.WriteLine(position);
 
@@ -130,8 +129,8 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
             IsFlipped = dataContextBone.Mirrored;
             Rotation = dataContextBone.Rotation;
 
-            double left = Canvas.GetLeft(RefBorder) + RefRectangle.Width / 2d + dataContextBone.Position.X * RefRectangle.Width - Width * RenderTransformOrigin.X;
-            double top = Canvas.GetTop(RefBorder) + RefRectangle.Height / 2d - dataContextBone.Position.Y * RefRectangle.Height - Height * RenderTransformOrigin.Y;
+            double left = Canvas.GetLeft(RefRectangle) + RefRectangle.Width / 2d + dataContextBone.Position.X * RefRectangle.Width - Width * RenderTransformOrigin.X;
+            double top = Canvas.GetTop(RefRectangle) + RefRectangle.Height / 2d - dataContextBone.Position.Y * RefRectangle.Height - Height * RenderTransformOrigin.Y;
             Canvas.SetLeft(this, left);
             Canvas.SetTop(this, top);
         }
