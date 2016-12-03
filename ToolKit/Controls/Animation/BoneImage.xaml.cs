@@ -23,6 +23,7 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
 
         public static Dictionary<AnimationControl2, Dictionary<string, ImageData>> Data = new Dictionary<AnimationControl2, Dictionary<string, ImageData>>( );
         public static event Action BackupChanges;
+        public static event Action DumpChanges;
 
         private static readonly Effect MOVE_EFFECT = new DropShadowEffect( ) { Color = Colors.Cyan, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
         private static readonly Effect ROTATE_EFFECT = new DropShadowEffect( ) { Color = Colors.Red, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
@@ -86,10 +87,12 @@ namespace mapKnight.ToolKit.Controls.Components.Animation {
                  ((Canvas.GetLeft(this) + Width * RenderTransformOrigin.X) - (Canvas.GetLeft(RefRectangle) + RefRectangle.Width / 2d)) / RefRectangle.Width,
                 -((Canvas.GetTop(this) + Height * RenderTransformOrigin.Y) - (Canvas.GetTop(RefRectangle) + RefRectangle.Height / 2d)) / RefRectangle.Height);
 
-            Console.WriteLine(position);
-
             if (double.IsNaN(position.X) || double.IsNaN(position.Y)) return;
-            dataContextBone.Position = new Vector2((float)position.X, (float)position.Y);
+            if((float)position.X != dataContextBone.Position.X ||(float)position.Y != dataContextBone.Position.Y) {
+                dataContextBone.Position = new Vector2((float)position.X, (float)position.Y);
+            } else {
+                DumpChanges?.Invoke( );
+            }
         }
 
         public void RotationChangeCompleted (double rotation) {

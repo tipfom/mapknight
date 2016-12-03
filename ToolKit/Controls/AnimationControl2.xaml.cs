@@ -59,12 +59,19 @@ namespace mapKnight.ToolKit.Controls {
             editBonesDialog.ScaleChanged += EditBonesDialog_ScaleChanged;
 
             BoneImage.BackupChanges += BoneImage_BackupChanges;
+            BoneImage.DumpChanges += BoneImage_DumpChanges;
 
             MLGCanvas.SelectedBoneImageChanged += MLGCanvas_SelectedBoneImageChanged;
 
             VertexAnimationFrame.GetIndex = (frame) => {
                 return animations.FirstOrDefault(anim => anim.Frames.Contains(frame))?.Frames.IndexOf(frame) ?? -1;
             };
+        }
+
+        private void BoneImage_DumpChanges ( ) {
+            if (undoStack.ContainsKey(currentAnimation) && undoStack[currentAnimation].ContainsKey(currentFrame)) {
+                undoStack[currentAnimation][currentFrame].Pop( );
+            }
         }
 
         private void SettingButton_MouseDown (object sender, MouseButtonEventArgs e) {
@@ -429,8 +436,8 @@ namespace mapKnight.ToolKit.Controls {
                 rect.Width = canvas.RenderSize.Width * ultrascale;
                 rect.Height = canvas.RenderSize.Width / MetaData.Ratio * ultrascale;
             }
-            rect.Height -= rect.StrokeThickness *2;
-            rect.Width -= rect.StrokeThickness *2;
+            rect.Height -= rect.StrokeThickness * 2;
+            rect.Width -= rect.StrokeThickness * 2;
             Canvas.SetLeft(rect, (canvas.RenderSize.Width - rect.Width - (rect.StrokeThickness * 2)) / 2d);
             Canvas.SetTop(rect, (canvas.RenderSize.Height - rect.Height - (rect.StrokeThickness * 2)) / 2d);
 
