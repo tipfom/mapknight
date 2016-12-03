@@ -440,6 +440,7 @@ namespace mapKnight.ToolKit.Controls {
                 boneImages[i].RefBorder = border;
                 boneImages[i].RefRectangle = rect;
                 boneImages[i].DataContext = currentFrame.Bones[i];
+                boneImages[i].Update( );
             }
         }
 
