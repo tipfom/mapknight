@@ -51,8 +51,6 @@ namespace mapKnight.ToolKit.Controls {
             editBonesDialog.BonePositionChanged += EditBonesDialog_BonePositionChanged;
             editBonesDialog.ScaleChanged += EditBonesDialog_ScaleChanged;
 
-            bones.CollectionChanged += Bones_CollectionChanged;
-
             BoneImage.BackupChanges += BoneImage_BackupChanges;
 
             MLGCanvas.SelectedBoneImageChanged += MLGCanvas_SelectedBoneImageChanged;
@@ -107,10 +105,6 @@ namespace mapKnight.ToolKit.Controls {
             undoStack[currentAnimation][currentFrame].Push(new ObservableCollection<VertexBone>(currentFrame.Bones.Select(bone => bone.Clone( ))));
         }
 
-        private void Bones_CollectionChanged (object sender, NotifyCollectionChangedEventArgs e) {
-            if (e.Action != NotifyCollectionChangedAction.Move) BonesChanged( );
-        }
-
         public AnimationControl2 (string metafile) : this( ) {
             MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
         }
@@ -134,6 +128,7 @@ namespace mapKnight.ToolKit.Controls {
                 bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
             using (Stream stream = project.GetOrCreateStream(animationdirectory, "animations.json"))
                 animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
+            BonesChanged( );
         }
 
         public List<FrameworkElement> Menu { get { return menu; } }
@@ -238,6 +233,8 @@ namespace mapKnight.ToolKit.Controls {
                     animations[i].Frames[j].Bones.Add(bone);
                 }
             }
+
+            BonesChanged( );
         }
 
         private void EditBonesDialog_BoneDeleted (int deletedBoneIndex) {
@@ -247,6 +244,8 @@ namespace mapKnight.ToolKit.Controls {
                     frame.Bones.RemoveAt(deletedBoneIndex);
                 }
             }
+
+            BonesChanged( );
         }
 
         private void EditBonesDialog_BonePositionChanged (int newz, int oldz) {
@@ -348,9 +347,6 @@ namespace mapKnight.ToolKit.Controls {
 
             }
 
-            currentAnimation = null;
-            currentFrame = null;
-
             if (bones.Count > boneImages.Count) {
                 for (int i = 0; i < bones.Count - boneImages.Count; i++) {
                     boneImages.Add(new BoneImage(this) { });
@@ -361,7 +357,9 @@ namespace mapKnight.ToolKit.Controls {
                 }
             }
 
-            treeview_animations.Items.Refresh( );
+            if(currentFrame != null) {
+                ResetEditor( );
+            }
         }
 
         private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
@@ -436,10 +434,12 @@ namespace mapKnight.ToolKit.Controls {
             Canvas.SetLeft(border, (canvas.RenderSize.Width - rect.Width - (border.BorderThickness.Bottom + border.BorderThickness.Top)) / 2d);
             Canvas.SetTop(border, (canvas.RenderSize.Height - rect.Height - (border.BorderThickness.Left + border.BorderThickness.Right)) / 2d);
 
-            foreach (BoneImage image in boneImages) {
-                image.RefBorder = border;
-                image.RefRectangle = rect;
-                image.Update( );
+            for (int i = 0; i < boneImages.Count; i++) {
+                if (!canvas.Children.Contains(boneImages[i])) canvas.Children.Add(boneImages[i]);
+                Canvas.SetZIndex(boneImages[i], -i);
+                boneImages[i].RefBorder = border;
+                boneImages[i].RefRectangle = rect;
+                boneImages[i].DataContext = currentFrame.Bones[i];
             }
         }
 
