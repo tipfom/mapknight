@@ -38,10 +38,17 @@ namespace mapKnight.ToolKit.Controls {
 
             // init menu
             Style imageStyle = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Property = Button.IsEnabledProperty, Value = false, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } };
-            Button settingButton = new Button( ) { Command = CustomCommands.Settings, Content = new Image( ) { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_settings"), Style = imageStyle } };
+            Image settingButton = new Image( ) {
+                Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_settings"),
+                Style = imageStyle
+            };
+            settingButton.MouseDown += SettingButton_MouseDown;
             menu.Add(settingButton);
-            Button scissorButton = new Button( ) { Content = new Image( ) { Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_scissors"), Style = imageStyle } };
-            scissorButton.Click += ScissorButton_Click;
+            Image scissorButton = new Image( ) {
+                Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_scissors"),
+                Style = imageStyle
+            };
+            scissorButton.MouseDown += ScissorButton_MouseDown;
             menu.Add(scissorButton);
 
             // init editbonesdialog
@@ -60,7 +67,11 @@ namespace mapKnight.ToolKit.Controls {
             };
         }
 
-        private void ScissorButton_Click (object sender, RoutedEventArgs e) {
+        private void SettingButton_MouseDown (object sender, MouseButtonEventArgs e) {
+            editBonesDialog.Show( );
+        }
+
+        private void ScissorButton_MouseDown (object sender, RoutedEventArgs e) {
             ResizeEntityDialog dialog = new ResizeEntityDialog(MetaData.Ratio, currentFrame?.Bones ?? bones, this);
             if (dialog.ShowDialog( ) ?? false) {
                 double centerShiftXReal = 0.5d + dialog.TrimRight - (1 + dialog.TrimLeft + dialog.TrimRight) / 2d;
@@ -213,14 +224,6 @@ namespace mapKnight.ToolKit.Controls {
             currentAnimation.Frames.Move(index, index - 1);
         }
 
-        private void CommandSettings_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = true;
-        }
-
-        private void CommandSettings_Executed (object sender, ExecutedRoutedEventArgs e) {
-            editBonesDialog.Show( );
-        }
-
         private void EditBonesDialog_BoneAdded (VertexBone addedBone) {
             BoneImage.LoadImage(addedBone.Image, this);
             bones.Add(addedBone);
@@ -357,7 +360,7 @@ namespace mapKnight.ToolKit.Controls {
                 }
             }
 
-            if(currentFrame != null) {
+            if (currentFrame != null) {
                 ResetEditor( );
             }
         }

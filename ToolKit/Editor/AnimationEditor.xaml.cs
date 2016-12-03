@@ -15,7 +15,7 @@ namespace mapKnight.ToolKit.Editor {
             new MenuItem() { Header = "ANIMATION", Items = {
                     new MenuItem() {Header="NEW", Icon = App.Current.FindResource("image_animation_new") }
             } },
-            new ComboBox() { VerticalAlignment = VerticalAlignment.Center, Width = 200 }
+            new ComboBox() { VerticalAlignment = VerticalAlignment.Center, Width = 200, Margin = new Thickness(-6,0,-6,0) }
         };
 
         public List<FrameworkElement> Menu {
@@ -40,8 +40,8 @@ namespace mapKnight.ToolKit.Editor {
 
         private void AnimationAdd_Click (object sender, RoutedEventArgs e) {
             AddAnimationWindow dialog = new AddAnimationWindow( );
-            if (dialog.ShowDialog( ) ?? false ) {
-                if(!animationControls.Any(item => item.MetaData.Entity == dialog.textbox_name.Text)) {
+            if (dialog.ShowDialog( ) ?? false) {
+                if (!animationControls.Any(item => item.MetaData.Entity == dialog.textbox_name.Text)) {
                     animationControls.Add(new AnimationControl2(dialog.Ratio, dialog.textbox_name.Text));
                     animationControlStrings.Add(animationControls[animationControls.Count - 1].ToString( ));
                     ((ComboBox)_Menu[1]).SelectedIndex = ((ComboBox)_Menu[1]).Items.Count - 1;

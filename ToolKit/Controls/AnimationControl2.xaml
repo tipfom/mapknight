@@ -16,7 +16,6 @@
         <CommandBinding Command="toolkit:CustomCommands.EditorDelete" Executed="CommandEditorDelete_Executed" CanExecute="CommandEditorDelete_CanExecute"/>
         <CommandBinding Command="toolkit:CustomCommands.EditorUp" Executed="CommandEditorUp_Executed" CanExecute="CommandEditorUp_CanExecute"/>
         <CommandBinding Command="toolkit:CustomCommands.EditorDown" Executed="CommandEditorDown_Executed" CanExecute="CommandEditorDown_CanExecute"/>
-        <CommandBinding Command="toolkit:CustomCommands.Settings" Executed="CommandSettings_Executed" CanExecute="CommandSettings_CanExecute"/>
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <DataTemplate x:Key="preview">
