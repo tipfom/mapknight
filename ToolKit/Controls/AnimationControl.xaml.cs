@@ -72,6 +72,9 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void SettingButton_MouseDown (object sender, MouseButtonEventArgs e) {
+            foreach(VertexBone bone in bones) {
+                bone.SetBitmapImage(this);
+            }
             editBonesDialog.Show( );
         }
 
@@ -131,8 +134,8 @@ namespace mapKnight.ToolKit.Controls {
 
         public AnimationControl (Project project, string animationdirectory) : this( ) {
             foreach (string texturedir in project.GetAllEntries(animationdirectory, "textures")) {
-                if (System.IO.Path.GetFileName(texturedir) == ".png") {
-                    string name = new DirectoryInfo(System.IO.Path.GetDirectoryName(texturedir)).Name;
+                if (Path.GetFileName(texturedir) == ".png") {
+                    string name = new DirectoryInfo(Path.GetDirectoryName(texturedir)).Name;
                     BoneImage.LoadImage(name, project.GetOrCreateStream(texturedir), project.GetOrCreateStream(System.IO.Path.ChangeExtension(texturedir, ".data")), this, false);
                 }
             }
