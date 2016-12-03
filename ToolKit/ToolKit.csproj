@@ -274,9 +274,6 @@
     <Resource Include="Resources\Images\collapse-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\color_dropper-48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\create_new-48.png" />
   </ItemGroup>
   <ItemGroup>
@@ -308,18 +305,6 @@
     <Resource Include="Resources\Images\undo-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\delete_sign-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\add_link-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\add_user_male-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Ecommerce-Do-Not-Drop-icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\video_playlist-48.png" />
   </ItemGroup>
   <ItemGroup>
@@ -330,9 +315,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\repeat-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\person_in_a_mirror-48.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\up_arrow-48.png" />
@@ -362,13 +344,7 @@
     <Resource Include="Resources\Images\vertical_settings_mixer-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\arrow-19.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\delete-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\old_man-48.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\minus_2_math-48.png" />
