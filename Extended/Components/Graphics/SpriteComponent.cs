@@ -30,22 +30,6 @@ namespace mapKnight.Extended.Components.Graphics {
         public override void Update (DeltaTime dt) {
             if (!Owner.IsOnScreen) return;
 
-            while (Owner.HasComponentInfo(ComponentData.SpriteAnimation)) {
-                object[ ] data = Owner.GetComponentInfo(ComponentData.SpriteAnimation);
-                if ((bool)data[1] && currentAnimation.Name != (string)data[0]) {
-                    // force animation
-                    currentAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
-                    if (currentAnimation == null) currentAnimation = animations[0];
-                    currentAnimationCallback = (data.Length == 3) ? (AnimationCallback)data[2] : null;
-                    queuedAnimation = null;
-                } else {
-                    // queue animation
-                    queuedAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
-                    queuedAnimationCallback = (data.Length == 3) ? (AnimationCallback)data[2] : null;
-                }
-                currentAnimation.Reset( );
-            }
-
             if (!currentAnimation.IsRunning) {
                 currentAnimationCallback?.Invoke(true);
                 if (queuedAnimation != null) {
@@ -59,6 +43,24 @@ namespace mapKnight.Extended.Components.Graphics {
                 }
                 currentAnimation.Reset( );
             }
+
+            while (Owner.HasComponentInfo(ComponentData.SpriteAnimation)) {
+                object[ ] data = Owner.GetComponentInfo(ComponentData.SpriteAnimation);
+                if ((bool)data[1] && currentAnimation.Name != (string)data[0]) {
+                    // force animation
+                    currentAnimationCallback?.Invoke(false);
+                    currentAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
+                    if (currentAnimation == null) currentAnimation = animations[0];
+                    currentAnimationCallback = (data.Length == 3) ? (AnimationCallback)data[2] : null;
+                    queuedAnimation = null;
+                    currentAnimation.Reset( );
+                } else {
+                    // queue animation
+                    queuedAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
+                    queuedAnimationCallback = (data.Length == 3) ? (AnimationCallback)data[2] : null;
+                }
+            }
+
             currentAnimation.Update(dt.TotalMilliseconds);
         }
 
