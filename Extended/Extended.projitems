@@ -22,6 +22,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\CircularSawComponent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SharkComponent.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\ShellComponent.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -123,6 +123,8 @@
     <AndroidAsset Include="Assets\textures\sepling\bullet.json" />
     <AndroidAsset Include="Assets\entities\shell.json" />
     <AndroidAsset Include="Assets\textures\sepling\body.json" />
+    <AndroidAsset Include="Assets\textures\shark\body.json" />
+    <AndroidAsset Include="Assets\entities\shark.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -221,6 +223,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\sepling\body.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\shark\body.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

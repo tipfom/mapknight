@@ -52,6 +52,7 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("shell");
             Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
             Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
+            Entity.Configuration sharkConfig = Assets.Load<Entity.Configuration>("shark");
 
             ////sawConfig.Create(new Vector2(3, 6), map);
 
@@ -69,6 +70,8 @@ namespace mapKnight.Extended.Screens {
             platformConfig.Create(map.SpawnPoint - new Vector2(0,5), map);
 
             seplingConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
+
+            sharkConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
 
             Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
             testEntity = playerConfig.Create(map.SpawnPoint, map);
