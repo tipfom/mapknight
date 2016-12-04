@@ -37,11 +37,10 @@ namespace mapKnight.Extended.Components.AI {
             if (Environment.TickCount < lockedTill) {
                 IsFacingLeft = currentTarget.Transform.BL.X > Owner.Transform.TR.X; 
             } else if (Environment.TickCount > nextTurn) {
-                Debug.Print(this, "turn");
                 IsFacingLeft = !IsFacingLeft;
                 nextTurn += timeBetweenTurns;
             }
-            Owner.SetComponentInfo(ComponentData.ScaleX, IsFacingLeft ? -1f : 1f);
+            Owner.SetComponentInfo(ComponentData.ScaleX, IsFacingLeft ? 1f : -1f);
         }
 
         private void Trigger_Triggered (Entity entity) {
@@ -52,7 +51,7 @@ namespace mapKnight.Extended.Components.AI {
                 lockedTill = Environment.TickCount + lockTime;
                 nextTurn = lockedTill + timeBetweenTurns;
                 Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X + (Owner.Transform.HalfSize.X + bulletEntityConfig.Transform.HalfSize.X) * (IsFacingLeft ? 1 : -1), Owner.Transform.BL.Y + Owner.Transform.Size.Y * bulletSpawnpointYPercent);
-                bulletEntityConfig.Create(spawnPoint, Owner.World).GetComponent< Movement.MotionComponent>().AimedVelocity.X = (IsFacingLeft ? -1f : 1f) * bulletSpeed;
+                bulletEntityConfig.Create(spawnPoint, Owner.World).GetComponent< Movement.MotionComponent>().AimedVelocity.X = (IsFacingLeft ? 1f : -1f) * bulletSpeed;
             }
         }
 
