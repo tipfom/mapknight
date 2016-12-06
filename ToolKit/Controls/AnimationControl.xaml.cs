@@ -242,6 +242,13 @@ namespace mapKnight.ToolKit.Controls {
                     VertexBone bone = addedBone.Clone( );
                     bone.Image = name;
                     animations[i].Frames[j].Bones.Add(bone);
+                    if (undoStack.ContainsKey(animations[i])) {
+                        if (undoStack[animations[i]].ContainsKey(animations[i].Frames[j])) {
+                            foreach (ObservableCollection<VertexBone> collection in undoStack[animations[i]][animations[i].Frames[j]]) {
+                                collection.Add(bone);
+                            }
+                        }
+                    }
                 }
             }
 
