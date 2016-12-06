@@ -72,7 +72,7 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void SettingButton_MouseDown (object sender, MouseButtonEventArgs e) {
-            foreach(VertexBone bone in bones) {
+            foreach (VertexBone bone in bones) {
                 bone.SetBitmapImage(this);
             }
             editBonesDialog.Show( );
@@ -234,6 +234,7 @@ namespace mapKnight.ToolKit.Controls {
         private void EditBonesDialog_BoneAdded (VertexBone addedBone) {
             BoneImage.LoadImage(addedBone.Image, this);
             bones.Add(addedBone);
+            addedBone.SetBitmapImage(this);
 
             string name = System.IO.Path.GetFileNameWithoutExtension(addedBone.Image);
             for (int i = 0; i < animations.Count; i++) {
