@@ -52,6 +52,9 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>mapKnight.ToolKit.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>

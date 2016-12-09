@@ -103,7 +103,7 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void Window_Loaded (object sender, RoutedEventArgs e) {
-            if(App.StartupFile != null && Path.GetExtension(App.StartupFile) == ".mkproj" && File.Exists(App.StartupFile)) {
+            if (App.StartupFile != null && Path.GetExtension(App.StartupFile) == ".mkproj" && File.Exists(App.StartupFile)) {
                 project = new Project(App.StartupFile);
                 mapeditor.Load(project);
                 animationeditor.Load(project);
@@ -147,6 +147,15 @@ namespace mapKnight.ToolKit.Windows {
                 animationeditor.Compile(animationpath);
                 System.Windows.MessageBox.Show("Finished!", "Success!", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
             }
+        }
+
+        public void CRASH_SAVE (string path) {
+            // experimental
+            mapeditor.Save(project);
+            animationeditor.Save(project);
+
+            project.Path = path;
+            project.Save( );
         }
     }
 }
