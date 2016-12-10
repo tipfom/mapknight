@@ -402,11 +402,11 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void scrollbar_horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
-            tilemapview.Offset = new Microsoft.Xna.Framework.Point((int)scrollbar_horizontal.Value, tilemapview.Offset.Y);
+            tilemapview.Offset = new Microsoft.Xna.Framework.Vector2((float)scrollbar_horizontal.Value, tilemapview.Offset.Y);
         }
 
         private void scrollbar_vertical_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
-            tilemapview.Offset = new Microsoft.Xna.Framework.Point(tilemapview.Offset.X, (int)scrollbar_vertical.Value);
+            tilemapview.Offset = new Microsoft.Xna.Framework.Vector2(tilemapview.Offset.X, (float)scrollbar_vertical.Value);
         }
 
         private void SelectTool (Tool tool) {
