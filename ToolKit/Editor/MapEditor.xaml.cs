@@ -325,11 +325,12 @@ namespace mapKnight.ToolKit.Editor {
             scrollbar_vertical.Value = currentMap.Height - tilemapview.RenderSize.Height / tilemapview.TileSize + 2;
         }
 
-        private bool GetClickedTile (MouseEventArgs e, out Point tile) {
+        private bool GetClickedTile(MouseEventArgs e, out Point tile)
+        {
             Point positionOnControl = e.GetPosition(tilemapview);
             tile = new Point(
-                    positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X,
-                    currentMap.Height - positionOnControl.Y / tilemapview.TileSize - tilemapview.Offset.Y
+                    positionOnControl.X / tilemapview.TileSize + Math.Ceiling(tilemapview.Offset.X),
+                    currentMap.Height - positionOnControl.Y / tilemapview.TileSize - Math.Floor(tilemapview.Offset.Y)
                 );
             return (tile.X >= 0 && tile.X < currentMap.Width && tile.Y >= 0 && tile.Y < currentMap.Height);
         }
