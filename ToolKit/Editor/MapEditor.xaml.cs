@@ -74,9 +74,9 @@ namespace mapKnight.ToolKit.Editor {
                     string dir = Path.GetDirectoryName(mapfile);
                     string name = Path.GetFileNameWithoutExtension(mapfile);
 
-                    using (Stream mapStream = project.GetOrCreateStream(mapfile)) {
+                    using (Stream mapStream = project.GetOrCreateStream(false, mapfile)) {
                         Map map = LoadMap(mapStream);
-                        using (Stream imageStream = project.GetOrCreateStream(Path.Combine(dir, name + ".png")))
+                        using (Stream imageStream = project.GetOrCreateStream(false, Path.Combine(dir, name + ".png")))
                             LoadImages(imageStream, map);
                         AddMap(map);
                     }
@@ -195,11 +195,11 @@ namespace mapKnight.ToolKit.Editor {
             foreach (Map map in GetMaps( )) {
                 // build texture
                 Texture2D packedTexture = TileSerializer.BuildTexture(map.Tiles, xnaTextures[map], GraphicsDevice);
-                using (Stream stream = project.GetOrCreateStream("maps", map.Name, map.Name + ".png"))
+                using (Stream stream = project.GetOrCreateStream(false, "maps", map.Name, map.Name + ".png"))
                     packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
 
                 map.Texture = Path.GetFileNameWithoutExtension(map.Name + ".png");
-                using (Stream stream = project.GetOrCreateStream("maps", map.Name, map.Name + ".map"))
+                using (Stream stream = project.GetOrCreateStream(false, "maps", map.Name, map.Name + ".map"))
                     map.MergeRotations(mapRotations[map]).Serialize(stream);
             }
         }

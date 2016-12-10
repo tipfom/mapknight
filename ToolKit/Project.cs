@@ -20,7 +20,7 @@ namespace mapKnight.ToolKit {
                     archive.Dispose( );
                     if (File.Exists(value)) File.Delete(value);
                     File.Copy(_Path, value);
-                    archive = new ZipArchive(File.Open(value, FileMode.Open), ZipArchiveMode.Update, false, Encoding.UTF8);
+                    archive = new ZipArchive(File.Open(value, FileMode.Open), ZipArchiveMode.Update, false);
                 }
                 _Path = value;
                 HasPath = true;
@@ -33,7 +33,7 @@ namespace mapKnight.ToolKit {
 
         public Project (string path) {
             Path = path;
-            archive = new ZipArchive(File.Open(path, FileMode.Open), ZipArchiveMode.Update, false, Encoding.UTF8);
+            archive = new ZipArchive(File.Open(path, FileMode.Open), ZipArchiveMode.Update, false);
         }
 
         public Project ( ) : this(System.IO.Path.GetTempFileName( )) {
@@ -42,7 +42,7 @@ namespace mapKnight.ToolKit {
 
         public void Save ( ) {
             archive.Dispose( );
-            archive = new ZipArchive(File.Open(Path, FileMode.Open), ZipArchiveMode.Update, false, Encoding.UTF8);
+            archive = new ZipArchive(File.Open(Path, FileMode.Open), ZipArchiveMode.Update, false);
             Updated = false;
         }
 
@@ -61,11 +61,16 @@ namespace mapKnight.ToolKit {
             }
         }
 
-        public Stream GetOrCreateStream (params string[ ] path) {
+        public Stream GetOrCreateStream (bool forcenew, params string[ ] path) {
             Updated = true;
             string internalpath = System.IO.Path.Combine(path);
             if (Contains(internalpath)) {
-                return archive.GetEntry(internalpath).Open( );
+                if (forcenew) {
+                    archive.GetEntry(internalpath);
+                    return archive.CreateEntry(internalpath, COMPRESSION).Open( );
+                } else {
+                    return archive.GetEntry(internalpath).Open( );
+                }
             } else {
                 return archive.CreateEntry(internalpath, COMPRESSION).Open( );
             }

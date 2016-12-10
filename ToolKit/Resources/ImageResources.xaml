@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <BitmapImage x:Key="logo" UriSource="../Resources/Images/icon.png"/>
-    <BitmapImage x:Key="image_draganddrop" UriSource="../Resources/Images/Ecommerce-Do-Not-Drop-icon.png"/>
 
     <Image x:Key="image_project_new" Source="../Resources/Images/folder-48.png"/>
     <Image x:Key="image_project_load" Source="../Resources/Images/opened_folder-48.png"/>

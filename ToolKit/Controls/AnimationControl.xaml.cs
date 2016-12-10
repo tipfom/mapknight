@@ -136,19 +136,19 @@ namespace mapKnight.ToolKit.Controls {
             foreach (string texturedir in project.GetAllEntries(animationdirectory, "textures")) {
                 if (Path.GetFileName(texturedir) == ".png") {
                     string name = new DirectoryInfo(Path.GetDirectoryName(texturedir)).Name;
-                    BoneImage.LoadImage(name, project.GetOrCreateStream(texturedir), project.GetOrCreateStream(System.IO.Path.ChangeExtension(texturedir, ".data")), this, false);
+                    BoneImage.LoadImage(name, project.GetOrCreateStream(false, texturedir), project.GetOrCreateStream(false, Path.ChangeExtension(texturedir, ".data")), this, false);
                 }
             }
 
-            using (Stream stream = project.GetOrCreateStream(animationdirectory, ".meta"))
+            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, ".meta"))
                 MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
-            using (Stream stream = project.GetOrCreateStream(animationdirectory, "bones.json"))
+            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, "bones.json"))
                 bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
-            using (Stream stream = project.GetOrCreateStream(animationdirectory, "animations.json"))
+            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, "animations.json"))
                 animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
             BonesChanged( );
         }
-
+        
         public List<FrameworkElement> Menu { get { return menu; } }
 
         public override string ToString ( ) {
@@ -402,23 +402,23 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         public void Save (Project project) {
-            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, ".meta"))
+            using (Stream stream = project.GetOrCreateStream(true, "animations", MetaData.Entity, ".meta"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(MetaData));
 
-            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "animations.json"))
+            using (Stream stream = project.GetOrCreateStream(true, "animations", MetaData.Entity, "animations.json"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(animations));
 
-            using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "bones.json"))
+            using (Stream stream = project.GetOrCreateStream(true, "animations", MetaData.Entity, "bones.json"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(bones));
 
             if (!BoneImage.Data.ContainsKey(this)) return;
             foreach (KeyValuePair<string, BoneImage.ImageData> kvpair in BoneImage.Data[this]) {
-                using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "textures", kvpair.Key, ".png"))
+                using (Stream stream = project.GetOrCreateStream(true, "animations", MetaData.Entity, "textures", kvpair.Key, ".png"))
                     kvpair.Value.Image.SaveToStream(stream);
-                using (Stream stream = project.GetOrCreateStream("animations", MetaData.Entity, "textures", kvpair.Key, ".data"))
+                using (Stream stream = project.GetOrCreateStream(true, "animations", MetaData.Entity, "textures", kvpair.Key, ".data"))
                 using (StreamWriter writer = new StreamWriter(stream))
                     writer.WriteLine(JsonConvert.SerializeObject(kvpair.Value.TransformOrigin));
             }

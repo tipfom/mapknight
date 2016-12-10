@@ -9,8 +9,6 @@ namespace mapKnight.ToolKit.Windows {
     /// Interaktionslogik für AboutWindow.xaml
     /// </summary>
     public partial class AboutWindow : Window {
-        private Stream A;
-
         public AboutWindow ( ) {
             this.Owner = App.Current.MainWindow;
             InitializeComponent( );
