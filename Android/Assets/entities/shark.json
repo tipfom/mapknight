@@ -92,12 +92,20 @@
             ]
         },
         {
-            "$type": "AI.Shark"
+            "$type": "AI.Shark",
+            "EscapeDistance": 10
         },
         {
             "$type": "Stats.Speed",
-            "X": 1,
+            "X": 5,
             "Y": 20
+        },
+        {
+            "$type": "AI.Basics.Trigger",
+            "TriggerZone": {
+                "X": 16,
+                "Y": 10
+            }
         }
     ]
 }
