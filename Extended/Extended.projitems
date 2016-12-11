@@ -55,6 +55,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\ActionMask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Player\AnimationState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\PlayerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\ArmorComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\DamageComponent.cs" />

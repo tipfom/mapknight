@@ -19,8 +19,8 @@ namespace mapKnight.Extended.Components.Player {
 
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
-
-        private bool isJumping = false, startedJumping = false;
+        private AnimationState animationState = AnimationState.None;
+        private bool startedJumping = false;
 
         public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
             Weapon = weapon;
@@ -37,7 +37,8 @@ namespace mapKnight.Extended.Components.Player {
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm1", new Vector2(2, 1.5f)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm2", new Vector2(2, 1.5f)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("head", new Vector2(9, 9)));
-            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("weapon", new Vector2(5, 18)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("weapon", new Vector2(3, 25)));
+            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("sword", new Vector2(3, 25)));
         }
 
         public override void Destroy ( ) {
@@ -62,20 +63,11 @@ namespace mapKnight.Extended.Components.Player {
                 string data = (string)Owner.GetComponentInfo(ComponentData.InputGesture)[0];
                 if (data == string.Empty) {
                     Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit_prepare", true, (AnimationComponent.AnimationCallback)AnimationCallbackContinueAttack);
-                } else Weapon.Special(data);
+                } else
+                    Weapon.Special(data);
             }
 
             Vector2 speed = speedComponent.Speed;
-            if (!isJumping && (motionComponent.IsOnGround || motionComponent.IsOnPlatform)) {
-                if (Action.HasFlag(ActionMask.Jump)) {
-                    isJumping = true;
-                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "jump", true, (AnimationComponent.AnimationCallback)AnimationCallbackFinishJumping);
-                } else {
-                    if (!startedJumping) motionComponent.AimedVelocity.Y = 0;
-                    startedJumping = false;
-                }
-            }
-
             if (Action.HasFlag(ActionMask.Left)) {
                 motionComponent.AimedVelocity.X = -speed.X;
             } else if (Action.HasFlag(ActionMask.Right)) {
@@ -84,14 +76,27 @@ namespace mapKnight.Extended.Components.Player {
                 motionComponent.AimedVelocity.X = 0;
             }
 
-            if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
-                if (motionComponent.AimedVelocity.X != 0) {
-                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", false);
+            if (animationState != AnimationState.Jump && (motionComponent.IsOnGround || motionComponent.IsOnPlatform)) {
+                if (Action.HasFlag(ActionMask.Jump)) {
+                    animationState = AnimationState.Jump;
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "jump", true, (AnimationComponent.AnimationCallback)AnimationCallbackFinishJumping);
+                    return;
                 } else {
-                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", false);
+                    if (!startedJumping)
+                        motionComponent.AimedVelocity.Y = 0;
+                    startedJumping = false;
                 }
-            } else {
-                Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", false);
+                if (motionComponent.AimedVelocity.X != 0) {
+                    if (animationState != AnimationState.Walk) {
+                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", true);
+                        animationState = AnimationState.Walk;
+                    }
+                } else {
+                    if (animationState != AnimationState.Idle) {
+                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
+                        animationState = AnimationState.Idle;
+                    }
+                }
             }
         }
 
@@ -99,7 +104,8 @@ namespace mapKnight.Extended.Components.Player {
             if (success) {
                 motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
                 Action &= ~ActionMask.Jump;
-                isJumping = false;
+                animationState = AnimationState.Fall;
+                Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", true);
                 startedJumping = true;
             }
         }

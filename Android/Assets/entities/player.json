@@ -1,8 +1,8 @@
 {
 	"Name": "Test Player",
 	"Transform": {
-		"Width": 1,
-		"Height": 1.5
+		"Width": 2,
+		"Height": 2.64
 	},
 	"Components": [
 		{
@@ -29,15 +29,15 @@
 		{
 			"$type": "Graphics.Animation",
 			"Scales": [
-				0.05,
-				0.05,
-				0.05,
-				0.05,
-				0.05,
-				0.05,
-				0.05,
-				0.05,
-				0.05
+				0.0487060845,
+				0.0487060845,
+				0.0487060845,
+				0.0487060845,
+				0.0487060845,
+				0.0487060845,
+				0.0487060845,
+				0.0487060845,
+				0.0487060845
 			],
 			"Animations": [
 				{
@@ -48,69 +48,68 @@
 							"State": [
 								{
 									"Position": {
-										"X": -0.348227978,
-										"Y": -0.420642346
-									},
-									"Texture": "feet1"
-								},
-								{
-									"Position": {
-										"X": 0.356214851,
-										"Y": -0.41957745
+										"X": 0.152158469,
+										"Y": -0.406347543
 									},
 									"Texture": "feet2"
 								},
 								{
 									"Position": {
-										"X": -0.0287527684,
-										"Y": -0.1043619
-									},
-									"Texture": "body"
-								},
-								{
-									"Position": {
-										"X": -0.0335448943,
-										"Y": 0.309890956
-									},
-									"Texture": "head"
-								},
-								{
-									"Rotation": -151.0,
-									"Position": {
-										"X": 0.202134073,
-										"Y": 0.343479842
-									},
-									"Texture": "weapon"
-								},
-								{
-									"Position": {
-										"X": 0.5526921,
-										"Y": -0.192750037
+										"X": 0.402641684,
+										"Y": -0.231010675
 									},
 									"Texture": "hand1"
 								},
 								{
 									"Position": {
-										"X": -0.573457956,
-										"Y": -0.190620214
+										"X": -0.154090866,
+										"Y": -0.405893743
 									},
-									"Texture": "hand2"
+									"Texture": "feet1"
 								},
 								{
-									"Rotation": 18.0,
 									"Position": {
-										"X": 0.384967625,
-										"Y": 0.0063895043
+										"X": 0.389550984,
+										"Y": -0.013874568
 									},
 									"Texture": "upper_arm1"
 								},
 								{
-									"Rotation": -18.0,
 									"Position": {
-										"X": -0.480810165,
-										"Y": -0.00532458676
+										"X": -0.0143380864,
+										"Y": -0.166811645
 									},
-									"Texture": "upper_arm2"
+									"Texture": "body"
+								},
+								{
+									"Position": {
+										"X": -0.060812,
+										"Y": 0.3166551
+									},
+									"Texture": "head"
+								},
+								{
+									"Position": {
+										"X": -0.367086381,
+										"Y": -0.04631752
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -47.0,
+									"Position": {
+										"X": -0.385396481,
+										"Y": -0.238530248
+									},
+									"Texture": "sword"
+								},
+								{
+									"Rotation": -4.0,
+									"Position": {
+										"X": -0.357564628,
+										"Y": -0.238204092
+									},
+									"Texture": "hand1"
 								}
 							],
 							"Time": 500
@@ -119,72 +118,143 @@
 							"State": [
 								{
 									"Position": {
-										"X": -0.317877829,
-										"Y": -0.395084321
-									},
-									"Texture": "feet1"
-								},
-								{
-									"Position": {
-										"X": 0.356214851,
-										"Y": -0.41957745
+										"X": 0.152158469,
+										"Y": -0.406347543
 									},
 									"Texture": "feet2"
 								},
 								{
 									"Position": {
-										"X": -0.0463239029,
-										"Y": -0.134179592
-									},
-									"Texture": "body"
-								},
-								{
-									"Position": {
-										"X": -0.0575055331,
-										"Y": 0.327994555
-									},
-									"Texture": "head"
-								},
-								{
-									"Rotation": -151.0,
-									"Position": {
-										"X": 0.202134073,
-										"Y": 0.343479842
-									},
-									"Texture": "weapon"
-								},
-								{
-									"Position": {
-										"X": 0.6341583,
-										"Y": -0.149088427
+										"X": 0.390494257,
+										"Y": -0.2830519
 									},
 									"Texture": "hand1"
 								},
 								{
 									"Position": {
-										"X": -0.58144486,
-										"Y": -0.188490376
+										"X": -0.154090866,
+										"Y": -0.405893743
 									},
-									"Texture": "hand2"
+									"Texture": "feet1"
 								},
 								{
-									"Rotation": 18.0,
 									"Position": {
-										"X": 0.394551873,
-										"Y": 0.05218095
+										"X": 0.379428118,
+										"Y": -0.07663018
 									},
 									"Texture": "upper_arm1"
 								},
 								{
-									"Rotation": -18.0,
 									"Position": {
-										"X": -0.4903944,
-										"Y": 0.0138439257
+										"X": -0.0262933671,
+										"Y": -0.201181948
 									},
-									"Texture": "upper_arm2"
+									"Texture": "body"
+								},
+								{
+									"Rotation": -3.0,
+									"Position": {
+										"X": -0.0517186,
+										"Y": 0.2960604
+									},
+									"Texture": "head"
+								},
+								{
+									"Position": {
+										"X": -0.3628451,
+										"Y": -0.08374908
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -45.0,
+									"Position": {
+										"X": -0.389637768,
+										"Y": -0.27489233
+									},
+									"Texture": "sword"
+								},
+								{
+									"Rotation": 2.0,
+									"Position": {
+										"X": -0.357564628,
+										"Y": -0.2895388
+									},
+									"Texture": "hand1"
 								}
 							],
-							"Time": 500
+							"Time": 800
+						},
+						{
+							"State": [
+								{
+									"Position": {
+										"X": 0.152158469,
+										"Y": -0.406347543
+									},
+									"Texture": "feet2"
+								},
+								{
+									"Position": {
+										"X": 0.392859459,
+										"Y": -0.258026153
+									},
+									"Texture": "hand1"
+								},
+								{
+									"Position": {
+										"X": -0.154090866,
+										"Y": -0.405893743
+									},
+									"Texture": "feet1"
+								},
+								{
+									"Position": {
+										"X": 0.372332543,
+										"Y": -0.0337289125
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Position": {
+										"X": -0.0262933671,
+										"Y": -0.169038832
+									},
+									"Texture": "body"
+								},
+								{
+									"Rotation": -3.0,
+									"Position": {
+										"X": -0.04908322,
+										"Y": 0.316527575
+									},
+									"Texture": "head"
+								},
+								{
+									"Position": {
+										"X": -0.372967958,
+										"Y": -0.03936096
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -51.0,
+									"Position": {
+										"X": -0.39334628,
+										"Y": -0.246056452
+									},
+									"Texture": "sword"
+								},
+								{
+									"Rotation": -11.0,
+									"Position": {
+										"X": -0.3644413,
+										"Y": -0.25557074
+									},
+									"Texture": "hand1"
+								}
+							],
+							"Time": 600
 						}
 					]
 				},
@@ -196,211 +266,371 @@
 							"State": [
 								{
 									"Position": {
-										"X": -0.348227978,
-										"Y": -0.420642346
-									},
-									"Texture": "feet1"
-								},
-								{
-									"Position": {
-										"X": 0.356214851,
-										"Y": -0.41957745
+										"X": 0.152158469,
+										"Y": -0.406347543
 									},
 									"Texture": "feet2"
 								},
 								{
 									"Position": {
-										"X": -0.0287527684,
-										"Y": -0.1043619
-									},
-									"Texture": "body"
-								},
-								{
-									"Position": {
-										"X": -0.0335448943,
-										"Y": 0.309890956
-									},
-									"Texture": "head"
-								},
-								{
-									"Rotation": -151.0,
-									"Position": {
-										"X": 0.202134073,
-										"Y": 0.343479842
-									},
-									"Texture": "weapon"
-								},
-								{
-									"Position": {
-										"X": 0.5526921,
-										"Y": -0.192750037
+										"X": 0.402641684,
+										"Y": -0.231010675
 									},
 									"Texture": "hand1"
 								},
 								{
 									"Position": {
-										"X": -0.573457956,
-										"Y": -0.190620214
+										"X": -0.154090866,
+										"Y": -0.405893743
 									},
-									"Texture": "hand2"
+									"Texture": "feet1"
 								},
 								{
-									"Rotation": 18.0,
 									"Position": {
-										"X": 0.384967625,
-										"Y": 0.0063895043
+										"X": 0.389550984,
+										"Y": -0.013874568
 									},
 									"Texture": "upper_arm1"
 								},
 								{
-									"Rotation": -18.0,
 									"Position": {
-										"X": -0.480810165,
-										"Y": -0.00532458676
+										"X": -0.0143380864,
+										"Y": -0.166811645
 									},
-									"Texture": "upper_arm2"
+									"Texture": "body"
+								},
+								{
+									"Position": {
+										"X": -0.060812,
+										"Y": 0.3166551
+									},
+									"Texture": "head"
+								},
+								{
+									"Position": {
+										"X": -0.367086381,
+										"Y": -0.04631752
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -47.0,
+									"Position": {
+										"X": -0.3938791,
+										"Y": -0.2363913
+									},
+									"Texture": "sword"
+								},
+								{
+									"Rotation": -4.0,
+									"Position": {
+										"X": -0.357564628,
+										"Y": -0.238204092
+									},
+									"Texture": "hand1"
 								}
 							],
-							"Time": 200
+							"Time": 100
+						},
+						{
+							"State": [
+								{
+									"Rotation": 14.0,
+									"Position": {
+										"X": 0.300026327,
+										"Y": -0.344051629
+									},
+									"Texture": "feet2"
+								},
+								{
+									"Rotation": -17.0,
+									"Position": {
+										"X": 0.3305396,
+										"Y": -0.186092809
+									},
+									"Texture": "hand1"
+								},
+								{
+									"Position": {
+										"X": -0.154090866,
+										"Y": -0.405893743
+									},
+									"Texture": "feet1"
+								},
+								{
+									"Rotation": -15.0,
+									"Position": {
+										"X": 0.389550984,
+										"Y": -0.013874568
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": 7.0,
+									"Position": {
+										"X": -0.0143380864,
+										"Y": -0.166811645
+									},
+									"Texture": "body"
+								},
+								{
+									"Rotation": -1.0,
+									"Position": {
+										"X": -0.08343226,
+										"Y": 0.302751929
+									},
+									"Texture": "head"
+								},
+								{
+									"Rotation": 11.0,
+									"Position": {
+										"X": -0.367086381,
+										"Y": -0.04631752
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -33.0,
+									"Position": {
+										"X": -0.318081141,
+										"Y": -0.228767157
+									},
+									"Texture": "sword"
+								},
+								{
+									"Rotation": 13.0,
+									"Position": {
+										"X": -0.278890878,
+										"Y": -0.22736232
+									},
+									"Texture": "hand1"
+								}
+							],
+							"Time": 150
+						},
+						{
+							"State": [
+								{
+									"Rotation": -1.0,
+									"Position": {
+										"X": 0.265902966,
+										"Y": -0.399903148
+									},
+									"Texture": "feet2"
+								},
+								{
+									"Rotation": -20.0,
+									"Position": {
+										"X": 0.3142498,
+										"Y": -0.186083615
+									},
+									"Texture": "hand1"
+								},
+								{
+									"Position": {
+										"X": -0.154090866,
+										"Y": -0.405893743
+									},
+									"Texture": "feet1"
+								},
+								{
+									"Rotation": -21.0,
+									"Position": {
+										"X": 0.389550984,
+										"Y": -0.013874568
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": 7.0,
+									"Position": {
+										"X": -0.0143380864,
+										"Y": -0.166811645
+									},
+									"Texture": "body"
+								},
+								{
+									"Rotation": -4.0,
+									"Position": {
+										"X": -0.07070836,
+										"Y": 0.305960357
+									},
+									"Texture": "head"
+								},
+								{
+									"Rotation": 22.0,
+									"Position": {
+										"X": -0.406896949,
+										"Y": -0.0549100637
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -41.0,
+									"Position": {
+										"X": -0.283492744,
+										"Y": -0.2074512
+									},
+									"Texture": "sword"
+								},
+								{
+									"Rotation": -2.0,
+									"Position": {
+										"X": -0.244656309,
+										"Y": -0.203935
+									},
+									"Texture": "hand1"
+								}
+							],
+							"Time": 150
+						},
+						{
+							"State": [
+								{
+									"Rotation": -1.0,
+									"Position": {
+										"X": 0.0232323986,
+										"Y": -0.4084957
+									},
+									"Texture": "feet2"
+								},
+								{
+									"Rotation": 17.0,
+									"Position": {
+										"X": 0.437247455,
+										"Y": -0.2106815
+									},
+									"Texture": "hand1"
+								},
+								{
+									"Rotation": -39.0,
+									"Position": {
+										"X": -0.0252934527,
+										"Y": -0.342629433
+									},
+									"Texture": "feet1"
+								},
+								{
+									"Rotation": 2.0,
+									"Position": {
+										"X": 0.389550984,
+										"Y": -0.013874568
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -5.0,
+									"Position": {
+										"X": -0.0143380864,
+										"Y": -0.166811645
+									},
+									"Texture": "body"
+								},
+								{
+									"Rotation": 2.0,
+									"Position": {
+										"X": -0.033950448,
+										"Y": 0.3091688
+									},
+									"Texture": "head"
+								},
+								{
+									"Position": {
+										"X": -0.406896949,
+										"Y": -0.0549100637
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -44.0,
+									"Position": {
+										"X": -0.461627245,
+										"Y": -0.23846592
+									},
+									"Texture": "sword"
+								},
+								{
+									"Rotation": -5.0,
+									"Position": {
+										"X": -0.421377,
+										"Y": -0.238158152
+									},
+									"Texture": "hand1"
+								}
+							],
+							"Time": 100
 						},
 						{
 							"State": [
 								{
 									"Position": {
-										"X": -0.269956559,
-										"Y": -0.400408924
-									},
-									"Texture": "feet1"
-								},
-								{
-									"Position": {
-										"X": 0.4392784,
-										"Y": -0.351422727
+										"X": 0.103817053,
+										"Y": -0.4084957
 									},
 									"Texture": "feet2"
 								},
 								{
+									"Rotation": 13.0,
 									"Position": {
-										"X": -0.0287527684,
-										"Y": -0.1043619
+										"X": 0.44007498,
+										"Y": -0.2106815
+									},
+									"Texture": "hand1"
+								},
+								{
+									"Rotation": -1.0,
+									"Position": {
+										"X": 0.0552912,
+										"Y": -0.4078673
+									},
+									"Texture": "feet1"
+								},
+								{
+									"Rotation": 9.0,
+									"Position": {
+										"X": 0.389550984,
+										"Y": -0.013874568
+									},
+									"Texture": "upper_arm1"
+								},
+								{
+									"Rotation": -10.0,
+									"Position": {
+										"X": -0.0143380864,
+										"Y": -0.166811645
 									},
 									"Texture": "body"
 								},
 								{
 									"Position": {
-										"X": -0.0335448943,
-										"Y": 0.309890956
+										"X": 0.00139369757,
+										"Y": 0.2974046
 									},
 									"Texture": "head"
 								},
 								{
-									"Rotation": -151.0,
+									"Rotation": -16.0,
 									"Position": {
-										"X": 0.202134073,
-										"Y": 0.343479842
-									},
-									"Texture": "weapon"
-								},
-								{
-									"Position": {
-										"X": 0.43129155,
-										"Y": -0.105426811
-									},
-									"Texture": "hand1"
-								},
-								{
-									"Position": {
-										"X": -0.501576066,
-										"Y": -0.170386791
-									},
-									"Texture": "hand2"
-								},
-								{
-									"Rotation": 18.0,
-									"Position": {
-										"X": 0.36260435,
-										"Y": 0.0340773575
+										"X": -0.406896949,
+										"Y": -0.0549100637
 									},
 									"Texture": "upper_arm1"
 								},
 								{
-									"Rotation": -18.0,
+									"Rotation": -49.0,
 									"Position": {
-										"X": -0.480810165,
-										"Y": -0.00532458676
+										"X": -0.540798068,
+										"Y": -0.239535362
 									},
-									"Texture": "upper_arm2"
-								}
-							],
-							"Time": 200
-						},
-						{
-							"State": [
-								{
-									"Position": {
-										"X": -0.469628572,
-										"Y": -0.4046686
-									},
-									"Texture": "feet1"
+									"Texture": "sword"
 								},
 								{
+									"Rotation": -9.0,
 									"Position": {
-										"X": 0.14695859,
-										"Y": -0.414252847
-									},
-									"Texture": "feet2"
-								},
-								{
-									"Position": {
-										"X": -0.0287527684,
-										"Y": -0.1043619
-									},
-									"Texture": "body"
-								},
-								{
-									"Position": {
-										"X": -0.0335448943,
-										"Y": 0.309890956
-									},
-									"Texture": "head"
-								},
-								{
-									"Rotation": -151.0,
-									"Position": {
-										"X": 0.202134073,
-										"Y": 0.343479842
-									},
-									"Texture": "weapon"
-								},
-								{
-									"Position": {
-										"X": 0.3402411,
-										"Y": -0.14376384
+										"X": -0.4892378,
+										"Y": -0.233880252
 									},
 									"Texture": "hand1"
-								},
-								{
-									"Position": {
-										"X": -0.501576066,
-										"Y": -0.170386791
-									},
-									"Texture": "hand2"
-								},
-								{
-									"Rotation": 18.0,
-									"Position": {
-										"X": 0.399344,
-										"Y": 0.00745442323
-									},
-									"Texture": "upper_arm1"
-								},
-								{
-									"Rotation": -18.0,
-									"Position": {
-										"X": -0.480810165,
-										"Y": -0.00532458676
-									},
-									"Texture": "upper_arm2"
 								}
 							],
 							"Time": 200

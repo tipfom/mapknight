@@ -54,7 +54,7 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
             Entity.Configuration sharkConfig = Assets.Load<Entity.Configuration>("shark");
 
-            ////sawConfig.Create(new Vector2(3, 6), map);
+            //sawConfig.Create(new Vector2(3, 6), map);
 
             walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
@@ -67,7 +67,7 @@ namespace mapKnight.Extended.Screens {
 
             hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
 
-            platformConfig.Create(map.SpawnPoint - new Vector2(0,5), map);
+            platformConfig.Create(map.SpawnPoint - new Vector2(0, 5), map);
 
             seplingConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
 
