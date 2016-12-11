@@ -87,7 +87,8 @@ namespace mapKnight.ToolKit.Editor {
         public void Compile (string mappath) {
             foreach (Map map in GetMaps( )) {
                 string basedirectory = Path.Combine(mappath, map.Name);
-                if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
+                if (!Directory.Exists(basedirectory))
+                    Directory.CreateDirectory(basedirectory);
                 // build texture
                 Texture2D packedTexture = TileSerializer.BuildTexture(map.Tiles, xnaTextures[map], GraphicsDevice);
                 using (Stream stream = File.Open(Path.Combine(basedirectory, map.Name + ".png"), FileMode.Create))
@@ -122,7 +123,8 @@ namespace mapKnight.ToolKit.Editor {
             ((ComboBox)_Menu[1]).SelectionChanged += CurrentMapChanged;
 
             ((Image)_Menu[2]).MouseDown += (sender, e) => {
-                if (currentMap == null) return;
+                if (currentMap == null)
+                    return;
                 new ModifyMapWindow(currentMap).ShowDialog( );
             };
 
@@ -293,10 +295,18 @@ namespace mapKnight.ToolKit.Editor {
 
         private void CommandBinding_ToolSelection_Executed (object sender, ExecutedRoutedEventArgs e) {
             switch (((RoutedUICommand)e.Command).Name.Last( )) {
-                case 'A': SelectTool(Tool.Pen); break;
-                case 'S': SelectTool(Tool.Eraser); break;
-                case 'D': SelectTool(Tool.Filler); break;
-                case 'F': SelectTool(Tool.Rotater); break;
+                case 'A':
+                    SelectTool(Tool.Pen);
+                    break;
+                case 'S':
+                    SelectTool(Tool.Eraser);
+                    break;
+                case 'D':
+                    SelectTool(Tool.Filler);
+                    break;
+                case 'F':
+                    SelectTool(Tool.Rotater);
+                    break;
             }
         }
 
@@ -325,8 +335,7 @@ namespace mapKnight.ToolKit.Editor {
             scrollbar_vertical.Value = currentMap.Height - tilemapview.RenderSize.Height / tilemapview.TileSize + 2;
         }
 
-        private bool GetClickedTile(MouseEventArgs e, out Point tile)
-        {
+        private bool GetClickedTile (MouseEventArgs e, out Point tile) {
             Point positionOnControl = e.GetPosition(tilemapview);
             tile = new Point(
                     positionOnControl.X / tilemapview.TileSize + Math.Ceiling(tilemapview.Offset.X),
@@ -502,8 +511,11 @@ namespace mapKnight.ToolKit.Editor {
             if (currentMap == null)
                 return;
             bool update = UpdateSelectedTile(e);
-            if (currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer))
+            if (currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer)) {
+                if (update)
+                    tilemapview.Update( );
                 return;
+            }
 
             Point clickedTile;
             if (GetClickedTile(e, out clickedTile) && ((int)clickedTile.X != (int)lastClickedTile.X || (int)clickedTile.Y != (int)lastClickedTile.Y) && (e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed)) {
@@ -567,12 +579,12 @@ namespace mapKnight.ToolKit.Editor {
         private bool UpdateSelectedTile (MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Microsoft.Xna.Framework.Point selectedTile = new Microsoft.Xna.Framework.Point(
-                (int)Math.Min(positionOnControl.X / tilemapview.TileSize, currentMap.Width - tilemapview.Offset.X - 1),
-                (int)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - tilemapview.Offset.Y - 1)
+                (int)Math.Min(positionOnControl.X / tilemapview.TileSize, currentMap.Width - Math.Floor(tilemapview.Offset.X) - 1),
+                (int)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y) - 1)
                 );
             if (selectedTile.X != tilemapview.CurrentSelection.X || selectedTile.Y != tilemapview.CurrentSelection.Y) {
-                text_xpos.Text = (selectedTile.X + tilemapview.Offset.X + 1).ToString( );
-                text_ypos.Text = (currentMap.Size.Height - selectedTile.Y - tilemapview.Offset.Y).ToString( );
+                text_xpos.Text = Math.Round(selectedTile.X + tilemapview.Offset.X + 1).ToString( );
+                text_ypos.Text = Math.Round(currentMap.Size.Height - selectedTile.Y - tilemapview.Offset.Y).ToString( );
                 tilemapview.CurrentSelection = selectedTile;
                 return true;
             } else
@@ -629,7 +641,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void wrappanel_tiles_Selected (object sender, RoutedEventArgs e) {
-            if (currentlyEditingTile >= 0 || currentlyEditionTilesMap >= 0) {
+            if (currentlyEditingTile >= 0 && currentlyEditionTilesMap >= 0) {
                 if (GetMaps( )[currentlyEditionTilesMap].Tiles.Where(t => t.Name == textbox_tile_name.Text) != null) {
                     ChangeTextureName(GetMaps( )[currentlyEditionTilesMap], GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name, textbox_tile_name.Text);
                     GetMaps( )[currentlyEditionTilesMap].Tiles[currentlyEditingTile].Name = textbox_tile_name.Text;
@@ -680,5 +692,87 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         #endregion templates
+
+        private void CommandDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
+            int index = wrappanel_tiles.SelectedIndex;
+            currentlyEditingTile = -1;
+            wrappanel_tiles.Items.RemoveAt(index);
+            currentMap.RemoveTile(index);
+            tilemapview.Update( );
+        }
+
+        private void CommandDelete_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = wrappanel_tiles?.SelectedItem != null;
+        }
+
+        private void CommandReplace_Executed (object sender, ExecutedRoutedEventArgs e) {
+            OpenFileDialog opendialog = new OpenFileDialog( );
+            opendialog.Filter = "Images|*.png;*.jpg;*.jpeg";
+            opendialog.Multiselect = false;
+            if (opendialog.ShowDialog( ) ?? false) {
+                string tileName = Path.GetFileNameWithoutExtension(opendialog.FileName);
+                BitmapImage tileImage = new BitmapImage( );
+                tileImage.BeginInit( );
+                tileImage.CacheOption = BitmapCacheOption.OnLoad;
+                tileImage.CreateOptions = BitmapCreateOptions.None;
+                tileImage.DecodePixelWidth = Map.TILE_PXL_SIZE;
+                tileImage.DecodePixelHeight = Map.TILE_PXL_SIZE;
+                tileImage.UriSource = new Uri(opendialog.FileName);
+                tileImage.EndInit( );
+
+                int index = wrappanel_tiles.SelectedIndex;
+                Tile prevTile = currentMap.Tiles[index];
+                wpfTextures[currentMap].Remove(prevTile.Name);
+                xnaTextures[currentMap].Remove(prevTile.Name);
+
+                AddTexture(currentMap, tileName, tileImage);
+                currentMap.Tiles[index].Name = tileName;
+                wrappanel_tiles.Items[wrappanel_tiles.SelectedIndex] = new ListViewEntry(tileImage);
+
+                tilemapview.Update( );
+            }
+        }
+
+        private void CommandReplace_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = wrappanel_tiles?.SelectedItem != null;
+        }
+
+        private void ButtonAdd_Click (object sender, RoutedEventArgs e) {
+            OpenFileDialog opendialog = new OpenFileDialog( );
+            opendialog.Filter = "Images|*.png;*.jpg;*.jpeg";
+            opendialog.Multiselect = true;
+            if (opendialog.ShowDialog( ) ?? false) {
+                foreach (string file in opendialog.FileNames) {
+                    if (checkbox_auto.IsChecked ?? false && currentMap.Tiles.Where(t => t.Name == Path.GetFileNameWithoutExtension(file)) != null) {
+                        // add tile
+                        string tileName = Path.GetFileNameWithoutExtension(file);
+                        BitmapImage tileImage = new BitmapImage( );
+                        tileImage.BeginInit( );
+                        tileImage.CacheOption = BitmapCacheOption.OnLoad;
+                        tileImage.CreateOptions = BitmapCreateOptions.None;
+                        tileImage.DecodePixelWidth = Map.TILE_PXL_SIZE;
+                        tileImage.DecodePixelHeight = Map.TILE_PXL_SIZE;
+                        tileImage.UriSource = new Uri(file);
+                        tileImage.EndInit( );
+
+                        AddTexture(currentMap, tileName, tileImage);
+                        currentMap.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes), Name = tileName });
+                        wrappanel_tiles.Items.Add(new ListViewEntry(tileImage));
+                    } else {
+                        // open add tile window
+                        AddTileWindow addTileDialog = new AddTileWindow(file, currentMap.Tiles.Select(t => t.Name), defaultAttributes);
+                        if (addTileDialog.ShowDialog( ) ?? false) {
+                            if (currentMap.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
+                                AddTexture(currentMap, addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2);
+                                currentMap.AddTile(addTileDialog.Created.Item1);
+                                wrappanel_tiles.Items.Add(new ListViewEntry(addTileDialog.Created.Item2));
+                            } else {
+                                MessageBox.Show("Please don't add tiles with the same name twice!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

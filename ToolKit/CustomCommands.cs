@@ -5,15 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace mapKnight.ToolKit {
+namespace mapKnight.ToolKit
+{
 
-    public class CustomCommands {
+    public class CustomCommands
+    {
 
         public static readonly RoutedUICommand Up = new RoutedUICommand(
             "Up",
             "Up",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.Up),
                 new KeyGesture(Key.PageUp)
             }
@@ -23,7 +25,7 @@ namespace mapKnight.ToolKit {
             "Down",
             "Down",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.Down),
                 new KeyGesture(Key.PageDown)
             }
@@ -33,16 +35,26 @@ namespace mapKnight.ToolKit {
             "EditorDelete",
             "EditorDelete",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.Delete, ModifierKeys.Control |ModifierKeys.Shift)
             }
             );
+
+        public static readonly RoutedUICommand EditorReplace = new RoutedUICommand(
+            "EditorReplace",
+            "EditorReplace",
+            typeof(CustomCommands),
+            new InputGestureCollection() {
+                new KeyGesture(Key.R, ModifierKeys.Control |ModifierKeys.Shift)
+            }
+            );
+
 
         public static readonly RoutedUICommand EditorNew = new RoutedUICommand(
             "EditorNew",
             "EditorNew",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.N, ModifierKeys.Control |ModifierKeys.Shift)
             }
             );
@@ -51,7 +63,7 @@ namespace mapKnight.ToolKit {
             "EditorUndo",
             "EditorUndo",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.Z, ModifierKeys.Control)
             }
             );
@@ -60,7 +72,7 @@ namespace mapKnight.ToolKit {
             "EditorOpen",
             "EditorOpen",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.O, ModifierKeys.Control |ModifierKeys.Shift)
             }
             );
@@ -69,7 +81,7 @@ namespace mapKnight.ToolKit {
             "EditorUp",
             "EditorUp",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.Up, ModifierKeys.Alt |ModifierKeys.Shift)
             }
             );
@@ -78,7 +90,7 @@ namespace mapKnight.ToolKit {
             "EditorDown",
             "EditorDown",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.Down, ModifierKeys.Alt |ModifierKeys.Shift)
             }
             );
@@ -87,7 +99,7 @@ namespace mapKnight.ToolKit {
             "EditorR",
             "EditorR",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.R, ModifierKeys.Control |ModifierKeys.Shift)
             }
             );
@@ -96,7 +108,7 @@ namespace mapKnight.ToolKit {
             "EditorAltA",
             "EditorAltA",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.A, ModifierKeys.Alt)
             }
             );
@@ -105,7 +117,7 @@ namespace mapKnight.ToolKit {
             "EditorAltS",
             "EditorAltS",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.S, ModifierKeys.Alt)
             }
             );
@@ -114,7 +126,7 @@ namespace mapKnight.ToolKit {
             "EditorAltD",
             "EditorAltD",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.D, ModifierKeys.Alt)
             }
             );
@@ -123,7 +135,7 @@ namespace mapKnight.ToolKit {
             "EditorAltF",
             "EditorAltF",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.F, ModifierKeys.Alt)
             }
             );
@@ -132,7 +144,7 @@ namespace mapKnight.ToolKit {
             "Settings",
             "Settings",
             typeof(CustomCommands),
-            new InputGestureCollection( ) {
+            new InputGestureCollection() {
                 new KeyGesture(Key.S, ModifierKeys.Alt | ModifierKeys.Shift)
             }
             );

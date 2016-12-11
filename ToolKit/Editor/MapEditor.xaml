@@ -13,6 +13,8 @@
         <CommandBinding Command="local:CustomCommands.EditorAltS" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
         <CommandBinding Command="local:CustomCommands.EditorAltD" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
         <CommandBinding Command="local:CustomCommands.EditorAltF" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorDelete" Executed="CommandDelete_Executed" CanExecute="CommandDelete_CanExecute"/>
+        <CommandBinding Command="local:CustomCommands.EditorReplace" Executed="CommandReplace_Executed" CanExecute="CommandReplace_CanExecute" />
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <Style TargetType="ListBox">
@@ -23,6 +25,15 @@
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="Image.IsEnabled" Value="False">
+                    <Trigger.Setters>
+                        <Setter Property="Image.Opacity" Value="0.5"/>
+                    </Trigger.Setters>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="ScrollBar">
             <Setter Property="Maximum" Value="0" />
@@ -51,20 +62,29 @@
             </Grid.RowDefinitions>
             <DockPanel>
                 <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0" />
-                <Button Margin="0,0,4,1" VerticalAlignment="Center" Click="ButtonSettings_Click">
-                    <Image Name="image_settings" Source="{StaticResource ResourceKey=image_map_settings}">
-                        <Image.Style>
-                            <Style>
-                                <Style.Triggers>
-                                    <Trigger Property="Image.IsEnabled" Value="False">
-                                        <Trigger.Setters>
-                                            <Setter Property="Image.Opacity" Value="0.5"/>
-                                        </Trigger.Setters>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
+                <Button Click="ButtonSettings_Click" Margin="0,0,4,0">
+                    <Button.ToolTip>
+                        Change the Default Tile Settings
+                    </Button.ToolTip>
+                    <Image Name="image_settings" Source="{StaticResource ResourceKey=image_map_settings}"/>
+                </Button>
+                <Button Margin="0,0,4,0" Click="ButtonAdd_Click">
+                    <Button.ToolTip>
+                        Add a New Tile
+                    </Button.ToolTip>
+                    <Image Name="image_add" Source="{StaticResource ResourceKey=image_map_add}"/>
+                </Button>
+                <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorDelete">
+                    <Button.ToolTip>
+                        Remove the Selected Tile
+                    </Button.ToolTip>
+                    <Image Name="image_remove" Source="{StaticResource ResourceKey=image_map_remove}"/>
+                </Button>
+                <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorReplace">
+                    <Button.ToolTip>
+                        Replace the Selected Tile
+                    </Button.ToolTip>
+                    <Image Name="image_replace" Source="{StaticResource ResourceKey=image_map_replace}"/>
                 </Button>
                 <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" VerticalAlignment="Center"/>
             </DockPanel>

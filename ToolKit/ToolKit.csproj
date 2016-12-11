@@ -385,6 +385,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\assoc.exe" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\plus_math-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\minus_math-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\replace-48.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
