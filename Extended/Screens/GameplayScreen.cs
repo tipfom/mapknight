@@ -90,9 +90,10 @@ namespace mapKnight.Extended.Screens {
             controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
-                if (gesture == UIGesturePanel.SWIPE_UP)
+                if (gesture == UIGesturePanel.SWIPE_UP) {
+                    if(testEntity.GetComponent<MotionComponent>().IsOnGround  || testEntity.GetComponent<MotionComponent>( ).IsOnPlatform)
                     testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
-                else
+                } else
                     testEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
             };
 
