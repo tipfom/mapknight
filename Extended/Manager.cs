@@ -25,7 +25,7 @@ namespace mapKnight.Extended {
             Screen.MainMenu.Load( );
             Screen.Active = Screen.MainMenu;
 
-            GL.ClearColor(0f, 0f, 0f, 0f);
+            GL.ClearColor(0.1f, 0.1f, 0.2f, 1f);
 
             Debug.Print(typeof(Manager), $"Loading took {Environment.TickCount - begin} ms");
         }
