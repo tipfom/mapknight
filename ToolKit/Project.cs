@@ -66,7 +66,7 @@ namespace mapKnight.ToolKit {
             string internalpath = System.IO.Path.Combine(path);
             if (Contains(internalpath)) {
                 if (forcenew) {
-                    archive.GetEntry(internalpath);
+                    archive.GetEntry(internalpath)?.Delete( );
                     return archive.CreateEntry(internalpath, COMPRESSION).Open( );
                 } else {
                     return archive.GetEntry(internalpath).Open( );
