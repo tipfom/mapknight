@@ -8,6 +8,7 @@ using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Screens;
 using mapKnight.Extended.Warfare;
+using System.Timers;
 
 namespace mapKnight.Extended.Components.Player {
 
@@ -21,9 +22,12 @@ namespace mapKnight.Extended.Components.Player {
         private SpeedComponent speedComponent;
         private AnimationState animationState = AnimationState.None;
         private bool startedJumping = false;
+        private Timer attackTimer = new Timer(580);
 
         public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
             Weapon = weapon;
+
+            attackTimer.Elapsed += (s, e) => { if (animationState == AnimationState.Attack) Weapon.Attack( ); };
 
             // hardcoded, im sorry god :(
             Owner.SetComponentInfo(ComponentData.BoneTexture, "player");
@@ -33,9 +37,7 @@ namespace mapKnight.Extended.Components.Player {
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("feet1", new Vector2(3, 2.5f)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("feet2", new Vector2(3, 2.5f)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("hand1", new Vector2(2, 2)));
-            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("hand2", new Vector2(2, 2)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm1", new Vector2(2, 1.5f)));
-            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("upper_arm2", new Vector2(2, 1.5f)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("head", new Vector2(9, 9)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("weapon", new Vector2(3, 25)));
             Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("sword", new Vector2(3, 25)));
@@ -62,7 +64,9 @@ namespace mapKnight.Extended.Components.Player {
             while (Owner.HasComponentInfo(ComponentData.InputGesture)) {
                 string data = (string)Owner.GetComponentInfo(ComponentData.InputGesture)[0];
                 if (data == string.Empty) {
-                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit_prepare", true, (AnimationComponent.AnimationCallback)AnimationCallbackContinueAttack);
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit", true, (AnimationComponent.AnimationCallback)AnimationCallbackAttack);
+                    animationState = AnimationState.Attack;
+                    attackTimer.Start( );
                 } else
                     Weapon.Special(data);
             }
@@ -76,45 +80,46 @@ namespace mapKnight.Extended.Components.Player {
                 motionComponent.AimedVelocity.X = 0;
             }
 
-            if (animationState != AnimationState.Jump && (motionComponent.IsOnGround || motionComponent.IsOnPlatform)) {
-                if (Action.HasFlag(ActionMask.Jump)) {
-                    animationState = AnimationState.Jump;
-                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "jump", true, (AnimationComponent.AnimationCallback)AnimationCallbackFinishJumping);
-                    return;
-                } else {
-                    if (!startedJumping)
-                        motionComponent.AimedVelocity.Y = 0;
-                    startedJumping = false;
-                }
-                if (motionComponent.AimedVelocity.X != 0) {
-                    if (animationState != AnimationState.Walk) {
-                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", true);
-                        animationState = AnimationState.Walk;
+            if (animationState != AnimationState.Jump && animationState != AnimationState.Attack) {
+                if(motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
+                    if (Action.HasFlag(ActionMask.Jump)) {
+                        Action &= ~ActionMask.Jump;
+                        animationState = AnimationState.Jump;
+                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "jump", true, (AnimationComponent.AnimationCallback)AnimationCallbackFinishJumping);
+                        motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
+                        return;
+                    } else {
+                            motionComponent.AimedVelocity.Y = 0;
                     }
-                } else {
-                    if (animationState != AnimationState.Idle) {
-                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
-                        animationState = AnimationState.Idle;
+                    if (motionComponent.AimedVelocity.X != 0) {
+                        if (animationState != AnimationState.Walk) {
+                            Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", true);
+                            animationState = AnimationState.Walk;
+                        }
+                    } else {
+                        if (animationState != AnimationState.Idle) {
+                            Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
+                            animationState = AnimationState.Idle;
+                        }
                     }
+                } else if(animationState != AnimationState.Fall) {
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", true);
+                    animationState = AnimationState.Fall;
                 }
             }
         }
 
         private void AnimationCallbackFinishJumping (bool success) {
             if (success) {
-                motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
-                Action &= ~ActionMask.Jump;
-                animationState = AnimationState.Fall;
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", true);
-                startedJumping = true;
+                animationState = AnimationState.Fall;
             }
         }
 
-        private void AnimationCallbackContinueAttack (bool success) {
-            if (success) {
-                Weapon.Attack( );
-                Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit_finish", true);
-            }
+        private void AnimationCallbackAttack (bool success) {
+            attackTimer.Stop( );
+            Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
+            animationState = AnimationState.Idle;
         }
 
         public new class Configuration : Component.Configuration {
