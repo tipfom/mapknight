@@ -43,7 +43,11 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Update (DeltaTime dt) {
-            if (IsOnPlatform) enforcedVelocity.X = platformStandingOn.Velocity.X;
+            if(platformStandingOn == null)
+                IsOnPlatform = false;
+
+            if (IsOnPlatform)
+                enforcedVelocity.X = platformStandingOn.Velocity.X;
 
             while (Owner.HasComponentInfo(ComponentData.Velocity)) {
                 enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
@@ -51,12 +55,18 @@ namespace mapKnight.Extended.Components.Movement {
             while (Owner.HasComponentInfo(ComponentData.Acceleration)) {
                 enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Acceleration)[0] * dt.TotalSeconds;
             }
-            if (!IsOnPlatform) enforcedVelocity += Owner.World.Gravity * GravityInfluence * dt.TotalSeconds;
-            if (IsOnPlatform) enforcedVelocity.Y = Math.Max(platformStandingOn.Velocity.Y, enforcedVelocity.Y);
+
+            if (IsOnPlatform) {
+                enforcedVelocity.Y = Math.Max(platformStandingOn.Velocity.Y, enforcedVelocity.Y);
+                platformStandingOn = null;
+            } else {
+                enforcedVelocity += Owner.World.Gravity * GravityInfluence * dt.TotalSeconds;
+            }
 
             Velocity = AimedVelocity + enforcedVelocity;
 
-            if (IsOnGround && BouncyMultiplier > 0) enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
+            if (IsOnGround && BouncyMultiplier > 0)
+                enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
 
             Transform newTransform = new Transform(Owner.Transform.Center + Velocity * dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
@@ -73,10 +83,11 @@ namespace mapKnight.Extended.Components.Movement {
             }
 
             Owner.Transform = newTransform;
-            IsOnPlatform = false;
 
-            if (AimedVelocity.X > 0) ScaleX = 1;
-            else if (AimedVelocity.X < 0) ScaleX = -1;
+            if (AimedVelocity.X > 0)
+                ScaleX = 1;
+            else if (AimedVelocity.X < 0)
+                ScaleX = -1;
             Owner.SetComponentInfo(ComponentData.ScaleX, ScaleX);
         }
 
