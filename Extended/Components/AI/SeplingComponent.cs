@@ -62,14 +62,14 @@ namespace mapKnight.Extended.Components.AI {
                     if (Math.Abs(enemy.Transform.X - Owner.Transform.X) < chillDistance) {
                         if (motionComponent.IsAtWall) {
                             Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true);
-                        }else {
+                        } else {
                             motionComponent.AimedVelocity.X = Math.Sign(Owner.Transform.X - enemy.Transform.X) * speedComponent.Speed.X;
                             Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", true);
                         }
                     } else {
                         enemy = null;
                         Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle", true);
-                        Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle", false);
+                        motionComponent.AimedVelocity.X = 0;
                     }
                 }
             }
