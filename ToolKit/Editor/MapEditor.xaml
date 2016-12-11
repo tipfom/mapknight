@@ -91,7 +91,7 @@
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles"
                  ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,2,0,0"
-                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_Selected" >
+                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_SelectionChanged" >
             </ListBox>
             <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
             <DockPanel Grid.Row="3">
