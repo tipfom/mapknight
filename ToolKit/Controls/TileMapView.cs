@@ -143,7 +143,7 @@ namespace mapKnight.ToolKit.Controls
                 spriteBatch.Draw(selectionTexture, new Rectangle(CurrentSelection.X * TileSize, CurrentSelection.Y * TileSize, TileSize, TileSize), Color.White);
 
             // draw spawnpoint tile
-            spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Offset.X) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Offset.Y) * TileSize), TileSize, TileSize), Color.White);
+            spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Math.Floor(Offset.X)) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Math.Floor(Offset.Y)) * TileSize), TileSize, TileSize), Color.White);
         }
     }
 }
