@@ -12,9 +12,10 @@ namespace mapKnight.ToolKit.Data {
 
         public ObservableCollection<VertexBone> Bones { get; set; }
         public int Time { get; set; }
+        public bool Featured { get; set; }
 
         public int Index { get { return GetIndex(this); } }
-
+        
         // boiler-plate
         public event PropertyChangedEventHandler PropertyChanged;
         public virtual void OnPropertyChanged (string propertyName) {

@@ -24,6 +24,7 @@ namespace mapKnight.ToolKit.Controls {
         private ObservableCollection<VertexBone> bones = new ObservableCollection<VertexBone>( );
         private VertexAnimation currentAnimation = null;
         private VertexAnimationFrame currentFrame = null;
+        private VertexAnimationFrame featuredFrame = null;
         private EditBonesDialog editBonesDialog;
         private List<FrameworkElement> menu = new List<FrameworkElement>( );
         private Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>> undoStack = new Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>>( );
@@ -65,6 +66,33 @@ namespace mapKnight.ToolKit.Controls {
             };
         }
 
+        public AnimationControl (string metafile) : this( ) {
+            MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
+        }
+
+        public AnimationControl (double ratio, string entity) : this( ) {
+            MetaData.Entity = entity;
+            MetaData.Ratio = ratio;
+        }
+
+        public AnimationControl (Project project, string animationdirectory) : this( ) {
+            foreach (string texturedir in project.GetAllEntries(animationdirectory, "textures")) {
+                if (Path.GetFileName(texturedir) == ".png") {
+                    string name = new DirectoryInfo(Path.GetDirectoryName(texturedir)).Name;
+                    BoneImage.LoadImage(name, project.GetOrCreateStream(false, texturedir), project.GetOrCreateStream(false, Path.ChangeExtension(texturedir, ".data")), this, false);
+                }
+            }
+
+            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, ".meta"))
+                MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
+            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, "bones.json"))
+                bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
+            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, "animations.json"))
+                animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
+            featuredFrame = animations.FirstOrDefault(anim => anim.Frames.Any(frame => frame.Featured))?.Frames.FirstOrDefault(frame => frame.Featured);
+            BonesChanged( );
+        }
+
         private void BoneImage_DumpChanges ( ) {
             if (undoStack.ContainsKey(currentAnimation) && undoStack[currentAnimation].ContainsKey(currentFrame)) {
                 undoStack[currentAnimation][currentFrame].Pop( );
@@ -79,7 +107,7 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void ScissorButton_MouseDown (object sender, RoutedEventArgs e) {
-            ResizeEntityDialog dialog = new ResizeEntityDialog(MetaData.Ratio, currentFrame?.Bones ?? bones, this);
+            ResizeEntityDialog dialog = new ResizeEntityDialog(MetaData.Ratio, currentFrame?.Bones ?? (featuredFrame.Bones ?? bones), this);
             if (dialog.ShowDialog( ) ?? false) {
                 double centerShiftXReal = 0.5d + dialog.TrimRight - (1 + dialog.TrimLeft + dialog.TrimRight) / 2d;
                 double centerShiftYReal = 0.5d + dialog.TrimTop - (1 + dialog.TrimTop + dialog.TrimBottom) / 2d;
@@ -121,32 +149,6 @@ namespace mapKnight.ToolKit.Controls {
                 undoStack[currentAnimation].Add(currentFrame, new Stack<ObservableCollection<VertexBone>>( ));
             }
             undoStack[currentAnimation][currentFrame].Push(new ObservableCollection<VertexBone>(currentFrame.Bones.Select(bone => bone.Clone( ))));
-        }
-
-        public AnimationControl (string metafile) : this( ) {
-            MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(File.ReadAllText(metafile));
-        }
-
-        public AnimationControl (double ratio, string entity) : this( ) {
-            MetaData.Entity = entity;
-            MetaData.Ratio = ratio;
-        }
-
-        public AnimationControl (Project project, string animationdirectory) : this( ) {
-            foreach (string texturedir in project.GetAllEntries(animationdirectory, "textures")) {
-                if (Path.GetFileName(texturedir) == ".png") {
-                    string name = new DirectoryInfo(Path.GetDirectoryName(texturedir)).Name;
-                    BoneImage.LoadImage(name, project.GetOrCreateStream(false, texturedir), project.GetOrCreateStream(false, Path.ChangeExtension(texturedir, ".data")), this, false);
-                }
-            }
-
-            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, ".meta"))
-                MetaData = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
-            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, "bones.json"))
-                bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
-            using (Stream stream = project.GetOrCreateStream(false, animationdirectory, "animations.json"))
-                animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
-            BonesChanged( );
         }
         
         public List<FrameworkElement> Menu { get { return menu; } }
@@ -205,17 +207,21 @@ namespace mapKnight.ToolKit.Controls {
                 // add new animation
                 ObservableCollection<VertexBone> firstFramesBones = (animations.Count == 0) ?
                     new ObservableCollection<VertexBone>(bones.Select(item => item.Clone( ))) : // set reference to the default bones
-                    new ObservableCollection<VertexBone>(animations[0].Frames[0].Bones.Select(item => item.Clone( ))); // cheap clone :D
+                    new ObservableCollection<VertexBone>(featuredFrame?.Bones ?? animations[0].Frames[0].Bones.Select(item => item.Clone( ))); // cheap clone :D
 
                 animations.Add(new VertexAnimation( ) {
                     CanRepeat = true,
-                    Frames = new ObservableCollection<VertexAnimationFrame>(new[ ] { new VertexAnimationFrame( ) { Bones = firstFramesBones, Time = 500 } }),
+                    Frames = new ObservableCollection<VertexAnimationFrame>(new[ ] { new VertexAnimationFrame( ) { Bones = firstFramesBones, Time = 500} }),
                     Name = "Default_" + animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( ),
                     IsDefault = animations.Count == 0
                 });
+                if(animations.Count == 1) {
+                    featuredFrame = animations[0].Frames[0];
+                    featuredFrame.Featured = true;
+                }
             } else if (currentFrame == null) {
                 // add new frame
-                currentAnimation.Frames.Add(currentAnimation.Frames[0].Clone( ));
+                currentAnimation.Frames.Add(featuredFrame.Clone( ));
             } else {
                 // copy frame
                 currentAnimation.Frames.Add(currentFrame.Clone( ));
@@ -229,6 +235,8 @@ namespace mapKnight.ToolKit.Controls {
         private void CommandEditorUp_Executed (object sender, ExecutedRoutedEventArgs e) {
             int index = currentAnimation.Frames.IndexOf(currentFrame);
             currentAnimation.Frames.Move(index, index - 1);
+            foreach (VertexAnimationFrame frame in currentAnimation.Frames)
+                frame.OnPropertyChanged("Index");
         }
 
         private void EditBonesDialog_BoneAdded (VertexBone addedBone) {
@@ -470,6 +478,16 @@ namespace mapKnight.ToolKit.Controls {
 
         private void CommandEditorUndo_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = currentAnimation != null && undoStack.ContainsKey(currentAnimation) && undoStack[currentAnimation].ContainsKey(currentFrame) && undoStack[currentAnimation][currentFrame].Count > 0;
+        }
+
+        private void MenuItemStarFrame_Click (object sender, RoutedEventArgs e) {
+            if (featuredFrame != null) {
+                featuredFrame.Featured = false;
+                featuredFrame.OnPropertyChanged("Featured");
+            }
+            currentFrame.Featured = true;
+            currentFrame.OnPropertyChanged("Featured");
+            featuredFrame = currentFrame;
         }
     }
 }

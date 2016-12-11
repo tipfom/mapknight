@@ -394,6 +394,9 @@
   <ItemGroup>
     <Resource Include="Resources\Images\replace-48.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\starfish-48.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
