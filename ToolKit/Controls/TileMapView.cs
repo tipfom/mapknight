@@ -119,13 +119,13 @@ namespace mapKnight.ToolKit.Controls
             if (CurrentMap == null)
                 return;
 
-            int columns = (int)Math.Min(RenderSize.Width / TileSize + 1, CurrentMap.Width - Offset.X);
-            int rows = (int)Math.Min(RenderSize.Height / TileSize + 1, CurrentMap.Height - Offset.Y);
-            for (int x = 0; x < columns; x++)
-            {
-                for (int y = 0; y < rows; y++)
-                {
-                    int cx = x + (int)Offset.X, cy = CurrentMap.Height - y - 1 - (int)Offset.Y;
+            int oy = (int)Math.Floor(Offset.Y);
+            int ox = (int)Math.Floor(Offset.X);
+            int columns = (int)Math.Min(RenderSize.Width / TileSize + 1, CurrentMap.Width - ox);
+            int rows = (int)Math.Min(RenderSize.Height / TileSize + 1, CurrentMap.Height - oy);
+            for (int x = 0; x < columns; x++) {
+                for (int y = 0; y < rows; y++) {
+                    int cx = x + ox, cy = CurrentMap.Height - y - 1 - oy;
                     Rectangle drawingRectangle = new Rectangle((int)((x + 0.5f) * TileSize), (int)((y + 0.5f) * TileSize), TileSize, TileSize);
                     for (int l = 0; l < 3; l++)
                     {
