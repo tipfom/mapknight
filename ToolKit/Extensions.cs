@@ -17,6 +17,23 @@ namespace mapKnight.ToolKit {
             map.Tiles = tiles.ToArray( );
         }
 
+        public static void RemoveTile(this Map map, int index) {
+            List<Tile> tiles = map.Tiles.ToList();
+            tiles.RemoveAt(index);
+            for (int y = 0; y < map.Height; y++) {
+                for (int x = 0; x < map.Width; x++) {
+                    for (int z = 0; z < 3; z++) {
+                        if (map.Data[x, y, z] == index) {
+                            map.Data[x, y, z] = 0;
+                        } else if (map.Data[x, y, z] > index) {
+                            map.Data[x, y, z]--;
+                        }
+                    }
+                }
+            }
+            map.Tiles = tiles.ToArray();
+        }
+
         public static BitmapImage ToBitmapImage (this Texture2D texture) {
             using (MemoryStream ms = new MemoryStream( )) {
                 texture.SaveAsPng(ms, texture.Width, texture.Height);
