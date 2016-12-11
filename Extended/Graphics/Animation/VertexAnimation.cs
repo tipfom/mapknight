@@ -46,7 +46,6 @@ namespace mapKnight.Extended.Graphics.Animation {
                 Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].State[i].Position, Frames[currentFrame].State[i].Position, progress) * ownerTransform.Size * vsize;
                 float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].State[i].Rotation, Frames[currentFrame].State[i].Rotation, progress);
 
-                Verticies[i] = verticies[i];
                 Verticies[i] = Mathf.TransformAtOrigin(
                     verticies[i],
                     interpolatedPosition.X, interpolatedPosition.Y,
