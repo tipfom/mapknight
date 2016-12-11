@@ -86,7 +86,7 @@
                     </Button.ToolTip>
                     <Image Name="image_replace" Source="{StaticResource ResourceKey=image_map_replace}"/>
                 </Button>
-                <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" VerticalAlignment="Center"/>
+                <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" />
             </DockPanel>
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles"
