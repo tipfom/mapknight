@@ -90,7 +90,6 @@ namespace mapKnight.Extended.Components.Graphics {
                 for (int i = 0; i < animations[0].Frames[0].State.Length; i++) {
                     if (animations[0].Frames[0].State[i].Texture == data.Item1) {
                         offsets[i] = data.Item2;
-                        break;
                     }
                 }
             }
