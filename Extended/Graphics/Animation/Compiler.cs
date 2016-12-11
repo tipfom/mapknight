@@ -20,8 +20,7 @@ namespace mapKnight.Extended.Graphics.Animation {
                 float[ ] texture = sprite.Get(animations[0].Frames[0].State[i].Texture);
                 Vector2 textureSize = new Vector2(Math.Abs(texture[4] - texture[0]) * sprite.Width, Math.Abs(texture[1] - texture[3]) * sprite.Height);
                 Vector2 vertexSize = new Vector2(textureSize.X * scales[i] / 2f, textureSize.Y * scales[i] / 2f * entityratio);
-                Vector2 offset = (offsets[i] - textureSize / 2f) / (textureSize);
-                offset.Y *= entityratio;
+                Vector2 offset = (offsets[i] - textureSize / 2f) / (textureSize / 2f) * vertexSize;
 
                 boneverticies[i] = new[ ] {
                     -vertexSize.X - offset.X,  vertexSize.Y + offset.Y,
