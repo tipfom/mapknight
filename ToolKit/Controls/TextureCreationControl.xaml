@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="mapKnight.ToolKit.Controls.TextureCreationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:mapKnight.ToolKit"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="listbox_itemtemplate" DataType="TextureItem">
+            <DockPanel Height="32">
+                <Image DockPanel.Dock="Left" Source="{Binding Image}" Width="30" Height="30" Margin="-3,1,0,1" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                <TextBlock DockPanel.Dock="Left" Text="{Binding SpriteName}" VerticalAlignment="Center" Margin="5,0,0,0" TextAlignment="Left" FontSize="15" />
+                <Button DockPanel.Dock="Right" Padding="5,5,5,5" VerticalAlignment="Center" Click="button_discard_Click">Discard</Button>
+                <TextBlock DockPanel.Dock="Left" Text="{Binding FullFileName}" VerticalAlignment="Bottom" Margin="0,0,5,5" TextAlignment="Right" FontSize="8" />
+            </DockPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ListBox Name="listbox_textures" DockPanel.Dock="Top" ItemTemplate="{StaticResource ResourceKey=listbox_itemtemplate}"
+                 DragEnter="listbox_textures_DragEnter" Drop="listbox_textures_Drop" AllowDrop="True"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch" >
+        <ListBox.ToolTip>
+            <ToolTip>
+                <ToolTip.Content>
+                    Drag and Drop Images
+                </ToolTip.Content>
+            </ToolTip>
+        </ListBox.ToolTip>
+    </ListBox>
+</UserControl>

@@ -30,12 +30,12 @@ namespace mapKnight.Extended.Graphics.UI {
         private string[ ] lines;
 
         private UITextAlignment _Alignment;
-        public UITextAlignment Alignment { get { return _Alignment; } set { _Alignment = value; RequestUpdate( ); } }
+        public UITextAlignment Alignment { get { return _Alignment; } set { _Alignment = value; IsDirty = true; } }
 
         private Color _Color;
         public Color Color {
             get { return _Color; }
-            set { _Color = value; RequestUpdate( ); }
+            set { _Color = value; IsDirty = true; }
         }
 
         readonly float charSize;
@@ -71,7 +71,6 @@ namespace mapKnight.Extended.Graphics.UI {
         public Vector2 MeasureText ( ) {
             return MeasureText(Text, this.charSize);
         }
-
 
         public static List<DepthVertexData> GetVertexData (string[ ] lines, UITextAlignment alignment, Vector2 position, float charSize, int depth, Color color) {
             List<DepthVertexData> vertexData = new List<DepthVertexData>( );

@@ -47,6 +47,9 @@ namespace mapKnight.Android
 			// aapt resource value: 0x7f020000
 			public const int icon = 2130837504;
 			
+			// aapt resource value: 0x7f020001
+			public const int splash = 2130837505;
+			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -75,6 +78,9 @@ namespace mapKnight.Android
 		
 		public partial class Style
 		{
+			
+			// aapt resource value: 0x7f040001
+			public const int SplashTheme = 2130968577;
 			
 			// aapt resource value: 0x7f040000
 			public const int thisTheme = 2130968576;

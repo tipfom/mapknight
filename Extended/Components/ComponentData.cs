@@ -4,21 +4,29 @@
         None,
         Result,
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
+        // player
+        InputInclude,
+        InputExclude,
+        InputGesture,
+
         // graphics
         Verticies,
-
         Texture,
         Color,
-        Animation,
+        VertexAnimation,
+        SpriteAnimation,
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        // Debugic
+        // animations
+        BoneOffset,
+        BoneTexture,
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
+        // stats
+        Damage,
+
         // physics
         Velocity,
-
-        Acceleration
+        Acceleration,
+        SlowDown,
+        ScaleX
     }
 }

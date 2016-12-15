@@ -1,0 +1,125 @@
+﻿{
+    "Name": "Plugger",
+    "Transform": {
+        "Width": 1.35,
+        "Height": 1
+    },
+    "Components": [
+        {
+            "$type": "Movement.Motion"
+        },
+        {
+            "$type": "Graphics.Sprite",
+            "Texture": "plugger",
+            "Animations": [
+                {
+                    "Name": "walk",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "walk0"
+                            ]
+                        },
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "walk1"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "shot",
+                    "CanRepeat": false,
+                    "Frames": [
+                        {
+                            "Time": 100,
+                            "Bones": [
+                                "shot0"
+                            ]
+                        },
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "shot1"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "$type": "Graphics.Skelet",
+            "Bones": [
+                {
+                    "Position": {
+                        "X": 0,
+                        "Y": 0
+                    },
+                    "Size": {
+                        "X": 1,
+                        "Y": 1
+                    }
+                }
+            ]
+        },
+        {
+            "$type": "AI.Plugger",
+            "TimeBetweenThrows": 4000,
+            "BulletSpeed": 1.5,
+            "Bullet": {
+                "Name": "Pluggullet",
+                "Transform": {
+                    "Width": 0.4,
+                    "Height": 0.4
+                },
+                "Components": [
+                    {
+                        "$type": "Movement.Motion",
+                        "GravityInfluence": 0.1
+                    },
+                    {
+                        "$type": "AI.Bullet"
+                    },
+                    {
+                        "$type": "Graphics.Texture",
+                        "Texture": "plugger_bullet"
+                    },
+                    {
+                        "$type": "Graphics.Skelet",
+                        "Bones": [
+                            {
+                                "Position": {
+                                    "X": 0,
+                                    "Y": 0
+                                },
+                                "Size": {
+                                    "X": 1,
+                                    "Y": 1
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "$type": "AI.Basics.Trigger",
+            "TriggerZone": {
+                "X": 8,
+                "Y": 3
+            },
+            "Offset": 1.5
+        },
+        {
+            "$type": "AI.Basics.Bishop",
+            "IsScaredToFall": true
+        },
+        {
+            "$type": "Stats.Speed",
+            "X": 0.75
+        }
+    ]
+}

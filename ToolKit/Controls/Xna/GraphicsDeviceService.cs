@@ -59,11 +59,11 @@ namespace mapKnight.ToolKit.Controls.Xna {
 
             // since we're using render targets anyway, the 
             // backbuffer size is somewhat irrelevant
-            parameters.BackBufferWidth = 480;
-            parameters.BackBufferHeight = 320;
-            parameters.BackBufferFormat = SurfaceFormat.Color;
+            parameters.BackBufferWidth = 1;
+            parameters.BackBufferHeight = 1;
+            parameters.BackBufferFormat = SurfaceFormat.Bgra32;
             parameters.DeviceWindowHandle = windowHandle;
-            parameters.DepthStencilFormat = DepthFormat.Depth24Stencil8;
+            parameters.DepthStencilFormat = DepthFormat.None;
             parameters.IsFullScreen = false;
 
             GraphicsAdapter.UseDriverType = GraphicsAdapter.DriverType.FastSoftware;

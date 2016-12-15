@@ -8,7 +8,7 @@ using OpenTK;
 using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Programs {
-    public class ColorProgram : Program {
+    public class ColorProgram : TextureProgram {
         private UniformMatrixHandle mvpMatrixHandle;
         private AttributeHandle colorHandle;
 
@@ -36,20 +36,20 @@ namespace mapKnight.Extended.Graphics.Programs {
         }
 
         public void Draw (IndexBuffer indexbuffer, IAttributeBuffer vertexbuffer, IAttributeBuffer texturebuffer, IAttributeBuffer colorbuffer, Texture2D texture, Matrix matrix, int count, int offset, bool alphablending = true) {
-            Apply(texture.ID, vertexbuffer, texturebuffer, alphablending);
+            Apply(texture.ID, indexbuffer, vertexbuffer, texturebuffer, alphablending);
             colorbuffer.Bind(colorHandle);
             mvpMatrixHandle.Set(matrix.MVP);
-            indexbuffer.Bind( );
+
             GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, new IntPtr(offset));
         }
 
-        public static ColorProgram Program { get; set; }
+        public static ColorProgram Program;
 
         public class BufferBatch {
-            public IndexBuffer IndexBuffer { get; set; }
-            public IAttributeBuffer VertexBuffer { get; set; }
-            public IAttributeBuffer ColorBuffer { get; set; }
-            public IAttributeBuffer TextureBuffer { get; set; }
+            public IndexBuffer IndexBuffer;
+            public IAttributeBuffer VertexBuffer;
+            public IAttributeBuffer ColorBuffer;
+            public IAttributeBuffer TextureBuffer; 
 
             public BufferBatch (IndexBuffer indexbuffer, IAttributeBuffer vertexbuffer, IAttributeBuffer colorbuffer, IAttributeBuffer texturebuffer) {
                 IndexBuffer = indexbuffer;

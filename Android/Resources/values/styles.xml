@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <resources>
-  <style name="thisTheme" parent="android:Theme.Light">
+  <style name="thisTheme" parent="android:Theme.Light"/>
+  <style name="SplashTheme" parent="android:style/Theme.NoTitleBar.Fullscreen">
+    <item name="android:windowBackground">@drawable/splash</item>
+    <item name="android:windowNoTitle">true</item>
   </style>
 </resources>

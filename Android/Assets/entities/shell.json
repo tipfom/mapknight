@@ -1,0 +1,420 @@
+﻿{
+    "Name": "Bully the Shell",
+    "Transform": {
+        "Width": 0.75,
+        "Height": 0.875
+    },
+    "Components": [
+        {
+            "$type": "Movement.Motion"
+        },
+        {
+            "$type": "Stats.Speed",
+            "X": 1
+        },
+        {
+            "$type": "Graphics.Animation",
+            "Scales": [
+                0.055555555555555555555555
+            ],
+            "Animations": [
+                {
+                    "Name": "idle",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 1000,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "walk",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w1",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "w2",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "prepare",
+                    "CanRepeat": false,
+                    "Frames": [
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "shell",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "def",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 100,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "attack",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 460,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": -360,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 460,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": 360,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "frenzy",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 1440,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": 360,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "Time": 460,
+                            "State": [
+                                {
+                                    "Texture": "atk",
+                                    "Rotation": 180,
+                                    "Position": {
+                                        "X": 0.0277777777,
+                                        "Y": -0.0714285714
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "$type": "AI.Basics.Trigger",
+            "TriggerZone": {
+                "X": 18,
+                "Y": 0.5
+            },
+            "Offset": 0
+        },
+        {
+            "$type": "AI.Shell",
+            "FrenzySpeed": 0.4,
+            "AttackSpeed": 6.35,
+            "StunDuration": 3000
+        }
+    ]
+}

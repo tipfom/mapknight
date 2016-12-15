@@ -1,0 +1,192 @@
+﻿{
+	"Name": "Sepling",
+	"Transform": {
+		"Width": 1,
+		"Height": 0.88
+	},
+	"Components": [
+		{
+			"$type": "Movement.Motion"
+		},
+		{
+			"$type": "Graphics.Sprite",
+			"Texture": "sepling/body",
+			"Animations": [
+				{
+					"Name": "idle",
+					"CanRepeat": true,
+					"Frames": [
+						{
+							"Time": 500,
+							"Bones": [
+								"sepler"
+							]
+						}
+					]
+				},
+				{
+					"Name": "walk",
+					"CanRepeat": true,
+					"Frames": [
+						{
+							"Time": 100,
+							"Bones": [
+								"walk1"
+							]
+						},
+						{
+							"Time": 100,
+							"Bones": [
+								"walk2"
+							]
+						}
+					]
+				},
+				{
+					"Name": "def",
+					"CanRepeat": true,
+					"Frames": [
+						{
+							"Time": 1000,
+							"Bones": [
+								"def"
+							]
+						}
+					]
+				},
+				{
+					"Name": "grow",
+					"CanRepeat": false,
+					"Frames": [
+						{
+							"Time": 333,
+							"Bones": [
+								"grow1"
+							]
+						},
+						{
+							"Time": 333,
+							"Bones": [
+								"grow2"
+							]
+						},
+						{
+							"Time": 333,
+							"Bones": [
+								"grow3"
+							]
+						}
+					]
+				},
+				{
+					"Name": "shoot_prep",
+					"CanRepeat": false,
+					"Frames": [
+						{
+							"Time": 90,
+							"Bones": [
+								"shot0"
+							]
+						},
+						{
+							"Time": 90,
+							"Bones": [
+								"shot1"
+							]
+						},
+						{
+							"Time": 90,
+							"Bones": [
+								"shot2"
+							]
+						}
+					]
+				},
+				{
+					"Name": "shoot_end",
+					"CanRepeat": false,
+					"Frames": [
+						{
+							"Time": 90,
+							"Bones": [
+								"shot3"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"$type": "Graphics.Skelet",
+			"Bones": [
+				{
+					"Position": {
+						"X": 0.0277777777,
+						"Y": 0.2692307692
+					},
+					"Size": {
+						"X": 2.1176470588,
+						"Y": 1.7333333333
+					}
+				}
+			]
+		},
+		{
+			"$type": "AI.Sepling",
+			"ChillDistance": 5,
+			"ShootCooldown": 2000,
+			"BulletSpeed": 3,
+			"BulletOffset": {
+				"X": 0.4305,
+				"Y": 0.3793
+			},
+			"Bullet": {
+				"Name": "sp_bullet",
+				"Transform": {
+					"Width": 0.3,
+					"Height": 0.3
+				},
+				"Components": [
+					{
+						"$type": "Graphics.Texture",
+						"Texture": "sepling/bullet"
+					},
+					{
+						"$type": "Graphics.Skelet",
+						"Bones": [
+							{
+								"Position": {
+									"X": 0,
+									"Y": 0
+								},
+								"Size": {
+									"X": 1,
+									"Y": 1
+								}
+							}
+						]
+					},
+					{
+						"$type": "AI.Bullet"
+					},
+					{
+						"$type": "Movement.Motion",
+						"GravityInfluence": 0.3
+					}
+				]
+			}
+		},
+		{
+			"$type": "AI.Basics.Trigger",
+			"TriggerZone": {
+				"X": 6,
+				"Y": 6
+			},
+			"Offset": 3
+		},
+		{
+			"$type": "Stats.Speed",
+			"X": 3
+		}
+	]
+}

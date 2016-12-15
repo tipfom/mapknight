@@ -17,27 +17,26 @@ using Microsoft.Win32;
 
 namespace mapKnight.ToolKit.Editor {
     public partial class TextureEditor : UserControl {
-        private List<UIElement> _Menu = new List<UIElement>( ) {
-            new MenuItem () {Header = "NEW" }
+        private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
+            new MenuItem () {Header = "CLEAR" }
         };
 
-        public List<UIElement> Menu { get { return _Menu; } }
+        public List<FrameworkElement> Menu { get { return _Menu; } }
 
         public TextureEditor ( ) {
             InitializeComponent( );
-            ((MenuItem)_Menu[0]).Click += MenuItemNew_Click;
+            ((MenuItem)_Menu[0]).Click += MenuItemClear_Click;
         }
 
-        private void MenuItemNew_Click (object sender, RoutedEventArgs e) {
-            if (MessageBox.Show("clear current progress?", "discard", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-                texturecreationcontrol.Clear( );
+        private void MenuItemClear_Click (object sender, RoutedEventArgs e) {
+            texturecreationcontrol.Clear( );
         }
 
         private void ButtonBuild_Click (object sender, RoutedEventArgs e) {
             SaveFileDialog dialog = new SaveFileDialog( );
             dialog.OverwritePrompt = true;
             if (dialog.ShowDialog( ) ?? false) {
-                texturecreationcontrol.Build(Path.GetFileNameWithoutExtension(dialog.FileName));
+                texturecreationcontrol.Build(dialog.FileName);
             }
         }
     }

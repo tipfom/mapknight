@@ -13,9 +13,9 @@ namespace mapKnight.Extended.Graphics.Buffer {
 
         public float[ ] Data { get; set; }
 
-        public ClientBuffer (int dimensions, int quads) {
+        public ClientBuffer (int dimensions, int count, PrimitiveType type) {
             Dimensions = dimensions;
-            Length = quads * dimensions;
+            Length = count * (int)type * dimensions;
             Bytes = Length * sizeof(float);
             Stride = Dimensions * sizeof(float);
 

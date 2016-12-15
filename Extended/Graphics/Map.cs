@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Graphics.Buffer;
+using mapKnight.Extended.Graphics.Particles;
 using OpenTK.Graphics.ES20;
 using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
 
@@ -14,7 +15,7 @@ namespace mapKnight.Extended.Graphics {
 
         private BufferBatch mainBuffer, foregroundBuffer;
         private Texture2D texture;
-        private Matrix matrix = new Matrix( );
+        private Matrix matrix = new Matrix(new Vector2(Window.Ratio, 1));
         private float[ ][ ][ ] layerBuffer;
         private float yOffsetRaw;
         private float yOffsetTile;
@@ -33,6 +34,7 @@ namespace mapKnight.Extended.Graphics {
         public Map (Stream input) : base(input) {
             DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 2));
             VertexSize = 2f * Window.Ratio / DRAW_WIDTH;
+            Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             InitTextureCoords( );
 
             texture = Assets.Load<Texture2D>(Texture);
@@ -41,12 +43,21 @@ namespace mapKnight.Extended.Graphics {
         }
 
         private void Window_Changed ( ) {
+            matrix.UpdateProjection(Window.ProjectionSize);
+            matrix.CalculateMVP( );
+
             if (2 * Window.Ratio / DRAW_WIDTH != VertexSize) {
                 VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
                 DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 2));
-                mainBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 2), new GPUBuffer(2, DrawSize.Area * 2, GenerateMainVerticies( )), new CachedGPUBuffer(2, DrawSize.Area * 2));
-                foregroundBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area), new GPUBuffer(2, DrawSize.Area, GenerateForegroundVerticies( )), new CachedGPUBuffer(2, DrawSize.Area));
+                mainBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 2), new GPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad, GenerateMainVerticies( )), new CachedGPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad));
+                foregroundBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area), new GPUBuffer(2, DrawSize.Area, PrimitiveType.Quad, GenerateForegroundVerticies( )), new CachedGPUBuffer(2, DrawSize.Area, PrimitiveType.Quad));
             }
+            UpdateEmitterMatrix( );
+        }
+
+        private void UpdateEmitterMatrix ( ) {
+            Emitter.Matrix.UpdateProjection(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
+            Emitter.Matrix.CalculateMVP( );
         }
 
         private float[ ] GenerateMainVerticies ( ) {
@@ -175,6 +186,10 @@ namespace mapKnight.Extended.Graphics {
 
                 matrix.TranslateView(mapOffsetX, mapOffsetY, 0);
                 matrix.CalculateMVP( );
+
+                Emitter.Matrix.ResetView();
+                Emitter.Matrix.TranslateView(-nextTile.X - DrawSize.Width / 2f, -nextTile.Y - DrawSize.Height / 2f, 0);
+                Emitter.Matrix.CalculateMVP( );
 
                 Vector2 intNextTile = new Vector2((int)Mathf.Clamp(nextTile.X, 0, Width - DrawSize.Width), (int)Mathf.Clamp(nextTile.Y, 0, Height - DrawSize.Height));
                 if (updateTile != intNextTile) {

@@ -25,7 +25,7 @@ namespace mapKnight.Core {
         }
 
         public DeltaTime (TimeSpan span) {
-            Seconds = (float)Math.Floor(span.TotalSeconds);
+            Seconds = (float)Mathi.Floor((float)span.TotalSeconds);
             Milliseconds = (float)span.Milliseconds;
             TotalMilliseconds = (float)span.TotalMilliseconds;
             TotalSeconds = (float)span.TotalSeconds;

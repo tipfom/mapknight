@@ -1,12 +1,11 @@
 using System;
 using mapKnight.Core;
-using mapKnight.Extended.Components;
 using Newtonsoft.Json;
 
 namespace mapKnight.Extended {
 
     public abstract class Component {
-        protected Entity Owner;
+        public readonly Entity Owner;
 
         public Component (Entity owner) {
             this.Owner = owner;
@@ -33,6 +32,9 @@ namespace mapKnight.Extended {
         public virtual void Tick ( ) {
         }
 
+        public virtual void Load ( ) {
+        }
+
         public override string ToString ( ) {
             return this.GetType( ).Name;
         }
@@ -41,17 +43,6 @@ namespace mapKnight.Extended {
         }
 
         public abstract class Configuration {
-            public readonly ComponentEnum Component;
-
-            public Configuration ( ) {
-                string shortedName = this.GetType( ).FullName.Substring(30).Replace("Component", "").Replace("+Configuration", "").Replace(".", "_").Replace("+", "_");
-                if (!Enum.TryParse(shortedName, out Component)) {
-#if DEBUG
-                    Debug.Print(this, "Error parsing " + shortedName + "Component to an ComponentEnum Entry");
-#endif
-                    Component = ComponentEnum.None;
-                }
-            }
 
             public abstract Component Create (Entity owner);
         }

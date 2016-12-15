@@ -4,9 +4,7 @@ using mapKnight.Core;
 using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
-    public abstract class UIItem {
-        public const Anchor DEFAULT_ANCHOR = Anchor.Left | Anchor.Top;
-
+    public abstract class UIItem : IDisposable {
         public event Action PositionChanged;
         public event Action SizeChanged;
 
@@ -19,49 +17,52 @@ namespace mapKnight.Extended.Graphics.UI {
         private bool multiClick;
         private int clickCount;
 
-        public Rectangle Bounds { get; private set; }
+        private UIRectangle _Bounds;
+        public UIRectangle Bounds { get { return _Bounds; } }
         private UIMargin horizontalMargin;
         private UIMargin verticalMargin;
 
         private Vector2 _Position;
         public Vector2 Position {
             get { return _Position; }
-            private set { _Position = value; Bounds = new Rectangle(Position, Size); RequestUpdate( ); }
         }
         private Vector2 _Size;
         public Vector2 Size {
             get { return _Size; }
-            protected set { _Size = value; Bounds = new Rectangle(Position, value); SizeChanged?.Invoke( ); RequestUpdate( ); }
+            protected set { _Size = value; _Bounds.Size = _Size; SizeChanged?.Invoke( ); IsDirty = true; }
         }
 
         private bool _Visible = true;
-        public bool Visible { get { return Owner.IsActive && _Visible; } set { _Visible = value; RequestUpdate( ); } }
+        public bool Visible { get { return Screen.IsActive && _Visible; } set { _Visible = value; IsDirty = true; } }
 
         private int _Depth;
-        public int Depth { get { return _Depth; } set { _Depth = value; RequestUpdate( ); } }
+        public int Depth { get { return _Depth; } set { _Depth = value; IsDirty = true; } }
 
-        protected Screen Owner { get; }
+        protected bool IsDirty;
+
+        public readonly Screen Screen;
 
         public UIItem (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth, bool multiclick = false) {
             UIRenderer.Add(owner, this);
-            Owner = owner;
+            Screen = owner;
 
             this._Size = size;
             this.multiClick = multiclick;
             this._Depth = depth;
 
-            vmargin.Bind(this);
-            vmargin.Changed += ( ) => {
-                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            };
-            hmargin.Bind(this);
-            hmargin.Changed += ( ) => {
-                Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            };
-            Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            verticalMargin = vmargin;
+            verticalMargin.Bind(this);
+            verticalMargin.Changed += ( ) => IsDirty = true;
+
+            horizontalMargin = hmargin;
+            horizontalMargin.Bind(this);
+            horizontalMargin.Changed += ( ) => IsDirty = true;
+
+            _Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
+            _Bounds = new UIRectangle(_Position, _Size);
         }
 
-        public virtual void HandleTouch (UITouchAction action) {
+        public virtual void HandleTouch (UITouchAction action, UITouch touch) {
             switch (action) {
                 case UITouchAction.Begin:
                 case UITouchAction.Enter:
@@ -85,13 +86,21 @@ namespace mapKnight.Extended.Graphics.UI {
             return Bounds.Collides(touchPosition);
         }
 
-        protected void RequestUpdate ( ) {
-            if (this.Visible)
-                Changed?.Invoke(this);
+        public virtual void Update (DeltaTime dt) {
+            if (IsDirty) {
+                if(horizontalMargin.IsDirty || verticalMargin.IsDirty) {
+                    _Position.X = horizontalMargin.ScreenPosition;
+                    _Position.Y = verticalMargin.ScreenPosition;
+                    _Bounds.Position = _Position;
+                    PositionChanged?.Invoke( );
+                }
+                UIRenderer.Update(this);
+                IsDirty = false;
+            }
         }
 
-        public virtual void Update (DeltaTime dt) {
-
+        public virtual void Dispose ( ) {
+            UIRenderer.Remove(this);
         }
 
         public abstract List<DepthVertexData> ConstructVertexData ( );

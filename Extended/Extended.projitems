@@ -11,75 +11,81 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Component.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\1Component.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\22Component.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\BulletComponent.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\FragileHeadComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\WallWalkerComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\TriggerComponent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\BishopComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\BulletComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SeplingComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\CircularSawComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\GrinderComponent.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SharkComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\HastorComponent.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\ShellComponent.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\LandMineComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SpikeComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\TriggerComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\TrowieComponent.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\PluggerComponent.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\TurretComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateAfter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\ComponentRequirement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\Instantiatable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateBefore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentList.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\DrawComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\FlippableTextureComponent.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\AnimationComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\DrawComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SkeletComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\TextureComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\MotionComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\PlatformComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\PushComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Movement\WaypointComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\GravityComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentEnum.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\MotionComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\PlatformComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\PushComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\SkeletComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\SpriteComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Player\ActionMask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Player\AnimationState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Player\PlayerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\ArmorComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\DamageComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\HealthComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\SpeedComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\TextureComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\PlayerComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\WaypointComponent.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\Compiler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimationFrame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexAnimationFrame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexBone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\CachedGPUBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\ClientBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\GPUBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IAttributeBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\IndexBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\PrimitiveType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\DepthVertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UITouchAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Framebuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Emitter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Particle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ParticleProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\TextureProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIHorizontalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILeftMargin.cs" />
@@ -89,9 +95,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIVerticalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIGesturePanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UILabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIPanel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRectangle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\AttributeHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\TextureHandle.cs" />
@@ -105,6 +114,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteBatch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Texture2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITextAlignment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouch.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouchAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IEntityWorld.cs" />
@@ -114,5 +125,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameOverScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Warfare\IWeapon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Warfare\Sword.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Warfare\Swords\WoodySword.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Bows\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Books\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Shields\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Wands\" />
   </ItemGroup>
 </Project>

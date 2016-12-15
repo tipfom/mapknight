@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
-using mapKnight.Extended.Components.AI;
+using mapKnight.Extended.Components.Movement;
+using mapKnight.Extended.Components.Player;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.UI;
@@ -12,11 +11,12 @@ using Map = mapKnight.Extended.Graphics.Map;
 
 namespace mapKnight.Extended.Screens {
 
-    public class GameplayScreen : Screen, PlayerComponent.IInputProvider {
+    public class GameplayScreen : Screen {
         private const int MAX_TIME_BETWEEN_UPDATES = 100;
 
         private UILabel debugLabel;
-        private UIButton leftButton, rightButton, jumpButton;
+        private UIPanel leftPanel, rightPanel;
+        private UIGesturePanel controlPanel;
 
         private Map map;
         private Entity testEntity;
@@ -26,65 +26,84 @@ namespace mapKnight.Extended.Screens {
             Entity.EntityAdded += (Entity obj) => { if (IsActive) obj.Prepare( ); };
         }
 
-        public bool Jump { get { return jumpButton.Clicked; } }
-
-        public bool Left { get { return leftButton.Clicked; } }
-
-        public bool Right { get { return rightButton.Clicked; } }
-
         public override void Draw ( ) {
             map.Draw( );
             base.Draw( );
         }
 
         public override void Load ( ) {
-            jumpButton = new UIButton(this, new UILeftMargin(0.05f), new UIBottomMargin(0.05f), new Vector2(0.5f, 0.5f), "J");
-            leftButton = new UIButton(this, new UIRightMargin(0.5f), new UIBottomMargin(0.1f), new Vector2(0.4f, 0.4f), "L");
-            rightButton = new UIButton(this, new UIRightMargin(0.05f), new UIBottomMargin(0.1f), new Vector2(0.4f, 0.4f), "R");
+            SetupControls( );
+            Window.Changed += ( ) => {
+                SetupControls( );
+            };
+
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
 
-            map = Assets.Load<Map>("testMap");
+            int begin = Environment.TickCount;
+            map = Assets.Load<Map>("beatiful_map");
+            Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
+            begin = Environment.TickCount;
 
-            //Entity.Configuration mobConfig = Assets.Load<Entity.Configuration>("potatoe_patrick2");
-            //mobConfig.Components.Add(new _2Component.Configuration( ));
-            //mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 5 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
-            //mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 7 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
-            //mobConfig.Create(new Vector2(7 + mobConfig.Transform.BoundsHalf.X, 10 + mobConfig.Transform.BoundsHalf.Y), map); // 9, 12
-
-            //Entity.Configuration mobConfig2 = Assets.Load<Entity.Configuration>("potatoe_patrick");
-            //mobConfig2.Components.Add(new _1Component.Configuration( ) { ScaredToFall = true });
-            //mobConfig2.Create(new Vector2(9, 12 + mobConfig2.Transform.BoundsHalf.Y), map);
-
-            Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
-            Entity.Configuration standingTrowieConfig = Assets.Load<Entity.Configuration>("standing_trowie");
-            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("walking_trowie");
+            //Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
+            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("plugger");
             Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
             Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
-            Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
-            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("hasto");
+            //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
+            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("shell");
+            Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
+            Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
+            Entity.Configuration sharkConfig = Assets.Load<Entity.Configuration>("shark");
 
-            sawConfig.Create(new Vector2(5, 2), map);
-            sawConfig.Create(new Vector2(10, 2), map);
+            //sawConfig.Create(new Vector2(3, 6), map);
 
-            standingTrowieConfig.Create(new Vector2(8, 16), map);
+            walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
-            walkingTrowieConfig.Create(new Vector2(40, 10), map);
+            landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
+            landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
 
-            landMineConfig.Create(new Vector2(40, landMineConfig.Transform.HalfSize.Y), map);
+            turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
 
-            turretConfig.Create(new Vector2(70, 3), map);
+            //meatballConfig.Create(new Vector2(3, 10), map);
 
-            meatballConfig.Create(new Vector2(4, 14), map);
+            hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
 
-            hastoConfig.Create(new Vector2(34, 2), map);
+            platformConfig.Create(map.SpawnPoint - new Vector2(0, 5), map);
 
-            Entity.Configuration testEntityConfig = Assets.Load<Entity.Configuration>("potatoe_patrick");
-            testEntityConfig.Components.Add(new PlayerComponent.Configuration(this));
-            testEntity = testEntityConfig.Create(new Vector2(8 + testEntityConfig.Transform.HalfSize.X, 13 + testEntityConfig.Transform.HalfSize.Y), map);
+            seplingConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
+
+            sharkConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
+
+            Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
+            testEntity = playerConfig.Create(map.SpawnPoint, map);
             testEntityHealth = testEntity.GetComponent<HealthComponent>( );
             map.Focus(testEntity.ID);
+            Debug.Print(this, $"player loading took {Environment.TickCount - begin} ms");
 
             base.Load( );
+        }
+
+        private void SetupControls ( ) {
+            controlPanel?.Dispose( );
+            leftPanel?.Dispose( );
+            rightPanel?.Dispose( );
+
+            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
+            controlPanel.OnGesturePerformed += (string gesture) => {
+                global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
+                if (gesture == UIGesturePanel.SWIPE_UP) {
+                    if(testEntity.GetComponent<MotionComponent>().IsOnGround  || testEntity.GetComponent<MotionComponent>( ).IsOnPlatform)
+                    testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
+                } else
+                    testEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
+            };
+
+            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            leftPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
+            leftPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
+
+            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            rightPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
+            rightPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
         }
 
         public override void Update (DeltaTime dt) {
@@ -99,8 +118,8 @@ namespace mapKnight.Extended.Screens {
         }
 
         protected override void Activated ( ) {
-            foreach (Entity entity in Entity.Entities)
-                entity.Prepare( );
+            for(int i = 0; i < Entity.Entities.Count;i++)
+                Entity.Entities[i].Prepare( );
             base.Activated( );
         }
     }

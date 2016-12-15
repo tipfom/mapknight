@@ -48,8 +48,8 @@ namespace mapKnight.ToolKit.Controls.Xna {
             // create the render target and buffer to hold the data
             renderTarget = new RenderTarget2D(
                 graphics, width, height, false,
-                SurfaceFormat.Color,
-                DepthFormat.Depth24Stencil8);
+                SurfaceFormat.Bgra32,
+                DepthFormat.None);
             buffer = new byte[width * height * 4];
             writeableBitmap = new WriteableBitmap(
                 width, height, 96, 96,
@@ -77,16 +77,7 @@ namespace mapKnight.ToolKit.Controls.Xna {
         public void Commit ( ) {
             // get the data from the render target
             renderTarget.GetData(buffer);
-
-            // because the only 32 bit pixel format for WPF is 
-            // BGRA but XNA is all RGBA, we have to swap the R 
-            // and B bytes for each pixel
-            for (int i = 0; i < buffer.Length - 2; i += 4) {
-                byte r = buffer[i];
-                buffer[i] = buffer[i + 2];
-                buffer[i + 2] = r;
-            }
-
+            
             // write our pixels into the bitmap source
             writeableBitmap.Lock( );
             Marshal.Copy(buffer, 0, writeableBitmap.BackBuffer, buffer.Length);

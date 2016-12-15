@@ -5,24 +5,9 @@
         "Height": 2
     },
     "Components": [
-        {
-            "$type": "Skelet",
-            "Bones": {
-                "body": {
-                    "Position": {
-                        "X": 0.5,
-                        "Y": 0.5
-                    },
-                    "Size": {
-                        "X": 1,
-                        "Y": 1
-                    }
-                }
-            }
-        },
-        {
-            "$type": "Animation",
-            "DefaultAnimation": "drot",
+         {
+            "$type": "Graphics.Animation",
+            "Default": "drot",
             "Animations": [
                 {
                     "Name": "drot",
@@ -33,8 +18,8 @@
                             "State": {
                                 "body": {
                                     "Position": {
-                                        "X": 0.5,
-                                        "Y": 0.5
+                                        "X": 0,
+                                        "Y": 0
                                     },
                                     "Size": {
                                         "X": 1,
@@ -49,8 +34,8 @@
                             "State": {
                                 "body": {
                                     "Position": {
-                                        "X": 0.5,
-                                        "Y": 0.5
+                                        "X": 0,
+                                        "Y": 0
                                     },
                                     "Size": {
                                         "X": 1,
@@ -65,7 +50,7 @@
             ]
         },
         {
-            "$type": "Texture",
+            "$type": "Graphics.Texture",
             "Texture": "saw"
         },
         {

@@ -15,14 +15,14 @@ namespace mapKnight.Extended.Graphics.Buffer {
         public float[ ] Cache { get; set; }
         private int buffer;
 
-        public CachedGPUBuffer (int dimensions, int quads, BufferUsage usage = BufferUsage.DynamicDraw) :
-            this(dimensions, quads, new float[4 * quads * dimensions], usage) {
+        public CachedGPUBuffer (int dimensions, int count, PrimitiveType type, BufferUsage usage = BufferUsage.DynamicDraw) :
+            this(dimensions, count, type, new float[count * dimensions * (int)type], usage) {
 
         }
 
-        public CachedGPUBuffer (int dimensions, int quads, float[ ] initialData, BufferUsage usage = BufferUsage.DynamicDraw) {
+        public CachedGPUBuffer (int dimensions, int count, PrimitiveType type, float[ ] initialData, BufferUsage usage = BufferUsage.DynamicDraw) {
             Dimensions = dimensions;
-            Length = Dimensions * quads * 4;
+            Length = Dimensions * count * (int)type;
             Bytes = Length * sizeof(float);
             Stride = Dimensions * sizeof(float);
             Cache = initialData;

@@ -15,7 +15,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         private void binder_Changed (object sender, float e) {
             currentPercent = e;
-            RequestUpdate( );
+            IsDirty = true;
         }
 
         public override List<DepthVertexData> ConstructVertexData ( ) {

@@ -27,12 +27,12 @@ namespace mapKnight.Extended.Graphics.UI {
             base.Release += this_Release;
         }
 
-        public Color Color { get { return _Color; } set { _Color = value; RequestUpdate( ); } }
-        public string Text { get { return _Text; } set { _Text = value; lines = _Text.Split('\n'); RequestUpdate( ); } }
+        public Color Color { get { return _Color; } set { _Color = value; IsDirty = true; ; } }
+        public string Text { get { return _Text; } set { _Text = value; lines = _Text.Split('\n'); IsDirty = true; } }
 
         public override List<DepthVertexData> ConstructVertexData ( ) {
             List<DepthVertexData> vertexData = new List<DepthVertexData>( );
-            vertexData.Add(new DepthVertexData(Bounds.Verticies(Anchor.Left | Anchor.Top), (this.Clicked ? "button_pressed" : "button_idle"), Depth, Color));
+            vertexData.Add(new DepthVertexData(Bounds.Verticies, (this.Clicked ? "button_pressed" : "button_idle"), Depth, Color));
 
             Vector2 textPosition = new Vector2(Position.X + Size.X * 0.5f, Position.Y - (Size.Y - lines.Length * charSize) * 0.5f);
             vertexData.AddRange(UILabel.GetVertexData(new string[ ] { Text }, UITextAlignment.Center, textPosition, charSize, Depth, Color.White));
@@ -40,11 +40,11 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         private void this_Click ( ) {
-            RequestUpdate( );
+            IsDirty = true;
         }
 
         private void this_Release ( ) {
-            RequestUpdate( );
+            IsDirty = true; 
         }
     }
 }

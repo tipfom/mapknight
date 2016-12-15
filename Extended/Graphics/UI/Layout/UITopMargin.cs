@@ -9,6 +9,7 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
 
         protected override void CalculateScreenPosition ( ) {
             ScreenPosition = 1f - Margin;
+            base.CalculateScreenPosition( );
         }
     }
 }

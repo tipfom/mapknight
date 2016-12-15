@@ -1,0 +1,182 @@
+﻿<UserControl x:Class="mapKnight.ToolKit.Controls.AnimationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:toolkit="clr-namespace:mapKnight.ToolKit"
+             xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
+             xmlns:content ="clr-namespace:mapKnight.ToolKit.Controls.Animation"
+             xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="toolkit:CustomCommands.EditorUndo" Executed="CommandEditorUndo_Executed" CanExecute="CommandEditorUndo_CanExecute"/>
+        <CommandBinding Command="toolkit:CustomCommands.EditorNew" Executed="CommandEditorNew_Executed" CanExecute="CommandEditorNew_CanExecute"/>
+        <CommandBinding Command="toolkit:CustomCommands.EditorDelete" Executed="CommandEditorDelete_Executed" CanExecute="CommandEditorDelete_CanExecute"/>
+        <CommandBinding Command="toolkit:CustomCommands.EditorUp" Executed="CommandEditorUp_Executed" CanExecute="CommandEditorUp_CanExecute"/>
+        <CommandBinding Command="toolkit:CustomCommands.EditorDown" Executed="CommandEditorDown_Executed" CanExecute="CommandEditorDown_CanExecute"/>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <DataTemplate x:Key="preview">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
+                    <Button Click="ButtonStartPlay_Click">
+                        <Image Height="48" Width="48" Source="{StaticResource ResourceKey=image_animationcomponent_startplay}"/>
+                    </Button>
+                    <Button Click="ButtonPausePlay_Click">
+                        <Image Height="48" Width="48" Source="{StaticResource ResourceKey=image_animationcomponent_pauseplay}"/>
+                    </Button>
+                    <Button Click="ButtonStopPlay_Click">
+                        <Image Height="48" Width="48" Source="{StaticResource ResourceKey=image_animationcomponent_stopplay}"/>
+                    </Button>
+                    <Button Click="ButtonResetPlay_Click">
+                        <Image Height="48" Width="48" Source="{StaticResource ResourceKey=image_animationcomponent_resetplay}"/>
+                    </Button>
+                </StackPanel>
+                <content:AnimationView x:Name="animationview" Margin="5"/>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="edit">
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Bottom" Margin="0,5,0,0">
+                    <TextBlock Text="Zoom" DockPanel.Dock="Left" Margin="0,0,5,0" Foreground="Gray"/>
+                    <Slider x:Name="slider_zoom" DockPanel.Dock="Right" Orientation="Horizontal" Minimum="0" Maximum="6" Value="0" IsSnapToTickEnabled="True"
+                        ValueChanged="slider_zoom_ValueChanged"/>
+                </DockPanel>
+                <content:MLGCanvas DockPanel.Dock="Top" x:Name="canvas_frame" ClipToBounds="True" Margin="3,0,0,3"
+                        SizeChanged="canvas_frame_SizeChanged">
+                    <Rectangle x:Name="rectangle_entity" Canvas.ZIndex ="-100" Stroke="Black" StrokeThickness="2" Opacity="0.5"/>
+                </content:MLGCanvas>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="none">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Nothing Selected" Foreground="Gray"/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <TreeView x:Name="treeview_animations" Grid.Column="0" ItemsSource="{Binding}" ContextMenu="{DynamicResource contextmenu_default}"
+                  SelectedItemChanged="treeview_animations_SelectedItemChanged" MouseDown="treeview_animations_MouseDown">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <EventSetter Event="TreeViewItem.MouseRightButtonDown" Handler="treeview_animations_TreeViewItemRightMouseButtonDown"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <ContextMenu x:Key="contextmenu_default">
+                    <MenuItem Command="toolkit:CustomCommands.EditorNew" Header="Add Animation">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_animation}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+                <ContextMenu x:Key="contextmenu_animation">
+                    <MenuItem Command="toolkit:CustomCommands.EditorNew" Header="Add Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_frame}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="toolkit:CustomCommands.EditorDelete" Header="Delete Animation">
+                        <MenuItem.Icon>
+                            <Image  Source="{StaticResource ResourceKey=image_animationcomponent_delete}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+                <ContextMenu x:Key="contextmenu_frame">
+                    <MenuItem Command="toolkit:CustomCommands.EditorNew" Header="Copy Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_frame}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="toolkit:CustomCommands.EditorUp" Header="Move Frame Up">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_up}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="toolkit:CustomCommands.EditorDown" Header="Move Frame Down">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_down}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="toolkit:CustomCommands.EditorR" Header="Reset Frame">
+                        <MenuItem.Icon>
+                            <Image  Source="{StaticResource ResourceKey=image_animationcomponent_reset}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="toolkit:CustomCommands.EditorDelete" Header="Delete Frame">
+                        <MenuItem.Icon>
+                            <Image  Source="{StaticResource ResourceKey=image_animationcomponent_delete}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Patrick Frame" Click="MenuItemStarFrame_Click">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_star}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsSelected"
+                    Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                </Style>
+            </TreeView.Resources>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type data:VertexAnimation}" ItemsSource="{Binding Frames}">
+                    <StackPanel Orientation="Horizontal" Margin="0,1,0,1">
+                        <RadioButton GroupName="radiobutton_animationdefault" IsChecked="{Binding IsDefault}" VerticalAlignment="Center"/>
+                        <Image  Width="20" Height="20" VerticalAlignment="Center" Source="{StaticResource ResourceKey=image_animationcomponent_animation}" />
+                        <CheckBox  IsChecked="{Binding CanRepeat}" VerticalAlignment="Center" Margin="7,1,7,1" Height="18" Width="18">
+                            <CheckBox.Template>
+                                <ControlTemplate TargetType="CheckBox">
+                                    <Grid>
+                                        <Border BorderBrush="Gray" BorderThickness="1">
+                                            <Image Name="image" Source="{StaticResource ResourceKey=image_animationcomponent_repeat}"/>
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="true">
+                                            <Setter TargetName="image" Property="Opacity" Value="1" />
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="false">
+                                            <Setter TargetName="image" Property="Opacity" Value="0.1" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </CheckBox.Template>
+                        </CheckBox>
+                        <TextBox  Text="{Binding Name}" MinWidth="100" MaxWidth="160" />
+                    </StackPanel>
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type data:VertexAnimationFrame}">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
+                                <Image Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" Source="{StaticResource ResourceKey=image_animationcomponent_frame}"/>
+                                <TextBlock Text="{Binding Index, StringFormat={}Frame {0}}" Margin="3,0"/>
+                                <controls:IntegerTextbox Width="72" TextAlignment="Right" Text="{Binding Time}"/>
+                                <TextBlock>ms</TextBlock>
+                                <Image x:Name="image_featured" Margin="6,0,0,0" Width="15" Height="15" Source="{StaticResource ResourceKey=image_animationcomponent_star}">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Featured}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Featured}" Value="False">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="White"/>
+        <ContentPresenter x:Name="contentpresenter" ContentTemplate="{StaticResource none}" Grid.Column="2"/>
+    </Grid>
+</UserControl>

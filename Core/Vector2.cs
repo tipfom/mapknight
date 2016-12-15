@@ -103,43 +103,59 @@ namespace mapKnight.Core {
             Y = y;
         }
 
-        public Vector2(Vector2 vector) {
+        public Vector2 (Vector2 vector) {
             X = vector.X;
             Y = vector.Y;
         }
 
-#region methods and functions
+        public Vector2 (Range<Vector2> velocity) : this( ) {
+            X = Mathf.Random(velocity.Min.X, velocity.Max.X);
+            Y = Mathf.Random(velocity.Min.Y, velocity.Max.Y);
+        }
 
+        #region methods and functions
+
+        /// <returns>
+        /// returns the absolute of both vector components
+        /// </returns>
         public Vector2 Abs ( ) {
             return new Vector2(Math.Abs(this.X), Math.Abs(this.Y));
+        }
+
+        /// <returns>
+        /// returns the normalized vector
+        /// </returns>
+        public Vector2 Normalize ( ) {
+            return this / Magnitude( );
         }
 
         /// <returns>
         /// returns the distance discribed by the vector
         /// </returns>
         public float Magnitude ( ) {
-            return (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+            return Mathf.Sqrt(X * X + Y * Y);
         }
 
         /// <returns>
         /// returns the squared distance of the vector (much faster)
         /// </returns>
         public float MagnitudeSqr ( ) {
-            return (float)(Math.Pow(X, 2f) + Math.Pow(Y, 2f));
+            return (X * X + Y * Y);
         }
 
         public float[ ] ToQuad ( ) {
+            float xh = X / 2f, yh = Y / 2f;
             return new float[ ] {
-                0, Y,
-                0, 0,
-                X, 0,
-                X, Y
+                -xh, yh,
+                -xh, -yh,
+                xh, -yh,
+                xh, yh
             };
         }
 
-#endregion
+        #endregion
 
-#region overrides
+        #region overrides
 
         public override bool Equals (object obj) {
             return (obj.GetType( ) == typeof(Vector2)) ? (((Vector2)obj) == this) : false;
@@ -153,6 +169,6 @@ namespace mapKnight.Core {
             return $"({X} {Y})";
         }
 
-#endregion
+        #endregion
     }
 }

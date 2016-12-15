@@ -1,6 +1,7 @@
 using System;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
+using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
@@ -20,7 +21,7 @@ namespace mapKnight.Extended.Components.AI {
             if (collidingEntity.Info.IsPlayer) {
                 Vector2 closestPointToPlayer = Owner.Transform.Center + (Owner.Transform.Center - collidingEntity.Transform.Center) * sawRadius;
                 if (Owner.Transform.Intersects(closestPointToPlayer)) {
-                    collidingEntity.SetComponentInfo(ComponentEnum.Stats_Health, damageComponent.OnTouch);
+                    collidingEntity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
                 }
             }
         }

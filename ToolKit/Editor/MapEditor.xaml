@@ -6,7 +6,16 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit"
              xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="600">
+             d:DesignHeight="300" d:DesignWidth="600" IsEnabled="False">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local:CustomCommands.EditorUndo" Executed="CommandBinding_Undo_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltA" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltS" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltD" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorAltF" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
+        <CommandBinding Command="local:CustomCommands.EditorDelete" Executed="CommandDelete_Executed" CanExecute="CommandDelete_CanExecute"/>
+        <CommandBinding Command="local:CustomCommands.EditorReplace" Executed="CommandReplace_Executed" CanExecute="CommandReplace_CanExecute" />
+    </UserControl.CommandBindings>
     <UserControl.Resources>
         <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">
@@ -16,6 +25,15 @@
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="Image.IsEnabled" Value="False">
+                    <Trigger.Setters>
+                        <Setter Property="Image.Opacity" Value="0.5"/>
+                    </Trigger.Setters>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="ScrollBar">
             <Setter Property="Maximum" Value="0" />
@@ -31,7 +49,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="300" Width="*" />
+            <ColumnDefinition MinWidth="304" Width="304" />
             <ColumnDefinition Width="6" />
             <ColumnDefinition MinWidth="300" Width="2*" />
         </Grid.ColumnDefinitions>
@@ -44,15 +62,36 @@
             </Grid.RowDefinitions>
             <DockPanel>
                 <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0" />
-                <Button Content="EXPORT TEMPLATE" Margin="0,0,0,3" Click="buttonexport_Click" VerticalAlignment="Center" />
+                <Button Click="ButtonSettings_Click" Margin="0,0,4,0">
+                    <Button.ToolTip>
+                        Change the Default Tile Settings
+                    </Button.ToolTip>
+                    <Image Name="image_settings" Source="{StaticResource ResourceKey=image_map_settings}"/>
+                </Button>
+                <Button Margin="0,0,4,0" Click="ButtonAdd_Click">
+                    <Button.ToolTip>
+                        Add a New Tile
+                    </Button.ToolTip>
+                    <Image Name="image_add" Source="{StaticResource ResourceKey=image_map_add}"/>
+                </Button>
+                <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorDelete">
+                    <Button.ToolTip>
+                        Remove the Selected Tile
+                    </Button.ToolTip>
+                    <Image Name="image_remove" Source="{StaticResource ResourceKey=image_map_remove}"/>
+                </Button>
+                <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorReplace">
+                    <Button.ToolTip>
+                        Replace the Selected Tile
+                    </Button.ToolTip>
+                    <Image Name="image_replace" Source="{StaticResource ResourceKey=image_map_replace}"/>
+                </Button>
+                <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" />
             </DockPanel>
             <ListBox Grid.Row="1"
                  x:Name="wrappanel_tiles"
-                 ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_Selected" >
-                <ListBox.Background>
-                    <ImageBrush ImageSource="{StaticResource ResourceKey=image_draganddrop}" Stretch="None" AlignmentX="Center" AlignmentY="Center" Opacity="0.05"/>
-                </ListBox.Background>
+                 ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,2,0,0"
+                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_SelectionChanged" >
             </ListBox>
             <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
             <DockPanel Grid.Row="3">

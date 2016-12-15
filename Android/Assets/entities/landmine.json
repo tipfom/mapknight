@@ -1,32 +1,81 @@
 ﻿{
 	"Name": "Landus Minus",
 	"Transform": {
-			"Width": 0.7,
-			"Height": 0.06
+		"Width": 0.7,
+		"Height": 0.21875
 	},
 	"Components": [
 		{
-			"$type": "Skelet",
-			"Bones": {
-				"body": {
+			"$type": "Graphics.Skelet",
+			"Bones": [
+				{
 					"Position": {
-						"X": 0.5,
-						"Y": 0.5
+						"X": 0,
+						"Y": 0
 					},
 					"Size": {
 						"X": 1,
 						"Y": 1
 					}
 				}
-			}
+			]
 		},
 		{
-			"$type": "Texture",
-			"Texture": "landmine"
+			"$type": "Graphics.Sprite",
+			"Texture": "landmine",
+			"Animations": [
+				{
+					"Name": "idle",
+					"CanRepeat": true,
+					"Frames": [
+						{
+							"Time": 10000000,
+							"Bones": [
+								"default"
+							]
+						}
+					]
+				},
+				{
+					"Name": "explode",
+					"CanRepeat": false,
+					"Frames": [
+						{
+							"Time": 500,
+							"Bones": [
+								"explode"
+							]
+						},
+						{
+							"Time": 400,
+							"Bones": [
+								"default"
+							]
+						},
+						{
+							"Time": 300,
+							"Bones": [
+								"explode"
+							]
+						},
+						{
+							"Time": 200,
+							"Bones": [
+								"default"
+							]
+						},
+						{
+							"Time": 100,
+							"Bones": [
+								"explode"
+							]
+						}
+					]
+				}
+			]
 		},
 		{
 			"$type": "AI.LandMine",
-			"ExplosionDelay": 500,
 			"ExplosionRadius": 5,
 			"ThrowBackSpeed": 42
 		},

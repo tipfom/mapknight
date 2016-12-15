@@ -1,8 +1,10 @@
 */bin/**
 */obj/**
+*/.vs/**
 packages/
 Components/*
 Shared/*
+TestResults/*
 .vs/*
 *.sou
 *.apk
@@ -15,3 +17,5 @@ Shared/*
 
 mapKnight.userprefs
 *.bak
+
+!assoc.exe
