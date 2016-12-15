@@ -93,12 +93,14 @@ namespace mapKnight.Extended.Components.Movement {
 
         private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {
             // returns true if any collision happened and modifies the transform
+            int ylimit = Mathi.Floor(oldTransform.TR.Y);
+            if (ylimit == oldTransform.TR.Y)
+                ylimit--;
             if (targetTransform.Center.X > oldTransform.Center.X) {
                 // moves to the right
                 int xlimit = Mathi.Floor(targetTransform.TR.X);
-                int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.TR.X; x <= xlimit; x++) {
-                    for (int y = Mathi.Ceil(targetTransform.BL.Y); y <= ylimit; y++) {
+                    for (int y = Mathi.Floor(oldTransform.BL.Y); y <= ylimit; y++) {
                         if (x >= Owner.World.Size.Width || Owner.World.HasCollider(x, y)) {
                             targetTransform.X = x - targetTransform.Size.X / 2;
                             return true;
@@ -108,9 +110,8 @@ namespace mapKnight.Extended.Components.Movement {
             } else if (targetTransform.Center.X < oldTransform.Center.X) {
                 // moves to the left
                 int xlimit = Mathi.Floor(targetTransform.BL.X);
-                int ylimit = ((oldTransform.TR.Y == Mathi.Floor(oldTransform.TR.Y)) ? (int)(oldTransform.TR.Y - 1) : (int)oldTransform.TR.Y);
                 for (int x = (int)oldTransform.BL.X; x >= xlimit; x--) {
-                    for (int y = Mathi.Ceil(targetTransform.BL.Y); y <= ylimit; y++) {
+                    for (int y = Mathi.Floor(oldTransform.BL.Y); y <= ylimit; y++) {
                         if (x < 0 || Owner.World.HasCollider(x, y)) {
                             targetTransform.X = x + 1 + targetTransform.Size.X / 2;
                             return true;
