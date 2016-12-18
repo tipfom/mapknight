@@ -159,7 +159,7 @@ namespace mapKnight.Extended.Graphics {
 
         public void Focus (int entityID) {
             focusEntity = Entity.Entities.Find(entity => entity.ID == entityID);
-            focusEntity.Destroyed += ( ) => { Focus(Entity.Entities[0].ID); };
+            focusEntity.Destroyed += ( ) => { focusEntity = null; };
         }
 
         private void UpdateFocus ( ) {
