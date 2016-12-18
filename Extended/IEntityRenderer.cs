@@ -5,5 +5,6 @@ namespace mapKnight.Extended {
     public interface IEntityRenderer {
         void QueueVertexData (int entity, List<VertexData> vertexData);
         void AddTexture (int entity, SpriteBatch entityTexture);
+        SpriteBatch GetTexture (int entity);
     }
 }

@@ -27,12 +27,12 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        public void QueueVertexData (int species, List<VertexData> vertexData) {
-            frameVertexData[species].Enqueue(vertexData);
+        public SpriteBatch GetTexture(int species) {
+            return entityTextures[species];
         }
 
-        public void Update (float dt) {
-
+        public void QueueVertexData (int species, List<VertexData> vertexData) {
+            frameVertexData[species].Enqueue(vertexData);
         }
 
         public void Draw ( ) {
