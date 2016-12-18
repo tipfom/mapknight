@@ -96,6 +96,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIDepths.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIDim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIGesturePanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItem.cs" />
