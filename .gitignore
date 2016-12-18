@@ -12,6 +12,7 @@ TestResults/*
 *.db
 *.bak
 *.user
+*.csproj.user
 *-Skunk.*
 *-Tim-PC.*
 
