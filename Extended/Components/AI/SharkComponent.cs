@@ -38,6 +38,7 @@ namespace mapKnight.Extended.Components.AI {
             if (motionComponent.IsOnGround && !isBouncing) {
                 isBouncing = true;
                 motionComponent.AimedVelocity.X = 0;
+                motionComponent.AimedVelocity.Y = 0;
                 Owner.SetComponentInfo(ComponentData.SpriteAnimation, "bounce", true, (SpriteComponent.AnimationCallback)BounceFinishedAnimationCallback);
                 Owner.SetComponentInfo(ComponentData.SpriteAnimation, "fly", false);
             }
