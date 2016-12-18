@@ -48,7 +48,7 @@ namespace mapKnight.Extended.Graphics.Programs
 
         public static ParticleProgram Program;
 
-        public class BufferBatch {
+        public class BufferBatch : IDisposable {
             public IAttributeBuffer VertexBuffer;
             public IAttributeBuffer SizeBuffer;
             public IAttributeBuffer ColorBuffer;
@@ -57,6 +57,12 @@ namespace mapKnight.Extended.Graphics.Programs
                 VertexBuffer = vertexbuffer;
                 SizeBuffer = sizebuffer;
                 ColorBuffer = colorbuffer;
+            }
+
+
+            public void Dispose ( ) {
+                ColorBuffer.Dispose( );
+                VertexBuffer.Dispose( );
             }
         }
     }
