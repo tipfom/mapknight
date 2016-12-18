@@ -23,7 +23,7 @@ namespace mapKnight.Extended.Screens {
         private HealthComponent testEntityHealth;
 
         public GameplayScreen ( ) {
-            Entity.EntityAdded += (Entity obj) => { if (IsActive) obj.Prepare( ); };
+            Entity.EntityAdded += (Entity obj) => { obj.Prepare( ); };
         }
 
         public override void Draw ( ) {
