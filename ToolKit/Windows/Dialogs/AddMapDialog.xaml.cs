@@ -31,15 +31,7 @@ namespace mapKnight.ToolKit.Windows {
             AddTexture = addtexture;
             this.Owner = App.Current.MainWindow;
         }
-
-        private void CheckNumericPreviewTextInput (object sender, TextCompositionEventArgs e) {
-            e.Handled = !char.IsNumber(e.Text[0]);
-        }
-
-        private void CheckFloatNumericTextInput (object sender, TextCompositionEventArgs e) {
-            e.Handled = !(char.IsNumber(e.Text[0]) || (e.Text[0] == '.' && !((TextBox)sender).Text.Contains(".")));
-        }
-
+        
         private void button_import_Click (object sender, RoutedEventArgs e) {
             OpenFileDialog importDialog = new OpenFileDialog( );
             importDialog.DefaultExt = "TileTemplates|*.mkttemplate";

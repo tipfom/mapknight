@@ -49,7 +49,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="304" Width="304" />
+            <ColumnDefinition MinWidth="322" Width="304" />
             <ColumnDefinition Width="6" />
             <ColumnDefinition MinWidth="300" Width="2*" />
         </Grid.ColumnDefinitions>

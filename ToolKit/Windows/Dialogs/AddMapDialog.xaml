@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit"
+        xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
         Title="Create Map" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize" ShowInTaskbar="False">
     <StackPanel>
@@ -17,19 +18,19 @@
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Width" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_width" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" PreviewTextInput="CheckNumericPreviewTextInput" VerticalContentAlignment="Center"/>
+            <controls:IntegerTextBox x:Name="textbox_width" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="189" VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Height" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
-            <TextBox x:Name="textbox_height" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="189" PreviewTextInput="CheckNumericPreviewTextInput" VerticalContentAlignment="Center"/>
+            <controls:IntegerTextBox x:Name="textbox_height" HorizontalAlignment="Right" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="189" VerticalContentAlignment="Center"/>
         </Grid>
         <Grid Margin="5,0,5,5">
             <Label Content="Gravity" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
             <StackPanel Width="189" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Label Content="X" Margin="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
+                <controls:FloatTextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" VerticalContentAlignment="Center"/>
                 <Label Content="Y" Margin="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
+                <controls:FloatTextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" VerticalContentAlignment="Center"/>
             </StackPanel>
         </Grid>
 

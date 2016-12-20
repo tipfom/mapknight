@@ -89,14 +89,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Animation\MLGCanvas.cs" />
+    <Compile Include="Controls\FloatTextBox.cs" />
+    <Compile Include="Controls\IntegerTextBox.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Controls\AnimationControl.xaml.cs">
       <DependentUpon>AnimationControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Animation\MoveableRenderTransformOrigin.cs" />
-    <Compile Include="Controls\IntegerTextbox.xaml.cs">
-      <DependentUpon>IntegerTextbox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Data\AnimationMetaData.cs" />
     <Compile Include="Data\VertexAnimation.cs" />
     <Compile Include="Data\VertexAnimationFrame.cs" />
@@ -192,10 +191,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AnimationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\IntegerTextbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

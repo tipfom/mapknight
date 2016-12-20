@@ -154,7 +154,7 @@
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
                                 <Image Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" Source="{StaticResource ResourceKey=image_animationcomponent_frame}"/>
                                 <TextBlock Text="{Binding Index, StringFormat={}Frame {0}}" Margin="3,0"/>
-                                <controls:IntegerTextbox Width="72" TextAlignment="Right" Text="{Binding Time}"/>
+                                <controls:IntegerTextBox Width="72" TextAlignment="Right" Text="{Binding Time}"/>
                                 <TextBlock>ms</TextBlock>
                                 <Image x:Name="image_featured" Margin="6,0,0,0" Width="15" Height="15" Source="{StaticResource ResourceKey=image_animationcomponent_star}">
                                     <Image.Style>

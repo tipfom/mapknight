@@ -45,10 +45,6 @@ namespace mapKnight.ToolKit.Windows {
             }
         }
 
-        private void CheckFloatNumericTextInput (object sender, TextCompositionEventArgs e) {
-            e.Handled = !(char.IsNumber(e.Text[0]) || (e.Text[0] == '.' && !((TextBox)sender).Text.Contains(".")));
-        }
-
         private bool ValidName ( ) {
             if (textbox_name.Text.Replace(" ", "") != "")
                 return true;
