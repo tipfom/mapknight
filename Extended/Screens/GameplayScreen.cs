@@ -56,6 +56,31 @@ namespace mapKnight.Extended.Screens {
 
             //sawConfig.Create(new Vector2(3, 6), map);
 
+            Entity.Configuration testPrivate = new Entity.Configuration( );
+            testPrivate.Name = "Testing Private";
+            testPrivate.Transform = new Transform(Vector2.Zero, new Vector2(1, 1));
+            testPrivate.Components = new ComponentList( );
+            testPrivate.Components.Add(new MotionComponent.Configuration( ));
+            testPrivate.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
+            testPrivate.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private" });
+            testPrivate.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
+            testPrivate.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
+
+            Entity.Configuration tentConfig = new Entity.Configuration( );
+            tentConfig.Name = "Testing Tent";
+            tentConfig.Transform = new Transform(Vector2.Zero, new Vector2(2, 2));
+            tentConfig.Components = new ComponentList( );
+            tentConfig.Components.Add(new Components.AI.Guardian.TentComponent.Configuration( ) {
+                Officer = null, PatrolRange = 4f, PrivateCount = 5, TimeBetweenPrivates = 3000,
+                Privates = new Entity.Configuration[ ] {
+                    testPrivate
+                }
+            });
+            tentConfig.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/tent" });
+            tentConfig.Components.Add(new Components.Graphics.DrawComponent.Configuration( ));
+            tentConfig.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
+            tentConfig.Create(map.SpawnPoint, map);
+
             walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
             landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);

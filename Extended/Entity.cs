@@ -7,6 +7,7 @@ using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Player;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Extended.Components.AI.Guardian;
 
 namespace mapKnight.Extended {
 
@@ -196,7 +197,7 @@ namespace mapKnight.Extended {
                 info = new EntityInfo( ) {
                     IsPlatform = typeSet.Contains(typeof(PlatformComponent.Configuration)),
                     IsPlayer = typeSet.Contains(typeof(PlayerComponent.Configuration)),
-                    IsTemporary = typeSet.Contains(typeof(TriggerComponent.InternalTriggerComponent.Configuration)),
+                    IsTemporary = typeSet.Contains(typeof(TriggerComponent.InternalTriggerComponent.Configuration)) ||typeSet.Contains(typeof(TentComponent.Configuration)),
 
                     HasHealth = typeSet.Contains(typeof(HealthComponent.Configuration))
                 };

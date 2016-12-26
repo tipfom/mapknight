@@ -53,6 +53,10 @@ namespace mapKnight.Extended.Components.AI.Basics {
             motionComponent.AimedVelocity.X = speedComponent.Speed.X * speedMult;
         }
 
+        protected void Turn ( ) {
+            speedMult *= -1;
+        }
+
         public new class Configuration : Component.Configuration {
             public bool IsScaredToFall;
 
