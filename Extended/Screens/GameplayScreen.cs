@@ -65,6 +65,7 @@ namespace mapKnight.Extended.Screens {
             testPrivate.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private" });
             testPrivate.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
             testPrivate.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
+            testPrivate.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
 
             Entity.Configuration testOfficer = new Entity.Configuration( );
             testOfficer.Name = "Testing Officer";
@@ -75,6 +76,7 @@ namespace mapKnight.Extended.Screens {
             testOfficer.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/officer" });
             testOfficer.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
             testOfficer.Components.Add(new SpeedComponent.Configuration( ) { X = 1.2f });
+            testOfficer.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
 
             Entity.Configuration tentConfig = new Entity.Configuration( );
             tentConfig.Name = "Testing Tent";

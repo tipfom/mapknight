@@ -61,6 +61,10 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             nextPrivateSpawnTime = Environment.TickCount + timeBetweenPrivates;
         }
 
+        public void OfficerDied ( ) {
+            activeOfficer = null;
+        }
+
         private Entity RandomPrivate ( ) {
             Entity.Configuration randomedConfig = privates[Mathi.Random(0, privates.Length)];
             return randomedConfig.Create(Owner.Transform.Center - new Vector2(0, Owner.Transform.HalfSize.Y - randomedConfig.Transform.HalfSize.Y), Owner.World);

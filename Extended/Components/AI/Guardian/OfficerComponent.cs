@@ -13,7 +13,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         public override void Destroy ( ) {
-            
+            tent.OfficerDied( );
         }
 
         public new class Configuration : Component.Configuration {
