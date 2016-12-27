@@ -58,7 +58,7 @@ namespace mapKnight.Extended.Screens {
 
             Entity.Configuration testPrivate = new Entity.Configuration( );
             testPrivate.Name = "Testing Private";
-            testPrivate.Transform = new Transform(Vector2.Zero, new Vector2(1, 1));
+            testPrivate.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
             testPrivate.Components = new ComponentList( );
             testPrivate.Components.Add(new MotionComponent.Configuration( ));
             testPrivate.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
@@ -68,7 +68,7 @@ namespace mapKnight.Extended.Screens {
 
             Entity.Configuration tentConfig = new Entity.Configuration( );
             tentConfig.Name = "Testing Tent";
-            tentConfig.Transform = new Transform(Vector2.Zero, new Vector2(2, 2));
+            tentConfig.Transform = new Transform(Vector2.Zero, new Vector2(3.405405405f, 2f));
             tentConfig.Components = new ComponentList( );
             tentConfig.Components.Add(new Components.AI.Guardian.TentComponent.Configuration( ) {
                 Officer = null, PatrolRange = 4f, PrivateCount = 5, TimeBetweenPrivates = 3000,
