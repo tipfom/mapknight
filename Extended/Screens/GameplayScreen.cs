@@ -62,10 +62,32 @@ namespace mapKnight.Extended.Screens {
             testPrivate.Components = new ComponentList( );
             testPrivate.Components.Add(new MotionComponent.Configuration( ));
             testPrivate.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
-            testPrivate.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private" });
+            testPrivate.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private1" });
             testPrivate.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
             testPrivate.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
             testPrivate.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
+
+            Entity.Configuration testPrivate2 = new Entity.Configuration( );
+            testPrivate2.Name = "Testing Private";
+            testPrivate2.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
+            testPrivate2.Components = new ComponentList( );
+            testPrivate2.Components.Add(new MotionComponent.Configuration( ));
+            testPrivate2.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
+            testPrivate2.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private2" });
+            testPrivate2.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
+            testPrivate2.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
+            testPrivate2.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
+
+            Entity.Configuration testPrivate3 = new Entity.Configuration( );
+            testPrivate3.Name = "Testing Private";
+            testPrivate3.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
+            testPrivate3.Components = new ComponentList( );
+            testPrivate3.Components.Add(new MotionComponent.Configuration( ));
+            testPrivate3.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
+            testPrivate3.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private3" });
+            testPrivate3.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
+            testPrivate3.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
+            testPrivate3.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
 
             Entity.Configuration testOfficer = new Entity.Configuration( );
             testOfficer.Name = "Testing Officer";
@@ -85,7 +107,7 @@ namespace mapKnight.Extended.Screens {
             tentConfig.Components.Add(new Components.AI.Guardian.TentComponent.Configuration( ) {
                 Officer = testOfficer, PatrolRange = 12f, PrivateCount = 4, TimeBetweenPrivates = 3000,
                 Privates = new Entity.Configuration[ ] {
-                    testPrivate
+                    testPrivate, testPrivate2, testPrivate3
                 }
             });
             tentConfig.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/tent" });
