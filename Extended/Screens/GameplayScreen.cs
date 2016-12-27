@@ -79,12 +79,13 @@ namespace mapKnight.Extended.Screens {
             tentConfig.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/tent" });
             tentConfig.Components.Add(new Components.Graphics.DrawComponent.Configuration( ));
             tentConfig.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
-            tentConfig.Create(map.SpawnPoint, map);
+            tentConfig.Create(new Vector2(26, 18 + tentConfig.Transform.HalfSize.Y), map);
 
             walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
             landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
             landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
+            landMineConfig.Create(new Vector2(2.5f, 8 + landMineConfig.Transform.HalfSize.Y), map);
 
             turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
 
@@ -92,7 +93,7 @@ namespace mapKnight.Extended.Screens {
 
             hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
 
-            platformConfig.Create(map.SpawnPoint - new Vector2(0, 5), map);
+            platformConfig.Create(new Vector2(3, 9), map);
 
             seplingConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
 
