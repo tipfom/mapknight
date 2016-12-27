@@ -179,17 +179,17 @@ namespace mapKnight.Extended {
             public ComponentList Components;
             public string Name;
             public Transform Transform;
-            private int entitySpecies = -1;
+            public int Species = -1;
 
             public Entity Create (Vector2 spawnLocation, IEntityWorld world) {
-                if (entitySpecies == -1 || Components.HasChanged) {
-                    entitySpecies = ++currentSpecies;
-                    entityNames.Add(entitySpecies, Name);
+                if (Species == -1 || Components.HasChanged) {
+                    Species = ++currentSpecies;
+                    entityNames.Add(Species, Name);
                     Components.ResolveComponentDependencies( );
                     Components.Sort( );
                     UpdateInfo( );
                 }
-                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, entitySpecies, info);
+                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Species, info);
             }
 
             private void UpdateInfo ( ) {
