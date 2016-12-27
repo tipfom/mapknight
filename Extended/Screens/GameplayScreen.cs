@@ -72,7 +72,7 @@ namespace mapKnight.Extended.Screens {
             testOfficer.Components = new ComponentList( );
             testOfficer.Components.Add(new MotionComponent.Configuration( ));
             testOfficer.Components.Add(new Components.AI.Guardian.OfficerComponent.Configuration( ));
-            testOfficer.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private" });
+            testOfficer.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/officer" });
             testOfficer.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
             testOfficer.Components.Add(new SpeedComponent.Configuration( ) { X = 1.2f });
 
