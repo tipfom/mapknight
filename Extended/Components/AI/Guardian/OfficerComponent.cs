@@ -2,9 +2,9 @@
 
 namespace mapKnight.Extended.Components.AI.Guardian {
     public class OfficerComponent : Component {
-        private Entity tent;
+        private TentComponent tent;
 
-        public OfficerComponent (Entity owner, Entity tent) : base(owner) {
+        public OfficerComponent (Entity owner, TentComponent tent) : base(owner) {
             this.tent = tent;
         }
 
@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         public new class Configuration : Component.Configuration {
-            public Entity Tent;
+            public TentComponent Tent;
 
             public override Component Create (Entity owner) {
                 return new OfficerComponent(owner, Tent);

@@ -66,12 +66,22 @@ namespace mapKnight.Extended.Screens {
             testPrivate.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
             testPrivate.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
 
+            Entity.Configuration testOfficer = new Entity.Configuration( );
+            testOfficer.Name = "Testing Officer";
+            testOfficer.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
+            testOfficer.Components = new ComponentList( );
+            testOfficer.Components.Add(new MotionComponent.Configuration( ));
+            testOfficer.Components.Add(new Components.AI.Guardian.OfficerComponent.Configuration( ));
+            testOfficer.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private" });
+            testOfficer.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
+            testOfficer.Components.Add(new SpeedComponent.Configuration( ) { X = 1.2f });
+
             Entity.Configuration tentConfig = new Entity.Configuration( );
             tentConfig.Name = "Testing Tent";
             tentConfig.Transform = new Transform(Vector2.Zero, new Vector2(3.405405405f, 2f));
             tentConfig.Components = new ComponentList( );
             tentConfig.Components.Add(new Components.AI.Guardian.TentComponent.Configuration( ) {
-                Officer = null, PatrolRange = 4f, PrivateCount = 5, TimeBetweenPrivates = 3000,
+                Officer = testOfficer, PatrolRange = 12f, PrivateCount = 4, TimeBetweenPrivates = 3000,
                 Privates = new Entity.Configuration[ ] {
                     testPrivate
                 }

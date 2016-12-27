@@ -22,6 +22,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             this.timeBetweenPrivates = timeBetweenPrivates;
             this.activePrivates = new List<Entity>(maxPrivateCount);
 
+            this.officer.Components.GetConfiguration<OfficerComponent.Configuration>( ).Tent = this;
             foreach (Entity.Configuration c in this.privates) {
                 c.Components.GetConfiguration<PrivateComponent.Configuration>( ).Tent = this;
             }
@@ -49,7 +50,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
 
         public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Info.IsPlayer) {
-                if (activeOfficer != null) {
+                if (activeOfficer == null) {
                     activeOfficer = officer.Create(Owner.Transform.Center, Owner.World).GetComponent<OfficerComponent>( );
                 }
             }
