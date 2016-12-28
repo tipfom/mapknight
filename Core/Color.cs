@@ -2,35 +2,42 @@
 
 namespace mapKnight.Core {
     public struct Color {
-        public int R;
-        public int G;
-        public int B;
-        public int A;
+        public byte R;
+        public byte G;
+        public byte B;
+        public byte A;
 
-        public Color (int red, int green, int blue, int alpha) : this( ) {
+        public Color (byte red, byte green, byte blue, byte alpha) : this( ) {
             R = red;
             G = green;
             B = blue;
             A = alpha;
         }
 
-        public Color (int red, int green, int blue) : this(red, green, blue, 255) {
+        public Color (byte red, byte green, byte blue) : this(red, green, blue, 255) {
 
         }
 
         public Color (string rgb) : this( ) {
             int startIndex = rgb.Contains("#") ? 1 : 0;
-            R = int.Parse(rgb.Substring(startIndex + 0, 2), NumberStyles.HexNumber);
-            G = int.Parse(rgb.Substring(startIndex + 2, 2), NumberStyles.HexNumber);
-            B = int.Parse(rgb.Substring(startIndex + 4, 2), NumberStyles.HexNumber);
+            R = byte.Parse(rgb.Substring(startIndex + 0, 2), NumberStyles.HexNumber);
+            G = byte.Parse(rgb.Substring(startIndex + 2, 2), NumberStyles.HexNumber);
+            B = byte.Parse(rgb.Substring(startIndex + 4, 2), NumberStyles.HexNumber);
             A = 255;
         }
 
         public Color (Range<Color> color) : this( ) {
-            R = Mathi.Random(color.Min.R, color.Max.R);
-            G = Mathi.Random(color.Min.G, color.Max.G);
-            B = Mathi.Random(color.Min.B, color.Max.B);
-            A = Mathi.Random(color.Min.A, color.Max.A);
+            R = (byte)Mathi.Random(color.Min.R, color.Max.R);
+            G = (byte)Mathi.Random(color.Min.G, color.Max.G);
+            B = (byte)Mathi.Random(color.Min.B, color.Max.B);
+            A = (byte)Mathi.Random(color.Min.A, color.Max.A);
+        }
+
+        public Color(int rgba) {
+            R = (byte)(rgba >> 24);
+            G = (byte)(rgba >> 16);
+            B = (byte)(rgba >> 8);
+            A = (byte)(rgba);
         }
 
         public string ToRGB ( ) {
