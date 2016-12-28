@@ -52,6 +52,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             if (collidingEntity.Info.IsPlayer) {
                 if (activeOfficer == null) {
                     activeOfficer = officer.Create(Owner.Transform.Center, Owner.World).GetComponent<OfficerComponent>( );
+                    activeOfficer.Target = collidingEntity;
                 }
             }
         }
@@ -62,7 +63,8 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         public void OfficerDied ( ) {
-            activeOfficer = null;
+            if (activeOfficer != null)
+                Owner.Destroy( );
         }
 
         private Entity RandomPrivate ( ) {
