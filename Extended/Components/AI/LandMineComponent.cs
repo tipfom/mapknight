@@ -43,10 +43,10 @@ namespace mapKnight.Extended.Components.AI {
 
         private float GetInfluence(float distpercent) {
             /* The Inluence of the Landmine scales by the cubic formula
-             * f(x) = 1 + 0.8 * (x - 1) ^ 3
+             * f(x) = 1 - 0.8 * (x - 1) ^ 3
              */
             distpercent -= 1f;
-            return 1 + 0.8f * distpercent * distpercent * distpercent;
+            return 1f - 0.8f * distpercent * distpercent * distpercent;
         }
 
         public new class Configuration : Component.Configuration {
