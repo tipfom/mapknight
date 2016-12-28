@@ -9,8 +9,9 @@ using mapKnight.Extended.Graphics;
 namespace mapKnight.Android {
     public class View : AndroidGameView {
         public View (Context context) : base(context) {
+            OpenTK.Graphics.GraphicsContext.ShareContexts = true;♂
             ContextRenderingApi = OpenTK.Graphics.GLVersion.ES2;
-            
+            Window.Info = WindowInfo;
         }
 
         protected override void OnSizeChanged (int w, int h, int oldw, int oldh) {

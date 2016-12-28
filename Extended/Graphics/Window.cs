@@ -1,8 +1,6 @@
 ﻿using mapKnight.Core;
 using OpenTK.Graphics.ES20;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using OpenTK.Platform;
 
 namespace mapKnight.Extended.Graphics {
     public static class Window {
@@ -12,6 +10,7 @@ namespace mapKnight.Extended.Graphics {
         public static Vector2 ProjectionSize { get { return new Vector2(Ratio, 1); } }
         public static Size Size;
         public static float Ratio;
+        public static IWindowInfo Info;
 
         public static void Change(int width, int height) {
             GL.Viewport(0, 0, width, height);
