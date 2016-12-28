@@ -131,6 +131,7 @@
     <AndroidAsset Include="Assets\textures\guardian\private1.json" />
     <AndroidAsset Include="Assets\textures\guardian\private2.json" />
     <AndroidAsset Include="Assets\textures\guardian\private3.json" />
+    <AndroidAsset Include="Assets\textures\slime.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -250,6 +251,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\guardian\private3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\slime.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

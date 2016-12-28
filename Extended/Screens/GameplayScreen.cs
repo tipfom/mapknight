@@ -115,6 +115,16 @@ namespace mapKnight.Extended.Screens {
             tentConfig.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
             tentConfig.Create(new Vector2(26, 18 + tentConfig.Transform.HalfSize.Y), map);
 
+            Entity.Configuration testSlime = new Entity.Configuration( );
+            testSlime.Name = "Testing Slime";
+            testSlime.Transform = new Transform(Vector2.Zero, new Vector2(1f, 0.95238095f));
+            testSlime.Components = new ComponentList( );
+            testSlime.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "slime" });
+            testSlime.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Position = Vector2.Zero, Size = Vector2.One } } });
+            testSlime.Components.Add(new Components.AI.SlimeComponent.Configuration( ));
+            testSlime.Components.Add(new Components.Movement.MotionComponent.Configuration( ));
+            testSlime.Create(map.SpawnPoint, map);
+
             walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
             landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);

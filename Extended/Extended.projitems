@@ -37,6 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\PluggerComponent.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SlimeComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\TurretComponent.cs">
       <SubType>Code</SubType>
     </Compile>
