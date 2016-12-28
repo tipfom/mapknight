@@ -31,35 +31,22 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void Explode (Entity entity) {
-            Vector2 closestDist = GetClosestDistanceVectorTo(entity.Transform);
-            Vector2 impulsDir = (entity.Transform.Center - Owner.Transform.Center).Normalize( );
+            Vector2 closestDist = entity.Transform.Center - Owner.Transform.Center;
             float distpercent = closestDist.Magnitude( ) / explosionRadius;
             if (distpercent <= 1) {
-                Vector2 appliedVel = impulsDir * (1.25f - distpercent) * throwBackSpeed;
-                entity.SetComponentInfo(ComponentData.Velocity, appliedVel);
-                entity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
+                float influence = GetInfluence(distpercent);
+                entity.SetComponentInfo(ComponentData.Velocity, closestDist.Normalize() * influence * throwBackSpeed);
+                entity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch * influence);
             }
             Owner.Destroy( );
         }
 
-        private Vector2 GetClosestDistanceVectorTo (Transform transform) {
-            float x = 0, y = 0;
-            if (transform.BL.X > Owner.Transform.TR.X) {
-                // right the bomb
-                x = transform.BL.X - Owner.Transform.TR.X;
-                if (transform.BL.Y > Owner.Transform.TR.Y) y = transform.BL.Y - Owner.Transform.TR.Y; // up right
-                else if (transform.TR.Y < Owner.Transform.BL.Y) y = transform.TR.Y - Owner.Transform.BL.Y; // bottom right
-            } else if (transform.TR.X < Owner.Transform.BL.X) {
-                // left the bomb
-                x = Owner.Transform.BL.X - transform.TR.X;
-                if (transform.BL.Y > Owner.Transform.TR.Y) y = transform.BL.Y - Owner.Transform.TR.Y; // up left
-                else if (transform.TR.Y < Owner.Transform.BL.Y) y = transform.TR.Y - Owner.Transform.BL.Y; // bottom left
-            } else {
-                // up or bellow the bomb
-                if (transform.BL.Y > Owner.Transform.TR.Y) y = transform.BL.Y - Owner.Transform.TR.Y; // up
-                else if (transform.TR.Y < Owner.Transform.BL.Y) y = transform.TR.Y - Owner.Transform.BL.Y; // bottom
-            }
-            return new Vector2(x, y);
+        private float GetInfluence(float distpercent) {
+            /* The Inluence of the Landmine scales by the cubic formula
+             * f(x) = 1 + 0.8 * (x - 1) ^ 3
+             */
+            distpercent -= 1f;
+            return 1 + 0.8f * distpercent * distpercent * distpercent;
         }
 
         public new class Configuration : Component.Configuration {
