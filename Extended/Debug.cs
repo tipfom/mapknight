@@ -10,7 +10,7 @@ using Android.Util;
 namespace mapKnight.Extended {
 #if DEBUG
     public static class Debug {
-        public static void Print (object sender, string message, params string[ ] args) {
+        public static void Print (object sender, string message, params object[ ] args) {
             Print(sender.GetType( ), message, args);
         }
 
@@ -18,7 +18,7 @@ namespace mapKnight.Extended {
             Print(sender.GetType( ), message);
         }
 
-        public static void Print(Type sender, string message, params string[] args) {
+        public static void Print(Type sender, string message, params object[] args) {
             Print(sender, String.Format(message, args));
         }
 
