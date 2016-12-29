@@ -9,7 +9,7 @@ using mapKnight.Extended.Graphics;
 namespace mapKnight.Android {
     public class View : AndroidGameView {
         public View (Context context) : base(context) {
-            OpenTK.Graphics.GraphicsContext.ShareContexts = true;♂
+            OpenTK.Graphics.GraphicsContext.ShareContexts = true;
             ContextRenderingApi = OpenTK.Graphics.GLVersion.ES2;
             Window.Info = WindowInfo;
         }
