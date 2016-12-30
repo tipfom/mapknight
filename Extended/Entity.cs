@@ -181,6 +181,15 @@ namespace mapKnight.Extended {
             public Transform Transform;
             public int Species = -1;
 
+            public Configuration ( ) {
+            }
+
+            public Configuration(string name, Vector2 size) {
+                Name = name;
+                Transform = new Transform(default(Vector2), size);
+                Components = new ComponentList( );
+            }
+
             public Entity Create (Vector2 spawnLocation, IEntityWorld world) {
                 if (Species == -1 || Components.HasChanged) {
                     Species = ++currentSpecies;
