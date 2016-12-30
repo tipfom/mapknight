@@ -501,6 +501,19 @@ namespace mapKnight.Core {
             return min + Random( ) * (max - min);
         }
 
+        public static float Pow (float b, int exp) {
+            // http://stackoverflow.com/questions/101439/the-most-efficient-way-to-implement-an-integer-based-power-function-powint-int
+            // iterative implementation of the good old farmer rule
+            float res = 1;
+            while (exp > 0) {
+                if ((exp & 1) != 0)
+                    res *= b;
+                exp >>= 1;
+                b *= b;
+            }
+            return res;
+        }
+
         [StructLayout(LayoutKind.Explicit)]
         private struct FloatIntUnion {
             [FieldOffset(0)]
