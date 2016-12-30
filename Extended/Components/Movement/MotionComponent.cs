@@ -12,16 +12,14 @@ namespace mapKnight.Extended.Components.Movement {
 
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
-        public readonly float BouncyMultiplier;
         public readonly float GravityInfluence;
 
         private Vector2 enforcedVelocity;
         private PlatformComponent platformStandingOn;
 
-        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult, float gravityinfluence) : base(owner) {
+        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float gravityinfluence) : base(owner) {
             HasMapCollider = mapCollider;
             HasPlatformCollider = platformCollider;
-            BouncyMultiplier = bouncymult;
             GravityInfluence = gravityinfluence;
         }
 
@@ -64,9 +62,6 @@ namespace mapKnight.Extended.Components.Movement {
             }
 
             Velocity = AimedVelocity + enforcedVelocity;
-
-            if (IsOnGround && BouncyMultiplier > 0)
-                enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
 
             Transform newTransform = new Transform(Owner.Transform.Center + Velocity * dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
@@ -156,13 +151,12 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public new class Configuration : Component.Configuration {
-            public float BounceMultiplier = 0f;
             public float GravityInfluence = 1f;
             public bool MapCollider = true;
             public bool PlatformCollider = false;
 
             public override Component Create (Entity owner) {
-                return new MotionComponent(owner, MapCollider, PlatformCollider, BounceMultiplier, GravityInfluence);
+                return new MotionComponent(owner, MapCollider, PlatformCollider, GravityInfluence);
             }
         }
     }
