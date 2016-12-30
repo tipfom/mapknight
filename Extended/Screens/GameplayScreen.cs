@@ -121,9 +121,10 @@ namespace mapKnight.Extended.Screens {
             testSlime.Components = new ComponentList( );
             testSlime.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "slime" });
             testSlime.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Position = Vector2.Zero, Size = Vector2.One } } });
-            testSlime.Components.Add(new Components.AI.SlimeComponent.Configuration( ));
-            testSlime.Components.Add(new Components.Movement.MotionComponent.Configuration( ));
-            testSlime.Create(map.SpawnPoint, map);
+            testSlime.Components.Add(new Components.AI.SlimeComponent.Configuration( ) { SlimeConfig = testSlime, SizeMultiplier = 0.8f, SplitCount = 3 });
+            testSlime.Components.Add(new Components.Stats.HealthComponent.Configuration( ) { Value = 1 });
+            testSlime.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 5, Y = 5 });
+            testSlime.Create(new Vector2(9, 7.5f), map);
 
             walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
 
