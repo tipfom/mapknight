@@ -100,11 +100,16 @@ namespace mapKnight.Extended {
             return textureCache[pathhash];
         }
 
+        static Dictionary<int, SpriteBatch> spriteCache = new Dictionary<int, SpriteBatch>( );
         public static SpriteBatch GetSprite (string name) {
-            Texture2D texture = Assets.Load<Texture2D>(name);
-            Dictionary<string, int[ ]> spriteContent = new Dictionary<string, int[ ]>( );
-            JsonConvert.PopulateObject(GetText("textures", name + ".json"), spriteContent);
-            return new SpriteBatch(spriteContent, texture);
+            int namehash = name.GetHashCode( );
+            if (!spriteCache.ContainsKey(namehash)) {
+                Texture2D texture = Assets.Load<Texture2D>(name);
+                Dictionary<string, int[ ]> spriteContent = new Dictionary<string, int[ ]>( );
+                JsonConvert.PopulateObject(GetText("textures", name + ".json"), spriteContent);
+                spriteCache.Add(namehash, new SpriteBatch(spriteContent, texture));
+            }
+            return spriteCache[namehash];
         }
 
         public static string GetText (params string[ ] path) {
