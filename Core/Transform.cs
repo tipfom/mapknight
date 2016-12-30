@@ -13,11 +13,13 @@ namespace mapKnight.Core {
             Size = size;
         }
 
+        public event Action SizeChanged;
+
         public Vector2 Center { get { return _Center; } set { _Center = value; _TR = _Center + HalfSize; _BL = _Center - HalfSize; } }
         public Vector2 BL { get { return _BL; } set { _BL = value; _Center = _BL + HalfSize; _TR = _BL + Size; } }
         public Vector2 TR { get { return _TR; } set { _TR = value; _Center = _TR - HalfSize; _BL = _TR - Size; } }
         public Vector2 HalfSize { get; private set; }
-        public Vector2 Size { get { return _Size; } set { _Size = value; HalfSize = _Size / 2f; _TR = _Center + HalfSize; _BL = _Center - HalfSize; } }
+        public Vector2 Size { get { return _Size; } set { _Size = value; HalfSize = _Size / 2f; _TR = _Center + HalfSize; _BL = _Center - HalfSize; SizeChanged?.Invoke( ); } }
 
         public float Width { get { return Size.X; } set { Size = new Vector2(value, Size.Y); } }
         public float Height { get { return Size.Y; } set { Size = new Vector2(Size.X, value); } }
