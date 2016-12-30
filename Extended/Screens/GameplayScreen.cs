@@ -180,6 +180,9 @@ namespace mapKnight.Extended.Screens {
             if (Math.Abs(Manager.FrameTime.Milliseconds) < MAX_TIME_BETWEEN_UPDATES) {
                 map.Update(dt);
                 base.Update(dt);
+                debugLabel.Color = Color.White;
+            } else {
+                debugLabel.Color = Color.Red;
             }
             debugLabel.Text = $"frame: {Manager.FrameTime.TotalMilliseconds:00.0}\n" +
                               $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
