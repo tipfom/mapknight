@@ -20,6 +20,9 @@ namespace mapKnight.Extended.Components.Graphics {
         public SkeletComponent (Entity owner, float[ ][ ] defaultvertexdata) : base(owner) {
             defaultVertexData = defaultvertexdata;
             currentVertexData = new float[defaultVertexData.Length][ ];
+            for (int i = 0; i < currentVertexData.Length; i++) {
+                currentVertexData[i] = new float[8];
+            }
 
             Window.Changed += ( ) => isDirty = true;
             Owner.Transform.SizeChanged += ( ) => isDirty = true;
@@ -39,13 +42,21 @@ namespace mapKnight.Extended.Components.Graphics {
         private void AdjustVerticies ( ) {
             Vector2 scale = Owner.Transform.Size * Owner.World.VertexSize;
             for (int i = 0; i < defaultVertexData.Length; i++) {
-                currentVertexData[i] = Mathf.TransformAtOrigin(defaultVertexData[i], 0, 0, _Rotation, _Mirrored, scale);
+                Mathf.TransformAtOrigin(defaultVertexData[i], ref currentVertexData[i], 0, 0, _Rotation, _Mirrored, scale);
             }
         }
 
         public new class Configuration : Component.Configuration {
             private float[ ][ ] internalParsedBones;
-            public Rectangle[ ] Bones { set { internalParsedBones = value.Select(item => item.Verticies( )).ToArray( ); } }
+            public Rectangle[ ] Bones {
+                set {
+                    internalParsedBones = new float[value.Length][ ];
+                    for (int i = 0; i < value.Length; i++) {
+                        internalParsedBones[i] = new float[8];
+                        value[i].Verticies(ref internalParsedBones[i]);
+                    }
+                }
+            }
 
             public override Component Create (Entity owner) {
                 return new SkeletComponent(owner, internalParsedBones);

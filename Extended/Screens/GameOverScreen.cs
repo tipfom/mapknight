@@ -43,7 +43,10 @@ namespace mapKnight.Extended.Screens {
                 int headHeightPXL = (int)(Math.Abs(textureUVs[3] - textureUVs[1]) * playerTexture.Height);
                 float vertexWidth = HEAD_HEIGHT / headHeightPXL * headWidthPXL;
                 GPUBuffer vertexBuffer = new GPUBuffer(2, 1, PrimitiveType.Quad);
-                vertexBuffer.Put(Mathf.TransformAtOrigin(new float[ ] { -vertexWidth, HEAD_HEIGHT, -vertexWidth, -HEAD_HEIGHT, vertexWidth, -HEAD_HEIGHT, vertexWidth, HEAD_HEIGHT }, HEAD_X, HEAD_Y, HEAD_ROTATION, false));
+                float[ ] vertexBufferData = new float[8];
+
+                Mathf.TransformAtOrigin(new float[ ] { -vertexWidth, HEAD_HEIGHT, -vertexWidth, -HEAD_HEIGHT, vertexWidth, -HEAD_HEIGHT, vertexWidth, HEAD_HEIGHT }, ref vertexBufferData, HEAD_X, HEAD_Y, HEAD_ROTATION, false);
+                vertexBuffer.Put(vertexBufferData);
                 GPUBuffer textureBuffer = new GPUBuffer(2, 1, PrimitiveType.Quad);
                 textureBuffer.Put(textureUVs);
                 headBuffer = new BufferBatch(new IndexBuffer(1), vertexBuffer, textureBuffer);

@@ -7,8 +7,8 @@ namespace mapKnight.Core {
         public float Rotation;
         public bool Flipped;
 
-        public float[ ] Verticies ( ) {
-            return Mathf.TransformAtOrigin(Size.ToQuad( ), Position.X, Position.Y, Rotation, Flipped);
+        public void Verticies ( ref float[] result) {
+            Mathf.TransformAtOrigin(Size.ToQuad( ), ref result, Position.X, Position.Y, Rotation, Flipped);
         }
     }
 }

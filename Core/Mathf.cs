@@ -44,59 +44,49 @@ namespace mapKnight.Core {
             return new Vector2(vec1.X + (vec2.X - vec1.X) * percent, vec1.Y + (vec2.Y - vec1.Y) * percent);
         }
 
-        public static float[ ] Transform (float[ ] verticies, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle, bool mirrored = false) {
-            if (verticies.Length % 2 != 0)
-                return null;
-
-            float[ ] transformedRotatedVerticies = new float[verticies.Length];
+        public static void Transform (float[ ] verticies, ref float[] result, float oldCenterX, float oldCenterY, float newCenterX, float newCenterY, float angle, bool mirrored = false) {
             for (int i = 0; i < verticies.Length / 2; i++) {
                 if (mirrored) {
-                    transformedRotatedVerticies[i * 2 + 0] = newCenterX - (verticies[i * 2 + 0] - oldCenterX) * Cos(angle) + (verticies[i * 2 + 1] - oldCenterY) * Sin(angle);
-                    transformedRotatedVerticies[i * 2 + 1] = newCenterY + (verticies[i * 2 + 0] - oldCenterX) * Sin(angle) + (verticies[i * 2 + 1] - oldCenterY) * Cos(angle);
+                    result[i * 2 + 0] = newCenterX - (verticies[i * 2 + 0] - oldCenterX) * Cos(angle) + (verticies[i * 2 + 1] - oldCenterY) * Sin(angle);
+                    result[i * 2 + 1] = newCenterY + (verticies[i * 2 + 0] - oldCenterX) * Sin(angle) + (verticies[i * 2 + 1] - oldCenterY) * Cos(angle);
                 } else {
-                    transformedRotatedVerticies[i * 2 + 0] = newCenterX + (verticies[i * 2 + 0] - oldCenterX) * Cos(angle) - (verticies[i * 2 + 1] - oldCenterY) * Sin(angle);
-                    transformedRotatedVerticies[i * 2 + 1] = newCenterY + (verticies[i * 2 + 0] - oldCenterX) * Sin(angle) + (verticies[i * 2 + 1] - oldCenterY) * Cos(angle);
+                    result[i * 2 + 0] = newCenterX + (verticies[i * 2 + 0] - oldCenterX) * Cos(angle) - (verticies[i * 2 + 1] - oldCenterY) * Sin(angle);
+                    result[i * 2 + 1] = newCenterY + (verticies[i * 2 + 0] - oldCenterX) * Sin(angle) + (verticies[i * 2 + 1] - oldCenterY) * Cos(angle);
                 }
             }
-            return transformedRotatedVerticies;
         }
 
-        public static float[ ] TransformAtOrigin (float[ ] verticies, float x, float y, float angle, bool mirrored, Vector2 scale) {
-            float[ ] transformedRotatedVerticies = new float[verticies.Length];
+        public static void TransformAtOrigin (float[ ] verticies, ref float[] result, float x, float y, float angle, bool mirrored, Vector2 scale) {
             float s = Sin(angle), c = Cos(angle);
             for (int i = 0; i < verticies.Length; i += 2) {
                 if (mirrored) {
-                    transformedRotatedVerticies[i + 0] = x - verticies[i] * scale.X * c + verticies[i + 1] * scale.Y * s;
-                    transformedRotatedVerticies[i + 1] = y + verticies[i] * scale.X * s + verticies[i + 1] * scale.Y * c;
+                    result[i + 0] = x - verticies[i] * scale.X * c + verticies[i + 1] * scale.Y * s;
+                    result[i + 1] = y + verticies[i] * scale.X * s + verticies[i + 1] * scale.Y * c;
                 } else {
-                    transformedRotatedVerticies[i + 0] = x + verticies[i] * scale.X * c - verticies[i + 1] * scale.Y * s;
-                    transformedRotatedVerticies[i + 1] = y + verticies[i] * scale.X * s + verticies[i + 1] * scale.Y * c;
+                    result[i + 0] = x + verticies[i] * scale.X * c - verticies[i + 1] * scale.Y * s;
+                    result[i + 1] = y + verticies[i] * scale.X * s + verticies[i + 1] * scale.Y * c;
                 }
             }
-            return transformedRotatedVerticies;
         }
 
-        public static float[ ] TransformAtOrigin (float[ ] verticies, float x, float y, float angle, bool mirrored) {
-            float[ ] transformedRotatedVerticies = new float[verticies.Length];
+        public static void TransformAtOrigin (float[ ] verticies, ref float[ ] result, float x, float y, float angle, bool mirrored) {
             float s = Sin(angle), c = Cos(angle);
             for (int i = 0; i < verticies.Length; i += 2) {
                 if (mirrored) {
-                    transformedRotatedVerticies[i + 0] = x - verticies[i] * c + verticies[i + 1] * s;
-                    transformedRotatedVerticies[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
+                    result[i + 0] = x - verticies[i] * c + verticies[i + 1] * s;
+                    result[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
                 } else {
-                    transformedRotatedVerticies[i + 0] = x + verticies[i] * c - verticies[i + 1] * s;
-                    transformedRotatedVerticies[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
+                    result[i + 0] = x + verticies[i] * c - verticies[i + 1] * s;
+                    result[i + 1] = y + verticies[i] * s + verticies[i + 1] * c;
                 }
             }
-            return transformedRotatedVerticies;
         }
 
-        public static float[ ] TranslateAndScale (float[ ] verticies, float x, float y, float scalex, float scaley) {
+        public static void TranslateAndScale (float[ ] verticies, ref float[ ] result, float x, float y, float scalex, float scaley) {
             for (int i = 0; i < verticies.Length; i += 2) {
-                verticies[i] = verticies[i] * scalex + x;
-                verticies[i + 1] = verticies[i + 1] * scaley + y;
+                result[i] = verticies[i] * scalex + x;
+                result[i + 1] = verticies[i + 1] * scaley + y;
             }
-            return verticies;
         }
 
         #region lookup table

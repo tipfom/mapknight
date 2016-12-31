@@ -26,6 +26,9 @@ namespace mapKnight.Extended.Graphics.Animation {
             IsRunning = true;
 
             Verticies = new float[Frames[0].State.Length][ ];
+            for(int i = 0; i < Verticies.Length; i++) {
+                Verticies[i] = new float[8];
+            }
             Textures = new string[Frames[0].State.Length];
         }
 
@@ -46,8 +49,8 @@ namespace mapKnight.Extended.Graphics.Animation {
                 Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].State[i].Position, Frames[currentFrame].State[i].Position, progress) * ownerTransform.Size * vsize;
                 float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].State[i].Rotation, Frames[currentFrame].State[i].Rotation, progress);
 
-                Verticies[i] = Mathf.TransformAtOrigin(
-                    verticies[i],
+                Mathf.TransformAtOrigin(
+                    verticies[i], ref Verticies[i],
                     interpolatedPosition.X, interpolatedPosition.Y,
                     interpolatedRotation, Frames[currentFrame].State[i].Mirrored, ownerTransform.Size * vsize);
                 Textures[i] = Frames[currentFrame].State[i].Texture;

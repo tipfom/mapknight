@@ -8,6 +8,7 @@ namespace mapKnight.Extended.Components.Graphics {
 
     [Instantiatable]
     public class DrawComponent : Component {
+        private float[ ][ ] cachedVerticies;
 
         public DrawComponent (Entity owner) : base(owner) {
         }
@@ -24,12 +25,17 @@ namespace mapKnight.Extended.Components.Graphics {
                     (Owner.HasComponentInfo(ComponentData.Color) ?
                     (Color)Owner.GetComponentInfo(ComponentData.Color)[0] : Color.White);
 
+                if (cachedVerticies == null) {
+                    cachedVerticies = new float[vertexData.Length][ ];
+                    for (int i = 0; i < vertexData.Length; i++) {
+                        cachedVerticies[i] = new float[8];
+                    }
+                }
+
                 Vector2 positionOnScreen = Owner.PositionOnScreen;
                 for (int i = 0; i < vertexData.Length; i++) {
-                    VertexData entryVertexData = new VertexData(
-                                   Mathf.TranslateAndScale(vertexData[i], positionOnScreen.X, positionOnScreen.Y, scaleX, 1),
-                                   spriteData[i],
-                                   colorData);
+                    Mathf.TranslateAndScale(vertexData[i], ref cachedVerticies[i], positionOnScreen.X, positionOnScreen.Y, scaleX, 1);
+                    VertexData entryVertexData = new VertexData(cachedVerticies[i], spriteData[i], colorData);
                     entityVertexData.Add(entryVertexData);
                 }
 
