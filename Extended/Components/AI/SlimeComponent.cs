@@ -33,10 +33,13 @@ namespace mapKnight.Extended.Components.AI {
             if (collidingEntity.Info.IsPlayer) {
                 isEscaping = true;
                 nextRageStage = Environment.TickCount + rageTime;
-                rainbowdizer.Rage( );
+                if (!rainbowdizer.Raging) {
+                    rainbowdizer.Rage( );
+                    Owner.SetComponentInfo(ComponentData.SpriteAnimation, "attack", true);
+                }
             }
         }
-        
+
         public override void Destroy ( ) {
             float ratio = Owner.Transform.Width / slimeConfig.Transform.Width;
             double max = Mathf.Pow(sizeMultiplier, splitCount - 1);
@@ -110,6 +113,7 @@ namespace mapKnight.Extended.Components.AI {
                 } else {
                     rainbowdizer.Normal( );
                     nextRageStage = int.MaxValue;
+                    Owner.SetComponentInfo(ComponentData.SpriteAnimation, "wobble",true);
                 }
             }
             if (rainbowdizer.Raging) {

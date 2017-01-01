@@ -119,7 +119,28 @@ namespace mapKnight.Extended.Screens {
             testSlime.Name = "Testing Slime";
             testSlime.Transform = new Transform(Vector2.Zero, new Vector2(1f, 0.95238095f));
             testSlime.Components = new ComponentList( );
-            testSlime.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "slime" });
+            testSlime.Components.Add(new Components.Graphics.SpriteComponent.Configuration( ) {
+                Texture = "slime", Animations = new[ ] {
+                    new Graphics.Animation.SpriteAnimation( ) {
+                        CanRepeat = true, Name ="wobble",
+                        Frames = new[ ] {
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "high" }, Time = 150 },
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 150 },
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "low" }, Time = 150 },
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 150 },
+                        }
+                    },
+                    new Graphics.Animation.SpriteAnimation( ) {
+                        CanRepeat = true, Name ="rage",
+                        Frames = new[ ] {
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "high" }, Time = 100 },
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 100 },
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "low" }, Time = 100 },
+                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 100 },
+                        }
+                    }
+                }
+            });
             testSlime.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Position = Vector2.Zero, Size = Vector2.One } } });
             testSlime.Components.Add(new Components.AI.SlimeComponent.Configuration( ) { SlimeConfig = testSlime, SizeMultiplier = 0.8f, SplitCount = 3, RageRange = 6, RageSpeedMultiplier = 3 });
             testSlime.Components.Add(new Components.Stats.HealthComponent.Configuration( ) { Value = 1 });
