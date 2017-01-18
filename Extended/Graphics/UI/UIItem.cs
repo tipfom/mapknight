@@ -8,8 +8,6 @@ namespace mapKnight.Extended.Graphics.UI {
         public event Action PositionChanged;
         public event Action SizeChanged;
 
-        public delegate void HandleUpdate (UIItem sender);
-        public event HandleUpdate Changed;
         public delegate void HandleItemClick ( );
         public event HandleItemClick Click;
         public event HandleItemClick Release;

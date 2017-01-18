@@ -21,7 +21,6 @@ namespace mapKnight.Extended.Components.Player {
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private AnimationState animationState = AnimationState.None;
-        private bool startedJumping = false;
         private Timer attackTimer = new Timer(580);
 
         public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
