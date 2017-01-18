@@ -62,7 +62,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\AnimationState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\PlayerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\ArmorComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\DamageComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\HealthComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\SpeedComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Debug.cs" />

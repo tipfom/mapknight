@@ -77,11 +77,8 @@
 		{
 			"$type": "AI.LandMine",
 			"ExplosionRadius": 5,
-			"ThrowBackSpeed": 42
-		},
-		{
-			"$type": "Stats.Damage",
-			"OnTouch": 5
+			"ThrowBackSpeed": 42,
+			"Damage":5
 		}
 	]
 }

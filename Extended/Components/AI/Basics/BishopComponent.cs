@@ -12,7 +12,6 @@ namespace mapKnight.Extended.Components.AI.Basics {
     [UpdateAfter(typeof(SpeedComponent))]
     public class BishopComponent : Component {
         public readonly bool IsScaredToFall;
-        private DamageComponent damageComponent;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private float speedMult = 1f;
@@ -33,7 +32,6 @@ namespace mapKnight.Extended.Components.AI.Basics {
         public override void Prepare ( ) {
             motionComponent = Owner.GetComponent<MotionComponent>( );
             speedComponent = Owner.GetComponent<SpeedComponent>( );
-            if (Owner.HasComponent<DamageComponent>( )) damageComponent = Owner.GetComponent<DamageComponent>( );
         }
 
         public override void Update (DeltaTime dt) {

@@ -7,16 +7,16 @@ using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
 
-    [ComponentRequirement(typeof(DamageComponent))]
     public class LandMineComponent : Component {
         public bool Exploding;
-        private DamageComponent damageComponent;
+        private float damage;
         private float explosionRadius;
         private float throwBackSpeed;
 
-        public LandMineComponent (Entity owner, float throwbackspeed, float explosionradius) : base(owner) {
+        public LandMineComponent (Entity owner, float throwbackspeed, float explosionradius, float damage) : base(owner) {
             throwBackSpeed = throwbackspeed;
             explosionRadius = explosionradius;
+            this.damage = damage;
         }
 
         public override void Collision (Entity collidingEntity) {
@@ -26,17 +26,13 @@ namespace mapKnight.Extended.Components.AI {
             }
         }
 
-        public override void Prepare ( ) {
-            damageComponent = Owner.GetComponent<DamageComponent>( );
-        }
-
         private void Explode (Entity entity) {
             Vector2 closestDist = entity.Transform.Center - Owner.Transform.Center;
             float distpercent = closestDist.Magnitude( ) / explosionRadius;
             if (distpercent <= 1) {
                 float influence = GetInfluence(distpercent);
                 entity.SetComponentInfo(ComponentData.Velocity, closestDist.Normalize() * influence * throwBackSpeed);
-                entity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch * influence);
+                entity.SetComponentInfo(ComponentData.Damage, damage * influence);
             }
             Owner.Destroy( );
         }
@@ -52,9 +48,10 @@ namespace mapKnight.Extended.Components.AI {
         public new class Configuration : Component.Configuration {
             public float ExplosionRadius;
             public float ThrowBackSpeed;
+            public float Damage;
 
             public override Component Create (Entity owner) {
-                return new LandMineComponent(owner, ThrowBackSpeed, ExplosionRadius);
+                return new LandMineComponent(owner, ThrowBackSpeed, ExplosionRadius, Damage);
             }
         }
     }

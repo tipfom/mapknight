@@ -9,14 +9,15 @@ namespace mapKnight.Extended.Components.AI {
     [ComponentRequirement(typeof(MotionComponent))]
     public class BulletComponent : Component {
         private MotionComponent motionComponent;
+        private float damage;
 
-        public BulletComponent (Entity owner) : base(owner) {
+        public BulletComponent (Entity owner, float damage) : base(owner) {
+            this.damage = damage;
         }
 
         public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Info.IsPlayer) {
-                DamageComponent damageComponent = Owner.GetComponent<DamageComponent>( );
-                if (damageComponent != null) collidingEntity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
+                collidingEntity.SetComponentInfo(ComponentData.Damage, damage);
                 Owner.Destroy( );
             }
         }
@@ -31,8 +32,10 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         public new class Configuration : Component.Configuration {
+            public float Damage;
+
             public override Component Create (Entity owner) {
-                return new BulletComponent(owner);
+                return new BulletComponent(owner, Damage);
             }
         }
     }

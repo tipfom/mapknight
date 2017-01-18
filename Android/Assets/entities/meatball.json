@@ -9,10 +9,6 @@
             "$type": "AI.Spike"
         },
         {
-            "$type": "Stats.Damage",
-            "OnTouch": 1
-        },
-        {
             "$type": "Movement.Gravity",
             "Influence": 1
         },

@@ -43,7 +43,8 @@
 						"GravityInfluence": 0
 					},
 					{
-						"$type": "AI.Bullet"
+						"$type": "AI.Bullet",
+						"Damage": 0.5
 					},
 					{
 						"$type": "Graphics.Skelet",
@@ -63,10 +64,6 @@
 					{
 						"$type": "Graphics.Texture",
 						"Texture": "turret_bullet"
-					},
-					{
-						"$type": "Stats.Damage",
-						"OnTouch": 0.4
 					}
 				]
 			}
