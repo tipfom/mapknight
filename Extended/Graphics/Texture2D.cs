@@ -34,7 +34,7 @@ namespace mapKnight.Extended.Graphics {
         }
 
         public override int GetHashCode ( ) {
-            return ID.GetHashCode( );
+            return ID;
         }
     }
 }
