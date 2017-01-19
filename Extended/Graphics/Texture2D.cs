@@ -11,13 +11,13 @@ namespace mapKnight.Extended.Graphics {
         public int ID { get; private set; }
         public bool Disposed { get; private set; } = false;
 
-        public Texture2D (int id, Size size, string name) {
+        public Texture2D(int id, Size size, string name) {
             Size = size;
             ID = id;
             Name = name;
         }
 
-        public void Dispose ( ) {
+        public void Dispose( ) {
             GL.DeleteTexture(ID);
             Size = new Size(0, 0);
             Name = null;
@@ -25,15 +25,15 @@ namespace mapKnight.Extended.Graphics {
             Disposed = true;
         }
 
-        public override string ToString ( ) {
+        public override string ToString( ) {
             return $"ID:{ID} Width:{Width} Height:{Height}";
         }
 
-        public override bool Equals (object obj) {
-            return obj.GetType( ) == typeof(Texture2D) && ((Texture2D)obj).ID == this.ID;
+        public override bool Equals(object obj) {
+            return obj.GetHashCode( ) == ID;
         }
 
-        public override int GetHashCode ( ) {
+        public override int GetHashCode( ) {
             return ID;
         }
     }
