@@ -65,8 +65,8 @@ namespace mapKnight.Extended.Components.Movement {
 
             Transform newTransform = new Transform(Owner.Transform.Center + Velocity * dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
-                IsAtWall = moveHorizontally(Owner.Transform, newTransform);
-                IsOnGround = moveVertically(Owner.Transform, newTransform);
+                IsAtWall = MoveHorizontally(Owner.Transform, newTransform);
+                IsOnGround = MoveVertically(Owner.Transform, newTransform);
 
                 if (IsOnGround) {
                     enforcedVelocity.X = 0;
@@ -86,7 +86,7 @@ namespace mapKnight.Extended.Components.Movement {
             Owner.SetComponentInfo(ComponentData.ScaleX, ScaleX);
         }
 
-        private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {
+        private bool MoveHorizontally (Transform oldTransform, Transform targetTransform) {
             // returns true if any collision happened and modifies the transform
             int ylimit = Mathi.Floor(oldTransform.TR.Y);
             if (ylimit == oldTransform.TR.Y)
@@ -118,7 +118,7 @@ namespace mapKnight.Extended.Components.Movement {
             return false;
         }
 
-        private bool moveVertically (Transform oldTransform, Transform targetTransform) {
+        private bool MoveVertically (Transform oldTransform, Transform targetTransform) {
             if (oldTransform.Center.Y < targetTransform.Center.Y) {
                 // goes up
                 int ylimit = Mathi.Floor(targetTransform.TR.Y);
