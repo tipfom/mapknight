@@ -8,6 +8,7 @@ namespace mapKnight.Extended.Components.Movement {
         private int currentWaypoint = 0;
 
         public PlatformComponent (Entity owner, Vector2[ ] waypoints, float speed) : base(owner, waypoints, speed) {
+            owner.Domain = EntityDomain.Platform;
         }
 
         protected override int GetNextWaypoint ( ) {

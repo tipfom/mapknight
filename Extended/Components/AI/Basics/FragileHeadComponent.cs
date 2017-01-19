@@ -13,7 +13,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Info.IsPlayer) {
+            if (collidingEntity.Domain == EntityDomain.Player) {
                 if (collidingEntity.Transform.BL.Y > Owner.Transform.Center.Y) {
                     Owner.Destroy( );
                 } else {

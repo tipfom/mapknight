@@ -26,6 +26,8 @@ namespace mapKnight.Extended.Components.AI {
         private Vector2 bulletOffset;
 
         public SeplingComponent (Entity owner, Entity.Configuration bullet, int shootcooldown, int chilldistance, float bulletspeed, Vector2 bulletoffset) : base(owner) {
+            owner.Domain = EntityDomain.Enemy;
+
             this.bullet = bullet;
             this.shootCooldown = shootcooldown;
             this.chillDistance = chilldistance;
@@ -41,7 +43,7 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void TriggerComponent_Triggered (Entity entity) {
-            if (entity.Info.IsPlayer) {
+            if (entity.Domain == EntityDomain.Player) {
                 enemy = entity;
             }
         }

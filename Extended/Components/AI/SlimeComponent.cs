@@ -16,6 +16,8 @@ namespace mapKnight.Extended.Components.AI {
         private Vector2 rageSpeedMultiplier;
 
         public SlimeComponent (Entity owner, Entity.Configuration slimeConfig, int splitCount, float sizeMultiplier, float rageRange, float rageSpeedMultiplier) : base(owner) {
+            owner.Domain = EntityDomain.Enemy;
+
             this.slimeConfig = slimeConfig;
             this.splitCount = splitCount;
             this.sizeMultiplier = sizeMultiplier;
@@ -30,7 +32,7 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Info.IsPlayer) {
+            if (collidingEntity.Domain == EntityDomain.Player) {
                 isEscaping = true;
                 nextRageStage = Environment.TickCount + rageTime;
                 if (!rainbowdizer.Raging) {

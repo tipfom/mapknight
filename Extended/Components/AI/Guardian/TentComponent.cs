@@ -49,7 +49,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Info.IsPlayer) {
+            if (collidingEntity.Domain == EntityDomain.Player) {
                 if (activeOfficer == null) {
                     activeOfficer = officer.Create(Owner.Transform.Center, Owner.World).GetComponent<OfficerComponent>( );
                     activeOfficer.Target = collidingEntity;

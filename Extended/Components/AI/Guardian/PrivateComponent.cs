@@ -8,6 +8,8 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private float patrolDistanceSqr;
 
         public PrivateComponent (Entity owner, TentComponent tent) : base(owner, true) {
+            owner.Domain = EntityDomain.Enemy;
+
             this.tent = tent;
             this.patrolDistanceSqr = tent.PatrolRangeSqr;
         }

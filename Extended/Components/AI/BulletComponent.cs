@@ -12,11 +12,13 @@ namespace mapKnight.Extended.Components.AI {
         private float damage;
 
         public BulletComponent (Entity owner, float damage) : base(owner) {
+            owner.Domain = EntityDomain.Temporary;
+
             this.damage = damage;
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Info.IsPlayer) {
+            if (collidingEntity.Domain == EntityDomain.Player) {
                 collidingEntity.SetComponentInfo(ComponentData.Damage, damage);
                 Owner.Destroy( );
             }

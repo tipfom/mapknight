@@ -19,6 +19,7 @@ namespace mapKnight.Extended.Components.AI {
         private bool isBouncing;
 
         public SharkComponent (Entity owner, float escapeDistance) : base(owner) {
+            owner.Domain = EntityDomain.Enemy;
             this.escapeDistance = escapeDistance;
         }
 
@@ -29,7 +30,7 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void SharkComponent_Triggered (Entity entity) {
-            if (entity.Info.IsPlayer) {
+            if (entity.Domain == EntityDomain.Player) {
                 player = entity;
             }
         }

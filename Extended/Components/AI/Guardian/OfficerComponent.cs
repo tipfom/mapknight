@@ -14,6 +14,8 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private SpeedComponent speedComponent;
 
         public OfficerComponent (Entity owner, TentComponent tent) : base(owner) {
+            owner.Domain = EntityDomain.Enemy;
+
             this.tent = tent;
         }
 

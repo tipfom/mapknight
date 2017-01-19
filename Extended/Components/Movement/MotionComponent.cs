@@ -29,7 +29,7 @@ namespace mapKnight.Extended.Components.Movement {
         public Vector2 Velocity { get; private set; } = new Vector2( );
 
         public override void Collision (Entity collidingEntity) {
-            if (HasPlatformCollider && collidingEntity.Info.IsPlatform && !IsOnPlatform) {
+            if (HasPlatformCollider && collidingEntity.Domain == EntityDomain.Platform && !IsOnPlatform) {
                 platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
                 if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y - 0.3 && Velocity.Y <= platformStandingOn.Velocity.Y) {
                     Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, collidingEntity.Transform.TR.Y + Owner.Transform.HalfSize.Y);

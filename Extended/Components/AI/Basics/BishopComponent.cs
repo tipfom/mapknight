@@ -21,7 +21,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (!collidingEntity.Info.IsTemporary) {
+            if (collidingEntity.Domain != EntityDomain.Temporary) {
                 if (speedMult == 1 && Owner.Transform.Center.X < collidingEntity.Transform.BL.X) // walking right
                     speedMult = -1;
                 else if (speedMult == -1 && Owner.Transform.Center.X > collidingEntity.Transform.TR.X)

@@ -14,13 +14,15 @@ namespace mapKnight.Extended.Components.AI {
         private float throwBackSpeed;
 
         public LandMineComponent (Entity owner, float throwbackspeed, float explosionradius, float damage) : base(owner) {
+            owner.Domain = EntityDomain.Obstacle;
+
             throwBackSpeed = throwbackspeed;
             explosionRadius = explosionradius;
             this.damage = damage;
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (!Exploding && collidingEntity.Info.IsPlayer) {
+            if (!Exploding && collidingEntity.Domain == EntityDomain.Player) {
                 Exploding = true;
                 Owner.SetComponentInfo(ComponentData.SpriteAnimation, "explode", true, (SpriteComponent.AnimationCallback)((bool success) => { Explode(collidingEntity); }));
             }

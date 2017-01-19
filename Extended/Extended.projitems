@@ -66,6 +66,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\SpeedComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityDomain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\Compiler.cs" />

@@ -12,11 +12,13 @@ namespace mapKnight.Extended.Components.AI {
         private float sawRadius;
 
         public CircularSawComponent (Entity owner, Vector2[ ] waypoints, float speed, float sawradius) : base(owner, waypoints, speed) {
+            owner.Domain = EntityDomain.Obstacle;
+
             sawRadius = sawradius;
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Info.IsPlayer) {
+            if (collidingEntity.Domain == EntityDomain.Player) {
                 Vector2 closestPointToPlayer = Owner.Transform.Center + (Owner.Transform.Center - collidingEntity.Transform.Center) * sawRadius;
                 if (Owner.Transform.Intersects(closestPointToPlayer)) {
                     collidingEntity.SetComponentInfo(ComponentData.Damage, float.PositiveInfinity);

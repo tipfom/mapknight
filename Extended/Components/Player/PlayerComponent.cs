@@ -24,6 +24,8 @@ namespace mapKnight.Extended.Components.Player {
         private Timer attackTimer = new Timer(580);
 
         public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
+            owner.Domain = EntityDomain.Player;
+
             Weapon = weapon;
 
             attackTimer.Elapsed += (s, e) => { if (animationState == AnimationState.Attack) Weapon.Attack( ); };

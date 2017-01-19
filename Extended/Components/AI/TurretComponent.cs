@@ -20,6 +20,8 @@ namespace mapKnight.Extended.Components.AI {
         private Entity currentTarget;
 
         public TurretComponent (Entity owner, Entity.Configuration bullet, int timebetweenshots, int timebetweenturns, int locktime, float bulletspawnpointypercent, float bulletspeed) : base(owner) {
+            owner.Domain = EntityDomain.Enemy;
+
             bulletEntityConfig = bullet;
             timeBetweenShots = timebetweenshots;
             timeBetweenTurns = timebetweenturns;
@@ -44,7 +46,7 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void Trigger_Triggered (Entity entity) {
-            if (entity.Info.IsPlayer && Environment.TickCount > nextShot && ((IsFacingLeft && entity.Transform.BL.X > Owner.Transform.TR.X) || (!IsFacingLeft && entity.Transform.TR.X < Owner.Transform.BL.X))) {
+            if (entity.Domain == EntityDomain.Player && Environment.TickCount > nextShot && ((IsFacingLeft && entity.Transform.BL.X > Owner.Transform.TR.X) || (!IsFacingLeft && entity.Transform.TR.X < Owner.Transform.BL.X))) {
                 // shot
                 currentTarget = entity;
                 nextShot = Environment.TickCount + timeBetweenShots;

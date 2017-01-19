@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
-using mapKnight.Extended.Components.AI.Basics;
-using mapKnight.Extended.Components.Movement;
-using mapKnight.Extended.Components.Player;
-using mapKnight.Extended.Components.Stats;
-using mapKnight.Extended.Components.AI.Guardian;
 
 namespace mapKnight.Extended {
 
     public class Entity {
         public readonly int ID;
-        public readonly EntityInfo Info;
+        public EntityDomain Domain;
         public readonly int Species;
         private const int TICKS_PER_SECOND = 4;
 
@@ -72,11 +67,10 @@ namespace mapKnight.Extended {
         private Component[ ] components;
         private Dictionary<ComponentData, Queue<object[ ]>> pendingComponentInfos = new Dictionary<ComponentData, Queue<object[ ]>>( );
 
-        public Entity (ComponentList components, Transform transform, IEntityWorld world, int species, EntityInfo info) {
+        public Entity (ComponentList components, Transform transform, IEntityWorld world, int species) {
             World = world;
             Transform = transform;
             Species = species;
-            Info = info;
             ID = ++currentInstance;
 
             foreach (ComponentData componentDataValue in Enum.GetValues(typeof(ComponentData)))
@@ -165,17 +159,7 @@ namespace mapKnight.Extended {
                 components[i].Update(dt);
         }
 
-        public struct EntityInfo {
-            // Stats
-            public bool HasHealth;
-
-            public bool IsPlatform;
-            public bool IsPlayer;
-            public bool IsTemporary;
-        }
-
         public class Configuration {
-            private EntityInfo info;
             public ComponentList Components;
             public string Name;
             public Transform Transform;
@@ -196,20 +180,8 @@ namespace mapKnight.Extended {
                     entityNames.Add(Species, Name);
                     Components.ResolveComponentDependencies( );
                     Components.Sort( );
-                    UpdateInfo( );
                 }
-                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Species, info);
-            }
-
-            private void UpdateInfo ( ) {
-                HashSet<Type> typeSet = new HashSet<Type>(Components.Select(item => item.GetType( )));
-                info = new EntityInfo( ) {
-                    IsPlatform = typeSet.Contains(typeof(PlatformComponent.Configuration)),
-                    IsPlayer = typeSet.Contains(typeof(PlayerComponent.Configuration)),
-                    IsTemporary = typeSet.Contains(typeof(TriggerComponent.InternalTriggerComponent.Configuration)) ||typeSet.Contains(typeof(TentComponent.Configuration)),
-
-                    HasHealth = typeSet.Contains(typeof(HealthComponent.Configuration))
-                };
+                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Species);
             }
         }
     }

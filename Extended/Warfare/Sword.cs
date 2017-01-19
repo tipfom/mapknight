@@ -30,7 +30,7 @@ namespace mapKnight.Extended.Warfare {
             for (int i = 0; i < Entity.Entities.Count; i++) {
                 Entity checkingEntity = Entity.Entities[i];
                 if (checkingEntity != Holder && checkingEntity.Transform.Intersects(hitbox)) {
-                    if (checkingEntity.Info.HasHealth) checkingEntity.SetComponentInfo(ComponentData.Damage, damage);
+                    if (checkingEntity.Domain == EntityDomain.Enemy) checkingEntity.SetComponentInfo(ComponentData.Damage, damage);
                 }
             }
         }

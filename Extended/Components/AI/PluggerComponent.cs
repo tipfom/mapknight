@@ -17,6 +17,8 @@ namespace mapKnight.Extended.Components.AI {
         private Entity currentTarget;
 
         public PluggerComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows, float bulletspeed) : base(owner) {
+            Owner.Domain = EntityDomain.Enemy;
+
             bulletEntityConfiguration = bullet;
             timeBetweenThrows = timebetweenthrows;
             bulletSpeed = bulletspeed;
@@ -31,7 +33,7 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void Trigger_Triggered (Entity entity) {
-            if (entity.Info.IsPlayer && Environment.TickCount > nextThrow && !isThrowing) {
+            if (entity.Domain == EntityDomain.Player && Environment.TickCount > nextThrow && !isThrowing) {
                 nextThrow = Environment.TickCount + timeBetweenThrows;
                 isThrowing = true;
                 currentTarget = entity;
