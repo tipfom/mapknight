@@ -32,9 +32,8 @@ namespace mapKnight.Extended.Graphics {
         private CachedGPUBuffer mainTextureBuffer { get { return (CachedGPUBuffer)mainBuffer.TextureBuffer; } }
 
         public Map (Stream input) : base(input) {
-            DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 2));
-            VertexSize = 2f * Window.Ratio / DRAW_WIDTH;
             Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
+            Window_Changed( );
             InitTextureCoords( );
 
             texture = Assets.Load<Texture2D>(Texture);
@@ -187,7 +186,7 @@ namespace mapKnight.Extended.Graphics {
                 matrix.TranslateView(mapOffsetX, mapOffsetY, 0);
                 matrix.CalculateMVP( );
 
-                Emitter.Matrix.ResetView();
+                Emitter.Matrix.ResetView( );
                 Emitter.Matrix.TranslateView(-nextTile.X - DrawSize.Width / 2f, -nextTile.Y - DrawSize.Height / 2f, 0);
                 Emitter.Matrix.CalculateMVP( );
 
