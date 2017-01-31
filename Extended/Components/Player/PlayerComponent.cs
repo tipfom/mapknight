@@ -103,6 +103,8 @@ namespace mapKnight.Extended.Components.Player {
                 }
             }
 
+            if (currentlyTalking) return;
+
             Vector2 speed = speedComponent.Speed;
             if (Action.HasFlag(ActionMask.Left)) {
                 motionComponent.AimedVelocity.X = -speed.X;
