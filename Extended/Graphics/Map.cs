@@ -48,6 +48,8 @@ namespace mapKnight.Extended.Graphics {
             if (2 * Window.Ratio / DRAW_WIDTH != VertexSize) {
                 VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
                 DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 2));
+                mainBuffer?.Dispose( );
+                foregroundBuffer?.Dispose( );
                 mainBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 2), new GPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad, GenerateMainVerticies( )), new CachedGPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad));
                 foregroundBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area), new GPUBuffer(2, DrawSize.Area, PrimitiveType.Quad, GenerateForegroundVerticies( )), new CachedGPUBuffer(2, DrawSize.Area, PrimitiveType.Quad));
             }
