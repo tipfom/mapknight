@@ -44,6 +44,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public static void Remove (UIItem uiItem) {
             if (!uiItems.ContainsKey(uiItem.Screen)) return;
             uiItems[uiItem.Screen].Remove(uiItem);
+            uiItem.Visible = false;
             if (uiItem.Screen.IsActive) Update(uiItem);
         }
 
