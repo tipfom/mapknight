@@ -20,7 +20,7 @@ namespace mapKnight.Extended.Screens {
 
         private Map map;
         private Entity testEntity;
-        private HealthComponent testEntityHealth;
+        private PlayerComponent testEntityPlayer;
 
         public GameplayScreen ( ) {
             Entity.EntityAdded += (Entity obj) => { obj.Prepare( ); };
@@ -167,7 +167,7 @@ namespace mapKnight.Extended.Screens {
 
             Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
             testEntity = playerConfig.Create(map.SpawnPoint, map);
-            testEntityHealth = testEntity.GetComponent<HealthComponent>( );
+            testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
             map.Focus(testEntity.ID);
             Debug.Print(this, $"player loading took {Environment.TickCount - begin} ms");
 
@@ -209,7 +209,7 @@ namespace mapKnight.Extended.Screens {
             debugLabel.Text = $"frame: {Manager.FrameTime.TotalMilliseconds:00.0}\n" +
                               $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
                             $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n" +
-                          $"health: {testEntityHealth.Current:00.0} ({testEntityHealth.Initial:00.0})";
+                          $"health: {testEntityPlayer.Health:00.0}";
         }
 
         protected override void Activated ( ) {

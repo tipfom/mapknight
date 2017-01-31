@@ -9,6 +9,8 @@ using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Screens;
 using mapKnight.Extended.Warfare;
 using System.Timers;
+using mapKnight.Extended.Graphics.UI;
+using mapKnight.Extended.Components.AI;
 
 namespace mapKnight.Extended.Components.Player {
 
@@ -17,16 +19,20 @@ namespace mapKnight.Extended.Components.Player {
     public class PlayerComponent : Component {
         public ActionMask Action;
         public IWeapon Weapon;
+        public float Health;
 
+        private bool currentlyTalking;
+        private Entity availableNPC;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private AnimationState animationState = AnimationState.None;
         private Timer attackTimer = new Timer(580);
 
-        public PlayerComponent (Entity owner, IWeapon weapon) : base(owner) {
+        public PlayerComponent (Entity owner, IWeapon weapon, float health) : base(owner) {
             owner.Domain = EntityDomain.Player;
 
             Weapon = weapon;
+            Health = health;
 
             attackTimer.Elapsed += (s, e) => { if (animationState == AnimationState.Attack) Weapon.Attack( ); };
 
@@ -56,20 +62,42 @@ namespace mapKnight.Extended.Components.Player {
             Weapon.Prepare( );
         }
 
+        public override void Collision (Entity collidingEntity) {
+            if (collidingEntity.Domain == EntityDomain.NPC) {
+                availableNPC = collidingEntity;
+            }
+        }
+
         public override void Update (DeltaTime dt) {
             while (Owner.HasComponentInfo(ComponentData.InputInclude))
                 Action |= (ActionMask)Owner.GetComponentInfo(ComponentData.InputInclude)[0];
             while (Owner.HasComponentInfo(ComponentData.InputExclude))
                 Action &= ~(ActionMask)Owner.GetComponentInfo(ComponentData.InputExclude)[0];
 
+            while (Owner.HasComponentInfo(ComponentData.Damage)) {
+                float value = (float)Owner.GetComponentInfo(ComponentData.Damage)[0];
+                if (availableNPC == null) { // npcs are an safezone
+                    Health -= value;
+                    if (Health < 0) {
+                        Owner.Destroy( );
+                    }
+                }
+            }
+
             while (Owner.HasComponentInfo(ComponentData.InputGesture)) {
                 string data = (string)Owner.GetComponentInfo(ComponentData.InputGesture)[0];
                 if (data == string.Empty) {
-                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit", true, (AnimationComponent.AnimationCallback)AnimationCallbackAttack);
-                    animationState = AnimationState.Attack;
-                    attackTimer.Start( );
-                } else
+                    if (availableNPC == null) {
+                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit", true, (AnimationComponent.AnimationCallback)AnimationCallbackAttack);
+                        animationState = AnimationState.Attack;
+                        attackTimer.Start( );
+                    } else if (!currentlyTalking) {
+                        currentlyTalking = true;
+                        new UIDialog(Screen.Gameplay, availableNPC.GetComponent<NPCComponent>( )).DialogFinished += ( ) => currentlyTalking = false;
+                    }
+                } else {
                     Weapon.Special(data);
+                }
             }
 
             Vector2 speed = speedComponent.Speed;
@@ -82,7 +110,7 @@ namespace mapKnight.Extended.Components.Player {
             }
 
             if (animationState != AnimationState.Jump && animationState != AnimationState.Attack) {
-                if(motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
+                if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
                     if (Action.HasFlag(ActionMask.Jump)) {
                         Action &= ~ActionMask.Jump;
                         animationState = AnimationState.Jump;
@@ -90,7 +118,7 @@ namespace mapKnight.Extended.Components.Player {
                         motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
                         return;
                     } else {
-                            motionComponent.AimedVelocity.Y = 0;
+                        motionComponent.AimedVelocity.Y = 0;
                     }
                     if (motionComponent.AimedVelocity.X != 0) {
                         if (animationState != AnimationState.Walk) {
@@ -103,11 +131,12 @@ namespace mapKnight.Extended.Components.Player {
                             animationState = AnimationState.Idle;
                         }
                     }
-                } else if(animationState != AnimationState.Fall) {
+                } else if (animationState != AnimationState.Fall) {
                     Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", true);
                     animationState = AnimationState.Fall;
                 }
             }
+            availableNPC = null;
         }
 
         private void AnimationCallbackFinishJumping (bool success) {
@@ -125,9 +154,10 @@ namespace mapKnight.Extended.Components.Player {
 
         public new class Configuration : Component.Configuration {
             public string Weapon;
+            public float Health;
 
             public override Component Create (Entity owner) {
-                return new PlayerComponent(owner, (IWeapon)Activator.CreateInstance(Type.GetType("mapKnight.Extended.Warfare." + Weapon), owner));
+                return new PlayerComponent(owner, (IWeapon)Activator.CreateInstance(Type.GetType("mapKnight.Extended.Warfare." + Weapon), owner), Health);
             }
         }
     }
