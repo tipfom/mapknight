@@ -1,0 +1,39 @@
+{
+    "Name": "Lenny",
+    "Transform": {
+        "Size": {
+            "X": 5,
+            "Y": 1.1
+        }
+    },
+    "Components": [
+        {
+            "$type": "Graphics.Skelet",
+            "Bones": [
+                {
+                    "Position": {
+                        "X": 0,
+                        "Y": 0
+                    },
+                    "Size": {
+                        "X": 0.22,
+                        "Y": 1
+                    }
+                }
+            ]
+        },
+        {
+            "$type": "Graphics.Texture",
+            "Texture": "npc"
+        },
+        {
+            "$type": "AI.NPC",
+            "Messages": [
+                "This ist ein TEST!",
+                "How are you gehen?",
+                "WHAT HAPPENS WHEN THIS SHIT IS BEING SPAMMED IN CAPSLOCK?\nGEHEN AUCH ZEILENUMBRUECHE?\nICH HOFFE DOCH",
+                "Wer das liest ist cool."
+            ]
+        }
+    ]
+}

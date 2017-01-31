@@ -53,6 +53,7 @@ namespace mapKnight.Extended.Screens {
             Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
             Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
             Entity.Configuration sharkConfig = Assets.Load<Entity.Configuration>("shark");
+            Entity.Configuration npcConfig = Assets.Load<Entity.Configuration>("npc");
 
             //sawConfig.Create(new Vector2(3, 6), map);
 
@@ -153,7 +154,7 @@ namespace mapKnight.Extended.Screens {
             landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
             landMineConfig.Create(new Vector2(2.5f, 8 + landMineConfig.Transform.HalfSize.Y), map);
 
-            turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
+            npcConfig.Create(new Vector2(62, 12 + npcConfig.Transform.HalfSize.Y), map);
 
             //meatballConfig.Create(new Vector2(3, 10), map);
 

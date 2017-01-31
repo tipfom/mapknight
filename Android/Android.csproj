@@ -15,7 +15,7 @@
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>mapKnight.Android</AssemblyName>
-    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <XamarinInsightsApiKey>d953cc830ec99ce35c4b2e3386b49e479b4c2dc3</XamarinInsightsApiKey>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -132,6 +132,8 @@
     <AndroidAsset Include="Assets\textures\guardian\private2.json" />
     <AndroidAsset Include="Assets\textures\guardian\private3.json" />
     <AndroidAsset Include="Assets\textures\slime.json" />
+    <AndroidAsset Include="Assets\entities\npc.json" />
+    <AndroidAsset Include="Assets\textures\npc.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -254,6 +256,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\slime.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\npc.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

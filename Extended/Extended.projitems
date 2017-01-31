@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\OfficerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\PrivateComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\TentComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\NPCComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SeplingComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\CircularSawComponent.cs">
       <SubType>Code</SubType>
@@ -100,6 +101,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIDepths.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIDialog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIDim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIGesturePanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />

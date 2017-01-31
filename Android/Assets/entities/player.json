@@ -11,16 +11,13 @@
 		},
 		{
 			"$type": "Player.Player",
-			"Weapon": "Swords.WoodySword"
+			"Weapon": "Swords.WoodySword",
+			"Health": 10
 		},
 		{
 			"$type": "Stats.Speed",
 			"X": 3.5,
 			"Y": 20
-		},
-		{
-			"$type": "Stats.Health",
-			"Value": 10
 		},
 		{
 			"$type": "Stats.Armor",

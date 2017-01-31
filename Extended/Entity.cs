@@ -159,6 +159,14 @@ namespace mapKnight.Extended {
                 components[i].Update(dt);
         }
 
+        public override string ToString ( ) {
+            return Name;
+        }
+
+        public override int GetHashCode ( ) {
+            return ID;
+        }
+
         public class Configuration {
             public ComponentList Components;
             public string Name;
