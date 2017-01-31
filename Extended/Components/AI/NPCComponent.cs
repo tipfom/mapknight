@@ -2,9 +2,11 @@
 
 namespace mapKnight.Extended.Components.AI {
     public class NPCComponent : Component {
+        public bool Available = true;
+
         private string[ ] messages;
         private int currentIndex = -1;
-
+        
         public NPCComponent (Entity owner, string[] messages) : base(owner) {
             owner.Domain = EntityDomain.NPC;
             this.messages = messages;
@@ -20,6 +22,7 @@ namespace mapKnight.Extended.Components.AI {
             currentIndex++;
             if (currentIndex == messages.Length) {
                 currentIndex = -1;
+                Available = false;
                 return null;
             } else {
                 return messages[currentIndex];

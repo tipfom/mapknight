@@ -22,7 +22,7 @@ namespace mapKnight.Extended.Components.Player {
         public float Health;
 
         private bool currentlyTalking;
-        private Entity availableNPC;
+        private Entity nearbyNPC;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private AnimationState animationState = AnimationState.None;
@@ -64,7 +64,7 @@ namespace mapKnight.Extended.Components.Player {
 
         public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Domain == EntityDomain.NPC) {
-                availableNPC = collidingEntity;
+                nearbyNPC = collidingEntity;
             }
         }
 
@@ -76,7 +76,7 @@ namespace mapKnight.Extended.Components.Player {
 
             while (Owner.HasComponentInfo(ComponentData.Damage)) {
                 float value = (float)Owner.GetComponentInfo(ComponentData.Damage)[0];
-                if (availableNPC == null) { // npcs are an safezone
+                if (nearbyNPC == null) { // npcs are an safezone
                     Health -= value;
                     if (Health < 0) {
                         Owner.Destroy( );
@@ -87,13 +87,16 @@ namespace mapKnight.Extended.Components.Player {
             while (Owner.HasComponentInfo(ComponentData.InputGesture)) {
                 string data = (string)Owner.GetComponentInfo(ComponentData.InputGesture)[0];
                 if (data == string.Empty) {
-                    if (availableNPC == null) {
+                    if (nearbyNPC == null) {
                         Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit", true, (AnimationComponent.AnimationCallback)AnimationCallbackAttack);
                         animationState = AnimationState.Attack;
                         attackTimer.Start( );
                     } else if (!currentlyTalking) {
-                        currentlyTalking = true;
-                        new UIDialog(Screen.Gameplay, availableNPC.GetComponent<NPCComponent>( )).DialogFinished += ( ) => currentlyTalking = false;
+                        NPCComponent npccomponent = nearbyNPC.GetComponent<NPCComponent>( );
+                        if (npccomponent.Available) {
+                            currentlyTalking = true;
+                            new UIDialog(Screen.Gameplay, npccomponent).DialogFinished += ( ) => currentlyTalking = false;
+                        }
                     }
                 } else {
                     Weapon.Special(data);
@@ -136,7 +139,7 @@ namespace mapKnight.Extended.Components.Player {
                     animationState = AnimationState.Fall;
                 }
             }
-            availableNPC = null;
+            nearbyNPC = null;
         }
 
         private void AnimationCallbackFinishJumping (bool success) {
