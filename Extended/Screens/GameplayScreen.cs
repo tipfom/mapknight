@@ -41,7 +41,9 @@ namespace mapKnight.Extended.Screens {
 
             int begin = Environment.TickCount;
             map = Assets.Load<Map>("beatiful_map");
+#if DEBUG
             Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
+#endif
             begin = Environment.TickCount;
 
             //Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
@@ -170,8 +172,9 @@ namespace mapKnight.Extended.Screens {
             testEntity = playerConfig.Create(map.SpawnPoint, map);
             testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
             map.Focus(testEntity.ID);
+#if DEBUG
             Debug.Print(this, $"player loading took {Environment.TickCount - begin} ms");
-
+#endif
             base.Load( );
         }
 

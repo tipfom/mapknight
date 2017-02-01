@@ -27,7 +27,9 @@ namespace mapKnight.Extended {
 
             GL.ClearColor(0.1f, 0.1f, 0.2f, 1f);
 
+#if DEBUG
             Debug.Print(typeof(Manager), $"Loading took {Environment.TickCount - begin} ms");
+#endif
         }
 
         private static Stopwatch stopWatch = new Stopwatch( );

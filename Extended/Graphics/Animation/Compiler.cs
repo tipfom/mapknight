@@ -13,7 +13,9 @@ namespace mapKnight.Extended.Graphics.Animation {
 
         public static void Compile (VertexAnimation[ ] animations, float[ ] scales, Vector2[ ] offsets, IEnumerable<string> sprites, Entity entity, out float[ ][ ] boneverticies, out SpriteBatch sprite) {
             sprite = SpriteBatch.Combine(false, new List<SpriteBatch>(sprites.Select(item => Assets.Load<SpriteBatch>(item))));
+#if DEBUG
             Debug.CheckGL(typeof(Compiler));
+#endif
             boneverticies = new float[animations[0].Frames[0].State.Length][ ];
             float entityratio = entity.Transform.Width / entity.Transform.Height;
             for (int i = 0; i < boneverticies.Length; i++) {
