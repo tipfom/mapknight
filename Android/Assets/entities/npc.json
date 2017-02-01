@@ -23,8 +23,75 @@
             ]
         },
         {
-            "$type": "Graphics.Texture",
-            "Texture": "npc"
+            "$type": "Graphics.Sprite",
+            "Texture": "npc/lenny",
+            "Animations": [
+                {
+                    "Name": "idle",
+                    "CanRepeat": true,
+                    "Frames": [
+                        {
+                            "Time": 1000,
+                            "Bones": [
+                                "idle"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "talk",
+                    "CanRepeat": false,
+                    "Frames": [
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "talk"
+                            ]
+                        },
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "idle"
+                            ]
+                        },{
+                            "Time": 200,
+                            "Bones": [
+                                "talk"
+                            ]
+                        },
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "idle"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "Name": "deny",
+                    "CanRepeat": false,
+                    "Frames": [
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "deny1"
+                            ]
+                        },
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "deny2"
+                            ]
+                        },
+                        {
+                            "Time": 200,
+                            "Bones": [
+                                "deny1"
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "$type": "AI.NPC",
