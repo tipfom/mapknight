@@ -74,7 +74,7 @@ namespace mapKnight.Core {
         public static Color Maroon { get { return new Color("#84144B"); } }
         public static Color Fuchsia { get { return new Color("#F012BE"); } }
         public static Color Purple { get { return new Color("#B10DC9"); } }
-        public static Color Black { get { return new Color("#111111"); } }
+        public static Color Black { get { return new Color("#000000"); } }
         public static Color Gray { get { return new Color("#AAAAAA"); } }
         public static Color Silver { get { return new Color("#DDDDDD"); } }
         public static Color White { get { return new Color("#FFFFFF"); } }
