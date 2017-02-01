@@ -61,23 +61,14 @@ namespace mapKnight.Core {
         #region default colors
         // source : http://clrs.cc/
 
-        public static Color Navy { get { return new Color("#001F3F"); } }
-        public static Color Blue { get { return new Color("#0074D9"); } }
-        public static Color Aqua { get { return new Color("#7FDBFF"); } }
-        public static Color Teal { get { return new Color("#39CCCC"); } }
-        public static Color Olive { get { return new Color("#4D9970"); } }
-        public static Color Green { get { return new Color("#2ECC40"); } }
-        public static Color Lime { get { return new Color("#01FF70"); } }
-        public static Color Yellow { get { return new Color("#FFDC00"); } }
-        public static Color Orange { get { return new Color("#FF851B"); } }
-        public static Color Red { get { return new Color("#FF4136"); } }
-        public static Color Maroon { get { return new Color("#84144B"); } }
-        public static Color Fuchsia { get { return new Color("#F012BE"); } }
-        public static Color Purple { get { return new Color("#B10DC9"); } }
-        public static Color Black { get { return new Color("#000000"); } }
-        public static Color Gray { get { return new Color("#AAAAAA"); } }
-        public static Color Silver { get { return new Color("#DDDDDD"); } }
-        public static Color White { get { return new Color("#FFFFFF"); } }
+        public static Color Blue { get; } = new Color(0, 116, 217);
+        public static Color Green { get; } = new Color(46, 204, 64);
+        public static Color Yellow { get; } = new Color(255, 220, 0);
+        public static Color Orange { get; } = new Color(255, 133, 27);
+        public static Color Red { get; } = new Color(255, 65, 54);
+        public static Color Purple { get; } = new Color(177, 13, 201);
+        public static Color Black { get; } = new Color(0, 0, 0);
+        public static Color White { get; } = new Color(255, 255, 255);
         #endregion
     }
 }
