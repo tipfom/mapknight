@@ -263,7 +263,6 @@ namespace mapKnight.Extended {
                             }
                         });
                         _Plugger.Components.Add(new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(8, 3), Offset = 1.5f });
-                        _Plugger.Components.Add(new BishopComponent.Configuration( ) { IsScaredToFall = true });
                         _Plugger.Components.Add(new SpeedComponent.Configuration( ) { X = 0.75f });
                     }
                     return _Plugger;

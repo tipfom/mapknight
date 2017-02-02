@@ -7,8 +7,9 @@ using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Components.AI {
 
+    [ComponentRequirement(typeof(MotionComponent))]
     [ComponentRequirement(typeof(TriggerComponent))]
-    public class PluggerComponent : Component {
+    public class PluggerComponent : BishopComponent {
         private Entity.Configuration bulletEntityConfiguration;
         private float bulletSpeed;
         private int nextThrow;
@@ -16,7 +17,7 @@ namespace mapKnight.Extended.Components.AI {
         private bool isThrowing;
         private Entity currentTarget;
 
-        public PluggerComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows, float bulletspeed) : base(owner) {
+        public PluggerComponent (Entity owner, Entity.Configuration bullet, int timebetweenthrows, float bulletspeed) : base(owner, true) {
             Owner.Domain = EntityDomain.Enemy;
 
             bulletEntityConfiguration = bullet;
@@ -27,9 +28,15 @@ namespace mapKnight.Extended.Components.AI {
         public override void Prepare ( ) {
             Owner.GetComponent<TriggerComponent>( ).Triggered += Trigger_Triggered;
             nextThrow = Environment.TickCount;
+            base.Prepare( );
         }
 
         public override void Update (DeltaTime dt) {
+            if (!isThrowing) {
+                base.Update(dt);
+            } else {
+                motionComponent.AimedVelocity.X = 0;
+            }
         }
 
         private void Trigger_Triggered (Entity entity) {

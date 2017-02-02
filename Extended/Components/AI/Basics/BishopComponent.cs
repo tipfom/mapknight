@@ -12,7 +12,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
     [UpdateAfter(typeof(SpeedComponent))]
     public class BishopComponent : Component {
         public readonly bool IsScaredToFall;
-        private MotionComponent motionComponent;
+        protected MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private float speedMult = 1f;
 
