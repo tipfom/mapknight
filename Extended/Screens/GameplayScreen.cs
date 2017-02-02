@@ -33,153 +33,35 @@ namespace mapKnight.Extended.Screens {
         }
 
         public override void Load ( ) {
-            SetupControls( );
-            Window.Changed += ( ) => {
-                SetupControls( );
-            };
-
-            debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
-
             int begin = Environment.TickCount;
             map = Assets.Load<Map>("beatiful_map");
 #if DEBUG
             Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
 #endif
-            begin = Environment.TickCount;
 
-            //Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
-            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("plugger");
-            Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
-            Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
-            //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
-            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("shell");
-            Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
-            Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
-            Entity.Configuration sharkConfig = Assets.Load<Entity.Configuration>("shark");
-            Entity.Configuration npcConfig = Assets.Load<Entity.Configuration>("npc");
+            EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(26, 18), map);
+            EntityCollection.Enemys.Slime.Create(new Vector2(9, 7.5f), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(72, 10), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(21, 7), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(22, 7), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(2.5f, 8 ), map);
+            EntityCollection.NPCs.Lenny.Create(new Vector2(62, 12), map);
+            EntityCollection.Enemys.Shell.Create(new Vector2(42, 11), map);
+            EntityCollection.Platforms.Copper.Create(new Vector2(3, 9), map);
+            EntityCollection.Enemys.Sepling.Create(map.SpawnPoint + new Vector2(10, 1), map);
+            EntityCollection.Enemys.Shark.Create(map.SpawnPoint + new Vector2(10, 1), map);
 
-            //sawConfig.Create(new Vector2(3, 6), map);
-
-            Entity.Configuration testPrivate = new Entity.Configuration( );
-            testPrivate.Name = "Testing Private";
-            testPrivate.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
-            testPrivate.Components = new ComponentList( );
-            testPrivate.Components.Add(new MotionComponent.Configuration( ));
-            testPrivate.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
-            testPrivate.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private1" });
-            testPrivate.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
-            testPrivate.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
-            testPrivate.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
-
-            Entity.Configuration testPrivate2 = new Entity.Configuration( );
-            testPrivate2.Name = "Testing Private";
-            testPrivate2.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
-            testPrivate2.Components = new ComponentList( );
-            testPrivate2.Components.Add(new MotionComponent.Configuration( ));
-            testPrivate2.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
-            testPrivate2.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private2" });
-            testPrivate2.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
-            testPrivate2.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
-            testPrivate2.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
-
-            Entity.Configuration testPrivate3 = new Entity.Configuration( );
-            testPrivate3.Name = "Testing Private";
-            testPrivate3.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
-            testPrivate3.Components = new ComponentList( );
-            testPrivate3.Components.Add(new MotionComponent.Configuration( ));
-            testPrivate3.Components.Add(new Components.AI.Guardian.PrivateComponent.Configuration( ));
-            testPrivate3.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/private3" });
-            testPrivate3.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
-            testPrivate3.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 1.2f });
-            testPrivate3.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
-
-            Entity.Configuration testOfficer = new Entity.Configuration( );
-            testOfficer.Name = "Testing Officer";
-            testOfficer.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
-            testOfficer.Components = new ComponentList( );
-            testOfficer.Components.Add(new MotionComponent.Configuration( ));
-            testOfficer.Components.Add(new Components.AI.Guardian.OfficerComponent.Configuration( ));
-            testOfficer.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/officer" });
-            testOfficer.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
-            testOfficer.Components.Add(new SpeedComponent.Configuration( ) { X = 1.2f });
-            testOfficer.Components.Add(new HealthComponent.Configuration( ) { Value = 1 });
-
-            Entity.Configuration tentConfig = new Entity.Configuration( );
-            tentConfig.Name = "Testing Tent";
-            tentConfig.Transform = new Transform(Vector2.Zero, new Vector2(3.405405405f, 2f));
-            tentConfig.Components = new ComponentList( );
-            tentConfig.Components.Add(new Components.AI.Guardian.TentComponent.Configuration( ) {
-                Officer = testOfficer, PatrolRange = 12f, PrivateCount = 4, TimeBetweenPrivates = 3000,
-                Privates = new Entity.Configuration[ ] {
-                    testPrivate, testPrivate2, testPrivate3
-                }
-            });
-            tentConfig.Components.Add(new Components.Graphics.TextureComponent.Configuration( ) { Texture = "guardian/tent" });
-            tentConfig.Components.Add(new Components.Graphics.DrawComponent.Configuration( ));
-            tentConfig.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } });
-            tentConfig.Create(new Vector2(26, 18 + tentConfig.Transform.HalfSize.Y), map);
-
-            Entity.Configuration testSlime = new Entity.Configuration( );
-            testSlime.Name = "Testing Slime";
-            testSlime.Transform = new Transform(Vector2.Zero, new Vector2(1f, 0.95238095f));
-            testSlime.Components = new ComponentList( );
-            testSlime.Components.Add(new Components.Graphics.SpriteComponent.Configuration( ) {
-                Texture = "slime", Animations = new[ ] {
-                    new Graphics.Animation.SpriteAnimation( ) {
-                        CanRepeat = true, Name ="wobble",
-                        Frames = new[ ] {
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "high" }, Time = 150 },
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 150 },
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "low" }, Time = 150 },
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 150 },
-                        }
-                    },
-                    new Graphics.Animation.SpriteAnimation( ) {
-                        CanRepeat = true, Name ="rage",
-                        Frames = new[ ] {
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "high" }, Time = 100 },
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 100 },
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "low" }, Time = 100 },
-                            new Graphics.Animation.SpriteAnimationFrame(){ Bones=new[ ] { "mid" }, Time = 100 },
-                        }
-                    }
-                }
-            });
-            testSlime.Components.Add(new Components.Graphics.SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Position = Vector2.Zero, Size = Vector2.One } } });
-            testSlime.Components.Add(new Components.AI.SlimeComponent.Configuration( ) { SlimeConfig = testSlime, SizeMultiplier = 0.8f, SplitCount = 3, RageRange = 6, RageSpeedMultiplier = 3 });
-            testSlime.Components.Add(new Components.Stats.HealthComponent.Configuration( ) { Value = 1 });
-            testSlime.Components.Add(new Components.Stats.SpeedComponent.Configuration( ) { X = 2f, Y = 2f });
-            testSlime.Create(new Vector2(9, 7.5f), map);
-
-            walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
-
-            landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
-            landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
-            landMineConfig.Create(new Vector2(2.5f, 8 + landMineConfig.Transform.HalfSize.Y), map);
-
-            npcConfig.Create(new Vector2(62, 12 + npcConfig.Transform.HalfSize.Y), map);
-
-            //meatballConfig.Create(new Vector2(3, 10), map);
-
-            hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
-
-            platformConfig.Create(new Vector2(3, 9), map);
-
-            seplingConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
-
-            sharkConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
-
-            Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
-            testEntity = playerConfig.Create(map.SpawnPoint, map);
+            testEntity = EntityCollection.Players.Diamond.Create(map.SpawnPoint, map);
             testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
             map.Focus(testEntity.ID);
-
-
+            
             healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new Vector2(2 * Window.Ratio, 0.05f), UIDepths.MIDDLE);
-            Window.Changed += ( ) => healthBar.Size = new Vector2(2 * Window.Ratio, healthBar.Size.Y);
-#if DEBUG
-            Debug.Print(this, $"player loading took {Environment.TickCount - begin} ms");
-#endif
+            debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
+            SetupControls( );
+            Window.Changed += ( ) => {
+                SetupControls( );
+                healthBar.Size = new Vector2(2 * Window.Ratio, healthBar.Size.Y);
+            };
             base.Load( );
         }
 
