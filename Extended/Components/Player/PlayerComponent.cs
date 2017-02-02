@@ -16,10 +16,10 @@ namespace mapKnight.Extended.Components.Player {
 
     [UpdateAfter(typeof(SpeedComponent))]
     [UpdateBefore(typeof(MotionComponent))]
-    public class PlayerComponent : Component {
+    public class PlayerComponent : Component, UIBar.IValueBinder {
         public ActionMask Action;
         public IWeapon Weapon;
-        public float Health;
+        public HealthTracker Health;
 
         private bool currentlyTalking;
         private Entity nearbyNPC;
@@ -28,11 +28,15 @@ namespace mapKnight.Extended.Components.Player {
         private AnimationState animationState = AnimationState.None;
         private Timer attackTimer = new Timer(580);
 
+        public float Value => throw new NotImplementedException( );
+        public float Maximum => throw new NotImplementedException( );
+        public event Action<float> ValueChanged;
+
         public PlayerComponent (Entity owner, IWeapon weapon, float health) : base(owner) {
             owner.Domain = EntityDomain.Player;
 
             Weapon = weapon;
-            Health = health;
+            Health = new HealthTracker(health);
 
             attackTimer.Elapsed += (s, e) => { if (animationState == AnimationState.Attack) Weapon.Attack( ); };
 
@@ -77,8 +81,8 @@ namespace mapKnight.Extended.Components.Player {
             while (Owner.HasComponentInfo(ComponentData.Damage)) {
                 float value = (float)Owner.GetComponentInfo(ComponentData.Damage)[0];
                 if (nearbyNPC == null) { // npcs are an safezone
-                    Health -= value;
-                    if (Health < 0) {
+                    Health.Value -= value;
+                    if (Health.Value < 0) {
                         Owner.Destroy( );
                     }
                 }
@@ -163,6 +167,18 @@ namespace mapKnight.Extended.Components.Player {
 
             public override Component Create (Entity owner) {
                 return new PlayerComponent(owner, (IWeapon)Activator.CreateInstance(Type.GetType("mapKnight.Extended.Warfare." + Weapon), owner), Health);
+            }
+        }
+
+        public class HealthTracker : UIBar.IValueBinder {
+            private float _Value;
+            public float Value { get { return _Value; } set { _Value = value; ValueChanged?.Invoke(value ); } }
+            public float Maximum { get; }
+            public event Action<float> ValueChanged;
+
+            public HealthTracker(float health) {
+                Maximum = health;
+                _Value = health;
             }
         }
     }

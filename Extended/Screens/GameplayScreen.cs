@@ -17,6 +17,7 @@ namespace mapKnight.Extended.Screens {
         private UILabel debugLabel;
         private UIPanel leftPanel, rightPanel;
         private UIGesturePanel controlPanel;
+        private UIBar healthBar;
 
         private Map map;
         private Entity testEntity;
@@ -172,6 +173,10 @@ namespace mapKnight.Extended.Screens {
             testEntity = playerConfig.Create(map.SpawnPoint, map);
             testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
             map.Focus(testEntity.ID);
+
+
+            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new Vector2(2 * Window.Ratio, 0.05f), UIDepths.MIDDLE);
+            Window.Changed += ( ) => healthBar.Size = new Vector2(2 * Window.Ratio, healthBar.Size.Y);
 #if DEBUG
             Debug.Print(this, $"player loading took {Environment.TickCount - begin} ms");
 #endif
@@ -212,8 +217,7 @@ namespace mapKnight.Extended.Screens {
             }
             debugLabel.Text = $"frame: {Manager.FrameTime.TotalMilliseconds:00.0}\n" +
                               $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
-                            $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n" +
-                          $"health: {testEntityPlayer.Health:00.0}";
+                            $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n";
         }
 
         protected override void Activated ( ) {

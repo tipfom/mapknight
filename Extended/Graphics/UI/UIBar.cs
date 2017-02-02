@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using mapKnight.Core;
 using mapKnight.Extended.Graphics.UI.Layout;
@@ -6,46 +7,40 @@ namespace mapKnight.Extended.Graphics.UI {
     public class UIBar : UIItem {
         const float BORDER_BOUNDS_RATIO = 10f / 10f; // width / height of image
 
+        private Color foregroundColor;
+        private Color backgroundColor;
+        private IValueBinder valueBinder;
         private float currentPercent;
 
-        public UIBar (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
-            //binder.Changed += binder_Changed;
-            //currentPercent = binder.Percent;
+        public UIBar (Screen owner, Color foregroundColor, Color backgroundColor, IValueBinder valueBinder, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
+            this.foregroundColor = foregroundColor;
+            this.backgroundColor = backgroundColor;
+            this.valueBinder = valueBinder;
+            this.currentPercent = Mathf.Clamp01(this.valueBinder.Value / this.valueBinder.Maximum);
+
+            this.valueBinder.ValueChanged += ValueBinder_ValueChanged;
+            IsDirty = true;
         }
 
-        private void binder_Changed (object sender, float e) {
-            currentPercent = e;
+        private void ValueBinder_ValueChanged (float value) {
+            currentPercent = Mathf.Clamp01(value / valueBinder.Maximum);
             IsDirty = true;
         }
 
         public override List<DepthVertexData> ConstructVertexData ( ) {
-            List<DepthVertexData> vertexData = new List<DepthVertexData>( );
+            List<DepthVertexData> vertexData = new List<DepthVertexData>(2);
 
-            float borderWidthHalf = Size.Y * BORDER_BOUNDS_RATIO;
-            float borderPosition = Position.X + Size.X * currentPercent;
-
-            float[ ] filled_verticies = new float[ ] {
-                Position.X,Position.Y,
-                Position.X,Position.Y - Size.Y,
-                borderPosition, Position.Y - Size.Y,
-                borderPosition, Position.Y};
-            float[ ] empty_verticies = new float[ ] {
-                borderPosition, Position.Y,
-                borderPosition, Position.Y - Size.Y,
-                Position.X + Size.X, Position.Y - Size.Y,
-                Position.X + Size.X, Position.Y};
-            float[ ] border_verticies = new float[ ] {
-                borderPosition - borderWidthHalf / 2f, Position.Y,
-                borderPosition - borderWidthHalf / 2f, Position.Y - Size.Y,
-                borderPosition + borderWidthHalf, Position.Y - Size.Y,
-                borderPosition + borderWidthHalf,Position.Y
-            };
-
-            vertexData.Add(new DepthVertexData(filled_verticies, "bar_filled", Depth, Color.White));
-            vertexData.Add(new DepthVertexData(empty_verticies, "bar_empty", Depth, Color.White));
-            vertexData.Add(new DepthVertexData(border_verticies, "bar_border", Depth, Color.White));
+            float barwidth = Size.X * currentPercent;
+            vertexData.Add(new DepthVertexData(Bounds.Verticies, "blank", Depth, backgroundColor));
+            vertexData.Add(new DepthVertexData(new UIRectangle(Position.X, Position.Y, barwidth, Size.Y).Verticies, "blank", Depth, foregroundColor));
 
             return vertexData;
+        }
+
+        public interface IValueBinder {
+            event Action<float> ValueChanged;
+            float Value { get; }
+            float Maximum { get; }
         }
     }
 }
