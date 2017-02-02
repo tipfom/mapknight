@@ -189,7 +189,7 @@ namespace mapKnight.Extended {
                     Components.ResolveComponentDependencies( );
                     Components.Sort( );
                 }
-                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Species);
+                return new Entity(Components, new Transform(spawnLocation + new Vector2(0, Transform.HalfSize.Y), Transform.Size), world, Species);
             }
         }
     }
