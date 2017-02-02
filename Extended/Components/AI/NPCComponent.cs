@@ -23,7 +23,7 @@ namespace mapKnight.Extended.Components.AI {
 
         public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Domain == EntityDomain.Player) {
-                Owner.SetComponentInfo(ComponentData.Color, Color.Fuchsia);
+                Owner.SetComponentInfo(ComponentData.Color, Color.Red);
             }
         }
 
