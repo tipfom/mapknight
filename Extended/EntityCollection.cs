@@ -689,7 +689,7 @@ namespace mapKnight.Extended {
                                     },
                                     new VertexAnimation( ) {
                                         Name = "attack",
-                                        CanRepeat = false,
+                                        CanRepeat = true,
                                         Frames = new VertexAnimationFrame[ ] {
                                             new VertexAnimationFrame( ) {
                                                 Time = 420,
