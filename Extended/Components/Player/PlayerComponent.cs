@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Components.Player {
 
     [UpdateAfter(typeof(SpeedComponent))]
     [UpdateBefore(typeof(MotionComponent))]
-    public class PlayerComponent : Component, UIBar.IValueBinder {
+    public class PlayerComponent : Component {
         public ActionMask Action;
         public IWeapon Weapon;
         public HealthTracker Health;
@@ -27,10 +27,6 @@ namespace mapKnight.Extended.Components.Player {
         private SpeedComponent speedComponent;
         private AnimationState animationState = AnimationState.None;
         private Timer attackTimer = new Timer(580);
-
-        public float Value => throw new NotImplementedException( );
-        public float Maximum => throw new NotImplementedException( );
-        public event Action<float> ValueChanged;
 
         public PlayerComponent (Entity owner, IWeapon weapon, float health) : base(owner) {
             owner.Domain = EntityDomain.Player;
