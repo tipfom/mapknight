@@ -27,7 +27,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private Vector2 _Size;
         public Vector2 Size {
             get { return _Size; }
-            protected set { _Size = value; _Bounds.Size = _Size; SizeChanged?.Invoke( ); IsDirty = true; }
+            set { _Size = value; _Bounds.Size = _Size; SizeChanged?.Invoke( ); IsDirty = true; }
         }
 
         private bool _Visible = true;
