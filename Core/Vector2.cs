@@ -80,13 +80,8 @@ namespace mapKnight.Core {
 
         #region defaults
 
-        public static Vector2 Zero {
-            get { return new Vector2(0, 0); }
-        }
-
-        public static Vector2 One {
-            get { return new Vector2(1, 1); }
-        }
+        public static readonly Vector2 Zero = new Vector2(0, 0);
+        public static readonly Vector2 One = new Vector2(1, 1);
 
         #endregion
 
