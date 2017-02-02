@@ -12,8 +12,8 @@ namespace mapKnight.Extended.Graphics.UI {
             Opacity = opacity;
         }
 
-        public override List<DepthVertexData> ConstructVertexData ( ) {
-            return new List<DepthVertexData>( ) { new DepthVertexData(new float[8] { -Window.Ratio, 1, -Window.Ratio, -1, Window.Ratio, -1, Window.Ratio, 1 }, "blank", Depth, color )};
+        public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
+            yield return new DepthVertexData(new float[8] { -Window.Ratio, 1, -Window.Ratio, -1, Window.Ratio, -1, Window.Ratio, 1 }, "blank", Depth, color );
         }
     }
 }

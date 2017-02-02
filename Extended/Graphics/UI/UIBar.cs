@@ -27,14 +27,10 @@ namespace mapKnight.Extended.Graphics.UI {
             IsDirty = true;
         }
 
-        public override List<DepthVertexData> ConstructVertexData ( ) {
-            List<DepthVertexData> vertexData = new List<DepthVertexData>(2);
-
+        public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
             float barwidth = Size.X * currentPercent;
-            vertexData.Add(new DepthVertexData(Bounds.Verticies, "blank", Depth, backgroundColor));
-            vertexData.Add(new DepthVertexData(new UIRectangle(Position.X, Position.Y, barwidth, Size.Y).Verticies, "blank", Depth, foregroundColor));
-
-            return vertexData;
+            yield return new DepthVertexData(Bounds.Verticies, "blank", Depth, backgroundColor);
+            yield return new DepthVertexData(new UIRectangle(Position.X, Position.Y, barwidth, Size.Y).Verticies, "blank", Depth, foregroundColor);
         }
 
         public interface IValueBinder {

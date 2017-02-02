@@ -9,8 +9,8 @@ namespace mapKnight.Extended.Graphics.UI {
         public UIPanel (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, bool multiclick = false) : base(owner, hmargin, vmargin, size, 0, multiclick) {
         }
 
-        public override List<DepthVertexData> ConstructVertexData ( ) {
-            return new List<DepthVertexData>( );
+        public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
+            yield break;
         }
     }
 }

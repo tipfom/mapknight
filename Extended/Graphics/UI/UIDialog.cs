@@ -33,12 +33,10 @@ namespace mapKnight.Extended.Graphics.UI {
             IsDirty = true;
         }
 
-        public override List<DepthVertexData> ConstructVertexData ( ) {
-            List<DepthVertexData> vertexData = new List<DepthVertexData>( );
-            vertexData.Add(new DepthVertexData(Bounds.Verticies, "blank", UIDepths.BACKGROUND, Color.Black));
-            vertexData.Add(new DepthVertexData(new UIRectangle(Bounds.Position + new Vector2(0.0125f, -0.0125f), Bounds.Size - new Vector2(0.025f, 0.025f)).Verticies, "blank", UIDepths.MIDDLE, Color.White));
-            vertexData.Add(new DepthVertexData(new UIRectangle(Bounds.Position + new Vector2(0.025f, -0.025f), Bounds.Size - new Vector2(0.05f, 0.05f)).Verticies, "blank", UIDepths.MIDDLE, Color.Black));
-            return vertexData;
+        public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
+            yield return new DepthVertexData(Bounds.Verticies, "blank", UIDepths.BACKGROUND, Color.Black);
+            yield return new DepthVertexData(new UIRectangle(Bounds.Position + new Vector2(0.0125f, -0.0125f), Bounds.Size - new Vector2(0.025f, 0.025f)).Verticies, "blank", UIDepths.MIDDLE, Color.White);
+            yield return new DepthVertexData(new UIRectangle(Bounds.Position + new Vector2(0.025f, -0.025f), Bounds.Size - new Vector2(0.05f, 0.05f)).Verticies, "blank", UIDepths.MIDDLE, Color.Black);
         }
     }
 }

@@ -101,6 +101,6 @@ namespace mapKnight.Extended.Graphics.UI {
             UIRenderer.Remove(this);
         }
 
-        public abstract List<DepthVertexData> ConstructVertexData ( );
+        public abstract IEnumerable<DepthVertexData> ConstructVertexData ( );
     }
 }
