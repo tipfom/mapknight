@@ -760,18 +760,45 @@ namespace mapKnight.Extended {
                         _Lenny.Name = "Lenny";
                         _Lenny.Transform = new Transform(Vector2.Zero, new Vector2(5f, 1.1f));
                         _Lenny.Components = new ComponentList {
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 0.22f, 1f) } },
+                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 0.22f, 1f), new Rectangle(0, 1.5f, 0.0275f, 0.53125f) } },
                             new SpriteComponent.Configuration( ) {
                                 Texture = "npc/lenny",
                                 Animations = new SpriteAnimation[ ] {
                                     new SpriteAnimation( ) {
-                                        Name = "idle",
+                                        Name = "idle_inactive",
                                         CanRepeat = true,
                                         Frames = new SpriteAnimationFrame[ ] {
                                             new SpriteAnimationFrame( ) {
                                                 Time = MAX_TIME,
                                                 Bones= new string[ ] {
-                                                    "idle"
+                                                    "idle",
+                                                    "inactive"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    new SpriteAnimation( ) {
+                                        Name = "idle_active",
+                                        CanRepeat = true,
+                                        Frames = new SpriteAnimationFrame[ ] {
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones= new string[ ] {
+                                                    "idle",
+                                                    "active"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    new SpriteAnimation( ) {
+                                        Name = "idle_none",
+                                        CanRepeat = true,
+                                        Frames = new SpriteAnimationFrame[ ] {
+                                            new SpriteAnimationFrame( ) {
+                                                Time = MAX_TIME,
+                                                Bones= new string[ ] {
+                                                    "idle",
+                                                    "none"
                                                 }
                                             }
                                         }
@@ -783,19 +810,22 @@ namespace mapKnight.Extended {
                                             new SpriteAnimationFrame( ) {
                                                 Time = 200,
                                                 Bones = new string[ ] {
-                                                    "talk"
+                                                    "talk",
+                                                    "none"
                                                 }
                                             },
                                             new SpriteAnimationFrame( ) {
                                                 Time = 200,
                                                 Bones = new string[ ] {
-                                                    "idle"
+                                                    "idle",
+                                                    "none"
                                                 }
                                             },
                                             new SpriteAnimationFrame( ) {
                                                 Time = 200,
                                                 Bones = new string[ ] {
-                                                    "talk"
+                                                    "talk",
+                                                    "none"
                                                 }
                                             }
                                         }
@@ -807,19 +837,22 @@ namespace mapKnight.Extended {
                                             new SpriteAnimationFrame( ) {
                                                 Time = 200,
                                                 Bones = new string[ ] {
-                                                    "deny1"
+                                                    "deny1",
+                                                    "none"
                                                 }
                                             },
                                             new SpriteAnimationFrame( ) {
                                                 Time = 200,
                                                 Bones = new string[ ] {
-                                                    "deny2"
+                                                    "deny2",
+                                                    "none"
                                                 }
                                             },
                                             new SpriteAnimationFrame( ) {
                                                 Time = 200,
                                                 Bones = new string[ ] {
-                                                    "deny1"
+                                                    "deny1",
+                                                    "none"
                                                 }
                                             }
                                         }

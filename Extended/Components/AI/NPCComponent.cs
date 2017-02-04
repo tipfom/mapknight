@@ -7,7 +7,7 @@ namespace mapKnight.Extended.Components.AI {
             get {
                 if (!_Available) {
                     Owner.SetComponentInfo(ComponentData.SpriteAnimation, "deny", true);
-                    Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle", false);
+                    Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle_none", false);
                 }
                 return _Available;
             }
@@ -22,8 +22,9 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Domain == EntityDomain.Player) {
-                Owner.SetComponentInfo(ComponentData.Color, Color.Red);
+            if (collidingEntity.Domain == EntityDomain.Player && _Available) {
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle_active", true);
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle_inactive", false);
             }
         }
 
@@ -31,12 +32,12 @@ namespace mapKnight.Extended.Components.AI {
             currentIndex++;
             if (currentIndex == messages.Length) {
                 currentIndex = -1;
-                _Available = false;
-                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle", true);
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle_none", true);
                 return null;
             } else {
+                _Available = false;
                 Owner.SetComponentInfo(ComponentData.SpriteAnimation, "talk", true);
-                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle", false);
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "idle_none", false);
                 return messages[currentIndex];
             }
         }
