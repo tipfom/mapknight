@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
@@ -26,7 +24,7 @@ namespace mapKnight.Extended.Components.Player {
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private AnimationState animationState = AnimationState.None;
-        private Timer attackTimer = new Timer(580);
+        private Timer attackTimer = new Timer(280);
 
         public PlayerComponent (Entity owner, IWeapon weapon, float health) : base(owner) {
             owner.Domain = EntityDomain.Player;

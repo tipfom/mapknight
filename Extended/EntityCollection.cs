@@ -1584,7 +1584,7 @@ namespace mapKnight.Extended {
                                         CanRepeat = false,
                                         Frames = new VertexAnimationFrame[ ] {
                                             new VertexAnimationFrame( ) {
-                                                Time = 300,
+                                                Time = 180,
                                                 State = new VertexBone[ ] {
                                                     new VertexBone( ) {
                                                         Position = new Vector2(0.1521585f, -0.4063475f),
@@ -1627,7 +1627,7 @@ namespace mapKnight.Extended {
                                                 }
                                             },
                                             new VertexAnimationFrame( ) {
-                                                Time = 130,
+                                                Time = 100,
                                                 State = new VertexBone[ ] {
                                                     new VertexBone( ) {
                                                         Position = new Vector2(0.1970704f, -0.325648f),
@@ -1675,7 +1675,7 @@ namespace mapKnight.Extended {
                                                 }
                                             },
                                             new VertexAnimationFrame( ) {
-                                                Time = 250,
+                                                Time = 170,
                                                 State = new VertexBone[ ] {
                                                     new VertexBone( ) {
                                                         Position = new Vector2(0.245788f, -0.4070656f),
