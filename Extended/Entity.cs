@@ -182,14 +182,15 @@ namespace mapKnight.Extended {
                 Components = new ComponentList( );
             }
 
-            public Entity Create (Vector2 spawnLocation, IEntityWorld world) {
+            public Entity Create (Vector2 spawnLocation, IEntityWorld world, bool liftPosition = true) {
                 if (Species == -1 || Components.HasChanged) {
                     Species = ++currentSpecies;
                     entityNames.Add(Species, Name);
                     Components.ResolveComponentDependencies( );
                     Components.Sort( );
                 }
-                return new Entity(Components, new Transform(spawnLocation + new Vector2(0, Transform.HalfSize.Y), Transform.Size), world, Species);
+                if (liftPosition) spawnLocation += new Vector2(0, Transform.HalfSize.Y);
+                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Species);
             }
         }
     }
