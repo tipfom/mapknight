@@ -79,8 +79,8 @@ namespace mapKnight.Extended.Components.AI {
                     Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", true, (AnimationComponent.AnimationCallback)AnimationCallbackWalk);
                 } else {
                     Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true, (AnimationComponent.AnimationCallback)AnimationCallbackIdle);
+                    walkpossibility *= 0.8f;
                 }
-                walkpossibility *= 0.8f;
             }
         }
 
