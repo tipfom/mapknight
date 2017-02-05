@@ -74,29 +74,28 @@ namespace mapKnight.Extended.Components.AI {
 
             switch (CurrentMoveDir) {
                 case Direction.Up:
-                    Append(slimeConfig.Create(groundVec + new Vector2(0, slimeConfig.Transform.HalfSize.Y), Owner.World));
-                    Turn(slimeConfig.Create(groundVec + new Vector2(0, -slimeConfig.Transform.HalfSize.Y), Owner.World));
+                    Append(slimeConfig.Create(groundVec + new Vector2(0, slimeConfig.Transform.HalfSize.Y), Owner.World, false));
+                    slimeConfig.Create(groundVec + new Vector2(0, -slimeConfig.Transform.HalfSize.Y), Owner.World, false).GetComponent<SlimeComponent>().Turn();
                     break;
                 case Direction.Down:
-                    Turn(slimeConfig.Create(groundVec + new Vector2(0, slimeConfig.Transform.HalfSize.Y), Owner.World));
-                    Append(slimeConfig.Create(groundVec + new Vector2(0, -slimeConfig.Transform.HalfSize.Y), Owner.World));
+                    slimeConfig.Create(groundVec + new Vector2(0, slimeConfig.Transform.HalfSize.Y), Owner.World, false).GetComponent<SlimeComponent>().Turn();
+                    Append(slimeConfig.Create(groundVec + new Vector2(0, -slimeConfig.Transform.HalfSize.Y), Owner.World, false));
                     break;
                 case Direction.Left:
-                    Append(slimeConfig.Create(groundVec + new Vector2(-Owner.Transform.HalfSize.X, 0), Owner.World));
-                    Turn(slimeConfig.Create(groundVec + new Vector2(Owner.Transform.HalfSize.X, 0), Owner.World));
+                    Append(slimeConfig.Create(groundVec + new Vector2(-Owner.Transform.HalfSize.X, 0), Owner.World, false));
+                    slimeConfig.Create(groundVec + new Vector2(Owner.Transform.HalfSize.X, 0), Owner.World, false).GetComponent<SlimeComponent>().Turn();
                     break;
                 case Direction.Right:
-                    Turn(slimeConfig.Create(groundVec + new Vector2(-Owner.Transform.HalfSize.X, 0), Owner.World));
-                    Append(slimeConfig.Create(groundVec + new Vector2(Owner.Transform.HalfSize.X, 0), Owner.World));
+                    slimeConfig.Create(groundVec + new Vector2(-Owner.Transform.HalfSize.X, 0), Owner.World, false).GetComponent<SlimeComponent>().Turn();
+                    Append(slimeConfig.Create(groundVec + new Vector2(Owner.Transform.HalfSize.X, 0), Owner.World, false));
                     break;
             }
         }
 
-        private void Turn (Entity e) {
-            SlimeComponent slimeComponent = e.GetComponent<SlimeComponent>( );
-            slimeComponent.NextMoveDir = 1 - CurrentMoveDir;
-            slimeComponent.NextWallDir = CurrentWallDir;
-            slimeComponent.FindWaypoint( );
+        public void Turn () {
+            NextMoveDir = 1 - CurrentMoveDir;
+            NextWallDir = CurrentWallDir;
+            FindWaypoint( );
         }
 
         private void Append (Entity e) {
@@ -109,7 +108,7 @@ namespace mapKnight.Extended.Components.AI {
         public override void Update (DeltaTime dt) {
             if (Environment.TickCount > nextRageStage) {
                 if (isEscaping) {
-                    Turn(Owner);
+                    Turn();
                     nextRageStage += 5 * rageTime / 3;
                     isEscaping = false;
                 } else {

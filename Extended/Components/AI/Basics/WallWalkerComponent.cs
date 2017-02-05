@@ -76,7 +76,9 @@ namespace mapKnight.Extended.Components.AI.Basics {
                     targetLoc = Owner.Transform.HalfSize.X;
                     int ywalkingon = CurrentWallDir == Direction.Down ? Mathi.Floor(Owner.Transform.BL.Y) - 1 : Mathi.Floor(Owner.Transform.TR.Y);
                     int ywalkingagainst = CurrentWallDir == Direction.Down ? ywalkingon + 1 : ywalkingon - 1;
-                    for (int x = Mathi.Floor(Owner.Transform.BL.X) - 1; x > -1; x--) {
+                    int xstart = Mathi.Floor(Owner.Transform.BL.X) - 1;
+                    if (!Owner.World.HasCollider(xstart, ywalkingon)) xstart++;
+                    for (int x = xstart; x > -1; x--) {
                         if (Owner.World.HasCollider(x, ywalkingagainst)) {
                             targetLoc = x + 1 + Owner.Transform.HalfSize.X;
                             NextMoveDir = 1 - CurrentWallDir;
@@ -95,7 +97,9 @@ namespace mapKnight.Extended.Components.AI.Basics {
                     targetLoc = Owner.World.Size.Width - Owner.Transform.HalfSize.X;
                     ywalkingon = CurrentWallDir == Direction.Down ? Mathi.Floor(Owner.Transform.BL.Y) - 1 : Mathi.Floor(Owner.Transform.TR.Y);
                     ywalkingagainst = CurrentWallDir == Direction.Down ? ywalkingon + 1 : ywalkingon - 1;
-                    for (int x = Mathi.Floor(Owner.Transform.TR.X); x < Owner.World.Size.Width; x++) {
+                    xstart = Mathi.Floor(Owner.Transform.TR.X);
+                    if (!Owner.World.HasCollider(xstart, ywalkingon)) xstart--;
+                    for (int x = xstart; x < Owner.World.Size.Width; x++) {
                         if (Owner.World.HasCollider(x, ywalkingagainst)) {
                             targetLoc = x - Owner.Transform.HalfSize.X;
                             NextMoveDir = 1 - CurrentWallDir;
@@ -114,7 +118,9 @@ namespace mapKnight.Extended.Components.AI.Basics {
                     targetLoc = Owner.World.Size.Height - Owner.Transform.HalfSize.Y;
                     int xwalkingon = CurrentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X) - 1 : Mathi.Floor(Owner.Transform.TR.X);
                     int xwalkingagainst = CurrentWallDir == Direction.Left ? xwalkingon + 1 : xwalkingon - 1;
-                    for (int y = Mathi.Floor(Owner.Transform.TR.Y); y < Owner.World.Size.Height; y++) {
+                    int ystart = Mathi.Floor(Owner.Transform.TR.Y);
+                    if (!Owner.World.HasCollider(xwalkingon, ystart)) ystart--;
+                    for (int y = ystart; y < Owner.World.Size.Height; y++) {
                         if (Owner.World.HasCollider(xwalkingagainst, y)) {
                             targetLoc = y - Owner.Transform.HalfSize.Y;
                             NextMoveDir = 1 - CurrentWallDir;
@@ -133,7 +139,9 @@ namespace mapKnight.Extended.Components.AI.Basics {
                     targetLoc = Owner.Transform.HalfSize.Y;
                     xwalkingon = CurrentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X) - 1 : Mathi.Floor(Owner.Transform.TR.X);
                     xwalkingagainst = CurrentWallDir == Direction.Left ? xwalkingon + 1 : xwalkingon - 1;
-                    for (int y = Mathi.Floor(Owner.Transform.BL.Y) - 1; y > -1; y--) {
+                    ystart = Mathi.Floor(Owner.Transform.BL.Y) - 1;
+                    if (!Owner.World.HasCollider(xwalkingon, ystart)) ystart++;
+                    for (int y = ystart; y > -1; y--) {
                         if (Owner.World.HasCollider(xwalkingagainst, y)) {
                             targetLoc = y + 1 + Owner.Transform.HalfSize.Y;
                             NextMoveDir = 1 - CurrentWallDir;
