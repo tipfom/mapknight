@@ -512,7 +512,7 @@ namespace mapKnight.Extended {
                                         CanRepeat = true,
                                         Frames = new VertexAnimationFrame[ ] {
                                             new VertexAnimationFrame( ) {
-                                                Time = MAX_TIME,
+                                                Time = 444,
                                                 State = new VertexBone[ ] {
                                                     new VertexBone(){
                                                         Texture = "shell",
