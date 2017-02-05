@@ -7,20 +7,23 @@ using System.Collections.Generic;
 namespace mapKnight.Extended.Graphics.UI {
     public class UIDialog : UIItem {
         public event Action DialogFinished;
-        UILabel currentPopup;
+        UILabel currentPopupLabel;
+        UILabel dotsLabel;
         NPCComponent npc;
 
         public UIDialog (Screen owner, NPCComponent npc) : base(owner, new UIHorizontalCenterMargin(0f), new UIBottomMargin(0.1f), new Vector2(Window.Ratio * 1.5f, 0.7f), UIDepths.MIDDLE){
             this.npc = npc;
-            currentPopup = new UILabel(owner, new UILeftMargin(0.3f * Window.Ratio), new UITopMargin(1.3f), UIDepths.FOREGROUND, 0.08f, npc.NextMessage( ), UITextAlignment.Left);
+            currentPopupLabel = new UILabel(owner, new UILeftMargin(0.3f * Window.Ratio), new UITopMargin(1.3f), UIDepths.FOREGROUND, 0.08f, npc.NextMessage( ), UITextAlignment.Left);
+            dotsLabel = new UILabel(owner, new UIHorizontalCenterMargin(0.68f * Window.Ratio), new UIBottomMargin(0.15f),UIDepths.FOREGROUND, 0.1f, "...", UITextAlignment.Center);
 
             void HandleClick ( )
             {
                 string nextMessage = npc.NextMessage( );
                 if (nextMessage != null) {
-                    currentPopup.Text = nextMessage;
+                    currentPopupLabel.Text = nextMessage;
                 } else {
-                    currentPopup.Dispose( );
+                    currentPopupLabel.Dispose( );
+                    dotsLabel.Dispose( );
                     Dispose( );
                     DialogFinished?.Invoke( );
                 }
