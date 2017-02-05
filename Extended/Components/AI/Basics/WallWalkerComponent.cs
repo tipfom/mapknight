@@ -116,7 +116,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
 
                 case Direction.Up:
                     targetLoc = Owner.World.Size.Height - Owner.Transform.HalfSize.Y;
-                    int xwalkingon = CurrentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X) - 1 : Mathi.Floor(Owner.Transform.TR.X);
+                    int xwalkingon = CurrentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X + 0.00001f) - 1 : Mathi.Floor(Owner.Transform.TR.X);
                     int xwalkingagainst = CurrentWallDir == Direction.Left ? xwalkingon + 1 : xwalkingon - 1;
                     int ystart = Mathi.Floor(Owner.Transform.TR.Y);
                     if (!Owner.World.HasCollider(xwalkingon, ystart)) ystart--;
