@@ -30,6 +30,9 @@ namespace mapKnight.Extended.Graphics.Animation {
                 Verticies[i] = new float[8];
             }
             Textures = new string[Frames[0].State.Length];
+            for(int i = 0;  i < Textures.Length; i++) {
+                Textures[i] = Frames[0].State[i].Texture;
+            }
         }
 
         public void Update (float dt, Transform ownerTransform, float vsize, float[ ][ ] verticies) {

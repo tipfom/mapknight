@@ -134,6 +134,7 @@
     <AndroidAsset Include="Assets\textures\slime.json" />
     <AndroidAsset Include="Assets\entities\npc.json" />
     <AndroidAsset Include="Assets\textures\npc\lenny.json" />
+    <AndroidAsset Include="Assets\textures\button.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -259,6 +260,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\npc\lenny.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\button.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

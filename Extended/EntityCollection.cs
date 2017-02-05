@@ -195,7 +195,7 @@ namespace mapKnight.Extended {
                     return _Turret;
                 }
             }
-            
+
             private static Entity.Configuration _Plugger;
             public static Entity.Configuration Plugger {
                 get {
@@ -927,26 +927,29 @@ namespace mapKnight.Extended {
                 }
             }
 
+            private static Entity.Configuration _MoonballTriggerButton;
             private static Entity.Configuration _Moonball;
             public static Entity.Configuration Moonball {
                 get {
-                    if(_Moonball == null) {
+                    if (_Moonball == null) {
                         _Moonball = new Entity.Configuration( );
                         _Moonball.Name = "Moonball";
                         _Moonball.Transform = new Transform(Vector2.Zero, new Vector2(2, 2));
+                        _Moonball.Components = new ComponentList( );
                         _Moonball.Components.Add(new AnimationComponent.Configuration( ) {
-                             Scales = new float[ ] {
-                                 0.04f
+                            Scales = new float[ ] {
+                                 0.02f
                              },
-                             Animations = new VertexAnimation[ ] {
+                            Animations = new VertexAnimation[ ] {
                                  new VertexAnimation( ) {
                                      Name = "drot",
-                                     CanRepeat = true, 
+                                     CanRepeat = true,
                                      Frames = new VertexAnimationFrame[ ] {
                                         new VertexAnimationFrame( ) {
                                             Time = 3000,
                                             State = new VertexBone[ ] {
                                                 new VertexBone( ) {
+                                                    Position = Vector2.Zero,
                                                     Texture = "body",
                                                     Rotation = 360
                                                 }
@@ -956,6 +959,7 @@ namespace mapKnight.Extended {
                                             Time = 1,
                                             State = new VertexBone[ ] {
                                                 new VertexBone( ) {
+                                                    Position = Vector2.Zero,
                                                     Texture = "body",
                                                     Rotation = 0
                                                 }
@@ -965,8 +969,48 @@ namespace mapKnight.Extended {
                                  }
                              }
                         });
+                        _Moonball.Components.Add(new MoonballComponent.Configuration( ) {
+                            BoostVelocity = 2.5f
+                        });
+
+                        _MoonballTriggerButton = new Entity.Configuration( );
+                        _MoonballTriggerButton.Name = "Moonball Trigger";
+                        _MoonballTriggerButton.Transform = new Transform(Vector2.Zero, new Vector2(1, 0.538461538f));
+                        _MoonballTriggerButton.Components = new ComponentList( );
+                        _MoonballTriggerButton.Components.Add(new SpriteComponent.Configuration( ) {
+                            Texture = "button",
+                            Animations = new SpriteAnimation[ ] {
+                                new SpriteAnimation( ) {
+                                    Name = "up",
+                                    CanRepeat = true,
+                                    Frames = new SpriteAnimationFrame[ ] {
+                                        new SpriteAnimationFrame( ) {
+                                            Time = MAX_TIME,
+                                            Bones = new string[ ] { "up" }
+                                        }
+                                    }
+                                },
+                                new SpriteAnimation( ) {
+                                    Name = "down",
+                                    CanRepeat = true,
+                                    Frames = new SpriteAnimationFrame[ ] {
+                                        new SpriteAnimationFrame( ) {
+                                            Time = MAX_TIME,
+                                            Bones = new string[ ] { "down" }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        _MoonballTriggerButton.Components.Add(new ButtonComponent.Configuration( ) {
+                            OnTrigger = (entity) => {
+                                _Moonball.Create(entity.Transform.Center + new Vector2(0, 0f), entity.World);
+                            }
+                        });
+                        _MoonballTriggerButton.Components.Add(new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } });
                     }
-                    return _Moonball;
+
+                    return _MoonballTriggerButton;
                 }
             }
 
