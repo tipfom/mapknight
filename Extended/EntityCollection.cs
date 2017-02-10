@@ -43,12 +43,12 @@ namespace mapKnight.Extended {
                         if (_Private1 == null) {
                             _Private1 = new Entity.Configuration( );
                             _Private1.Name = "Private1";
-                            _Private1.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
+                            _Private1.Transform = new Transform(Vector2.Zero, new Vector2(0.825f, 1.5f));
                             _Private1.Components = new ComponentList {
                             new MotionComponent.Configuration( ),
                             new PrivateComponent.Configuration( ),
                             new TextureComponent.Configuration( ) { Texture = "guardian/private1" },
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } },
+                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0.1666666f, 0f, 2.18181818f, 1f) } },
                             new SpeedComponent.Configuration( ) { X = 1.2f },
                             new HealthComponent.Configuration( ) { Value = 1 }
                         };
