@@ -25,7 +25,7 @@ namespace mapKnight.Extended {
                             _Tent.Transform = new Transform(Vector2.Zero, new Vector2(3.405405405f, 2f));
                             _Tent.Components = new ComponentList {
                             new TentComponent.Configuration( ) {
-                                Officer = Officer1, PatrolRange = 12f, PrivateCount = 4, TimeBetweenPrivates = 3000,
+                                Officer = Officer1, PatrolRange = 14f, PrivateCount = 4, TimeBetweenPrivates = 3000,
                                 Privates = new Entity.Configuration[ ] { Private1, Private2, Private3 }
                             },
                             new TextureComponent.Configuration( ) { Texture = "guardian/tent" },
