@@ -14,7 +14,7 @@ namespace mapKnight.Extended.Graphics.UI {
         const int SWIPE_MIN_DIST = 100;
 
         // CURRENTLY ONLY WITH SUPPORT FOR ANDROID
-        private int currentTouchID;
+        private int currentTouchID = -1;
         private IList<GesturePoint> trackedStrokeBuffer = new List<GesturePoint>(100);
         private GestureStore gestureStore;
 
