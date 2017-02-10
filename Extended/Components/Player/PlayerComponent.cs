@@ -138,6 +138,8 @@ namespace mapKnight.Extended.Components.Player {
                     Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", true);
                     animationState = AnimationState.Fall;
                 }
+            } else if(motionComponent.IsOnGround || motionComponent.IsOnPlatform){
+                motionComponent.AimedVelocity.Y = 0;
             }
             nearbyNPC = null;
         }
