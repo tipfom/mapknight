@@ -16,28 +16,30 @@ namespace mapKnight.Extended.Graphics {
         private ClientBuffer textureBuffer { get { return (ClientBuffer)buffer.TextureBuffer; } }
         private ClientBuffer colorBuffer { get { return (ClientBuffer)buffer.ColorBuffer; } }
 
-        public EntityRenderer( ) {
+        public EntityRenderer ( ) {
             buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT, PrimitiveType.Quad), new ClientBuffer(4, MAX_QUAD_COUNT, PrimitiveType.Quad), new ClientBuffer(2, MAX_QUAD_COUNT, PrimitiveType.Quad));
         }
 
-        public void AddTexture(int species, SpriteBatch entityTexture) {
-            if (!entityTextures.ContainsKey(species)) {
-                entityTextures.Add(species, entityTexture);
-                if (!frameVertexData.ContainsKey(entityTexture))
-                    frameVertexData.Add(entityTexture, new Queue<VertexData>( ));
-            }
+        public void AddTexture (int species, SpriteBatch entityTexture) {
+            entityTextures.Add(species, entityTexture);
+            if (!frameVertexData.ContainsKey(entityTexture))
+                frameVertexData.Add(entityTexture, new Queue<VertexData>( ));
         }
 
-        public SpriteBatch GetTexture(int species) {
+        public SpriteBatch GetTexture (int species) {
             return entityTextures[species];
         }
 
-        public void QueueVertexData(int species, List<VertexData> vertexData) {
+        public bool HasTexture (int species) {
+            return entityTextures.ContainsKey(species);
+        }
+
+        public void QueueVertexData (int species, List<VertexData> vertexData) {
             frameVertexData[entityTextures[species]].Enqueue(vertexData);
         }
 
-        public void Draw( ) {
-            foreach(SpriteBatch sprite in frameVertexData.Keys) { 
+        public void Draw ( ) {
+            foreach (SpriteBatch sprite in frameVertexData.Keys) {
                 int currentIndex = 0;
                 while (frameVertexData[sprite].Count > 0) {
                     VertexData vertexData = frameVertexData[sprite].Dequeue( );

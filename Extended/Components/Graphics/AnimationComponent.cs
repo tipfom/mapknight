@@ -81,21 +81,23 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void Load ( ) {
-            List<string> sprites = new List<string>(4);
-            Vector2[ ] offsets = new Vector2[scales.Length];
-            while (Owner.HasComponentInfo(ComponentData.BoneTexture))
-                sprites.Add((string)Owner.GetComponentInfo(ComponentData.BoneTexture)[0]);
-            while (Owner.HasComponentInfo(ComponentData.BoneOffset)) {
-                Tuple<string, Vector2> data = (Tuple<string, Vector2>)Owner.GetComponentInfo(ComponentData.BoneOffset)[0];
-                for (int i = 0; i < animations[0].Frames[0].State.Length; i++) {
-                    if (animations[0].Frames[0].State[i].Texture == data.Item1) {
-                        offsets[i] = data.Item2;
+            if (!Owner.World.Renderer.HasTexture(Owner.Species)) {
+                List<string> sprites = new List<string>(4);
+                Vector2[ ] offsets = new Vector2[scales.Length];
+                while (Owner.HasComponentInfo(ComponentData.BoneTexture))
+                    sprites.Add((string)Owner.GetComponentInfo(ComponentData.BoneTexture)[0]);
+                while (Owner.HasComponentInfo(ComponentData.BoneOffset)) {
+                    Tuple<string, Vector2> data = (Tuple<string, Vector2>)Owner.GetComponentInfo(ComponentData.BoneOffset)[0];
+                    for (int i = 0; i < animations[0].Frames[0].State.Length; i++) {
+                        if (animations[0].Frames[0].State[i].Texture == data.Item1) {
+                            offsets[i] = data.Item2;
+                        }
                     }
                 }
-            }
 
-            Compiler.Compile(animations, scales, offsets, sprites, Owner, out boneVerticies, out sprite);
-            Owner.World.Renderer.AddTexture(Owner.Species, sprite);
+                Compiler.Compile(animations, scales, offsets, sprites, Owner, out boneVerticies, out sprite);
+                Owner.World.Renderer.AddTexture(Owner.Species, sprite);
+            }
             SetAnimation(0);
         }
 

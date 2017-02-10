@@ -6,5 +6,6 @@ namespace mapKnight.Extended {
         void QueueVertexData (int entity, List<VertexData> vertexData);
         void AddTexture (int entity, SpriteBatch entityTexture);
         SpriteBatch GetTexture (int entity);
+        bool HasTexture (int entity);
     }
 }

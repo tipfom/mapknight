@@ -11,7 +11,7 @@ namespace mapKnight.Extended.Components.Graphics {
     [UpdateBefore(typeof(DrawComponent))]
     public class SpriteComponent : Component {
         private SpriteAnimation[ ] animations;
-        private string[] cache;
+        private string[ ] cache;
 
         public delegate void AnimationCallback (bool success);
 
@@ -24,7 +24,8 @@ namespace mapKnight.Extended.Components.Graphics {
             this.animations = animations;
             this.currentAnimation = animations[0];
             this.cache = new string[currentAnimation.Frames[0].Bones.Length];
-            Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
+            if (!Owner.World.Renderer.HasTexture(Owner.Species))
+                Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
         }
 
         public override void Update (DeltaTime dt) {
