@@ -13,8 +13,10 @@ namespace mapKnight.Extended.Components.AI {
 
         public MoonballComponent (Entity owner, float boostVelocity) : base(owner) {
             this.boostVelocity = boostVelocity;
-            Owner.SetComponentInfo(ComponentData.BoneTexture, "moonball");
-            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("body", new Vector2(25, 25)));
+            if (!Owner.World.Renderer.HasTexture(Owner.Species)) {
+                Owner.SetComponentInfo(ComponentData.BoneTexture, "moonball");
+                Owner.SetComponentInfo(ComponentData.BoneOffset, "body", new Vector2(25, 25));
+            }
         }
 
         public override void Load ( ) {

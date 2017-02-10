@@ -87,10 +87,10 @@ namespace mapKnight.Extended.Components.Graphics {
                 while (Owner.HasComponentInfo(ComponentData.BoneTexture))
                     sprites.Add((string)Owner.GetComponentInfo(ComponentData.BoneTexture)[0]);
                 while (Owner.HasComponentInfo(ComponentData.BoneOffset)) {
-                    Tuple<string, Vector2> data = (Tuple<string, Vector2>)Owner.GetComponentInfo(ComponentData.BoneOffset)[0];
+                    object[ ] data = Owner.GetComponentInfo(ComponentData.BoneOffset);
                     for (int i = 0; i < animations[0].Frames[0].State.Length; i++) {
-                        if (animations[0].Frames[0].State[i].Texture == data.Item1) {
-                            offsets[i] = data.Item2;
+                        if (animations[0].Frames[0].State[i].Texture == (string)data[0]) {
+                            offsets[i] = (Vector2)data[1];
                         }
                     }
                 }

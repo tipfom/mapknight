@@ -28,9 +28,11 @@ namespace mapKnight.Extended.Components.AI {
             frenzySpeed = frenzyspeed;
             attackSpeed = attackspeed;
 
-            Owner.SetComponentInfo(ComponentData.BoneTexture, "shell");
-            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("shell", new Vector2(9.5f, 12.5f)));
-            Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true, (AnimationComponent.AnimationCallback)AnimationCallbackIdle);
+            if (!Owner.World.Renderer.HasTexture(Owner.Species)) {
+                Owner.SetComponentInfo(ComponentData.BoneTexture, "shell");
+                Owner.SetComponentInfo(ComponentData.BoneOffset, "shell", new Vector2(9.5f, 12.5f));
+                Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true, (AnimationComponent.AnimationCallback)AnimationCallbackIdle);
+            }
         }
 
         public override void Prepare ( ) {
