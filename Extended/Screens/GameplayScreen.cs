@@ -57,7 +57,7 @@ namespace mapKnight.Extended.Screens {
             map.Focus(testEntity.ID);
 
             healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new Vector2(2 * Window.Ratio, 0.05f), UIDepths.MIDDLE);
-            debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
+            debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.075f), 0.05f, "", UITextAlignment.Right);
             SetupControls( );
             Window.Changed += ( ) => {
                 SetupControls( );
