@@ -106,7 +106,6 @@
     <AndroidAsset Include="Assets\textures\landmine.json" />
     <AndroidAsset Include="Assets\textures\turret.json" />
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
-    <AndroidAsset Include="Assets\textures\meatball.json" />
     <AndroidAsset Include="Assets\textures\hasto.json" />
     <AndroidAsset Include="Assets\entities\player.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
@@ -135,6 +134,7 @@
     <AndroidAsset Include="Assets\entities\npc.json" />
     <AndroidAsset Include="Assets\textures\npc\lenny.json" />
     <AndroidAsset Include="Assets\textures\button.json" />
+    <AndroidAsset Include="Assets\textures\moonball.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -189,9 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\entities\meatball.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\meatball.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\hasto.png" />
@@ -263,6 +260,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\moonball.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
