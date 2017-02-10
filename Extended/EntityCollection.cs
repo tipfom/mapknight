@@ -417,7 +417,7 @@ namespace mapKnight.Extended {
                     if (_Shark == null) {
                         _Shark = new Entity.Configuration( );
                         _Shark.Name = "Shark";
-                        _Shark.Transform = new Transform(Vector2.Zero, new Vector2(0.97972f, 1.25f));
+                        _Shark.Transform = new Transform(Vector2.Zero, new Vector2(0.540540f, 1.25f));
                         _Shark.Components = new ComponentList {
                             new MotionComponent.Configuration( ) { GravityInfluence = 0.9f },
                             new SpriteComponent.Configuration( ) {
@@ -483,7 +483,7 @@ namespace mapKnight.Extended {
                                     }
                                 }
                             },
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } },
+                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1.8125f, 1) } },
                             new SharkComponent.Configuration( ) { EscapeDistance = 10 },
                             new SpeedComponent.Configuration( ) { X = 5, Y = 20 },
                             new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(16, 10) }
