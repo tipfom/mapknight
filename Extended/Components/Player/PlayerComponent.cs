@@ -114,31 +114,33 @@ namespace mapKnight.Extended.Components.Player {
                 motionComponent.AimedVelocity.X = 0;
             }
 
-            if (animationState != AnimationState.Jump && animationState != AnimationState.Attack) {
-                if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
-                    if (Action.HasFlag(ActionMask.Jump)) {
-                        Action &= ~ActionMask.Jump;
-                        animationState = AnimationState.Jump;
-                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "jump", true, (AnimationComponent.AnimationCallback)AnimationCallbackFinishJumping);
-                        motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
-                        return;
-                    } else {
-                        motionComponent.AimedVelocity.Y = 0;
-                    }
-                    if (motionComponent.AimedVelocity.X != 0) {
-                        if (animationState != AnimationState.Walk) {
-                            Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", true);
-                            animationState = AnimationState.Walk;
+            if (animationState != AnimationState.Attack) {
+                if(animationState != AnimationState.Jump) {
+                    if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
+                        if (Action.HasFlag(ActionMask.Jump)) {
+                            Action &= ~ActionMask.Jump;
+                            animationState = AnimationState.Jump;
+                            Owner.SetComponentInfo(ComponentData.VertexAnimation, "jump", true, (AnimationComponent.AnimationCallback)AnimationCallbackFinishJumping);
+                            motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
+                            return;
+                        } else {
+                            motionComponent.AimedVelocity.Y = 0;
                         }
-                    } else {
-                        if (animationState != AnimationState.Idle) {
-                            Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
-                            animationState = AnimationState.Idle;
+                        if (motionComponent.AimedVelocity.X != 0) {
+                            if (animationState != AnimationState.Walk) {
+                                Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", true);
+                                animationState = AnimationState.Walk;
+                            }
+                        } else {
+                            if (animationState != AnimationState.Idle) {
+                                Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
+                                animationState = AnimationState.Idle;
+                            }
                         }
+                    } else if (animationState != AnimationState.Fall) {
+                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", true);
+                        animationState = AnimationState.Fall;
                     }
-                } else if (animationState != AnimationState.Fall) {
-                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "fall", true);
-                    animationState = AnimationState.Fall;
                 }
             } else if(motionComponent.IsOnGround || motionComponent.IsOnPlatform){
                 motionComponent.AimedVelocity.Y = 0;
