@@ -29,9 +29,9 @@ namespace mapKnight.Extended.Components.Movement {
         public Vector2 Velocity { get; private set; } = new Vector2( );
 
         public override void Collision (Entity collidingEntity) {
-            if (HasPlatformCollider && collidingEntity.Domain == EntityDomain.Platform && !IsOnPlatform) {
+            if (HasPlatformCollider && collidingEntity.Domain == EntityDomain.Platform && platformStandingOn == null) {
                 platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
-                if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y - 0.3 && Velocity.Y <= platformStandingOn.Velocity.Y) {
+                if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y + Math.Min(-0.1f, (Velocity.Y - Math.Abs(platformStandingOn.Velocity.Y)) * Manager.FrameTime.TotalSeconds) && Velocity.Y <= platformStandingOn.Velocity.Y) {
                     Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, collidingEntity.Transform.TR.Y + Owner.Transform.HalfSize.Y);
                     IsOnPlatform = true;
                 } else {
@@ -41,7 +41,7 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Update (DeltaTime dt) {
-            if(platformStandingOn == null)
+            if (platformStandingOn == null)
                 IsOnPlatform = false;
 
             if (IsOnPlatform)
