@@ -33,21 +33,6 @@ namespace mapKnight.Extended.Components.Player {
             Health = new HealthTracker(health);
 
             attackTimer.Elapsed += (s, e) => { if (animationState == AnimationState.Attack) Weapon.Attack( ); };
-
-            if (!Owner.World.Renderer.HasTexture(Owner.Species)) {
-                // hardcoded, im sorry god :(
-                Owner.SetComponentInfo(ComponentData.BoneTexture, "player");
-                Owner.SetComponentInfo(ComponentData.BoneTexture, "Sword(2)");
-
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "body", new Vector2(9, 5));
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "feet1", new Vector2(3, 2.5f));
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "feet2", new Vector2(3, 2.5f));
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "hand1", new Vector2(2, 2));
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "upper_arm1", new Vector2(2, 1.5f));
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "head", new Vector2(9, 9));
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "weapon", new Vector2(3, 25));
-                Owner.SetComponentInfo(ComponentData.BoneOffset, "sword", new Vector2(3, 25));
-            }
         }
 
         public override void Destroy ( ) {

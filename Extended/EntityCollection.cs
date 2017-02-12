@@ -713,6 +713,12 @@ namespace mapKnight.Extended {
                         _Shell.Components = new ComponentList {
                             new SpeedComponent.Configuration( ) { X = 1 },
                             new AnimationComponent.Configuration( ) {
+                                Textures = new string[ ] {
+                                    "shell"
+                                },
+                                Offsets = new Vector2[ ] {
+                                    new Vector2(9.5f, 12.5f)
+                                },
                                 Scales = new float[ ] {
                                     0.055555555555555555555555f
                                 },
@@ -970,6 +976,13 @@ namespace mapKnight.Extended {
                         _BlackHole.Components = new ComponentList( );
                         _BlackHole.Components.Add(new BlackHoleComponent.Configuration( ));
                         _BlackHole.Components.Add(new AnimationComponent.Configuration( ) {
+                            Textures = new string[ ] {
+                                "blackhole"
+                            },
+                            Offsets = new Vector2[ ] {
+                                new Vector2(12, 12),
+                                new Vector2(12, 12)
+                            },
                             Scales = new float[ ] {
                                 0.0416666666f,
                                 0.0416666666f
@@ -1148,6 +1161,12 @@ namespace mapKnight.Extended {
                         _CircularSaw.Transform = new Transform(Vector2.Zero, new Vector2(2f, 2f));
                         _CircularSaw.Components = new ComponentList {
                             new AnimationComponent.Configuration( ) {
+                                Textures = new string[ ] {
+                                    "saw"
+                                },
+                                Offsets = new Vector2[ ] {
+                                    new Vector2(12, 12)
+                                },
                                 Scales = new float[ ] {
                                     0.083333333333f
                                 },
@@ -1201,9 +1220,15 @@ namespace mapKnight.Extended {
                         _Moonball.Transform = new Transform(Vector2.Zero, new Vector2(2, 2));
                         _Moonball.Components = new ComponentList( );
                         _Moonball.Components.Add(new AnimationComponent.Configuration( ) {
+                            Textures = new string[ ] {
+                                "moonball"
+                            },
+                            Offsets = new Vector2[ ] {
+                                new Vector2(25, 25)
+                            },
                             Scales = new float[ ] {
                                  0.02f
-                             },
+                            },
                             Animations = new VertexAnimation[ ] {
                                  new VertexAnimation( ) {
                                      Name = "drot",
@@ -1387,6 +1412,21 @@ namespace mapKnight.Extended {
                             new PlayerComponent.Configuration( ) { Weapon = "Swords.WoodySword", Health = 10 },
                             new SpeedComponent.Configuration( ) { X = 3.5f, Y = 20 },
                             new AnimationComponent.Configuration( ) {
+                                Textures = new string[ ] {
+                                    "player",
+                                    "Sword(2)"
+                                },
+                                Offsets = new Vector2[ ] {
+                                    new Vector2(3, 2.5f),   // feet2
+                                    new Vector2(2, 2),      // hand1
+                                    new Vector2(3, 2.5f),   // feet1
+                                    new Vector2(2, 1.5f),   // upper_arm1
+                                    new Vector2(9, 5),      // body
+                                    new Vector2(9, 9),      // head
+                                    new Vector2(2, 1.5f),   // upper_arm1
+                                    new Vector2(3, 25),     // sword
+                                    new Vector2(2, 2)       // hand1
+                                },
                                 Scales = new float[ ] {
                                     0.0487060845f,
                                     0.0487060845f,

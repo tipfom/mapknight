@@ -32,7 +32,7 @@ namespace mapKnight.Extended {
         public virtual void Tick ( ) {
         }
 
-        public virtual void Load ( ) {
+        public virtual void Load (Configuration config) {
         }
 
         public override string ToString ( ) {

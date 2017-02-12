@@ -31,7 +31,8 @@ namespace mapKnight.Extended.Components.Graphics {
         private VertexAnimation currentAnimation { get { return animations[currentAnimationIndex]; } }
 
         public override void Update (DeltaTime dt) {
-            if (!Owner.IsOnScreen) return;
+            if (!Owner.IsOnScreen)
+                return;
 
             if (!currentAnimation.IsRunning) {
                 currentAnimationCallback?.Invoke(true);
@@ -71,7 +72,8 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void PostUpdate ( ) {
-            if (!Owner.IsOnScreen) return;
+            if (!Owner.IsOnScreen)
+                return;
             Owner.SetComponentInfo(ComponentData.Verticies, animations[currentAnimationIndex].Verticies);
             Owner.SetComponentInfo(ComponentData.Texture, animations[currentAnimationIndex].Textures);
         }
@@ -80,22 +82,10 @@ namespace mapKnight.Extended.Components.Graphics {
             currentAnimation.Reset( );
         }
 
-        public override void Load ( ) {
+        public override void Load (Component.Configuration rawConfig) {
             if (!Owner.World.Renderer.HasTexture(Owner.Species)) {
-                List<string> sprites = new List<string>(4);
-                Vector2[ ] offsets = new Vector2[scales.Length];
-                while (Owner.HasComponentInfo(ComponentData.BoneTexture))
-                    sprites.Add((string)Owner.GetComponentInfo(ComponentData.BoneTexture)[0]);
-                while (Owner.HasComponentInfo(ComponentData.BoneOffset)) {
-                    object[ ] data = Owner.GetComponentInfo(ComponentData.BoneOffset);
-                    for (int i = 0; i < animations[0].Frames[0].State.Length; i++) {
-                        if (animations[0].Frames[0].State[i].Texture == (string)data[0]) {
-                            offsets[i] = (Vector2)data[1];
-                        }
-                    }
-                }
-
-                Compiler.Compile(animations, scales, offsets, sprites, Owner, out boneVerticies, out sprite);
+                Configuration config = (Configuration)rawConfig;
+                Compiler.Compile(animations, scales, config.Offsets, config.Textures, Owner, out boneVerticies, out sprite);
                 Owner.World.Renderer.AddTexture(Owner.Species, sprite);
             }
             SetAnimation(0);
@@ -112,7 +102,8 @@ namespace mapKnight.Extended.Components.Graphics {
 
         private int FindAnimationIndex (string name) {
             for (int i = 0; i < animations.Length; i++) {
-                if (animations[i].Name == name) return i;
+                if (animations[i].Name == name)
+                    return i;
             }
             return -1;
         }
@@ -120,6 +111,8 @@ namespace mapKnight.Extended.Components.Graphics {
         public new class Configuration : Component.Configuration {
             public VertexAnimation[ ] Animations;
             public float[ ] Scales;
+            public string[ ] Textures;
+            public Vector2[ ] Offsets;
 
             public override Component Create (Entity owner) {
                 return new AnimationComponent(owner, Animations, Scales);

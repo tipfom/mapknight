@@ -15,8 +15,6 @@ namespace mapKnight.Extended.Components.AI {
             owner.Domain = EntityDomain.Obstacle;
 
             sawRadius = sawradius;
-
-            Owner.SetComponentInfo(ComponentData.BoneTexture, "saw");
         }
 
         public override void Collision (Entity collidingEntity) {

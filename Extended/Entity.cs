@@ -82,7 +82,7 @@ namespace mapKnight.Extended {
             }
 
             for(int i = 0; i < components.Count; i++) {
-                this.components[i].Load( );
+                this.components[i].Load(components[i]);
             }
 
             Entities.Add(this);
