@@ -46,7 +46,7 @@ namespace mapKnight.Extended {
                             _Private1.Transform = new Transform(Vector2.Zero, new Vector2(0.825f, 1.5f));
                             _Private1.Components = new ComponentList {
                                 new MotionComponent.Configuration( ),
-                                new PrivateComponent.Configuration( ),
+                                new PrivateComponent.Configuration( ) { AttackCooldown = 777, Damage = 0.4f },
                                 new SpriteComponent.Configuration( ) {
                                     Texture = "guardian/guardian" ,
                                     Animations = new SpriteAnimation[ ] {
@@ -148,7 +148,7 @@ namespace mapKnight.Extended {
                             _Private2.Transform = new Transform(Vector2.Zero, new Vector2(0.868421f, 1.5f));
                             _Private2.Components = new ComponentList {
                             new MotionComponent.Configuration( ),
-                            new PrivateComponent.Configuration( ),
+                            new PrivateComponent.Configuration( ) { AttackCooldown = 1000, Damage = 1f },
                             new SpriteComponent.Configuration( ) {
                                 Texture = "guardian/guardian",
                                 Animations = new SpriteAnimation[ ] {
@@ -199,13 +199,13 @@ namespace mapKnight.Extended {
                                         CanRepeat = false,
                                         Frames = new SpriteAnimationFrame[ ] {
                                             new SpriteAnimationFrame( ) {
-                                                Time = 50,
+                                                Time = 100,
                                                 Bones = new string[ ] {
                                                     "2idle"
                                                 }
                                             },
                                             new SpriteAnimationFrame( ) {
-                                                Time = 100,
+                                                Time = 200,
                                                 Bones = new string[ ] {
                                                     "2atk"
                                                 }
@@ -244,7 +244,7 @@ namespace mapKnight.Extended {
                             _Private3.Transform = new Transform(Vector2.Zero, new Vector2(0.868421f, 1.5f));
                             _Private3.Components = new ComponentList {
                             new MotionComponent.Configuration( ),
-                            new PrivateComponent.Configuration( ),
+                            new PrivateComponent.Configuration( ) { AttackCooldown = 200, Damage = 0.2f },
                             new SpriteComponent.Configuration( ) {
                                 Texture = "guardian/guardian" ,
                                 Animations = new SpriteAnimation[ ] {
