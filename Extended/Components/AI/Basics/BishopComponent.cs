@@ -55,6 +55,10 @@ namespace mapKnight.Extended.Components.AI.Basics {
             speedMult *= -1;
         }
 
+        protected void Walk(bool right) {
+            speedMult = right ? 1f : -1f;
+        }
+
         public new class Configuration : Component.Configuration {
             public bool IsScaredToFall;
 
