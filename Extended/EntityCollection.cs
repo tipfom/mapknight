@@ -959,6 +959,60 @@ namespace mapKnight.Extended {
                     return _Shell;
                 }
             }
+
+            private static Entity.Configuration _BlackHole;
+            public static Entity.Configuration BlackHole {
+                get {
+                    if (_BlackHole == null) {
+                        _BlackHole = new Entity.Configuration( );
+                        _BlackHole.Name = "Black Hole";
+                        _BlackHole.Transform = new Transform(Vector2.Zero, new Vector2(3.14159f, 3.14159f));
+                        _BlackHole.Components = new ComponentList( );
+                        _BlackHole.Components.Add(new BlackHoleComponent.Configuration( ));
+                        _BlackHole.Components.Add(new AnimationComponent.Configuration( ) {
+                            Scales = new float[ ] {
+                                0.0416666666f,
+                                0.0416666666f
+                            },
+                            Animations = new VertexAnimation[ ] {
+                                new VertexAnimation( ) {
+                                    Name = "drot",
+                                    CanRepeat = true,
+                                    Frames = new VertexAnimationFrame[ ] {
+                                        new VertexAnimationFrame( ) {
+                                            Time = 9000,
+                                            State = new VertexBone[ ] {
+                                                new VertexBone( ) {
+                                                    Texture = "o",
+                                                    Rotation = 0
+                                                },
+                                                new VertexBone( ) {
+                                                    Texture = "i",
+                                                    Rotation = 0
+                                                }
+                                            }
+                                        },
+                                        new VertexAnimationFrame( ) {
+                                            Time = 1,
+                                            State = new VertexBone[ ] {
+                                                new VertexBone( ) {
+                                                    Texture = "o",
+                                                    Rotation = -360
+                                                },
+                                                new VertexBone( ) {
+                                                    Texture = "i",
+                                                    Rotation = 360
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    return _BlackHole;
+                }
+            }
         }
 
         public static class NPCs {

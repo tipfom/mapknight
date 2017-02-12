@@ -51,6 +51,7 @@ namespace mapKnight.Extended.Screens {
             EntityCollection.Enemys.Sepling.Create(map.SpawnPoint + new Vector2(10, 1), map);
             EntityCollection.Enemys.Shark.Create(map.SpawnPoint + new Vector2(10, 1), map);
             EntityCollection.Obstacles.Moonball.Create(new Vector2(map.SpawnPoint.X, 7) + new Vector2(3, 0), map, true);
+            EntityCollection.Enemys.BlackHole.Create(map.SpawnPoint, map);
 
             testEntity = EntityCollection.Players.Diamond.Create(map.SpawnPoint, map);
             testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
