@@ -121,7 +121,7 @@ namespace mapKnight.Extended {
                                             CanRepeat = false,
                                             Frames = new SpriteAnimationFrame[ ] {
                                                 new SpriteAnimationFrame( ) {
-                                                    Time = 50,
+                                                    Time = 100,
                                                     Bones = new string[ ] {
                                                         "1def"
                                                     }
@@ -217,7 +217,7 @@ namespace mapKnight.Extended {
                                         CanRepeat = false,
                                         Frames = new SpriteAnimationFrame[ ] {
                                             new SpriteAnimationFrame( ) {
-                                                Time = 50,
+                                                Time = 100,
                                                 Bones = new string[ ] {
                                                     "2def"
                                                 }
