@@ -34,6 +34,7 @@ namespace mapKnight.Extended.Components.Movement {
                 if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y + Math.Min(-0.1f, (Velocity.Y - Math.Abs(platformStandingOn.Velocity.Y)) * Manager.FrameTime.TotalSeconds) && Velocity.Y <= platformStandingOn.Velocity.Y) {
                     Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, collidingEntity.Transform.TR.Y + Owner.Transform.HalfSize.Y);
                     IsOnPlatform = true;
+                    enforcedVelocity.X = platformStandingOn.Velocity.X;
                 } else {
                     platformStandingOn = null;
                 }
@@ -43,9 +44,6 @@ namespace mapKnight.Extended.Components.Movement {
         public override void Update (DeltaTime dt) {
             if (platformStandingOn == null)
                 IsOnPlatform = false;
-
-            if (IsOnPlatform)
-                enforcedVelocity.X = platformStandingOn.Velocity.X;
 
             while (Owner.HasComponentInfo(ComponentData.Velocity)) {
                 enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
