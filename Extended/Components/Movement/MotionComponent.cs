@@ -31,7 +31,7 @@ namespace mapKnight.Extended.Components.Movement {
         public override void Collision (Entity collidingEntity) {
             if (HasPlatformCollider && collidingEntity.Domain == EntityDomain.Platform && platformStandingOn == null) {
                 platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
-                if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y + Math.Min(-0.2f, (Velocity.Y - Math.Abs(platformStandingOn.Velocity.Y)) * Manager.FrameTime.TotalSeconds) && Velocity.Y -0.1f<= platformStandingOn.Velocity.Y) {
+                if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y + Math.Min(-0.2f, (Velocity.Y - Math.Abs(platformStandingOn.Velocity.Y)) * Manager.FrameTime.TotalSeconds - 0.05f) && Velocity.Y - 0.1f <= platformStandingOn.Velocity.Y) {
                     Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, collidingEntity.Transform.TR.Y + Owner.Transform.HalfSize.Y);
                     IsOnPlatform = true;
                     enforcedVelocity.X = platformStandingOn.Velocity.X;
