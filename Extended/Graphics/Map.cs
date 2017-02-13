@@ -11,7 +11,7 @@ using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
 
 namespace mapKnight.Extended.Graphics {
     public class Map : Core.Map, IEntityWorld {
-        const int DRAW_WIDTH = 18;
+        const int DRAW_WIDTH = 13;
 
         private BufferBatch mainBuffer, foregroundBuffer;
         private Texture2D texture;
