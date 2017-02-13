@@ -996,11 +996,11 @@ namespace mapKnight.Extended {
                                             Time = 9000,
                                             State = new VertexBone[ ] {
                                                 new VertexBone( ) {
-                                                    Texture = "o",
+                                                    Texture = "i",
                                                     Rotation = 0
                                                 },
                                                 new VertexBone( ) {
-                                                    Texture = "i",
+                                                    Texture = "o",
                                                     Rotation = 0
                                                 }
                                             }
@@ -1009,12 +1009,12 @@ namespace mapKnight.Extended {
                                             Time = 1,
                                             State = new VertexBone[ ] {
                                                 new VertexBone( ) {
-                                                    Texture = "o",
-                                                    Rotation = -360
-                                                },
-                                                new VertexBone( ) {
                                                     Texture = "i",
                                                     Rotation = 360
+                                                },
+                                                new VertexBone( ) {
+                                                    Texture = "o",
+                                                    Rotation = -360
                                                 }
                                             }
                                         }
