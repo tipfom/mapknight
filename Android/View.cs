@@ -1,6 +1,5 @@
 ﻿using System;
 using Android.Content;
-using Android.Opengl;
 using OpenTK;
 using OpenTK.Platform.Android;
 using mapKnight.Extended;
@@ -8,6 +7,8 @@ using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Android {
     public class View : AndroidGameView {
+        bool firstLoad = false;
+
         public View (Context context) : base(context) {
             OpenTK.Graphics.GraphicsContext.ShareContexts = true;
             ContextRenderingApi = OpenTK.Graphics.GLVersion.ES2;
@@ -21,7 +22,9 @@ namespace mapKnight.Android {
 
         protected override void OnLoad (EventArgs e) {
             base.OnLoad(e);
-            Manager.Initialize( );
+            if (!firstLoad)
+                Manager.Initialize( );
+            firstLoad = true;
             Run( );
         }
 
@@ -29,16 +32,10 @@ namespace mapKnight.Android {
             Manager.Update( );
             SwapBuffers( );
         }
-    }
-    /*
-    public class View : GLSurfaceView {
-        public View (Context context) : base(context) {
-            base.SetEGLConfigChooser(8, 8, 8, 8, 16, 0);
-            this.SetEGLContextClientVersion(2);
 
-            this.SetRenderer(new Renderer( ));
-            this.RenderMode = Rendermode.Continuously;
+        protected override void Dispose (bool disposing) {
+            firstLoad = false;
+            base.Dispose(disposing);
         }
     }
-    */
 }
