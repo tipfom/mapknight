@@ -485,7 +485,7 @@ namespace mapKnight.Extended {
                     if (_Sepling == null) {
                         _Sepling = new Entity.Configuration( );
                         _Sepling.Name = "Sepling";
-                        _Sepling.Transform = new Transform(Vector2.Zero, new Vector2(1f, 0.88f));
+                        _Sepling.Transform = new Transform(Vector2.Zero, new Vector2(1f, 15f / 17f));
                         _Sepling.Components = new ComponentList {
                             new SpriteComponent.Configuration( ) {
                                 Texture = "sepling/body",
@@ -594,7 +594,7 @@ namespace mapKnight.Extended {
                                     }
                                 }
                             },
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0.0277777777f, 0.2692307692f, 2.1176470588f, 1.7333333333f) } },
+                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(-2.5f / 36f, 14f / 29f, 36f / 17f, 29f / 15f) } },
                             new SeplingComponent.Configuration( ) {
                                 ChillDistance = 5,
                                 ShootCooldown = 2000,
