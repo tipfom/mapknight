@@ -1037,7 +1037,7 @@ namespace mapKnight.Extended {
                         _Lenny.Name = "Lenny";
                         _Lenny.Transform = new Transform(Vector2.Zero, new Vector2(5f, 1.1f));
                         _Lenny.Components = new ComponentList {
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 0.22f, 1f), new Rectangle(0, 0.9f, 0.075625f, 0.6875f) } },
+                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 0.22f, 1f), new Rectangle(0, 0.9f, 0.075625f, 0.65625f) } },
                             new SpriteComponent.Configuration( ) {
                                 Texture = "npc/lenny",
                                 Animations = new SpriteAnimation[ ] {
