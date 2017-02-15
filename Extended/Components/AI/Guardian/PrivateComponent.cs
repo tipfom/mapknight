@@ -37,7 +37,9 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                     Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true, (SpriteComponent.AnimationCallback)DefAnimationCallback);
                     Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", false);
                 }
-                Walk(Owner.Transform.Center.X < collidingEntity.Transform.Center.X);
+                bool right = Owner.Transform.Center.X < collidingEntity.Transform.Center.X;
+                Walk(right);
+                motionComponent.ScaleX = right ? 1f : -1f;
             }
         }
 
