@@ -101,13 +101,11 @@
     <AndroidAsset Include="Assets\textures\interface.json" />
     <AndroidAsset Include="Assets\entities\circularsaw.json" />
     <AndroidAsset Include="Assets\textures\saw.json" />
-    <AndroidAsset Include="Assets\textures\s_trowie.json" />
     <AndroidAsset Include="Assets\entities\tourret.json" />
     <AndroidAsset Include="Assets\entities\landmine.json" />
     <AndroidAsset Include="Assets\textures\landmine.json" />
     <AndroidAsset Include="Assets\textures\turret.json" />
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
-    <AndroidAsset Include="Assets\textures\hasto.json" />
     <AndroidAsset Include="Assets\entities\player.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
     <AndroidAsset Include="Assets\maps\beatiful_map.map" />
@@ -126,11 +124,6 @@
     <AndroidAsset Include="Assets\textures\shark\body.json" />
     <AndroidAsset Include="Assets\entities\shark.json" />
     <AndroidAsset Include="Assets\textures\pole.json" />
-    <AndroidAsset Include="Assets\textures\guardian\tent.json" />
-    <AndroidAsset Include="Assets\textures\guardian\officer.json" />
-    <AndroidAsset Include="Assets\textures\guardian\private1.json" />
-    <AndroidAsset Include="Assets\textures\guardian\private2.json" />
-    <AndroidAsset Include="Assets\textures\guardian\private3.json" />
     <AndroidAsset Include="Assets\textures\slime.json" />
     <AndroidAsset Include="Assets\entities\npc.json" />
     <AndroidAsset Include="Assets\textures\npc\lenny.json" />
@@ -179,9 +172,6 @@
     <AndroidAsset Include="Assets\textures\saw.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\s_trowie.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\textures\landmine.png" />
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\entities\meatball.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\hasto.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\player.png" />
@@ -239,21 +226,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\pole.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\guardian\tent.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\guardian\officer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\guardian\private1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\guardian\private2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\guardian\private3.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\slime.png" />
