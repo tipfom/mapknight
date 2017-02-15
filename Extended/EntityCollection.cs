@@ -205,9 +205,15 @@ namespace mapKnight.Extended {
                                                 }
                                             },
                                             new SpriteAnimationFrame( ) {
-                                                Time = 200,
+                                                Time = 100,
                                                 Bones = new string[ ] {
-                                                    "2atk"
+                                                    "2atk1"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "2atk2"
                                                 }
                                             }
                                         }
