@@ -99,33 +99,23 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface.json" />
-    <AndroidAsset Include="Assets\entities\circularsaw.json" />
     <AndroidAsset Include="Assets\textures\saw.json" />
-    <AndroidAsset Include="Assets\entities\tourret.json" />
-    <AndroidAsset Include="Assets\entities\landmine.json" />
     <AndroidAsset Include="Assets\textures\landmine.json" />
     <AndroidAsset Include="Assets\textures\turret.json" />
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
-    <AndroidAsset Include="Assets\entities\player.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
     <AndroidAsset Include="Assets\maps\beatiful_map.map" />
     <AndroidAsset Include="Assets\gestures\gestures" />
     <AndroidAsset Include="Assets\textures\Sword%282%29.json" />
-    <AndroidAsset Include="Assets\entities\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\shell.json" />
     <AndroidAsset Include="Assets\textures\plugger_bullet.json" />
     <AndroidAsset Include="Assets\textures\plugger.json" />
-    <AndroidAsset Include="Assets\entities\plugger.json" />
-    <AndroidAsset Include="Assets\entities\sepling.json" />
     <AndroidAsset Include="Assets\textures\sepling\bullet.json" />
-    <AndroidAsset Include="Assets\entities\shell.json" />
     <AndroidAsset Include="Assets\textures\sepling\body.json" />
     <AndroidAsset Include="Assets\textures\shark\body.json" />
-    <AndroidAsset Include="Assets\entities\shark.json" />
     <AndroidAsset Include="Assets\textures\pole.json" />
     <AndroidAsset Include="Assets\textures\slime.json" />
-    <AndroidAsset Include="Assets\entities\npc.json" />
     <AndroidAsset Include="Assets\textures\npc\lenny.json" />
     <AndroidAsset Include="Assets\textures\button.json" />
     <AndroidAsset Include="Assets\textures\moonball.json" />
@@ -179,9 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\turret_bullet.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\entities\meatball.json" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\player.png" />
