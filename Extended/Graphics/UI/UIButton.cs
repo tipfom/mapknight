@@ -35,9 +35,9 @@ namespace mapKnight.Extended.Graphics.UI {
         public override IEnumerable<DepthVertexData> ConstructVertexData( ) {
             string textureDomain = "btn_" + (Clicked ? "p" : "i");
             float w = EDGE_WIDTH_HEIGHT_RATIO * Size.Y;
-            yield return new DepthVertexData(new UIRectangle(Position.X, Position.Y, w, Size.Y).Verticies, textureDomain + "l", Depth, Color);
-            yield return new DepthVertexData(new UIRectangle(Position.X + w, Position.Y, Size.X - 2 * w, Size.Y).Verticies, textureDomain + "c", Depth, Color);
-            yield return new DepthVertexData(new UIRectangle(Position.X + Size.X - w, Position.Y, w, Size.Y).Verticies, textureDomain + "r", Depth, Color);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y, w, Size.Y), textureDomain + "l", Depth, Color);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + w, Position.Y, Size.X - 2 * w, Size.Y), textureDomain + "c", Depth, Color);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + Size.X - w, Position.Y, w, Size.Y), textureDomain + "r", Depth, Color);
 
             Vector2 textPosition = new Vector2(Position.X + Size.X * 0.5f, Position.Y - (Size.Y - lines.Length * charSize) * 0.5f);
 

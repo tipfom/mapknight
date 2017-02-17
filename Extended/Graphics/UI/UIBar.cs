@@ -30,7 +30,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
             float barwidth = Size.X * currentPercent;
             yield return new DepthVertexData(Bounds.Verticies, "blank", Depth, backgroundColor);
-            yield return new DepthVertexData(new UIRectangle(Position.X, Position.Y, barwidth, Size.Y).Verticies, "blank", Depth, foregroundColor);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y, barwidth, Size.Y), "blank", Depth, foregroundColor);
         }
 
         public interface IValueBinder {
