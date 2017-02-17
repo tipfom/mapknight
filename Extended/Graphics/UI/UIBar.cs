@@ -12,7 +12,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private IValueBinder valueBinder;
         private float currentPercent;
 
-        public UIBar (Screen owner, Color foregroundColor, Color backgroundColor, IValueBinder valueBinder, UIMargin hmargin, UIMargin vmargin, Vector2 size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
+        public UIBar (Screen owner, Color foregroundColor, Color backgroundColor, IValueBinder valueBinder, UIMargin hmargin, UIMargin vmargin, IUISize size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
             this.foregroundColor = foregroundColor;
             this.backgroundColor = backgroundColor;
             this.valueBinder = valueBinder;

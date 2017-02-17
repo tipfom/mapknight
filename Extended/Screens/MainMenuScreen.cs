@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Screens {
 #endif                
                 );
 
-            UIButton button = new UIButton(this, new UIHorizontalCenterMargin(0f), new UIVerticalCenterMargin(-0.2f), new Vector2(1.3f, 0.3f), "PLAY");
+            UIButton button = new UIButton(this, new UIHorizontalCenterMargin(0f), new UIVerticalCenterMargin(-0.2f), new AbsoluteSize(1.3f, 0.3f), "PLAY");
             button.Release += ( ) => { Screen.Active = Gameplay; };
             base.Load( );
         }

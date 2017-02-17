@@ -25,7 +25,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private string _Text;
         public string Text {
             get { return _Text; }
-            set { _Text = value; lines = Text.Split('\n'); Size = MeasureText(value, charSize); } //size setting will call requupdate
+            set { _Text = value; lines = Text.Split('\n'); ((AbsoluteSize)Size).Size = MeasureText(value, charSize); } //size setting will call requupdate
         }
         private string[ ] lines;
 
@@ -48,7 +48,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         }
 
-        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, int depth, float size, Color color, string text, UITextAlignment alignment = UITextAlignment.Left) : base(owner, hmargin, vmargin, new Vector2(0, 0), depth) {
+        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, int depth, float size, Color color, string text, UITextAlignment alignment = UITextAlignment.Left) : base(owner, hmargin, vmargin, new AbsoluteSize(), depth) {
             charSize = size;
             Text = text;
             Color = color;

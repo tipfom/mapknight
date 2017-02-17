@@ -95,6 +95,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ParticleProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\TextureProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\AbsoluteSize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\IUISize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\RelativeSize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIHorizontalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILeftMargin.cs" />

@@ -13,13 +13,13 @@ namespace mapKnight.Extended.Graphics.UI {
         private float charSize;
         private string[ ] lines;
 
-        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string text) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, 0, Color.White) {
+        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string text) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, 0, Color.White) {
         }
 
-        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string text, int depth, Color color) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, depth, color) {
+        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string text, int depth, Color color) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, depth, color) {
         }
 
-        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string text, float textsize, int depth, Color color) : base(owner, hmargin, vmargin, size, depth, false) {
+        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string text, float textsize, int depth, Color color) : base(owner, hmargin, vmargin, size, depth, false) {
             _Text = text;
             lines = text.Split('\n');
             charSize = textsize;

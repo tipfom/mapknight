@@ -9,7 +9,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private Color _ModificationColor;
         public Color ModificationColor { get { return _ModificationColor; } set { _ModificationColor = value; IsDirty = true; } }
 
-        public UIImage (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, string idletexture, string clicktexture, int depth, Color modificationcolor) : base(owner, hmargin, vmargin, size, depth) {
+        public UIImage (Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string idletexture, string clicktexture, int depth, Color modificationcolor) : base(owner, hmargin, vmargin, size, depth) {
             textureIdle = idletexture;
             textureClick = clicktexture;
 

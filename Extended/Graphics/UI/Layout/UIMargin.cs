@@ -33,21 +33,21 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
 
         public void Bind (UIItem owner) {
             if (allreadyBound) {
-                Owner.SizeChanged -= CalculateScreenPosition;
+                Owner.Size.Changed -= CalculateScreenPosition;
             } else {
                 if (updateOnScreenChange)
                     Window.Changed += CalculateScreenPosition;
                 allreadyBound = true;
             }
             Owner = owner;
-            Owner.SizeChanged += CalculateScreenPosition;
+            Owner.Size.Changed += CalculateScreenPosition;
 
             CalculateScreenPosition( );
         }
 
         public void Dispose ( ) {
             if (allreadyBound) {
-                Owner.SizeChanged -= CalculateScreenPosition;
+                Owner.Size.Changed -= CalculateScreenPosition;
                 if (updateOnScreenChange)
                     Window.Changed -= CalculateScreenPosition;
             }

@@ -23,16 +23,16 @@ namespace mapKnight.Extended.Screens {
         private Entity testEntity;
         private PlayerComponent testEntityPlayer;
 
-        public GameplayScreen ( ) {
+        public GameplayScreen( ) {
             Entity.EntityAdded += (Entity obj) => { obj.Prepare( ); };
         }
 
-        public override void Draw ( ) {
+        public override void Draw( ) {
             map.Draw( );
             base.Draw( );
         }
 
-        public override void Load ( ) {
+        public override void Load( ) {
             int begin = Environment.TickCount;
             map = Assets.Load<Map>("beatiful_map");
 #if DEBUG
@@ -57,22 +57,14 @@ namespace mapKnight.Extended.Screens {
             testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
             map.Focus(testEntity.ID);
 
-            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new Vector2(2 * Window.Ratio, 0.05f), UIDepths.MIDDLE);
+            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(1f, 0.025f), UIDepths.MIDDLE);
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.075f), 0.05f, "", UITextAlignment.Right);
             SetupControls( );
-            Window.Changed += ( ) => {
-                SetupControls( );
-                healthBar.Size = new Vector2(2 * Window.Ratio, healthBar.Size.Y);
-            };
             base.Load( );
         }
 
-        private void SetupControls ( ) {
-            controlPanel?.Dispose( );
-            leftPanel?.Dispose( );
-            rightPanel?.Dispose( );
-
-            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 6f / 5f, 2), Assets.GetGestureStore("gestures"));
+        private void SetupControls( ) {
+            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(3f / 5f, 1f), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
                 if (gesture == UIGesturePanel.SWIPE_UP) {
@@ -82,18 +74,18 @@ namespace mapKnight.Extended.Screens {
                     testEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
             };
 
-            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 2f / 5f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 5f, 2));
+            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 2f / 5f), new UITopMargin(0), new RelativeSize(1f / 5f, 1f));
             leftPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
             leftPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
             leftPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
 
-            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 5f, 2));
+            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new RelativeSize(1f / 5f, 1f));
             rightPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
             rightPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
             rightPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
         }
 
-        public override void Update (DeltaTime dt) {
+        public override void Update(DeltaTime dt) {
             if (Math.Abs(Manager.FrameTime.Milliseconds) < MAX_TIME_BETWEEN_UPDATES) {
                 map.Update(dt);
                 base.Update(dt);
@@ -106,7 +98,7 @@ namespace mapKnight.Extended.Screens {
                             $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n";
         }
 
-        protected override void Activated ( ) {
+        protected override void Activated( ) {
             for (int i = 0; i < Entity.Entities.Count; i++)
                 Entity.Entities[i].Prepare( );
             base.Activated( );
