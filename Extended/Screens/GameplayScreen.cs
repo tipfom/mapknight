@@ -85,10 +85,12 @@ namespace mapKnight.Extended.Screens {
             leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
             leftPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
             leftPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
+            leftPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
 
             rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
             rightPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
             rightPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
+            rightPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
         }
 
         public override void Update (DeltaTime dt) {

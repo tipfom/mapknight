@@ -11,6 +11,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public delegate void HandleItemClick ( );
         public event HandleItemClick Click;
         public event HandleItemClick Release;
+        public event HandleItemClick Leave;
         public bool Clicked { get { return (clickCount > 0); } }
         private bool multiClick;
         private int clickCount;
@@ -70,11 +71,17 @@ namespace mapKnight.Extended.Graphics.UI {
                     }
                     break;
                 case UITouchAction.End:
-                case UITouchAction.Leave:
                     if (Clicked) {
                         clickCount--;
                         if (!Clicked)
                             Release?.Invoke( );
+                    }
+                    break;
+                case UITouchAction.Leave:
+                    if (Clicked) {
+                        clickCount--;
+                        if (!Clicked)
+                            Leave?.Invoke( );
                     }
                     break;
             }
