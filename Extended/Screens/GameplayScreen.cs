@@ -72,7 +72,7 @@ namespace mapKnight.Extended.Screens {
             leftPanel?.Dispose( );
             rightPanel?.Dispose( );
 
-            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
+            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 6f / 5f, 2), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
                 if (gesture == UIGesturePanel.SWIPE_UP) {
@@ -82,12 +82,12 @@ namespace mapKnight.Extended.Screens {
                     testEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
             };
 
-            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 2f / 5f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 5f, 2));
             leftPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
             leftPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
             leftPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
 
-            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 5f, 2));
             rightPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
             rightPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
             rightPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
