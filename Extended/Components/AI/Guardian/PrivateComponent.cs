@@ -22,6 +22,11 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             this.attackCooldown = attackCooldown;
         }
 
+        public override void Prepare( ) {
+            Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", true);
+            base.Prepare( );
+        }
+
         public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Domain == EntityDomain.Player) {
                 motionComponent.AimedVelocity.X = 0f;
