@@ -336,7 +336,23 @@ namespace mapKnight.Extended {
                             _Officer1.Components = new ComponentList {
                             new MotionComponent.Configuration( ),
                             new OfficerComponent.Configuration( ),
-                            new TextureComponent.Configuration( ) { Texture = "guardian/officer" },
+                            new SpriteComponent.Configuration( ) {
+                                Texture = "guardian/guardian",
+                                Animations = new SpriteAnimation[ ] {
+                                    new SpriteAnimation( ) {
+                                        Name = "idle",
+                                        CanRepeat = true,
+                                        Frames = new SpriteAnimationFrame[ ] {
+                                            new SpriteAnimationFrame( ) {
+                                                Time = MAX_TIME,
+                                                Bones = new string[] {
+                                                    "oidle"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
                             new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } },
                             new SpeedComponent.Configuration( ) { X = 1.2f },
                             new HealthComponent.Configuration( ) { Value = 1 }
