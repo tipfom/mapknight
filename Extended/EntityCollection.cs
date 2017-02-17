@@ -28,18 +28,10 @@ namespace mapKnight.Extended {
                                 Officer = Officer1, PatrolRange = 14f, PrivateCount = 4, TimeBetweenPrivates = 3000,
                                 Privates = new Entity.Configuration[ ] { Private1, Private2, Private3 }
                             },
-                            new SpriteComponent.Configuration( ) {
+                            new TextureComponent.Configuration( ) {
                                 Texture = "guardian/guardian",
-                                Animations = new SpriteAnimation[ ] {
-                                    new SpriteAnimation( ) {
-                                        Name = "idle",
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = MAX_TIME,
-                                                Bones = new string[ ] { "tent" }
-                                            }
-                                        }
-                                    }
+                                Sprites = new string[ ] {
+                                    "tent"
                                 }
                             },
                             new DrawComponent.Configuration( ),
@@ -336,21 +328,10 @@ namespace mapKnight.Extended {
                             _Officer1.Components = new ComponentList {
                             new MotionComponent.Configuration( ),
                             new OfficerComponent.Configuration( ),
-                            new SpriteComponent.Configuration( ) {
+                            new TextureComponent.Configuration( ) {
                                 Texture = "guardian/guardian",
-                                Animations = new SpriteAnimation[ ] {
-                                    new SpriteAnimation( ) {
-                                        Name = "idle",
-                                        CanRepeat = true,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = MAX_TIME,
-                                                Bones = new string[] {
-                                                    "oidle"
-                                                }
-                                            }
-                                        }
-                                    }
+                                Sprites = new string[ ] {
+                                    "oidle"
                                 }
                             },
                             new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } },
