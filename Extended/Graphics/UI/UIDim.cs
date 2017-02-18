@@ -7,7 +7,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public float Opacity { get { return color.A / 255f; } set { color.A = (byte)((1f - value) * 255); IsDirty = true; } }
         private Color color;
 
-        public UIDim(Screen owner, float opacity, int depth, bool multiclick = false) : base(owner, new UILeftMargin(0), new UITopMargin(0), new AbsoluteSize( ), depth, multiclick) {
+        public UIDim(Screen owner, float opacity, int depth, bool multiclick = false) : base(owner, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(1f, 1f), depth, multiclick) {
             color = new Color(2, 2, 2);
             Opacity = opacity;
         }
