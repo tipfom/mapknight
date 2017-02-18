@@ -39,25 +39,6 @@ namespace mapKnight.Extended.Screens {
             Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
 #endif
 
-            EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(26, 18), map);
-            EntityCollection.Enemys.Slime.Create(new Vector2(9, 7.5f), map);
-            EntityCollection.Enemys.Plugger.Create(new Vector2(72, 10), map);
-            EntityCollection.Obstacles.Landmine.Create(new Vector2(21, 7), map);
-            EntityCollection.Obstacles.Landmine.Create(new Vector2(22, 7), map);
-            EntityCollection.Obstacles.Landmine.Create(new Vector2(2.5f, 8), map);
-            EntityCollection.NPCs.Lenny.Create(new Vector2(62, 12), map);
-            EntityCollection.Enemys.Shell.Create(new Vector2(42, 11), map);
-            EntityCollection.Platforms.Copper.Create(new Vector2(3, 9), map);
-            EntityCollection.Enemys.Sepling.Create(map.SpawnPoint + new Vector2(10, 1), map);
-            EntityCollection.Enemys.Shark.Create(map.SpawnPoint + new Vector2(10, 1), map);
-            EntityCollection.Obstacles.Moonball.Create(new Vector2(map.SpawnPoint.X, 7) + new Vector2(3, 0), map, true);
-            EntityCollection.Enemys.BlackHole.Create(map.SpawnPoint + new Vector2(3f, 0f), map);
-
-            testEntity = EntityCollection.Players.Diamond.Create(map.SpawnPoint, map);
-            testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
-            map.Focus(testEntity.ID);
-
-            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(1f, 0.025f), UIDepths.MIDDLE);
             debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.075f), 0.05f, "", UITextAlignment.Right);
             SetupControls( );
             base.Load( );
@@ -99,6 +80,32 @@ namespace mapKnight.Extended.Screens {
         }
 
         protected override void Activated( ) {
+            while(Entity.Entities.Count > 0) {
+                Entity.Entities[0].Destroy( );
+                Entity.Entities.RemoveAt(0);
+            }
+
+            EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(26, 18), map);
+            EntityCollection.Enemys.Slime.Create(new Vector2(9, 7.5f), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(72, 10), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(21, 7), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(22, 7), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(2.5f, 8), map);
+            EntityCollection.NPCs.Lenny.Create(new Vector2(62, 12), map);
+            EntityCollection.Enemys.Shell.Create(new Vector2(42, 11), map);
+            EntityCollection.Platforms.Copper.Create(new Vector2(3, 9), map);
+            EntityCollection.Enemys.Sepling.Create(map.SpawnPoint + new Vector2(10, 1), map);
+            EntityCollection.Enemys.Shark.Create(map.SpawnPoint + new Vector2(10, 1), map);
+            EntityCollection.Obstacles.Moonball.Create(new Vector2(map.SpawnPoint.X, 7) + new Vector2(3, 0), map, true);
+            EntityCollection.Enemys.BlackHole.Create(map.SpawnPoint + new Vector2(3f, 0f), map);
+
+            testEntity = EntityCollection.Players.Diamond.Create(map.SpawnPoint, map);
+            testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
+            map.Focus(testEntity.ID);
+
+            healthBar?.Dispose( );
+            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(1f, 0.025f), UIDepths.MIDDLE);
+
             for (int i = 0; i < Entity.Entities.Count; i++)
                 Entity.Entities[i].Prepare( );
             base.Activated( );
