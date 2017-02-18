@@ -153,11 +153,6 @@
     <AndroidAsset Include="Assets\textures\beatiful_map.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\splash.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\textures\platforms\copper.png" />
   </ItemGroup>
   <ItemGroup>
