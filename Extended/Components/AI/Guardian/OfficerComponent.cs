@@ -12,11 +12,14 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private TentComponent tent;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
+        private int lastWalkingTime;
+        private int turnTime;
 
-        public OfficerComponent(Entity owner, TentComponent tent) : base(owner) {
+        public OfficerComponent(Entity owner, TentComponent tent, int turnTime) : base(owner) {
             owner.Domain = EntityDomain.Enemy;
 
             this.tent = tent;
+            this.turnTime = turnTime;
         }
 
         public override void Prepare( ) {
@@ -29,7 +32,10 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                 // walk left
                 if (Owner.World.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 1) ||
                     Owner.World.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 2)) {
-                    motionComponent.AimedVelocity.X = -speedComponent.Speed.X;
+                    if(motionComponent.AimedVelocity.X < 0 || Environment.TickCount - lastWalkingTime > turnTime) {
+                        motionComponent.AimedVelocity.X = -speedComponent.Speed.X;
+                        lastWalkingTime = Environment.TickCount;
+                    }
                 } else {
                     motionComponent.AimedVelocity.X = 0;
                 }
@@ -37,13 +43,17 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                 // walk right
                 if (Owner.World.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y)) ||
                     Owner.World.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y - 1))) {
-                    motionComponent.AimedVelocity.X = speedComponent.Speed.X;
+                    if (motionComponent.AimedVelocity.X > 0 || Environment.TickCount - lastWalkingTime > turnTime) {
+                        motionComponent.AimedVelocity.X = speedComponent.Speed.X;
+                        lastWalkingTime = Environment.TickCount;
+                    }
                 } else {
                     motionComponent.AimedVelocity.X = 0;
                 }
             } else {
                 motionComponent.AimedVelocity.X = 0;
             }
+
             if (motionComponent.IsOnGround) {
                 motionComponent.AimedVelocity.Y = 0;
             }
@@ -63,9 +73,10 @@ namespace mapKnight.Extended.Components.AI.Guardian {
 
         public new class Configuration : Component.Configuration {
             public TentComponent Tent;
+            public int TurnTime;
 
             public override Component Create(Entity owner) {
-                return new OfficerComponent(owner, Tent);
+                return new OfficerComponent(owner, Tent, TurnTime);
             }
         }
     }
