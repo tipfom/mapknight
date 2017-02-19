@@ -25,6 +25,10 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         public override void Prepare( ) {
             motionComponent = Owner.GetComponent<MotionComponent>( );
             speedComponent = Owner.GetComponent<SpeedComponent>( );
+            Owner.GetComponent<HealthComponent>( ).IsHit = (entity) => {
+                // check for the sign
+                return (entity.Transform.X - Owner.Transform.X) * motionComponent.ScaleX < 0;
+            };
         }
 
         public override void Update(DeltaTime dt) {
