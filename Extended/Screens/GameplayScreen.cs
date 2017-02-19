@@ -47,7 +47,9 @@ namespace mapKnight.Extended.Screens {
         private void SetupControls( ) {
             controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(3f / 5f, 1f), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
+#if DEBUG
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
+#endif
                 if (gesture == UIGesturePanel.SWIPE_UP) {
                     if (testEntity.GetComponent<MotionComponent>( ).IsOnGround || testEntity.GetComponent<MotionComponent>( ).IsOnPlatform)
                         testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
