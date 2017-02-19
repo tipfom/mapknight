@@ -324,7 +324,7 @@ namespace mapKnight.Extended {
                         if (_Officer1 == null) {
                             _Officer1 = new Entity.Configuration( );
                             _Officer1.Name = "Officer1";
-                            _Officer1.Transform = new Transform(Vector2.Zero, new Vector2(1.785714f, 1.5f));
+                            _Officer1.Transform = new Transform(Vector2.Zero, new Vector2(0.75f, 1.5f));
                             _Officer1.Components = new ComponentList {
                             new MotionComponent.Configuration( ),
                             new OfficerComponent.Configuration( ),
@@ -334,7 +334,7 @@ namespace mapKnight.Extended {
                                     "oidle"
                                 }
                             },
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( ) { Size = Vector2.One, Position = Vector2.Zero } } },
+                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9f / 25f, 0.5f / 21f, 25f / 10f, 21f / 20f) } },
                             new SpeedComponent.Configuration( ) { X = 1.2f },
                             new HealthComponent.Configuration( ) { Value = 1 }
                         };
