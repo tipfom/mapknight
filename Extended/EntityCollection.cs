@@ -1275,7 +1275,8 @@ namespace mapKnight.Extended {
                              }
                         });
                         _Moonball.Components.Add(new MoonballComponent.Configuration( ) {
-                            BoostVelocity = 2.5f
+                            BoostVelocity = 2.5f,
+                            DamagePerSecond = 4f
                         });
 
                         _MoonballTriggerButton = new Entity.Configuration( );
