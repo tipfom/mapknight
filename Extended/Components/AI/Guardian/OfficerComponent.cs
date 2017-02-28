@@ -17,15 +17,17 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private int nextAttackTime;
         private int turnTime;
         private int attackCooldown;
+        private float damage;
         private bool walking;
         private bool attacking;
 
-        public OfficerComponent(Entity owner, TentComponent tent, int turnTime, int attackCooldown) : base(owner) {
+        public OfficerComponent(Entity owner, TentComponent tent, int turnTime, int attackCooldown, float damage) : base(owner) {
             owner.Domain = EntityDomain.Enemy;
 
             this.tent = tent;
             this.turnTime = turnTime;
             this.attackCooldown = attackCooldown;
+            this.damage = damage;
         }
 
         public override void Prepare( ) {
@@ -39,7 +41,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         public override void Collision(Entity collidingEntity) {
-            if(collidingEntity.Domain == EntityDomain.Player && Environment.TickCount > nextAttackTime && !attacking) {
+            if (collidingEntity.Domain == EntityDomain.Player && Environment.TickCount > nextAttackTime && !attacking) {
                 attacking = true;
                 motionComponent.AimedVelocity.X = 0;
                 Owner.SetComponentInfo(ComponentData.SpriteAnimation, "atk", true, (SpriteComponent.AnimationCallback)AttackAnimationCallback);
@@ -116,14 +118,19 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private void AttackAnimationCallback(bool success) {
             attacking = false;
             nextAttackTime = Environment.TickCount + attackCooldown;
+            if (Math.Sign(Target.Transform.Center.X - Owner.Transform.Center.X) == motionComponent.ScaleX && Math.Abs(Owner.Transform.Center.X - Target.Transform.Center.X) < Owner.Transform.Width) {
+                Target.SetComponentInfo(ComponentData.Damage, damage);
+            }
         }
 
         public new class Configuration : Component.Configuration {
             public TentComponent Tent;
             public int TurnTime;
+            public int AttackTime;
+            public float Damage;
 
             public override Component Create(Entity owner) {
-                return new OfficerComponent(owner, Tent, TurnTime, 1000);
+                return new OfficerComponent(owner, Tent, TurnTime, AttackTime, Damage);
             }
         }
     }

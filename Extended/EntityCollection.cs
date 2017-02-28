@@ -263,7 +263,7 @@ namespace mapKnight.Extended {
                             _Officer1.Transform = new Transform(Vector2.Zero, new Vector2(1.75f / 19f * 12f, 1.75f));
                             _Officer1.Components = new ComponentList {
                                 new MotionComponent.Configuration( ),
-                                new OfficerComponent.Configuration( ) { TurnTime = 1500 },
+                                new OfficerComponent.Configuration( ) { TurnTime = 1500, AttackTime = 1000, Damage = Mathf.PI / 6f },
                                 new SpriteComponent.Configuration( ) {
                                     Texture = "guardian/guardian",
                                     Animations = new SpriteAnimation[ ] {
