@@ -26,7 +26,7 @@ namespace mapKnight.Extended {
                             _Tent.Components = new ComponentList {
                             new TentComponent.Configuration( ) {
                                 Officer = Officer1, PatrolRange = 14f, PrivateCount = 4, TimeBetweenPrivates = 3000,
-                                Privates = new Entity.Configuration[ ] { Private1, Private2, Private3 }
+                                Privates = new Entity.Configuration[ ] { Private1, Private2 }
                             },
                             new TextureComponent.Configuration( ) {
                                 Texture = "guardian/guardian",
@@ -48,7 +48,7 @@ namespace mapKnight.Extended {
                         if (_Private1 == null) {
                             _Private1 = new Entity.Configuration( );
                             _Private1.Name = "Private1";
-                            _Private1.Transform = new Transform(Vector2.Zero, new Vector2(0.825f, 1.5f));
+                            _Private1.Transform = new Transform(Vector2.Zero, new Vector2(1.5f / 19f * 11f, 1.5f));
                             _Private1.Components = new ComponentList {
                                 new MotionComponent.Configuration( ),
                                 new PrivateComponent.Configuration( ) { AttackCooldown = 777, Damage = 0.4f },
@@ -94,7 +94,7 @@ namespace mapKnight.Extended {
                                                     Bones = new string[ ] {
                                                         "1idle"
                                                     }
-                                                }
+                                                },
                                             }
                                         },
                                         new SpriteAnimation( ) {
@@ -135,7 +135,7 @@ namespace mapKnight.Extended {
                                         }
                                     }
                                 },
-                                new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0.15384615f, 0f, 2.3636363636f, 1f) } },
+                                new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9.5f / 23f , 0f, 23f / 11f, 1f) } },
                                 new SpeedComponent.Configuration( ) { X = 1.2f },
                                 new HealthComponent.Configuration( ) { Value = 1 }
                             };
@@ -150,171 +150,99 @@ namespace mapKnight.Extended {
                         if (_Private2 == null) {
                             _Private2 = new Entity.Configuration( );
                             _Private2.Name = "Private2";
-                            _Private2.Transform = new Transform(Vector2.Zero, new Vector2(0.868421f, 1.5f));
+                            _Private2.Transform = new Transform(Vector2.Zero, new Vector2(1.5f / 19f * 11f, 1.5f));
                             _Private2.Components = new ComponentList {
-                            new MotionComponent.Configuration( ),
-                            new PrivateComponent.Configuration( ) { AttackCooldown = 1000, Damage = 1f },
-                            new SpriteComponent.Configuration( ) {
-                                Texture = "guardian/guardian",
-                                Animations = new SpriteAnimation[ ] {
-                                    new SpriteAnimation( ) {
-                                        Name = "idle",
-                                        CanRepeat = true,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = MAX_TIME,
-                                                Bones = new string[ ] {
-                                                    "2idle"
+                                new MotionComponent.Configuration( ),
+                                new PrivateComponent.Configuration( ) { AttackCooldown = 1000, Damage = 1f },
+                                new SpriteComponent.Configuration( ) {
+                                    Texture = "guardian/guardian",
+                                    Animations = new SpriteAnimation[ ] {
+                                        new SpriteAnimation( ) {
+                                            Name = "idle",
+                                            CanRepeat = true,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = MAX_TIME,
+                                                    Bones = new string[ ] {
+                                                        "2idle"
+                                                    }
                                                 }
                                             }
-                                        }
-                                    },
-                                    new SpriteAnimation( ) {
-                                        Name = "walk",
-                                        CanRepeat = true,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 70,
-                                                Bones = new string[ ] {
-                                                    "2walk1"
-                                                }
-                                            },
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 70,
-                                                Bones = new string[ ] {
-                                                    "2idle"
-                                                }
-                                            },
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 70,
-                                                Bones = new string[ ] {
-                                                    "2walk2"
-                                                }
-                                            },
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 70,
-                                                Bones = new string[ ] {
-                                                    "2idle"
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "walk",
+                                            CanRepeat = true,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 70,
+                                                    Bones = new string[ ] {
+                                                        "2walk1"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 70,
+                                                    Bones = new string[ ] {
+                                                        "2idle"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 70,
+                                                    Bones = new string[ ] {
+                                                        "2walk2"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 70,
+                                                    Bones = new string[ ] {
+                                                        "2idle"
+                                                    }
+                                                },
+                                            }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "atk",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "2idle"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "2atk1"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "2atk2"
+                                                    }
                                                 }
                                             }
-                                        }
-                                    },
-                                    new SpriteAnimation( ) {
-                                        Name = "atk",
-                                        CanRepeat = false,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 100,
-                                                Bones = new string[ ] {
-                                                    "2idle"
-                                                }
-                                            },
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 100,
-                                                Bones = new string[ ] {
-                                                    "2atk1"
-                                                }
-                                            },
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 100,
-                                                Bones = new string[ ] {
-                                                    "2atk2"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    new SpriteAnimation( ) {
-                                        Name = "def",
-                                        CanRepeat = false,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 100,
-                                                Bones = new string[ ] {
-                                                    "2def"
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "def",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "2def"
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            },
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0.1739f, 0f, 2.09090909f, 1f) } },
-                            new SpeedComponent.Configuration( ) { X = 1.2f },
-                            new HealthComponent.Configuration( ) { Value = 1 }
-                        };
+                                },
+                                new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(15f / 35f, 0f, 35f / 11f, 1f) } },
+                                new SpeedComponent.Configuration( ) { X = 1.2f },
+                                new HealthComponent.Configuration( ) { Value = 1 }
+                            };
                         }
                         return _Private2;
-                    }
-                }
-
-                private static Entity.Configuration _Private3;
-                public static Entity.Configuration Private3 {
-                    get {
-                        if (_Private3 == null) {
-                            _Private3 = new Entity.Configuration( );
-                            _Private3.Name = "Private3";
-                            _Private3.Transform = new Transform(Vector2.Zero, new Vector2(0.868421f, 1.5f));
-                            _Private3.Components = new ComponentList {
-                            new MotionComponent.Configuration( ),
-                            new PrivateComponent.Configuration( ) { AttackCooldown = 200, Damage = 0.2f },
-                            new SpriteComponent.Configuration( ) {
-                                Texture = "guardian/guardian" ,
-                                Animations = new SpriteAnimation[ ] {
-                                    new SpriteAnimation( ) {
-                                        Name = "idle",
-                                        CanRepeat = true,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = MAX_TIME,
-                                                Bones = new string[ ] {
-                                                    "3idle"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    new SpriteAnimation( ) {
-                                        Name = "walk",
-                                        CanRepeat = true,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 70,
-                                                Bones = new string[ ] {
-                                                    "3idle"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    new SpriteAnimation( ) {
-                                        Name = "atk",
-                                        CanRepeat = false,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 50,
-                                                Bones = new string[ ] {
-                                                    "3idle"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    new SpriteAnimation( ) {
-                                        Name = "def",
-                                        CanRepeat = false,
-                                        Frames = new SpriteAnimationFrame[ ] {
-                                            new SpriteAnimationFrame( ) {
-                                                Time = 50,
-                                                Bones = new string[ ] {
-                                                    "3idle"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle( 0.16f, 0.05f, 2.27272727f, 1.0526315f) } },
-                            new SpeedComponent.Configuration( ) { X = 1.2f },
-                            new HealthComponent.Configuration( ) { Value = 1 }
-                        };
-                        }
-                        return _Private3;
                     }
                 }
 
