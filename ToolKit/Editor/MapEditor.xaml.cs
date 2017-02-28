@@ -611,6 +611,7 @@ namespace mapKnight.ToolKit.Editor {
                         listview_tile_attributes.Items.Add(new AttributeListViewEntry(false, attribute.ToString( ), ""));
                     }
                 }
+                SelectTool(Tool.Pen);
             }
         }
 
