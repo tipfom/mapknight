@@ -468,7 +468,7 @@ namespace mapKnight.ToolKit.Editor {
                                     Tuple.Create(clickedTile,currentLayer, (int)(tileRotation * 2), true)});
                         tileRotation += 0.5f;
                         tileRotation %= 2f;
-                        if (currentMap.GetTile((int)clickedTile.X, (int)clickedTile.Y).Name != "None")
+                        if (currentMap.GetTile((int)clickedTile.X, (int)clickedTile.Y, currentLayer).Name != "None")
                             mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = tileRotation;
                         break;
                 }
