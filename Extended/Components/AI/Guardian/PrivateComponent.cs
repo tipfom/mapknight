@@ -71,6 +71,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                 attackingEntity.SetComponentInfo(ComponentData.Damage, damage);
                 nextAttackTime = Environment.TickCount + attackCooldown;
             }
+            Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", false);
         }
 
         public new class Configuration : Component.Configuration {
