@@ -260,20 +260,91 @@ namespace mapKnight.Extended {
                         if (_Officer1 == null) {
                             _Officer1 = new Entity.Configuration( );
                             _Officer1.Name = "Officer1";
-                            _Officer1.Transform = new Transform(Vector2.Zero, new Vector2(0.75f, 1.5f));
+                            _Officer1.Transform = new Transform(Vector2.Zero, new Vector2(1.75f / 19f * 12f, 1.75f));
                             _Officer1.Components = new ComponentList {
-                            new MotionComponent.Configuration( ),
-                            new OfficerComponent.Configuration( ) { TurnTime = 1500 },
-                            new TextureComponent.Configuration( ) {
-                                Texture = "guardian/guardian",
-                                Sprites = new string[ ] {
-                                    "oidle"
-                                }
-                            },
-                            new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9f / 25f, 0.5f / 21f, 25f / 10f, 21f / 20f) } },
-                            new SpeedComponent.Configuration( ) { X = 1.2f },
-                            new HealthComponent.Configuration( ) { Value = 1 }
-                        };
+                                new MotionComponent.Configuration( ),
+                                new OfficerComponent.Configuration( ) { TurnTime = 1500 },
+                                new SpriteComponent.Configuration( ) {
+                                    Texture = "guardian/guardian",
+                                    Animations = new SpriteAnimation[ ] {
+                                        new SpriteAnimation( ) {
+                                            Name = "idle",
+                                            CanRepeat = true,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = MAX_TIME,
+                                                    Bones = new string[ ] {
+                                                        "oidle"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "walk",
+                                            CanRepeat = true,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 80,
+                                                    Bones = new string[ ] {
+                                                        "owalk1"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 80,
+                                                    Bones = new string[ ] {
+                                                        "owalk2"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "atk",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "oidle"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "oatk1"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "oatk2"
+                                                    }
+                                                },
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 100,
+                                                    Bones = new string[ ] {
+                                                        "oatk3"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "def",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time  = 10000,
+                                                    Bones = new string[ ] {
+                                                        "odef"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9f / 25f, 0.5f / 21f, 25f / 10f, 21f / 20f) } },
+                                new SpeedComponent.Configuration( ) { X = 2.4f },
+                                new HealthComponent.Configuration( ) { Value = 1 }
+                            };
                         }
                         return _Officer1;
                     }

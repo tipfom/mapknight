@@ -3,6 +3,7 @@ using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI.Guardian {
     [ComponentRequirement(typeof(MotionComponent))]
@@ -14,7 +15,8 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private SpeedComponent speedComponent;
         private int lastWalkingTime;
         private int turnTime;
-
+        private bool walking;
+       
         public OfficerComponent(Entity owner, TentComponent tent, int turnTime) : base(owner) {
             owner.Domain = EntityDomain.Enemy;
 
@@ -29,6 +31,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                 // check for the sign
                 return (entity.Transform.X - Owner.Transform.X) * motionComponent.ScaleX < 0;
             };
+            walking = false;
         }
 
         public override void Update(DeltaTime dt) {
@@ -39,9 +42,15 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                     if(motionComponent.AimedVelocity.X < 0 || Environment.TickCount - lastWalkingTime > turnTime) {
                         motionComponent.AimedVelocity.X = -speedComponent.Speed.X;
                         lastWalkingTime = Environment.TickCount;
+                        if (!walking) {
+                            Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", true);
+                            walking = true;
+                        }
                     }
                 } else {
                     motionComponent.AimedVelocity.X = 0;
+                    walking = false;
+                    Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true);
                 }
             } else if (Owner.Transform.TR.X <= Target.Transform.BL.X) {
                 // walk right
@@ -50,11 +59,19 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                     if (motionComponent.AimedVelocity.X > 0 || Environment.TickCount - lastWalkingTime > turnTime) {
                         motionComponent.AimedVelocity.X = speedComponent.Speed.X;
                         lastWalkingTime = Environment.TickCount;
+                        if (!walking) {
+                            Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", true);
+                            walking = true;
+                        }
                     }
                 } else {
                     motionComponent.AimedVelocity.X = 0;
+                    walking = false;
+                    Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true);
                 }
             } else {
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true);
+                walking = false;
                 motionComponent.AimedVelocity.X = 0;
             }
 
