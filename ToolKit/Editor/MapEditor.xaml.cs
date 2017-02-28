@@ -463,6 +463,13 @@ namespace mapKnight.ToolKit.Editor {
                         break;
 
                     case Tool.Rotater:
+                        if (currentMap.Tiles[currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer]].Name == "None") {
+                            for (int i = 2; i > -1; i--) {
+                                if (currentMap.Tiles[currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, i]].Name != "None") {
+                                    ((RadioButton)_Menu[9 + i]).IsChecked = true;
+                                }
+                            }
+                        }
                         float tileRotation = mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
                         Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     Tuple.Create(clickedTile,currentLayer, (int)(tileRotation * 2), true)});
