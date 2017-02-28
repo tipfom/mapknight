@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private int lastWalkingTime;
         private int turnTime;
         private bool walking;
-       
+
         public OfficerComponent(Entity owner, TentComponent tent, int turnTime) : base(owner) {
             owner.Domain = EntityDomain.Enemy;
 
@@ -35,11 +35,12 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         public override void Update(DeltaTime dt) {
-            if (Owner.Transform.BL.X >= Target.Transform.TR.X) {
+            if (Owner.Transform.Center.X >= Target.Transform.Center.X) {
                 // walk left
-                if (Owner.World.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 1) ||
-                    Owner.World.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 2)) {
-                    if(motionComponent.AimedVelocity.X < 0 || Environment.TickCount - lastWalkingTime > turnTime) {
+                if (Owner.Transform.BL.X >= Target.Transform.TR.X &&
+                    (Owner.World.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 1) ||
+                     Owner.World.HasCollider(Mathi.Floor(Owner.Transform.BL.X), Mathi.Floor(Owner.Transform.BL.Y) - 2))) {
+                    if (motionComponent.AimedVelocity.X < 0 || Environment.TickCount - lastWalkingTime > turnTime) {
                         motionComponent.AimedVelocity.X = -speedComponent.Speed.X;
                         lastWalkingTime = Environment.TickCount;
                         if (!walking) {
@@ -49,13 +50,18 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                     }
                 } else {
                     motionComponent.AimedVelocity.X = 0;
+                    if (motionComponent.ScaleX < 0)
+                        lastWalkingTime = Environment.TickCount;
+                    else if (Environment.TickCount - lastWalkingTime > turnTime)
+                        motionComponent.ScaleX = -1;
                     walking = false;
                     Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true);
                 }
-            } else if (Owner.Transform.TR.X <= Target.Transform.BL.X) {
+            } else {
                 // walk right
-                if (Owner.World.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y)) ||
-                    Owner.World.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y - 1))) {
+                if (Owner.Transform.TR.X <= Target.Transform.BL.X &&
+                    (Owner.World.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y) - 1) ||
+                     Owner.World.HasCollider(Mathi.Floor(Owner.Transform.TR.X), Mathi.Floor(Owner.Transform.BL.Y) - 2))) {
                     if (motionComponent.AimedVelocity.X > 0 || Environment.TickCount - lastWalkingTime > turnTime) {
                         motionComponent.AimedVelocity.X = speedComponent.Speed.X;
                         lastWalkingTime = Environment.TickCount;
@@ -66,13 +72,13 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                     }
                 } else {
                     motionComponent.AimedVelocity.X = 0;
+                    if (motionComponent.ScaleX > 0)
+                        lastWalkingTime = Environment.TickCount;
+                    else if (Environment.TickCount - lastWalkingTime > turnTime)
+                        motionComponent.ScaleX = 1;
                     walking = false;
                     Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true);
                 }
-            } else {
-                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "def", true);
-                walking = false;
-                motionComponent.AimedVelocity.X = 0;
             }
 
             if (motionComponent.IsOnGround) {
