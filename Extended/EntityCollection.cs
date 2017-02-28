@@ -10,6 +10,14 @@ using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics.Animation;
 
 // ( ͡° ͜ʖ ͡°)
+
+/* FORMULA FOR THE BONE RECTANGLES
+ * X = (TOP_LEFT_CORNER_X - IMAGE_WIDTH / 2) / IMAGE_WIDTH
+ * Y = (TOP_LEFT_CORNER_X - IMAGE_HEIGHT / 2) / IMAGE_HEIGHT 
+ * W = IMAGE_WIDTH / BOX_WIDTH
+ * H = IMAGE_HEIHT / BOX_HEIGHT
+ */
+
 namespace mapKnight.Extended {
     public static class EntityCollection {
         private const int MAX_TIME = int.MaxValue - 86400001;
