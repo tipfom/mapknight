@@ -168,7 +168,7 @@ namespace mapKnight.Extended.Graphics {
                 Vector2 focusPoint = focusEntity.Transform.Center;
                 focusCenter = new Vector2(
                     Mathf.Clamp(focusPoint.X, DrawSize.Width / 2f - 1, Width - DrawSize.Width / 2f + 1),
-                    Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f - 1 + yOffsetTile, Height - DrawSize.Height / 2f + 1 - yOffsetTile)
+                    Mathf.Clamp(focusPoint.Y + yOffsetRaw, DrawSize.Height / 2f - 1 + yOffsetTile, Height - DrawSize.Height / 2f + 1 - yOffsetTile)
                     );
                 int xClamp = Width - DrawSize.Width, yClamp = Height - DrawSize.Height;
                 Vector2 nextTile = new Vector2(
