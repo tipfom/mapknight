@@ -36,7 +36,7 @@ namespace mapKnight.Extended.Components.Player {
         }
 
         public override void Destroy ( ) {
-            GameOverScreen gameOverScreen = new GameOverScreen((Extended.Graphics.Map)Owner.World, Owner.World.Renderer.GetTexture(Owner.Species));
+            GameOverScreen gameOverScreen = new GameOverScreen((Extended.Graphics.Map)Owner.World);
             gameOverScreen.Load( );
             Screen.Active = gameOverScreen;
         }
