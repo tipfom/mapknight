@@ -89,7 +89,6 @@
     <AndroidAsset Include="Assets\textures\sepling\bullet.json" />
     <AndroidAsset Include="Assets\textures\sepling\body.json" />
     <AndroidAsset Include="Assets\textures\shark\body.json" />
-    <AndroidAsset Include="Assets\textures\pole.json" />
     <AndroidAsset Include="Assets\textures\slime.json" />
     <AndroidAsset Include="Assets\textures\npc\lenny.json" />
     <AndroidAsset Include="Assets\textures\button.json" />
@@ -178,9 +177,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\Sword%282%29.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\pole.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\slime.png" />

@@ -12,13 +12,16 @@ namespace mapKnight.Extended.Graphics.UI {
         public UIImage (Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string idletexture, string clicktexture, int depth, Color modificationcolor) : base(owner, hmargin, vmargin, size, depth) {
             textureIdle = idletexture;
             textureClick = clicktexture;
+            _ModificationColor = modificationcolor;
 
-            this.Click += ( ) => { IsDirty = true; };
-            this.Release += ( ) => { IsDirty = true; };
+            Click += ( ) => IsDirty = true; 
+            Release += ( ) => IsDirty = true; 
+            Leave += ( ) => IsDirty = true;
+            IsDirty = true;
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
-            yield return new DepthVertexData(Bounds.Verticies, this.Clicked ? textureClick : textureIdle, Depth, ModificationColor);
+            yield return new DepthVertexData(Bounds.Verticies, this.Clicked ? textureClick : textureIdle, Depth, _ModificationColor);
         }
     }
 }
