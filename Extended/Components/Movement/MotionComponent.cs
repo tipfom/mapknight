@@ -93,7 +93,7 @@ namespace mapKnight.Extended.Components.Movement {
                 // moves to the right
                 int xlimit = Mathi.Floor(targetTransform.TR.X);
                 for (int x = (int)oldTransform.TR.X; x <= xlimit; x++) {
-                    for (int y = Mathi.Floor(oldTransform.BL.Y); y <= ylimit; y++) {
+                    for (int y = Mathi.Floor(oldTransform.BL.Y + 0.001f); y <= ylimit; y++) {
                         if (x >= Owner.World.Size.Width || Owner.World.HasCollider(x, y)) {
                             targetTransform.X = x - targetTransform.Size.X / 2;
                             return true;
@@ -104,7 +104,7 @@ namespace mapKnight.Extended.Components.Movement {
                 // moves to the left
                 int xlimit = Mathi.Floor(targetTransform.BL.X);
                 for (int x = (int)oldTransform.BL.X; x >= xlimit; x--) {
-                    for (int y = Mathi.Floor(oldTransform.BL.Y); y <= ylimit; y++) {
+                    for (int y = Mathi.Floor(oldTransform.BL.Y + 0.001f); y <= ylimit; y++) {
                         if (x < 0 || Owner.World.HasCollider(x, y)) {
                             targetTransform.X = x + 1 + targetTransform.Size.X / 2;
                             return true;
