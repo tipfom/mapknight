@@ -67,8 +67,8 @@ namespace mapKnight.Extended.Graphics {
             int tileCount = DrawSize.Area;
 
             float ystart = -(DrawSize.Height / 2f * VertexSize);
-            yOffsetRaw = (VertexSize - Math.Abs(ystart + 1));
-            yOffsetTile = yOffsetRaw / VertexSize;
+            yOffsetRaw = (VertexSize - Math.Abs(ystart+1));
+            yOffsetTile = yOffsetRaw / VertexSize - 1;
             yVertexSize = VertexSize - yOffsetRaw;
 
             float[ ] verticies = new float[tileCount * 2 * 2 * 4];
@@ -76,13 +76,13 @@ namespace mapKnight.Extended.Graphics {
                 for (int y = 0; y < DrawSize.Height; y++) {
                     for (int x = 0; x < DrawSize.Width; x++) {
                         verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 0] = -Window.Ratio - VertexSize + (x * VertexSize);
-                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 1] = ystart + (y * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 1] = -1f + (y * VertexSize);
                         verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 2] = -Window.Ratio - VertexSize + (x * VertexSize);
-                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 3] = ystart + ((y + 1) * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 3] = -1f + ((y + 1) * VertexSize);
                         verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 4] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
-                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 5] = ystart + ((y + 1) * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 5] = -1f + ((y + 1) * VertexSize);
                         verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 6] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
-                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 7] = ystart + (y * VertexSize);
+                        verticies[x * 8 + y * DrawSize.Width * 8 + i * tileCount * 8 + 7] = -1f + (y * VertexSize);
                     }
                 }
             }
@@ -91,19 +91,18 @@ namespace mapKnight.Extended.Graphics {
 
         private float[ ] GenerateForegroundVerticies ( ) {
             int tileCount = DrawSize.Area;
-            float ystart = -(DrawSize.Height / 2f * VertexSize);
 
             float[ ] verticies = new float[tileCount * 1 * 2 * 4];
             for (int y = 0; y < DrawSize.Height; y++) {
                 for (int x = 0; x < DrawSize.Width; x++) {
                     verticies[x * 8 + y * DrawSize.Width * 8 + 0] = -Window.Ratio - VertexSize + (x * VertexSize);
-                    verticies[x * 8 + y * DrawSize.Width * 8 + 1] = ystart + (y * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 1] = -1f + (y * VertexSize);
                     verticies[x * 8 + y * DrawSize.Width * 8 + 2] = -Window.Ratio - VertexSize + (x * VertexSize);
-                    verticies[x * 8 + y * DrawSize.Width * 8 + 3] = ystart + ((y + 1) * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 3] = -1f + ((y + 1) * VertexSize);
                     verticies[x * 8 + y * DrawSize.Width * 8 + 4] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
-                    verticies[x * 8 + y * DrawSize.Width * 8 + 5] = ystart + ((y + 1) * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 5] = -1f + ((y + 1) * VertexSize);
                     verticies[x * 8 + y * DrawSize.Width * 8 + 6] = -Window.Ratio - VertexSize + (x * VertexSize) + VertexSize;
-                    verticies[x * 8 + y * DrawSize.Width * 8 + 7] = ystart + (y * VertexSize);
+                    verticies[x * 8 + y * DrawSize.Width * 8 + 7] = -1f + (y * VertexSize);
                 }
             }
             return verticies;
@@ -170,12 +169,12 @@ namespace mapKnight.Extended.Graphics {
                 Vector2 focusPoint = focusEntity.Transform.Center;
                 focusCenter = new Vector2(
                     Mathf.Clamp(focusPoint.X, DrawSize.Width / 2f - 1, Width - DrawSize.Width / 2f + 1),
-                    Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f - 1 + yOffsetTile, Height - DrawSize.Height / 2f + 1)
+                    Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f + yOffsetTile, Height - DrawSize.Height / 2f + 1)
                     );
                 int xClamp = Width - DrawSize.Width, yClamp = Height - DrawSize.Height;
                 Vector2 nextTile = new Vector2(
                     Mathf.Clamp(focusPoint.X - DrawSize.Width / 2f, -1, xClamp + 1),
-                    Mathf.Clamp(focusPoint.Y - DrawSize.Height / 2f, -1, yClamp + 1));
+                    focusCenter.Y - DrawSize.Height / 2f - yOffsetTile);
 
                 float mapOffsetX;
                 if (nextTile.X == -1) mapOffsetX = VertexSize;
@@ -183,9 +182,10 @@ namespace mapKnight.Extended.Graphics {
                 else mapOffsetX = -((nextTile.X) % 1) * VertexSize;
 
                 float mapOffsetY;
-                if (nextTile.Y < yOffsetTile) mapOffsetY = -nextTile.Y * yVertexSize;
-                else if (nextTile.Y >= yClamp) mapOffsetY = (yClamp - nextTile.Y) * yVertexSize;
-                else mapOffsetY = -((nextTile.Y) % 1) * VertexSize;
+                mapOffsetY= -((nextTile.Y) % 1) * VertexSize;
+                //if (nextTile.Y < yOffsetTile) mapOffsetY = -nextTile.Y * yVertexSize;
+                //else if (nextTile.Y >= yClamp) mapOffsetY = (yClamp - nextTile.Y) * yVertexSize;
+                //else mapOffsetY = -((nextTile.Y) % 1) * VertexSize;
 
                 matrix.ResetView( );
                 matrix.TranslateView(mapOffsetX, mapOffsetY, 0);
