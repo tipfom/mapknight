@@ -80,7 +80,6 @@
     <AndroidAsset Include="Assets\textures\turret.json" />
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
-    <AndroidAsset Include="Assets\maps\beatiful_map.map" />
     <AndroidAsset Include="Assets\gestures\gestures" />
     <AndroidAsset Include="Assets\textures\Sword%282%29.json" />
     <AndroidAsset Include="Assets\textures\platforms\copper.json" />
@@ -97,6 +96,7 @@
     <AndroidAsset Include="Assets\textures\moonball.json" />
     <AndroidAsset Include="Assets\textures\guardian\guardian.json" />
     <AndroidAsset Include="Assets\textures\blackhole.json" />
+    <AndroidAsset Include="Assets\maps\Schtart.map" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -150,9 +150,6 @@
     <AndroidAsset Include="Assets\textures\player.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\beatiful_map.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\textures\platforms\copper.png" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +199,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\blackhole.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\Schtart.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
