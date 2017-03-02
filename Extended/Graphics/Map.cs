@@ -19,6 +19,8 @@ namespace mapKnight.Extended.Graphics {
         private float[ ][ ][ ] layerBuffer;
         private float yOffsetRaw;
         private float yOffsetTile;
+
+        private float yVertexSize;
         private Entity focusEntity;
         private Vector2 focusCenter;
         private Vector2 updateTile = new Vector2(-1, -1);
@@ -63,9 +65,11 @@ namespace mapKnight.Extended.Graphics {
 
         private float[ ] GenerateMainVerticies ( ) {
             int tileCount = DrawSize.Area;
+
             float ystart = -(DrawSize.Height / 2f * VertexSize);
             yOffsetRaw = (VertexSize - Math.Abs(ystart + 1));
             yOffsetTile = yOffsetRaw / VertexSize;
+            yVertexSize = VertexSize - yOffsetRaw;
 
             float[ ] verticies = new float[tileCount * 2 * 2 * 4];
             for (int i = 0; i < 2; i++) { // PR tile and overlay vertex
@@ -88,8 +92,6 @@ namespace mapKnight.Extended.Graphics {
         private float[ ] GenerateForegroundVerticies ( ) {
             int tileCount = DrawSize.Area;
             float ystart = -(DrawSize.Height / 2f * VertexSize);
-            yOffsetRaw = (VertexSize - Math.Abs(ystart + 1));
-            yOffsetTile = yOffsetRaw / VertexSize;
 
             float[ ] verticies = new float[tileCount * 1 * 2 * 4];
             for (int y = 0; y < DrawSize.Height; y++) {
@@ -168,23 +170,24 @@ namespace mapKnight.Extended.Graphics {
                 Vector2 focusPoint = focusEntity.Transform.Center;
                 focusCenter = new Vector2(
                     Mathf.Clamp(focusPoint.X, DrawSize.Width / 2f - 1, Width - DrawSize.Width / 2f + 1),
-                    Mathf.Clamp(focusPoint.Y + yOffsetRaw, DrawSize.Height / 2f - 1 + yOffsetTile, Height - DrawSize.Height / 2f + 1 - yOffsetTile)
+                    Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f - 1 + yOffsetTile, Height - DrawSize.Height / 2f + 1)
                     );
                 int xClamp = Width - DrawSize.Width, yClamp = Height - DrawSize.Height;
                 Vector2 nextTile = new Vector2(
                     Mathf.Clamp(focusPoint.X - DrawSize.Width / 2f, -1, xClamp + 1),
                     Mathf.Clamp(focusPoint.Y - DrawSize.Height / 2f, -1, yClamp + 1));
-                matrix.ResetView( );
+
                 float mapOffsetX;
-                if (nextTile.X < 0) mapOffsetX = (-nextTile.X) * VertexSize;
-                else if (nextTile.X > xClamp) mapOffsetX = -(nextTile.X - xClamp) * VertexSize;
+                if (nextTile.X == -1) mapOffsetX = VertexSize;
+                else if (nextTile.X > xClamp) mapOffsetX = (xClamp - nextTile.X) * VertexSize;
                 else mapOffsetX = -((nextTile.X) % 1) * VertexSize;
 
                 float mapOffsetY;
-                if (nextTile.Y < 0) mapOffsetY = -nextTile.Y * (VertexSize - yOffsetRaw);
-                else if (nextTile.Y >= yClamp) mapOffsetY = -(nextTile.Y - yClamp) * (VertexSize - yOffsetRaw);
+                if (nextTile.Y < yOffsetTile) mapOffsetY = -nextTile.Y * yVertexSize;
+                else if (nextTile.Y >= yClamp) mapOffsetY = (yClamp - nextTile.Y) * yVertexSize;
                 else mapOffsetY = -((nextTile.Y) % 1) * VertexSize;
 
+                matrix.ResetView( );
                 matrix.TranslateView(mapOffsetX, mapOffsetY, 0);
                 matrix.CalculateMVP( );
 
@@ -192,7 +195,7 @@ namespace mapKnight.Extended.Graphics {
                 Emitter.Matrix.TranslateView(-nextTile.X - DrawSize.Width / 2f, -nextTile.Y - DrawSize.Height / 2f, 0);
                 Emitter.Matrix.CalculateMVP( );
 
-                Vector2 intNextTile = new Vector2((int)Mathf.Clamp(nextTile.X, 0, Width - DrawSize.Width), (int)Mathf.Clamp(nextTile.Y, 0, Height - DrawSize.Height));
+                Vector2 intNextTile = new Vector2(Mathi.Clamp((int)nextTile.X, 0, Width - DrawSize.Width), Mathi.Clamp((int)nextTile.Y, 0, Height - DrawSize.Height));
                 if (updateTile != intNextTile) {
                     updateTile = intNextTile;
                     UpdateTextureBuffer( );
