@@ -1412,8 +1412,7 @@ namespace mapKnight.Extended {
                                 Speed = 3,
                                 Waypoints = new Vector2[ ] {
                                     new Vector2(0, 0),
-                                    new Vector2(6, 8),
-                                    new Vector2(0, 6)
+                                    new Vector2(0, 4)
                                 }
                             }
                         };

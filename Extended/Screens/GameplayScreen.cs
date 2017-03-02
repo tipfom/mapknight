@@ -34,7 +34,7 @@ namespace mapKnight.Extended.Screens {
 
         public override void Load( ) {
             int begin = Environment.TickCount;
-            map = Assets.Load<Map>("beatiful_map");
+            map = Assets.Load<Map>("Schtart");
 #if DEBUG
             Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
 #endif
@@ -87,19 +87,21 @@ namespace mapKnight.Extended.Screens {
                 Entity.Entities.RemoveAt(0);
             }
 
-            EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(26, 18), map);
-            EntityCollection.Enemys.Slime.Create(new Vector2(9, 7.5f), map);
-            EntityCollection.Enemys.Plugger.Create(new Vector2(72, 10), map);
-            EntityCollection.Obstacles.Landmine.Create(new Vector2(21, 7), map);
-            EntityCollection.Obstacles.Landmine.Create(new Vector2(22, 7), map);
-            EntityCollection.Obstacles.Landmine.Create(new Vector2(2.5f, 8), map);
-            EntityCollection.NPCs.Lenny.Create(new Vector2(62, 12), map);
-            EntityCollection.Enemys.Shell.Create(new Vector2(42, 11), map);
-            EntityCollection.Platforms.Copper.Create(new Vector2(3, 9), map);
-            EntityCollection.Enemys.Sepling.Create(map.SpawnPoint + new Vector2(10, 1), map);
-            EntityCollection.Enemys.Shark.Create(map.SpawnPoint + new Vector2(10, 1), map);
-            EntityCollection.Obstacles.Moonball.Create(new Vector2(map.SpawnPoint.X, 7) + new Vector2(3, 0), map, true);
-            EntityCollection.Enemys.BlackHole.Create(map.SpawnPoint + new Vector2(3f, 0f), map);
+            EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(12, 18), map);
+            EntityCollection.Enemys.Slime.Create(new Vector2(55, 20), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(52, 4), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(53, 4), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(54, 4), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(55, 4), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(24, 4), map);
+            EntityCollection.NPCs.Lenny.Create(new Vector2(7, 1), map);
+            EntityCollection.Enemys.Shell.Create(new Vector2(36, 4), map);
+            EntityCollection.Platforms.Copper.Create(new Vector2(13.1f, 4), map);
+            EntityCollection.Platforms.Copper.Create(new Vector2(5f, 13), map);
+            EntityCollection.Enemys.Sepling.Create(new Vector2(10, 3), map);
+            EntityCollection.Enemys.Shark.Create(new Vector2(40, 21), map);
+            EntityCollection.Obstacles.Moonball.Create(new Vector2(34, 17), map);
+            EntityCollection.Enemys.BlackHole.Create(new Vector2(68f, 9f), map);
 
             testEntity = EntityCollection.Players.Diamond.Create(map.SpawnPoint, map);
             testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
