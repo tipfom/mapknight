@@ -49,7 +49,7 @@ namespace mapKnight.Extended.Graphics {
 
             if (2 * Window.Ratio / DRAW_WIDTH != VertexSize) {
                 VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
-                DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 2));
+                DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 1));
                 mainBuffer?.Dispose( );
                 foregroundBuffer?.Dispose( );
                 mainBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 2), new GPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad, GenerateMainVerticies( )), new CachedGPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad));
@@ -132,11 +132,19 @@ namespace mapKnight.Extended.Graphics {
         private void UpdateTextureBuffer ( ) {
             for (int layer = 0; layer < 2; layer++) {
                 for (int ly = 0; ly < DrawSize.Height; ly++) {
-                    Array.Copy(layerBuffer[layer][ly + (int)updateTile.Y], (int)updateTile.X * 8, mainTextureBuffer.Cache, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
+                    if(ly + (int)updateTile.Y < Height) {
+                        Array.Copy(layerBuffer[layer][ly + (int)updateTile.Y], (int)updateTile.X * 8, mainTextureBuffer.Cache, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
+                    } else {
+                        Array.Clear(mainTextureBuffer.Cache, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
+                    }
                 }
             }
             for (int ly = 0; ly < DrawSize.Height; ly++) {
-                Array.Copy(layerBuffer[2][ly + (int)updateTile.Y], (int)updateTile.X * 8, foregroundTextureBuffer.Cache, ly * DrawSize.Width * 8, DrawSize.Width * 8);
+                if (ly + (int)updateTile.Y < Height) {
+                    Array.Copy(layerBuffer[2][ly + (int)updateTile.Y], (int)updateTile.X * 8, foregroundTextureBuffer.Cache, ly * DrawSize.Width * 8, DrawSize.Width * 8);
+                } else {
+                    Array.Clear(foregroundTextureBuffer.Cache, ly * DrawSize.Width * 8, DrawSize.Width * 8);
+                }
             }
 
             mainTextureBuffer.Apply( );
@@ -169,7 +177,7 @@ namespace mapKnight.Extended.Graphics {
                 Vector2 focusPoint = focusEntity.Transform.Center;
                 focusCenter = new Vector2(
                     Mathf.Clamp(focusPoint.X, DrawSize.Width / 2f - 1, Width - DrawSize.Width / 2f + 1),
-                    Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f + yOffsetTile, Height - DrawSize.Height / 2f + 1)
+                    Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f + yOffsetTile, Height - DrawSize.Height / 2f -yOffsetTile)   
                     );
                 int xClamp = Width - DrawSize.Width, yClamp = Height - DrawSize.Height;
                 Vector2 nextTile = new Vector2(
@@ -181,8 +189,7 @@ namespace mapKnight.Extended.Graphics {
                 else if (nextTile.X > xClamp) mapOffsetX = (xClamp - nextTile.X) * VertexSize;
                 else mapOffsetX = -((nextTile.X) % 1) * VertexSize;
 
-                float mapOffsetY;
-                mapOffsetY= -((nextTile.Y) % 1) * VertexSize;
+                float mapOffsetY = -((nextTile.Y) % 1) * VertexSize;
                 //if (nextTile.Y < yOffsetTile) mapOffsetY = -nextTile.Y * yVertexSize;
                 //else if (nextTile.Y >= yClamp) mapOffsetY = (yClamp - nextTile.Y) * yVertexSize;
                 //else mapOffsetY = -((nextTile.Y) % 1) * VertexSize;
@@ -195,7 +202,7 @@ namespace mapKnight.Extended.Graphics {
                 Emitter.Matrix.TranslateView(-nextTile.X - DrawSize.Width / 2f, -nextTile.Y - DrawSize.Height / 2f, 0);
                 Emitter.Matrix.CalculateMVP( );
 
-                Vector2 intNextTile = new Vector2(Mathi.Clamp((int)nextTile.X, 0, Width - DrawSize.Width), Mathi.Clamp((int)nextTile.Y, 0, Height - DrawSize.Height));
+                Vector2 intNextTile = new Vector2((int)nextTile.X, (int)nextTile.Y);
                 if (updateTile != intNextTile) {
                     updateTile = intNextTile;
                     UpdateTextureBuffer( );
