@@ -17,23 +17,31 @@ namespace mapKnight.Extended.Graphics {
         private Texture2D texture;
         private Matrix matrix = new Matrix(new Vector2(Window.Ratio, 1));
         private float[ ][ ][ ] layerBuffer;
-        private float yOffsetRaw;
-        private float yOffsetTile;
+        private float xFocusCenterMinClamp;
+        private float xFocusCenterMaxClamp;
+        private float yFocusCenterMinClamp;
+        private float yFocusCenterMaxClamp;
+        private float xNextTileOffset;
+        private float yNextTileOffset;
+        private int xViewPortClamp;
+        private float xEmitterMatrixOffset;
+        private float yEmitterMatrixOffset;
+        private int textureBufferL1baseOffset;
+        private int textureBufferLength;
 
-        private float yVertexSize;
         private Entity focusEntity;
         private Vector2 focusCenter;
         private Vector2 updateTile = new Vector2(-1, -1);
+
+        private CachedGPUBuffer mainTextureBuffer;
+        private CachedGPUBuffer foregroundTextureBuffer;
 
         public Size DrawSize { get; private set; }
         public float VertexSize { get; private set; }
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
 
-        private CachedGPUBuffer foregroundTextureBuffer { get { return (CachedGPUBuffer)foregroundBuffer.TextureBuffer; } }
-        private CachedGPUBuffer mainTextureBuffer { get { return (CachedGPUBuffer)mainBuffer.TextureBuffer; } }
-
-        public Map (Stream input) : base(input) {
+        public Map(Stream input) : base(input) {
             Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             Window_Changed( );
             InitTextureCoords( );
@@ -43,33 +51,45 @@ namespace mapKnight.Extended.Graphics {
             Window.Changed += Window_Changed;
         }
 
-        private void Window_Changed ( ) {
+        private void Window_Changed( ) {
             matrix.UpdateProjection(Window.ProjectionSize);
             matrix.CalculateMVP( );
 
             if (2 * Window.Ratio / DRAW_WIDTH != VertexSize) {
                 VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
                 DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 1));
-                mainBuffer?.Dispose( );
-                foregroundBuffer?.Dispose( );
-                mainBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 2), new GPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad, GenerateMainVerticies( )), new CachedGPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad));
-                foregroundBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area), new GPUBuffer(2, DrawSize.Area, PrimitiveType.Quad, GenerateForegroundVerticies( )), new CachedGPUBuffer(2, DrawSize.Area, PrimitiveType.Quad));
-            }
-            UpdateEmitterMatrix( );
-        }
 
-        private void UpdateEmitterMatrix ( ) {
+                mainBuffer?.Dispose( );
+                mainTextureBuffer = new CachedGPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad);
+                mainBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area * 2), new GPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad, GenerateMainVerticies( )), mainTextureBuffer);
+
+                foregroundBuffer?.Dispose( );
+                foregroundTextureBuffer = new CachedGPUBuffer(2, DrawSize.Area, PrimitiveType.Quad);
+                foregroundBuffer = new BufferBatch(new IndexBuffer(DrawSize.Area), new GPUBuffer(2, DrawSize.Area, PrimitiveType.Quad, GenerateForegroundVerticies( )), foregroundTextureBuffer);
+            }
+
             Emitter.Matrix.UpdateProjection(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             Emitter.Matrix.CalculateMVP( );
         }
 
-        private float[ ] GenerateMainVerticies ( ) {
+        private float[ ] GenerateMainVerticies( ) {
             int tileCount = DrawSize.Area;
 
             float ystart = -(DrawSize.Height / 2f * VertexSize);
-            yOffsetRaw = (VertexSize - Math.Abs(ystart+1));
-            yOffsetTile = yOffsetRaw / VertexSize - 1;
-            yVertexSize = VertexSize - yOffsetRaw;
+            float yOffsetRaw = (VertexSize - Math.Abs(ystart + 1));
+            float yOffsetTile = yOffsetRaw / VertexSize - 1;
+
+            xFocusCenterMinClamp = DrawSize.Width / 2f - 1;
+            xFocusCenterMaxClamp = Width - DrawSize.Width / 2f + 1;
+            yFocusCenterMinClamp = DrawSize.Height / 2f + yOffsetTile;
+            yFocusCenterMaxClamp = Height - DrawSize.Height / 2f - yOffsetTile;
+            xNextTileOffset = DrawSize.Width / 2f;
+            yNextTileOffset = DrawSize.Height / 2f + yOffsetTile;
+            xViewPortClamp = Width - DrawSize.Width;
+            xEmitterMatrixOffset = DrawSize.Width / 2f;
+            yEmitterMatrixOffset = DrawSize.Height / 2f;
+            textureBufferL1baseOffset = DrawSize.Area * 8;
+            textureBufferLength = DrawSize.Width * 8;
 
             float[ ] verticies = new float[tileCount * 2 * 2 * 4];
             for (int i = 0; i < 2; i++) { // PR tile and overlay vertex
@@ -89,7 +109,7 @@ namespace mapKnight.Extended.Graphics {
             return verticies;
         }
 
-        private float[ ] GenerateForegroundVerticies ( ) {
+        private float[ ] GenerateForegroundVerticies( ) {
             int tileCount = DrawSize.Area;
 
             float[ ] verticies = new float[tileCount * 1 * 2 * 4];
@@ -108,7 +128,7 @@ namespace mapKnight.Extended.Graphics {
             return verticies;
         }
 
-        private void InitTextureCoords ( ) {
+        private void InitTextureCoords( ) {
             // buffer tile coords
             layerBuffer = new float[3][ ][ ];
             for (int layer = 0; layer < 3; layer++) {
@@ -129,21 +149,20 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        private void UpdateTextureBuffer ( ) {
-            for (int layer = 0; layer < 2; layer++) {
-                for (int ly = 0; ly < DrawSize.Height; ly++) {
-                    if(ly + (int)updateTile.Y < Height) {
-                        Array.Copy(layerBuffer[layer][ly + (int)updateTile.Y], (int)updateTile.X * 8, mainTextureBuffer.Cache, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
-                    } else {
-                        Array.Clear(mainTextureBuffer.Cache, ly * DrawSize.Width * 8 + layer * DrawSize.Area * 8, DrawSize.Width * 8);
-                    }
-                }
-            }
+        private void UpdateTextureBuffer( ) {
+            int sourceIndex = (int)updateTile.X * 8;
+
             for (int ly = 0; ly < DrawSize.Height; ly++) {
+                int baseDestinationIndex = ly * textureBufferLength;
                 if (ly + (int)updateTile.Y < Height) {
-                    Array.Copy(layerBuffer[2][ly + (int)updateTile.Y], (int)updateTile.X * 8, foregroundTextureBuffer.Cache, ly * DrawSize.Width * 8, DrawSize.Width * 8);
+                    int layerBufferIndex = ly + (int)updateTile.Y;
+                    Array.Copy(layerBuffer[0][layerBufferIndex], sourceIndex, mainTextureBuffer.Cache, baseDestinationIndex, textureBufferLength);
+                    Array.Copy(layerBuffer[1][layerBufferIndex], sourceIndex, mainTextureBuffer.Cache, baseDestinationIndex + textureBufferL1baseOffset, textureBufferLength);
+                    Array.Copy(layerBuffer[2][layerBufferIndex], sourceIndex, foregroundTextureBuffer.Cache, baseDestinationIndex, textureBufferLength);
                 } else {
-                    Array.Clear(foregroundTextureBuffer.Cache, ly * DrawSize.Width * 8, DrawSize.Width * 8);
+                    Array.Clear(mainTextureBuffer.Cache, baseDestinationIndex, textureBufferLength);
+                    Array.Clear(mainTextureBuffer.Cache, baseDestinationIndex + textureBufferL1baseOffset, textureBufferLength);
+                    Array.Clear(foregroundTextureBuffer.Cache, baseDestinationIndex, textureBufferLength);
                 }
             }
 
@@ -151,7 +170,7 @@ namespace mapKnight.Extended.Graphics {
             foregroundTextureBuffer.Apply( );
         }
 
-        public void Draw ( ) {
+        public void Draw( ) {
             Program.Begin( );
             Program.Draw(mainBuffer, texture, matrix, true);
             Program.End( );
@@ -161,48 +180,40 @@ namespace mapKnight.Extended.Graphics {
             Program.End( );
         }
 
-        public void Update (DeltaTime dt) {
+        public void Update(DeltaTime dt) {
             Entity.UpdateAll(dt);
             UpdateFocus( );
             Entity.PostUpdateAll( );
         }
 
-        public void Focus (int entityID) {
+        public void Focus(int entityID) {
             focusEntity = Entity.Entities.Find(entity => entity.ID == entityID);
             focusEntity.Destroyed += ( ) => { focusEntity = null; };
         }
 
-        private void UpdateFocus ( ) {
+        private void UpdateFocus( ) {
             if (focusEntity != null) {
                 Vector2 focusPoint = focusEntity.Transform.Center;
-                focusCenter = new Vector2(
-                    Mathf.Clamp(focusPoint.X, DrawSize.Width / 2f - 1, Width - DrawSize.Width / 2f + 1),
-                    Mathf.Clamp(focusPoint.Y, DrawSize.Height / 2f + yOffsetTile, Height - DrawSize.Height / 2f -yOffsetTile)   
-                    );
-                int xClamp = Width - DrawSize.Width, yClamp = Height - DrawSize.Height;
-                Vector2 nextTile = new Vector2(
-                    Mathf.Clamp(focusPoint.X - DrawSize.Width / 2f, -1, xClamp + 1),
-                    focusCenter.Y - DrawSize.Height / 2f - yOffsetTile);
+                focusCenter = new Vector2(Mathf.Clamp(focusPoint.X, xFocusCenterMinClamp, xFocusCenterMaxClamp), Mathf.Clamp(focusPoint.Y, yFocusCenterMinClamp, yFocusCenterMaxClamp));
+                Vector2 nextTile = new Vector2(focusCenter.X - xNextTileOffset, focusCenter.Y - yNextTileOffset);
 
                 float mapOffsetX;
-                if (nextTile.X == -1) mapOffsetX = VertexSize;
-                else if (nextTile.X > xClamp) mapOffsetX = (xClamp - nextTile.X) * VertexSize;
-                else mapOffsetX = -((nextTile.X) % 1) * VertexSize;
-
-                float mapOffsetY = -((nextTile.Y) % 1) * VertexSize;
-                //if (nextTile.Y < yOffsetTile) mapOffsetY = -nextTile.Y * yVertexSize;
-                //else if (nextTile.Y >= yClamp) mapOffsetY = (yClamp - nextTile.Y) * yVertexSize;
-                //else mapOffsetY = -((nextTile.Y) % 1) * VertexSize;
+                if (nextTile.X < 0)
+                    mapOffsetX = -nextTile.X * VertexSize;
+                else if (nextTile.X >= xViewPortClamp)
+                    mapOffsetX = (xViewPortClamp - nextTile.X) * VertexSize;
+                else
+                    mapOffsetX = -((nextTile.X) % 1) * VertexSize;
 
                 matrix.ResetView( );
-                matrix.TranslateView(mapOffsetX, mapOffsetY, 0);
+                matrix.TranslateView(mapOffsetX, -((nextTile.Y) % 1) * VertexSize, 0);
                 matrix.CalculateMVP( );
 
                 Emitter.Matrix.ResetView( );
-                Emitter.Matrix.TranslateView(-nextTile.X - DrawSize.Width / 2f, -nextTile.Y - DrawSize.Height / 2f, 0);
+                Emitter.Matrix.TranslateView(-nextTile.X - xEmitterMatrixOffset, -nextTile.Y - yEmitterMatrixOffset, 0);
                 Emitter.Matrix.CalculateMVP( );
 
-                Vector2 intNextTile = new Vector2((int)nextTile.X, (int)nextTile.Y);
+                Vector2 intNextTile = new Vector2(Mathi.Clamp((int)nextTile.X, 0, xViewPortClamp), (int)nextTile.Y);
                 if (updateTile != intNextTile) {
                     updateTile = intNextTile;
                     UpdateTextureBuffer( );
@@ -210,15 +221,15 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        public Vector2 GetPositionOnScreen (Entity entity) {
+        public Vector2 GetPositionOnScreen(Entity entity) {
             return (entity.Transform.Center - focusCenter) * VertexSize;
         }
 
-        public bool HasCollider (int x, int y) {
+        public bool HasCollider(int x, int y) {
             return GetTile(x, y).HasFlag(TileAttribute.Collision);
         }
 
-        public bool IsOnScreen (Entity entity) {
+        public bool IsOnScreen(Entity entity) {
             return true;
         }
     }
