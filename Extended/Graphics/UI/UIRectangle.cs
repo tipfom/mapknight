@@ -50,5 +50,23 @@ namespace mapKnight.Extended.Graphics.UI {
             Verticies[6] = Verticies[4]; // Right
             Verticies[7] = Top;
         }
+
+        public static float[] GetVerticies(float x, float y, float width, float height) {
+            return new float[8] {
+                x, y,
+                x, y - height, 
+                x + width, y - height, 
+                x + width, y
+            };
+        }
+
+        public static float[] GetVerticies(Vector2 position, Vector2 size) {
+            return new float[8] {
+                position.X, position.Y,
+                position.X, position.Y - size.Y,
+                position.X + size.X, position.Y - size.Y,
+                position.X + size.X, position.Y
+            };
+        }
     }
 }

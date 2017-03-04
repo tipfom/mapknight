@@ -11,7 +11,7 @@ namespace mapKnight.Extended.Components.Stats {
         }
 
         float ApplyScaleFunction (int value) {
-            return -1f / (2 * value + 1) + 1f;
+            return 1f / (0.5f * value + 1);
         }
 
         public new class Configuration : Component.Configuration {

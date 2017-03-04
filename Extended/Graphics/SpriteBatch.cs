@@ -76,6 +76,7 @@ namespace mapKnight.Extended.Graphics {
             }
             FBOProgram.Program.End( );
             buffer.Unbind( );
+            GL.ClearColor(Window.Background.R / 255f, Window.Background.G / 255f, Window.Background.B / 255f, Window.Background.A / 255f);
 
             if (diposeChildren) {
                 for (int i = 0; i < children.Count; i++)

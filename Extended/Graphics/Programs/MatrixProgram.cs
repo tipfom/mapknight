@@ -30,7 +30,7 @@ namespace mapKnight.Extended.Graphics.Programs {
 
         public static MatrixProgram Program;
 
-        public class BufferBatch {
+        public class BufferBatch : IDisposable {
             public IndexBuffer IndexBuffer;
             public IAttributeBuffer VertexBuffer;
             public IAttributeBuffer TextureBuffer;
@@ -39,6 +39,12 @@ namespace mapKnight.Extended.Graphics.Programs {
                 IndexBuffer = indexbuffer;
                 VertexBuffer = vertexbuffer;
                 TextureBuffer = texturebuffer;
+            }
+
+            public void Dispose ( ) {
+                IndexBuffer.Dispose( );
+                VertexBuffer.Dispose( );
+                TextureBuffer.Dispose( );
             }
         }
     }

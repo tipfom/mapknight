@@ -1,8 +1,6 @@
 */bin/**
 */obj/**
 */.vs/**
-packages/
-Components/*
 Shared/*
 TestResults/*
 .vs/*
@@ -12,6 +10,7 @@ TestResults/*
 *.db
 *.bak
 *.user
+*.csproj.user
 *-Skunk.*
 *-Tim-PC.*
 

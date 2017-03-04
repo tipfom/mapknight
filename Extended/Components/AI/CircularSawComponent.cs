@@ -6,22 +6,22 @@ using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
 
-    [ComponentRequirement(typeof(DamageComponent))]
     public class CircularSawComponent : WaypointComponent {
         private int currentwaypoint;
-        private DamageComponent damageComponent;
         private int direction;
         private float sawRadius;
 
         public CircularSawComponent (Entity owner, Vector2[ ] waypoints, float speed, float sawradius) : base(owner, waypoints, speed) {
+            owner.Domain = EntityDomain.Obstacle;
+
             sawRadius = sawradius;
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Info.IsPlayer) {
+            if (collidingEntity.Domain == EntityDomain.Player) {
                 Vector2 closestPointToPlayer = Owner.Transform.Center + (Owner.Transform.Center - collidingEntity.Transform.Center) * sawRadius;
                 if (Owner.Transform.Intersects(closestPointToPlayer)) {
-                    collidingEntity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
+                    collidingEntity.SetComponentInfo(ComponentData.Damage, float.PositiveInfinity);
                 }
             }
         }
@@ -29,7 +29,6 @@ namespace mapKnight.Extended.Components.AI {
         public override void Prepare ( ) {
             direction = 1;
             currentwaypoint = 0;
-            damageComponent = Owner.GetComponent<DamageComponent>( );
             base.Prepare( );
         }
 

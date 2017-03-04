@@ -122,6 +122,7 @@ namespace mapKnight.ToolKit.Controls.Xna {
         }
 
         public void Update ( ) {
+            if (GraphicsService == null) return;
             // set the image source render target
             GraphicsDevice.SetRenderTarget(imageSource.RenderTarget);
             GraphicsDevice.Clear(Background);

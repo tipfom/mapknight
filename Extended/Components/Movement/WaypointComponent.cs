@@ -8,7 +8,7 @@ namespace mapKnight.Extended.Components.Movement {
         private Vector2 currentMoveDistance;
         private int currentMoveDuration;
         private Vector2 currentWaypoint;
-        private int nextMoveTime;
+        private int timeTillNextMove;
         private Vector2 nextWaypoint;
         private float speed;
         private Vector2[ ] waypoints;
@@ -28,10 +28,11 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Update (DeltaTime dt) {
-            if (Environment.TickCount > nextMoveTime)
+            timeTillNextMove -= (int)dt.Milliseconds;
+            if (timeTillNextMove < 0)
                 PrepareNextMove( );
 
-            float progressPercent = 1f - (nextMoveTime - Environment.TickCount) / (float)currentMoveDuration;
+            float progressPercent = 1f - (timeTillNextMove) / (float)currentMoveDuration;
             Vector2 nextPosition = currentWaypoint + currentMoveDistance * GetPositionInterpolationPercent(progressPercent);
             Owner.Transform.Center = nextPosition;
         }
@@ -49,7 +50,7 @@ namespace mapKnight.Extended.Components.Movement {
             nextWaypoint = waypoints[GetNextWaypoint( )];
             currentMoveDistance = nextWaypoint - currentWaypoint;
             currentMoveDuration = GetCurrentMoveDuration( );
-            nextMoveTime = Environment.TickCount + currentMoveDuration;
+            timeTillNextMove = currentMoveDuration;
             Velocity = currentMoveDistance / (currentMoveDuration / 1000f);
         }
     }

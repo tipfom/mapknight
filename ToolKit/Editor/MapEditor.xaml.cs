@@ -34,17 +34,17 @@ namespace mapKnight.ToolKit.Editor {
                     new MenuItem() { Header = "NEW", Height = 22, Icon = App.Current.FindResource("image_map_new") },
                     new MenuItem() { Header = "LOAD", Height = 22 }
                 } },
-            new ComboBox() { Width = 260, Margin = new Thickness(-6, 0, -6, 0), VerticalAlignment = VerticalAlignment.Center },
+            new ComboBox() { Width = 260, Margin = new Thickness(-6, 0, -6, 0), VerticalAlignment = VerticalAlignment.Center, Focusable = false },
             new Image() { Source= (BitmapImage)App.Current.FindResource("image_map_mapsettings"), Style = imageStyle },
             new MenuItem() { Header = "SHOW LAYER", IsEnabled = false },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Background" } },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Middle" } },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Foreground" } },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Background" }, Focusable = false },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Middle" }, Focusable = false },
+            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Foreground" }, Focusable = false },
             new Separator() { },
             new MenuItem() {Header ="MODIFY LAYER",IsEnabled =false },
-            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip(){ Content = "Select Background" } },
-            new RadioButton() {IsChecked = true, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Middle" } },
-            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Foreground" } },
+            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip(){ Content = "Select Background" }, Focusable = false },
+            new RadioButton() {IsChecked = true, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Middle" }, Focusable = false },
+            new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Foreground" }, Focusable = false },
             new Separator(),
             new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_undo"), Style = imageStyle }, Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Ctrl + Z" } },
             new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pen"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Alt + A" } },
@@ -463,12 +463,19 @@ namespace mapKnight.ToolKit.Editor {
                         break;
 
                     case Tool.Rotater:
+                        if (currentMap.Tiles[currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer]].Name == "None") {
+                            for (int i = 2; i > -1; i--) {
+                                if (currentMap.Tiles[currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, i]].Name != "None") {
+                                    ((RadioButton)_Menu[9 + i]).IsChecked = true;
+                                }
+                            }
+                        }
                         float tileRotation = mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
                         Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     Tuple.Create(clickedTile,currentLayer, (int)(tileRotation * 2), true)});
                         tileRotation += 0.5f;
                         tileRotation %= 2f;
-                        if (currentMap.GetTile((int)clickedTile.X, (int)clickedTile.Y).Name != "None")
+                        if (currentMap.GetTile((int)clickedTile.X, (int)clickedTile.Y, currentLayer).Name != "None")
                             mapRotations[currentMap][(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = tileRotation;
                         break;
                 }
@@ -611,6 +618,7 @@ namespace mapKnight.ToolKit.Editor {
                         listview_tile_attributes.Items.Add(new AttributeListViewEntry(false, attribute.ToString( ), ""));
                     }
                 }
+                SelectTool(Tool.Pen);
             }
         }
 

@@ -5,31 +5,31 @@ using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI.Basics {
 
-    [ComponentRequirement(typeof(DamageComponent))]
     public class FragileHeadComponent: Component {
-        private DamageComponent damageComponent;
+        private float damage;
 
-        public FragileHeadComponent (Entity owner) : base(owner) {
+        public FragileHeadComponent (Entity owner, float damage) : base(owner) {
+            this.damage = damage;
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (collidingEntity.Info.IsPlayer) {
+            if (collidingEntity.Domain == EntityDomain.Player) {
                 if (collidingEntity.Transform.BL.Y > Owner.Transform.Center.Y) {
                     Owner.Destroy( );
                 } else {
-                    collidingEntity.SetComponentInfo(ComponentData.Damage, damageComponent.OnTouch);
+                    collidingEntity.SetComponentInfo(ComponentData.Damage, damage);
                 }
             }
         }
 
         public override void Prepare ( ) {
-            damageComponent = Owner.GetComponent<DamageComponent>( );
         }
 
         public new class Configuration : Component.Configuration {
+            public float Damage;
 
             public override Component Create (Entity owner) {
-                return new FragileHeadComponent(owner);
+                return new FragileHeadComponent(owner, Damage);
             }
         }
     }

@@ -12,16 +12,14 @@ namespace mapKnight.Extended.Components.Movement {
 
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
-        public readonly float BouncyMultiplier;
         public readonly float GravityInfluence;
 
         private Vector2 enforcedVelocity;
         private PlatformComponent platformStandingOn;
 
-        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float bouncymult, float gravityinfluence) : base(owner) {
+        public MotionComponent (Entity owner, bool mapCollider, bool platformCollider, float gravityinfluence) : base(owner) {
             HasMapCollider = mapCollider;
             HasPlatformCollider = platformCollider;
-            BouncyMultiplier = bouncymult;
             GravityInfluence = gravityinfluence;
         }
 
@@ -31,11 +29,12 @@ namespace mapKnight.Extended.Components.Movement {
         public Vector2 Velocity { get; private set; } = new Vector2( );
 
         public override void Collision (Entity collidingEntity) {
-            if (HasPlatformCollider && collidingEntity.Info.IsPlatform && !IsOnPlatform) {
+            if (HasPlatformCollider && collidingEntity.Domain == EntityDomain.Platform && platformStandingOn == null) {
                 platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
-                if (Owner.Transform.BL.Y > collidingEntity.Transform.TR.Y - 0.3 && Velocity.Y <= platformStandingOn.Velocity.Y) {
+                if (Owner.Transform.BL.Y >= collidingEntity.Transform.TR.Y + (Velocity.Y - Math.Abs(platformStandingOn.Velocity.Y)) * Manager.FrameTime.TotalSeconds - 0.05f && Velocity.Y - 0.1f <= platformStandingOn.Velocity.Y) {
                     Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, collidingEntity.Transform.TR.Y + Owner.Transform.HalfSize.Y);
                     IsOnPlatform = true;
+                    enforcedVelocity.X = platformStandingOn.Velocity.X;
                 } else {
                     platformStandingOn = null;
                 }
@@ -43,11 +42,8 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Update (DeltaTime dt) {
-            if(platformStandingOn == null)
+            if (platformStandingOn == null)
                 IsOnPlatform = false;
-
-            if (IsOnPlatform)
-                enforcedVelocity.X = platformStandingOn.Velocity.X;
 
             while (Owner.HasComponentInfo(ComponentData.Velocity)) {
                 enforcedVelocity += (Vector2)Owner.GetComponentInfo(ComponentData.Velocity)[0];
@@ -65,13 +61,10 @@ namespace mapKnight.Extended.Components.Movement {
 
             Velocity = AimedVelocity + enforcedVelocity;
 
-            if (IsOnGround && BouncyMultiplier > 0)
-                enforcedVelocity.Y = -enforcedVelocity.Y * BouncyMultiplier;
-
             Transform newTransform = new Transform(Owner.Transform.Center + Velocity * dt.TotalSeconds, Owner.Transform.Size);
             if (HasMapCollider) {
-                IsAtWall = moveHorizontally(Owner.Transform, newTransform);
-                IsOnGround = moveVertically(Owner.Transform, newTransform);
+                IsAtWall = MoveHorizontally(Owner.Transform, newTransform);
+                IsOnGround = MoveVertically(Owner.Transform, newTransform);
 
                 if (IsOnGround) {
                     enforcedVelocity.X = 0;
@@ -91,7 +84,7 @@ namespace mapKnight.Extended.Components.Movement {
             Owner.SetComponentInfo(ComponentData.ScaleX, ScaleX);
         }
 
-        private bool moveHorizontally (Transform oldTransform, Transform targetTransform) {
+        private bool MoveHorizontally (Transform oldTransform, Transform targetTransform) {
             // returns true if any collision happened and modifies the transform
             int ylimit = Mathi.Floor(oldTransform.TR.Y);
             if (ylimit == oldTransform.TR.Y)
@@ -100,7 +93,7 @@ namespace mapKnight.Extended.Components.Movement {
                 // moves to the right
                 int xlimit = Mathi.Floor(targetTransform.TR.X);
                 for (int x = (int)oldTransform.TR.X; x <= xlimit; x++) {
-                    for (int y = Mathi.Floor(oldTransform.BL.Y); y <= ylimit; y++) {
+                    for (int y = Mathi.Floor(oldTransform.BL.Y + 0.001f); y <= ylimit; y++) {
                         if (x >= Owner.World.Size.Width || Owner.World.HasCollider(x, y)) {
                             targetTransform.X = x - targetTransform.Size.X / 2;
                             return true;
@@ -111,7 +104,7 @@ namespace mapKnight.Extended.Components.Movement {
                 // moves to the left
                 int xlimit = Mathi.Floor(targetTransform.BL.X);
                 for (int x = (int)oldTransform.BL.X; x >= xlimit; x--) {
-                    for (int y = Mathi.Floor(oldTransform.BL.Y); y <= ylimit; y++) {
+                    for (int y = Mathi.Floor(oldTransform.BL.Y + 0.001f); y <= ylimit; y++) {
                         if (x < 0 || Owner.World.HasCollider(x, y)) {
                             targetTransform.X = x + 1 + targetTransform.Size.X / 2;
                             return true;
@@ -123,7 +116,7 @@ namespace mapKnight.Extended.Components.Movement {
             return false;
         }
 
-        private bool moveVertically (Transform oldTransform, Transform targetTransform) {
+        private bool MoveVertically (Transform oldTransform, Transform targetTransform) {
             if (oldTransform.Center.Y < targetTransform.Center.Y) {
                 // goes up
                 int ylimit = Mathi.Floor(targetTransform.TR.Y);
@@ -156,13 +149,12 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public new class Configuration : Component.Configuration {
-            public float BounceMultiplier = 0f;
             public float GravityInfluence = 1f;
             public bool MapCollider = true;
             public bool PlatformCollider = false;
 
             public override Component Create (Entity owner) {
-                return new MotionComponent(owner, MapCollider, PlatformCollider, BounceMultiplier, GravityInfluence);
+                return new MotionComponent(owner, MapCollider, PlatformCollider, GravityInfluence);
             }
         }
     }

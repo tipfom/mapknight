@@ -16,10 +16,6 @@
         VertexAnimation,
         SpriteAnimation,
 
-        // animations
-        BoneOffset,
-        BoneTexture,
-
         // stats
         Damage,
 

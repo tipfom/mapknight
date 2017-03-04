@@ -27,14 +27,6 @@ namespace mapKnight.Android {
             SetContentView(view);
         }
 
-        protected override void OnStop ( ) {
-            base.OnStop( );
-        }
-
-        protected override void OnResume ( ) {
-            base.OnResume( );
-        }
-
         protected override void OnDestroy ( ) {
             Manager.Destroy( );
             base.OnDestroy( );

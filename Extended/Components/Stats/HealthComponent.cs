@@ -1,4 +1,4 @@
-﻿using mapKnight.Android;
+﻿using System;
 using mapKnight.Core;
 
 namespace mapKnight.Extended.Components.Stats {
@@ -6,7 +6,7 @@ namespace mapKnight.Extended.Components.Stats {
     public class HealthComponent : Component {
         public readonly int Initial;
         public float Current;
-        public bool Invincible;
+        public Func<Entity, bool> IsHit; 
 
         private ArmorComponent armorComponent;
 
@@ -22,9 +22,9 @@ namespace mapKnight.Extended.Components.Stats {
 
         public override void Update (DeltaTime dt) {
             while (Owner.HasComponentInfo(ComponentData.Damage)) {
-                float info = (float)Owner.GetComponentInfo(ComponentData.Damage)[0];
-                if (!Invincible) {
-                    Current -= (info * ((armorComponent != null) ? armorComponent.PhysicalMultiplier : 1f));
+                object[] data = Owner.GetComponentInfo(ComponentData.Damage);
+                if (IsHit?.Invoke((Entity)data[0]) ?? true) {
+                    Current -= ((float)data[1] * ((armorComponent != null) ? armorComponent.PhysicalMultiplier : 1f));
                     if (Current < 0)
                         Owner.Destroy( );
                 }

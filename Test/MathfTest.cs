@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using mapKnight.Core;
 
@@ -28,6 +24,16 @@ namespace mapKnight.Test {
             for(int i = 1; i < int.MaxValue && i > 0; i += 1) {
                 // error is less then 0.5%
                 Assert.IsTrue(Math.Abs(Mathf.Sqrt(i) / Math.Sqrt(i) - 1) <= 0.005);
+            }
+        }
+
+        [TestMethod]
+        public void TestPow ( ) {
+            for (int i = 0; i < 100; i++) {
+                Assert.AreEqual((float)Math.Pow(i, 0), Mathf.Pow(i, 0));
+                Assert.AreEqual((float)Math.Pow(i, 1), Mathf.Pow(i, 1));
+                Assert.AreEqual((float)Math.Pow(i, 2), Mathf.Pow(i, 2));
+                Assert.AreEqual((float)Math.Pow(i, 91), Mathf.Pow(i, 91));
             }
         }
     }

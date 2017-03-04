@@ -69,7 +69,7 @@ namespace mapKnight.Extended {
         static Dictionary<int, Texture2D> textureCache = new Dictionary<int, Texture2D>( );
         public static Texture2D GetTexture (params string[ ] path) {
             int pathhash = path.GetHashCode( );
-            if (!textureCache.ContainsKey(pathhash)) {
+            if (!textureCache.ContainsKey(pathhash) || textureCache[pathhash].Disposed) {
                 int width, height, id = GL.GenTexture( );
                 GL.BindTexture(TextureTarget.Texture2D, id);
 #if __ANDROID__
@@ -85,8 +85,11 @@ namespace mapKnight.Extended {
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
 
-                textureCache.Add(pathhash, new Texture2D(id, new Size(width, height), path[path.Length - 1]));
-
+                if (!textureCache.ContainsKey(pathhash)) {
+                    textureCache.Add(pathhash, new Texture2D(id, new Size(width, height), path[path.Length - 1]));
+                } else {
+                    textureCache[pathhash] = new Texture2D(id, new Size(width, height), path[path.Length - 1]);
+                }
 #if DEBUG
                 if (id == 0 || Debug.CheckGL(typeof(Assets)))
                     Debug.Print(typeof(Assets), "failed loading image " + path[path.Length - 1]);
@@ -97,11 +100,16 @@ namespace mapKnight.Extended {
             return textureCache[pathhash];
         }
 
+        static Dictionary<int, SpriteBatch> spriteCache = new Dictionary<int, SpriteBatch>( );
         public static SpriteBatch GetSprite (string name) {
-            Texture2D texture = Assets.Load<Texture2D>(name);
-            Dictionary<string, int[ ]> spriteContent = new Dictionary<string, int[ ]>( );
-            JsonConvert.PopulateObject(GetText("textures", name + ".json"), spriteContent);
-            return new SpriteBatch(spriteContent, texture);
+            int namehash = name.GetHashCode( );
+            if (!spriteCache.ContainsKey(namehash)) {
+                Texture2D texture = Assets.Load<Texture2D>(name);
+                Dictionary<string, int[ ]> spriteContent = new Dictionary<string, int[ ]>( );
+                JsonConvert.PopulateObject(GetText("textures", name + ".json"), spriteContent);
+                spriteCache.Add(namehash, new SpriteBatch(spriteContent, texture));
+            }
+            return spriteCache[namehash];
         }
 
         public static string GetText (params string[ ] path) {

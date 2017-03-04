@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
 using mapKnight.Core;
 
 namespace mapKnight.Extended.Components.Movement {
 
     public class PlatformComponent : WaypointComponent {
-        private int currentWaypoint = 0;
+        private int currentWaypoint = 1;
 
         public PlatformComponent (Entity owner, Vector2[ ] waypoints, float speed) : base(owner, waypoints, speed) {
+            owner.Domain = EntityDomain.Platform;
         }
 
         protected override int GetNextWaypoint ( ) {

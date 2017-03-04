@@ -23,12 +23,10 @@ namespace mapKnight.Extended.Components.AI {
         private float walkpossibility = 1f;
 
         public ShellComponent (Entity owner, float frenzyspeed, float attackspeed) : base(owner) {
+            owner.Domain = EntityDomain.Enemy;
+
             frenzySpeed = frenzyspeed;
             attackSpeed = attackspeed;
-
-            Owner.SetComponentInfo(ComponentData.BoneTexture, "shell");
-            Owner.SetComponentInfo(ComponentData.BoneOffset, Tuple.Create("shell", new Vector2(9.5f, 12.5f)));
-            Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true, (AnimationComponent.AnimationCallback)AnimationCallbackIdle);
         }
 
         public override void Prepare ( ) {
@@ -49,7 +47,7 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void Trigger_Triggered (Entity entity) {
-            if (!(hasting || stunned) && entity.Info.IsPlayer) {
+            if (!(hasting || stunned) && entity.Domain == EntityDomain.Player) {
                 target = entity;
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, "prepare", true, (AnimationComponent.AnimationCallback)AnimationCallbackPrepare);
             }
@@ -77,8 +75,8 @@ namespace mapKnight.Extended.Components.AI {
                     Owner.SetComponentInfo(ComponentData.VertexAnimation, "walk", true, (AnimationComponent.AnimationCallback)AnimationCallbackWalk);
                 } else {
                     Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true, (AnimationComponent.AnimationCallback)AnimationCallbackIdle);
+                    walkpossibility *= 0.8f;
                 }
-                walkpossibility *= 0.8f;
             }
         }
 

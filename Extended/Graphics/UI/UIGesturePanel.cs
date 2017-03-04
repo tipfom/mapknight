@@ -14,12 +14,12 @@ namespace mapKnight.Extended.Graphics.UI {
         const int SWIPE_MIN_DIST = 100;
 
         // CURRENTLY ONLY WITH SUPPORT FOR ANDROID
-        private int currentTouchID;
+        private int currentTouchID = -1;
         private IList<GesturePoint> trackedStrokeBuffer = new List<GesturePoint>(100);
         private GestureStore gestureStore;
 
         public event Action<string> OnGesturePerformed;
-        public UIGesturePanel (Screen owner, UIMargin hmargin, UIMargin vmargin, Vector2 size, GestureStore gesturestore) : base(owner, hmargin, vmargin, size, false) {
+        public UIGesturePanel (Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, GestureStore gesturestore) : base(owner, hmargin, vmargin, size, false) {
             gestureStore = gesturestore;
         }
 

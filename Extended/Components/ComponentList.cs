@@ -61,6 +61,16 @@ namespace mapKnight.Extended.Components {
                 Type componentType = Type.GetType(components[i].GetType( ).FullName.Replace("+Configuration", ""));
                 ComponentRequirement[ ] requirements = (ComponentRequirement[ ])componentType.GetCustomAttributes(typeof(ComponentRequirement), false);
                 foreach (ComponentRequirement requirement in requirements) {
+                    switch(requirement){
+                        case UpdateAfter ua:
+                            if (!ua.Requirement)
+                                continue;
+                            break;
+                        case UpdateBefore ub:
+                            if (!ub.Requirement)
+                                continue;
+                            break;
+                    }
                     Type componentConfigType = Type.GetType(requirement.Requiring.FullName + "+Configuration");
                     if (!instanciatedTypes.Contains(componentConfigType)) {
                         bool canBeInstanciated = requirement.Requiring.GetCustomAttributes(typeof(Instantiatable), false).Length > 0;
@@ -84,12 +94,16 @@ namespace mapKnight.Extended.Components {
 
                 if (beforeAttribute.Length + afterAttribute.Length > 0) {
                     foreach (UpdateAfter attr in afterAttribute) {
-                        Component.Configuration relation = typeMap[attr.Relation];
-                        relations[components[i]].Add(relation);
+                        if (typeMap.ContainsKey(attr.Relation)) {
+                            Component.Configuration relation = typeMap[attr.Relation];
+                            relations[components[i]].Add(relation);
+                        }
                     }
                     foreach (UpdateBefore attr in beforeAttribute) {
-                        Component.Configuration relation = typeMap[attr.Relation];
-                        relations[relation].Add(components[i]);
+                        if (typeMap.ContainsKey(attr.Relation)) {
+                            Component.Configuration relation = typeMap[attr.Relation];
+                            relations[relation].Add(components[i]);
+                        }
                     }
                 }
             }

@@ -45,7 +45,7 @@ namespace mapKnight.Extended.Graphics.Programs {
 
         public static ColorProgram Program;
 
-        public class BufferBatch {
+        public class BufferBatch : IDisposable {
             public IndexBuffer IndexBuffer;
             public IAttributeBuffer VertexBuffer;
             public IAttributeBuffer ColorBuffer;
@@ -56,6 +56,14 @@ namespace mapKnight.Extended.Graphics.Programs {
                 VertexBuffer = vertexbuffer;
                 ColorBuffer = colorbuffer;
                 TextureBuffer = texturebuffer;
+            }
+
+
+            public void Dispose ( ) {
+                IndexBuffer.Dispose( );
+                VertexBuffer.Dispose( );
+                TextureBuffer.Dispose( );
+                ColorBuffer.Dispose( );
             }
         }
     }

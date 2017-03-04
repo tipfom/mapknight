@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mapKnight.ToolKit.Windows"
+        xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
         Title="Modify Map" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
     <StackPanel>
@@ -19,9 +20,9 @@
             <Label Content="Gravity" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
             <StackPanel Width="189" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Label Content="X" Margin="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
+                <controls:FloatTextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
                 <Label Content="Y" Margin="0" VerticalAlignment="Center"/>
-                <TextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
+                <controls:FloatTextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" PreviewTextInput="CheckFloatNumericTextInput" VerticalContentAlignment="Center"/>
             </StackPanel>
         </Grid>
 

@@ -17,108 +17,100 @@ namespace mapKnight.Extended.Screens {
         private UILabel debugLabel;
         private UIPanel leftPanel, rightPanel;
         private UIGesturePanel controlPanel;
+        private UIBar healthBar;
 
         private Map map;
         private Entity testEntity;
-        private HealthComponent testEntityHealth;
+        private PlayerComponent testEntityPlayer;
 
-        public GameplayScreen ( ) {
-            Entity.EntityAdded += (Entity obj) => { if (IsActive) obj.Prepare( ); };
+        public GameplayScreen( ) {
+            Entity.EntityAdded += (Entity obj) => { obj.Prepare( ); };
         }
 
-        public override void Draw ( ) {
+        public override void Draw( ) {
             map.Draw( );
             base.Draw( );
         }
 
-        public override void Load ( ) {
-            SetupControls( );
-            Window.Changed += ( ) => {
-                SetupControls( );
-            };
-
-            debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.05f), 0.05f, "", UITextAlignment.Right);
-
+        public override void Load( ) {
             int begin = Environment.TickCount;
-            map = Assets.Load<Map>("beatiful_map");
+            map = Assets.Load<Map>("Schtart");
+#if DEBUG
             Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
-            begin = Environment.TickCount;
+#endif
 
-            //Entity.Configuration sawConfig = Assets.Load<Entity.Configuration>("circularsaw");
-            Entity.Configuration walkingTrowieConfig = Assets.Load<Entity.Configuration>("plugger");
-            Entity.Configuration landMineConfig = Assets.Load<Entity.Configuration>("landmine");
-            Entity.Configuration turretConfig = Assets.Load<Entity.Configuration>("tourret");
-            //Entity.Configuration meatballConfig = Assets.Load<Entity.Configuration>("meatball");
-            Entity.Configuration hastoConfig = Assets.Load<Entity.Configuration>("shell");
-            Entity.Configuration platformConfig = Assets.Load<Entity.Configuration>("platforms/copper");
-            Entity.Configuration seplingConfig = Assets.Load<Entity.Configuration>("sepling");
-            Entity.Configuration sharkConfig = Assets.Load<Entity.Configuration>("shark");
-
-            //sawConfig.Create(new Vector2(3, 6), map);
-
-            walkingTrowieConfig.Create(new Vector2(72, 10 + walkingTrowieConfig.Transform.HalfSize.Y), map);
-
-            landMineConfig.Create(new Vector2(21, 7 + landMineConfig.Transform.HalfSize.Y), map);
-            landMineConfig.Create(new Vector2(22, 7 + landMineConfig.Transform.HalfSize.Y), map);
-
-            turretConfig.Create(new Vector2(62, 12 + turretConfig.Transform.HalfSize.Y), map);
-
-            //meatballConfig.Create(new Vector2(3, 10), map);
-
-            hastoConfig.Create(new Vector2(42, 11 + hastoConfig.Transform.HalfSize.Y), map);
-
-            platformConfig.Create(map.SpawnPoint - new Vector2(0, 5), map);
-
-            seplingConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
-
-            sharkConfig.Create(map.SpawnPoint + new Vector2(10, 1), map);
-
-            Entity.Configuration playerConfig = Assets.Load<Entity.Configuration>("player");
-            testEntity = playerConfig.Create(map.SpawnPoint, map);
-            testEntityHealth = testEntity.GetComponent<HealthComponent>( );
-            map.Focus(testEntity.ID);
-            Debug.Print(this, $"player loading took {Environment.TickCount - begin} ms");
-
+            debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.075f), 0.05f, "", UITextAlignment.Right);
+            SetupControls( );
             base.Load( );
         }
 
-        private void SetupControls ( ) {
-            controlPanel?.Dispose( );
-            leftPanel?.Dispose( );
-            rightPanel?.Dispose( );
-
-            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 4f / 3f, 2), Assets.GetGestureStore("gestures"));
+        private void SetupControls( ) {
+            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(3f / 5f, 1f), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
+#if DEBUG
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
+#endif
                 if (gesture == UIGesturePanel.SWIPE_UP) {
-                    if(testEntity.GetComponent<MotionComponent>().IsOnGround  || testEntity.GetComponent<MotionComponent>( ).IsOnPlatform)
-                    testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
+                    if (testEntity.GetComponent<MotionComponent>( ).IsOnGround || testEntity.GetComponent<MotionComponent>( ).IsOnPlatform)
+                        testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
                 } else
                     testEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
             };
 
-            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 1f / 3f), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 2f / 5f), new UITopMargin(0), new RelativeSize(1f / 5f, 1f));
             leftPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
             leftPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
+            leftPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
 
-            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new Vector2(Window.Ratio * 2f / 3f, 2));
+            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new RelativeSize(1f / 5f, 1f));
             rightPanel.Click += ( ) => testEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
             rightPanel.Release += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
+            rightPanel.Leave += ( ) => testEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
         }
 
-        public override void Update (DeltaTime dt) {
+        public override void Update(DeltaTime dt) {
             if (Math.Abs(Manager.FrameTime.Milliseconds) < MAX_TIME_BETWEEN_UPDATES) {
                 map.Update(dt);
                 base.Update(dt);
+                debugLabel.Color = Color.White;
+            } else {
+                debugLabel.Color = Color.Red;
             }
             debugLabel.Text = $"frame: {Manager.FrameTime.TotalMilliseconds:00.0}\n" +
                               $"update: {Manager.UpdateTime.TotalMilliseconds:00.0}\n" +
-                            $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n" +
-                          $"health: {testEntityHealth.Current:00.0} ({testEntityHealth.Initial:00.0})";
+                            $"draw: {Manager.DrawTime.TotalMilliseconds:00.0}\n";
         }
 
-        protected override void Activated ( ) {
-            for(int i = 0; i < Entity.Entities.Count;i++)
+        protected override void Activated( ) {
+            while(Entity.Entities.Count > 0) {
+                Entity.Entities[0].Destroy( );
+                Entity.Entities.RemoveAt(0);
+            }
+
+            EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(12, 18), map);
+            EntityCollection.Enemys.Slime.Create(new Vector2(55, 20), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(52, 4), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(53, 4), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(54, 4), map);
+            EntityCollection.Enemys.Plugger.Create(new Vector2(55, 4), map);
+            EntityCollection.Obstacles.Landmine.Create(new Vector2(24, 4), map);
+            EntityCollection.NPCs.Lenny.Create(new Vector2(7, 1), map);
+            EntityCollection.Enemys.Shell.Create(new Vector2(36, 4), map);
+            EntityCollection.Platforms.Copper.Create(new Vector2(13.1f, 4), map);
+            EntityCollection.Platforms.Copper.Create(new Vector2(5f, 13), map);
+            EntityCollection.Enemys.Sepling.Create(new Vector2(10, 3), map);
+            EntityCollection.Enemys.Shark.Create(new Vector2(40, 21), map);
+            EntityCollection.Obstacles.Moonball.Create(new Vector2(34, 17), map);
+            EntityCollection.Enemys.BlackHole.Create(new Vector2(68f, 9f), map);
+
+            testEntity = EntityCollection.Players.Diamond.Create(map.SpawnPoint, map);
+            testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
+            map.Focus(testEntity.ID);
+
+            healthBar?.Dispose( );
+            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(1f, 0.025f), UIDepths.MIDDLE);
+
+            for (int i = 0; i < Entity.Entities.Count; i++)
                 Entity.Entities[i].Prepare( );
             base.Activated( );
         }

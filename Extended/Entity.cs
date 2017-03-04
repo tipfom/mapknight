@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
 using mapKnight.Extended.Components;
-using mapKnight.Extended.Components.AI.Basics;
-using mapKnight.Extended.Components.Movement;
-using mapKnight.Extended.Components.Player;
-using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended {
 
     public class Entity {
         public readonly int ID;
-        public readonly EntityInfo Info;
+        public EntityDomain Domain;
         public readonly int Species;
         private const int TICKS_PER_SECOND = 4;
 
@@ -71,11 +67,10 @@ namespace mapKnight.Extended {
         private Component[ ] components;
         private Dictionary<ComponentData, Queue<object[ ]>> pendingComponentInfos = new Dictionary<ComponentData, Queue<object[ ]>>( );
 
-        public Entity (ComponentList components, Transform transform, IEntityWorld world, int species, EntityInfo info) {
+        public Entity (ComponentList components, Transform transform, IEntityWorld world, int species) {
             World = world;
             Transform = transform;
             Species = species;
-            Info = info;
             ID = ++currentInstance;
 
             foreach (ComponentData componentDataValue in Enum.GetValues(typeof(ComponentData)))
@@ -87,7 +82,7 @@ namespace mapKnight.Extended {
             }
 
             for(int i = 0; i < components.Count; i++) {
-                this.components[i].Load( );
+                this.components[i].Load(components[i]);
             }
 
             Entities.Add(this);
@@ -164,42 +159,38 @@ namespace mapKnight.Extended {
                 components[i].Update(dt);
         }
 
-        public struct EntityInfo {
-            // Stats
-            public bool HasHealth;
+        public override string ToString ( ) {
+            return Name;
+        }
 
-            public bool IsPlatform;
-            public bool IsPlayer;
-            public bool IsTemporary;
+        public override int GetHashCode ( ) {
+            return ID;
         }
 
         public class Configuration {
-            private EntityInfo info;
             public ComponentList Components;
             public string Name;
             public Transform Transform;
-            private int entitySpecies = -1;
+            public int Species = -1;
 
-            public Entity Create (Vector2 spawnLocation, IEntityWorld world) {
-                if (entitySpecies == -1 || Components.HasChanged) {
-                    entitySpecies = ++currentSpecies;
-                    entityNames.Add(entitySpecies, Name);
-                    Components.ResolveComponentDependencies( );
-                    Components.Sort( );
-                    UpdateInfo( );
-                }
-                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, entitySpecies, info);
+            public Configuration ( ) {
             }
 
-            private void UpdateInfo ( ) {
-                HashSet<Type> typeSet = new HashSet<Type>(Components.Select(item => item.GetType( )));
-                info = new EntityInfo( ) {
-                    IsPlatform = typeSet.Contains(typeof(PlatformComponent.Configuration)),
-                    IsPlayer = typeSet.Contains(typeof(PlayerComponent.Configuration)),
-                    IsTemporary = typeSet.Contains(typeof(TriggerComponent.InternalTriggerComponent.Configuration)),
+            public Configuration(string name, Vector2 size) {
+                Name = name;
+                Transform = new Transform(default(Vector2), size);
+                Components = new ComponentList( );
+            }
 
-                    HasHealth = typeSet.Contains(typeof(HealthComponent.Configuration))
-                };
+            public Entity Create (Vector2 spawnLocation, IEntityWorld world, bool liftPosition = true) {
+                if (Species == -1 || Components.HasChanged) {
+                    Species = ++currentSpecies;
+                    entityNames.Add(Species, Name);
+                    Components.ResolveComponentDependencies( );
+                    Components.Sort( );
+                }
+                if (liftPosition) spawnLocation += new Vector2(0, Transform.HalfSize.Y);
+                return new Entity(Components, new Transform(spawnLocation, Transform.Size), world, Species);
             }
         }
     }

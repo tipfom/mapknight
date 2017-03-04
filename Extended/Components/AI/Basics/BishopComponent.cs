@@ -12,8 +12,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
     [UpdateAfter(typeof(SpeedComponent))]
     public class BishopComponent : Component {
         public readonly bool IsScaredToFall;
-        private DamageComponent damageComponent;
-        private MotionComponent motionComponent;
+        protected MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private float speedMult = 1f;
 
@@ -22,7 +21,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
         }
 
         public override void Collision (Entity collidingEntity) {
-            if (!collidingEntity.Info.IsTemporary) {
+            if (collidingEntity.Domain != EntityDomain.Temporary) {
                 if (speedMult == 1 && Owner.Transform.Center.X < collidingEntity.Transform.BL.X) // walking right
                     speedMult = -1;
                 else if (speedMult == -1 && Owner.Transform.Center.X > collidingEntity.Transform.TR.X)
@@ -33,7 +32,6 @@ namespace mapKnight.Extended.Components.AI.Basics {
         public override void Prepare ( ) {
             motionComponent = Owner.GetComponent<MotionComponent>( );
             speedComponent = Owner.GetComponent<SpeedComponent>( );
-            if (Owner.HasComponent<DamageComponent>( )) damageComponent = Owner.GetComponent<DamageComponent>( );
         }
 
         public override void Update (DeltaTime dt) {
@@ -51,6 +49,14 @@ namespace mapKnight.Extended.Components.AI.Basics {
                 }
             }
             motionComponent.AimedVelocity.X = speedComponent.Speed.X * speedMult;
+        }
+
+        protected void Turn ( ) {
+            speedMult *= -1;
+        }
+
+        protected void Walk(bool right) {
+            speedMult = right ? 1f : -1f;
         }
 
         public new class Configuration : Component.Configuration {

@@ -7,8 +7,7 @@ using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Components.Stats {
 
-    [ComponentRequirement(typeof(MotionComponent))]
-    [UpdateBefore(typeof(MotionComponent))]
+    [UpdateBefore(typeof(MotionComponent), false)]
     public class SpeedComponent : Component {
         public Vector2 Speed;
         private Vector2 defaultSpeed;
