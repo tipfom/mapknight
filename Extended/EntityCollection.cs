@@ -260,7 +260,7 @@ namespace mapKnight.Extended {
                         if (_Officer1 == null) {
                             _Officer1 = new Entity.Configuration( );
                             _Officer1.Name = "Officer1";
-                            _Officer1.Transform = new Transform(Vector2.Zero, new Vector2(1.75f / 19f * 12f, 1.75f));
+                            _Officer1.Transform = new Transform(Vector2.Zero, new Vector2(1f, 19f / 12f));
                             _Officer1.Components = new ComponentList {
                                 new MotionComponent.Configuration( ),
                                 new OfficerComponent.Configuration( ) { TurnTime = 1500, AttackTime = 1000, Damage = Mathf.PI / 6f },
