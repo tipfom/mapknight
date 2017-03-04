@@ -47,13 +47,12 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <DebugSymbols>False</DebugSymbols>
     <BundleAssemblies>False</BundleAssemblies>
-    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
     <AotAssemblies>False</AotAssemblies>
     <EnableLLVM>False</EnableLLVM>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <EnableProguard>False</EnableProguard>
     <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
-    <Debugger>Xamarin</Debugger>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
