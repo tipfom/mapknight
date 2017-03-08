@@ -9,6 +9,8 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
         const float BAR_HEIGHT_HALF = HEIGHT_HALF * 1f / 2f;
         const float EDGE_WIDTH = 2f / 4f * 2f * HEIGHT_HALF;
         const float EDGE_OFFSET = 1f / 4f * 2f * HEIGHT_HALF;
+        static readonly Color BACKGROUND_COLOR = new Color(255, 255, 255, 128);
+        static readonly Color BAR_COLOR = new Color(255, 0, 0, 128);
 
         private HealthComponent healthComponent;
         private float[ ][ ] baseVerticies;
@@ -66,13 +68,13 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
 
         public override IEnumerable<DepthVertexData> ConstructVertexData( ) {
             Mathf.TransformAtOrigin(baseVerticies[0], ref transformedVerticies[0], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
-            yield return new DepthVertexData(transformedVerticies[0], "hbar_l", UIDepths.BACKGROUND);
+            yield return new DepthVertexData(transformedVerticies[0], "hbar_l", UIDepths.BACKGROUND, BACKGROUND_COLOR);
             Mathf.TransformAtOrigin(baseVerticies[1], ref transformedVerticies[1], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
-            yield return new DepthVertexData(transformedVerticies[1], "hbar_m", UIDepths.BACKGROUND);
+            yield return new DepthVertexData(transformedVerticies[1], "hbar_m", UIDepths.BACKGROUND, BACKGROUND_COLOR);
             Mathf.TransformAtOrigin(baseVerticies[2], ref transformedVerticies[2], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
-            yield return new DepthVertexData(transformedVerticies[2], "hbar_r", UIDepths.BACKGROUND);
+            yield return new DepthVertexData(transformedVerticies[2], "hbar_r", UIDepths.BACKGROUND, BACKGROUND_COLOR);
             Mathf.TransformAtOrigin(baseVerticies[3], ref transformedVerticies[3], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
-            yield return new DepthVertexData(transformedVerticies[3], "blank", UIDepths.BACKGROUND, Color.Red);
+            yield return new DepthVertexData(transformedVerticies[3], "blank", UIDepths.BACKGROUND, BAR_COLOR);
         }
     }
 }
