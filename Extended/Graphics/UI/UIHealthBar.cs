@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Extended.Graphics.UI.Layout;
 
-namespace mapKnight.Extended.Graphics.UI.Layout {
+namespace mapKnight.Extended.Graphics.UI {
     public class UIHealthBar : UIItem {
         const float HEIGHT_HALF = 0.025f;
         const float BAR_HEIGHT_HALF = HEIGHT_HALF * 1f / 2f;

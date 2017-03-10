@@ -1,6 +1,6 @@
 ﻿using System;
 using mapKnight.Core;
-using mapKnight.Extended.Graphics.UI.Layout;
+using mapKnight.Extended.Graphics.UI;
 
 namespace mapKnight.Extended.Components.Stats {
 
