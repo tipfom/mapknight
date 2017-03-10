@@ -15,7 +15,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         private HealthComponent healthComponent;
         private float[ ][ ] baseVerticies;
-        private float[ ][] transformedVerticies;
+        private float[ ][ ] transformedVerticies;
 
         public UIHealthBar(Screen owner, HealthComponent healthComponent) : base(owner, new UIHorizontalCenterMargin(0), new UIVerticalCenterMargin(0), new AbsoluteSize(healthComponent.Initial * 0.05f, HEIGHT_HALF * 2), UIDepths.BACKGROUND, false) {
             this.healthComponent = healthComponent;
@@ -68,13 +68,14 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData( ) {
-            Mathf.TransformAtOrigin(baseVerticies[0], ref transformedVerticies[0], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
+            float yOffset = healthComponent.Owner.PositionOnScreen.Y + (healthComponent.Owner.Transform.HalfSize.Y + 0.25f) * healthComponent.Owner.World.VertexSize;
+            Mathf.TransformAtOrigin(baseVerticies[0], ref transformedVerticies[0], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
             yield return new DepthVertexData(transformedVerticies[0], "hbar_l", UIDepths.BACKGROUND, BACKGROUND_COLOR);
-            Mathf.TransformAtOrigin(baseVerticies[1], ref transformedVerticies[1], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
+            Mathf.TransformAtOrigin(baseVerticies[1], ref transformedVerticies[1], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
             yield return new DepthVertexData(transformedVerticies[1], "hbar_m", UIDepths.BACKGROUND, BACKGROUND_COLOR);
-            Mathf.TransformAtOrigin(baseVerticies[2], ref transformedVerticies[2], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
+            Mathf.TransformAtOrigin(baseVerticies[2], ref transformedVerticies[2], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
             yield return new DepthVertexData(transformedVerticies[2], "hbar_r", UIDepths.BACKGROUND, BACKGROUND_COLOR);
-            Mathf.TransformAtOrigin(baseVerticies[3], ref transformedVerticies[3], healthComponent.Owner.PositionOnScreen.X, healthComponent.Owner.PositionOnScreen.Y, 0f, false);
+            Mathf.TransformAtOrigin(baseVerticies[3], ref transformedVerticies[3], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
             yield return new DepthVertexData(transformedVerticies[3], "blank", UIDepths.BACKGROUND, BAR_COLOR);
         }
     }
