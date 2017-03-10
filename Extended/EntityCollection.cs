@@ -140,12 +140,24 @@ namespace mapKnight.Extended {
                                                     }
                                                 }
                                             }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "hurt",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 130,
+                                                    Bones = new string[ ] {
+                                                        "1hurt"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
                                 new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9.5f / 23f , 0f, 23f / 11f, 1f) } },
                                 new SpeedComponent.Configuration( ) { X = 1.2f },
-                                new HealthComponent.Configuration( ) { Value = 1 }
+                                new HealthComponent.Configuration( ) { Value = 5 }
                             };
                         }
                         return _Private1;
@@ -242,12 +254,24 @@ namespace mapKnight.Extended {
                                                     }
                                                 }
                                             }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "hurt",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 130,
+                                                    Bones = new string[ ] {
+                                                        "2hurt"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
                                 new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(15f / 35f, 0f, 35f / 11f, 1f) } },
                                 new SpeedComponent.Configuration( ) { X = 1.2f },
-                                new HealthComponent.Configuration( ) { Value = 1 }
+                                new HealthComponent.Configuration( ) { Value = 5 }
                             };
                         }
                         return _Private2;
@@ -338,12 +362,24 @@ namespace mapKnight.Extended {
                                                     }
                                                 }
                                             }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "hurt",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time  = 130,
+                                                    Bones = new string[ ] {
+                                                        "ohurt"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
                                 new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9f / 25f, 0.5f / 21f, 25f / 10f, 21f / 20f) } },
                                 new SpeedComponent.Configuration( ) { X = 2.4f },
-                                new HealthComponent.Configuration( ) { Value = 1 }
+                                new HealthComponent.Configuration( ) { Value = 3 }
                             };
                         }
                         return _Officer1;
@@ -637,7 +673,8 @@ namespace mapKnight.Extended {
                                 }
                             },
                             new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(6, 6), Offset = 3 },
-                            new SpeedComponent.Configuration( ) { X = 3 }
+                            new SpeedComponent.Configuration( ) { X = 3 },
+                            new HealthComponent.Configuration(){ Value = 5 }
                         };
                     }
                     return _Sepling;
