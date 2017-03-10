@@ -64,18 +64,6 @@ namespace mapKnight.Extended {
                                     Texture = "guardian/guardian" ,
                                     Animations = new SpriteAnimation[ ] {
                                         new SpriteAnimation( ) {
-                                            Name = "idle",
-                                            CanRepeat = true,
-                                            Frames = new SpriteAnimationFrame[ ] {
-                                                new SpriteAnimationFrame( ) {
-                                                    Time = MAX_TIME,
-                                                    Bones = new string[ ] {
-                                                        "1idle"
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        new SpriteAnimation( ) {
                                             Name = "walk",
                                             CanRepeat = true,
                                             Frames = new SpriteAnimationFrame[ ] {
@@ -177,18 +165,6 @@ namespace mapKnight.Extended {
                                 new SpriteComponent.Configuration( ) {
                                     Texture = "guardian/guardian",
                                     Animations = new SpriteAnimation[ ] {
-                                        new SpriteAnimation( ) {
-                                            Name = "idle",
-                                            CanRepeat = true,
-                                            Frames = new SpriteAnimationFrame[ ] {
-                                                new SpriteAnimationFrame( ) {
-                                                    Time = MAX_TIME,
-                                                    Bones = new string[ ] {
-                                                        "2idle"
-                                                    }
-                                                }
-                                            }
-                                        },
                                         new SpriteAnimation( ) {
                                             Name = "walk",
                                             CanRepeat = true,
