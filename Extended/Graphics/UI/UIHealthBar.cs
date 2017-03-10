@@ -24,6 +24,7 @@ namespace mapKnight.Extended.Graphics.UI {
                 UpdateIndicator( );
                 shaker.Reset( );
             };
+            healthComponent.Owner.Destroyed += Dispose;
 
             float halfWidth = Size.X / 2f;
             baseVerticies = new float[4][ ];
