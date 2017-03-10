@@ -16,10 +16,14 @@ namespace mapKnight.Extended.Graphics.UI {
         private HealthComponent healthComponent;
         private float[ ][ ] baseVerticies;
         private float[ ][ ] transformedVerticies;
+        private Shaker shaker = new Shaker( ) { Amplitude = 10, Length = 500, Frequency = 1 / 50f };
 
         public UIHealthBar(Screen owner, HealthComponent healthComponent) : base(owner, new UIHorizontalCenterMargin(0), new UIVerticalCenterMargin(0), new AbsoluteSize(healthComponent.Initial * 0.05f, HEIGHT_HALF * 2), UIDepths.BACKGROUND, false) {
             this.healthComponent = healthComponent;
-            healthComponent.Changed += UpdateIndicator;
+            healthComponent.Changed += ( ) => {
+                UpdateIndicator( );
+                shaker.Reset( );
+            };
 
             float halfWidth = Size.X / 2f;
             baseVerticies = new float[4][ ];
@@ -69,14 +73,40 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public override IEnumerable<DepthVertexData> ConstructVertexData( ) {
             float yOffset = healthComponent.Owner.PositionOnScreen.Y + (healthComponent.Owner.Transform.HalfSize.Y + 0.25f) * healthComponent.Owner.World.VertexSize;
-            Mathf.TransformAtOrigin(baseVerticies[0], ref transformedVerticies[0], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
+            float rotation = shaker.Rotation;
+            Mathf.TransformAtOrigin(baseVerticies[0], ref transformedVerticies[0], healthComponent.Owner.PositionOnScreen.X, yOffset, rotation, false);
             yield return new DepthVertexData(transformedVerticies[0], "hbar_l", UIDepths.BACKGROUND, BACKGROUND_COLOR);
-            Mathf.TransformAtOrigin(baseVerticies[1], ref transformedVerticies[1], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
+            Mathf.TransformAtOrigin(baseVerticies[1], ref transformedVerticies[1], healthComponent.Owner.PositionOnScreen.X, yOffset, rotation, false);
             yield return new DepthVertexData(transformedVerticies[1], "hbar_m", UIDepths.BACKGROUND, BACKGROUND_COLOR);
-            Mathf.TransformAtOrigin(baseVerticies[2], ref transformedVerticies[2], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
+            Mathf.TransformAtOrigin(baseVerticies[2], ref transformedVerticies[2], healthComponent.Owner.PositionOnScreen.X, yOffset, rotation, false);
             yield return new DepthVertexData(transformedVerticies[2], "hbar_r", UIDepths.BACKGROUND, BACKGROUND_COLOR);
-            Mathf.TransformAtOrigin(baseVerticies[3], ref transformedVerticies[3], healthComponent.Owner.PositionOnScreen.X, yOffset, 0f, false);
+            Mathf.TransformAtOrigin(baseVerticies[3], ref transformedVerticies[3], healthComponent.Owner.PositionOnScreen.X, yOffset, rotation, false);
             yield return new DepthVertexData(transformedVerticies[3], "blank", UIDepths.BACKGROUND, BAR_COLOR);
+        }
+
+        private class Shaker {
+            public int Length;
+            public float Amplitude;
+            public float Frequency { get { return angularVelocity / 360f; } set { angularVelocity = 360f * value; } }
+
+            public float Rotation {
+                get {
+                    if (Environment.TickCount < finishTime) {
+                        float x = Environment.TickCount - startTime;
+                        return Amplitude * Mathf.Exp(-4f * x / Length) * Mathf.Sin(angularVelocity * x);
+                    }
+                    return 0f;
+                }
+            }
+
+            private float angularVelocity;
+            private int finishTime;
+            private int startTime;
+
+            public void Reset( ) {
+                startTime = Environment.TickCount;
+                finishTime = startTime + Length;
+            }
         }
     }
 }
