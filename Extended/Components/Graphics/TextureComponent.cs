@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Graphics;
+using mapKnight.Core.Graphics;
 
 namespace mapKnight.Extended.Components.Graphics {
     [UpdateBefore(typeof(DrawComponent))]
@@ -11,10 +9,10 @@ namespace mapKnight.Extended.Components.Graphics {
         private string[ ] textures;
 
         public TextureComponent(Entity owner, string texturename, string[ ] sprites) : base(owner) {
-            SpriteBatch texture = Assets.Load<SpriteBatch>(texturename);
+            Spritebatch2D texture = Assets.Load<Spritebatch2D>(texturename);
 
             if (sprites == null) {
-                List<string> sortedKeys = texture.Sprites.Keys.ToList( );
+                List<string> sortedKeys = texture.Sprites( ).ToList( );
                 sortedKeys.Sort( );
                 textures = sortedKeys.ToArray( );
             } else {

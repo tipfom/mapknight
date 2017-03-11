@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
 using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.Animation;
+using mapKnight.Core.Graphics;
 
 namespace mapKnight.Extended.Components.Graphics {
 
@@ -25,7 +23,7 @@ namespace mapKnight.Extended.Components.Graphics {
             this.currentAnimation = animations[0];
             this.cache = new string[currentAnimation.Frames[0].Bones.Length];
             if (!Owner.World.Renderer.HasTexture(Owner.Species))
-                Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
+                Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<Spritebatch2D>(texture));
         }
 
         public override void Update (DeltaTime dt) {

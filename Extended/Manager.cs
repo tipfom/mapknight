@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using mapKnight.Core;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.Programs;
 using mapKnight.Extended.Graphics.UI;
 using OpenTK.Graphics.ES20;
+using mapKnight.Core.Graphics;
 
 namespace mapKnight.Extended {
     public static class Manager {
@@ -19,7 +19,7 @@ namespace mapKnight.Extended {
             FBOProgram.Program = new FBOProgram( );
             ParticleProgram.Program = new ParticleProgram( );
 
-            UIRenderer.Texture = Assets.Load<SpriteBatch>("interface");
+            UIRenderer.Texture = Assets.Load<Spritebatch2D>("interface");
 
             Screen.Gameplay.Load( );
             Screen.MainMenu.Load( );

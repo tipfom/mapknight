@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using mapKnight.Core;
+using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Particles;
-using OpenTK.Graphics.ES20;
 using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
 
 namespace mapKnight.Extended.Graphics {

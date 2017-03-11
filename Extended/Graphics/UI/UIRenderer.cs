@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using mapKnight.Core;
+using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
 using static mapKnight.Extended.Graphics.Programs.ColorProgram;
 
 namespace mapKnight.Extended.Graphics.UI {
 
     public static class UIRenderer {
-        public static SpriteBatch Texture;
+        public static Spritebatch2D Texture;
         private const int MAX_QUADS = 800;
         private static BufferBatch buffer;
         private static Screen currentScreen;
@@ -113,7 +114,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     while (queue.Count > 0) {
                         DepthVertexData vertexData = queue.Dequeue( );
                         Array.Copy(vertexData.Verticies, 0, vertexBuffer.Cache, position, 8);
-                        Array.Copy(Texture.Get(vertexData.Texture), 0, textureBuffer.Cache, position, 8);
+                        Array.Copy(Texture[vertexData.Texture], 0, textureBuffer.Cache, position, 8);
                         Array.Copy(vertexData.Color.ToOpenGL( ), 0, colorBuffer.Cache, position * 2, 16);
                         position += 8;
                     }

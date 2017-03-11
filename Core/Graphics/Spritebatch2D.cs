@@ -1,47 +1,65 @@
-﻿using mapKnight.Core;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+#if __ANDROID__
 using System.Linq;
-using mapKnight.Extended.Graphics.Programs;
+using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
+using mapKnight.Extended.Graphics.Programs;
 using OpenTK.Graphics.ES20;
+#endif
 
-namespace mapKnight.Extended.Graphics {
-    public class SpriteBatch : Texture2D {
-        public Dictionary<string, float[ ]> Sprites { get; private set; } = new Dictionary<string, float[ ]>( );
+namespace mapKnight.Core.Graphics {
+    public class Spritebatch2D : Texture2D{
+        private Dictionary<string, float[ ]> sprites = new Dictionary<string, float[ ]>( );
 
-        public SpriteBatch (Texture2D texture) : base(texture.ID, texture.Size, texture.Name) { }
-
-        public SpriteBatch (Dictionary<string, int[ ]> content, Texture2D texture) :
-            this(content, texture.ID, texture.Name, texture.Size) {
-
+        public float[] this[string name] {
+            get {
+                return sprites[name];
+            }
+            set {
+                sprites[name] = value;
+            }
         }
 
-        public SpriteBatch (Dictionary<string, int[ ]> content, int id, string name, Size size) : base(id, size, name) {
-            if (content != null) {
-                foreach (var sprite in content) {
+        public Spritebatch2D(Texture2D texture) : base(texture.ID, texture.Size, texture.Name) {
+        }
+
+        public Spritebatch2D(Dictionary<string, int[ ]> content, Texture2D texture) : this(content, texture.ID, texture.Size, texture.Name) {
+        }
+
+        public Spritebatch2D(Dictionary<string, int[ ]> Content, int ID, Size Size, string Name = "%") : base(ID, Size, Name) {
+            if (Content != null) {
+                foreach (KeyValuePair<string, int[ ]> sprite in Content) {
                     Add(sprite.Key, sprite.Value);
                 }
             }
         }
 
-        public float[ ] Get (string name) {
-            return Sprites[name];
-        }
-
-        public void Add (string name, int[ ] data) {
+        public void Add(string name, int[] data) {
             float top = (float)(data[1]) / Height;
             float bottom = (float)(data[1] + data[3]) / Height;
             float left = (float)data[0] / Width;
             float right = (float)(data[0] + data[2]) / Width;
 
-            Sprites.Add(name, new float[ ] { left, top, left, bottom, right, bottom, right, top });
+            Add(name, new float[ ] { left, top, left, bottom, right, bottom, right, top });
         }
 
-        public static SpriteBatch Combine (bool diposeChildren, List<SpriteBatch> children) {
+        public void Add(string name, float[] uvs) {
+            sprites.Add(name, uvs);
+        }
+        
+        public IEnumerable<string> Sprites( ) {
+            foreach (string s in sprites.Keys)
+                yield return s;
+        }
+
+#if __ANDROID__
+        public static Spritebatch2D Combine (bool diposeChildren, List<Spritebatch2D> children) {
             children.Sort((a, b) => { return -a.Size.Height.CompareTo(b.Size.Height); });
             Size size = new Size(children.Sum(batch => batch.Width), children[0].Height);
             Framebuffer buffer = new Framebuffer(size.Width, size.Height, false);
-            SpriteBatch result = new SpriteBatch(null, buffer.Texture, "csprite", size);
+            Spritebatch2D result = new Spritebatch2D(new Texture2D(buffer.Texture, size, "csprite"));
 
             buffer.Bind( );
             FBOProgram.Program.Begin( );
@@ -64,9 +82,9 @@ namespace mapKnight.Extended.Graphics {
                 float tleft = position / (float)size.Width;
                 float theight = children[i].Height / (float)size.Height;
                 float twidth = children[i].Width / (float)size.Width;
-                foreach (KeyValuePair<string, float[ ]> entry in children[i].Sprites) {
+                foreach (KeyValuePair<string, float[ ]> entry in children[i].sprites) {
                     // sprites einfügen
-                    result.Sprites.Add(entry.Key, new[ ] {
+                    result.Add(entry.Key, new[ ] {
                         tleft + entry.Value[0] * twidth, entry.Value[1] * theight,
                         tleft + entry.Value[2] * twidth, entry.Value[3] * theight,
                         tleft + entry.Value[4] * twidth, entry.Value[5] * theight,
@@ -85,5 +103,6 @@ namespace mapKnight.Extended.Graphics {
 
             return result;
         }
+#endif
     }
 }

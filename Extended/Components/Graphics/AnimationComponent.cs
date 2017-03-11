@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System;
 using mapKnight.Core;
-using System.Linq;
 using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics.Animation;
-using mapKnight.Extended.Graphics;
+using mapKnight.Core.Graphics;
 
 namespace mapKnight.Extended.Components.Graphics {
 
@@ -85,7 +83,7 @@ namespace mapKnight.Extended.Components.Graphics {
 
         public override void Load(Component.Configuration rawConfig) {
             if (!loadCache.ContainsKey(Owner.Species)) {
-                SpriteBatch sprite;
+                Spritebatch2D sprite;
                 Configuration config = (Configuration)rawConfig;
                 Compiler.Compile(animations, scales, config.Offsets, config.Textures, Owner, out boneVerticies, out sprite);
                 Owner.World.Renderer.AddTexture(Owner.Species, sprite);

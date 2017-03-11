@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
 using OpenTK.Graphics.ES20;
 
