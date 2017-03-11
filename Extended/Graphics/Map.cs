@@ -39,13 +39,6 @@ namespace mapKnight.Extended.Graphics {
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
 
-        // temp
-        public System.Collections.Generic.List<Entity> Entities { get; set; } = new System.Collections.Generic.List<Entity>( );
-        public static event Action<Entity> EntityAdded;
-        private System.Collections.Generic.Queue<Entity> removedEntities = new System.Collections.Generic.Queue<Entity>( );
-        private int nextTick;
-        private int timeBetweenTicks = 250;
-
         public Map(Stream input) : base(input) {
             Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             Window_Changed( );
@@ -175,7 +168,8 @@ namespace mapKnight.Extended.Graphics {
             foregroundTextureBuffer.Apply( );
         }
 
-        public void Draw( ) {
+        public new void Draw( ) {
+            base.Draw( );
             Program.Begin( );
             Program.Draw(mainBuffer, texture, matrix, true);
             Program.End( );
@@ -185,31 +179,9 @@ namespace mapKnight.Extended.Graphics {
             Program.End( );
         }
 
-        public void Update(DeltaTime dt) {
-            while(removedEntities.Count > 0) {
-                Entities.Remove(removedEntities.Dequeue( ));
-            }
-            if (Environment.TickCount > nextTick) {
-                nextTick += timeBetweenTicks;
-                for (int i = 0; i < Entities.Count; i++)
-                    Entities[i].Tick( );
-            }
-
-            for (int i = 0; i < Entities.Count; i++)
-                Entities[i].Update(dt);
+        public new void Update(DeltaTime dt) {
+            base.Update(dt);
             UpdateFocus( );
-            for (int i = 0; i < Entities.Count; i++)
-                Entities[i].Draw( );
-
-            int outerLoopsBounds = Entities.Count - 1;
-            for (int i = 0; i < outerLoopsBounds; i++) {
-                for (int l = i + 1; l < Entities.Count; l++) {
-                    if (Entities[i].Transform.Intersects(Entities[l].Transform)) {
-                        Entities[i].Collision(Entities[l]);
-                        Entities[l].Collision(Entities[i]);
-                    }
-                }
-            }
         }
 
         public void Focus(int entityID) {
@@ -257,15 +229,6 @@ namespace mapKnight.Extended.Graphics {
 
         public bool IsOnScreen(Entity entity) {
             return true;
-        }
-
-        public void Add(Entity entity) {
-            Entities.Add(entity);
-            EntityAdded?.Invoke(entity);
-        }
-
-        public void Destroy(Entity entity) {
-            Entities.Remove(entity);
         }
     }
 }

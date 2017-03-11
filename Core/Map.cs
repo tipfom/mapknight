@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using mapKnight.Core.Exceptions;
+using mapKnight.Core.World;
 using Newtonsoft.Json;
 
 namespace mapKnight.Core {
     public class Map {
+        public const int TIME_BETWEEN_TICKS = 1000 / 2;
         public const int TILE_PXL_SIZE = 18;
         public static byte[ ] HEADER { get; } = { 133, 007, 042, 077, 064, 080 };
         public static short VERSION { get; } = 3;
@@ -31,7 +32,12 @@ namespace mapKnight.Core {
         public string Name { get; set; }
         public Vector2 Gravity { get; set; }
 
-        public Map (Size size, string creator, string name) {
+        public List<Entity> Entities { get; set; } = new List<Entity>( );
+        public event Action<Entity> EntityAdded;
+        private int nextTickTime;
+        private Queue<Entity> removedEntities = new Queue<Entity>( );
+
+        public Map(Size size, string creator, string name) {
             Size = size;
             Data = new int[size.Width, size.Height, 3];
             Creator = creator;
@@ -39,11 +45,11 @@ namespace mapKnight.Core {
             SpawnPoint = new Vector2( );
         }
 
-        public Map (Size size) : this(size, null, null) {
+        public Map(Size size) : this(size, null, null) {
 
         }
 
-        public Map (Stream input) {
+        public Map(Stream input) {
             using (BinaryReader reader = new BinaryReader(input, Encoding.UTF8, false)) {
                 // check for header
                 if (!reader.ReadBytes(HEADER.Length).SequenceEqual(HEADER))
@@ -66,7 +72,7 @@ namespace mapKnight.Core {
             }
         }
 
-        public void Serialize (Stream stream) {
+        public void Serialize(Stream stream) {
             using (BinaryWriter writer = new BinaryWriter(stream, Encoding.UTF8, true)) {
                 bool is32bit = (Size.Area >= Math.Pow(2, 16));
 
@@ -145,28 +151,73 @@ namespace mapKnight.Core {
             }
         }
 
-        public Tile GetTile (int x, int y, int layer) {
+        public Tile GetTile(int x, int y, int layer) {
             return Tiles[Data[x, y, layer]];
         }
 
-        public Tile GetTileBackground (int x, int y) {
+        public Tile GetTileBackground(int x, int y) {
             return Tiles[Data[x, y, 0]];
         }
 
-        public Tile GetTile (int x, int y) {
+        public Tile GetTile(int x, int y) {
             return Tiles[Data[x, y, 1]];
         }
 
-        public Tile GetTileForeground (int x, int y) {
+        public Tile GetTileForeground(int x, int y) {
             return Tiles[Data[x, y, 2]];
         }
 
-        public override string ToString ( ) {
+        public void Add(Entity entity) {
+            Entities.Add(entity);
+            EntityAdded?.Invoke(entity);
+        }
+
+        public void Destroy(Entity entity) {
+            Entities.Remove(entity);
+        }
+
+#if __ANDROID__
+        public void Update(DeltaTime dt) {
+            // cleanup
+            while (removedEntities.Count > 0) {
+                Entities.Remove(removedEntities.Dequeue( ));
+            }
+
+            // ticks
+            if (Environment.TickCount > nextTickTime) {
+                for (int i = 0; i < Entities.Count; i++)
+                    Entities[i].Tick( );
+                nextTickTime = Environment.TickCount + TIME_BETWEEN_TICKS;
+            }
+
+            // updates
+            for (int i = 0; i < Entities.Count; i++)
+                Entities[i].Update(dt);
+
+            // collisions
+            int outerLoopsBounds = Entities.Count - 1;
+            for (int i = 0; i < outerLoopsBounds; i++) {
+                for (int l = i + 1; l < Entities.Count; l++) {
+                    if (Entities[i].Transform.Intersects(Entities[l].Transform)) {
+                        Entities[i].Collision(Entities[l]);
+                        Entities[l].Collision(Entities[i]);
+                    }
+                }
+            }
+        }
+
+        public void Draw( ) {
+            for (int i = 0; i < Entities.Count; i++)
+                Entities[i].Draw( );
+        }
+#endif
+
+        public override string ToString( ) {
             return $"{Name} ({Size.Width}x{Size.Height})";
         }
 
         #region deserialization
-        private void Deserialize00001 (BinaryReader reader) {
+        private void Deserialize00001(BinaryReader reader) {
             bool is32bit = reader.ReadBoolean( );
 
             Size = new Size(reader.ReadInt16( ), reader.ReadInt16( ));
@@ -216,7 +267,7 @@ namespace mapKnight.Core {
             Gravity = DEFAULT_GRAVITY;
         }
 
-        private void Deserialize00002 (BinaryReader reader) {
+        private void Deserialize00002(BinaryReader reader) {
             bool is32bit = reader.ReadBoolean( );
 
             Size = new Size(reader.ReadInt16( ), reader.ReadInt16( ));
@@ -266,7 +317,7 @@ namespace mapKnight.Core {
             Gravity = new Vector2(reader.ReadSingle( ), reader.ReadSingle( ));
         }
 
-        private void Deserialize00003 (BinaryReader reader) {
+        private void Deserialize00003(BinaryReader reader) {
             bool is32bit = reader.ReadBoolean( );
 
             Size = new Size(reader.ReadInt16( ), reader.ReadInt16( ));

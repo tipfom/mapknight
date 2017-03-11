@@ -34,7 +34,7 @@ namespace mapKnight.Extended.Screens {
         public override void Load( ) {
             int begin = Environment.TickCount;
             map = Assets.Load<Map>("Schtart");
-            Map.EntityAdded += (Entity obj) => { obj.Prepare( ); };
+            map.EntityAdded += (Entity obj) => { obj.Prepare( ); };
 #if DEBUG
             Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
 #endif
