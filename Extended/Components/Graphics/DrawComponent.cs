@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Graphics;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World;
+using mapKnight.Core.Graphics;
 
 namespace mapKnight.Extended.Components.Graphics {
-
     [Instantiatable]
     public class DrawComponent : Component {
         private float[ ][ ] cachedVerticies;
@@ -13,7 +12,7 @@ namespace mapKnight.Extended.Components.Graphics {
         public DrawComponent(Entity owner) : base(owner) {
         }
 
-        public override void PostUpdate( ) {
+        public override void Draw( ) {
             if (Owner.IsOnScreen) {
                 Owner.World.Renderer.QueueVertexData(Owner.Species, ConstructVertexData( ));
             } else {

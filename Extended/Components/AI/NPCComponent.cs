@@ -1,4 +1,5 @@
-﻿using mapKnight.Core;
+﻿using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Components.AI {
     public class NPCComponent : Component {

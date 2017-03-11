@@ -1,10 +1,10 @@
 ﻿using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI.Basics {
-
     [UpdateAfter(typeof(SpeedComponent))]
     [UpdateBefore(typeof(SkeletComponent))]
     public class WallWalkerComponent : Component {

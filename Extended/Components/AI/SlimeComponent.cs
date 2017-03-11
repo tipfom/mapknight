@@ -1,7 +1,9 @@
 ﻿using System;
 using mapKnight.Core;
+using mapKnight.Core.World;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Components.AI {
     public class SlimeComponent : WallWalkerComponent {

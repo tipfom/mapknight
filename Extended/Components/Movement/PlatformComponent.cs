@@ -1,7 +1,7 @@
 using mapKnight.Core;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.Movement {
-
     public class PlatformComponent : WaypointComponent {
         private int currentWaypoint = 1;
 

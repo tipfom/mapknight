@@ -1,10 +1,9 @@
 using System;
-using System.Collections.Generic;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Components.Movement {
-
     [Instantiatable]
     public class MotionComponent : Component {
         public Vector2 AimedVelocity;

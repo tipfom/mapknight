@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
 using mapKnight.Core.Graphics;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Graphics.Animation {
     public static class Compiler {

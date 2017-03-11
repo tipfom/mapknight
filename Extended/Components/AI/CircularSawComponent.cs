@@ -1,11 +1,10 @@
 using System;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Movement;
-using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
-
     public class CircularSawComponent : WaypointComponent {
         private int currentwaypoint;
         private int direction;

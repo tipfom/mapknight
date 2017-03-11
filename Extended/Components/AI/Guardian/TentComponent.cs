@@ -1,6 +1,7 @@
-﻿using mapKnight.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using mapKnight.Core;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.AI.Guardian {
     public class TentComponent : Component {

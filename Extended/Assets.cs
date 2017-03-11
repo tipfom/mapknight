@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using mapKnight.Core;
+using mapKnight.Core.World;
 using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.Particles;
 using mapKnight.Extended.Graphics.Programs;
 using Newtonsoft.Json;
 using OpenTK.Graphics.ES20;
 using Path = System.IO.Path;
+using Entity = mapKnight.Core.World.Entity;
 
 #if __ANDROID__
 using Android.Content;

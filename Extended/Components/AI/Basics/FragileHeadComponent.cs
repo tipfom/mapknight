@@ -1,10 +1,7 @@
-using System;
-using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Components.Stats;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Components.AI.Basics {
-
     public class FragileHeadComponent: Component {
         private float damage;
 

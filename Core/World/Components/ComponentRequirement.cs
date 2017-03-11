@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace mapKnight.Extended.Components.Attributes {
+namespace mapKnight.Core.World.Components {
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class ComponentRequirement : Attribute {

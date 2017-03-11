@@ -2,13 +2,13 @@ using System;
 using System.Timers;
 using mapKnight.Core;
 using mapKnight.Extended.Components.AI.Basics;
-using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.AI {
-
     [ComponentRequirement(typeof(SpeedComponent))]
     [ComponentRequirement(typeof(TriggerComponent))]
     public class ShellComponent : Component {

@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace mapKnight.Extended.Components.Attributes {
-
+namespace mapKnight.Core.World.Components {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class UpdateAfter : ComponentRequirement {
         public readonly Type Relation;

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.Stats {
     public class ArmorComponent : Component {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Graphics.Animation;
 using mapKnight.Core.Graphics;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
+using mapKnight.Extended.Graphics.Animation;
 
 namespace mapKnight.Extended.Components.Graphics {
-
     [UpdateBefore(typeof(DrawComponent))]
     public class AnimationComponent : Component {
         private static Dictionary<int, float[ ][ ]> loadCache = new Dictionary<int, float[ ][ ]>( );
@@ -20,16 +20,16 @@ namespace mapKnight.Extended.Components.Graphics {
         private float[ ] scales;
         private float[ ][ ] boneVerticies;
 
-        public AnimationComponent (Entity owner, VertexAnimation[ ] animations, float[ ] scales) : base(owner) {
+        public AnimationComponent(Entity owner, VertexAnimation[ ] animations, float[ ] scales) : base(owner) {
             this.animations = animations;
             this.scales = scales;
         }
 
-        public delegate void AnimationCallback (bool success);
+        public delegate void AnimationCallback(bool success);
 
         private VertexAnimation currentAnimation { get { return animations[currentAnimationIndex]; } }
 
-        public override void Update (DeltaTime dt) {
+        public override void Update(DeltaTime dt) {
             if (!Owner.IsOnScreen)
                 return;
 
@@ -70,14 +70,14 @@ namespace mapKnight.Extended.Components.Graphics {
             animations[currentAnimationIndex].Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, boneVerticies);
         }
 
-        public override void PostUpdate ( ) {
+        public override void Draw( ) {
             if (!Owner.IsOnScreen)
                 return;
             Owner.SetComponentInfo(ComponentData.Verticies, animations[currentAnimationIndex].Verticies);
             Owner.SetComponentInfo(ComponentData.Texture, animations[currentAnimationIndex].Textures);
         }
 
-        public override void Prepare ( ) {
+        public override void Prepare( ) {
             currentAnimation.Reset( );
         }
 
@@ -94,7 +94,7 @@ namespace mapKnight.Extended.Components.Graphics {
             SetAnimation(0);
         }
 
-        private void SetAnimation (int index) {
+        private void SetAnimation(int index) {
             currentAnimationIndex = index;
             if (currentAnimationIndex < 0 || currentAnimationIndex >= animations.Length) {
                 currentAnimationIndex = 0;
@@ -103,7 +103,7 @@ namespace mapKnight.Extended.Components.Graphics {
             currentAnimation.Reset( );
         }
 
-        private int FindAnimationIndex (string name) {
+        private int FindAnimationIndex(string name) {
             for (int i = 0; i < animations.Length; i++) {
                 if (animations[i].Name == name)
                     return i;
@@ -117,7 +117,7 @@ namespace mapKnight.Extended.Components.Graphics {
             public string[ ] Textures;
             public Vector2[ ] Offsets;
 
-            public override Component Create (Entity owner) {
+            public override Component Create(Entity owner) {
                 return new AnimationComponent(owner, Animations, Scales);
             }
         }

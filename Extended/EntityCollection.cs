@@ -1,5 +1,6 @@
 ﻿using mapKnight.Core;
-using mapKnight.Extended.Components;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.AI;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.AI.Guardian;

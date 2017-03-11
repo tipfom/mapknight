@@ -1,17 +1,17 @@
 ﻿using System;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
+using mapKnight.Extended.Components.AI;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Screens;
 using mapKnight.Extended.Warfare;
 using System.Timers;
-using mapKnight.Extended.Graphics.UI;
-using mapKnight.Extended.Components.AI;
 
 namespace mapKnight.Extended.Components.Player {
-
     [UpdateAfter(typeof(SpeedComponent))]
     [UpdateBefore(typeof(MotionComponent))]
     public class PlayerComponent : Component {

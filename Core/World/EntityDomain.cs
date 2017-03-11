@@ -1,4 +1,4 @@
-﻿namespace mapKnight.Extended {
+﻿namespace mapKnight.Core.World {
     // (╯°□°）╯︵ ┻━┻
     public enum EntityDomain {
         Enemy,          // everything that attacks the player and can be attack 

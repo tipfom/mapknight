@@ -1,11 +1,9 @@
-﻿namespace mapKnight.Extended.Components {
-
-    public enum ComponentData {
-        None,
-        Result,
+﻿namespace mapKnight.Core.World.Components {
+    public enum ComponentData : int{
+        None = -1,
 
         // player
-        InputInclude,
+        InputInclude = 0,
         InputExclude,
         InputGesture,
 

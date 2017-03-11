@@ -5,6 +5,7 @@ using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Particles;
 using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Graphics {
     public class Map : Core.Map, IEntityWorld {
@@ -37,6 +38,13 @@ namespace mapKnight.Extended.Graphics {
         public float VertexSize { get; private set; }
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
+
+        // temp
+        public System.Collections.Generic.List<Entity> Entities { get; set; } = new System.Collections.Generic.List<Entity>( );
+        public static event Action<Entity> EntityAdded;
+        private System.Collections.Generic.Queue<Entity> removedEntities = new System.Collections.Generic.Queue<Entity>( );
+        private int nextTick;
+        private int timeBetweenTicks = 250;
 
         public Map(Stream input) : base(input) {
             Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
@@ -178,13 +186,34 @@ namespace mapKnight.Extended.Graphics {
         }
 
         public void Update(DeltaTime dt) {
-            Entity.UpdateAll(dt);
+            while(removedEntities.Count > 0) {
+                Entities.Remove(removedEntities.Dequeue( ));
+            }
+            if (Environment.TickCount > nextTick) {
+                nextTick += timeBetweenTicks;
+                for (int i = 0; i < Entities.Count; i++)
+                    Entities[i].Tick( );
+            }
+
+            for (int i = 0; i < Entities.Count; i++)
+                Entities[i].Update(dt);
             UpdateFocus( );
-            Entity.PostUpdateAll( );
+            for (int i = 0; i < Entities.Count; i++)
+                Entities[i].Draw( );
+
+            int outerLoopsBounds = Entities.Count - 1;
+            for (int i = 0; i < outerLoopsBounds; i++) {
+                for (int l = i + 1; l < Entities.Count; l++) {
+                    if (Entities[i].Transform.Intersects(Entities[l].Transform)) {
+                        Entities[i].Collision(Entities[l]);
+                        Entities[l].Collision(Entities[i]);
+                    }
+                }
+            }
         }
 
         public void Focus(int entityID) {
-            focusEntity = Entity.Entities.Find(entity => entity.ID == entityID);
+            focusEntity = Entities.Find(entity => entity.ID == entityID);
             focusEntity.Destroyed += ( ) => { focusEntity = null; };
         }
 
@@ -228,6 +257,15 @@ namespace mapKnight.Extended.Graphics {
 
         public bool IsOnScreen(Entity entity) {
             return true;
+        }
+
+        public void Add(Entity entity) {
+            Entities.Add(entity);
+            EntityAdded?.Invoke(entity);
+        }
+
+        public void Destroy(Entity entity) {
+            Entities.Remove(entity);
         }
     }
 }

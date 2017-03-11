@@ -1,13 +1,13 @@
 ﻿using System;
 using mapKnight.Core;
-using mapKnight.Extended.Components;
+using mapKnight.Core.World;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Player;
-using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
 using Map = mapKnight.Extended.Graphics.Map;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Screens {
 
@@ -24,7 +24,6 @@ namespace mapKnight.Extended.Screens {
         private PlayerComponent testEntityPlayer;
 
         public GameplayScreen( ) {
-            Entity.EntityAdded += (Entity obj) => { obj.Prepare( ); };
         }
 
         public override void Draw( ) {
@@ -35,6 +34,7 @@ namespace mapKnight.Extended.Screens {
         public override void Load( ) {
             int begin = Environment.TickCount;
             map = Assets.Load<Map>("Schtart");
+            Map.EntityAdded += (Entity obj) => { obj.Prepare( ); };
 #if DEBUG
             Debug.Print(this, $"map loading took {Environment.TickCount - begin} ms");
 #endif
@@ -82,9 +82,9 @@ namespace mapKnight.Extended.Screens {
         }
 
         protected override void Activated( ) {
-            while(Entity.Entities.Count > 0) {
-                Entity.Entities[0].Destroy( );
-                Entity.Entities.RemoveAt(0);
+            while(map.Entities.Count > 0) {
+                map.Entities[0].Destroy( );
+                map.Entities.RemoveAt(0);
             }
 
             EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(12, 18), map);
@@ -103,15 +103,15 @@ namespace mapKnight.Extended.Screens {
             EntityCollection.Obstacles.Moonball.Create(new Vector2(34, 17), map);
             EntityCollection.Enemys.BlackHole.Create(new Vector2(68f, 9f), map);
 
-            testEntity = EntityCollection.Players.Diamond.Create(map.SpawnPoint, map);
+            testEntity = EntityCollection.Players.Diamond.Create(new Vector2(7, 18), map);
             testEntityPlayer = testEntity.GetComponent<PlayerComponent>( );
             map.Focus(testEntity.ID);
 
             healthBar?.Dispose( );
             healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), testEntityPlayer.Health, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(1f, 0.025f), UIDepths.MIDDLE);
 
-            for (int i = 0; i < Entity.Entities.Count; i++)
-                Entity.Entities[i].Prepare( );
+            for (int i = 0; i < map.Entities.Count; i++)
+                map.Entities[i].Prepare( );
             base.Activated( );
         }
     }

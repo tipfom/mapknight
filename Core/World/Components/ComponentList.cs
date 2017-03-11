@@ -3,11 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Exceptions;
 
-namespace mapKnight.Extended.Components {
-
+namespace mapKnight.Core.World.Components {
     public class ComponentList : ICollection<Component.Configuration> {
         private bool _HasChanged;
         private List<Component.Configuration> components = new List<Component.Configuration>( );
@@ -21,47 +18,47 @@ namespace mapKnight.Extended.Components {
             get { return components[index]; }
         }
 
-        public void Add (Component.Configuration item) {
+        public void Add(Component.Configuration item) {
             components.Add(item);
             _HasChanged = true;
         }
 
-        public void Clear ( ) {
+        public void Clear( ) {
             components.Clear( );
         }
 
-        public bool Contains (Component.Configuration item) {
+        public bool Contains(Component.Configuration item) {
             return components.Contains(item);
         }
 
-        public void CopyTo (Component.Configuration[ ] array, int arrayIndex) {
+        public void CopyTo(Component.Configuration[ ] array, int arrayIndex) {
             components.CopyTo(array, arrayIndex);
         }
 
-        public T GetConfiguration<T> ( ) where T : Component.Configuration {
+        public T GetConfiguration<T>( ) where T : Component.Configuration {
             Type type = typeof(T);
             return (T)components.Find(c => c.GetType( ) == type);
         }
 
-        public IEnumerator<Component.Configuration> GetEnumerator ( ) {
+        public IEnumerator<Component.Configuration> GetEnumerator( ) {
             return components.GetEnumerator( );
         }
 
-        IEnumerator IEnumerable.GetEnumerator ( ) {
+        IEnumerator IEnumerable.GetEnumerator( ) {
             return components.GetEnumerator( );
         }
 
-        public bool Remove (Component.Configuration item) {
+        public bool Remove(Component.Configuration item) {
             return components.Remove(item);
         }
 
-        public void ResolveComponentDependencies ( ) {
+        public void ResolveComponentDependencies( ) {
             HashSet<Type> instanciatedTypes = new HashSet<Type>(components.Select(config => config.GetType( )));
             for (int i = 0; i < components.Count; i++) {
                 Type componentType = Type.GetType(components[i].GetType( ).FullName.Replace("+Configuration", ""));
                 ComponentRequirement[ ] requirements = (ComponentRequirement[ ])componentType.GetCustomAttributes(typeof(ComponentRequirement), false);
                 foreach (ComponentRequirement requirement in requirements) {
-                    switch(requirement){
+                    switch (requirement) {
                         case UpdateAfter ua:
                             if (!ua.Requirement)
                                 continue;
@@ -78,13 +75,13 @@ namespace mapKnight.Extended.Components {
                             components.Add((Component.Configuration)Activator.CreateInstance(componentConfigType));
                             instanciatedTypes.Add(componentConfigType);
                         } else
-                            throw new ComponentDependencyException(components[i].GetType(), requirement.Requiring);
+                            throw new ComponentDependencyException(components[i].GetType( ), requirement.Requiring);
                     }
                 }
             }
         }
 
-        public void Sort ( ) {
+        public void Sort( ) {
             Dictionary<Type, Component.Configuration> typeMap = components.ToDictionary(item => Type.GetType(item.GetType( ).FullName.Replace("+Configuration", "")), item => item);
             Dictionary<Component.Configuration, List<Component.Configuration>> relations = components.ToDictionary(item => item, item => new List<Component.Configuration>( ));
             // structure into nodes

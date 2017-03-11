@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\FragileHeadComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\WallWalkerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\TriggerComponent.cs">
@@ -45,12 +44,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\TurretComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateAfter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\ComponentRequirement.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\Instantiatable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateBefore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\DrawComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SkeletComponent.cs" />
@@ -69,11 +62,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\HealthComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\SpeedComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Debug.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityCollection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EntityDomain.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\Compiler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimationFrame.cs" />
@@ -130,10 +119,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITextAlignment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouchAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IEntityWorld.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IEntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Manager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameOverScreen.cs" />

@@ -1,4 +1,6 @@
 ﻿using System;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Components.AI {
     public class ButtonComponent : Component {

@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Spritebatch2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Texture2D.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interpolation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Map.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Mathf.cs" />
@@ -29,5 +30,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)TileAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transform.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Vector2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Component.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Components\ComponentDependencyException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Components\ComponentList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Components\ComponentData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Components\ComponentRequirement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Components\Instantiatable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Components\UpdateAfter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Components\UpdateBefore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\EntityDomain.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\IEntityRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\IEntityWorld.cs" />
   </ItemGroup>
 </Project>

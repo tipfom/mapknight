@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using mapKnight.Core;
 using mapKnight.Core.Graphics;
+using mapKnight.Core.World;
 using mapKnight.Extended.Graphics.Buffer;
 using static mapKnight.Extended.Graphics.Programs.ColorProgram;
 
@@ -27,11 +28,7 @@ namespace mapKnight.Extended.Graphics {
                 frameVertexData.Add(entityTexture, new Queue<VertexData>( ));
         }
 
-        public Spritebatch2D GetTexture (int species) {
-            return entityTextures[species];
-        }
-
-        public bool HasTexture (int species) {
+        public bool HasTexture(int species) {
             return entityTextures.ContainsKey(species);
         }
 

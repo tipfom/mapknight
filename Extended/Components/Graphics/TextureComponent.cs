@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using mapKnight.Extended.Components.Attributes;
 using mapKnight.Core.Graphics;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Components.Graphics {
     [UpdateBefore(typeof(DrawComponent))]
@@ -23,7 +24,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 Owner.World.Renderer.AddTexture(Owner.Species, texture);
         }
 
-        public override void PostUpdate( ) {
+        public override void Draw( ) {
             if (!Owner.IsOnScreen)
                 return;
 
