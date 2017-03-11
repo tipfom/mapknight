@@ -29,6 +29,7 @@ namespace mapKnight.Extended.Graphics {
 
         private Entity focusEntity;
         private Vector2 focusCenter;
+        private Vector2 drawThreshold;
         private Vector2 updateTile = new Vector2(-1, -1);
 
         private CachedGPUBuffer mainTextureBuffer;
@@ -56,6 +57,7 @@ namespace mapKnight.Extended.Graphics {
             if (2 * Window.Ratio / DRAW_WIDTH != VertexSize) {
                 VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
                 DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 1));
+                drawThreshold = new Vector2(DrawSize.Width / 2f, DrawSize.Height / 2f);
 
                 mainBuffer?.Dispose( );
                 mainTextureBuffer = new CachedGPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad);
@@ -182,6 +184,13 @@ namespace mapKnight.Extended.Graphics {
         public new void Update(DeltaTime dt) {
             base.Update(dt);
             UpdateFocus( );
+            for (int i = 0; i < Entities.Count; i++) {
+                Entity entity = Entities[i];
+                entity.IsOnScreen = (entity.Transform.Center - focusCenter).Abs( ) < drawThreshold + entity.Transform.HalfSize;
+                if (entity.IsOnScreen) {
+                    entity.PositionOnScreen = (entity.Transform.Center - focusCenter) * VertexSize;
+                }
+            }
         }
 
         public void Focus(int entityID) {
@@ -219,16 +228,8 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        public Vector2 GetPositionOnScreen(Entity entity) {
-            return (entity.Transform.Center - focusCenter) * VertexSize;
-        }
-
         public bool HasCollider(int x, int y) {
             return GetTile(x, y).HasFlag(TileAttribute.Collision);
-        }
-
-        public bool IsOnScreen(Entity entity) {
-            return true;
         }
     }
 }

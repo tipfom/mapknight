@@ -17,10 +17,10 @@ namespace mapKnight.Core.World {
         public Transform Transform;
         public bool IsDestroyed;
         public event Action Destroyed;
+        public bool IsOnScreen;
+        public Vector2 PositionOnScreen;
 
         public string Name { get { return entityNames[Species]; } }
-        public bool IsOnScreen { get { return World.IsOnScreen(this); } }
-        public Vector2 PositionOnScreen { get { return World.GetPositionOnScreen(this); } }
         
         private Component[ ] components;
         private Queue<object[ ]>[ ] pendingComponentInfos = new Queue<object[ ]>[13];

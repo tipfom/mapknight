@@ -6,14 +6,12 @@ namespace mapKnight.Core.World {
 
         Vector2 Gravity { get; }
         Size Size { get; }
-        Vector2 GetPositionOnScreen(Entity entity);
         List<Entity> Entities { get; set; }
 
         void Add(Entity entity);
         void Destroy(Entity entity);
 
         bool HasCollider(int x, int y);
-        bool IsOnScreen(Entity entity);
 
         float VertexSize { get; }
     }
