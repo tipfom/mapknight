@@ -34,7 +34,7 @@ namespace mapKnight.Extended.Graphics {
             return entityTextures.ContainsKey(species);
         }
 
-        public void QueueVertexData (int species, List<VertexData> vertexData) {
+        public void QueueVertexData (int species, IEnumerable<VertexData> vertexData) {
             frameVertexData[entityTextures[species]].Enqueue(vertexData);
         }
 
