@@ -10,6 +10,8 @@ namespace mapKnight.Extended.Components.Graphics {
 
     [UpdateBefore(typeof(DrawComponent))]
     public class AnimationComponent : Component {
+        private static Dictionary<int, float[ ][ ]> loadCache = new Dictionary<int, float[ ][ ]>( );
+
         private VertexAnimation[ ] animations;
         private int currentAnimationIndex;
 
@@ -19,7 +21,6 @@ namespace mapKnight.Extended.Components.Graphics {
 
         private float[ ] scales;
         private float[ ][ ] boneVerticies;
-        private SpriteBatch sprite;
 
         public AnimationComponent (Entity owner, VertexAnimation[ ] animations, float[ ] scales) : base(owner) {
             this.animations = animations;
@@ -82,11 +83,15 @@ namespace mapKnight.Extended.Components.Graphics {
             currentAnimation.Reset( );
         }
 
-        public override void Load (Component.Configuration rawConfig) {
-            if (!Owner.World.Renderer.HasTexture(Owner.Species)) {
+        public override void Load(Component.Configuration rawConfig) {
+            if (!loadCache.ContainsKey(Owner.Species)) {
+                SpriteBatch sprite;
                 Configuration config = (Configuration)rawConfig;
                 Compiler.Compile(animations, scales, config.Offsets, config.Textures, Owner, out boneVerticies, out sprite);
                 Owner.World.Renderer.AddTexture(Owner.Species, sprite);
+                loadCache.Add(Owner.Species, boneVerticies);
+            } else {
+                boneVerticies = loadCache[Owner.Species];
             }
             SetAnimation(0);
         }
