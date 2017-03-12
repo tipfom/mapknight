@@ -125,13 +125,15 @@
             <DockPanel VerticalAlignment="Bottom" Background="#FFF0F0F0">
                 <TextBlock x:Name="text_xpos" Padding="0" Width="25" TextAlignment="Center" />
                 <TextBlock x:Name="text_ypos" Padding="0" Width="25" TextAlignment="Center" />
+                <Rectangle DockPanel.Dock="Right" Width="17" Height="17"/>
                 <ScrollBar x:Name="scrollbar_horizontal"
                        Orientation="Horizontal"
                        ValueChanged="scrollbar_horizontal_ValueChanged" />
             </DockPanel>
             <ScrollBar x:Name="scrollbar_vertical"
                        Orientation="Vertical" HorizontalAlignment="Right"
-                       ValueChanged="scrollbar_vertical_ValueChanged">
+                       ValueChanged="scrollbar_vertical_ValueChanged"
+                       Margin="0,0,0,17">
             </ScrollBar>
         </Grid>
     </Grid>
