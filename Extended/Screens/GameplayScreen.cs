@@ -84,7 +84,6 @@ namespace mapKnight.Extended.Screens {
         protected override void Activated( ) {
             while(map.Entities.Count > 0) {
                 map.Entities[0].Destroy( );
-                map.Entities.RemoveAt(0);
             }
 
             EntityCollection.Enemys.Guardians.Tent.Create(new Vector2(12, 18), map);

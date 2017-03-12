@@ -16,7 +16,7 @@ namespace mapKnight.Android {
         View view;
 
         protected override void OnCreate (Bundle bundle) {
-            RequestWindowFeature(WindowFeatures.NoTitle);
+            base.Window.DecorView.SystemUiVisibility = Constants.STATUS_BAR_VISIBILITY;
             base.OnCreate(bundle);
 
             // Create our OpenGL view, and display it
@@ -34,13 +34,8 @@ namespace mapKnight.Android {
 
         public override void OnWindowFocusChanged (bool hasFocus) {
             base.OnWindowFocusChanged(hasFocus);
-            if (hasFocus) {
-                base.Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(
-                    SystemUiFlags.LayoutFullscreen |
-                    SystemUiFlags.Fullscreen | 
-                    SystemUiFlags.LayoutHideNavigation|
-                    SystemUiFlags.HideNavigation| 
-                    SystemUiFlags.ImmersiveSticky);
+            if (hasFocus && base.Window.DecorView.SystemUiVisibility != Constants.STATUS_BAR_VISIBILITY) {
+                base.Window.DecorView.SystemUiVisibility = Constants.STATUS_BAR_VISIBILITY;
             }
         }
     }
