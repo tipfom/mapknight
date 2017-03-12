@@ -1,5 +1,7 @@
-﻿using OpenTK.Graphics.ES20;
-using System;
+﻿using System;
+#if __ANDROID__
+using OpenTK.Graphics.ES20;
+#endif
 
 namespace mapKnight.Core.Graphics {
     public class Texture2D : IDisposable {
@@ -28,7 +30,7 @@ namespace mapKnight.Core.Graphics {
             GL.DeleteTexture(ID);
             Disposed = true;
         }
-#elif Windows
+#elif __WINDOWS__
         public void Dispose( ) {
         }
 #endif

@@ -7,7 +7,9 @@ namespace mapKnight.Core.World
 {
     public abstract class Component
     {
+#if __ANDROID__
         public static SerializationBinder SerializationBinder { get; } = new ComponentSerializationBinder( );
+#endif
 
         public readonly Entity Owner;
 
@@ -48,6 +50,7 @@ namespace mapKnight.Core.World
             public abstract Component Create(Entity owner);
         }
 
+#if __ANDROID__
         private class ComponentSerializationBinder : SerializationBinder {
 
             public override void BindToName(Type serializedType, out string assemblyName, out string typeName) {
@@ -59,5 +62,6 @@ namespace mapKnight.Core.World
                 return Type.GetType($"mapKnight.Extended.Components.{ typeName }Component+Configuration");
             }
         }
+#endif
     }
 }
