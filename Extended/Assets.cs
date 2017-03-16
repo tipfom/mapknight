@@ -56,16 +56,22 @@ namespace mapKnight.Extended {
         public static void Destroy ( ) {
             foreach (Texture2D texture in textureCache.Values)
                 texture.Dispose( );
-            textureCache = null;
+            textureCache.Clear();
+            foreach (Spritebatch2D sprite in spriteCache.Values)
+                sprite.Dispose( );
+            spriteCache.Clear( );
 
             ColorProgram.Program.Dispose( );
             MatrixProgram.Program.Dispose( );
+            FBOProgram.Program.Dispose( );
+            ParticleProgram.Program.Dispose( );
+
             foreach (int shader in loadedVertexShader.Values)
                 GL.DeleteShader(shader);
-            loadedVertexShader = null;
+            loadedVertexShader.Clear();
             foreach (int shader in loadedFragmentShader.Values)
                 GL.DeleteShader(shader);
-            loadedFragmentShader = null;
+            loadedFragmentShader.Clear();
         }
 
         static Dictionary<int, Texture2D> textureCache = new Dictionary<int, Texture2D>( );

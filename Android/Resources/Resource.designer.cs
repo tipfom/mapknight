@@ -60,8 +60,11 @@ namespace mapKnight.Android
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f060001
+			public const int iconimage = 2131099649;
+			
 			// aapt resource value: 0x7f060000
-			public const int iconimage = 2131099648;
+			public const int splash_layout = 2131099648;
 			
 			static Id()
 			{

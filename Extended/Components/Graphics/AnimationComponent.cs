@@ -82,12 +82,13 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void Load(Component.Configuration rawConfig) {
-            if (!loadCache.ContainsKey(Owner.Species)) {
+            if (!loadCache.ContainsKey(Owner.Species) || !Owner.World.Renderer.HasTexture(Owner.Species)) {
                 Spritebatch2D sprite;
                 Configuration config = (Configuration)rawConfig;
                 Compiler.Compile(animations, scales, config.Offsets, config.Textures, Owner, out boneVerticies, out sprite);
                 Owner.World.Renderer.AddTexture(Owner.Species, sprite);
-                loadCache.Add(Owner.Species, boneVerticies);
+                if (!loadCache.ContainsKey(Owner.Species))
+                    loadCache.Add(Owner.Species, boneVerticies);
             } else {
                 boneVerticies = loadCache[Owner.Species];
             }

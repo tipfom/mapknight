@@ -19,6 +19,7 @@ namespace mapKnight.Extended {
             FBOProgram.Program = new FBOProgram( );
             ParticleProgram.Program = new ParticleProgram( );
 
+            UIRenderer.Init( );
             UIRenderer.Texture = Assets.Load<Spritebatch2D>("interface");
 
             Screen.Gameplay.Load( );
@@ -52,6 +53,9 @@ namespace mapKnight.Extended {
 
         public static void Destroy ( ) {
             Assets.Destroy( );
+            Screen.MainMenu.Dispose( );
+            Screen.Gameplay.Dispose( );
+            UIRenderer.Dispose( );
         }
 
         private static int lastUpdate = Environment.TickCount;

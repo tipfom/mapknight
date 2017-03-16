@@ -13,17 +13,22 @@ namespace mapKnight.Extended.Graphics.UI {
         private static BufferBatch buffer;
         private static Screen currentScreen;
         private static List<Tuple<UIItem, int>>[ ] indexUsage;
-        private static int renderCount = 0;
+        private static int renderCount;
         private static Dictionary<Screen, List<UIItem>> uiItems;
-        private static int vertexCount = 0;
-        private static Queue<UIItem> updateQueue = new Queue<UIItem>( );
-        private static int[ ] startPositions = { 0, 0, 0 };
+        private static int vertexCount;
+        private static Queue<UIItem> updateQueue;
+        private static int[ ] startPositions;
 
         private static CachedGPUBuffer vertexBuffer;
         private static CachedGPUBuffer textureBuffer;
         private static CachedGPUBuffer colorBuffer;
 
-        static UIRenderer ( ) {
+        public static void Init( ) {
+            startPositions = new int[] { 0, 0, 0 };
+            renderCount = 0;
+            vertexCount = 0;
+            updateQueue = new Queue<UIItem>( );
+
             IndexBuffer sharedIndexBuffer = new IndexBuffer(MAX_QUADS);
             vertexBuffer = new CachedGPUBuffer(2, MAX_QUADS, PrimitiveType.Quad);
             textureBuffer = new CachedGPUBuffer(2, MAX_QUADS, PrimitiveType.Quad);
@@ -32,6 +37,13 @@ namespace mapKnight.Extended.Graphics.UI {
 
             uiItems = new Dictionary<Screen, List<UIItem>>( );
             indexUsage = new List<Tuple<UIItem, int>>[ ] { new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ) };
+        }
+
+        public static void Dispose( ) {
+            buffer.Dispose( );
+            uiItems.Clear( );
+            indexUsage[0].Clear( );
+            updateQueue.Clear( );
         }
 
         public static List<UIItem> Current { get { return uiItems[currentScreen]; } }

@@ -1,6 +1,6 @@
 using System;
-using System.ComponentModel;
-
+using System.Timers;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -8,8 +8,6 @@ using Android.Views;
 using Android.Widget;
 using Android.Content.PM;
 using static Android.Views.ViewTreeObserver;
-using Android.Animation;
-using Android.Views.Animations;
 
 namespace mapKnight.Android {
     [Activity(
@@ -19,33 +17,46 @@ namespace mapKnight.Android {
         NoHistory = true,
         ScreenOrientation = ScreenOrientation.SensorLandscape)]
     public class SplashActivity : Activity {
-        protected override void OnCreate (Bundle savedInstanceState) {
+        static bool SERVICE_STARTED = false;
+        Timer timer = new Timer(30);
+        bool allreadyStarting = false;
+
+        protected override void OnCreate(Bundle savedInstanceState) {
+            Window.DecorView.SystemUiVisibility = Constants.STATUS_BAR_VISIBILITY;
             base.OnCreate(savedInstanceState);
-            Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(
-                    SystemUiFlags.LayoutFullscreen |
-                    SystemUiFlags.Fullscreen |
-                    SystemUiFlags.LayoutHideNavigation |
-                    SystemUiFlags.HideNavigation |
-                    SystemUiFlags.ImmersiveSticky);
             SetContentView(Resource.Layout.SplashScreen);
 
-
-            ImageView iconImage = FindViewById<ImageView>(Resource.Id.iconimage);
-
+            timer.Elapsed += Timer_Elapsed;
             LayoutListener listener = new LayoutListener( );
             listener.LoadingFinished += ( ) => {
-                BackgroundWorker worker = new BackgroundWorker( );
-                worker.DoWork += (sender, e) => {
+                if (!allreadyStarting) {
+                    timer?.Stop( );
+                    timer?.Start( );
+                }
+            };
+            FindViewById<ImageView>(Resource.Id.iconimage).ViewTreeObserver.AddOnGlobalLayoutListener(listener);
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e) {
+            if (!allreadyStarting) {
+                allreadyStarting = true;
+                timer.Stop( );
+
+                Task task = new Task(( ) => {
                     Intent intent = new Intent(this, typeof(MainActivity));
                     intent.SetFlags(ActivityFlags.ClearTop);
-                    StartActivity(new Intent(this, typeof(MainActivity)));
-                };
-                worker.RunWorkerCompleted += (sender, e) => {
-                    Finish( );
-                };
-                worker.RunWorkerAsync( );
-            };
-            iconImage.ViewTreeObserver.AddOnGlobalLayoutListener(listener);
+                    StartActivity(intent);
+                }, TaskCreationOptions.AttachedToParent);
+                task.Start( );
+            }
+        }
+
+        protected override void OnDestroy( ) {
+            allreadyStarting = false;
+            base.OnDestroy( );
+        }
+
+        public override void OnBackPressed( ) {
         }
 
         private class LayoutListener : Java.Lang.Object, IOnGlobalLayoutListener {
