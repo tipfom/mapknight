@@ -53,72 +53,150 @@
             <ColumnDefinition Width="6" />
             <ColumnDefinition MinWidth="300" Width="2*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25" />
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="5" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <DockPanel>
-                <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0" />
-                <Button Click="ButtonSettings_Click" Margin="0,0,4,0">
-                    <Button.ToolTip>
-                        Change the Default Tile Settings
-                    </Button.ToolTip>
-                    <Image Name="image_settings" Source="{StaticResource ResourceKey=image_map_settings}"/>
-                </Button>
-                <Button Margin="0,0,4,0" Click="ButtonAdd_Click">
-                    <Button.ToolTip>
-                        Add a New Tile
-                    </Button.ToolTip>
-                    <Image Name="image_add" Source="{StaticResource ResourceKey=image_map_add}"/>
-                </Button>
-                <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorDelete">
-                    <Button.ToolTip>
-                        Remove the Selected Tile
-                    </Button.ToolTip>
-                    <Image Name="image_remove" Source="{StaticResource ResourceKey=image_map_remove}"/>
-                </Button>
-                <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorReplace">
-                    <Button.ToolTip>
-                        Replace the Selected Tile
-                    </Button.ToolTip>
-                    <Image Name="image_replace" Source="{StaticResource ResourceKey=image_map_replace}"/>
-                </Button>
-                <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" />
-            </DockPanel>
-            <ListBox Grid.Row="1"
-                 x:Name="wrappanel_tiles"
-                 ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,2,0,0"
-                 AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_SelectionChanged" >
-            </ListBox>
-            <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
-            <DockPanel Grid.Row="3">
-                <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2" />
-                <ListView x:Name="listview_tile_attributes">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn  Header="Active">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{ Binding Active }" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="100" Header="Attribute" DisplayMemberBinding="{ Binding Attribute }" />
-                            <GridViewColumn Width="140" Header="Value">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Value}" MinWidth="50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </DockPanel>
-        </Grid>
+        <TabControl TabStripPlacement="Left" Margin="2,0,0,0">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="270" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Padding" Value="3" />
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="TILES">
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <DockPanel>
+                        <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0" />
+                        <Button Click="ButtonSettings_Click" Margin="0,0,4,0">
+                            <Button.ToolTip>
+                                Change the Default Tile Settings
+                            </Button.ToolTip>
+                            <Image Name="image_settings" Source="{StaticResource ResourceKey=image_map_settings}"/>
+                        </Button>
+                        <Button Margin="0,0,4,0" Click="ButtonAdd_Click">
+                            <Button.ToolTip>
+                                Add a New Tile
+                            </Button.ToolTip>
+                            <Image Name="image_add" Source="{StaticResource ResourceKey=image_map_add}"/>
+                        </Button>
+                        <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorDelete">
+                            <Button.ToolTip>
+                                Remove the Selected Tile
+                            </Button.ToolTip>
+                            <Image Name="image_remove" Source="{StaticResource ResourceKey=image_map_remove}"/>
+                        </Button>
+                        <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorReplace">
+                            <Button.ToolTip>
+                                Replace the Selected Tile
+                            </Button.ToolTip>
+                            <Image Name="image_replace" Source="{StaticResource ResourceKey=image_map_replace}"/>
+                        </Button>
+                        <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" />
+                    </DockPanel>
+                    <ListBox Grid.Row="1"
+                         x:Name="wrappanel_tiles"
+                         ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,2,0,0"
+                         AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_SelectionChanged" >
+                    </ListBox>
+                    <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
+                    <DockPanel Grid.Row="3">
+                        <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2" />
+                        <ListView x:Name="listview_tile_attributes">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn  Header="Active">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{ Binding Active }" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="100" Header="Attribute" DisplayMemberBinding="{ Binding Attribute }" />
+                                    <GridViewColumn Width="140" Header="Value">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Value}" MinWidth="50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="ENTITIES">
+                <Grid>
+                    <ListBox x:Name="listbox_entities">
+                        <ListBox.Resources>
+                            <DataTemplate x:Key="DefaultTemplate">
+                                <Image Source="{Binding}" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                            </DataTemplate>
+                            <DataTemplate x:Key="SelectionTemplate">
+                                <Image Source="{Binding}" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                                    <Image.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20" RenderingBias="Quality"/>
+                                    </Image.Effect>
+                                </Image>
+                            </DataTemplate>
+                            <DataTemplate x:Key="HoverTemplate">
+                                <Image Source="{Binding}" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                                    <Image.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity=".5" BlurRadius="20" RenderingBias="Quality"/>
+                                    </Image.Effect>
+                                </Image>
+                            </DataTemplate>
+                        </ListBox.Resources>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Setter Property="ContentTemplate" Value="{StaticResource DefaultTemplate}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border Name="Border" Padding="2" SnapsToDevicePixels="true">
+                                                <ContentPresenter />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="true">
+                                                    <Setter TargetName="Border" Property="Background" Value="Transparent"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource HoverTemplate}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource SelectionTemplate}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False" Background="White" />
         <Grid Grid.Column="2">
             <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" />
