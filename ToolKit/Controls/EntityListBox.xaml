@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="mapKnight.ToolKit.Controls.EntityListBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DockPanel>
+        <TextBlock x:Name="textblock_name" DockPanel.Dock="Top" Margin="4"/>
+        <ListBox x:Name="listbox_entities" SelectionChanged="listbox_entities_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.Resources>
+                <DataTemplate x:Key="DefaultTemplate" DataType="{x:Type data:EntityData}">
+                    <Image Source="{Binding Texture}" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                        <Image.LayoutTransform>
+                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                        </Image.LayoutTransform>
+                    </Image>
+                </DataTemplate>
+                <DataTemplate x:Key="SelectionTemplate" DataType="{x:Type data:EntityData}">
+                    <Image Source="{Binding Texture}" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                        <Image.LayoutTransform>
+                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                        </Image.LayoutTransform>
+                        <Image.Effect>
+                            <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20" RenderingBias="Quality"/>
+                        </Image.Effect>
+                    </Image>
+                </DataTemplate>
+                <DataTemplate x:Key="HoverTemplate" DataType="{x:Type data:EntityData}">
+                    <Image Source="{Binding Texture}" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                        <Image.LayoutTransform>
+                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                        </Image.LayoutTransform>
+                        <Image.Effect>
+                            <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity=".5" BlurRadius="20" RenderingBias="Quality"/>
+                        </Image.Effect>
+                    </Image>
+                </DataTemplate>
+            </ListBox.Resources>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="ContentTemplate" Value="{StaticResource DefaultTemplate}" />
+                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Name="Border" Padding="2" SnapsToDevicePixels="true">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="true">
+                                        <Setter TargetName="Border" Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="ContentTemplate" Value="{StaticResource HoverTemplate}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="ContentTemplate" Value="{StaticResource SelectionTemplate}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel></WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+    </DockPanel>
+</UserControl>

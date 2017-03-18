@@ -160,8 +160,6 @@ namespace mapKnight.ToolKit.Editor {
             };
 
             tilemapview.SetReceiveFuncs((Map m) => { return xnaTextures[m]; }, (Map m, int x, int y, int l) => { return mapRotations[m][x, y, l]; });
-
-            listbox_entities.Items.Add(new BitmapImage(new Uri(@"C:\Users\TIm\OneDrive\mapKnight\Shared\Assets\Textures\Mob\Sepling\sepler.png")));
         }
 
         private enum Tool {

@@ -88,8 +88,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Animation\MLGCanvas.cs" />
+    <Compile Include="Controls\EntityListBox.xaml.cs">
+      <DependentUpon>EntityListBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FloatTextBox.cs" />
     <Compile Include="Controls\IntegerTextBox.cs" />
+    <Compile Include="Data\EntityData.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Controls\AnimationControl.xaml.cs">
       <DependentUpon>AnimationControl.xaml</DependentUpon>
@@ -190,6 +194,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AnimationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EntityListBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,6 +398,33 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\starfish-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\slime.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\shell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\shark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\sepler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\plugger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\moonball.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\canone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\landmine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\guardian_tent.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
