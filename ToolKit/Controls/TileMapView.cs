@@ -8,11 +8,11 @@ using Color = Microsoft.Xna.Framework.Color;
 using Point = Microsoft.Xna.Framework.Point;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using mapKnight.Core.World;
+using System.IO;
 
-namespace mapKnight.ToolKit.Controls
-{
-    public class TileMapView : XnaControl
-    {
+namespace mapKnight.ToolKit.Controls {
+    public class TileMapView : XnaControl {
         const int TILESIZE_MIN = 20;
         const int TILESIZE_MAX = 100;
         const int ZOOM_LEVELS = 15;
@@ -20,13 +20,13 @@ namespace mapKnight.ToolKit.Controls
         private Map _CurrentMap;
         public Map CurrentMap {
             get { return _CurrentMap; }
-            set { _CurrentMap = value; Update(); }
+            set { _CurrentMap = value; Update( ); }
         }
 
         private Vector2 _Offset;
         public Vector2 Offset {
             get { return _Offset; }
-            set { _Offset = value; Update(); }
+            set { _Offset = value; Update( ); }
         }
 
 
@@ -45,7 +45,7 @@ namespace mapKnight.ToolKit.Controls
                 _Offset.Y = Math.Max(_Offset.Y, 0);
                 _CurrentSelection.X += (int)prevOffset.X - (int)_Offset.X;
                 _CurrentSelection.Y += (int)prevOffset.Y - (int)_Offset.Y;
-                Update();
+                Update( );
             }
         }
 
@@ -60,62 +60,57 @@ namespace mapKnight.ToolKit.Controls
             set { _CurrentSelection = value; }
         }
 
-        private bool[] Layer = { true, true, true };
+        private bool[ ] Layer = { true, true, true };
         public bool ShowForeground {
             get { return Layer[2]; }
-            set { Layer[2] = value; Update(); }
+            set { Layer[2] = value; Update( ); }
         }
         public bool ShowBackground {
             get { return Layer[0]; }
-            set { Layer[0] = value; Update(); }
+            set { Layer[0] = value; Update( ); }
         }
         public bool ShowMiddle {
             get { return Layer[1]; }
-            set { Layer[1] = value; Update(); }
+            set { Layer[1] = value; Update( ); }
         }
 
         private Texture2D selectionTexture;
         private Texture2D spawnpointTexture;
         private Func<Map, Dictionary<string, Texture2D>> GetXNATextures;
+        private Func<string, Texture2D> GetEntityTexture;
         private Func<Map, int, int, int, float> GetRotation;
 
-        public TileMapView()
-        {
-            base.DeviceInitialized += () =>
-            {
-                CreateEmptyTexture();
+        public TileMapView( ) {
+            base.DeviceInitialized += ( ) => {
+                CreateEmptyTexture( );
             };
-            Loaded += (sender, e) =>
-            {
-                this.Focus();
+            Loaded += (sender, e) => {
+                this.Focus( );
             };
         }
 
-        public void SetReceiveFuncs(Func<Map, Dictionary<string, Texture2D>> texfunc, Func<Map, int, int, int, float> rotfunc)
-        {
+        public void SetReceiveFuncs(Func<Map, Dictionary<string, Texture2D>> texfunc, Func<Map, int, int, int, float> rotfunc, Func<string, Texture2D> entitytexfunc) {
             GetXNATextures = texfunc;
             GetRotation = rotfunc;
+            GetEntityTexture = entitytexfunc;
         }
 
-        public bool IsLayerActive(int id)
-        {
+        public bool IsLayerActive(int id) {
             return id < 0 || id > 3 || Layer[id];
         }
 
-        private void CreateEmptyTexture()
-        {
+        private void CreateEmptyTexture( ) {
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
             selectionTexture = new Texture2D(GraphicsDevice, 1, 1);
-            selectionTexture.SetData(new Color[] { new Color(255, 0, 0, 63) });
+            selectionTexture.SetData(new Color[ ] { new Color(255, 0, 0, 63) });
 
             spawnpointTexture = new Texture2D(GraphicsDevice, 1, 1);
-            spawnpointTexture.SetData(new Color[] { new Color(0, 255, 0, 63) });
+            spawnpointTexture.SetData(new Color[ ] { new Color(0, 255, 0, 63) });
         }
 
-        protected override void Render(SpriteBatch spriteBatch)
-        {
+        protected override void Render(SpriteBatch spriteBatch) {
             if (CurrentMap == null)
                 return;
 
@@ -123,20 +118,13 @@ namespace mapKnight.ToolKit.Controls
             int ox = (int)Math.Floor(Offset.X);
             int columns = (int)Math.Min(RenderSize.Width / TileSize + 1, CurrentMap.Width - ox);
             int rows = (int)Math.Min(RenderSize.Height / TileSize + 1, CurrentMap.Height - oy);
-            for (int x = 0; x < columns; x++) {
-                for (int y = 0; y < rows; y++) {
-                    int cx = x + ox, cy = CurrentMap.Height - y - 1 - oy;
-                    Rectangle drawingRectangle = new Rectangle((int)((x + 0.5f) * TileSize), (int)((y + 0.5f) * TileSize), TileSize, TileSize);
-                    for (int l = 0; l < 3; l++)
-                    {
-                        if (Layer[l])
-                        {
-                            float rotation = GetRotation(CurrentMap, cx, cy, l) * (float)Math.PI;
-                            spriteBatch.Draw(GetXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, l).Name], drawingRectangle, null, Color.White, rotation, new Microsoft.Xna.Framework.Vector2(Map.TILE_PXL_SIZE / 2f, Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);
-                        }
-                    }
-                }
+            DrawLayer(0, columns, rows, ox, oy, spriteBatch);
+            DrawLayer(1, columns, rows, ox, oy, spriteBatch);
+            foreach (Entity e in _CurrentMap.Entities) {
+                Texture2D texture = GetEntityTexture(e.Name);
+                spriteBatch.Draw(texture, new Rectangle((int)((e.Transform.X - ox) * TileSize), (int)((_CurrentMap.Height - e.Transform.Y - oy) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize)), null, e.Domain == EntityDomain.Temporary ? new Color(Color.White, 128) : Color.White, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), SpriteEffects.None, 0);
             }
+            DrawLayer(2, columns, rows, ox, oy, spriteBatch);
 
             // draw selected tile
             if (CurrentSelection.X > -1 && CurrentSelection.Y > -1)
@@ -144,6 +132,38 @@ namespace mapKnight.ToolKit.Controls
 
             // draw spawnpoint tile
             spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Math.Floor(Offset.X)) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Math.Floor(Offset.Y)) * TileSize), TileSize, TileSize), Color.White);
+        }
+
+        private void DrawLayer(int layer, int columns, int rows, int offsetx, int offsety, SpriteBatch spriteBatch) {
+            if (!Layer[layer])
+                return;
+            for (int x = 0; x < columns; x++) {
+                for (int y = 0; y < rows; y++) {
+                    int cx = x + offsetx, cy = CurrentMap.Height - y - 1 - offsety;
+                    Rectangle drawingRectangle = new Rectangle((int)((x + 0.5f) * TileSize), (int)((y + 0.5f) * TileSize), TileSize, TileSize);
+                    float rotation = GetRotation(CurrentMap, cx, cy, layer) * (float)Math.PI;
+                    spriteBatch.Draw(GetXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, layer).Name], drawingRectangle, null, Color.White, rotation, new Vector2(Map.TILE_PXL_SIZE / 2f, Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);
+                }
+            }
+        }
+
+        public class EditorMap : Map, IEntityWorld {
+
+            public EditorMap(Size size, string creator, string name) :
+                base(size, creator, name) {
+            }
+
+            public EditorMap(Stream input) :
+                base(input) {
+            }
+
+            public IEntityRenderer Renderer => null;
+
+            public float VertexSize => 0;
+
+            public bool HasCollider(int x, int y) {
+                return false;
+            }
         }
     }
 }

@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using Point = System.Windows.Point;
+using mapKnight.Core.World;
 
 namespace mapKnight.ToolKit.Editor {
 
@@ -62,6 +63,8 @@ namespace mapKnight.ToolKit.Editor {
 
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
 
+        private Entity cachedEntity;
+
         public void Load (Project project) {
             xnaTextures.Clear( );
             wpfTextures.Clear( );
@@ -73,7 +76,7 @@ namespace mapKnight.ToolKit.Editor {
                     string name = Path.GetFileNameWithoutExtension(mapfile);
 
                     using (Stream mapStream = project.GetOrCreateStream(false, mapfile)) {
-                        Map map = LoadMap(mapStream);
+                        Controls.TileMapView.EditorMap map = LoadMap(mapStream);
                         using (Stream imageStream = project.GetOrCreateStream(false, Path.Combine(dir, name + ".png")))
                             LoadImages(imageStream, map);
                         AddMap(map);
@@ -159,7 +162,14 @@ namespace mapKnight.ToolKit.Editor {
                 }
             };
 
-            tilemapview.SetReceiveFuncs((Map m) => { return xnaTextures[m]; }, (Map m, int x, int y, int l) => { return mapRotations[m][x, y, l]; });
+            tilemapview.DeviceInitialized += ( ) => {
+                entitylistbox.Init(tilemapview.GraphicsDevice);
+            };
+
+            tilemapview.SetReceiveFuncs((Map m) => { return xnaTextures[m]; }, (Map m, int x, int y, int l) => { return mapRotations[m][x, y, l]; }, (string name) => {
+                Data.EntityData d = entitylistbox.Find(name);
+                return d.Texture;
+            });
         }
 
         private enum Tool {
@@ -216,7 +226,7 @@ namespace mapKnight.ToolKit.Editor {
                 wrappanel_tiles.SelectedIndex = 0;
         }
 
-        private void AddMap (Map map) {
+        private void AddMap (Controls.TileMapView.EditorMap map) {
             if (!IsEnabled)
                 IsEnabled = true;
 
@@ -350,15 +360,15 @@ namespace mapKnight.ToolKit.Editor {
 
         private void LoadMap (string path) {
             using (Stream mapStream = File.OpenRead(path)) {
-                Map map = LoadMap(mapStream);
+                Controls.TileMapView.EditorMap map = LoadMap(mapStream);
                 using (Stream imageStream = File.OpenRead(Path.Combine(Path.GetDirectoryName(path), map.Texture + ".png")))
                     LoadImages(imageStream, map);
                 AddMap(map);
             }
         }
 
-        private Map LoadMap (Stream mapStream) {
-            Map loadedMap = new Map(mapStream);
+        private Controls.TileMapView.EditorMap LoadMap (Stream mapStream) {
+            Controls.TileMapView.EditorMap loadedMap = new Controls.TileMapView.EditorMap(mapStream);
             mapRotations.Add(loadedMap, loadedMap.ExtractRotations( ));
             return loadedMap;
         }
@@ -381,7 +391,7 @@ namespace mapKnight.ToolKit.Editor {
             if (tilemapview.CurrentMap != null)
                 tilemapview.CurrentMap = null;
             foreach (object map in ((ComboBox)_Menu[1]).Items) {
-                AddMap((Map)map);
+                AddMap((Controls.TileMapView.EditorMap)map);
             }
         }
 
@@ -411,6 +421,16 @@ namespace mapKnight.ToolKit.Editor {
             if (currentMap == null || currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer))
                 return;
 
+            if(tabcontrol_toolselect.SelectedIndex == 0) {
+                // tiles
+                HandleTilemapViewClickTiles(sender, e);
+            } else {
+                // entities
+                HandleTilemapViewClickEntities(sender, e);
+            }
+        }
+
+        private void HandleTilemapViewClickTiles(object sender, MouseButtonEventArgs e) {
             Point clickedTile = GetClickedTile( );
             if (e.RightButton == MouseButtonState.Pressed) {
                 Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
@@ -483,6 +503,37 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
+        private Vector2 GetEntityCenter( MouseEventArgs e) {
+            Point positionOnControl = e.GetPosition(tilemapview);
+            Vector2 selectedTile = new Vector2(
+                (float)Math.Min(positionOnControl.X / tilemapview.TileSize, currentMap.Width - Math.Floor(tilemapview.Offset.X) - 1),
+                currentMap.Size.Height - (float)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y) - 1) - (float)Math.Floor(tilemapview.Offset.Y));
+            selectedTile.Y = (float)Math.Floor(selectedTile.Y);
+
+            return selectedTile;
+        }
+
+        private void GetSpawnLocation(MouseEventArgs e, Entity.Configuration c) {
+            Vector2 center = GetEntityCenter(e);
+            float floatingPart = center.X % 1f;
+            if(floatingPart < 1f / 3f) {
+
+            } else if (floatingPart > 2f / 3f) {
+
+            } else {
+
+            }
+        }
+
+        private void HandleTilemapViewClickEntities(object sender, MouseButtonEventArgs e) {
+            entitylistbox.GetCurrentFinalConfiguration( ).Create(GetEntityCenter(e), (Controls.TileMapView.EditorMap)currentMap, true);
+            if (cachedEntity != null) {
+                currentMap.Entities.Remove(cachedEntity);
+                cachedEntity = null;
+            }
+            tilemapview.Update( );
+        }
+
         private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {
             if (currentMap != null)
                 UpdateSelectedTile(e);
@@ -490,6 +541,10 @@ namespace mapKnight.ToolKit.Editor {
 
         private void tilemapview_MouseLeave (object sender, MouseEventArgs e) {
             tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Point(-1, -1);
+            if(cachedEntity != null) {
+                currentMap.Entities.Remove(cachedEntity);
+                cachedEntity = null;
+            }
             tilemapview.Update( );
         }
 
@@ -498,9 +553,20 @@ namespace mapKnight.ToolKit.Editor {
                 return;
             bool updated = UpdateSelectedTile(e);
 
-            if (!updated)
+            if (tabcontrol_toolselect.SelectedIndex == 0) {
+                if (!updated)
+                    return;
+                HandleTilemapViewMoveTiles(sender, e, updated);
+            } else {
+                HandleTilemapViewMoveEntities(sender, e);
+                if (updated)
+                    tilemapview.Update( );
                 return;
+            }
 
+        }
+
+        private void HandleTilemapViewMoveTiles(object sender, MouseEventArgs e, bool updated) {
             Point clickedTile = GetClickedTile( );
             if (e.RightButton == MouseButtonState.Pressed) {
                 Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
@@ -531,6 +597,17 @@ namespace mapKnight.ToolKit.Editor {
             }
             if (updated)
                 tilemapview.Update( );
+        }
+
+        private void HandleTilemapViewMoveEntities(object sender, MouseEventArgs e) {
+            Vector2 entityLocation = GetEntityCenter(e);
+            if(cachedEntity == null) {
+                cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, (Controls.TileMapView.EditorMap)currentMap, true);
+            } else {
+                entityLocation.Y += cachedEntity.Transform.Height / 2;
+                cachedEntity.Transform.Center = entityLocation;
+            }
+            tilemapview.Update( );
         }
 
         private void tilemapview_PreviewMouseWheel (object sender, MouseWheelEventArgs e) {
