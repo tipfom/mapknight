@@ -506,23 +506,11 @@ namespace mapKnight.ToolKit.Editor {
         private Vector2 GetEntityCenter( MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Vector2 selectedTile = new Vector2(
-                (float)Math.Min(positionOnControl.X / tilemapview.TileSize, currentMap.Width - Math.Floor(tilemapview.Offset.X) - 1),
-                currentMap.Size.Height - (float)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y) - 1) - (float)Math.Floor(tilemapview.Offset.Y));
+                (float)Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, currentMap.Width - Math.Floor(tilemapview.Offset.X) - 1),
+                currentMap.Size.Height - (float)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y)) - (float)Math.Floor(tilemapview.Offset.Y));
             selectedTile.Y = (float)Math.Floor(selectedTile.Y);
 
             return selectedTile;
-        }
-
-        private void GetSpawnLocation(MouseEventArgs e, Entity.Configuration c) {
-            Vector2 center = GetEntityCenter(e);
-            float floatingPart = center.X % 1f;
-            if(floatingPart < 1f / 3f) {
-
-            } else if (floatingPart > 2f / 3f) {
-
-            } else {
-
-            }
         }
 
         private void HandleTilemapViewClickEntities(object sender, MouseButtonEventArgs e) {
