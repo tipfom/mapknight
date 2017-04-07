@@ -37,11 +37,11 @@ namespace mapKnight.ToolKit.Controls {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Sepler", new Core.Vector2(1f, 15f / 17f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Sepler", new Core.Vector2(1f * 23f / 17f, 15f / 17f * 23f / 15f)) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Shark", new Core.Vector2(0.540540f, 1.25f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Shark", new Core.Vector2(0.540540f * 29f/15f, 0.540540f*31f/15f)) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
@@ -75,11 +75,11 @@ namespace mapKnight.ToolKit.Controls {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Sepler", new Core.Vector2(1f, 15f / 17f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Sepler", new Core.Vector2(1f * 23f / 17f, 15f / 17f * 23f / 15f)) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Shark", new Core.Vector2(0.540540f, 1.25f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Shark", new Core.Vector2(0.540540f * 29f/15f, 0.540540f*31f/15f)) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
