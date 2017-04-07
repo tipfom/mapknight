@@ -18,6 +18,9 @@
     <BitmapImage x:Key="image_map_add" UriSource="../Resources/Images/plus_math-48.png"/>
     <BitmapImage x:Key="image_map_remove" UriSource="../Resources/Images/minus_math-48.png"/>
     <BitmapImage x:Key="image_map_replace" UriSource="../Resources/Images/replace-48.png"/>
+    <BitmapImage x:Key="image_map_placeentity" UriSource="../Resources/Images/octopus-48.png"/>
+    <BitmapImage x:Key="image_map_selectentity" UriSource="../Resources/Images/hand_cursor-48.png"/>
+    <BitmapImage x:Key="image_map_killentity" UriSource="../Resources/Images/empty_trash-48.png"/>
     <Image x:Key="image_map_new" Source="../Resources/Images/create_new-48.png"/>
 
     <Image x:Key="image_animation_new" Source="../Resources/Images/create_new-48.png"/>

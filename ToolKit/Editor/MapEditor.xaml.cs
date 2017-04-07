@@ -47,12 +47,16 @@ namespace mapKnight.ToolKit.Editor {
             new RadioButton() {IsChecked = true, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Middle" }, Focusable = false },
             new RadioButton() {IsChecked = false, GroupName="modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Foreground" }, Focusable = false },
             new Separator(),
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_undo"), Style = imageStyle }, Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Ctrl + Z" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pen"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Alt + A" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_eraser"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Alt + S" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_fill"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Ctrl + D" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pointer"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_rotate"), Style = imageStyle }, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Ctrl + F" } }
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_undo"), Style = imageStyle }, Background = Brushes.White, Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Ctrl + Z" } },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pen"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Alt + A" } },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_eraser"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Alt + S" } },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_fill"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Ctrl + D" } },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pointer"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0) },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_rotate"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Ctrl + F" } },
+            new Separator(),
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_placeentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Place Entity" } },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_selectentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Select and Move Entity" } },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_killentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Kill Entity" } },
         };
 
         // Map Cache List von Koord Layer alter Wert IsRotation
@@ -63,7 +67,7 @@ namespace mapKnight.ToolKit.Editor {
 
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
 
-        private Entity cachedEntity;
+        private Entity cachedEntity, currentlySelectedEntity;
 
         public void Load (Project project) {
             xnaTextures.Clear( );
@@ -147,6 +151,10 @@ namespace mapKnight.ToolKit.Editor {
             _Menu[17].MouseDown += (sender, e) => SelectTool(Tool.Pointer);
             _Menu[18].MouseDown += (sender, e) => SelectTool(Tool.Rotater);
 
+            _Menu[20].MouseDown += (sender, e) => SelectTool(Tool.God);
+            _Menu[21].MouseDown += (sender, e) => SelectTool(Tool.Hand);
+            _Menu[22].MouseDown += (sender, e) => SelectTool(Tool.Trashcan);
+
             App.Current.MainWindow.Closing += (sender, e) => {
                 Properties.Settings.Default.DefaultTileAttributes = JsonConvert.SerializeObject(defaultAttributes);
             };
@@ -177,7 +185,10 @@ namespace mapKnight.ToolKit.Editor {
             Eraser = 1,
             Filler = 2,
             Pointer = 3,
-            Rotater = 4
+            Rotater = 4,
+            God = 6,
+            Hand = 7,
+            Trashcan = 8
         }
 
         public List<FrameworkElement> Menu { get { return _Menu; } }
@@ -401,6 +412,9 @@ namespace mapKnight.ToolKit.Editor {
             ((Border)_Menu[16]).BorderThickness = new Thickness(0);
             ((Border)_Menu[17]).BorderThickness = new Thickness(0);
             ((Border)_Menu[18]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[20]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[21]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[22]).BorderThickness = new Thickness(0);
         }
 
         private void scrollbar_horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -412,6 +426,16 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void SelectTool (Tool tool) {
+            if (cachedEntity != null) {
+                currentMap.Entities.Remove(cachedEntity);
+                cachedEntity = null;
+            }
+
+            if ((int)tool < 5) {
+                tabcontrol_toolselect.SelectedIndex = 0;
+            } else {
+                tabcontrol_toolselect.SelectedIndex = 1;
+            }
             currentTool = tool;
             ResetToolBorders( );
             ((Border)_Menu[14 + (int)tool]).BorderThickness = new Thickness(1);
@@ -503,23 +527,48 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private Vector2 GetEntityCenter( MouseEventArgs e) {
+        private Vector2 GetEntityCenterRaw(MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Vector2 selectedTile = new Vector2(
-                (float)Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, currentMap.Width - Math.Floor(tilemapview.Offset.X) - 1),
+                (float)Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, currentMap.Width - tilemapview.Offset.X - 1),
                 currentMap.Size.Height - (float)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y)) - (float)Math.Floor(tilemapview.Offset.Y));
-            selectedTile.Y = (float)Math.Floor(selectedTile.Y);
+            return selectedTile;
+        }
 
+
+        private Vector2 GetEntityCenter( MouseEventArgs e) {
+            Vector2 selectedTile = GetEntityCenterRaw(e);
+            selectedTile.Y = (float)Math.Floor(selectedTile.Y);
             return selectedTile;
         }
 
         private void HandleTilemapViewClickEntities(object sender, MouseButtonEventArgs e) {
-            entitylistbox.GetCurrentFinalConfiguration( ).Create(GetEntityCenter(e), (Controls.TileMapView.EditorMap)currentMap, true);
-            if (cachedEntity != null) {
-                currentMap.Entities.Remove(cachedEntity);
-                cachedEntity = null;
+            switch (currentTool) {
+                case Tool.God:
+                    entitylistbox.GetCurrentFinalConfiguration( ).Create(GetEntityCenter(e), (Controls.TileMapView.EditorMap)currentMap, true);
+                    if (cachedEntity != null) {
+                        currentMap.Entities.Remove(cachedEntity);
+                        cachedEntity = null;
+                    }
+                    tilemapview.Update( );
+                    break;
+                case Tool.Hand:
+                    Entity clickedEntity = GetClickedEntity(e);
+                    if(clickedEntity != null) {
+                        Console.WriteLine(clickedEntity.Name);
+                    }
+                    break;
             }
-            tilemapview.Update( );
+        }
+
+        private Entity GetClickedEntity(MouseEventArgs e) {
+            Vector2 clickedPosition = GetEntityCenterRaw(e);
+            for(int i = currentMap.Entities.Count -1; i >= 0; i--) {
+                if (currentMap.Entities[i].Transform.Intersects(clickedPosition)) {
+                    return currentMap.Entities[i];
+                }
+            }
+            return null;
         }
 
         private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {
@@ -588,14 +637,33 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewMoveEntities(object sender, MouseEventArgs e) {
-            Vector2 entityLocation = GetEntityCenter(e);
-            if(cachedEntity == null) {
-                cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, (Controls.TileMapView.EditorMap)currentMap, true);
-            } else {
-                entityLocation.Y += cachedEntity.Transform.Height / 2;
-                cachedEntity.Transform.Center = entityLocation;
+            switch (currentTool) {
+                case Tool.God:
+                    Vector2 entityLocation = GetEntityCenter(e);
+                    if(cachedEntity == null) {
+                        cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, (Controls.TileMapView.EditorMap)currentMap, true);
+                    } else {
+                        entityLocation.Y += cachedEntity.Transform.Height / 2;
+                        cachedEntity.Transform.Center = entityLocation;
+                    }
+                    tilemapview.Update( );
+                    break;
+                case Tool.Hand:
+                    Entity selectedEntity = GetClickedEntity(e);
+                    Console.WriteLine(selectedEntity?.Name ?? "NULL");
+                    bool changed = (currentlySelectedEntity != null || selectedEntity != null) && currentlySelectedEntity != selectedEntity;
+                    if (currentlySelectedEntity != null) {
+                        currentlySelectedEntity.Domain = EntityDomain.Enemy;
+                        currentlySelectedEntity = null;
+                    }
+                    if (selectedEntity != null) {
+                        selectedEntity.Domain = EntityDomain.Obstacle;
+                        currentlySelectedEntity = selectedEntity;
+                    }
+                    if (changed)
+                        tilemapview.Update( );
+                    break;
             }
-            tilemapview.Update( );
         }
 
         private void tilemapview_PreviewMouseWheel (object sender, MouseWheelEventArgs e) {
@@ -794,6 +862,14 @@ namespace mapKnight.ToolKit.Editor {
             image.UriSource = new Uri(file);
             image.EndInit( );
             return image;
+        }
+
+        private void tabcontrol_toolselect_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if(tabcontrol_toolselect.SelectedIndex == 0) {
+                SelectTool(Tool.Pen);
+            } else {
+                SelectTool(Tool.God);
+            }
         }
     }
 }

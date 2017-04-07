@@ -429,6 +429,11 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Entities\guardian_tent.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\empty_trash-48.png" />
+    <Resource Include="Resources\Images\hand_cursor-48.png" />
+    <Resource Include="Resources\Images\octopus-48.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
