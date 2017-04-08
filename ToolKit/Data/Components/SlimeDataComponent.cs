@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Controls;
 using mapKnight.Core;
 using mapKnight.Core.World;
@@ -18,7 +17,7 @@ namespace mapKnight.ToolKit.Data.Components {
         public Direction InitialMoveDirection = Direction.Left;
 
         public UserControl Control { get; }
-        public Action<Action<List<Vector2>>> RequestMapVectorList { get; set; }
+        public Action<Func<Vector2, bool>> RequestMapVectorList { get; set; }
 
         public SlimeDataComponent(Entity owner) : base(owner) {
             Control = new SlimeDataControl(this);

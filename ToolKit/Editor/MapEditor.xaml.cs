@@ -70,8 +70,7 @@ namespace mapKnight.ToolKit.Editor {
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
 
         private Entity cachedEntity, currentlySelectedEntity;
-        private Action<List<Vector2>> currentVectorListRequestCallback;
-        private List<Vector2> currentVectorList = new List<Vector2>();
+        private Func<Vector2, bool> currentVectorRequestCallback;
 
         public void Load (Project project) {
             xnaTextures.Clear( );
@@ -158,7 +157,7 @@ namespace mapKnight.ToolKit.Editor {
             _Menu[20].MouseDown += (sender, e) => SelectTool(Tool.God);
             _Menu[21].MouseDown += (sender, e) => SelectTool(Tool.Hand);
             _Menu[22].MouseDown += (sender, e) => SelectTool(Tool.Trashcan);
-            _Menu[23].MouseDown += (sender, e) => SelectTool(Tool.God);
+            _Menu[23].MouseDown += (sender, e) => SelectTool(Tool.Hand);
 
             App.Current.MainWindow.Closing += (sender, e) => {
                 Properties.Settings.Default.DefaultTileAttributes = JsonConvert.SerializeObject(defaultAttributes);
@@ -434,9 +433,10 @@ namespace mapKnight.ToolKit.Editor {
 
         private void SelectTool (Tool tool) {
             if(currentTool == Tool.VectorGrabber) {
-                currentVectorListRequestCallback(currentVectorList);
-                currentVectorList = new List<Vector2>( );
                 _Menu[23].IsEnabled = false;
+            }
+            if (tool != Tool.Hand && tool != Tool.VectorGrabber) {
+                contentpresenter_entitydata.Content = null;
             }
 
             if (cachedEntity != null) {
@@ -556,10 +556,12 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewClickEntities(object sender, MouseButtonEventArgs e) {
-            contentpresenter_entitydata.Content = null;
+            if (currentTool == Tool.God || currentTool == Tool.Hand)
+                contentpresenter_entitydata.Content = null;
             switch (currentTool) {
                 case Tool.God:
-                    entitylistbox.GetCurrentFinalConfiguration( ).Create(GetEntityCenter(e), (Controls.TileMapView.EditorMap)currentMap, true);
+                    Vector2 clickedPosition = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
+                    entitylistbox.GetCurrentFinalConfiguration( ).Create(clickedPosition, (Controls.TileMapView.EditorMap)currentMap, true);
                     if (cachedEntity != null) {
                         currentMap.Entities.Remove(cachedEntity);
                         cachedEntity = null;
@@ -587,15 +589,20 @@ namespace mapKnight.ToolKit.Editor {
                     }
                     break;
                 case Tool.VectorGrabber:
-                    Vector2 clickedPosition = GetEntityCenterRaw(e);
-                    currentVectorList.Add(clickedPosition);
+                    clickedPosition = GetEntityCenterRaw(e);
+                    if (Keyboard.IsKeyDown(Key.LeftShift)) {
+                        clickedPosition.X = (float)Math.Floor(clickedPosition.X) + 0.5f;
+                        clickedPosition.Y = (float)Math.Floor(clickedPosition.Y) + 0.5f;
+                    }
+                    if (!currentVectorRequestCallback(clickedPosition))
+                        SelectTool(Tool.God);
                     break;
             }
         }
 
-        private void HandleMapVectorListRequest(Action<List<Vector2>> callback) {
+        private void HandleMapVectorListRequest(Func<Vector2, bool> callback) {
             _Menu[23].IsEnabled = true;
-            currentVectorListRequestCallback = callback;
+            currentVectorRequestCallback = callback;
             SelectTool(Tool.VectorGrabber);
         }
 
@@ -675,7 +682,7 @@ namespace mapKnight.ToolKit.Editor {
         private void HandleTilemapViewMoveEntities(object sender, MouseEventArgs e) {
             switch (currentTool) {
                 case Tool.God:
-                    Vector2 entityLocation = GetEntityCenter(e);
+                    Vector2 entityLocation = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
                     if(cachedEntity == null) {
                         cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, (Controls.TileMapView.EditorMap)currentMap, true);
                     } else {

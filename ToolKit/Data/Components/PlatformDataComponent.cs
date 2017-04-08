@@ -1,20 +1,19 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using mapKnight.Core;
 using mapKnight.Core.World;
 using mapKnight.ToolKit.Controls.Components;
-using System.Collections.Generic;
-using mapKnight.Core;
-using System;
-using System.Collections.ObjectModel;
 
 namespace mapKnight.ToolKit.Data.Components {
     public class PlatformDataComponent : Component, IUserControlComponent {
         public UserControl Control { get; }
 
         public ObservableCollection<Vector2> Waypoints { get; set; }
-        public Action<Action<List<Vector2>>> RequestMapVectorList { get; set; }
+        public Action<Func<Vector2, bool>> RequestMapVectorList { get; set; }
 
         public PlatformDataComponent(Entity owner) : base(owner) {
-            Waypoints = new ObservableCollection<Vector2>( );
+            Waypoints = new ObservableCollection<Vector2>( ) { new Vector2(0, 0) };
             Control = new PlatformDataControl(this);
         }
 

@@ -1,6 +1,5 @@
 ﻿using mapKnight.Core;
 using mapKnight.ToolKit.Data.Components;
-using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace mapKnight.ToolKit.Controls.Components {
@@ -21,12 +20,14 @@ namespace mapKnight.ToolKit.Controls.Components {
         }
 
         private void button_reset_Click(object sender, System.Windows.RoutedEventArgs e) {
+            referenceComponent.Waypoints.Clear( );
+            referenceComponent.Waypoints.Add(new Vector2(0, 0));
             referenceComponent.RequestMapVectorList(RequestMapVectorListCallback);
         }
 
-        private void RequestMapVectorListCallback(List<Vector2> result) {
-            referenceComponent.Waypoints.Clear();
-            referenceComponent.Waypoints.AddRange(result);
+        private bool RequestMapVectorListCallback(Vector2 input) {
+            referenceComponent.Waypoints.Add(input);
+            return true;
         }
     }
 }
