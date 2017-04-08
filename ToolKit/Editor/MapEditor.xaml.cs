@@ -610,7 +610,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {
-            if (currentMap != null)
+            if (currentMap != null && tabcontrol_toolselect.SelectedIndex == 0)
                 UpdateSelectedTile(e);
         }
 
@@ -626,16 +626,14 @@ namespace mapKnight.ToolKit.Editor {
         private void tilemapview_MouseMove (object sender, MouseEventArgs e) {
             if (currentMap == null)
                 return;
-            bool updated = UpdateSelectedTile(e);
 
             if (tabcontrol_toolselect.SelectedIndex == 0) {
+                bool updated = UpdateSelectedTile(e);
                 if (!updated)
                     return;
                 HandleTilemapViewMoveTiles(sender, e, updated);
             } else {
                 HandleTilemapViewMoveEntities(sender, e);
-                if (updated)
-                    tilemapview.Update( );
                 return;
             }
 
@@ -920,6 +918,7 @@ namespace mapKnight.ToolKit.Editor {
                 SelectTool(Tool.Pen);
             } else {
                 SelectTool(Tool.God);
+                tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Point(-1, -1);
             }
         }
 
