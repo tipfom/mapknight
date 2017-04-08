@@ -29,7 +29,6 @@ namespace mapKnight.ToolKit.Controls {
             set { _Offset = value; Update( ); }
         }
 
-
         private int _ZoomLevel = 6;
         public int ZoomLevel {
             get { return _ZoomLevel; }

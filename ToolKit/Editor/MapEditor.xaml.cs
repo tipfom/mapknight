@@ -58,6 +58,7 @@ namespace mapKnight.ToolKit.Editor {
             new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_placeentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Place Entity" } },
             new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_selectentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Select and Move Entity" } },
             new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_killentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Kill Entity" } },
+            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_finishvectorrequest"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), IsEnabled = false, ToolTip = new ToolTip() { Content = "Finish Vector Request" } },
         };
 
         // Map Cache List von Koord Layer alter Wert IsRotation
@@ -69,6 +70,8 @@ namespace mapKnight.ToolKit.Editor {
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
 
         private Entity cachedEntity, currentlySelectedEntity;
+        private Action<List<Vector2>> currentVectorListRequestCallback;
+        private List<Vector2> currentVectorList = new List<Vector2>();
 
         public void Load (Project project) {
             xnaTextures.Clear( );
@@ -155,6 +158,7 @@ namespace mapKnight.ToolKit.Editor {
             _Menu[20].MouseDown += (sender, e) => SelectTool(Tool.God);
             _Menu[21].MouseDown += (sender, e) => SelectTool(Tool.Hand);
             _Menu[22].MouseDown += (sender, e) => SelectTool(Tool.Trashcan);
+            _Menu[23].MouseDown += (sender, e) => SelectTool(Tool.God);
 
             App.Current.MainWindow.Closing += (sender, e) => {
                 Properties.Settings.Default.DefaultTileAttributes = JsonConvert.SerializeObject(defaultAttributes);
@@ -189,7 +193,8 @@ namespace mapKnight.ToolKit.Editor {
             Rotater = 4,
             God = 6,
             Hand = 7,
-            Trashcan = 8
+            Trashcan = 8,
+            VectorGrabber = 9
         }
 
         public List<FrameworkElement> Menu { get { return _Menu; } }
@@ -416,6 +421,7 @@ namespace mapKnight.ToolKit.Editor {
             ((Border)_Menu[20]).BorderThickness = new Thickness(0);
             ((Border)_Menu[21]).BorderThickness = new Thickness(0);
             ((Border)_Menu[22]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[23]).BorderThickness = new Thickness(0);
         }
 
         private void scrollbar_horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
@@ -427,6 +433,12 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void SelectTool (Tool tool) {
+            if(currentTool == Tool.VectorGrabber) {
+                currentVectorListRequestCallback(currentVectorList);
+                currentVectorList = new List<Vector2>( );
+                _Menu[23].IsEnabled = false;
+            }
+
             if (cachedEntity != null) {
                 currentMap.Entities.Remove(cachedEntity);
                 cachedEntity = null;
@@ -559,7 +571,9 @@ namespace mapKnight.ToolKit.Editor {
                     if(clickedEntity != null) {
                         foreach(Component c in clickedEntity.GetComponents( )) {
                             if (c is IUserControlComponent) {
-                                contentpresenter_entitydata.Content = (c as IUserControlComponent).Control;
+                                IUserControlComponent uc = c as IUserControlComponent;
+                                uc.RequestMapVectorList = HandleMapVectorListRequest;
+                                contentpresenter_entitydata.Content = uc.Control;
                             }
                         }
                     }
@@ -572,7 +586,17 @@ namespace mapKnight.ToolKit.Editor {
                         currentlySelectedEntity = null;
                     }
                     break;
+                case Tool.VectorGrabber:
+                    Vector2 clickedPosition = GetEntityCenterRaw(e);
+                    currentVectorList.Add(clickedPosition);
+                    break;
             }
+        }
+
+        private void HandleMapVectorListRequest(Action<List<Vector2>> callback) {
+            _Menu[23].IsEnabled = true;
+            currentVectorListRequestCallback = callback;
+            SelectTool(Tool.VectorGrabber);
         }
 
         private Entity GetClickedEntity(MouseEventArgs e) {

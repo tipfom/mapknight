@@ -91,6 +91,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Animation\MLGCanvas.cs" />
+    <Compile Include="Controls\Components\PlatformDataControl.xaml.cs">
+      <DependentUpon>PlatformDataControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EntityListBox.xaml.cs">
       <DependentUpon>EntityListBox.xaml</DependentUpon>
     </Compile>
@@ -99,6 +102,7 @@
     </Compile>
     <Compile Include="Controls\FloatTextBox.cs" />
     <Compile Include="Controls\IntegerTextBox.cs" />
+    <Compile Include="Data\Components\PlatformDataComponent.cs" />
     <Compile Include="Data\Components\SlimeDataComponent.cs" />
     <Compile Include="Data\EntityData.cs" />
     <Compile Include="Data\IUserControlComponent.cs" />
@@ -202,6 +206,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AnimationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Components\PlatformDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -442,6 +450,9 @@
     <Resource Include="Resources\Images\empty_trash-48.png" />
     <Resource Include="Resources\Images\hand_cursor-48.png" />
     <Resource Include="Resources\Images\octopus-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\platform_copper.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -53,6 +53,10 @@ namespace mapKnight.ToolKit.Controls {
             new Entity.Configuration("Slime", new Core.Vector2(1f, 0.95238095f)) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
+            },
+            new Entity.Configuration("Copper Platform", new Core.Vector2(1.5f, 1f)) { Components = new ComponentList( ) {
+                    new ShadowComponent.Configuration( )
+                }
             }
         };
         private Entity.Configuration[ ] finalConfigurations = new Entity.Configuration[ ] {
@@ -92,6 +96,11 @@ namespace mapKnight.ToolKit.Controls {
                     new ActiveComponent.Configuration( ),
                     new SlimeDataComponent.Configuration( )
                 }
+            },
+            new Entity.Configuration("Copper Platform", new Core.Vector2(1.5f, 1f)) { Components = new ComponentList( ) {
+                    new ActiveComponent.Configuration( ),
+                    new PlatformDataComponent.Configuration( )
+                }
             }
         };
 
@@ -110,6 +119,7 @@ namespace mapKnight.ToolKit.Controls {
             entityCollection.Add(new EntityData("Shark", "shark", g));
             entityCollection.Add(new EntityData("Shell", "shell", g));
             entityCollection.Add(new EntityData("Slime", "slime", g));
+            entityCollection.Add(new EntityData("Copper Platform", "platform_copper", g));
 
             listbox_entities.SelectedIndex = 0;
         }
