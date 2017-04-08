@@ -72,6 +72,7 @@ namespace mapKnight.ToolKit.Controls {
             get { return Layer[1]; }
             set { Layer[1] = value; Update( ); }
         }
+        public Action<SpriteBatch, int, int, int> AdditionalRenderCall { get; set; }
 
         private Texture2D selectionTexture;
         private Texture2D spawnpointTexture;
@@ -125,14 +126,14 @@ namespace mapKnight.ToolKit.Controls {
             DrawLayer(1, columns, rows, ox, oy, spriteBatch);
             foreach (Entity e in _CurrentMap.Entities) {
                 Texture2D texture = GetEntityTexture(e.Name);
-                Color color = e.Domain == EntityDomain.Temporary ? new Color(64,64,64,128) : Color.White;
+                Color color = e.Domain == EntityDomain.Temporary ? new Color(64, 64, 64, 128) : Color.White;
                 Rectangle entityRectangle = new Rectangle((int)((e.Transform.X - ox) * TileSize), (int)((_CurrentMap.Height - e.Transform.Y - oy) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize));
                 switch (e.Domain) {
                     case EntityDomain.Obstacle:
                         spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(0, 0, 128, 128), 0f, new Vector2(.5f, .5f), SpriteEffects.None, 0);
                         break;
                     case EntityDomain.NPC:
-                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(128, 0, 0, 128), 0f, new Vector2(.5f,.5f),SpriteEffects.None,0);
+                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(128, 0, 0, 128), 0f, new Vector2(.5f, .5f), SpriteEffects.None, 0);
                         break;
                 }
                 spriteBatch.Draw(texture, entityRectangle, null, color, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), SpriteEffects.None, 0);
@@ -145,6 +146,8 @@ namespace mapKnight.ToolKit.Controls {
 
             // draw spawnpoint tile
             spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Math.Floor(Offset.X)) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Math.Floor(Offset.Y)) * TileSize), TileSize, TileSize), Color.White);
+
+            AdditionalRenderCall?.Invoke(spriteBatch, ox, oy, TileSize);
         }
 
         private void DrawLayer(int layer, int columns, int rows, int offsetx, int offsety, SpriteBatch spriteBatch) {

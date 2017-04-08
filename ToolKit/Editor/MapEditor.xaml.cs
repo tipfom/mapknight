@@ -437,6 +437,7 @@ namespace mapKnight.ToolKit.Editor {
             }
             if (tool != Tool.Hand && tool != Tool.VectorGrabber) {
                 contentpresenter_entitydata.Content = null;
+                tilemapview.AdditionalRenderCall = null;
             }
 
             if (cachedEntity != null) {
@@ -556,8 +557,10 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewClickEntities(object sender, MouseButtonEventArgs e) {
-            if (currentTool == Tool.God || currentTool == Tool.Hand)
+            if (currentTool == Tool.God || currentTool == Tool.Hand) {
                 contentpresenter_entitydata.Content = null;
+                tilemapview.AdditionalRenderCall = null;
+            }
             switch (currentTool) {
                 case Tool.God:
                     Vector2 clickedPosition = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
@@ -576,6 +579,8 @@ namespace mapKnight.ToolKit.Editor {
                                 IUserControlComponent uc = c as IUserControlComponent;
                                 uc.RequestMapVectorList = HandleMapVectorListRequest;
                                 contentpresenter_entitydata.Content = uc.Control;
+                                tilemapview.AdditionalRenderCall = uc.Render;
+                                uc.RequestRender += () => tilemapview.Update( );
                             }
                         }
                     }
