@@ -122,7 +122,21 @@ namespace mapKnight.ToolKit.Controls {
             DrawLayer(1, columns, rows, ox, oy, spriteBatch);
             foreach (Entity e in _CurrentMap.Entities) {
                 Texture2D texture = GetEntityTexture(e.Name);
-                Color color = e.Domain == EntityDomain.Temporary ? new Color(128, 128, 128, 128) : (e.Domain == EntityDomain.Obstacle ? new Color(0, 0, 255, 128) : Color.White);
+                Color color;
+                switch (e.Domain) {
+                    case EntityDomain.Temporary:
+                        color = new Color(64, 64, 64, 128);
+                        break;
+                    case EntityDomain.Obstacle:
+                        color = new Color(0, 0, 128, 128);
+                        break;
+                    case EntityDomain.NPC:
+                        color = new Color(128, 0, 0, 128);
+                        break;
+                    default:
+                        color = Color.White;
+                        break;
+                }
                 spriteBatch.Draw(texture, new Rectangle((int)((e.Transform.X - ox) * TileSize), (int)((_CurrentMap.Height - e.Transform.Y - oy) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize)), null, color, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), SpriteEffects.None, 0);
             }
             DrawLayer(2, columns, rows, ox, oy, spriteBatch);

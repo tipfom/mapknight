@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System;
 using Microsoft.Xna.Framework.Graphics;
+using mapKnight.ToolKit.Data.Components;
 
 namespace mapKnight.ToolKit.Controls {
     /// <summary>
@@ -88,7 +89,8 @@ namespace mapKnight.ToolKit.Controls {
                 }
             },
             new Entity.Configuration("Slime", new Core.Vector2(1f, 0.95238095f)) { Components = new ComponentList( ) {
-                    new ActiveComponent.Configuration( )
+                    new ActiveComponent.Configuration( ),
+                    new SlimeDataComponent.Configuration( )
                 }
             }
         };

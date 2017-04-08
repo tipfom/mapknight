@@ -21,6 +21,7 @@ using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using Point = System.Windows.Point;
 using mapKnight.Core.World;
+using mapKnight.ToolKit.Data;
 
 namespace mapKnight.ToolKit.Editor {
 
@@ -543,6 +544,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewClickEntities(object sender, MouseButtonEventArgs e) {
+            contentpresenter_entitydata.Content = null;
             switch (currentTool) {
                 case Tool.God:
                     entitylistbox.GetCurrentFinalConfiguration( ).Create(GetEntityCenter(e), (Controls.TileMapView.EditorMap)currentMap, true);
@@ -555,7 +557,19 @@ namespace mapKnight.ToolKit.Editor {
                 case Tool.Hand:
                     Entity clickedEntity = GetClickedEntity(e);
                     if(clickedEntity != null) {
-                        Console.WriteLine(clickedEntity.Name);
+                        foreach(Component c in clickedEntity.GetComponents( )) {
+                            if (c is IUserControlComponent) {
+                                contentpresenter_entitydata.Content = (c as IUserControlComponent).Control;
+                            }
+                        }
+                    }
+                    break;
+                case Tool.Trashcan:
+                    clickedEntity = GetClickedEntity(e);
+                    if(clickedEntity != null) {
+                        currentMap.Entities.Remove(clickedEntity);
+                        tilemapview.Update( );
+                        currentlySelectedEntity = null;
                     }
                     break;
             }
@@ -650,7 +664,6 @@ namespace mapKnight.ToolKit.Editor {
                     break;
                 case Tool.Hand:
                     Entity selectedEntity = GetClickedEntity(e);
-                    Console.WriteLine(selectedEntity?.Name ?? "NULL");
                     bool changed = (currentlySelectedEntity != null || selectedEntity != null) && currentlySelectedEntity != selectedEntity;
                     if (currentlySelectedEntity != null) {
                         currentlySelectedEntity.Domain = EntityDomain.Enemy;
@@ -658,6 +671,20 @@ namespace mapKnight.ToolKit.Editor {
                     }
                     if (selectedEntity != null) {
                         selectedEntity.Domain = EntityDomain.Obstacle;
+                        currentlySelectedEntity = selectedEntity;
+                    }
+                    if (changed)
+                        tilemapview.Update( );
+                    break;
+                case Tool.Trashcan:
+                    selectedEntity = GetClickedEntity(e);
+                    changed = (currentlySelectedEntity != null || selectedEntity != null) && currentlySelectedEntity != selectedEntity;
+                    if (currentlySelectedEntity != null) {
+                        currentlySelectedEntity.Domain = EntityDomain.Enemy;
+                        currentlySelectedEntity = null;
+                    }
+                    if (selectedEntity != null) {
+                        selectedEntity.Domain = EntityDomain.NPC;
                         currentlySelectedEntity = selectedEntity;
                     }
                     if (changed)
@@ -871,5 +898,6 @@ namespace mapKnight.ToolKit.Editor {
                 SelectTool(Tool.God);
             }
         }
+
     }
 }

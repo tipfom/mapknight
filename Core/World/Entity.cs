@@ -21,7 +21,7 @@ namespace mapKnight.Core.World {
         public Vector2 PositionOnScreen;
 
         public string Name { get { return entityNames[Species]; } }
-        
+
         private Component[ ] components;
         private Queue<object[ ]>[ ] pendingComponentInfos = new Queue<object[ ]>[13];
 
@@ -73,12 +73,17 @@ namespace mapKnight.Core.World {
         }
 
         public T GetComponent<T>( ) where T : Component {
-            for(int i = 0; i < components.Length; i++) {
-                if(components[i].GetType() == typeof(T)) {
+            for (int i = 0; i < components.Length; i++) {
+                if (components[i].GetType( ) == typeof(T)) {
                     return (T)components[i];
                 }
             }
             return null;
+        }
+
+        public IEnumerable<Component> GetComponents( ) {
+            for (int i = 0; i < components.Length; i++)
+                yield return components[i];
         }
 
         public void Collision(Entity collidingEntity) {
@@ -92,7 +97,7 @@ namespace mapKnight.Core.World {
 
             IsDestroyed = true;
             for (int i = 0; i < components.Length; i++)
-                components[i].Destroy();
+                components[i].Destroy( );
             Destroyed?.Invoke( );
             World.Destroy(this);
         }

@@ -140,9 +140,7 @@
             </TabItem>
             <TabItem Header="ENTITIES">
                 <DockPanel>
-                    <ContentPresenter x:Name="entitydatacontainer" DockPanel.Dock="Bottom">
-                        
-                    </ContentPresenter>
+                    <ContentPresenter x:Name="contentpresenter_entitydata" DockPanel.Dock="Bottom" MaxHeight="300"/>
                     <controls:EntityListBox x:Name="entitylistbox"/>
                 </DockPanel>
             </TabItem>

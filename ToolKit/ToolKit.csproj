@@ -94,9 +94,14 @@
     <Compile Include="Controls\EntityListBox.xaml.cs">
       <DependentUpon>EntityListBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Components\SlimeDataControl.xaml.cs">
+      <DependentUpon>SlimeDataControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FloatTextBox.cs" />
     <Compile Include="Controls\IntegerTextBox.cs" />
+    <Compile Include="Data\Components\SlimeDataComponent.cs" />
     <Compile Include="Data\EntityData.cs" />
+    <Compile Include="Data\IUserControlComponent.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Controls\AnimationControl.xaml.cs">
       <DependentUpon>AnimationControl.xaml</DependentUpon>
@@ -201,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\EntityListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Components\SlimeDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
