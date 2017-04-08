@@ -75,6 +75,7 @@ namespace mapKnight.ToolKit.Controls {
 
         private Texture2D selectionTexture;
         private Texture2D spawnpointTexture;
+        private Texture2D emptyTexture;
         private Func<Map, Dictionary<string, Texture2D>> GetXNATextures;
         private Func<string, Texture2D> GetEntityTexture;
         private Func<Map, int, int, int, float> GetRotation;
@@ -107,6 +108,9 @@ namespace mapKnight.ToolKit.Controls {
 
             spawnpointTexture = new Texture2D(GraphicsDevice, 1, 1);
             spawnpointTexture.SetData(new Color[ ] { new Color(0, 255, 0, 63) });
+
+            emptyTexture = new Texture2D(GraphicsDevice, 1, 1);
+            emptyTexture.SetData(new Color[ ] { Color.White });
         }
 
         protected override void Render(SpriteBatch spriteBatch) {
@@ -121,22 +125,17 @@ namespace mapKnight.ToolKit.Controls {
             DrawLayer(1, columns, rows, ox, oy, spriteBatch);
             foreach (Entity e in _CurrentMap.Entities) {
                 Texture2D texture = GetEntityTexture(e.Name);
-                Color color;
+                Color color = e.Domain == EntityDomain.Temporary ? new Color(64,64,64,128) : Color.White;
+                Rectangle entityRectangle = new Rectangle((int)((e.Transform.X - ox) * TileSize), (int)((_CurrentMap.Height - e.Transform.Y - oy) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize));
                 switch (e.Domain) {
-                    case EntityDomain.Temporary:
-                        color = new Color(64, 64, 64, 128);
-                        break;
                     case EntityDomain.Obstacle:
-                        color = new Color(0, 0, 128, 128);
+                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(0, 0, 128, 128), 0f, new Vector2(.5f, .5f), SpriteEffects.None, 0);
                         break;
                     case EntityDomain.NPC:
-                        color = new Color(128, 0, 0, 128);
-                        break;
-                    default:
-                        color = Color.White;
+                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(128, 0, 0, 128), 0f, new Vector2(.5f,.5f),SpriteEffects.None,0);
                         break;
                 }
-                spriteBatch.Draw(texture, new Rectangle((int)((e.Transform.X - ox) * TileSize), (int)((_CurrentMap.Height - e.Transform.Y - oy) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize)), null, color, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, entityRectangle, null, color, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), SpriteEffects.None, 0);
             }
             DrawLayer(2, columns, rows, ox, oy, spriteBatch);
 
