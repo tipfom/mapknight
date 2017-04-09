@@ -706,23 +706,9 @@ namespace mapKnight.ToolKit.Editor {
                     }
                     tilemapview.Update( );
                     break;
-                case Tool.Hand:
+                case Tool.Trashcan:
                     Entity selectedEntity = GetClickedEntity(e);
                     bool changed = (currentlySelectingEntity != null || selectedEntity != null) && currentlySelectingEntity != selectedEntity;
-                    if (currentlySelectingEntity != null && currentlySelectingEntity != currentlySelectedEntity) {
-                        currentlySelectingEntity.Domain = EntityDomain.Enemy;
-                        currentlySelectingEntity = null;
-                    }
-                    if (selectedEntity != null) {
-                        selectedEntity.Domain = EntityDomain.Obstacle;
-                        currentlySelectingEntity = selectedEntity;
-                    }
-                    if (changed)
-                        tilemapview.Update( );
-                    break;
-                case Tool.Trashcan:
-                    selectedEntity = GetClickedEntity(e);
-                    changed = (currentlySelectingEntity != null || selectedEntity != null) && currentlySelectingEntity != selectedEntity;
                     if (currentlySelectingEntity != null) {
                         currentlySelectingEntity.Domain = EntityDomain.Enemy;
                         currentlySelectingEntity = null;
@@ -733,6 +719,27 @@ namespace mapKnight.ToolKit.Editor {
                     }
                     if (changed)
                         tilemapview.Update( );
+                    break;
+                case Tool.Hand:
+                    if(currentlySelectedEntity != null && Mouse.LeftButton == MouseButtonState.Pressed) {
+                        currentlySelectingEntity = null;
+                        currentlySelectedEntity.Transform.Center = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
+                        currentlySelectedEntity.Update(default(DeltaTime));
+                        tilemapview.Update( );
+                    } else {
+                        selectedEntity = GetClickedEntity(e);
+                        changed = (currentlySelectingEntity != null || selectedEntity != null) && currentlySelectingEntity != selectedEntity;
+                        if (currentlySelectingEntity != null) {
+                            currentlySelectingEntity.Domain = EntityDomain.Enemy;
+                            currentlySelectingEntity = null;
+                        }
+                        if (selectedEntity != null) {
+                            selectedEntity.Domain = EntityDomain.Obstacle;
+                            currentlySelectingEntity = selectedEntity;
+                        }
+                        if (changed)
+                            tilemapview.Update( );
+                    }
                     break;
             }
         }
