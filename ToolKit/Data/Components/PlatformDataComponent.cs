@@ -18,7 +18,7 @@ namespace mapKnight.ToolKit.Data.Components {
         public Action<Func<Vector2, bool>> RequestMapVectorList { get; set; }
 
         public PlatformDataComponent(Entity owner) : base(owner) {
-            Waypoints = new ObservableCollection<Vector2>( ) { new Vector2(0, 0) };
+            Waypoints = new ObservableCollection<Vector2>( ) { owner.Transform.Center };
             Control = new PlatformDataControl(this);
             Waypoints.CollectionChanged += (sender, e) => RequestRender?.Invoke( );
         }

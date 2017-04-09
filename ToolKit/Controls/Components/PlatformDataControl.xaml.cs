@@ -21,7 +21,7 @@ namespace mapKnight.ToolKit.Controls.Components {
 
         private void button_reset_Click(object sender, System.Windows.RoutedEventArgs e) {
             referenceComponent.Waypoints.Clear( );
-            referenceComponent.Waypoints.Add(new Vector2(0, 0));
+            referenceComponent.Waypoints.Add(referenceComponent.Owner.Transform.Center);
             referenceComponent.RequestMapVectorList(RequestMapVectorListCallback);
         }
 

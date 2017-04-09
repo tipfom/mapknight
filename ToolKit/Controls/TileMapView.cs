@@ -10,6 +10,7 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using mapKnight.Core.World;
 using System.IO;
+using mapKnight.Core.World.Components;
 
 namespace mapKnight.ToolKit.Controls {
     public class TileMapView : XnaControl {
@@ -128,15 +129,23 @@ namespace mapKnight.ToolKit.Controls {
                 Texture2D texture = GetEntityTexture(e.Name);
                 Color color = e.Domain == EntityDomain.Temporary ? new Color(64, 64, 64, 128) : Color.White;
                 Rectangle entityRectangle = new Rectangle((int)((e.Transform.X - ox) * TileSize), (int)((_CurrentMap.Height - e.Transform.Y - oy) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize));
+                SpriteEffects effect = SpriteEffects.None;
+                float rotation = 0f;
+                e.Draw( );
+                if (e.HasComponentInfo(ComponentData.Texture)) {
+                    object[ ] data = e.GetComponentInfo(ComponentData.Texture);
+                    effect = (SpriteEffects)data[0];
+                    rotation = (float)data[1];
+                }
                 switch (e.Domain) {
                     case EntityDomain.Obstacle:
-                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(0, 0, 128, 128), 0f, new Vector2(.5f, .5f), SpriteEffects.None, 0);
+                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(0, 0, 128, 128), rotation, new Vector2(.5f, .5f), effect, 0);
                         break;
                     case EntityDomain.NPC:
-                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(128, 0, 0, 128), 0f, new Vector2(.5f, .5f), SpriteEffects.None, 0);
+                        spriteBatch.Draw(emptyTexture, entityRectangle, null, new Color(128, 0, 0, 128), rotation, new Vector2(.5f, .5f), effect, 0);
                         break;
                 }
-                spriteBatch.Draw(texture, entityRectangle, null, color, 0f, new Vector2(texture.Width / 2f, texture.Height / 2f), SpriteEffects.None, 0);
+                spriteBatch.Draw(texture, entityRectangle, null, color, rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), effect, 0);
             }
             DrawLayer(2, columns, rows, ox, oy, spriteBatch);
 
