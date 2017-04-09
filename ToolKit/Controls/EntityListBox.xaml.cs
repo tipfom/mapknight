@@ -30,7 +30,7 @@ namespace mapKnight.ToolKit.Controls {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Moonball", new Core.Vector2(2f, 2f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Moonball", new Core.Vector2(1, 0.538461538f)) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
@@ -57,6 +57,10 @@ namespace mapKnight.ToolKit.Controls {
             new Entity.Configuration("Copper Platform", new Core.Vector2(1.5f, 1f)) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
+            },
+            new Entity.Configuration("Fir", new Core.Vector2(5f, 5f * 71f / 54f)) { Components = new ComponentList( ) {
+                    new ShadowComponent.Configuration( )
+                }
             }
         };
         private Entity.Configuration[ ] finalConfigurations = new Entity.Configuration[ ] {
@@ -72,8 +76,9 @@ namespace mapKnight.ToolKit.Controls {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Moonball", new Core.Vector2(2f, 2f)) { Components = new ComponentList( ) {
-                    new ActiveComponent.Configuration( )
+            new Entity.Configuration("Moonball", new Core.Vector2(1, 0.538461538f)) { Components = new ComponentList( ) {
+                    new ActiveComponent.Configuration( ),
+                    new MoonballDataComponent.Configuration( )
                 }
             },
             new Entity.Configuration("Plugger", new Core.Vector2(1.35f, 1f)) { Components = new ComponentList( ) {
@@ -101,6 +106,10 @@ namespace mapKnight.ToolKit.Controls {
                     new ActiveComponent.Configuration( ),
                     new PlatformDataComponent.Configuration( )
                 }
+            },
+            new Entity.Configuration("Fir", new Core.Vector2(5f, 5f * 71f / 54f)) { Components = new ComponentList( ) {
+                    new ActiveComponent.Configuration( )
+                }
             }
         };
 
@@ -113,13 +122,14 @@ namespace mapKnight.ToolKit.Controls {
             entityCollection.Add(new EntityData("Canone", "canone", g));
             entityCollection.Add(new EntityData("Guardian", "guardian_tent", g));
             entityCollection.Add(new EntityData("Landmine", "landmine", g));
-            entityCollection.Add(new EntityData("Moonball", "moonball", g));
+            entityCollection.Add(new EntityData("Moonball", "button", g));
             entityCollection.Add(new EntityData("Plugger", "plugger", g));
             entityCollection.Add(new EntityData("Sepler", "sepler", g));
             entityCollection.Add(new EntityData("Shark", "shark", g));
             entityCollection.Add(new EntityData("Shell", "shell", g));
             entityCollection.Add(new EntityData("Slime", "slime", g));
             entityCollection.Add(new EntityData("Copper Platform", "platform_copper", g));
+            entityCollection.Add(new EntityData("Fir", "fir", g));
 
             listbox_entities.SelectedIndex = 0;
         }

@@ -548,7 +548,7 @@ namespace mapKnight.ToolKit.Editor {
         private Vector2 GetEntityCenterRaw(MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Vector2 selectedTile = new Vector2(
-                (float)Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, currentMap.Width - tilemapview.Offset.X - 1),
+                (float)Math.Min(positionOnControl.X / tilemapview.TileSize + Math.Floor(tilemapview.Offset.X), currentMap.Width - tilemapview.Offset.X - 1),
                 currentMap.Size.Height - (float)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y)) - (float)Math.Floor(tilemapview.Offset.Y));
             return selectedTile;
         }
@@ -610,7 +610,7 @@ namespace mapKnight.ToolKit.Editor {
                         clickedPosition.Y = (float)Math.Floor(clickedPosition.Y) + 0.5f;
                     }
                     if (!currentVectorRequestCallback(clickedPosition))
-                        SelectTool(Tool.God);
+                        SelectTool(Tool.Hand);
                     break;
             }
         }
@@ -722,7 +722,7 @@ namespace mapKnight.ToolKit.Editor {
                     break;
                 case Tool.Hand:
                     if (currentlySelectedEntity != null && Mouse.LeftButton == MouseButtonState.Pressed) {
-                        currentlySelectedEntity.Transform.Center = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
+                        currentlySelectedEntity.Transform.Center = Keyboard.IsKeyDown(Key.LeftShift) ? (GetEntityCenter(e) + new Vector2(0f, currentlySelectedEntity.Transform.HalfSize.Y)) : GetEntityCenterRaw(e) ;
                         currentlySelectedEntity.Update(default(DeltaTime));
                         tilemapview.Update( );
                     } else {
