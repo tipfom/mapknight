@@ -69,7 +69,7 @@ namespace mapKnight.ToolKit.Editor {
 
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
 
-        private Entity cachedEntity, currentlySelectedEntity;
+        private Entity cachedEntity, currentlySelectingEntity, currentlySelectedEntity;
         private Func<Vector2, bool> currentVectorRequestCallback;
 
         public void Load (Project project) {
@@ -438,6 +438,10 @@ namespace mapKnight.ToolKit.Editor {
             if (tool != Tool.Hand && tool != Tool.VectorGrabber) {
                 contentpresenter_entitydata.Content = null;
                 tilemapview.AdditionalRenderCall = null;
+                if(currentlySelectedEntity != null) {
+                    currentlySelectedEntity.Domain = EntityDomain.Enemy;
+                    currentlySelectedEntity = null;
+                }
             }
 
             if (cachedEntity != null) {
@@ -574,7 +578,12 @@ namespace mapKnight.ToolKit.Editor {
                 case Tool.Hand:
                     Entity clickedEntity = GetClickedEntity(e);
                     if(clickedEntity != null) {
-                        foreach(Component c in clickedEntity.GetComponents( )) {
+                        if(currentlySelectedEntity != null) {
+                            currentlySelectedEntity.Domain = EntityDomain.Enemy;
+                        }
+                        currentlySelectedEntity = clickedEntity;
+                        currentlySelectedEntity.Domain = EntityDomain.Obstacle;
+                        foreach (Component c in clickedEntity.GetComponents( )) {
                             if (c is IUserControlComponent) {
                                 IUserControlComponent uc = c as IUserControlComponent;
                                 uc.RequestMapVectorList = HandleMapVectorListRequest;
@@ -583,6 +592,7 @@ namespace mapKnight.ToolKit.Editor {
                                 uc.RequestRender += () => tilemapview.Update( );
                             }
                         }
+                        tilemapview.Update( );
                     }
                     break;
                 case Tool.Trashcan:
@@ -590,7 +600,7 @@ namespace mapKnight.ToolKit.Editor {
                     if(clickedEntity != null) {
                         currentMap.Entities.Remove(clickedEntity);
                         tilemapview.Update( );
-                        currentlySelectedEntity = null;
+                        currentlySelectingEntity = null;
                     }
                     break;
                 case Tool.VectorGrabber:
@@ -698,28 +708,28 @@ namespace mapKnight.ToolKit.Editor {
                     break;
                 case Tool.Hand:
                     Entity selectedEntity = GetClickedEntity(e);
-                    bool changed = (currentlySelectedEntity != null || selectedEntity != null) && currentlySelectedEntity != selectedEntity;
-                    if (currentlySelectedEntity != null) {
-                        currentlySelectedEntity.Domain = EntityDomain.Enemy;
-                        currentlySelectedEntity = null;
+                    bool changed = (currentlySelectingEntity != null || selectedEntity != null) && currentlySelectingEntity != selectedEntity;
+                    if (currentlySelectingEntity != null && currentlySelectingEntity != currentlySelectedEntity) {
+                        currentlySelectingEntity.Domain = EntityDomain.Enemy;
+                        currentlySelectingEntity = null;
                     }
                     if (selectedEntity != null) {
                         selectedEntity.Domain = EntityDomain.Obstacle;
-                        currentlySelectedEntity = selectedEntity;
+                        currentlySelectingEntity = selectedEntity;
                     }
                     if (changed)
                         tilemapview.Update( );
                     break;
                 case Tool.Trashcan:
                     selectedEntity = GetClickedEntity(e);
-                    changed = (currentlySelectedEntity != null || selectedEntity != null) && currentlySelectedEntity != selectedEntity;
-                    if (currentlySelectedEntity != null) {
-                        currentlySelectedEntity.Domain = EntityDomain.Enemy;
-                        currentlySelectedEntity = null;
+                    changed = (currentlySelectingEntity != null || selectedEntity != null) && currentlySelectingEntity != selectedEntity;
+                    if (currentlySelectingEntity != null) {
+                        currentlySelectingEntity.Domain = EntityDomain.Enemy;
+                        currentlySelectingEntity = null;
                     }
                     if (selectedEntity != null) {
                         selectedEntity.Domain = EntityDomain.NPC;
-                        currentlySelectedEntity = selectedEntity;
+                        currentlySelectingEntity = selectedEntity;
                     }
                     if (changed)
                         tilemapview.Update( );
