@@ -1329,9 +1329,9 @@ namespace mapKnight.Extended {
                                 }
                             }
                         });
-                        _MoonballTriggerButton.Components.Add(new ButtonComponent.Configuration( ) {
+                        _MoonballTriggerButton.Components.Add(new MoonballButtonComponent.Configuration( ) {
                             OnTrigger = (entity) => {
-                                _Moonball.Create(entity.Transform.Center + new Vector2(0, 0f), entity.World);
+                                _Moonball.Create(entity.Transform.Center + , entity.World);
                             }
                         });
                         _MoonballTriggerButton.Components.Add(new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } });

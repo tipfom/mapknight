@@ -4,7 +4,7 @@ using mapKnight.Core.World.Components;
 
 namespace mapKnight.Extended.Components.AI {
     public class ButtonComponent : Component {
-        private Action<Entity> onTriggerAction;
+        protected Action<Entity> onTriggerAction;
         private bool isDown;
 
         public ButtonComponent (Entity owner, Action<Entity> onTriggerAction) : base(owner) {

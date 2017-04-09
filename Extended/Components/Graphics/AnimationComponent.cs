@@ -17,12 +17,14 @@ namespace mapKnight.Extended.Components.Graphics {
         private AnimationCallback queuedAnimationCallback;
         private int queuedAnimationIndex = -1;
 
+        private Configuration config;
         private float[ ] scales;
         private float[ ][ ] boneVerticies;
 
-        public AnimationComponent(Entity owner, VertexAnimation[ ] animations, float[ ] scales) : base(owner) {
+        public AnimationComponent(Entity owner, VertexAnimation[ ] animations, float[ ] scales, Configuration config) : base(owner) {
             this.animations = animations;
             this.scales = scales;
+            this.config = config;
         }
 
         public delegate void AnimationCallback(bool success);
@@ -78,13 +80,8 @@ namespace mapKnight.Extended.Components.Graphics {
         }
 
         public override void Prepare( ) {
-            currentAnimation.Reset( );
-        }
-
-        public override void Load(Component.Configuration rawConfig) {
             if (!loadCache.ContainsKey(Owner.Species) || !Owner.World.Renderer.HasTexture(Owner.Species)) {
                 Spritebatch2D sprite;
-                Configuration config = (Configuration)rawConfig;
                 Compiler.Compile(animations, scales, config.Offsets, config.Textures, Owner, out boneVerticies, out sprite);
                 Owner.World.Renderer.AddTexture(Owner.Species, sprite);
                 if (!loadCache.ContainsKey(Owner.Species))
@@ -93,6 +90,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 boneVerticies = loadCache[Owner.Species];
             }
             SetAnimation(0);
+            currentAnimation.Reset( );
         }
 
         private void SetAnimation(int index) {
@@ -119,7 +117,7 @@ namespace mapKnight.Extended.Components.Graphics {
             public Vector2[ ] Offsets;
 
             public override Component Create(Entity owner) {
-                return new AnimationComponent(owner, Animations, Scales);
+                return new AnimationComponent(owner, Animations, Scales, this);
             }
         }
     }

@@ -10,11 +10,11 @@ using System.Collections.Generic;
 
 namespace mapKnight.ToolKit.Data.Components {
     public class SlimeDataComponent : Component, IUserControlComponent {
-        public enum Direction : byte {
-            Top,
-            Down,
-            Left,
-            Right
+        public enum Direction : sbyte {
+            Top = 0,
+            Down = 1,
+            Left = 2,
+            Right = -1
         }
         private Direction _InitialWallDirection = Direction.Down;
         public Direction InitialWallDirection {
@@ -90,8 +90,8 @@ namespace mapKnight.ToolKit.Data.Components {
         }
 
         public IEnumerable<Tuple<DataID, DataType, object>> CollectData( ) {
-            yield return Tuple.Create(DataID.SLIME_InitialMoveDirection, DataType.Byte, (object)((byte)_InitialMoveDirection));
-            yield return Tuple.Create(DataID.SLIME_InitialWallDirection, DataType.Byte, (object)((byte)_InitialWallDirection));
+            yield return Tuple.Create(DataID.SLIME_InitialMoveDirection, DataType.SByte, (object)((sbyte)_InitialMoveDirection));
+            yield return Tuple.Create(DataID.SLIME_InitialWallDirection, DataType.SByte, (object)((sbyte)_InitialWallDirection));
         }
 
         public new class Configuration : Component.Configuration {
