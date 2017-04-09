@@ -18,7 +18,7 @@ namespace mapKnight.ToolKit.Data.Components {
         public Action<Func<Vector2, bool>> RequestMapVectorList { get; set; }
 
         public PlatformDataComponent(Entity owner) : base(owner) {
-            Waypoints = new ObservableCollection<Vector2>( ) { owner.Transform.Center };
+            Waypoints = new ObservableCollection<Vector2>( ) { new Vector2(0, 0) };
             Control = new PlatformDataControl(this);
             Waypoints.CollectionChanged += (sender, e) => RequestRender?.Invoke( );
         }
@@ -30,12 +30,12 @@ namespace mapKnight.ToolKit.Data.Components {
         }
 
         public void Render(SpriteBatch spriteBatch, int ox, int oy, int tilesize) {
-            if(emptyTexture == null) {
+            if (emptyTexture == null) {
                 emptyTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
                 emptyTexture.SetData(new Microsoft.Xna.Framework.Color[ ] { new Microsoft.Xna.Framework.Color(Microsoft.Xna.Framework.Color.Lime, 128) });
             }
             for (int i = 0; i < Waypoints.Count; i++)
-                spriteBatch.Draw(emptyTexture, new Microsoft.Xna.Framework.Rectangle((int)((Waypoints[i].X - ox) * tilesize), (int)((Owner.World.Size.Height - Waypoints[i].Y - oy) * tilesize), tilesize / 5, tilesize / 5), null, Microsoft.Xna.Framework.Color.White, Mathf.PI / 4f, new Microsoft.Xna.Framework.Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
+                spriteBatch.Draw(emptyTexture, new Microsoft.Xna.Framework.Rectangle((int)((Waypoints[i].X - ox + Owner.Transform.Center.X) * tilesize), (int)((Owner.World.Size.Height - Waypoints[i].Y - oy - Owner.Transform.Center.Y) * tilesize), tilesize / 5, tilesize / 5), null, Microsoft.Xna.Framework.Color.White, Mathf.PI / 4f, new Microsoft.Xna.Framework.Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
         }
     }
 }

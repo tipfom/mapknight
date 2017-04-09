@@ -721,15 +721,14 @@ namespace mapKnight.ToolKit.Editor {
                         tilemapview.Update( );
                     break;
                 case Tool.Hand:
-                    if(currentlySelectedEntity != null && Mouse.LeftButton == MouseButtonState.Pressed) {
-                        currentlySelectingEntity = null;
+                    if (currentlySelectedEntity != null && Mouse.LeftButton == MouseButtonState.Pressed) {
                         currentlySelectedEntity.Transform.Center = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
                         currentlySelectedEntity.Update(default(DeltaTime));
                         tilemapview.Update( );
                     } else {
                         selectedEntity = GetClickedEntity(e);
                         changed = (currentlySelectingEntity != null || selectedEntity != null) && currentlySelectingEntity != selectedEntity;
-                        if (currentlySelectingEntity != null) {
+                        if (currentlySelectingEntity != null && currentlySelectedEntity != currentlySelectingEntity) {
                             currentlySelectingEntity.Domain = EntityDomain.Enemy;
                             currentlySelectingEntity = null;
                         }
