@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using mapKnight.Core.World.Components;
+using mapKnight.Core.World.Serialization;
 
 namespace mapKnight.Core.World {
     public class Entity {
@@ -38,9 +39,6 @@ namespace mapKnight.Core.World {
             components = new Component[Components.Count];
             for (int i = 0; i < components.Length; i++) {
                 components[i] = Components[i].Create(this);
-            }
-            for (int i = 0; i < components.Length; i++) {
-                components[i].Load(Components[i]);
             }
 
             World.Add(this);
@@ -100,6 +98,11 @@ namespace mapKnight.Core.World {
                 components[i].Destroy( );
             Destroyed?.Invoke( );
             World.Destroy(this);
+        }
+
+        public void Load(Dictionary<DataID,object> data) {
+            for (int i = 0; i < components.Length; i++)
+                components[i].Load(data);
         }
 
         public void Prepare( ) {

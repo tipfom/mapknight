@@ -42,5 +42,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)World\EntityDomain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)World\IEntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)World\IEntityWorld.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Serialization\DataID.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Serialization\DataType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Serialization\EntityID.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)World\Serialization\IEntitySerializer.cs" />
   </ItemGroup>
 </Project>

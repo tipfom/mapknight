@@ -11,6 +11,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using mapKnight.Core.World;
 using System.IO;
 using mapKnight.Core.World.Components;
+using mapKnight.ToolKit.Data;
 
 namespace mapKnight.ToolKit.Controls {
     public class TileMapView : XnaControl {
@@ -179,7 +180,7 @@ namespace mapKnight.ToolKit.Controls {
             }
 
             public EditorMap(Stream input) :
-                base(input) {
+                base(input, new WindowsEntitySerializer( )) {
             }
 
             public IEntityRenderer Renderer => null;

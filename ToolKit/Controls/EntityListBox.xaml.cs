@@ -13,11 +13,7 @@ namespace mapKnight.ToolKit.Controls {
     /// Interaktionslogik für EntityListBox.xaml
     /// </summary>
     public partial class EntityListBox : UserControl {
-        public delegate void OnSelectionChanged(EntityData oldSelection, EntityData newSelection);
-        public event OnSelectionChanged SelectionChanged;
-
-        private ObservableCollection<EntityData> entityCollection = new ObservableCollection<EntityData>( );
-        private Entity.Configuration[ ] shadowConfigurations = new Entity.Configuration[ ] {
+        public static readonly Entity.Configuration[ ] SHADOW_CONFIGURATIONS = new Entity.Configuration[ ] {
             new Entity.Configuration("Canone", new Core.Vector2( 1.2f, 0.85161f)) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
@@ -63,7 +59,7 @@ namespace mapKnight.ToolKit.Controls {
                 }
             }
         };
-        private Entity.Configuration[ ] finalConfigurations = new Entity.Configuration[ ] {
+        public static readonly Entity.Configuration[ ] FINAL_CONFIGURATIONS = new Entity.Configuration[ ] {
             new Entity.Configuration("Canone", new Core.Vector2( 1.2f, 0.85161f)) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
@@ -113,6 +109,11 @@ namespace mapKnight.ToolKit.Controls {
             }
         };
 
+        public delegate void OnSelectionChanged(EntityData oldSelection, EntityData newSelection);
+        public event OnSelectionChanged SelectionChanged;
+
+        private ObservableCollection<EntityData> entityCollection = new ObservableCollection<EntityData>( );
+
         public EntityListBox( ) {
             InitializeComponent( );
             listbox_entities.ItemsSource = entityCollection;
@@ -148,11 +149,11 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         public Entity.Configuration GetCurrentShadowConfiguration( ) {
-            return shadowConfigurations[listbox_entities.SelectedIndex];
+            return SHADOW_CONFIGURATIONS[listbox_entities.SelectedIndex];
         }
 
         public Entity.Configuration GetCurrentFinalConfiguration( ) {
-            return finalConfigurations[listbox_entities.SelectedIndex];
+            return FINAL_CONFIGURATIONS[listbox_entities.SelectedIndex];
         }
 
         public class ShadowComponent : Component {

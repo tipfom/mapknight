@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using mapKnight.Core.World.Serialization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +37,7 @@ namespace mapKnight.Core.World
         public virtual void Tick( ) {
         }
 
-        public virtual void Load(Configuration config) {
+        public virtual void Load(Dictionary<DataID, object> data) {
         }
 
         public virtual void Update(DeltaTime dt) {

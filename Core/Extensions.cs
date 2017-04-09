@@ -139,5 +139,200 @@ namespace mapKnight.Core {
         }
 
         #endregion Float
+
+        #region BinaryWriter
+        public static void Write(this BinaryWriter writer, Vector2 vector) {
+            writer.Write(vector.X);
+            writer.Write(vector.Y);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, bool[] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, byte[] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, sbyte[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, short[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, ushort[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, int[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, uint[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, long[] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, ulong[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, float[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, double[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, decimal[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, Vector2[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+
+        public static void WriteArray(this BinaryWriter writer, string[ ] array) {
+            writer.Write((short)array.Length);
+            for (int i = 0; i < array.Length; i++)
+                writer.Write(array[i]);
+        }
+        #endregion
+
+        #region BinaryReader
+        public static Vector2 ReadVector2(this BinaryReader reader) {
+            return new Vector2(reader.ReadSingle( ), reader.ReadSingle( ));
+        }
+
+        public static bool[ ] ReadBooleanArray(this BinaryReader reader) {
+            bool[ ] result = new bool[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadBoolean( );
+            return result;
+        }
+
+        public static byte[] ReadByteArray(this BinaryReader reader) {
+            byte[ ] result = new byte[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadByte( );
+            return result;
+        }
+
+        public static sbyte[ ] ReadSByteArray(this BinaryReader reader) {
+            sbyte[ ] result = new sbyte[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadSByte( );
+            return result;
+        }
+
+        public static short[] ReadInt16Array(this BinaryReader reader) {
+            short[ ] result = new short[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadInt16( );
+            return result;
+        }
+
+        public static ushort[ ] ReadUInt16Array(this BinaryReader reader) {
+            ushort[ ] result = new ushort[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadUInt16( );
+            return result;
+        }
+
+        public static int[ ] ReadInt32Array(this BinaryReader reader) {
+            int[ ] result = new int[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadInt32( );
+            return result;
+        }
+
+        public static uint[ ] ReadUInt32Array(this BinaryReader reader) {
+            uint[ ] result = new uint[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadUInt32( );
+            return result;
+        }
+
+        public static long[ ] ReadInt64Array(this BinaryReader reader) {
+            long[ ] result = new long[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadInt64( );
+            return result;
+        }
+
+        public static ulong[ ] ReadUInt64Array(this BinaryReader reader) {
+            ulong[ ] result = new ulong[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadUInt64( );
+            return result;
+        }
+
+        public static float[ ] ReadSingleArray(this BinaryReader reader) {
+            float[ ] result = new float[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadSingle( );
+            return result;
+        }
+
+        public static double[ ] ReadDoubleArray(this BinaryReader reader) {
+            double[ ] result = new double[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadDouble( );
+            return result;
+        }
+
+        public static decimal[ ] ReadDecimalArray(this BinaryReader reader) {
+            decimal[ ] result = new decimal[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadDecimal( );
+            return result;
+        }
+
+        public static Vector2[ ] ReadVector2Array(this BinaryReader reader) {
+            Vector2[ ] result = new Vector2[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadVector2( );
+            return result;
+        }
+
+        public static string[ ] ReadStringArray(this BinaryReader reader) {
+            string[ ] result = new string[reader.ReadInt16( )];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = reader.ReadString( );
+            return result;
+        }
+        #endregion
     }
 }

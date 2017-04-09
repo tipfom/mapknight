@@ -104,7 +104,7 @@ namespace mapKnight.ToolKit.Editor {
 
                 map.Texture = Path.GetFileNameWithoutExtension(map.Name + ".png");
                 using (Stream stream = File.Open(Path.Combine(basedirectory, map.Name + ".map"), FileMode.Create))
-                    map.MergeRotations(mapRotations[map]).Serialize(stream);
+                    map.MergeRotations(mapRotations[map]).Serialize(stream, new WindowsEntitySerializer());
             }
         }
 
@@ -225,7 +225,7 @@ namespace mapKnight.ToolKit.Editor {
 
                 map.Texture = Path.GetFileNameWithoutExtension(map.Name + ".png");
                 using (Stream stream = project.GetOrCreateStream(false, "maps", map.Name, map.Name + ".map"))
-                    map.MergeRotations(mapRotations[map]).Serialize(stream);
+                    map.MergeRotations(mapRotations[map]).Serialize(stream, new WindowsEntitySerializer());
             }
         }
 

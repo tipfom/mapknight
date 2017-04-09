@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using mapKnight.ToolKit.Controls.Components;
 using System.Reflection;
 using System.Windows.Media.Imaging;
+using mapKnight.Core.World.Serialization;
 
 namespace mapKnight.ToolKit.Data.Components {
     public class MoonballDataComponent : Component, IUserControlComponent {
@@ -41,6 +42,14 @@ namespace mapKnight.ToolKit.Data.Components {
                     2 * tilesize,
                     2 * tilesize)
                     , null, Microsoft.Xna.Framework.Color.White, 0f, new Microsoft.Xna.Framework.Vector2(moonballTexture.Width / 2f, moonballTexture.Height / 2f), SpriteEffects.None, 0);
+        }
+
+        public IEnumerable<Tuple<DataID, DataType, object>> CollectData( ) {
+            yield return Tuple.Create(DataID.MOONBALL_Offset, DataType.Vector2, (object)_MoonballSpawnOffset);
+        }
+
+        public override void Load(Dictionary<DataID, object> data) {
+            _MoonballSpawnOffset = (Vector2)data[DataID.MOONBALL_Offset];
         }
 
         public new class Configuration : Component.Configuration {

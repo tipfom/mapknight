@@ -5,10 +5,12 @@ using mapKnight.Core.World;
 using mapKnight.ToolKit.Controls.Components;
 using Microsoft.Xna.Framework.Graphics;
 using mapKnight.Core.World.Components;
+using mapKnight.Core.World.Serialization;
+using System.Collections.Generic;
 
 namespace mapKnight.ToolKit.Data.Components {
     public class SlimeDataComponent : Component, IUserControlComponent {
-        public enum Direction {
+        public enum Direction : byte {
             Top,
             Down,
             Left,
@@ -42,6 +44,11 @@ namespace mapKnight.ToolKit.Data.Components {
             float rotation;
             SetGraphicalData(out effect, out rotation);
             Owner.SetComponentInfo(ComponentData.Texture, effect, rotation);
+        }
+
+        public override void Load(Dictionary<DataID, object> data) {
+            _InitialMoveDirection = (Direction)data[DataID.SLIME_InitialMoveDirection];
+            _InitialWallDirection = (Direction)data[DataID.SLIME_InitialWallDirection];
         }
 
         private void SetGraphicalData(out SpriteEffects effect, out float rotation) {
@@ -80,6 +87,11 @@ namespace mapKnight.ToolKit.Data.Components {
                     effect = SpriteEffects.None;
                     break;
             }
+        }
+
+        public IEnumerable<Tuple<DataID, DataType, object>> CollectData( ) {
+            yield return Tuple.Create(DataID.SLIME_InitialMoveDirection, DataType.Byte, (object)((byte)_InitialMoveDirection));
+            yield return Tuple.Create(DataID.SLIME_InitialWallDirection, DataType.Byte, (object)((byte)_InitialWallDirection));
         }
 
         public new class Configuration : Component.Configuration {
