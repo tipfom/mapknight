@@ -153,14 +153,14 @@
                 <Rectangle DockPanel.Dock="Right" Width="17" Height="17"/>
                 <ScrollBar x:Name="scrollbar_horizontal"
                        Orientation="Horizontal"
-                       ValueChanged="scrollbar_horizontal_ValueChanged" />
+                       ValueChanged="scrollbar_horizontal_ValueChanged" LargeChange="100"/>
             </DockPanel>
             <ScrollBar x:Name="scrollbar_vertical"
                        Orientation="Vertical" HorizontalAlignment="Right"
                        ValueChanged="scrollbar_vertical_ValueChanged"
                        DockPanel.Dock="Right">
             </ScrollBar>
-            <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" BorderThickness="1" BorderBrush="White"/>
+            <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" SizeChanged="tilemapview_SizeChanged" BorderThickness="1" BorderBrush="White"/>
         </DockPanel>
     </Grid>
 </UserControl>

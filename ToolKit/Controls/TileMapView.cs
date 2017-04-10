@@ -171,8 +171,13 @@ namespace mapKnight.ToolKit.Controls {
             if (!Layer[layer])
                 return;
             for (int x = 0; x < columns; x++) {
+                int cx = x + offsetx;
+                if (cx < 0)
+                    continue;
                 for (int y = 0; y < rows; y++) {
-                    int cx = x + offsetx, cy = CurrentMap.Height - y - 1 - offsety;
+                    int cy = CurrentMap.Height - y - 1 - offsety;
+                    if (cy >= CurrentMap.Height)
+                        continue;
                     Rectangle drawingRectangle = new Rectangle((int)((x + 0.5f) * TileSize), (int)((y + 0.5f) * TileSize), TileSize, TileSize);
                     float rotation = GetRotation(CurrentMap, cx, cy, layer) * (float)Math.PI;
                     spriteBatch.Draw(GetXNATextures(CurrentMap)[CurrentMap.GetTile(cx, cy, layer).Name], drawingRectangle, null, Color.White, rotation, new Vector2(Map.TILE_PXL_SIZE / 2f, Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);

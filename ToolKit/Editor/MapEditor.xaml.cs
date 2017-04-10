@@ -348,10 +348,10 @@ namespace mapKnight.ToolKit.Editor {
             UpdateListbox( );
             tilemapview.CurrentMap = currentMap;
             // reset scrollbars
-            scrollbar_horizontal.Minimum = 0;
+            scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
             scrollbar_horizontal.Maximum = currentMap.Width;
             scrollbar_horizontal.Value = 0;
-            scrollbar_vertical.Minimum = 0;
+            scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
             scrollbar_vertical.Maximum = currentMap.Height;
             scrollbar_vertical.Value = currentMap.Height - tilemapview.RenderSize.Height / tilemapview.TileSize + 2;
         }
@@ -552,8 +552,9 @@ namespace mapKnight.ToolKit.Editor {
         private Vector2 GetEntityCenterRaw(MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Vector2 selectedTile = new Vector2(
-                (float)Math.Min(positionOnControl.X / tilemapview.TileSize + Math.Floor(tilemapview.Offset.X), currentMap.Width - tilemapview.Offset.X - 1),
-                currentMap.Size.Height - (float)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y)) - (float)Math.Floor(tilemapview.Offset.Y));
+                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + Math.Floor(tilemapview.Offset.X), currentMap.Width - tilemapview.Offset.X - 1)),
+                (float)Math.Max(0, Math.Min(currentMap.Size.Height - positionOnControl.Y / tilemapview.TileSize - (float)Math.Floor(tilemapview.Offset.Y), currentMap.Height)));
+            Console.WriteLine(selectedTile);
             return selectedTile;
         }
 
@@ -572,7 +573,7 @@ namespace mapKnight.ToolKit.Editor {
             switch (currentTool) {
                 case Tool.God:
                     Vector2 clickedPosition = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
-                    entitylistbox.GetCurrentFinalConfiguration( ).Create(clickedPosition, (Controls.TileMapView.EditorMap)currentMap, true);
+                    entitylistbox.GetCurrentFinalConfiguration( ).Create(clickedPosition, (Controls.TileMapView.EditorMap)currentMap, Keyboard.IsKeyDown(Key.LeftShift));
                     if (cachedEntity != null) {
                         currentMap.Entities.Remove(cachedEntity);
                         cachedEntity = null;
@@ -704,9 +705,10 @@ namespace mapKnight.ToolKit.Editor {
                 case Tool.God:
                     Vector2 entityLocation = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
                     if (cachedEntity == null) {
-                        cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, (Controls.TileMapView.EditorMap)currentMap, true);
+                        cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, (Controls.TileMapView.EditorMap)currentMap, Keyboard.IsKeyDown(Key.LeftShift));
                     } else {
-                        entityLocation.Y += cachedEntity.Transform.Height / 2;
+                        if (Keyboard.IsKeyDown(Key.LeftShift))
+                            entityLocation.Y += cachedEntity.Transform.Height / 2;
                         cachedEntity.Transform.Center = entityLocation;
                     }
                     tilemapview.Update( );
@@ -753,7 +755,7 @@ namespace mapKnight.ToolKit.Editor {
                     }
                     float rx = clickedPosition.X - (float)Math.Floor(tilemapview.Offset.X), ry = currentMap.Height - clickedPosition.Y - (float)Math.Floor(tilemapview.Offset.Y);
                     if (rx != tilemapview.CurrentSelection.X || ry != tilemapview.CurrentSelection.Y) {
-                        tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(rx,ry );
+                        tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(rx, ry);
                         tilemapview.Update( );
                     }
                     break;
@@ -761,6 +763,8 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void tilemapview_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
+            scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
             if (e.Delta > 0) {
                 tilemapview.ZoomLevel++;
             } else {
@@ -787,8 +791,8 @@ namespace mapKnight.ToolKit.Editor {
         private bool UpdateSelectedTile(MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Microsoft.Xna.Framework.Point selectedTile = new Microsoft.Xna.Framework.Point(
-                (int)Math.Min(positionOnControl.X / tilemapview.TileSize, currentMap.Width - Math.Floor(tilemapview.Offset.X) - 1),
-                (int)Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y) - 1)
+                (int)Math.Max(-Math.Floor(tilemapview.Offset.X), Math.Min(positionOnControl.X / tilemapview.TileSize, currentMap.Width - Math.Floor(tilemapview.Offset.X) - 1)),
+                (int)Math.Max(-Math.Floor(tilemapview.Offset.Y), Math.Min(positionOnControl.Y / tilemapview.TileSize, currentMap.Height - Math.Floor(tilemapview.Offset.Y) - 1))
                 );
             if (selectedTile.X != tilemapview.CurrentSelection.X || selectedTile.Y != tilemapview.CurrentSelection.Y) {
                 text_xpos.Text = Math.Round(selectedTile.X + Math.Floor(tilemapview.Offset.X) + 1).ToString( );
@@ -944,6 +948,11 @@ namespace mapKnight.ToolKit.Editor {
                     }
                 }
             }
+        }
+
+        private void tilemapview_SizeChanged(object sender, SizeChangedEventArgs e) {
+            scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
+            scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
         }
 
         private BitmapImage LoadTileImage(string file) {
