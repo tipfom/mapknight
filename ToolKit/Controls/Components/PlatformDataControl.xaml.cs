@@ -15,7 +15,6 @@ namespace mapKnight.ToolKit.Controls.Components {
 
         public PlatformDataControl(PlatformDataComponent referenceComponent) : this() {
             this.referenceComponent = referenceComponent;
-            textblock_count.DataContext = referenceComponent.Waypoints;
             listbox_waypoints.ItemsSource = referenceComponent.Waypoints;
         }
 

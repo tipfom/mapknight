@@ -9,45 +9,54 @@
     <UserControl.Resources>
         <Style x:Key="btn_style_active" TargetType="Button">
             <Setter Property="BorderBrush" Value="Blue"/>
+            <Setter Property="Background" Value="LightBlue"/>
         </Style>
         <Style x:Key="btn_style_inactive" TargetType="Button">
             <Setter Property="IsEnabled" Value="False"/>
         </Style>
     </UserControl.Resources>
-    <StackPanel Margin="10">
-        <TextBlock>Initial Move Direction</TextBlock>
-        <Grid Width="100" Height="100" HorizontalAlignment="Left">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button x:Name="btn_imove_top" Grid.Column="1" Grid.Row="0" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_top_Click">&#x2191;</Button>
-            <Button x:Name="btn_imove_left" Grid.Column="0" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_left_Click">&#x2190;</Button>
-            <Button x:Name="btn_imove_down" Grid.Column="1" Grid.Row="2" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_down_Click">&#x2193;</Button>
-            <Button x:Name="btn_imove_right" Grid.Column="2" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_right_Click">&#x2192;</Button>
-        </Grid>
-        <TextBlock Margin="0,20,0,0">Initial Wall Direction</TextBlock>
-        <Grid Width="100" Height="100" HorizontalAlignment="Left">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button x:Name="btn_iwall_top" Grid.Column="1" Grid.Row="0" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_top_Click">&#x2191;</Button>
-            <Button x:Name="btn_iwall_left" Grid.Column="0" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_left_Click">&#x2190;</Button>
-            <Button x:Name="btn_iwall_down" Grid.Column="1" Grid.Row="2" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_down_Click">&#x2193;</Button>
-            <Button x:Name="btn_iwall_right" Grid.Column="2" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_right_Click">&#x2192;</Button>
-        </Grid>
-    </StackPanel>
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <TextBlock HorizontalAlignment="Center">Moving Direction</TextBlock>
+            <Grid Width="100" Height="100" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="btn_imove_top" Grid.Column="1" Grid.Row="0" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_top_Click">&#x2191;</Button>
+                <Button x:Name="btn_imove_left" Grid.Column="0" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_left_Click">&#x2190;</Button>
+                <Button x:Name="btn_imove_down" Grid.Column="1" Grid.Row="2" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_down_Click">&#x2193;</Button>
+                <Button x:Name="btn_imove_right" Grid.Column="2" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_imove_right_Click">&#x2192;</Button>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <TextBlock HorizontalAlignment="Center">Sticking Direction</TextBlock>
+            <Grid Width="100" Height="100" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button x:Name="btn_iwall_top" Grid.Column="1" Grid.Row="0" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_top_Click">&#x2191;</Button>
+                <Button x:Name="btn_iwall_left" Grid.Column="0" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_left_Click">&#x2190;</Button>
+                <Button x:Name="btn_iwall_down" Grid.Column="1" Grid.Row="2" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_down_Click">&#x2193;</Button>
+                <Button x:Name="btn_iwall_right" Grid.Column="2" Grid.Row="1" FontSize="35" FontWeight="ExtraBold" Padding="0,-11.5,0,0" Click="btn_iwall_right_Click">&#x2192;</Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
 </UserControl>

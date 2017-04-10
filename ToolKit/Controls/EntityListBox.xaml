@@ -11,27 +11,17 @@
         <ListBox x:Name="listbox_entities" SelectionChanged="listbox_entities_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.Resources>
                 <DataTemplate x:Key="DefaultTemplate" DataType="{x:Type data:EntityData}">
-                    <Image Source="{Binding Bitmap}" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
-                        <Image.LayoutTransform>
-                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
-                        </Image.LayoutTransform>
-                    </Image>
+                    <Image Source="{Binding Bitmap}" Stretch="Uniform" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor" MaxWidth="50"/>
                 </DataTemplate>
                 <DataTemplate x:Key="SelectionTemplate" DataType="{x:Type data:EntityData}">
-                    <Image Source="{Binding Bitmap}" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
-                        <Image.LayoutTransform>
-                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
-                        </Image.LayoutTransform>
+                    <Image Source="{Binding Bitmap}" Stretch="Uniform" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor" MaxWidth="50">
                         <Image.Effect>
                             <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20" RenderingBias="Quality"/>
                         </Image.Effect>
                     </Image>
                 </DataTemplate>
                 <DataTemplate x:Key="HoverTemplate" DataType="{x:Type data:EntityData}">
-                    <Image Source="{Binding Bitmap}" Stretch="None" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor">
-                        <Image.LayoutTransform>
-                            <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
-                        </Image.LayoutTransform>
+                    <Image Source="{Binding Bitmap}" Stretch="Uniform" SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor" MaxWidth="50">
                         <Image.Effect>
                             <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity=".5" BlurRadius="20" RenderingBias="Quality"/>
                         </Image.Effect>

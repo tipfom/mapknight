@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit.Controls.Components"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Button Click="btn_reset_Click">Reset</Button>
+    <Grid Margin="5">
+        <Button Click="btn_reset_Click" Padding="0,5">Reset Moonball Position</Button>
     </Grid>
 </UserControl>

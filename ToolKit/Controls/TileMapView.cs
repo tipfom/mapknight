@@ -55,8 +55,8 @@ namespace mapKnight.ToolKit.Controls {
             get { return _TileSize; }
         }
 
-        private Point _CurrentSelection = new Point(-1, -1);
-        public Point CurrentSelection {
+        private Vector2 _CurrentSelection = new Vector2(-1, -1);
+        public Vector2 CurrentSelection {
             get { return _CurrentSelection; }
             set { _CurrentSelection = value; }
         }
@@ -74,6 +74,8 @@ namespace mapKnight.ToolKit.Controls {
             get { return Layer[1]; }
             set { Layer[1] = value; Update( ); }
         }
+        public int Mode { get; set; }
+
         public Action<SpriteBatch, int, int, int> AdditionalRenderCall { get; set; }
 
         private Texture2D selectionTexture;
@@ -151,8 +153,13 @@ namespace mapKnight.ToolKit.Controls {
             DrawLayer(2, columns, rows, ox, oy, spriteBatch);
 
             // draw selected tile
-            if (CurrentSelection.X > -1 && CurrentSelection.Y > -1)
-                spriteBatch.Draw(selectionTexture, new Rectangle((int)((CurrentSelection.X + 0.5f) * TileSize), (int)((CurrentSelection.Y + 0.5f) * TileSize), TileSize, TileSize), null, Color.White, 0f, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
+            if (CurrentSelection.X > -1 && CurrentSelection.Y > -1) {
+                if(Mode == 0) {
+                    spriteBatch.Draw(selectionTexture, new Rectangle((int)((CurrentSelection.X + 0.5f) * TileSize), (int)((CurrentSelection.Y + 0.5f) * TileSize), TileSize, TileSize), null, Color.White, 0f, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
+                } else if (Mode == 1) {
+                    spriteBatch.Draw(emptyTexture, new Rectangle((int)((CurrentSelection.X) * TileSize), (int)((CurrentSelection.Y) * TileSize), TileSize / 5, TileSize / 5), null, new Color(255, 0, 0, 63), Mathf.PI / 4f, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
+                }
+            }
 
             // draw spawnpoint tile
             spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Math.Floor(Offset.X)) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Math.Floor(Offset.Y)) * TileSize), TileSize, TileSize), Color.White);

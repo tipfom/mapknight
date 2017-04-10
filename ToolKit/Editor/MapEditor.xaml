@@ -140,15 +140,14 @@
             </TabItem>
             <TabItem Header="ENTITIES">
                 <DockPanel>
-                    <ContentPresenter x:Name="contentpresenter_entitydata" DockPanel.Dock="Bottom" MaxHeight="300"/>
+                    <ContentPresenter x:Name="contentpresenter_entitydata" DockPanel.Dock="Bottom" MaxHeight="250"/>
                     <controls:EntityListBox x:Name="entitylistbox"/>
                 </DockPanel>
             </TabItem>
         </TabControl>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False" Background="White" />
-        <Grid Grid.Column="2">
-            <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" />
-            <DockPanel VerticalAlignment="Bottom" Background="#FFF0F0F0">
+        <DockPanel Grid.Column="2">
+            <DockPanel VerticalAlignment="Bottom" Background="#FFF0F0F0" DockPanel.Dock="Bottom">
                 <TextBlock x:Name="text_xpos" Padding="0" Width="25" TextAlignment="Center" />
                 <TextBlock x:Name="text_ypos" Padding="0" Width="25" TextAlignment="Center" />
                 <Rectangle DockPanel.Dock="Right" Width="17" Height="17"/>
@@ -159,8 +158,9 @@
             <ScrollBar x:Name="scrollbar_vertical"
                        Orientation="Vertical" HorizontalAlignment="Right"
                        ValueChanged="scrollbar_vertical_ValueChanged"
-                       Margin="0,0,0,17">
+                       DockPanel.Dock="Right">
             </ScrollBar>
-        </Grid>
+            <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" BorderThickness="1" BorderBrush="White"/>
+        </DockPanel>
     </Grid>
 </UserControl>

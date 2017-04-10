@@ -7,103 +7,116 @@ using System.Windows.Controls;
 using System;
 using Microsoft.Xna.Framework.Graphics;
 using mapKnight.ToolKit.Data.Components;
+using mapKnight.Core;
 
 namespace mapKnight.ToolKit.Controls {
     /// <summary>
     /// Interaktionslogik für EntityListBox.xaml
     /// </summary>
     public partial class EntityListBox : UserControl {
+        private static readonly Vector2 CANONE_SIZE = new Vector2(1.2f, 0.85161f);
+        private static readonly Vector2 GUARDIAN_SIZE = new Vector2(3.405405405f, 2f);
+        private static readonly Vector2 LANDMINE_SIZE = new Vector2(0.7f, 0.21875f);
+        private static readonly Vector2 MOONBALL_SIZE = new Vector2(1, 0.538461538f);
+        private static readonly Vector2 PLUGGER_SIZE = new Vector2(1.35f, 1f);
+        private static readonly Vector2 SEPLER_SIZE = new Vector2(1f * 23f / 17f, 15f / 17f * 23f / 15f);
+        private static readonly Vector2 SHARK_SIZE = new Vector2(0.540540f * 29f / 15f, 0.540540f * 31f / 15f);
+        private static readonly Vector2 SHELL_SIZE = new Vector2(0.75f, 0.875f);
+        private static readonly Vector2 SLIME_SIZE = new Vector2(1f, 0.95238095f);
+        private static readonly Vector2 PLATFORM_COPPER_SIZE = new Vector2(1.5f, 1f);
+        private static readonly Vector2 FIR_SIZE = new Vector2(5f, 5f * 71f / 54f);
+
         public static readonly Entity.Configuration[ ] SHADOW_CONFIGURATIONS = new Entity.Configuration[ ] {
-            new Entity.Configuration("Canone", new Core.Vector2( 1.2f, 0.85161f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Canone", CANONE_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Guardian", new Core.Vector2(3.405405405f, 2f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Guardian", GUARDIAN_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Landmine", new Core.Vector2(0.7f, 0.21875f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Landmine", LANDMINE_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Moonball", new Core.Vector2(1, 0.538461538f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Moonball", MOONBALL_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Plugger", new Core.Vector2(1.35f, 1f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Plugger", PLUGGER_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Sepler", new Core.Vector2(1f * 23f / 17f, 15f / 17f * 23f / 15f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Sepler", SEPLER_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Shark", new Core.Vector2(0.540540f * 29f/15f, 0.540540f*31f/15f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Shark", SHARK_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Shell", new Core.Vector2(0.75f, 0.875f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Shell", SHELL_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Slime", new Core.Vector2(1f, 0.95238095f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Slime", SLIME_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Copper Platform", new Core.Vector2(1.5f, 1f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Copper Platform", PLATFORM_COPPER_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Fir", new Core.Vector2(5f, 5f * 71f / 54f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Fir", FIR_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             }
         };
         public static readonly Entity.Configuration[ ] FINAL_CONFIGURATIONS = new Entity.Configuration[ ] {
-            new Entity.Configuration("Canone", new Core.Vector2( 1.2f, 0.85161f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Canone", CANONE_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Guardian", new Core.Vector2(3.405405405f, 2f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Guardian", GUARDIAN_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Landmine", new Core.Vector2(0.7f, 0.21875f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Landmine", LANDMINE_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Moonball", new Core.Vector2(1, 0.538461538f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Moonball", MOONBALL_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( ),
                     new MoonballDataComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Plugger", new Core.Vector2(1.35f, 1f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Plugger", PLUGGER_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Sepler", new Core.Vector2(1f * 23f / 17f, 15f / 17f * 23f / 15f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Sepler", SEPLER_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Shark", new Core.Vector2(0.540540f * 29f/15f, 0.540540f*31f/15f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Shark", SHARK_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Shell", new Core.Vector2(0.75f, 0.875f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Shell", SHELL_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Slime", new Core.Vector2(1f, 0.95238095f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Slime", SLIME_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( ),
                     new SlimeDataComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Copper Platform", new Core.Vector2(1.5f, 1f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Copper Platform", PLATFORM_COPPER_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( ),
                     new PlatformDataComponent.Configuration( )
                 }
             },
-            new Entity.Configuration("Fir", new Core.Vector2(5f, 5f * 71f / 54f)) { Components = new ComponentList( ) {
+            new Entity.Configuration("Fir", FIR_SIZE) { Components = new ComponentList( ) {
                     new ActiveComponent.Configuration( )
                 }
             }

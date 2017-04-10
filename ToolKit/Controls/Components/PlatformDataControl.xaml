@@ -3,15 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:core="clr-namespace:mapKnight.Core"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <StackPanel Margin="20">
-        <TextBlock>Waypoints</TextBlock>
-        <TextBlock x:Name="textblock_count" >
-            <Run Text="Count: "/>
-            <Run Text="{Binding Count, Mode=OneWay}"/>
-        </TextBlock>
-        <ListView x:Name="listbox_waypoints"/>
-        <Button HorizontalAlignment="Center" Click="button_reset_Click">Reset</Button>
+             d:DesignHeight="250" d:DesignWidth="300">
+    <StackPanel Margin="5" MaxHeight="240">
+        <TextBlock HorizontalAlignment="Center">Waypoints</TextBlock>
+        <ListView x:Name="listbox_waypoints" Margin="5,5" Background="Transparent" BorderBrush="LightGray" MaxHeight="180">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type core:Vector2}">
+                    <TextBlock>
+                        <Run Text="( X: "/>
+                        <Run Text="{Binding X, StringFormat=0.00}"/>
+                        <Run Text=", Y: "/>
+                        <Run Text="{Binding Y, StringFormat=0.00}"/>
+                        <Run Text=" )"/>
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button HorizontalAlignment="Stretch" Padding="0,3" Margin="5,0" Click="button_reset_Click">Reset Waypoints</Button>
     </StackPanel>
 </UserControl>
