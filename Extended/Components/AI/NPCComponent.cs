@@ -1,5 +1,7 @@
-﻿using mapKnight.Core.World;
+﻿using System.Collections.Generic;
+using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
+using mapKnight.Core.World.Serialization;
 
 namespace mapKnight.Extended.Components.AI {
     public class NPCComponent : Component {
@@ -17,9 +19,12 @@ namespace mapKnight.Extended.Components.AI {
         private string[ ] messages;
         private int currentIndex = -1;
 
-        public NPCComponent (Entity owner, string[ ] messages) : base(owner) {
+        public NPCComponent (Entity owner) : base(owner) {
             owner.Domain = EntityDomain.NPC;
-            this.messages = messages;
+        }
+
+        public override void Load(Dictionary<DataID, object> data) {
+            messages = (string[ ])data[DataID.NPC_Messages];
         }
 
         public override void Collision (Entity collidingEntity) {
@@ -44,10 +49,8 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         public new class Configuration : Component.Configuration {
-            public string[ ] Messages;
-
             public override Component Create (Entity owner) {
-                return new NPCComponent(owner, Messages);
+                return new NPCComponent(owner);
             }
         }
     }

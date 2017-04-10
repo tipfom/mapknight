@@ -41,6 +41,8 @@ namespace mapKnight.ToolKit.Data {
                     return EntityID.Platform_Copper;
                 case "Fir":
                     return EntityID.Fir;
+                case "Lenny":
+                    return EntityID.Npc_Lenny;
                 default:
                     return EntityID.Error;
             }
@@ -82,6 +84,9 @@ namespace mapKnight.ToolKit.Data {
                     break;
                 case EntityID.Fir:
                     entity = EntityListBox.FINAL_CONFIGURATIONS[10].Create(position, world, false);
+                    break;
+                case EntityID.Npc_Lenny:
+                    entity = EntityListBox.FINAL_CONFIGURATIONS[11].Create(position, world, false);
                     break;
             }
 

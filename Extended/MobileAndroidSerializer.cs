@@ -32,6 +32,9 @@ namespace mapKnight.Extended {
                 case EntityID.Moonball:
                     EntityCollection.Obstacles.Moonball.Create(position, world, false).Load(data);
                     break;
+                case EntityID.Npc_Lenny:
+                    EntityCollection.NPCs.Lenny.Create(position, world, false).Load(data);
+                    break;
                 case EntityID.Platform_Copper:
                     EntityCollection.Platforms.Copper.Create(position, world, false).Load(data);
                     break;

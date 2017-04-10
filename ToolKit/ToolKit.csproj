@@ -94,6 +94,9 @@
     <Compile Include="Controls\Components\MoonballDataControl.xaml.cs">
       <DependentUpon>MoonballDataControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Components\NPCDataControl.xaml.cs">
+      <DependentUpon>NPCDataControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Components\PlatformDataControl.xaml.cs">
       <DependentUpon>PlatformDataControl.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,7 @@
     <Compile Include="Controls\FloatTextBox.cs" />
     <Compile Include="Controls\IntegerTextBox.cs" />
     <Compile Include="Data\Components\MoonballDataComponent.cs" />
+    <Compile Include="Data\Components\NPCDataComponent.cs" />
     <Compile Include="Data\Components\PlatformDataComponent.cs" />
     <Compile Include="Data\Components\SlimeDataComponent.cs" />
     <Compile Include="Data\EntityData.cs" />
@@ -215,6 +219,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Components\MoonballDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Components\NPCDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -468,6 +476,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Entities\button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\npc_lenny.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

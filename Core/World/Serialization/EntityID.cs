@@ -13,5 +13,6 @@
         Slime = 9,
         Platform_Copper = 10,
         Fir = 11,
+        Npc_Lenny = 12,
     }
 }

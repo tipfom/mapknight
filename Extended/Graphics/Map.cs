@@ -40,7 +40,7 @@ namespace mapKnight.Extended.Graphics {
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
 
-        public Map(Stream input) : base(input) {
+        public Map(Stream input) : base(input, new MobileAndroidSerializer()) {
             Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             Window_Changed( );
             InitTextureCoords( );

@@ -5,5 +5,6 @@
         PLATFORM_Waypoint = 2,
         SLIME_InitialMoveDirection = 3,
         SLIME_InitialWallDirection = 4,
+        NPC_Messages = 5,
     }
 }

@@ -10,7 +10,7 @@ namespace mapKnight.Extended.Components.AI {
         private int direction;
         private float sawRadius;
 
-        public CircularSawComponent (Entity owner, Vector2[ ] waypoints, float speed, float sawradius) : base(owner, waypoints, speed) {
+        public CircularSawComponent (Entity owner, float speed, float sawradius) : base(owner, speed) {
             owner.Domain = EntityDomain.Obstacle;
 
             sawRadius = sawradius;
@@ -48,10 +48,9 @@ namespace mapKnight.Extended.Components.AI {
 
         public new class Configuration : Component.Configuration {
             public float Speed;
-            public Vector2[ ] Waypoints;
 
             public override Component Create (Entity owner) {
-                return new CircularSawComponent(owner, Waypoints, Speed, owner.Transform.HalfSize.X);
+                return new CircularSawComponent(owner, Speed, owner.Transform.HalfSize.X);
             }
         }
     }

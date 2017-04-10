@@ -1173,14 +1173,7 @@ namespace mapKnight.Extended {
                                     }
                                 }
                             },
-                            new NPCComponent.Configuration( ) {
-                                Messages = new string[ ] {
-                                "This ist ein totaler TEST!",
-                                "How are you gehen?",
-                                "WHAT DO YOU THINK OF SPAM?\nCACH ME OUSSIDE, HOW BOUT DAH!\nZEILENUMBRUECHE!\nKAPPA123NOKAPPA\n.period",
-                                "Wer das liest ist cool"
-                            }
-                            }
+                            new NPCComponent.Configuration( ) { }
                         };
                     }
                     return _Lenny;
@@ -1236,10 +1229,6 @@ namespace mapKnight.Extended {
                             },
                             new CircularSawComponent.Configuration( ) {
                                 Speed = 3,
-                                Waypoints = new Vector2[ ] {
-                                    new Vector2(0, 0),
-                                    new Vector2(1, 1)
-                                }
                             }
                         };
                     }
@@ -1329,11 +1318,7 @@ namespace mapKnight.Extended {
                                 }
                             }
                         });
-                        _MoonballTriggerButton.Components.Add(new MoonballButtonComponent.Configuration( ) {
-                            OnTrigger = (entity) => {
-                                _Moonball.Create(entity.Transform.Center + , entity.World);
-                            }
-                        });
+                        _MoonballTriggerButton.Components.Add(new MoonballButtonComponent.Configuration( ));
                         _MoonballTriggerButton.Components.Add(new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } });
                     }
 
@@ -1422,13 +1407,7 @@ namespace mapKnight.Extended {
                         _Copper.Components = new ComponentList {
                             new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } },
                             new TextureComponent.Configuration( ) { Texture = "platforms/copper" },
-                            new PlatformComponent.Configuration( ) {
-                                Speed = 3,
-                                Waypoints = new Vector2[ ] {
-                                    new Vector2(0, 0),
-                                    new Vector2(0, 4)
-                                }
-                            }
+                            new PlatformComponent.Configuration( ) { Speed = 3 }
                         };
                     }
                     return _Copper;
