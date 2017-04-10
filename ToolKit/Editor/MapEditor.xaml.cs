@@ -700,10 +700,10 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewMoveEntities(object sender, MouseEventArgs e) {
-
+            Vector2 entityLocation = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
+            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(entityLocation.X - tilemapview.Offset.X, currentMap.Height - entityLocation.Y - tilemapview.Offset.Y);
             switch (currentTool) {
                 case Tool.God:
-                    Vector2 entityLocation = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
                     if (cachedEntity == null) {
                         cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, (Controls.TileMapView.EditorMap)currentMap, Keyboard.IsKeyDown(Key.LeftShift));
                     } else {

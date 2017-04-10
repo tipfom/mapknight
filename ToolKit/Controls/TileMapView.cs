@@ -17,7 +17,7 @@ namespace mapKnight.ToolKit.Controls {
     public class TileMapView : XnaControl {
         const int TILESIZE_MIN = 20;
         const int TILESIZE_MAX = 100;
-        const int ZOOM_LEVELS = 15;
+        const int ZOOM_LEVELS = 30;
 
         private Map _CurrentMap;
         public Map CurrentMap {
@@ -42,8 +42,6 @@ namespace mapKnight.ToolKit.Controls {
                 tileSizeDelta -= _TileSize;
                 _Offset.X -= tileSizeDelta * CurrentSelection.X / _TileSize;
                 _Offset.Y -= tileSizeDelta * CurrentSelection.Y / _TileSize;
-                _Offset.X = Math.Max(_Offset.X, 0);
-                _Offset.Y = Math.Max(_Offset.Y, 0);
                 _CurrentSelection.X += (int)prevOffset.X - (int)_Offset.X;
                 _CurrentSelection.Y += (int)prevOffset.Y - (int)_Offset.Y;
                 Update( );
