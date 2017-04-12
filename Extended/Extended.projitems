@@ -105,6 +105,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UILabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIPanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRectangle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRenderer.cs" />

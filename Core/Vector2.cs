@@ -148,6 +148,14 @@ namespace mapKnight.Core {
             };
         }
 
+        public float Distance(Vector2 vec) {
+            return Mathf.Sqrt(DistanceSqr(vec));
+        }
+
+        public float DistanceSqr(Vector2 vec) {
+            return (this - vec).MagnitudeSqr( );
+        }
+
         #endregion
 
         #region overrides
