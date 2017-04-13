@@ -8,7 +8,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         static UIMap( ) {
             STATIONS = new Station[ ] {
-                new Station(0, Line.LightGreen, new Vector2(97.5f / 229f, 224.5f / 229f), ""),
+                new Station(0, Line.LightGreen, new Vector2(97.5f / 229f, 224.5f / 229f), "green_0"),
                 new Station(1, Line.LightGreen, new Vector2(92.5f / 229f, 202.5f / 229f), ""),
                 new Station(2, Line.LightGreen, new Vector2(108.5f / 229f, 185.5f / 229f), ""),
                 new Station(3, Line.LightGreen, new Vector2(78.5f / 229f, 160.5f / 229f), ""),
@@ -49,7 +49,9 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         private Station selectedStation;
-        private UnlockedState unlockedState = new UnlockedState(Line.Yellow, 1);
+        private UnlockedState unlockedState = new UnlockedState(Line.LightGreen, 0);
+
+        public string CurrentSelection { get { return selectedStation?.Map ?? null; } }
 
         public UIMap(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
             IsDirty = true;

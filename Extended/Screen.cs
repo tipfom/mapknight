@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using mapKnight.Core;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Screens;
@@ -8,12 +6,11 @@ using mapKnight.Extended.Screens;
 namespace mapKnight.Extended {
 
     public class Screen : IDisposable {
-        public static GameplayScreen Gameplay;
         public static MainMenuScreen MainMenu;
+        public static GameplayScreen Gameplay;
         private static Screen _Active;
 
         static Screen ( ) {
-            Gameplay = new GameplayScreen( );
             MainMenu = new MainMenuScreen( );
             _Active = MainMenu;
         }

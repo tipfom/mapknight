@@ -22,7 +22,6 @@ namespace mapKnight.Extended {
             UIRenderer.Init( );
             UIRenderer.Texture = Assets.Load<Spritebatch2D>("interface");
 
-            Screen.Gameplay.Load( );
             Screen.MainMenu.Load( );
             Screen.Active = Screen.MainMenu;
 
@@ -54,7 +53,7 @@ namespace mapKnight.Extended {
         public static void Destroy ( ) {
             Assets.Destroy( );
             Screen.MainMenu.Dispose( );
-            Screen.Gameplay.Dispose( );
+            Screen.Gameplay?.Dispose( );
             UIRenderer.Dispose( );
         }
 

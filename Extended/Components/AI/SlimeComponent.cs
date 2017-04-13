@@ -33,7 +33,7 @@ namespace mapKnight.Extended.Components.AI {
         public override void Load(Dictionary<DataID, object> data) {
             NextMoveDir = (Direction)((sbyte)data[DataID.SLIME_InitialMoveDirection]);
             NextWallDir = (Direction)((sbyte)data[DataID.SLIME_InitialWallDirection]);
-            FindWaypoint( );
+            base.Prepare( );
         }
 
         public override void Prepare ( ) {

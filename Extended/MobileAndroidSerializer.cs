@@ -51,7 +51,7 @@ namespace mapKnight.Extended {
                     EntityCollection.Enemys.Shell.Create(position, world, false).Load(data);
                     break;
                 case EntityID.Slime:
-                    EntityCollection.Enemys.Shell.Create(position, world, false).Load(data);
+                    EntityCollection.Enemys.Slime.Create(position, world, false).Load(data);
                     break;
             }
         }
