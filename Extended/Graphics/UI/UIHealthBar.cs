@@ -55,8 +55,12 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override void Update(DeltaTime dt) {
-            if (healthComponent.Owner.IsOnScreen)
+            if (healthComponent.Owner.IsOnScreen) {
                 IsDirty = true;
+                Visible = true;
+            } else {
+                Visible = false;
+            }
             base.Update(dt);
         }
 
