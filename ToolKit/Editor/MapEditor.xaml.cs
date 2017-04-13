@@ -552,7 +552,7 @@ namespace mapKnight.ToolKit.Editor {
         private Vector2 GetEntityCenterRaw(MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Vector2 selectedTile = new Vector2(
-                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + Math.Floor(tilemapview.Offset.X), currentMap.Width - tilemapview.Offset.X - 1)),
+                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + Math.Floor(tilemapview.Offset.X), currentMap.Width)),
                 (float)Math.Max(0, Math.Min(currentMap.Size.Height - positionOnControl.Y / tilemapview.TileSize - (float)Math.Floor(tilemapview.Offset.Y), currentMap.Height)));
             Console.WriteLine(selectedTile);
             return selectedTile;
