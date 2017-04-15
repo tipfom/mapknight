@@ -11,7 +11,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         static UIMap ( ) {
             STATIONS = new Station[ ] {
-                new Station(0, Line.LightGreen, 0, "green_0"),
+                new Station(0, Line.LightGreen, 0, "Maehhpp"),
                 new Station(1, Line.LightGreen, 3, null),
                 new Station(2, Line.LightGreen, 4, null),
                 new Station(3, Line.LightGreen, 8, null),

@@ -95,8 +95,7 @@
     <AndroidAsset Include="Assets\textures\moonball.json" />
     <AndroidAsset Include="Assets\textures\guardian\guardian.json" />
     <AndroidAsset Include="Assets\textures\blackhole.json" />
-    <AndroidAsset Include="Assets\maps\Schtart.map" />
-    <AndroidAsset Include="Assets\maps\green_0.map" />
+    <AndroidAsset Include="Assets\maps\Maehhpp.map" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -200,10 +199,7 @@
     <AndroidAsset Include="Assets\textures\blackhole.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\Schtart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\green_0.png" />
+    <AndroidAsset Include="Assets\textures\Maehhpp.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
