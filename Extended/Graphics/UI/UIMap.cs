@@ -151,9 +151,20 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public string CurrentSelection { get { return (selectedStation?.IsAvailable(unlockedState) ?? false) ? selectedStation.Map : null; } }
 
-        public UIMap (Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
+        public UIMap (Screen owner) : base(owner, new UILeftMargin(0f), new UIBottomMargin(0f), new AbsoluteSize(0f,0f), UIDepths.MIDDLE, false) {
             IsDirty = true;
             currentPosition = currentWaypoint;
+
+            Window.Changed += () => {
+                UpdateMargins( );
+            };
+            UpdateMargins( );
+        }
+
+        private void UpdateMargins ( ) {
+            horizontalMargin.Margin = 38f / 450f * Window.Ratio * 2f;
+            verticalMargin.Margin = 13f / 450f * Window.Ratio * 2f;
+            ((AbsoluteSize)Size).Size = new Vector2(229f / 450f * Window.Ratio * 2f, 229f / 450f * Window.Ratio * 2f);
         }
 
         public override void HandleTouch (UITouchAction action, UITouch touch) {
@@ -222,7 +233,10 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
+            float backgroundHeight = 2f / 4f * 3f * Window.Ratio;
+            yield return new DepthVertexData(UIRectangle.GetVerticies(-Window.Ratio, -1f + backgroundHeight, 2*Window.Ratio, backgroundHeight), "mmenu_bckgrnd", UIDepths.BACKGROUND, Color.White);
             yield return new DepthVertexData(Bounds.Verticies, "map", Depth, Color.White);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Position + new Vector2(-4f / 450f * Window.Ratio * 2f, 4f / 450f * Window.Ratio * 2f), new Vector2(236f / 450f * Window.Ratio * 2f, 238f / 450f * Window.Ratio * 2f)), "map_border", UIDepths.FOREGROUND, Color.White);
             if (selectedStation != null) {
                 Vector2 selectedStationPosition = WAYPOINTS[selectedStation.Position];
                 yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + selectedStationPosition.X * Size.Size.X - .05f, Position.Y - selectedStationPosition.Y * Size.Size.Y + .1f * 31f / 19f, .1f, .1f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);

@@ -17,8 +17,8 @@ namespace mapKnight.Extended.Graphics.UI {
 
         private UIRectangle _Bounds;
         public UIRectangle Bounds { get { return _Bounds; } }
-        private UIMargin horizontalMargin;
-        private UIMargin verticalMargin;
+        protected UIMargin horizontalMargin;
+        protected UIMargin verticalMargin;
 
         private Vector2 _Position;
         public Vector2 Position {

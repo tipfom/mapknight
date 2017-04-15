@@ -17,7 +17,6 @@ namespace mapKnight.Android {
         NoHistory = true,
         ScreenOrientation = ScreenOrientation.SensorLandscape)]
     public class SplashActivity : Activity {
-        static bool SERVICE_STARTED = false;
         Timer timer = new Timer(30);
         bool allreadyStarting = false;
 
