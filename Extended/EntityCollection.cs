@@ -531,9 +531,27 @@ namespace mapKnight.Extended {
                                         CanRepeat = true,
                                         Frames = new SpriteAnimationFrame[ ] {
                                             new SpriteAnimationFrame( ) {
-                                                Time = 500,
+                                                Time = 300,
                                                 Bones = new string[ ] {
                                                     "sepler"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    new SpriteAnimation( ) {
+                                        Name = "run",
+                                        CanRepeat = true,
+                                        Frames = new SpriteAnimationFrame[ ] {
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk1"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk2"
                                                 }
                                             }
                                         }
@@ -542,6 +560,30 @@ namespace mapKnight.Extended {
                                         Name = "walk",
                                         CanRepeat = true,
                                         Frames = new SpriteAnimationFrame[ ] {
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk1"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk2"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk1"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk2"
+                                                }
+                                            },
                                             new SpriteAnimationFrame( ) {
                                                 Time = 100,
                                                 Bones = new string[ ] {
