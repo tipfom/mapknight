@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using mapKnight.Core;
+using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Handle;
-using OpenTK;
 using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Programs {

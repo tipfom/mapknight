@@ -1,4 +1,4 @@
-﻿using mapKnight.Core;
+﻿using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.AI {
     public class BlackHoleComponent : Component {

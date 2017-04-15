@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using mapKnight.Core;
+﻿using mapKnight.Core;
+using mapKnight.Core.Graphics;
 
 namespace mapKnight.Extended.Graphics {
     public class DepthVertexData : VertexData {

@@ -21,10 +21,10 @@ namespace mapKnight.ToolKit.Windows {
 
         private Tuple<Tile[ ], Dictionary<string, Texture2D>> template;
         private GraphicsDevice graphicsDevice;
-        private Action<Map> AddMap;
-        private Action<Map, string, Texture2D> AddTexture;
+        private Action<Controls.TileMapView.EditorMap> AddMap;
+        private Action<Controls.TileMapView.EditorMap, string, Texture2D> AddTexture;
 
-        public CreateMapWindow (GraphicsDevice g, Action<Map> addmap, Action<Map, string, Texture2D> addtexture) {
+        public CreateMapWindow (GraphicsDevice g, Action<Controls.TileMapView.EditorMap> addmap, Action<Map, string, Texture2D> addtexture) {
             InitializeComponent( );
             graphicsDevice = g;
             AddMap = addmap;
@@ -52,7 +52,7 @@ namespace mapKnight.ToolKit.Windows {
             Core.Size mapSize = new Core.Size(0, 0);
             Core.Vector2 gravity = new Vector2(0, 0);
             if (ValidName( ) && ValidCreator( ) && ValidSize(ref mapSize) && ValidGravity(ref gravity)) {
-                Map createdMap = new Map(mapSize, textbox_creator.Text, textbox_name.Text) { Gravity = gravity };
+                Controls.TileMapView.EditorMap createdMap = new Controls.TileMapView.EditorMap(mapSize, textbox_creator.Text, textbox_name.Text) { Gravity = gravity };
                 AddMap(createdMap);
                 if (template != null) {
                     foreach (Tile tile in template.Item1) {

@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.Animation;
+using mapKnight.Core.Graphics;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.Graphics {
 
@@ -13,23 +12,24 @@ namespace mapKnight.Extended.Components.Graphics {
         private SpriteAnimation[ ] animations;
         private string[ ] cache;
 
-        public delegate void AnimationCallback (bool success);
+        public delegate void AnimationCallback(bool success);
 
         private AnimationCallback currentAnimationCallback;
         private SpriteAnimation currentAnimation;
         private SpriteAnimation queuedAnimation;
         private AnimationCallback queuedAnimationCallback;
 
-        public SpriteComponent (Entity owner, SpriteAnimation[ ] animations, string texture) : base(owner) {
+        public SpriteComponent(Entity owner, SpriteAnimation[ ] animations, string texture) : base(owner) {
             this.animations = animations;
             this.currentAnimation = animations[0];
             this.cache = new string[currentAnimation.Frames[0].Bones.Length];
             if (!Owner.World.Renderer.HasTexture(Owner.Species))
-                Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<SpriteBatch>(texture));
+                Owner.World.Renderer.AddTexture(Owner.Species, Assets.Load<Spritebatch2D>(texture));
         }
 
-        public override void Update (DeltaTime dt) {
-            if (!Owner.IsOnScreen) return;
+        public override void Update(DeltaTime dt) {
+            if (!Owner.IsOnScreen)
+                return;
 
             if (!currentAnimation.IsRunning) {
                 currentAnimationCallback?.Invoke(true);
@@ -51,7 +51,8 @@ namespace mapKnight.Extended.Components.Graphics {
                     // force animation
                     currentAnimationCallback?.Invoke(false);
                     currentAnimation = animations.FirstOrDefault(anim => anim.Name == (string)data[0]);
-                    if (currentAnimation == null) currentAnimation = animations[0];
+                    if (currentAnimation == null)
+                        currentAnimation = animations[0];
                     currentAnimationCallback = (data.Length == 3) ? (AnimationCallback)data[2] : null;
                     queuedAnimation = null;
                     currentAnimation.Reset( );
@@ -65,7 +66,7 @@ namespace mapKnight.Extended.Components.Graphics {
             currentAnimation.Update(dt.TotalMilliseconds);
         }
 
-        public override void PostUpdate ( ) {
+        public override void Draw( ) {
             for (int i = 0; i < cache.Length; i++)
                 cache[i] = currentAnimation.CurrentFrame.Bones[i];
 
@@ -76,7 +77,7 @@ namespace mapKnight.Extended.Components.Graphics {
             public SpriteAnimation[ ] Animations;
             public string Texture;
 
-            public override Component Create (Entity owner) {
+            public override Component Create(Entity owner) {
                 return new SpriteComponent(owner, Animations, Texture);
             }
         }

@@ -1,8 +1,8 @@
 using System;
 using mapKnight.Core;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.Movement {
-
     public abstract class WaypointComponent : Component {
         public Vector2 Velocity;
         private Vector2 currentMoveDistance;
@@ -13,14 +13,17 @@ namespace mapKnight.Extended.Components.Movement {
         private float speed;
         private Vector2[ ] waypoints;
 
-        public WaypointComponent (Entity owner, Vector2[ ] waypoints, float speed) : base(owner) {
-            Array.Copy(waypoints, this.waypoints = new Vector2[waypoints.Length], waypoints.Length);
-            for (int i = 0; i < waypoints.Length; i++)
-                this.waypoints[i] += Owner.Transform.Center;
+        public WaypointComponent (Entity owner, float speed) : base(owner) {
             this.speed = speed * speed;
         }
 
         protected int waypointCount { get { return waypoints.Length; } }
+
+        protected void SetWaypoints(Vector2[] waypoints) {
+            Array.Copy(waypoints, this.waypoints = new Vector2[waypoints.Length], waypoints.Length);
+            for (int i = 0; i < waypoints.Length; i++)
+                this.waypoints[i] += Owner.Transform.Center;
+        }
 
         public override void Prepare ( ) {
             nextWaypoint = waypoints[0];

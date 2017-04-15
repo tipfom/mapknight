@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
+﻿using mapKnight.Core;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Components.Stats {
-
     [UpdateBefore(typeof(MotionComponent), false)]
     public class SpeedComponent : Component {
         public Vector2 Speed;

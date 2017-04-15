@@ -1,5 +1,6 @@
 ﻿using mapKnight.Core;
-using mapKnight.Extended.Components;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.AI;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.AI.Guardian;
@@ -63,18 +64,6 @@ namespace mapKnight.Extended {
                                 new SpriteComponent.Configuration( ) {
                                     Texture = "guardian/guardian" ,
                                     Animations = new SpriteAnimation[ ] {
-                                        new SpriteAnimation( ) {
-                                            Name = "idle",
-                                            CanRepeat = true,
-                                            Frames = new SpriteAnimationFrame[ ] {
-                                                new SpriteAnimationFrame( ) {
-                                                    Time = MAX_TIME,
-                                                    Bones = new string[ ] {
-                                                        "1idle"
-                                                    }
-                                                }
-                                            }
-                                        },
                                         new SpriteAnimation( ) {
                                             Name = "walk",
                                             CanRepeat = true,
@@ -140,12 +129,24 @@ namespace mapKnight.Extended {
                                                     }
                                                 }
                                             }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "hurt",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 130,
+                                                    Bones = new string[ ] {
+                                                        "1hurt"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
                                 new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9.5f / 23f , 0f, 23f / 11f, 1f) } },
                                 new SpeedComponent.Configuration( ) { X = 1.2f },
-                                new HealthComponent.Configuration( ) { Value = 1 }
+                                new HealthComponent.Configuration( ) { Value = 5 }
                             };
                         }
                         return _Private1;
@@ -165,18 +166,6 @@ namespace mapKnight.Extended {
                                 new SpriteComponent.Configuration( ) {
                                     Texture = "guardian/guardian",
                                     Animations = new SpriteAnimation[ ] {
-                                        new SpriteAnimation( ) {
-                                            Name = "idle",
-                                            CanRepeat = true,
-                                            Frames = new SpriteAnimationFrame[ ] {
-                                                new SpriteAnimationFrame( ) {
-                                                    Time = MAX_TIME,
-                                                    Bones = new string[ ] {
-                                                        "2idle"
-                                                    }
-                                                }
-                                            }
-                                        },
                                         new SpriteAnimation( ) {
                                             Name = "walk",
                                             CanRepeat = true,
@@ -242,12 +231,24 @@ namespace mapKnight.Extended {
                                                     }
                                                 }
                                             }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "hurt",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time = 130,
+                                                    Bones = new string[ ] {
+                                                        "2hurt"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
                                 new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(15f / 35f, 0f, 35f / 11f, 1f) } },
                                 new SpeedComponent.Configuration( ) { X = 1.2f },
-                                new HealthComponent.Configuration( ) { Value = 1 }
+                                new HealthComponent.Configuration( ) { Value = 5 }
                             };
                         }
                         return _Private2;
@@ -338,12 +339,24 @@ namespace mapKnight.Extended {
                                                     }
                                                 }
                                             }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "hurt",
+                                            CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) {
+                                                    Time  = 130,
+                                                    Bones = new string[ ] {
+                                                        "ohurt"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 },
                                 new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(9f / 25f, 0.5f / 21f, 25f / 10f, 21f / 20f) } },
                                 new SpeedComponent.Configuration( ) { X = 2.4f },
-                                new HealthComponent.Configuration( ) { Value = 1 }
+                                new HealthComponent.Configuration( ) { Value = 3 }
                             };
                         }
                         return _Officer1;
@@ -518,9 +531,27 @@ namespace mapKnight.Extended {
                                         CanRepeat = true,
                                         Frames = new SpriteAnimationFrame[ ] {
                                             new SpriteAnimationFrame( ) {
-                                                Time = 500,
+                                                Time = 300,
                                                 Bones = new string[ ] {
                                                     "sepler"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    new SpriteAnimation( ) {
+                                        Name = "run",
+                                        CanRepeat = true,
+                                        Frames = new SpriteAnimationFrame[ ] {
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk1"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk2"
                                                 }
                                             }
                                         }
@@ -529,6 +560,30 @@ namespace mapKnight.Extended {
                                         Name = "walk",
                                         CanRepeat = true,
                                         Frames = new SpriteAnimationFrame[ ] {
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk1"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk2"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk1"
+                                                }
+                                            },
+                                            new SpriteAnimationFrame( ) {
+                                                Time = 100,
+                                                Bones = new string[ ] {
+                                                    "walk2"
+                                                }
+                                            },
                                             new SpriteAnimationFrame( ) {
                                                 Time = 100,
                                                 Bones = new string[ ] {
@@ -637,7 +692,8 @@ namespace mapKnight.Extended {
                                 }
                             },
                             new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(6, 6), Offset = 3 },
-                            new SpeedComponent.Configuration( ) { X = 3 }
+                            new SpeedComponent.Configuration( ) { X = 3 },
+                            new HealthComponent.Configuration(){ Value = 5 }
                         };
                     }
                     return _Sepling;
@@ -931,11 +987,11 @@ namespace mapKnight.Extended {
                                         CanRepeat = true,
                                         Frames = new VertexAnimationFrame[ ] {
                                             new VertexAnimationFrame( ) {
-                                                Time = 420,
+                                                Time = 1,
                                                 State = new VertexBone[ ] {
                                                     new VertexBone( ) {
                                                         Texture = "atk",
-                                                        Rotation = -360,
+                                                        Rotation = 0,
                                                         Position = new Vector2(0.0277777777f, -0.0714285714f)
                                                     }
                                                 }
@@ -945,7 +1001,7 @@ namespace mapKnight.Extended {
                                                 State = new VertexBone[ ] {
                                                     new VertexBone( ) {
                                                         Texture = "atk",
-                                                        Rotation = 360,
+                                                        Rotation = 720,
                                                         Position = new Vector2(0.0277777777f, -0.0714285714f)
                                                     }
                                                 }
@@ -982,7 +1038,10 @@ namespace mapKnight.Extended {
                             },
                             new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(18, 0.5f) },
                             new ShellComponent.Configuration( ) { FrenzySpeed = 0.4f, AttackSpeed = 6.35f },
-                            new MotionComponent.Configuration( )
+                            new MotionComponent.Configuration( ),
+                            new HealthComponent.Configuration( ) {
+                                Value = 3
+                            }
                         };
                     }
                     return _Shell;
@@ -1159,14 +1218,7 @@ namespace mapKnight.Extended {
                                     }
                                 }
                             },
-                            new NPCComponent.Configuration( ) {
-                                Messages = new string[ ] {
-                                "This ist ein totaler TEST!",
-                                "How are you gehen?",
-                                "WHAT DO YOU THINK OF SPAM?\nCACH ME OUSSIDE, HOW BOUT DAH!\nZEILENUMBRUECHE!\nKAPPA123NOKAPPA\n.period",
-                                "Wer das liest ist cool"
-                            }
-                            }
+                            new NPCComponent.Configuration( ) { }
                         };
                     }
                     return _Lenny;
@@ -1222,10 +1274,6 @@ namespace mapKnight.Extended {
                             },
                             new CircularSawComponent.Configuration( ) {
                                 Speed = 3,
-                                Waypoints = new Vector2[ ] {
-                                    new Vector2(0, 0),
-                                    new Vector2(1, 1)
-                                }
                             }
                         };
                     }
@@ -1315,11 +1363,7 @@ namespace mapKnight.Extended {
                                 }
                             }
                         });
-                        _MoonballTriggerButton.Components.Add(new ButtonComponent.Configuration( ) {
-                            OnTrigger = (entity) => {
-                                _Moonball.Create(entity.Transform.Center + new Vector2(0, 0f), entity.World);
-                            }
-                        });
+                        _MoonballTriggerButton.Components.Add(new MoonballButtonComponent.Configuration( ));
                         _MoonballTriggerButton.Components.Add(new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } });
                     }
 
@@ -1408,13 +1452,7 @@ namespace mapKnight.Extended {
                         _Copper.Components = new ComponentList {
                             new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } },
                             new TextureComponent.Configuration( ) { Texture = "platforms/copper" },
-                            new PlatformComponent.Configuration( ) {
-                                Speed = 3,
-                                Waypoints = new Vector2[ ] {
-                                    new Vector2(0, 0),
-                                    new Vector2(0, 4)
-                                }
-                            }
+                            new PlatformComponent.Configuration( ) { Speed = 3 }
                         };
                     }
                     return _Copper;

@@ -62,7 +62,7 @@ namespace mapKnight.ToolKit {
         }
 
         public static Map MergeRotations (this Map map, float[ , , ] rotations) {
-            Map result = new Map(map.Size, map.Creator, map.Name) { Texture = map.Texture, SpawnPoint = map.SpawnPoint, Gravity = map.Gravity };
+            Map result = new Map(map.Size, map.Creator, map.Name) { Texture = map.Texture, SpawnPoint = map.SpawnPoint, Gravity = map.Gravity, Entities = map.Entities };
             Dictionary<int, bool[ ]> hasRotation = new Dictionary<int, bool[ ]>( );
             // get all available rotations
             for (int l = 0; l < 3; l++) {

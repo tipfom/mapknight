@@ -17,8 +17,8 @@ namespace mapKnight.Extended.Graphics.UI {
 
         private UIRectangle _Bounds;
         public UIRectangle Bounds { get { return _Bounds; } }
-        private UIMargin horizontalMargin;
-        private UIMargin verticalMargin;
+        protected UIMargin horizontalMargin;
+        protected UIMargin verticalMargin;
 
         private Vector2 _Position;
         public Vector2 Position {
@@ -27,7 +27,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public readonly IUISize Size;
 
         private bool _Visible = true;
-        public bool Visible { get { return Screen.IsActive && _Visible; } set { _Visible = value; IsDirty = true; } }
+        public bool Visible { get { return Screen.IsActive && _Visible; } set { if(_Visible != value) IsDirty = true; _Visible = value; } }
 
         private int _Depth;
         public int Depth { get { return _Depth; } set { _Depth = value; IsDirty = true; } }

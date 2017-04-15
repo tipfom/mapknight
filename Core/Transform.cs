@@ -55,11 +55,11 @@ namespace mapKnight.Core {
         }
 
         public bool Intersects (Vector2 point) {
-            return
-                this.BL.X <= point.X ||
-                this.TR.X >= point.X ||
-                this.TR.Y >= point.Y ||
-                this.BL.Y <= point.Y;
+            return !(
+                this.BL.X >= point.X ||
+                this.TR.X <= point.X ||
+                this.TR.Y <= point.Y ||
+                this.BL.Y >= point.Y);
         }
 
         public bool Touches (Transform transform) {

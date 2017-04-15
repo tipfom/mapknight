@@ -1,15 +1,15 @@
 using System;
-using System.Timers;
 using mapKnight.Core;
 using mapKnight.Extended.Components.AI.Basics;
-using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.AI {
-
     [ComponentRequirement(typeof(SpeedComponent))]
+    [ComponentRequirement(typeof(HealthComponent))]
     [ComponentRequirement(typeof(TriggerComponent))]
     public class ShellComponent : Component {
         private float frenzySpeed;
@@ -18,6 +18,7 @@ namespace mapKnight.Extended.Components.AI {
         private float hastingDirection;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
+        private HealthComponent healthComponent;
         private bool stunned;
         private Entity target;
         private float walkpossibility = 1f;
@@ -33,6 +34,7 @@ namespace mapKnight.Extended.Components.AI {
             Owner.GetComponent<TriggerComponent>( ).Triggered += Trigger_Triggered;
             speedComponent = Owner.GetComponent<SpeedComponent>( );
             motionComponent = Owner.GetComponent<MotionComponent>( );
+            healthComponent = Owner.GetComponent<HealthComponent>( );
             hasting = false;
             stunned = false;
         }
@@ -44,10 +46,15 @@ namespace mapKnight.Extended.Components.AI {
                 motionComponent.AimedVelocity.X = -hastingDirection * frenzySpeed * speedComponent.Speed.X;
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, "frenzy", true, (AnimationComponent.AnimationCallback)AnimationCallbackFrenzy);
             }
+            if (Owner.HasComponentInfo(ComponentData.Damage) && healthComponent.Current > healthComponent.Initial * .75f) {
+                object[ ] data = Owner.GetComponentInfo(ComponentData.Damage);
+                float initialDamage = (float)data[1];
+                Owner.SetComponentInfo(ComponentData.Damage, data[0], Math.Min(healthComponent.Current - healthComponent.Initial * .7f, initialDamage));
+            }
         }
 
         private void Trigger_Triggered (Entity entity) {
-            if (!(hasting || stunned) && entity.Domain == EntityDomain.Player) {
+            if (!(hasting || stunned) && entity.Domain == EntityDomain.Player && motionComponent.ScaleX == Math.Sign(entity.Transform.Center.X - Owner.Transform.Center.X)) {
                 target = entity;
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, "prepare", true, (AnimationComponent.AnimationCallback)AnimationCallbackPrepare);
             }

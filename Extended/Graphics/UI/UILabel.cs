@@ -12,10 +12,10 @@ namespace mapKnight.Extended.Graphics.UI {
         private static Dictionary<char, float> charScales = new Dictionary<char, float>( ) { [' '] = 1f };
 
         static UILabel ( ) {
-            foreach (KeyValuePair<string, float[ ]> entry in UIRenderer.Texture.Sprites) {
+            foreach (string entry in UIRenderer.Texture.Sprites()) {
                 char entryCharacter;
-                if (char.TryParse(entry.Key, out entryCharacter)) {
-                    float[ ] verticies = UIRenderer.Texture.Get(entry.Key);
+                if (char.TryParse(entry, out entryCharacter)) {
+                    float[ ] verticies = UIRenderer.Texture[entry];
                     float scale = ((verticies[4] - verticies[0]) * UIRenderer.Texture.Width) / ((verticies[3] - verticies[1]) * UIRenderer.Texture.Height);
                     charScales.Add(entryCharacter, scale);
                 }

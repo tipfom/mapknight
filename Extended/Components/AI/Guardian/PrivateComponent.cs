@@ -1,9 +1,13 @@
 ﻿using System;
 using mapKnight.Core;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Graphics;
+using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI.Guardian {
+    [UpdateBefore(typeof(HealthComponent))]
     public class PrivateComponent : BishopComponent {
         private TentComponent tent;
         private float patrolDistanceSqr;
@@ -49,6 +53,12 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         public override void Update (DeltaTime dt) {
+            if (Owner.HasComponentInfo(ComponentData.Damage)) {
+                Owner.SetComponentInfo(ComponentData.SpriteAnimation, "hurt", true, (SpriteComponent.AnimationCallback)HurtAnimationCallback);
+                motionComponent.AimedVelocity.X = 0;
+                nextAttackTime = -1;
+                inAttackRange = true;
+            }
             if (!inAttackRange) {
                 if ((Owner.Transform.Center - tent.Owner.Transform.Center).MagnitudeSqr( ) > patrolDistanceSqr) {
                     Turn( );
@@ -72,6 +82,12 @@ namespace mapKnight.Extended.Components.AI.Guardian {
                 nextAttackTime = Environment.TickCount + attackCooldown;
             }
             Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", false);
+        }
+
+        private void HurtAnimationCallback(bool success) {
+            Walk(motionComponent.ScaleX == 1f);
+            nextAttackTime = Environment.TickCount + attackCooldown * 2 / 3;
+            inAttackRange = false;
         }
 
         public new class Configuration : Component.Configuration {

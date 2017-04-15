@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using mapKnight.Core;
-using mapKnight.Extended.Graphics;
+using mapKnight.Core.World;
+using mapKnight.Core.Graphics;
+using mapKnight.Extended.Graphics.Particles;
 using mapKnight.Extended.Graphics.Programs;
 using Newtonsoft.Json;
 using OpenTK.Graphics.ES20;
 using Path = System.IO.Path;
-using mapKnight.Extended.Graphics.Particles;
+using Entity = mapKnight.Core.World.Entity;
 
 #if __ANDROID__
 using Android.Content;
@@ -28,7 +30,7 @@ namespace mapKnight.Extended {
                 return (T)((object)GetTexture("textures", paths[0] + ".png"));
             } else if (request == typeof(string)) {
                 return (T)((object)GetText(Path.Combine(paths)));
-            } else if (request == typeof(SpriteBatch) && paths.Length == 1) {
+            } else if (request == typeof(Spritebatch2D) && paths.Length == 1) {
                 return (T)((object)GetSprite(paths[0]));
             } else if (request == typeof(Entity.Configuration) && paths.Length == 1) {
                 return (T)((object)GetEntityConfig(paths[0]));
@@ -54,16 +56,22 @@ namespace mapKnight.Extended {
         public static void Destroy ( ) {
             foreach (Texture2D texture in textureCache.Values)
                 texture.Dispose( );
-            textureCache = null;
+            textureCache.Clear();
+            foreach (Spritebatch2D sprite in spriteCache.Values)
+                sprite.Dispose( );
+            spriteCache.Clear( );
 
             ColorProgram.Program.Dispose( );
             MatrixProgram.Program.Dispose( );
+            FBOProgram.Program.Dispose( );
+            ParticleProgram.Program.Dispose( );
+
             foreach (int shader in loadedVertexShader.Values)
                 GL.DeleteShader(shader);
-            loadedVertexShader = null;
+            loadedVertexShader.Clear();
             foreach (int shader in loadedFragmentShader.Values)
                 GL.DeleteShader(shader);
-            loadedFragmentShader = null;
+            loadedFragmentShader.Clear();
         }
 
         static Dictionary<int, Texture2D> textureCache = new Dictionary<int, Texture2D>( );
@@ -100,14 +108,14 @@ namespace mapKnight.Extended {
             return textureCache[pathhash];
         }
 
-        static Dictionary<int, SpriteBatch> spriteCache = new Dictionary<int, SpriteBatch>( );
-        public static SpriteBatch GetSprite (string name) {
+        static Dictionary<int, Spritebatch2D> spriteCache = new Dictionary<int, Spritebatch2D>( );
+        public static Spritebatch2D GetSprite (string name) {
             int namehash = name.GetHashCode( );
             if (!spriteCache.ContainsKey(namehash)) {
                 Texture2D texture = Assets.Load<Texture2D>(name);
                 Dictionary<string, int[ ]> spriteContent = new Dictionary<string, int[ ]>( );
                 JsonConvert.PopulateObject(GetText("textures", name + ".json"), spriteContent);
-                spriteCache.Add(namehash, new SpriteBatch(spriteContent, texture));
+                spriteCache.Add(namehash, new Spritebatch2D(spriteContent, texture));
             }
             return spriteCache[namehash];
         }

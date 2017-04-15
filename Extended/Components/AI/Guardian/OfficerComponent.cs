@@ -1,6 +1,7 @@
 ﻿using System;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Components.Graphics;
@@ -8,6 +9,7 @@ using mapKnight.Extended.Components.Graphics;
 namespace mapKnight.Extended.Components.AI.Guardian {
     [ComponentRequirement(typeof(MotionComponent))]
     [ComponentRequirement(typeof(SpeedComponent))]
+    [UpdateBefore(typeof(HealthComponent))]
     public class OfficerComponent : Component {
         public Entity Target;
         private TentComponent tent;
@@ -35,7 +37,12 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             speedComponent = Owner.GetComponent<SpeedComponent>( );
             Owner.GetComponent<HealthComponent>( ).IsHit = (entity) => {
                 // check for the sign
-                return (entity.Transform.X - Owner.Transform.X) * motionComponent.ScaleX < 0;
+                if ((entity.Transform.X - Owner.Transform.X) * motionComponent.ScaleX < 0) {
+                    Owner.SetComponentInfo(ComponentData.SpriteAnimation, "hurt", true, (SpriteComponent.AnimationCallback)HurtAnimationCallback);
+                    attacking = true;
+                    return true;
+                }
+                return false;
             };
             walking = false;
         }
@@ -116,11 +123,17 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         }
 
         private void AttackAnimationCallback(bool success) {
-            attacking = false;
-            nextAttackTime = Environment.TickCount + attackCooldown;
-            if (Math.Sign(Target.Transform.Center.X - Owner.Transform.Center.X) == motionComponent.ScaleX && Math.Abs(Owner.Transform.Center.X - Target.Transform.Center.X) < Owner.Transform.Width) {
-                Target.SetComponentInfo(ComponentData.Damage, damage);
+            if (success) {
+                attacking = false;
+                if (Math.Sign(Target.Transform.Center.X - Owner.Transform.Center.X) == motionComponent.ScaleX && Math.Abs(Owner.Transform.Center.X - Target.Transform.Center.X) < Owner.Transform.Width) {
+                    Target.SetComponentInfo(ComponentData.Damage, damage);
+                }
             }
+            nextAttackTime = Environment.TickCount + attackCooldown;
+        }
+
+        private void HurtAnimationCallback (bool success) {
+            attacking = false;
         }
 
         public new class Configuration : Component.Configuration {

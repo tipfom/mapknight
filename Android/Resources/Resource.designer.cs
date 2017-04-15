@@ -57,11 +57,46 @@ namespace mapKnight.Android
 			}
 		}
 		
-		public partial class String
+		public partial class Id
+		{
+			
+			// aapt resource value: 0x7f060001
+			public const int iconimage = 2131099649;
+			
+			// aapt resource value: 0x7f060000
+			public const int splash_layout = 2131099648;
+			
+			static Id()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Id()
+			{
+			}
+		}
+		
+		public partial class Layout
 		{
 			
 			// aapt resource value: 0x7f030000
-			public const int app_name = 2130903040;
+			public const int SplashScreen = 2130903040;
+			
+			static Layout()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Layout()
+			{
+			}
+		}
+		
+		public partial class String
+		{
+			
+			// aapt resource value: 0x7f040000
+			public const int app_name = 2130968576;
 			
 			static String()
 			{
@@ -76,11 +111,8 @@ namespace mapKnight.Android
 		public partial class Style
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int SplashTheme = 2130968577;
-			
-			// aapt resource value: 0x7f040000
-			public const int thisTheme = 2130968576;
+			// aapt resource value: 0x7f050000
+			public const int thisTheme = 2131034112;
 			
 			static Style()
 			{

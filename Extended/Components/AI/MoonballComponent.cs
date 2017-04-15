@@ -1,11 +1,9 @@
 ﻿using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
-using mapKnight.Extended.Components.Graphics;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Movement;
-using System;
 
 namespace mapKnight.Extended.Components.AI {
-
     [ComponentRequirement(typeof(MotionComponent))]
     public class MoonballComponent : Component {
         private float boostVelocity;

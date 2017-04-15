@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Component.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\FragileHeadComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\WallWalkerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\TriggerComponent.cs">
@@ -23,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\OfficerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\PrivateComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\TentComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\MoonballButtonComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\MoonballComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\NPCComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SeplingComponent.cs" />
@@ -45,12 +45,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\TurretComponent.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateAfter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\ComponentRequirement.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\Instantiatable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\Attributes\UpdateBefore.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Components\ComponentList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\DrawComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SkeletComponent.cs" />
@@ -69,11 +63,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\HealthComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\SpeedComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Debug.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityCollection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EntityDomain.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentDependencyException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ComponentLoadException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\Compiler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimationFrame.cs" />
@@ -99,6 +89,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\IUISize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\RelativeSize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIHealthBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIHorizontalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILeftMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIMargin.cs" />
@@ -114,6 +105,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UILabel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIPanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRectangle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRenderer.cs" />
@@ -126,16 +118,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ColorProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\MatrixProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\Program.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\SpriteBatch.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Texture2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITextAlignment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouchAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IEntityWorld.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IEntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Manager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MobileAndroidSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameOverScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />

@@ -1,10 +1,10 @@
 ﻿using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI.Basics {
-
     [UpdateAfter(typeof(SpeedComponent))]
     [UpdateBefore(typeof(SkeletComponent))]
     public class WallWalkerComponent : Component {
@@ -95,7 +95,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
 
                 case Direction.Right:
                     targetLoc = Owner.World.Size.Width - Owner.Transform.HalfSize.X;
-                    ywalkingon = CurrentWallDir == Direction.Down ? Mathi.Floor(Owner.Transform.BL.Y) - 1 : Mathi.Floor(Owner.Transform.TR.Y);
+                    ywalkingon = CurrentWallDir == Direction.Down ? Mathi.Floor(Owner.Transform.BL.Y) - 1 : Mathi.Ceil(Owner.Transform.TR.Y);
                     ywalkingagainst = CurrentWallDir == Direction.Down ? ywalkingon + 1 : ywalkingon - 1;
                     xstart = Mathi.Floor(Owner.Transform.TR.X);
                     if (!Owner.World.HasCollider(xstart, ywalkingon)) xstart--;

@@ -1,10 +1,10 @@
 using System;
 using mapKnight.Core;
+using mapKnight.Core.World;
+using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.AI.Basics;
-using mapKnight.Extended.Components.Attributes;
 
 namespace mapKnight.Extended.Components.AI {
-
     [ComponentRequirement(typeof(TriggerComponent))]
     public class TurretComponent : Component {
         public bool IsFacingLeft = true;

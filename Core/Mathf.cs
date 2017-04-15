@@ -17,6 +17,10 @@ namespace mapKnight.Core {
             return Clamp(value, 0, 1);
         }
 
+        public static float Exp(float d) {
+            return (float)Math.Exp(d);
+        }
+
         public static float Interpolate (float v1, float v2, float percent) {
             return Interpolate(v1, v2, percent, Interpolation.Linear);
         }

@@ -1,12 +1,12 @@
 using System;
 using mapKnight.Core;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World;
 using mapKnight.Extended.Components.AI.Basics;
-using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Components.AI {
-
     [ComponentRequirement(typeof(MotionComponent))]
     [ComponentRequirement(typeof(TriggerComponent))]
     public class PluggerComponent : BishopComponent {

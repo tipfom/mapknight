@@ -1,11 +1,9 @@
-using System;
-using System.Linq;
 using mapKnight.Core;
-using mapKnight.Extended.Components.Attributes;
 using mapKnight.Extended.Graphics;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Components.Graphics {
-
     [UpdateBefore(typeof(DrawComponent))]
     public class SkeletComponent : Component {
         private float _Rotation;
@@ -17,7 +15,7 @@ namespace mapKnight.Extended.Components.Graphics {
         private readonly float[ ][ ] defaultVertexData;
         private float[ ][ ] currentVertexData;
 
-        public SkeletComponent (Entity owner, float[ ][ ] defaultvertexdata) : base(owner) {
+        public SkeletComponent(Entity owner, float[ ][ ] defaultvertexdata) : base(owner) {
             defaultVertexData = defaultvertexdata;
             currentVertexData = new float[defaultVertexData.Length][ ];
             for (int i = 0; i < currentVertexData.Length; i++) {
@@ -28,18 +26,18 @@ namespace mapKnight.Extended.Components.Graphics {
             Owner.Transform.SizeChanged += ( ) => isDirty = true;
         }
 
-        public override void Update (DeltaTime dt) {
+        public override void Update(DeltaTime dt) {
             if (isDirty)
                 AdjustVerticies( );
         }
 
-        public override void PostUpdate ( ) {
+        public override void Draw( ) {
             if (!Owner.IsOnScreen)
                 return;
             Owner.SetComponentInfo(ComponentData.Verticies, currentVertexData);
         }
 
-        private void AdjustVerticies ( ) {
+        private void AdjustVerticies( ) {
             Vector2 scale = Owner.Transform.Size * Owner.World.VertexSize;
             for (int i = 0; i < defaultVertexData.Length; i++) {
                 Mathf.TransformAtOrigin(defaultVertexData[i], ref currentVertexData[i], 0, 0, _Rotation, _Mirrored, scale);
@@ -58,7 +56,7 @@ namespace mapKnight.Extended.Components.Graphics {
                 }
             }
 
-            public override Component Create (Entity owner) {
+            public override Component Create(Entity owner) {
                 return new SkeletComponent(owner, internalParsedBones);
             }
         }

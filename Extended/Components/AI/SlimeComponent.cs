@@ -1,7 +1,11 @@
 ﻿using System;
 using mapKnight.Core;
+using mapKnight.Core.World;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Core.World.Components;
+using mapKnight.Core.World.Serialization;
+using System.Collections.Generic;
 
 namespace mapKnight.Extended.Components.AI {
     public class SlimeComponent : WallWalkerComponent {
@@ -24,6 +28,12 @@ namespace mapKnight.Extended.Components.AI {
             this.rageRange = rageRange;
             this.rageSpeedMultiplier = Vector2.One * rageSpeedMultiplier;
             this.rainbowdizer.Normal( );
+        }
+
+        public override void Load(Dictionary<DataID, object> data) {
+            NextMoveDir = (Direction)((sbyte)data[DataID.SLIME_InitialMoveDirection]);
+            NextWallDir = (Direction)((sbyte)data[DataID.SLIME_InitialWallDirection]);
+            base.Prepare( );
         }
 
         public override void Prepare ( ) {

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using mapKnight.Core;
+using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Particles;
-using OpenTK.Graphics.ES20;
 using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
+using mapKnight.Core.World;
 
 namespace mapKnight.Extended.Graphics {
     public class Map : Core.Map, IEntityWorld {
@@ -31,6 +29,7 @@ namespace mapKnight.Extended.Graphics {
 
         private Entity focusEntity;
         private Vector2 focusCenter;
+        private Vector2 drawThreshold;
         private Vector2 updateTile = new Vector2(-1, -1);
 
         private CachedGPUBuffer mainTextureBuffer;
@@ -41,7 +40,7 @@ namespace mapKnight.Extended.Graphics {
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
 
-        public Map(Stream input) : base(input) {
+        public Map(Stream input) : base(input, new MobileAndroidSerializer()) {
             Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             Window_Changed( );
             InitTextureCoords( );
@@ -58,6 +57,7 @@ namespace mapKnight.Extended.Graphics {
             if (2 * Window.Ratio / DRAW_WIDTH != VertexSize) {
                 VertexSize = 2 * Window.Ratio / DRAW_WIDTH;
                 DrawSize = new Size(DRAW_WIDTH + 2, Mathi.Ceil(DRAW_WIDTH / Window.Ratio + 1));
+                drawThreshold = new Vector2(DrawSize.Width / 2f, DrawSize.Height / 2f);
 
                 mainBuffer?.Dispose( );
                 mainTextureBuffer = new CachedGPUBuffer(2, DrawSize.Area * 2, PrimitiveType.Quad);
@@ -170,7 +170,8 @@ namespace mapKnight.Extended.Graphics {
             foregroundTextureBuffer.Apply( );
         }
 
-        public void Draw( ) {
+        public new void Draw( ) {
+            base.Draw( );
             Program.Begin( );
             Program.Draw(mainBuffer, texture, matrix, true);
             Program.End( );
@@ -180,14 +181,20 @@ namespace mapKnight.Extended.Graphics {
             Program.End( );
         }
 
-        public void Update(DeltaTime dt) {
-            Entity.UpdateAll(dt);
+        public new void Update(DeltaTime dt) {
+            base.Update(dt);
             UpdateFocus( );
-            Entity.PostUpdateAll( );
+            for (int i = 0; i < Entities.Count; i++) {
+                Entity entity = Entities[i];
+                entity.IsOnScreen = (entity.Transform.Center - focusCenter).Abs( ) < drawThreshold + entity.Transform.HalfSize;
+                if (entity.IsOnScreen) {
+                    entity.PositionOnScreen = (entity.Transform.Center - focusCenter) * VertexSize;
+                }
+            }
         }
 
         public void Focus(int entityID) {
-            focusEntity = Entity.Entities.Find(entity => entity.ID == entityID);
+            focusEntity = Entities.Find(entity => entity.ID == entityID);
             focusEntity.Destroyed += ( ) => { focusEntity = null; };
         }
 
@@ -221,16 +228,8 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        public Vector2 GetPositionOnScreen(Entity entity) {
-            return (entity.Transform.Center - focusCenter) * VertexSize;
-        }
-
         public bool HasCollider(int x, int y) {
             return GetTile(x, y).HasFlag(TileAttribute.Collision);
-        }
-
-        public bool IsOnScreen(Entity entity) {
-            return true;
         }
     }
 }

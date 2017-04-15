@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>mapKnight.ToolKit</RootNamespace>
     <AssemblyName>ToolKit</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -29,6 +29,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,7 +37,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WINDOWS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;__WINDOWS__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -45,7 +46,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <DefineConstants>TRACE;__WINDOWS__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -56,9 +57,8 @@
     <StartupObject>mapKnight.ToolKit.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MonoGame.Framework, Version=3.6.0.1625, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.6.0.1625\lib\net40\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -67,6 +67,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
@@ -88,8 +91,30 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Animation\MLGCanvas.cs" />
+    <Compile Include="Controls\Components\MoonballDataControl.xaml.cs">
+      <DependentUpon>MoonballDataControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Components\NPCDataControl.xaml.cs">
+      <DependentUpon>NPCDataControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Components\PlatformDataControl.xaml.cs">
+      <DependentUpon>PlatformDataControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EntityListBox.xaml.cs">
+      <DependentUpon>EntityListBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Components\SlimeDataControl.xaml.cs">
+      <DependentUpon>SlimeDataControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FloatTextBox.cs" />
     <Compile Include="Controls\IntegerTextBox.cs" />
+    <Compile Include="Data\Components\MoonballDataComponent.cs" />
+    <Compile Include="Data\Components\NPCDataComponent.cs" />
+    <Compile Include="Data\Components\PlatformDataComponent.cs" />
+    <Compile Include="Data\Components\SlimeDataComponent.cs" />
+    <Compile Include="Data\EntityData.cs" />
+    <Compile Include="Data\IUserControlComponent.cs" />
+    <Compile Include="Data\WindowsEntitySerializer.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Controls\AnimationControl.xaml.cs">
       <DependentUpon>AnimationControl.xaml</DependentUpon>
@@ -190,6 +215,26 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AnimationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Components\MoonballDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Components\NPCDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Components\PlatformDataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\EntityListBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Components\SlimeDataControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,6 +435,50 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\starfish-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\slime.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\shell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\shark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\sepler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\plugger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\moonball.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\canone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\landmine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\guardian_tent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\empty_trash-48.png" />
+    <Resource Include="Resources\Images\hand_cursor-48.png" />
+    <Resource Include="Resources\Images\octopus-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\platform_copper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\fir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\button.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\npc_lenny.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

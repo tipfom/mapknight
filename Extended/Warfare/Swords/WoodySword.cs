@@ -1,4 +1,5 @@
 ﻿using mapKnight.Core;
+using mapKnight.Core.World;
 using mapKnight.Extended.Graphics.UI;
 
 namespace mapKnight.Extended.Warfare.Swords {
