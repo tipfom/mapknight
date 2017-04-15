@@ -987,11 +987,11 @@ namespace mapKnight.Extended {
                                         CanRepeat = true,
                                         Frames = new VertexAnimationFrame[ ] {
                                             new VertexAnimationFrame( ) {
-                                                Time = 420,
+                                                Time = 1,
                                                 State = new VertexBone[ ] {
                                                     new VertexBone( ) {
                                                         Texture = "atk",
-                                                        Rotation = -360,
+                                                        Rotation = 0,
                                                         Position = new Vector2(0.0277777777f, -0.0714285714f)
                                                     }
                                                 }
@@ -1001,7 +1001,7 @@ namespace mapKnight.Extended {
                                                 State = new VertexBone[ ] {
                                                     new VertexBone( ) {
                                                         Texture = "atk",
-                                                        Rotation = 360,
+                                                        Rotation = 720,
                                                         Position = new Vector2(0.0277777777f, -0.0714285714f)
                                                     }
                                                 }
@@ -1038,7 +1038,10 @@ namespace mapKnight.Extended {
                             },
                             new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(18, 0.5f) },
                             new ShellComponent.Configuration( ) { FrenzySpeed = 0.4f, AttackSpeed = 6.35f },
-                            new MotionComponent.Configuration( )
+                            new MotionComponent.Configuration( ),
+                            new HealthComponent.Configuration( ) {
+                                Value = 3
+                            }
                         };
                     }
                     return _Shell;
