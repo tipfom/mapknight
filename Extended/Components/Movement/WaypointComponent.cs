@@ -14,7 +14,7 @@ namespace mapKnight.Extended.Components.Movement {
         private Vector2[ ] waypoints;
 
         public WaypointComponent (Entity owner, float speed) : base(owner) {
-            this.speed = speed * speed;
+            this.speed = speed;
         }
 
         protected int waypointCount { get { return waypoints.Length; } }
@@ -26,7 +26,8 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Prepare ( ) {
-            nextWaypoint = waypoints[0];
+            currentWaypoint = waypoints[0];
+            nextWaypoint = waypoints.Length > 1 ? waypoints[1] : waypoints[0];
             PrepareNextMove( );
         }
 
@@ -45,7 +46,7 @@ namespace mapKnight.Extended.Components.Movement {
         protected abstract float GetPositionInterpolationPercent (float progressPercent);
 
         private int GetCurrentMoveDuration ( ) {
-            return (int)(currentMoveDistance.MagnitudeSqr( ) / speed * 1000);
+            return (int)(currentMoveDistance.Magnitude( ) / speed * 1000);
         }
 
         private void PrepareNextMove ( ) {

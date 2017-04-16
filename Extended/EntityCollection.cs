@@ -1452,7 +1452,7 @@ namespace mapKnight.Extended {
                         _Copper.Components = new ComponentList {
                             new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } },
                             new TextureComponent.Configuration( ) { Texture = "platforms/copper" },
-                            new PlatformComponent.Configuration( ) { Speed = 3 }
+                            new PlatformComponent.Configuration( ) { Speed = 2 }
                         };
                     }
                     return _Copper;
