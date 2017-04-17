@@ -169,26 +169,21 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
-            Vector2 clickedPosition = (touch.RelativePosition - Position).Abs( ) / Size.Size;
-            if (action == UITouchAction.End) {
-                if (zoomedQuadrant > 0) {
-                    clickedPosition /= 2f;
-                    if (zoomedQuadrant == 1 || zoomedQuadrant == 4) clickedPosition.X += 0.5f;
-                    if (zoomedQuadrant == 3 || zoomedQuadrant == 4) clickedPosition.Y += 0.5f;
+            if (action != UITouchAction.End) return true;
 
-                    Station clickedStation = FindClosestStation(clickedPosition);
-                    if (clickedStation == null) {
-                        zoomedQuadrant = 0;
-                        IsDirty = true;
-                    } else {
-                        switch (action) {
-                            case UITouchAction.End:
-                                IsDirty = selectedStation != clickedStation;
-                                selectedStation = clickedStation;
-                                MoveTrain(selectedStation.Position);
-                                break;
-                        }
-                    }
+            Vector2 clickedPosition = (touch.RelativePosition - Position).Abs( ) / Size.Size;
+            if (zoomedQuadrant > 0) clickedPosition /= 2f;
+            if (zoomedQuadrant == 1 || zoomedQuadrant == 4) clickedPosition.X += 0.5f;
+            if (zoomedQuadrant == 3 || zoomedQuadrant == 4) clickedPosition.Y += 0.5f;
+            Station clickedStation = FindClosestStation(clickedPosition);
+
+            if (clickedStation != null) {
+                IsDirty = selectedStation != clickedStation;
+                selectedStation = clickedStation;
+                MoveTrain(selectedStation.Position);
+            } else {
+                if (zoomedQuadrant > 0) {
+                    zoomedQuadrant = 0;
                 } else {
                     if (clickedPosition.X < 0.5f) {
                         if (clickedPosition.Y < 0.5f) {
@@ -203,8 +198,8 @@ namespace mapKnight.Extended.Graphics.UI {
                             zoomedQuadrant = 4;
                         }
                     }
-                    IsDirty = true;
                 }
+                IsDirty = true;
             }
             return true;
         }
