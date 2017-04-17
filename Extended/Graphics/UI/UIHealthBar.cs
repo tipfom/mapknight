@@ -52,6 +52,8 @@ namespace mapKnight.Extended.Graphics.UI {
             transformedVerticies = new float[baseVerticies.Length][ ];
             for (int i = 0; i < transformedVerticies.Length; i++)
                 transformedVerticies[i] = new float[8];
+
+            Visible = false;
         }
 
         public override void Update(DeltaTime dt) {
