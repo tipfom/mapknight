@@ -5,6 +5,7 @@ using mapKnight.Core.World;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
+using mapKnight.Extended.Components.Stats;
 
 namespace mapKnight.Extended.Components.AI {
     [ComponentRequirement(typeof(MotionComponent))]
@@ -25,8 +26,17 @@ namespace mapKnight.Extended.Components.AI {
             bulletSpeed = bulletspeed;
         }
 
+        public override void Collision (Entity collidingEntity) {
+            if (collidingEntity.Species == bulletEntityConfiguration.Species) {
+                if (collidingEntity.GetComponent<ReturnableBulletComponent>( ).Returned)
+                    Owner.SetComponentInfo(ComponentData.Damage, collidingEntity, 3f);
+                collidingEntity.Destroy( );
+            }
+        }
+
         public override void Prepare ( ) {
             Owner.GetComponent<TriggerComponent>( ).Triggered += Trigger_Triggered;
+            Owner.GetComponent<HealthComponent>( ).IsHit = (entity) => { return entity.Species == bulletEntityConfiguration.Species; };
             nextThrow = Environment.TickCount;
             base.Prepare( );
         }
@@ -53,7 +63,7 @@ namespace mapKnight.Extended.Components.AI {
             isThrowing = false;
 
             // calc velocity of the bullet to hit the player
-            Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X, Owner.Transform.TR.Y + bulletEntityConfiguration.Transform.HalfSize.Y);
+            Vector2 spawnPoint = new Vector2(Owner.Transform.Center.X, Owner.Transform.TR.Y + bulletEntityConfiguration.Transform.HalfSize.Y + .1f);
             float c = currentTarget.Transform.Center.Y - spawnPoint.Y; // distance y axis
             float d = currentTarget.Transform.Center.X - spawnPoint.X; // distance x axis
             if (float.IsNaN(c) || float.IsNaN(d)) {

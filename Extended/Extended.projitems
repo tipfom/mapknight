@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\MoonballButtonComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\MoonballComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\NPCComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\ReturnableBulletComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SeplingComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\CircularSawComponent.cs">
       <SubType>Code</SubType>

@@ -7,7 +7,7 @@ namespace mapKnight.Extended.Components.AI {
 
     [ComponentRequirement(typeof(MotionComponent))]
     public class BulletComponent : Component {
-        private MotionComponent motionComponent;
+        protected MotionComponent motionComponent;
         private float damage;
 
         public BulletComponent (Entity owner, float damage) : base(owner) {

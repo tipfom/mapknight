@@ -502,7 +502,7 @@ namespace mapKnight.Extended {
                                     new MotionComponent.Configuration( ) {
                                         GravityInfluence = 0.1f
                                     },
-                                    new BulletComponent.Configuration( ),
+                                    new ReturnableBulletComponent.Configuration( ) { ReturnSpeed = 4f, Damage = .1f },
                                     new TextureComponent.Configuration( ) { Texture = "plugger_bullet" },
                                     new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } }
                                 }
@@ -510,6 +510,7 @@ namespace mapKnight.Extended {
                         });
                         _Plugger.Components.Add(new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(8, 3), Offset = 1.5f });
                         _Plugger.Components.Add(new SpeedComponent.Configuration( ) { X = 0.75f });
+                        _Plugger.Components.Add(new HealthComponent.Configuration( ) { Value = 3 });
                     }
                     return _Plugger;
                 }

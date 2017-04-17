@@ -11,6 +11,7 @@ namespace mapKnight.Extended.Components.AI {
 
         public MoonballButtonComponent(Entity owner, Entity.Configuration moonballConfiguration) : base(owner, null) {
             onTriggerAction = OnTrigger;
+            this.moonballConfiguration = moonballConfiguration;
         }
 
         public override void Load(Dictionary<DataID, object> data) {
