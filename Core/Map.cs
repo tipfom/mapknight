@@ -286,7 +286,7 @@ namespace mapKnight.Core {
         }
 
         public void Destroy(Entity entity) {
-            Entities.Remove(entity);
+            removedEntities.Enqueue(entity);
         }
 
 #if __ANDROID__
