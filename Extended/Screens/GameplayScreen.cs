@@ -15,7 +15,7 @@ namespace mapKnight.Extended.Screens {
         private const int MAX_TIME_BETWEEN_UPDATES = 100;
 
         private UILabel debugLabel;
-        private UIPanel leftPanel, rightPanel;
+        private UIControlButton leftButton, rightButton;
         private UIGesturePanel controlPanel;
         private UIBar healthBar;
 
@@ -24,16 +24,16 @@ namespace mapKnight.Extended.Screens {
         private PlayerComponent playerComponent;
         private string mapName;
 
-        public GameplayScreen(string mapName) {
+        public GameplayScreen (string mapName) {
             this.mapName = mapName;
         }
 
-        public override void Draw( ) {
+        public override void Draw ( ) {
             map.Draw( );
             base.Draw( );
         }
 
-        public override void Load( ) {
+        public override void Load ( ) {
             map = Assets.Load<Map>(mapName);
             for (int i = 0; i < map.Entities.Count; i++) {
                 map.Entities[i].Prepare( );
@@ -51,8 +51,8 @@ namespace mapKnight.Extended.Screens {
             base.Load( );
         }
 
-        private void SetupControls( ) {
-            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(3f / 5f, 1f), Assets.GetGestureStore("gestures"));
+        private void SetupControls ( ) {
+            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new AbsoluteSize(6f / 5f * Window.Ratio - .15f, 2f), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
 #if DEBUG
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
@@ -64,18 +64,18 @@ namespace mapKnight.Extended.Screens {
                     playerEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
             };
 
-            leftPanel = new UIPanel(this, new UIRightMargin(Window.Ratio * 2f / 5f), new UITopMargin(0), new RelativeSize(1f / 5f, 1f));
-            leftPanel.Click += ( ) => playerEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
-            leftPanel.Release += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
-            leftPanel.Leave += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
+            leftButton = new UIControlButton(this, "l", new UIRightMargin(Window.Ratio * 2f / 5f + .1f), new UIBottomMargin(.05f), new AbsoluteSize(Window.Ratio * 2f / 5f, Window.Ratio * 2f / 5f));
+            leftButton.Click += ( ) => playerEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
+            leftButton.Release += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
+            leftButton.Leave += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
 
-            rightPanel = new UIPanel(this, new UIRightMargin(0), new UITopMargin(0), new RelativeSize(1f / 5f, 1f));
-            rightPanel.Click += ( ) => playerEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
-            rightPanel.Release += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
-            rightPanel.Leave += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
+            rightButton = new UIControlButton(this, "r", new UIRightMargin(.05f), new UIBottomMargin(.05f), new AbsoluteSize(Window.Ratio * 2f / 5f, Window.Ratio * 2f / 5f));
+            rightButton.Click += ( ) => playerEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
+            rightButton.Release += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
+            rightButton.Leave += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
         }
 
-        public override void Update(DeltaTime dt) {
+        public override void Update (DeltaTime dt) {
             if (Math.Abs(Manager.FrameTime.Milliseconds) < MAX_TIME_BETWEEN_UPDATES) {
                 map.Update(dt);
                 base.Update(dt);

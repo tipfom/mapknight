@@ -89,6 +89,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\IUISize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\RelativeSize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIControlButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIHealthBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIHorizontalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILeftMargin.cs" />
