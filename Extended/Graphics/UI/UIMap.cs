@@ -147,15 +147,16 @@ namespace mapKnight.Extended.Graphics.UI {
         private int targetWaypointIndex;
         private int currentDirection = 1;
         private int currentTextureIndex = 0;
+        private int zoomedQuadrant = 0;
         private int lastTextureChange;
 
         public string CurrentSelection { get { return (selectedStation?.IsAvailable(unlockedState) ?? false) ? selectedStation.Map : null; } }
 
-        public UIMap (Screen owner) : base(owner, new UILeftMargin(0f), new UIBottomMargin(0f), new AbsoluteSize(0f,0f), UIDepths.MIDDLE, false) {
+        public UIMap (Screen owner) : base(owner, new UILeftMargin(0f), new UIBottomMargin(0f), new AbsoluteSize(0f, 0f), UIDepths.MIDDLE, false) {
             IsDirty = true;
             currentPosition = currentWaypoint;
 
-            Window.Changed += () => {
+            Window.Changed += ( ) => {
                 UpdateMargins( );
             };
             UpdateMargins( );
@@ -169,17 +170,41 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
             Vector2 clickedPosition = (touch.RelativePosition - Position).Abs( ) / Size.Size;
-            Station clickedStation = FindClosestStation(clickedPosition);
-            switch (action) {
-                case UITouchAction.Begin:
-                    break;
-                case UITouchAction.End:
-                    IsDirty = selectedStation != clickedStation;
-                    selectedStation = clickedStation;
-                    if(selectedStation != null) {
-                        MoveTrain(selectedStation.Position);
+            if (action == UITouchAction.End) {
+                if (zoomedQuadrant > 0) {
+                    clickedPosition /= 2f;
+                    if (zoomedQuadrant == 1 || zoomedQuadrant == 4) clickedPosition.X += 0.5f;
+                    if (zoomedQuadrant == 3 || zoomedQuadrant == 4) clickedPosition.Y += 0.5f;
+
+                    Station clickedStation = FindClosestStation(clickedPosition);
+                    if (clickedStation == null) {
+                        zoomedQuadrant = 0;
+                        IsDirty = true;
+                    } else {
+                        switch (action) {
+                            case UITouchAction.End:
+                                IsDirty = selectedStation != clickedStation;
+                                selectedStation = clickedStation;
+                                MoveTrain(selectedStation.Position);
+                                break;
+                        }
                     }
-                    break;
+                } else {
+                    if (clickedPosition.X < 0.5f) {
+                        if (clickedPosition.Y < 0.5f) {
+                            zoomedQuadrant = 2;
+                        } else {
+                            zoomedQuadrant = 3;
+                        }
+                    } else {
+                        if (clickedPosition.Y < 0.5f) {
+                            zoomedQuadrant = 1;
+                        } else {
+                            zoomedQuadrant = 4;
+                        }
+                    }
+                    IsDirty = true;
+                }
             }
             return true;
         }
@@ -215,7 +240,7 @@ namespace mapKnight.Extended.Graphics.UI {
                         currentTextureIndex = 0;
                         isTrainMoving = false;
                     }
-                    if(currentDirection + Math.Sign(WAYPOINTS[nextWaypointIndex].X - WAYPOINTS[currentWaypointIndex].X) == 0) {
+                    if (currentDirection + Math.Sign(WAYPOINTS[nextWaypointIndex].X - WAYPOINTS[currentWaypointIndex].X) == 0) {
                         currentDirection = Math.Sign(WAYPOINTS[nextWaypointIndex].X - WAYPOINTS[currentWaypointIndex].X);
                     }
                     currentWaypointIndex = nextWaypointIndex;
@@ -223,7 +248,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     float interpolation = Mathf.Clamp01((TRAIN_SPEED * dt.TotalSeconds) / (currentPosition - currentWaypoint).Magnitude( ));
                     currentPosition = Mathf.Interpolate(currentPosition, currentWaypoint, interpolation);
 
-                    if (Environment.TickCount  - lastTextureChange > 200) {
+                    if (Environment.TickCount - lastTextureChange > 200) {
                         currentTextureIndex = (currentTextureIndex + 1) % 3;
                         lastTextureChange = Environment.TickCount;
                     }
@@ -235,14 +260,56 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
             float backgroundHeight = 2f / 4f * 3f * Window.Ratio;
-            yield return new DepthVertexData(UIRectangle.GetVerticies(-Window.Ratio, -1f + backgroundHeight, 2*Window.Ratio, backgroundHeight), "mmenu_bckgrnd", UIDepths.BACKGROUND, Color.White);
-            yield return new DepthVertexData(Bounds.Verticies, "map", Depth, Color.White);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(-Window.Ratio, -1f + backgroundHeight, 2 * Window.Ratio, backgroundHeight), "mmenu_bckgrnd", UIDepths.BACKGROUND, Color.White);
             yield return new DepthVertexData(UIRectangle.GetVerticies(Position + new Vector2(-4f / 450f * Window.Ratio * 2f, 4f / 450f * Window.Ratio * 2f), new Vector2(236f / 450f * Window.Ratio * 2f, 238f / 450f * Window.Ratio * 2f)), "map_border", UIDepths.FOREGROUND, Color.White);
-            if (selectedStation != null) {
-                Vector2 selectedStationPosition = WAYPOINTS[selectedStation.Position];
-                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + selectedStationPosition.X * Size.Size.X - .05f, Position.Y - selectedStationPosition.Y * Size.Size.Y + .1f * 31f / 19f, .1f, .1f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);
+            if (zoomedQuadrant > 0) {
+                yield return new DepthVertexData(Bounds.Verticies, "map_" + zoomedQuadrant, Depth, Color.White);
+                if (selectedStation != null && IsVisible(WAYPOINTS[selectedStation.Position])) {
+                    Vector2 selectedStationPosition = Transform(WAYPOINTS[selectedStation.Position]);
+                    yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + selectedStationPosition.X * Size.Size.X - .1f, Position.Y - selectedStationPosition.Y * Size.Size.Y + .2f * 31f / 19f, .2f, .2f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);
+                }
+                if (IsVisible(currentPosition)) {
+                    Vector2 drawnPosition = Transform(currentPosition);
+                    yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + drawnPosition.X * Size.Size.X - currentDirection * .16f, Position.Y - drawnPosition.Y * Size.Y + .32f * 25f / 32f / 2f, currentDirection * .32f, .32f * 25f / 32f + (isTrainMoving ? 0.01f * (float)Math.Cos(Environment.TickCount * Math.PI / 250d) : 0f)), "train_" + currentTextureIndex, Depth + 1, Color.White);
+                }
+            } else {
+                Vector2 sizeHalf = Size.Size / 2f;
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + sizeHalf.X, Position.Y, sizeHalf.X, sizeHalf.Y), "map_1", Depth, Color.White);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y, sizeHalf.X, sizeHalf.Y), "map_2", Depth, Color.White);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y - sizeHalf.Y, sizeHalf.X, sizeHalf.Y), "map_3", Depth, Color.White);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + sizeHalf.X, Position.Y - sizeHalf.Y, sizeHalf.X, sizeHalf.Y), "map_4", Depth, Color.White);
+                if (selectedStation != null) {
+                    Vector2 selectedStationPosition = WAYPOINTS[selectedStation.Position];
+                    yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + selectedStationPosition.X * Size.Size.X - .05f, Position.Y - selectedStationPosition.Y * Size.Size.Y + .1f * 31f / 19f, .1f, .1f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);
+                }
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + currentPosition.X * Size.Size.X - currentDirection * .08f, Position.Y - currentPosition.Y * Size.Y + .16f * 25f / 32f / 2f, currentDirection * .16f, .16f * 25f / 32f + (isTrainMoving ? 0.005f * (float)Math.Cos(Environment.TickCount * Math.PI / 250d) : 0f)), "train_" + currentTextureIndex, Depth + 1, Color.White);
             }
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + currentPosition.X * Size.Size.X - currentDirection * .05f, Position.Y - currentPosition.Y * Size.Y + .1f * 25f / 32f / 2f, currentDirection * .1f, .1f * 25f / 32f + (isTrainMoving ? 0.005f * (float)Math.Cos(Environment.TickCount * Math.PI / 250d) : 0f)), "train_" + currentTextureIndex, Depth + 1, Color.White);
+        }
+
+        private bool IsVisible (Vector2 position) {
+            if (zoomedQuadrant == 1 || zoomedQuadrant == 4) {
+                if (position.X < 0.5f) return false;
+            } else {
+                if (position.X > 0.5f) return false;
+            }
+            if (zoomedQuadrant == 3 || zoomedQuadrant == 4) {
+                if (position.Y < 0.5f) return false;
+            } else {
+                if (position.Y > 0.5f) return false;
+            }
+            return true;
+        }
+
+        private Vector2 Transform (Vector2 position) {
+            if (zoomedQuadrant == 1 || zoomedQuadrant == 4) {
+                position.X -= 0.5f;
+            }
+            if (zoomedQuadrant == 3 || zoomedQuadrant == 4) {
+                position.Y -= 0.5f;
+            }
+            position.X *= 2;
+            position.Y *= 2;
+            return position;
         }
 
         public enum Line {
