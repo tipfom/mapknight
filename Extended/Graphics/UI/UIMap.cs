@@ -167,7 +167,7 @@ namespace mapKnight.Extended.Graphics.UI {
             ((AbsoluteSize)Size).Size = new Vector2(229f / 450f * Window.Ratio * 2f, 229f / 450f * Window.Ratio * 2f);
         }
 
-        public override void HandleTouch (UITouchAction action, UITouch touch) {
+        public override bool HandleTouch (UITouchAction action, UITouch touch) {
             Vector2 clickedPosition = (touch.RelativePosition - Position).Abs( ) / Size.Size;
             Station clickedStation = FindClosestStation(clickedPosition);
             switch (action) {
@@ -181,6 +181,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     }
                     break;
             }
+            return true;
         }
 
         private Station FindClosestStation (Vector2 clickedPosition) {

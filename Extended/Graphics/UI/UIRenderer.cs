@@ -15,6 +15,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private static List<Tuple<UIItem, int>>[ ] indexUsage;
         private static int renderCount;
         private static Dictionary<Screen, List<UIItem>> uiItems;
+        private static Dictionary<Screen, int> uiItemsOffset;
         private static int vertexCount;
         private static Queue<UIItem> updateQueue;
         private static int[ ] startPositions;
@@ -36,6 +37,7 @@ namespace mapKnight.Extended.Graphics.UI {
             buffer = new BufferBatch(sharedIndexBuffer, vertexBuffer, colorBuffer, textureBuffer);
 
             uiItems = new Dictionary<Screen, List<UIItem>>( );
+            uiItemsOffset = new Dictionary<Screen, int>( );
             indexUsage = new List<Tuple<UIItem, int>>[ ] { new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ) };
         }
 
@@ -49,15 +51,29 @@ namespace mapKnight.Extended.Graphics.UI {
         public static List<UIItem> Current { get { return uiItems[currentScreen]; } }
 
         public static void Add (Screen screen, UIItem item) {
-            if (!uiItems.ContainsKey(screen))
+            if (!uiItems.ContainsKey(screen)) {
                 uiItems.Add(screen, new List<UIItem>( ));
-            uiItems[screen].Add(item);
+                uiItemsOffset.Add(screen, 0);
+            }
+            switch (item.Depth) {
+                case UIDepths.FOREGROUND:
+                    uiItems[screen].Insert(0, item);
+                    uiItemsOffset[screen]++;
+                    break;
+                case UIDepths.MIDDLE:
+                    uiItems[screen].Insert(uiItemsOffset[screen], item);
+                    break;
+                case UIDepths.BACKGROUND:
+                    uiItems[screen].Add(item);
+                    break;
+            }
         }
 
         public static void Remove (UIItem uiItem) {
             if (!uiItems.ContainsKey(uiItem.Screen)) return;
             uiItems[uiItem.Screen].Remove(uiItem);
             uiItem.Visible = false;
+            if (uiItem.Depth == UIDepths.FOREGROUND) uiItemsOffset[uiItem.Screen]--;
             if (uiItem.Screen.IsActive) Update(uiItem);
         }
 

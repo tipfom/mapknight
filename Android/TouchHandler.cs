@@ -24,9 +24,11 @@ namespace mapKnight.Android {
                         UITouch touch = new UITouch(pointerId, new Vector2(e.GetX(pointerIndex), e.GetY(pointerIndex)));
                         activeTouches.Add(touch);
 
-                        foreach (UIItem UI in UIRenderer.Current.FindAll((UIItem UI) => UI.Collides(touch.RelativePosition))) {
-                            // iterates through each colliding UI
-                            UI.HandleTouch(UITouchAction.Begin, touch);
+                        for(int i = 0; i< UIRenderer.Current.Count; i++) {
+                            UIItem item = UIRenderer.Current[i];
+                            if (item.Collides(touch.RelativePosition) && item.HandleTouch(UITouchAction.Begin, touch)) {
+                                break;
+                            }
                         }
                     }
                     break;
@@ -36,8 +38,11 @@ namespace mapKnight.Android {
                     // user lifted the finger of the screen
                     int touchIndex = activeTouches.FindIndex((UITouch touch) => touch.ID == pointerId);
                     if (touchIndex != -1) {
-                        foreach (UIItem UI in UIRenderer.Current.FindAll((UIItem UI) => UI.Collides(activeTouches[touchIndex].RelativePosition))) {
-                            UI.HandleTouch(UITouchAction.End, activeTouches[touchIndex]);
+                        for (int i = 0; i < UIRenderer.Current.Count; i++) {
+                            UIItem item = UIRenderer.Current[i];
+                            if (item.Collides(activeTouches[touchIndex].RelativePosition) && item.HandleTouch(UITouchAction.End, activeTouches[touchIndex])) {
+                                break;
+                            }
                         }
                         activeTouches.RemoveAt(touchIndex);
                     }
@@ -50,17 +55,37 @@ namespace mapKnight.Android {
                         if (activeTouches[i].Position - activeTouchPosition != Vector2.Zero) {
                             // touch moved
                             Vector2 activeTouchRelativePosition = new Vector2((activeTouchPosition.X / Window.Size.Width - 0.5f) * 2 * Window.Ratio, (activeTouchPosition.Y / Window.Size.Height - 0.5f) * -2);
+                            for (int j = 0; j < UIRenderer.Current.Count; j++) {
+                                UIItem item = UIRenderer.Current[j];
 
-                            foreach (UIItem UI in UIRenderer.Current) {
-                                if (UI.Collides(activeTouchRelativePosition) && !UI.Collides(activeTouches[i].RelativePosition)) {
+                                bool current = item.Collides(activeTouchRelativePosition);
+                                bool last = item.Collides(activeTouches[i].RelativePosition);
+
+                                if (current && !last) {
                                     // collides with the current position, but not with the last
-                                    UI.HandleTouch(UITouchAction.Enter, activeTouches[i]);
-                                } else if (!UI.Collides(activeTouchRelativePosition) && UI.Collides(activeTouches[i].RelativePosition)) {
+                                    if (item.HandleTouch(UITouchAction.Enter, activeTouches[i])) {
+                                        for(int k = j+1; k < UIRenderer.Current.Count; k++) {
+                                            UIItem kitem = UIRenderer.Current[k];
+                                            if (kitem.Collides(activeTouches[i].RelativePosition)) {
+                                                kitem.HandleTouch(UITouchAction.Leave, activeTouches[i]);
+                                            }
+                                        }
+                                    }
+                                } else if (!current && last) {
                                     // collides with the last position, but not with the current -> touch moved out of UIelement
-                                    UI.HandleTouch(UITouchAction.Leave, activeTouches[i]);
-                                } else if (UI.Collides(activeTouchRelativePosition)) {
+                                    if(item.HandleTouch(UITouchAction.Leave, activeTouches[i])) {
+                                        for (int k = j + 1; k < UIRenderer.Current.Count; k++) {
+                                            UIItem kitem = UIRenderer.Current[k];
+                                            if (kitem.Collides(activeTouchRelativePosition)) {
+                                                kitem.HandleTouch(UITouchAction.Enter, activeTouches[i]);
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
+                                } else if (current) {
                                     // touch moved inside UI
-                                    UI.HandleTouch(UITouchAction.Move, activeTouches[i]);
+                                    if (item.HandleTouch(UITouchAction.Move, activeTouches[i])) break;
                                 }
                             }
 

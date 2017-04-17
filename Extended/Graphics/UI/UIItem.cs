@@ -37,12 +37,12 @@ namespace mapKnight.Extended.Graphics.UI {
         public readonly Screen Screen;
 
         public UIItem(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, int depth, bool multiclick = false) {
-            UIRenderer.Add(owner, this);
             Screen = owner;
 
             this.Size = size;
             this.multiClick = multiclick;
             this._Depth = depth;
+            UIRenderer.Add(owner, this);
 
             verticalMargin = vmargin;
             verticalMargin.Bind(this);
@@ -58,7 +58,7 @@ namespace mapKnight.Extended.Graphics.UI {
             _Bounds = new UIRectangle(_Position, Size.Size);
         }
 
-        public virtual void HandleTouch(UITouchAction action, UITouch touch) {
+        public virtual bool HandleTouch(UITouchAction action, UITouch touch) {
             switch (action) {
                 case UITouchAction.Begin:
                 case UITouchAction.Enter:
@@ -82,6 +82,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     }
                     break;
             }
+            return true;
         }
 
         public bool Collides(Vector2 touchPosition) {
