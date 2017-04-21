@@ -46,5 +46,16 @@ namespace mapKnight.Core.Graphics {
         public override int GetHashCode( ) {
             return ID;
         }
+
+#if __ANDROID__
+        public static Texture2D CreateEmpty() {
+            int id = GL.GenTexture( );
+            GL.BindTexture(TextureTarget.Texture2D, id);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, 1, 1, 0, PixelFormat.Rgb, PixelType.UnsignedByte, new byte[ ] { 255, 255, 255 });
+            return new Texture2D(id, new Size(1, 1), "empty");
+        }
+#endif
     }
 }
