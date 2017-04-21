@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Components.Player {
     [UpdateBefore(typeof(MotionComponent))]
     public class PlayerComponent : Component {
         public ActionMask Action;
-        public IWeapon Weapon;
+        public BaseWeapon BaseWeapon;
         public HealthTracker Health;
 
         private bool currentlyTalking;
@@ -24,27 +24,27 @@ namespace mapKnight.Extended.Components.Player {
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
         private AnimationState animationState = AnimationState.None;
-        private Timer attackTimer = new Timer(280);
 
-        public PlayerComponent (Entity owner, IWeapon weapon, float health) : base(owner) {
+        public PlayerComponent (Entity owner, BaseWeapon baseWeapon, float health) : base(owner) {
             owner.Domain = EntityDomain.Player;
 
-            Weapon = weapon;
+            BaseWeapon = baseWeapon;
             Health = new HealthTracker(health);
-
-            attackTimer.Elapsed += (s, e) => { if (animationState == AnimationState.Attack) Weapon.Attack( ); };
         }
 
         public override void Destroy ( ) {
             GameOverScreen gameOverScreen = new GameOverScreen((Extended.Graphics.Map)Owner.World);
             gameOverScreen.Load( );
             Screen.Active = gameOverScreen;
+#if DEBUG
+            BaseWeapon.Destroy( );
+#endif
         }
 
         public override void Prepare ( ) {
             speedComponent = Owner.GetComponent<SpeedComponent>( );
             motionComponent = Owner.GetComponent<MotionComponent>( );
-            Weapon.Prepare( );
+            BaseWeapon.Prepare( );
         }
 
         public override void Collision (Entity collidingEntity) {
@@ -69,13 +69,19 @@ namespace mapKnight.Extended.Components.Player {
                 }
             }
 
+            if (nearbyNPC == null) {
+                if (BaseWeapon.Update( )) {
+                    Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit", true, (AnimationComponent.AnimationCallback)AnimationCallbackAttack);
+                    animationState = AnimationState.Attack;
+                    BaseWeapon.Attack( );
+                }
+            }
+
             while (Owner.HasComponentInfo(ComponentData.InputGesture)) {
                 string data = (string)Owner.GetComponentInfo(ComponentData.InputGesture)[0];
                 if (data == string.Empty) {
                     if (nearbyNPC == null) {
-                        Owner.SetComponentInfo(ComponentData.VertexAnimation, "hit", true, (AnimationComponent.AnimationCallback)AnimationCallbackAttack);
-                        animationState = AnimationState.Attack;
-                        attackTimer.Start( );
+                        Action |= ActionMask.Jump;
                     } else if (!currentlyTalking) {
                         NPCComponent npccomponent = nearbyNPC.GetComponent<NPCComponent>( );
                         if (npccomponent.Available) {
@@ -83,8 +89,9 @@ namespace mapKnight.Extended.Components.Player {
                             new UIDialog(Screen.Gameplay, npccomponent).DialogFinished += ( ) => currentlyTalking = false;
                         }
                     }
+                    // JUMP, TODO
                 } else {
-                    Weapon.Special(data);
+                    // SPECIAL ATTACK, TODO
                 }
             }
 
@@ -100,7 +107,7 @@ namespace mapKnight.Extended.Components.Player {
             }
 
             if (animationState != AnimationState.Attack) {
-                if(animationState != AnimationState.Jump) {
+                if (animationState != AnimationState.Jump) {
                     if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
                         if (Action.HasFlag(ActionMask.Jump)) {
                             Action &= ~ActionMask.Jump;
@@ -127,7 +134,7 @@ namespace mapKnight.Extended.Components.Player {
                         animationState = AnimationState.Fall;
                     }
                 }
-            } else if(motionComponent.IsOnGround || motionComponent.IsOnPlatform){
+            } else if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
                 motionComponent.AimedVelocity.Y = 0;
             }
             nearbyNPC = null;
@@ -141,27 +148,32 @@ namespace mapKnight.Extended.Components.Player {
         }
 
         private void AnimationCallbackAttack (bool success) {
-            attackTimer.Stop( );
             Owner.SetComponentInfo(ComponentData.VertexAnimation, "idle", true);
             animationState = AnimationState.Idle;
         }
+
+#if DEBUG
+        public override void Draw ( ) {
+            BaseWeapon.Draw( );
+        }
+#endif  
 
         public new class Configuration : Component.Configuration {
             public string Weapon;
             public float Health;
 
             public override Component Create (Entity owner) {
-                return new PlayerComponent(owner, (IWeapon)Activator.CreateInstance(Type.GetType("mapKnight.Extended.Warfare." + Weapon), owner), Health);
+                return new PlayerComponent(owner, BaseWeaponCollection.DiamondSword(owner), Health);
             }
         }
 
         public class HealthTracker : UIBar.IValueBinder {
             private float _Value;
-            public float Value { get { return _Value; } set { _Value = value; ValueChanged?.Invoke(value ); } }
+            public float Value { get { return _Value; } set { _Value = value; ValueChanged?.Invoke(value); } }
             public float Maximum { get; }
             public event Action<float> ValueChanged;
 
-            public HealthTracker(float health) {
+            public HealthTracker (float health) {
                 Maximum = health;
                 _Value = health;
             }

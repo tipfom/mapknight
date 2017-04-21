@@ -131,14 +131,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameOverScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\IWeapon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\Sword.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\Swords\WoodySword.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Bows\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Books\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Shields\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Wands\" />
+    <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeapon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeaponCollection.cs" />
   </ItemGroup>
 </Project>

@@ -54,14 +54,10 @@ namespace mapKnight.Extended.Screens {
         private void SetupControls ( ) {
             controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new AbsoluteSize(6f / 5f * Window.Ratio - .15f, 2f), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
+                playerEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
 #if DEBUG
                 global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
 #endif
-                if (gesture == UIGesturePanel.SWIPE_UP) {
-                    if (playerEntity.GetComponent<MotionComponent>( ).IsOnGround || playerEntity.GetComponent<MotionComponent>( ).IsOnPlatform)
-                        playerEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Jump);
-                } else
-                    playerEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
             };
 
             leftButton = new UIControlButton(this, "l", new UIRightMargin(Window.Ratio * 2f / 5f + .1f), new UIBottomMargin(.05f), new AbsoluteSize(Window.Ratio * 2f / 5f, Window.Ratio * 2f / 5f));
