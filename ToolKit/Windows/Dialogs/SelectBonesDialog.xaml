@@ -1,0 +1,23 @@
+﻿<Window x:Class="mapKnight.ToolKit.Windows.Dialogs.SelectBonesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
+        mc:Ignorable="d"
+        Title="Select Bones to Export" SizeToContent="Height" Width="300" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" MaxHeight="1000">
+    <DockPanel Margin="5">
+        <Button DockPanel.Dock="Bottom" Content="EXPORT" Margin="0,5,0,0" Click="Button_Click"/>
+        <ListView x:Name="listview_bones">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type data:VertexBone}">
+                    <CheckBox IsChecked="{Binding Export}" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        <CheckBox.Content>
+                            <Image Source="{Binding BitmapImage}" Width="40" Height="40" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        </CheckBox.Content>
+                    </CheckBox>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </DockPanel>
+</Window>

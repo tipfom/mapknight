@@ -91,6 +91,10 @@ namespace mapKnight.ToolKit.Controls {
                 animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
             featuredFrame = animations.FirstOrDefault(anim => anim.Frames.Any(frame => frame.Featured))?.Frames.FirstOrDefault(frame => frame.Featured);
             BonesChanged( );
+
+            foreach (VertexBone bone in bones) {
+                bone.SetBitmapImage(this);
+            }
         }
 
         private void BoneImage_DumpChanges ( ) {
@@ -166,11 +170,14 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         public void Compile (string animationpath) {
-            string basedirectory = Path.Combine(animationpath, MetaData.Entity);
-            if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
+            SelectBonesDialog selectBonesDialog = new SelectBonesDialog(bones);
+            if(selectBonesDialog.ShowDialog() ?? false) {
+                string basedirectory = Path.Combine(animationpath, MetaData.Entity);
+                if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
 
-            using (Stream stream = File.Open(Path.Combine(basedirectory, "animation.json"), FileMode.Create))
-                AnimationSerizalizer.Serialize(animations, stream);
+                using (Stream stream = File.Open(Path.Combine(basedirectory, "animation.json"), FileMode.Create))
+                    AnimationSerizalizer.Compile(animations.ToArray(), stream, selectBonesDialog.SelectedIndices);
+            }
         }
 
         private void CommandEditorDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
