@@ -23,7 +23,7 @@ namespace mapKnight.Extended.Graphics.UI {
             gestureStore = gesturestore;
         }
 
-        public override void HandleTouch (UITouchAction action, UITouch touch) {
+        public override bool HandleTouch (UITouchAction action, UITouch touch) {
             switch (action) {
                 case UITouchAction.Move:
                     if (touch.ID == currentTouchID) {
@@ -47,7 +47,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     }
                     break;
             }
-            base.HandleTouch(action, touch);
+            return base.HandleTouch(action, touch);
         }
 
         private string ComputeGesture ( ) {

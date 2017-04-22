@@ -16,6 +16,8 @@ namespace mapKnight.ToolKit.Data {
         public string Image { get; set; }
         public float Scale { get; set; }
 
+        public bool Export { get; set; } = true;
+
         public void SetBitmapImage(AnimationControl control) {
             BitmapImage = BoneImage.Data[control][Path.GetFileNameWithoutExtension(Image)].Image;
         }

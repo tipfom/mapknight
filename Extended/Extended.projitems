@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\MoonballButtonComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\MoonballComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\NPCComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\ReturnableBulletComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\SeplingComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\CircularSawComponent.cs">
       <SubType>Code</SubType>
@@ -47,6 +48,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\AnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\DrawComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\HitboxComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SkeletComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\SpriteComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Graphics\TextureComponent.cs" />
@@ -58,6 +60,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\ActionMask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\AnimationState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\Player\PlayerAnimationComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Player\PlayerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\ArmorComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Stats\HealthComponent.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\SpriteAnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexAnimation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexAnimationData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexAnimationFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Animation\VertexBone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Buffer\CachedGPUBuffer.cs" />
@@ -89,6 +93,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\IUISize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\RelativeSize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIControlButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIHealthBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIHorizontalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILeftMargin.cs" />
@@ -128,14 +133,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameOverScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\IWeapon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\Sword.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\Swords\WoodySword.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Bows\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Books\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Shields\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Warfare\Wands\" />
+    <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeapon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeaponCollection.cs" />
   </ItemGroup>
 </Project>

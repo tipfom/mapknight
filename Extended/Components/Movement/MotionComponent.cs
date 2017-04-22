@@ -121,7 +121,7 @@ namespace mapKnight.Extended.Components.Movement {
                 int ylimit = Mathi.Floor(targetTransform.TR.Y);
                 int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.TR.Y; y <= ylimit; y++) {
-                    for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
+                    for (int x = Mathi.Floor(targetTransform.BL.X + 0.001f); x <= xlimit; x++) {
                         if (y >= Owner.World.Size.Height || Owner.World.HasCollider(x, y)) {
                             targetTransform.Y = y - targetTransform.Size.Y / 2f;
                             enforcedVelocity.Y = 0;
@@ -135,7 +135,7 @@ namespace mapKnight.Extended.Components.Movement {
                 int ylimit = Mathi.Floor(targetTransform.BL.Y);
                 int xlimit = ((targetTransform.TR.X == Mathi.Floor(targetTransform.TR.X)) ? (int)targetTransform.TR.X - 1 : (int)targetTransform.TR.X);
                 for (int y = (int)oldTransform.BL.Y; y >= ylimit; y--) {
-                    for (int x = (int)targetTransform.BL.X; x <= xlimit; x++) {
+                    for (int x = Mathi.Floor(targetTransform.BL.X + 0.001f); x <= xlimit; x++) {
                         if (y == -1 || Owner.World.HasCollider(x, y)) {
                             targetTransform.Y = y + 1 + targetTransform.Size.Y / 2f;
                             return true;

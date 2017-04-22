@@ -81,7 +81,7 @@
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
     <AndroidAsset Include="Assets\gestures\gestures" />
-    <AndroidAsset Include="Assets\textures\Sword%282%29.json" />
+    <AndroidAsset Include="Assets\textures\swords\diamond.json" />
     <AndroidAsset Include="Assets\textures\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\shell.json" />
     <AndroidAsset Include="Assets\textures\plugger_bullet.json" />
@@ -178,7 +178,7 @@
     <AndroidAsset Include="Assets\textures\shark\body.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\Sword%282%29.png" />
+    <AndroidAsset Include="Assets\textures\swords\diamond.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\slime.png" />
@@ -201,6 +201,7 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\Maehhpp.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
   <ProjectExtensions />

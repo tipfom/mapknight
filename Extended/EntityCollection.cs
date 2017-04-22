@@ -502,7 +502,7 @@ namespace mapKnight.Extended {
                                     new MotionComponent.Configuration( ) {
                                         GravityInfluence = 0.1f
                                     },
-                                    new BulletComponent.Configuration( ),
+                                    new ReturnableBulletComponent.Configuration( ) { ReturnSpeed = 4f, Damage = .1f },
                                     new TextureComponent.Configuration( ) { Texture = "plugger_bullet" },
                                     new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } }
                                 }
@@ -510,6 +510,7 @@ namespace mapKnight.Extended {
                         });
                         _Plugger.Components.Add(new TriggerComponent.Configuration( ) { TriggerZone = new Vector2(8, 3), Offset = 1.5f });
                         _Plugger.Components.Add(new SpeedComponent.Configuration( ) { X = 0.75f });
+                        _Plugger.Components.Add(new HealthComponent.Configuration( ) { Value = 3 });
                     }
                     return _Plugger;
                 }
@@ -1452,7 +1453,7 @@ namespace mapKnight.Extended {
                         _Copper.Components = new ComponentList {
                             new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } },
                             new TextureComponent.Configuration( ) { Texture = "platforms/copper" },
-                            new PlatformComponent.Configuration( ) { Speed = 3 }
+                            new PlatformComponent.Configuration( ) { Speed = 2 }
                         };
                     }
                     return _Copper;
@@ -1470,900 +1471,565 @@ namespace mapKnight.Extended {
                         _Diamond.Transform = new Transform(Vector2.Zero, new Vector2(1f, 1.32f));
                         _Diamond.Components = new ComponentList {
                             new MotionComponent.Configuration( ) { PlatformCollider = true },
-                            new PlayerComponent.Configuration( ) { Weapon = "Swords.WoodySword", Health = 10 },
-                            new SpeedComponent.Configuration( ) { X = 3.5f, Y = 20 },
-                            new AnimationComponent.Configuration( ) {
-                                Textures = new string[ ] {
-                                    "player",
-                                    "Sword(2)"
-                                },
-                                Offsets = new Vector2[ ] {
-                                    new Vector2(3, 2.5f),   // feet2
-                                    new Vector2(2, 2),      // hand1
-                                    new Vector2(3, 2.5f),   // feet1
-                                    new Vector2(2, 1.5f),   // upper_arm1
-                                    new Vector2(9, 5),      // body
-                                    new Vector2(9, 9),      // head
-                                    new Vector2(2, 1.5f),   // upper_arm1
-                                    new Vector2(3, 25),     // sword
-                                    new Vector2(2, 2)       // hand1
-                                },
-                                Scales = new float[ ] {
-                                    0.0487060845f,
-                                    0.0487060845f,
-                                    0.0487060845f,
-                                    0.0487060845f,
-                                    0.0487060845f,
-                                    0.0487060845f,
-                                    0.0487060845f,
-                                    0.0487060845f,
-                                    0.0487060845f
-                                },
-                                Animations = new VertexAnimation[ ] {
-                                    new VertexAnimation() {
-                                        Name = "idle",
-                                        CanRepeat = true,
-                                        Frames = new VertexAnimationFrame[ ] {
-                                            new VertexAnimationFrame( ) {
-                                                Time = 500,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4026417f, -0.2310107f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.060812f, 0.3166551f),
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3670864f, -0.04631752f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3853965f, -0.2385302f),
-                                                        Rotation = -47f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3575646f, -0.2382041f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 800,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3904943f, -0.2830519f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3794281f, -0.07663018f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.02629337f, -0.2011819f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.0517186f, 0.2960604f),
-                                                        Rotation = -3f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3628451f, -0.08374908f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3896378f, -0.2748923f),
-                                                        Rotation = -45f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3575646f, -0.2895388f),
-                                                        Rotation = 2f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 600,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3928595f, -0.2580262f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3723325f, -0.03372891f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.02629337f, -0.1690388f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.04908322f, 0.3165276f),
-                                                        Rotation = -3f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.372968f, -0.03936096f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3933463f, -0.2460565f),
-                                                        Rotation = -51f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3644413f, -0.2555707f),
-                                                        Rotation = -11f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                        }
+                            new PlayerComponent.Configuration( ) {
+                                Health = 10,
+                                BodyAnimationData = new VertexAnimationData( ) {
+                                    Offsets = new Vector2[ ] {
+                                        new Vector2(3, 2.5f),   // feet2
+                                        new Vector2(2, 2),      // hand1
+                                        new Vector2(3, 2.5f),   // feet1
+                                        new Vector2(2, 1.5f),   // upper_arm1
+                                        new Vector2(9, 5),      // body
+                                        new Vector2(9, 9),      // head
+                                        new Vector2(2, 1.5f),   // upper_arm1
                                     },
-                                    new VertexAnimation() {
-                                        Name = "walk",
-                                        CanRepeat = true,
-                                        Frames = new VertexAnimationFrame[ ] {
-                                            new VertexAnimationFrame( ) {
-                                                Time = 100,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4026417f, -0.2310107f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.060812f, 0.3166551f),
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3670864f, -0.04631752f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3938791f, -0.2363913f),
-                                                        Rotation = -47f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3575646f, -0.2382041f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 150,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3000263f, -0.3440516f),
-                                                        Rotation = 14f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3305396f, -0.1860928f),
-                                                        Rotation = -17f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Rotation = -15f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Rotation = 7f,
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.08343226f, 0.3027519f),
-                                                        Rotation = -1f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3670864f, -0.04631752f),
-                                                        Rotation = 11f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3180811f, -0.2287672f),
-                                                        Rotation = -33f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.2788909f, -0.2273623f),
-                                                        Rotation = 13f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 150,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.265903f, -0.3999031f),
-                                                        Rotation = -1f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3142498f, -0.1860836f),
-                                                        Rotation = -20f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Rotation = -21f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Rotation = 7f,
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.07070836f, 0.3059604f),
-                                                        Rotation = -4f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4068969f, -0.05491006f),
-                                                        Rotation = 22f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.2834927f, -0.2074512f),
-                                                        Rotation = -41f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.2446563f, -0.203935f),
-                                                        Rotation = -2f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 100,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.0232324f, -0.4084957f),
-                                                        Rotation = -1f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4372475f, -0.2106815f),
-                                                        Rotation = 17f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.02529345f, -0.3426294f),
-                                                        Rotation = -39f,
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Rotation = 2f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Rotation = -5f,
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.03395045f, 0.3091688f),
-                                                        Rotation = 2f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4068969f, -0.05491006f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4616272f, -0.2384659f),
-                                                        Rotation = -44f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.421377f, -0.2381582f),
-                                                        Rotation = -5f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 200,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1038171f, -0.4084957f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.440075f, -0.2106815f),
-                                                        Rotation = 13f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.0552912f, -0.4078673f),
-                                                        Rotation = -1f,
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Rotation = 9f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Rotation = -10f,
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.001393698f, 0.2974046f),
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4068969f, -0.05491006f),
-                                                        Rotation = -16f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.5407981f, -0.2395354f),
-                                                        Rotation = -49f,
-                                                        Texture = "sword"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4892378f, -0.2338803f),
-                                                        Rotation = -9f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                        }
+                                    Scales = new float[ ] {
+                                        0.04870608f,
+                                        0.04870608f,
+                                        0.04870608f,
+                                        0.04870608f,
+                                        0.04870608f,
+                                        0.04870608f,
+                                        0.04870608f,
                                     },
-                                    new VertexAnimation() {
-                                        Name = "jump",
-                                        CanRepeat = false,
-                                        Frames = new VertexAnimationFrame[ ] {
-                                            new VertexAnimationFrame( ) {
-                                                Time = 100,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4026417f, -0.2310107f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.060812f, 0.3166551f),
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3670864f, -0.04631752f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3853965f, -0.2385302f),
-                                                        Rotation = -47f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3575646f, -0.2382041f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
+                                    Animations = new VertexAnimation[ ] {
+                                        new VertexAnimation( ) {
+                                            Name = "idle",
+                                            CanRepeat = true,
+                                            Frames = new VertexAnimationFrame[ ] {
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 500,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.4026417f, -0.2310107f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.060812f, 0.3166551f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 800,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.3904943f, -0.2830519f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.3794281f, -0.07663018f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.02629337f, -0.2011819f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -3f,
+                                                            Position = new Vector2(-0.0517186f, 0.2960604f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.3628451f, -0.08374908f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 600,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.3928595f, -0.2580262f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.3723325f, -0.03372891f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.02629337f, -0.1690388f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -3f,
+                                                            Position = new Vector2(-0.04908322f, 0.3165276f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.372968f, -0.03936096f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
                                             },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 100,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3984004f, -0.2491917f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3626894f, -0.04168086f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.03837211f, -0.1967569f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.08060472f, 0.2835014f),
-                                                        Rotation = -3f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3868791f, -0.07305434f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3853965f, -0.2385302f),
-                                                        Rotation = -51f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3575646f, -0.2382041f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
+                                        },
+                                        new VertexAnimation( ) {
+                                            Name = "walk",
+                                            CanRepeat = true,
+                                            Frames = new VertexAnimationFrame[ ] {
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 100,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.4026417f, -0.2310107f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.060812f, 0.3166551f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 100,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Rotation = 14f,
+                                                            Position = new Vector2(0.2830611f, -0.3076895f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -17f,
+                                                            Position = new Vector2(0.3305396f, -0.1860928f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -15f,
+                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 7f,
+                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -1f,
+                                                            Position = new Vector2(-0.08343226f, 0.3027519f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 11f,
+                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 130,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Rotation = -1f,
+                                                            Position = new Vector2(0.265903f, -0.3999031f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -20f,
+                                                            Position = new Vector2(0.3142498f, -0.1860836f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -21f,
+                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 7f,
+                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -4f,
+                                                            Position = new Vector2(-0.07070836f, 0.3059604f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 22f,
+                                                            Position = new Vector2(-0.4068969f, -0.05491006f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 130,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Rotation = -1f,
+                                                            Position = new Vector2(0.0232324f, -0.4084957f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 17f,
+                                                            Position = new Vector2(0.4372475f, -0.2106815f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -39f,
+                                                            Position = new Vector2(-0.008328262f, -0.2891558f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 2f,
+                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -5f,
+                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 2f,
+                                                            Position = new Vector2(-0.03395045f, 0.3091688f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.4068969f, -0.05491006f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 170,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.1038171f, -0.4084957f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 13f,
+                                                            Position = new Vector2(0.440075f, -0.2106815f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -1f,
+                                                            Position = new Vector2(0.0552912f, -0.4078673f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 9f,
+                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -10f,
+                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.001393698f, 0.2974046f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -16f,
+                                                            Position = new Vector2(-0.3871042f, -0.04849323f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
                                             },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 100,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1846751f, -0.4052781f),
-                                                        Rotation = -4f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4563648f, -0.1529391f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1031953f, -0.2711402f),
-                                                        Rotation = -17f,
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.455998f, 0.0428075f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.04786761f, -0.07590644f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.05653057f, 0.3562256f),
-                                                        Rotation = -3f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.333156f, 0.05635188f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3627762f, -0.1444166f),
-                                                        Rotation = -56f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3405994f, -0.1515768f),
-                                                        Rotation = -9f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
+                                        },
+                                        new VertexAnimation( ) {
+                                            Name = "jump",
+                                            Frames = new VertexAnimationFrame[ ] {
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 75,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.4026417f, -0.2310107f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.060812f, 0.3166551f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 75,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.3984004f, -0.2491917f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.3626894f, -0.04168086f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.03837211f, -0.1967569f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -3f,
+                                                            Position = new Vector2(-0.08060472f, 0.2835014f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.3868791f, -0.07305434f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 5,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Rotation = -4f,
+                                                            Position = new Vector2(0.1846751f, -0.4052781f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -4f,
+                                                            Position = new Vector2(0.4563648f, -0.1529391f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -17f,
+                                                            Position = new Vector2(-0.1031953f, -0.2711402f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.455998f, 0.0428075f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.04786761f, -0.07590644f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -3f,
+                                                            Position = new Vector2(0.05653057f, 0.3562256f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.333156f, 0.05635188f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
                                             },
-                                        }
-                                    },
-                                    new VertexAnimation() {
-                                        Name = "hit",
-                                        CanRepeat = false,
-                                        Frames = new VertexAnimationFrame[ ] {
-                                            new VertexAnimationFrame( ) {
-                                                Time = 180,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4026417f, -0.2310107f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.060812f, 0.3166551f),
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3670864f, -0.04631752f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3853965f, -0.2385302f),
-                                                        Rotation = -47f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3575646f, -0.2382041f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
+                                        },
+                                        new VertexAnimation( ) {
+                                            Name = "fall",
+                                            CanRepeat = true,
+                                            Frames = new VertexAnimationFrame[ ] {
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 180,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Rotation = -4f,
+                                                            Position = new Vector2(0.1846751f, -0.4052781f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -4f,
+                                                            Position = new Vector2(0.4563648f, -0.1529391f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -17f,
+                                                            Position = new Vector2(-0.1031953f, -0.2711402f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.455998f, 0.0428075f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.04786761f, -0.07590644f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -3f,
+                                                            Position = new Vector2(0.05653057f, 0.3562256f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(-0.333156f, 0.05635188f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 180,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Rotation = -4f,
+                                                            Position = new Vector2(0.3176892f, -0.4250605f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 16f,
+                                                            Position = new Vector2(0.5604317f, -0.126454f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -17f,
+                                                            Position = new Vector2(-0.1757534f, -0.3420686f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 20f,
+                                                            Position = new Vector2(0.4842733f, 0.05029381f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Position = new Vector2(0.01955226f, -0.1053484f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 10f,
+                                                            Position = new Vector2(0.01270382f, 0.3668803f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -24f,
+                                                            Position = new Vector2(-0.345544f, 0.05367533f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
+                                                new VertexAnimationFrame( ) {
+                                                    Time = 180,
+                                                    State = new VertexBone[ ] {
+                                                        new VertexBone( ) {
+                                                            Rotation = 23f,
+                                                            Position = new Vector2(0.2483846f, -0.3597768f),
+                                                            Texture = "feet2"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 9f,
+                                                            Position = new Vector2(0.5250875f, -0.1692329f),
+                                                            Texture = "hand1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 13f,
+                                                            Position = new Vector2(-0.1997874f, -0.3728145f),
+                                                            Texture = "feet1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -1f,
+                                                            Position = new Vector2(0.455998f, 0.0428075f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -8f,
+                                                            Position = new Vector2(0.01955226f, -0.1053484f),
+                                                            Texture = "body"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = 6f,
+                                                            Position = new Vector2(0.05653057f, 0.318754f),
+                                                            Texture = "head"
+                                                        },
+                                                        new VertexBone( ) {
+                                                            Rotation = -5f,
+                                                            Position = new Vector2(-0.345544f, 0.05367533f),
+                                                            Texture = "upper_arm1"
+                                                        },
+                                                    }
+                                                },
                                             },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 100,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1970704f, -0.325648f),
-                                                        Rotation = 9f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3464464f, -0.1977958f),
-                                                        Rotation = -2f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3327864f, 0.002213408f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.05927676f, -0.1578739f),
-                                                        Rotation = 17f,
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.172874f, 0.3037908f),
-                                                        Rotation = 9f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4522333f, -0.07670592f),
-                                                        Rotation = 85f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1890052f, -0.1126988f),
-                                                        Rotation = 26f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1681619f, -0.07521598f),
-                                                        Rotation = 75f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 170,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.245788f, -0.4070656f),
-                                                        Rotation = -1f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.417704f, -0.3078755f),
-                                                        Rotation = 2f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1422649f, -0.3944962f),
-                                                        Rotation = -9f,
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3800367f, -0.08216827f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.0001469269f, -0.1900498f),
-                                                        Rotation = -13f,
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.03444532f, 0.2637313f),
-                                                        Rotation = -3f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3718168f, -0.01950422f),
-                                                        Rotation = 27f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.09572338f, -0.158121f),
-                                                        Rotation = -56f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.0404874f, -0.1699104f),
-                                                        Rotation = -12f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 1,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1521585f, -0.4063475f),
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4026417f, -0.2310107f),
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1540909f, -0.4058937f),
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.389551f, -0.01387457f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.01433809f, -0.1668116f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.060812f, 0.3166551f),
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3670864f, -0.04631752f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3853965f, -0.2385302f),
-                                                        Rotation = -47f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3575646f, -0.2382041f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                        }
-                                    },
-                                    new VertexAnimation() {
-                                        Name = "fall",
-                                        CanRepeat = true,
-                                        Frames = new VertexAnimationFrame[ ] {
-                                            new VertexAnimationFrame( ) {
-                                                Time = 200,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.1846751f, -0.4052781f),
-                                                        Rotation = -4f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4563648f, -0.1529391f),
-                                                        Rotation = -4f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1031953f, -0.2711402f),
-                                                        Rotation = -17f,
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.455998f, 0.0428075f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.04786761f, -0.07590644f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.05653057f, 0.3562256f),
-                                                        Rotation = -3f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.333156f, 0.05635188f),
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3627762f, -0.1444166f),
-                                                        Rotation = -56f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3405994f, -0.1515768f),
-                                                        Rotation = -9f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 200,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.3176892f, -0.4250605f),
-                                                        Rotation = -4f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.5604317f, -0.126454f),
-                                                        Rotation = 16f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1757534f, -0.3420686f),
-                                                        Rotation = -17f,
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.4842733f, 0.05029381f),
-                                                        Rotation = 20f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.01955226f, -0.1053484f),
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.01270382f, 0.3668803f),
-                                                        Rotation = 10f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.345544f, 0.05367533f),
-                                                        Rotation = -24f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4989638f, -0.1163473f),
-                                                        Rotation = -72f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.4661487f, -0.1288491f),
-                                                        Rotation = -33f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                            new VertexAnimationFrame( ) {
-                                                Time = 200,
-                                                State = new VertexBone[ ] {
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.2483846f, -0.3597768f),
-                                                        Rotation = 23f,
-                                                        Texture = "feet2"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.5250875f, -0.1692329f),
-                                                        Rotation = 9f,
-                                                        Texture = "hand1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.1997874f, -0.3728145f),
-                                                        Rotation = 13f,
-                                                        Texture = "feet1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.455998f, 0.0428075f),
-                                                        Rotation = -1f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.01955226f, -0.1053484f),
-                                                        Rotation = -8f,
-                                                        Texture = "body"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(0.05653057f, 0.318754f),
-                                                        Rotation = 6f,
-                                                        Texture = "head"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.345544f, 0.05367533f),
-                                                        Rotation = -5f,
-                                                        Texture = "upper_arm1"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.3008564f, -0.1302504f),
-                                                        Rotation = -76f,
-                                                        Texture = "weapon"
-                                                    },
-                                                    new VertexBone( ) {
-                                                        Position = new Vector2(-0.2680414f, -0.1542533f),
-                                                        Rotation = -26f,
-                                                        Texture = "hand1"
-                                                    },
-                                                }
-                                            },
-                                        }
-                                    },
+                                        },
+                                    }
                                 }
-                            }
+                            },
+                            new SpeedComponent.Configuration( ) { X = 3.5f, Y = 20 },
+                            new PlayerAnimationComponent.Configuration( ) { }
                         };
                     }
                     return _Diamond;

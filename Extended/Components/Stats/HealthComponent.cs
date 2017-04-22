@@ -30,7 +30,7 @@ namespace mapKnight.Extended.Components.Stats {
                 object[ ] data = Owner.GetComponentInfo(ComponentData.Damage);
                 if (IsHit?.Invoke((Entity)data[0]) ?? true) {
                     Current -= ((float)data[1] * ((armorComponent != null) ? armorComponent.PhysicalMultiplier : 1f));
-                    if (Current < 0)
+                    if (Current <= 0)
                         Owner.Destroy( );
                 }
             }

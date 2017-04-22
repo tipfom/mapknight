@@ -54,14 +54,14 @@ namespace mapKnight.Extended.Components.AI {
         }
 
         private void Trigger_Triggered (Entity entity) {
-            if (!(hasting || stunned) && entity.Domain == EntityDomain.Player && motionComponent.ScaleX == Math.Sign(entity.Transform.Center.X - Owner.Transform.Center.X)) {
+            if (!(hasting || stunned) && entity.Domain == EntityDomain.Player && motionComponent.ScaleX == Math.Sign(entity.Transform.Center.X - Owner.Transform.Center.X) && Math.Abs(entity.Transform.Center.X - Owner.Transform.Center.X) > Owner.Transform.HalfSize.X / 2f) {
                 target = entity;
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, "prepare", true, (AnimationComponent.AnimationCallback)AnimationCallbackPrepare);
             }
         }
 
         private void AnimationCallbackPrepare (bool success) {
-            hastingDirection = (target.Transform.BL.X > Owner.Transform.TR.X) ? 1 : -1;
+            hastingDirection = (target.Transform.Center.X > Owner.Transform.Center.X) ? 1 : -1;
             motionComponent.AimedVelocity.X = speedComponent.Speed.X * attackSpeed * hastingDirection;
             hasting = true;
             Owner.SetComponentInfo(ComponentData.VertexAnimation, "attack", true);
