@@ -13,15 +13,15 @@ namespace mapKnight.Extended.Graphics.Animation {
             texture erstellen
          */
 
-        public static void Compile (VertexAnimation[ ] animations, float[ ] scales, Vector2[ ] offsets, IEnumerable<string> sprites, Entity entity, out float[ ][ ] boneverticies, out Spritebatch2D sprite) {
+        public static void Compile (string[ ] defaultTextures, float[ ] scales, Vector2[ ] offsets, IEnumerable<string> sprites, Entity entity, out float[ ][ ] boneverticies, out Spritebatch2D sprite) {
             sprite = Spritebatch2D.Combine(false, new List<Spritebatch2D>(sprites.Select(item => Assets.Load<Spritebatch2D>(item))));
 #if DEBUG
             Debug.CheckGL(typeof(Compiler));
 #endif
-            boneverticies = new float[animations[0].Frames[0].State.Length][ ];
+            boneverticies = new float[scales.Length][ ];
             float entityratio = entity.Transform.Width / entity.Transform.Height;
             for (int i = 0; i < boneverticies.Length; i++) {
-                float[ ] texture = sprite[animations[0].Frames[0].State[i].Texture];
+                float[ ] texture = sprite[defaultTextures[i]];
                 Vector2 textureSize = new Vector2(Math.Abs(texture[4] - texture[0]) * sprite.Width, Math.Abs(texture[1] - texture[3]) * sprite.Height);
                 Vector2 vertexSize = new Vector2(textureSize.X * scales[i] / 2f, textureSize.Y * scales[i] / 2f * entityratio);
                 Vector2 offset = (offsets[i] - textureSize / 2f) / (textureSize / 2f) * vertexSize;

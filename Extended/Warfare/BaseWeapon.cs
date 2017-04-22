@@ -5,6 +5,9 @@ using mapKnight.Core.World;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Core.World.Components;
+using mapKnight.Extended.Graphics.Animation;
+using System;
+using System.Timers;
 
 namespace mapKnight.Extended.Warfare {
     public class BaseWeapon {
@@ -19,19 +22,26 @@ namespace mapKnight.Extended.Warfare {
         public readonly string Name;
         public readonly int ID;
         public readonly float Damage;
+        public readonly string Texture;
+        public readonly VertexAnimationData AnimationData;
 
         private MotionComponent motionComponent;
         private Vector2 hitboxOffset;
         private Transform hitbox;
         private Entity owner;
+        private Timer timer;
 
-        public BaseWeapon (string Name, int ID, float Damage, Transform hitbox, Entity owner) {
+        public BaseWeapon (string Name, int ID, float Damage, string Texture, int timeUntillHit, VertexAnimationData AnimationData, Transform hitbox, Entity owner) {
             this.Name = Name;
             this.ID = ID;
             this.Damage = Damage;
+            this.Texture = Texture;
+            this.AnimationData = AnimationData;
             this.hitbox = hitbox;
             this.hitboxOffset = hitbox.Center;
             this.owner = owner;
+            this.timer = new Timer(timeUntillHit);
+            this.timer.Elapsed += Timer_Elapsed;
         }
 
         public void Prepare ( ) {
@@ -69,17 +79,22 @@ namespace mapKnight.Extended.Warfare {
             return false;
         }
 
-        public int Attack ( ) {
-            int hitCount = 0;
-            hitbox.Center = owner.Transform.Center + new Vector2(motionComponent.ScaleX * hitboxOffset.X, hitboxOffset.Y);
+        public void Attack ( ) {
+            timer.Start( );
+        }
+
+        public void Abort ( ) {
+            timer.Stop( );
+        }
+
+        private void Timer_Elapsed (object sender, ElapsedEventArgs e) {
             for (int i = 0; i < owner.World.Entities.Count; i++) {
                 Entity entity = owner.World.Entities[i];
                 if (entity.Domain == EntityDomain.Enemy && entity.Transform.Touches(hitbox)) {
-                    hitCount++;
                     entity.SetComponentInfo(ComponentData.Damage, owner, Damage);
                 }
             }
-            return hitCount;
+            timer.Stop( );
         }
 
 #if DEBUG

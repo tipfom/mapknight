@@ -35,7 +35,7 @@ namespace mapKnight.Extended.Graphics.Animation {
             }
         }
 
-        public void Update (float dt, Transform ownerTransform, float vsize, float[ ][ ] verticies) {
+        public void Update (float dt, Transform ownerTransform, float vsize, float[ ][ ] verticies, int offset = 0) {
             if (IsRunning && Environment.TickCount > nextFrameTime) {
                 currentFrame = nextFrame;
                 nextFrame++;
@@ -53,7 +53,7 @@ namespace mapKnight.Extended.Graphics.Animation {
                 float interpolatedRotation = Mathf.Interpolate(Frames[nextFrame].State[i].Rotation, Frames[currentFrame].State[i].Rotation, progress);
 
                 Mathf.TransformAtOrigin(
-                    verticies[i], ref Verticies[i],
+                    verticies[i + offset], ref Verticies[i],
                     interpolatedPosition.X, interpolatedPosition.Y,
                     interpolatedRotation, Frames[currentFrame].State[i].Mirrored, ownerTransform.Size * vsize);
                 Textures[i] = Frames[currentFrame].State[i].Texture;
