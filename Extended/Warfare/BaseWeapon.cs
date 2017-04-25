@@ -49,7 +49,9 @@ namespace mapKnight.Extended.Warfare {
 #if DEBUG
             if (BASE_WEAPON_TEXTURE == null) {
                 BASE_WEAPON_TEXTURE = new Spritebatch2D(new Dictionary<string, int[ ]>( ) { ["0"] = new int[ ] { 0, 0, 1, 1 } }, Texture2D.CreateEmpty( ));
-                owner.World.Renderer.AddTexture(BASE_WEAPON_HITBOX_SPECIES, BASE_WEAPON_TEXTURE);            
+            }
+            if (!owner.World.Renderer.HasTexture(BASE_WEAPON_HITBOX_SPECIES)) {
+                owner.World.Renderer.AddTexture(BASE_WEAPON_HITBOX_SPECIES, BASE_WEAPON_TEXTURE);
             }
 
             UpdateSizeVertices( );
