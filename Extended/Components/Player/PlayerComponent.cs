@@ -101,7 +101,9 @@ namespace mapKnight.Extended.Components.Player {
                 }
             }
 
-            if (!currentlyTalking && bodyAnimationState != AnimationState.Jump) {
+            if (!currentlyTalking) {
+                if (bodyAnimationState == AnimationState.Jump) return;
+
                 Vector2 speed = speedComponent.Speed;
                 if (Action.HasFlag(ActionMask.Left)) {
                     motionComponent.AimedVelocity.X = -speed.X;
@@ -113,7 +115,7 @@ namespace mapKnight.Extended.Components.Player {
 
                 if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
                     if (attemptJump) {
-                        SetAnimation("jump", JumpAnimationCallback, null);
+                        SetAnimationIfUnset("jump",AnimationState.Jump, JumpAnimationCallback, null);
                         motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
                         return;
                     } else {
