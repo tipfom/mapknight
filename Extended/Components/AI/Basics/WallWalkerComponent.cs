@@ -14,7 +14,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
         protected Direction NextWallDir = Direction.Down;
         private SpeedComponent speedComponent;
         private SkeletComponent skeletComponent;
-        private float targetLoc;
+        protected float targetLoc;
 
         public WallWalkerComponent (Entity owner) : base(owner) {
         }
@@ -137,7 +137,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
 
                 case Direction.Down:
                     targetLoc = Owner.Transform.HalfSize.Y;
-                    xwalkingon = CurrentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X) - 1 : Mathi.Floor(Owner.Transform.TR.X);
+                    xwalkingon = CurrentWallDir == Direction.Left ? Mathi.Floor(Owner.Transform.BL.X + 0.00001f) - 1: Mathi.Floor(Owner.Transform.TR.X);
                     xwalkingagainst = CurrentWallDir == Direction.Left ? xwalkingon + 1 : xwalkingon - 1;
                     ystart = Mathi.Floor(Owner.Transform.BL.Y) - 1;
                     if (!Owner.World.HasCollider(xwalkingon, ystart)) ystart++;

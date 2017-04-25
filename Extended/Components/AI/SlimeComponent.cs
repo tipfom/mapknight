@@ -30,7 +30,7 @@ namespace mapKnight.Extended.Components.AI {
             this.rainbowdizer.Normal( );
         }
 
-        public override void Load(Dictionary<DataID, object> data) {
+        public override void Load (Dictionary<DataID, object> data) {
             NextMoveDir = (Direction)((sbyte)data[DataID.SLIME_InitialMoveDirection]);
             NextWallDir = (Direction)((sbyte)data[DataID.SLIME_InitialWallDirection]);
         }
@@ -80,6 +80,24 @@ namespace mapKnight.Extended.Components.AI {
                     groundVec.X = Owner.Transform.TR.X - slimeConfig.Transform.HalfSize.X;
                     break;
             }
+
+            if (!Owner.World.HasCollider(Mathi.Floor(groundVec.X), Mathi.Floor(groundVec.Y))) {
+                switch (CurrentMoveDir) {
+                    case Direction.Left:
+                        groundVec.X = Math.Max(targetLoc, groundVec.X - 1);
+                        break;
+                    case Direction.Right:
+                        groundVec.X = Math.Min(targetLoc, groundVec.X + 1);
+                        break;
+                    case Direction.Up:
+                        groundVec.Y = Math.Min(targetLoc, groundVec.Y + 1);
+                        break;
+                    case Direction.Down:
+                        groundVec.Y = Math.Max(targetLoc, groundVec.Y - 1);
+                        break;
+                }
+            }
+
 
             switch (CurrentMoveDir) {
                 case Direction.Up:
