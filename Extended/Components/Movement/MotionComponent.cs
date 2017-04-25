@@ -31,9 +31,9 @@ namespace mapKnight.Extended.Components.Movement {
             if (HasPlatformCollider && collidingEntity.Domain == EntityDomain.Platform && platformStandingOn == null) {
                 platformStandingOn = collidingEntity.GetComponent<PlatformComponent>( );
                 if (Owner.Transform.BL.Y >= collidingEntity.Transform.TR.Y + (Velocity.Y - Math.Abs(platformStandingOn.Velocity.Y)) * Manager.FrameTime.TotalSeconds - 0.05f && Velocity.Y - 0.1f <= platformStandingOn.Velocity.Y) {
-                    Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, collidingEntity.Transform.TR.Y + Owner.Transform.HalfSize.Y);
                     IsOnPlatform = true;
-                    enforcedVelocity.X = platformStandingOn.Velocity.X;
+                    PlatformVelocityChanged(platformStandingOn.Velocity);
+                    platformStandingOn.VelocityChanged = PlatformVelocityChanged;
                 } else {
                     platformStandingOn = null;
                 }
@@ -52,7 +52,7 @@ namespace mapKnight.Extended.Components.Movement {
             }
 
             if (IsOnPlatform) {
-                enforcedVelocity.Y = Math.Max(platformStandingOn.Velocity.Y, enforcedVelocity.Y);
+                platformStandingOn.VelocityChanged = null;
                 platformStandingOn = null;
             } else {
                 enforcedVelocity += Owner.World.Gravity * GravityInfluence * dt.TotalSeconds;
@@ -81,6 +81,11 @@ namespace mapKnight.Extended.Components.Movement {
             else if (AimedVelocity.X < 0)
                 ScaleX = -1;
             Owner.SetComponentInfo(ComponentData.ScaleX, ScaleX);
+        }
+
+        private void PlatformVelocityChanged (Vector2 newVelocity) {
+            enforcedVelocity = newVelocity;
+            Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, platformStandingOn.Owner.Transform.TR.Y + Owner.Transform.HalfSize.Y);
         }
 
         private bool MoveHorizontally (Transform oldTransform, Transform targetTransform) {
