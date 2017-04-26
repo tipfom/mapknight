@@ -59,7 +59,7 @@ namespace mapKnight.Core.Graphics {
             children.Sort((a, b) => { return -a.Size.Height.CompareTo(b.Size.Height); });
             Size size = new Size(children.Sum(batch => batch.Width), children[0].Height);
             Framebuffer buffer = new Framebuffer(size.Width, size.Height, false);
-            Spritebatch2D result = new Spritebatch2D(new Texture2D(buffer.Texture, size, "csprite"));
+            Spritebatch2D result = new Spritebatch2D(new Texture2D(buffer.Texture.ID, size, "csprite"));
 
             buffer.Bind( );
             FBOProgram.Program.Begin( );

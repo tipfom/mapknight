@@ -18,6 +18,7 @@ namespace mapKnight.Extended {
             MatrixProgram.Program = new MatrixProgram( );
             FBOProgram.Program = new FBOProgram( );
             ParticleProgram.Program = new ParticleProgram( );
+            GaussianBlurProgram.Program = new GaussianBlurProgram( );
 
             UIRenderer.Init( );
             UIRenderer.Texture = Assets.Load<Spritebatch2D>("interface");

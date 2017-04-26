@@ -15,7 +15,7 @@ namespace mapKnight.Extended {
             _Active = MainMenu;
         }
 
-        public static Screen Active { get { return _Active; } set { _Active.IsActive = false; value.IsActive = true; UIRenderer.Prepare(value); value.Activated( ); _Active = value; } }
+        public static Screen Active { get { return _Active; } set { UIRenderer.Prepare(value); _Active.IsActive = false; value.IsActive = true; value.Activated( ); _Active = value; } }
         public bool IsActive { get; private set; }
 
         public virtual void Dispose ( ) {

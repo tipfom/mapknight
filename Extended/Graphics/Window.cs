@@ -8,7 +8,7 @@ namespace mapKnight.Extended.Graphics {
         public static event HandleScreenChanged Changed;
 
         private static Color _Background;
-        public static Color Background { get { return _Background; } set { _Background = value; GL.ClearColor(_Background.R / 255f, _Background.G / 255f, _Background.B / 255f, _Background.A / 255f); } }
+        public static Color Background { get { return _Background; } set { _Background = value; UpdateBackgroundColor( ); } }
         public static Vector2 ProjectionSize { get { return new Vector2(Ratio, 1); } }
         public static Size Size;
         public static float Ratio;
@@ -23,6 +23,10 @@ namespace mapKnight.Extended.Graphics {
             Matrix.Default.CalculateMVP( );
 
             Changed?.Invoke( );
+        }
+
+        public static void UpdateBackgroundColor ( ) {
+            GL.ClearColor(_Background.R / 255f, _Background.G / 255f, _Background.B / 255f, _Background.A / 255f);
         }
     }
 }

@@ -24,8 +24,8 @@ namespace mapKnight.Extended.Graphics.UI {
         private static CachedGPUBuffer textureBuffer;
         private static CachedGPUBuffer colorBuffer;
 
-        public static void Init( ) {
-            startPositions = new int[] { 0, 0, 0 };
+        public static void Init ( ) {
+            startPositions = new int[ ] { 0, 0, 0 };
             renderCount = 0;
             vertexCount = 0;
             updateQueue = new Queue<UIItem>( );
@@ -41,7 +41,7 @@ namespace mapKnight.Extended.Graphics.UI {
             indexUsage = new List<Tuple<UIItem, int>>[ ] { new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ), new List<Tuple<UIItem, int>>( ) };
         }
 
-        public static void Dispose( ) {
+        public static void Dispose ( ) {
             buffer.Dispose( );
             uiItems.Clear( );
             indexUsage[0].Clear( );
@@ -106,6 +106,8 @@ namespace mapKnight.Extended.Graphics.UI {
                 foreach (UIItem item in uiItems[target]) {
                     Update(item);
                 }
+            } else {
+                uiItems.Add(target, new List<UIItem>( ));
             }
         }
 

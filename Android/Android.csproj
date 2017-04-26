@@ -201,7 +201,9 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\Maehhpp.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\gauss.txt" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
   <ProjectExtensions />

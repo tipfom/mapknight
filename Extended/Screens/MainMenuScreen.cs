@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using mapKnight.Core;
+﻿using System.Reflection;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
 using mapKnight.Extended.Graphics;
+using mapKnight.Extended.Graphics.Buffer;
+using OpenTK.Graphics.ES20;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Screens {
     public class MainMenuScreen : Screen {
@@ -28,8 +27,17 @@ namespace mapKnight.Extended.Screens {
             };
 
             base.Load( );
-
-
         }
-    }
+        int x = 5;
+        public override void Update (DeltaTime dt) {
+            base.Update(dt);
+            x--;
+            if (x < 0) {
+                UIWindow s = new UIWindow( );
+                s.FillUIBuffer( );
+                Screen.Active = s;
+            }
+        }
+
+   }
 }
