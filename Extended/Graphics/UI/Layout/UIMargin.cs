@@ -1,56 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace mapKnight.Extended.Graphics.UI.Layout {
-    public abstract class UIMargin : IDisposable {
-        protected UIItem Owner { get; private set; }
-
-        private float _ScreenPosition;
-        public float ScreenPosition { get { return _ScreenPosition; } protected set { _ScreenPosition = value; Changed?.Invoke( ); } }
+    public class UIMargin {
         public event Action Changed;
 
-        private bool updateOnScreenChange;
-        private bool allreadyBound;
+        private float _Left;
+        public float Left { get { return _Left; } set { _Left = value; Changed?.Invoke( ); } }
 
-        private float _Margin;
-        public float Margin { get { return _Margin; } set { _Margin = value; CalculateScreenPosition( ); } }
+        private float _Right;
+        public float Right { get { return _Right; } set { _Right = value; Changed?.Invoke( ); } }
 
-        public bool IsDirty;
+        private float _Top;
+        public float Top { get { return _Top; } set { _Top = value; Changed?.Invoke( ); } }
 
-        public UIMargin (float margin, bool updateonscreenchange) {
-            _Margin = margin;
-            updateOnScreenChange = updateonscreenchange;
+        private float _Bottom;
+        public float Bottom { get { return _Bottom; } set { _Bottom = value; Changed?.Invoke( ); } }
+
+        public UIMargin (float horizontal, float vertical) {
+            _Left = horizontal;
+            _Right = horizontal;
+            _Top = vertical;
+            _Bottom = vertical;
         }
 
-        ~UIMargin ( ) {
-            Dispose( );
-        }
-
-        protected virtual void CalculateScreenPosition ( ) {
-            IsDirty = true;
-        }
-
-        public void Bind (UIItem owner) {
-            if (allreadyBound) {
-                Owner.Size.Changed -= CalculateScreenPosition;
-            } else {
-                if (updateOnScreenChange)
-                    Window.Changed += CalculateScreenPosition;
-                allreadyBound = true;
-            }
-            Owner = owner;
-            Owner.Size.Changed += CalculateScreenPosition;
-
-            CalculateScreenPosition( );
-        }
-
-        public void Dispose ( ) {
-            if (allreadyBound) {
-                Owner.Size.Changed -= CalculateScreenPosition;
-                if (updateOnScreenChange)
-                    Window.Changed -= CalculateScreenPosition;
-            }
+        public UIMargin (float left, float right, float top, float bottom) {
+            _Left = left;
+            _Right = right;
+            _Top = top;
+            _Bottom = bottom;
         }
     }
 }

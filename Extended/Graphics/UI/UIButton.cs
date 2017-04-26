@@ -13,13 +13,13 @@ namespace mapKnight.Extended.Graphics.UI {
         private float charSize;
         private string[ ] lines;
 
-        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string text) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, 0, Color.White) {
+        public UIButton(Screen owner, UILayout layout, string text) : this(owner, layout, text, DEFAULT_TEXT_SIZE, 0, Color.White) {
         }
 
-        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string text, int depth, Color color) : this(owner, hmargin, vmargin, size, text, DEFAULT_TEXT_SIZE, depth, color) {
+        public UIButton(Screen owner, UILayout layout, string text, int depth, Color color) : this(owner, layout, text, DEFAULT_TEXT_SIZE, depth, color) {
         }
 
-        public UIButton(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, string text, float textsize, int depth, Color color) : base(owner, hmargin, vmargin, size, depth, false) {
+        public UIButton(Screen owner, UILayout layout, string text, float textsize, int depth, Color color) : base(owner, layout, depth, false) {
             _Text = text;
             lines = text.Split('\n');
             charSize = textsize;
@@ -34,12 +34,12 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public override IEnumerable<DepthVertexData> ConstructVertexData( ) {
             string textureDomain = "btn_" + (Clicked ? "p" : "i");
-            float w = EDGE_WIDTH_HEIGHT_RATIO * Size.Y;
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y, w, Size.Y), textureDomain + "l", Depth, Color);
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + w, Position.Y, Size.X - 2 * w, Size.Y), textureDomain + "c", Depth, Color);
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + Size.X - w, Position.Y, w, Size.Y), textureDomain + "r", Depth, Color);
+            float w = EDGE_WIDTH_HEIGHT_RATIO * Layout.Height;
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X, Layout.Y, w, Layout.Height), textureDomain + "l", Depth, Color);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + w, Layout.Y, Layout.Width - 2 * w, Layout.Height), textureDomain + "c", Depth, Color);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + Layout .Width- w, Layout.Y, w, Layout.Height), textureDomain + "r", Depth, Color);
 
-            Vector2 textPosition = new Vector2(Position.X + Size.X * 0.5f, Position.Y - (Size.Y - lines.Length * charSize) * 0.5f);
+            Vector2 textPosition = new Vector2(Layout.X + Layout.Width* 0.5f, Layout.Y - (Layout.Height - lines.Length * charSize) * 0.5f);
 
             foreach (DepthVertexData d in UILabel.GetVertexData(new string[ ] { Text }, UITextAlignment.Center, textPosition, charSize, Depth, Color.White)) {
                 yield return d;

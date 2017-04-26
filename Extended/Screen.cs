@@ -2,6 +2,7 @@
 using mapKnight.Core;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Screens;
+using mapKnight.Extended.Graphics;
 
 namespace mapKnight.Extended {
 
@@ -13,6 +14,11 @@ namespace mapKnight.Extended {
         static Screen ( ) {
             MainMenu = new MainMenuScreen( );
             _Active = MainMenu;
+        }
+
+        public Vector2 Size { get { return new Vector2(2 * Window.Ratio, 2); } }
+        public Vector2 Position {
+            get { return new Vector2(-Window.Ratio, 1); }
         }
 
         public static Screen Active { get { return _Active; } set { UIRenderer.Prepare(value); _Active.IsActive = false; value.IsActive = true; value.Activated( ); _Active = value; } }

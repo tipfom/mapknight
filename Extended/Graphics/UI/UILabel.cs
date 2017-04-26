@@ -12,7 +12,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private static Dictionary<char, float> charScales = new Dictionary<char, float>( ) { [' '] = 1f };
 
         static UILabel ( ) {
-            foreach (string entry in UIRenderer.Texture.Sprites()) {
+            foreach (string entry in UIRenderer.Texture.Sprites( )) {
                 char entryCharacter;
                 if (char.TryParse(entry, out entryCharacter)) {
                     float[ ] verticies = UIRenderer.Texture[entry];
@@ -25,7 +25,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private string _Text;
         public string Text {
             get { return _Text; }
-            set { _Text = value; lines = Text.Split('\n'); ((AbsoluteSize)Size).Size = MeasureText(value, charSize); } //size setting will call requupdate
+            set { _Text = value; lines = Text.Split('\n'); Layout.AdjustSize(MeasureText(value, charSize)); } //size setting will call requupdate
         }
         private string[ ] lines;
 
@@ -40,29 +40,30 @@ namespace mapKnight.Extended.Graphics.UI {
 
         readonly float charSize;
 
-        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, float size, string text, UITextAlignment alignment = UITextAlignment.Left) : this(owner, hmargin, vmargin, 0, size, text, alignment) {
+        public UILabel (Screen owner, UILayout layout, float size, string text, UITextAlignment alignment = UITextAlignment.Left) : this(owner, layout, UIDepths.MIDDLE, size, text, alignment) {
 
         }
 
-        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, int depth, float size, string text, UITextAlignment alignment = UITextAlignment.Left) : this(owner, hmargin, vmargin, depth, size, Color.White, text, alignment) {
+        public UILabel (Screen owner, UILayout layout, int depth, float size, string text, UITextAlignment alignment = UITextAlignment.Left) : this(owner, layout, depth, size, Color.White, text, alignment) {
 
         }
 
-        public UILabel (Screen owner, UIMargin hmargin, UIMargin vmargin, int depth, float size, Color color, string text, UITextAlignment alignment = UITextAlignment.Left) : base(owner, hmargin, vmargin, new AbsoluteSize(), depth) {
+        public UILabel (Screen owner, UILayout layout, int depth, float size, Color color, string text, UITextAlignment alignment = UITextAlignment.Left) : base(owner, layout, depth) {
             charSize = size;
             Text = text;
             Color = color;
             Alignment = alignment;
+            Layout.Refresh( );
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
             switch (Alignment) {
                 case UITextAlignment.Left:
-                    return GetVertexData(lines, Alignment, this.Position, this.charSize, Depth, this.Color);
+                    return GetVertexData(lines, Alignment, Layout.Position, this.charSize, Depth, this.Color);
                 case UITextAlignment.Right:
-                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X, 0), this.charSize, Depth, this.Color);
+                    return GetVertexData(lines, Alignment, Layout.Position + new Vector2(Layout.Width, 0), this.charSize, Depth, this.Color);
                 case UITextAlignment.Center:
-                    return GetVertexData(lines, Alignment, this.Position + new Vector2(this.Size.X * 0.5f, 0), this.charSize, Depth, this.Color);
+                    return GetVertexData(lines, Alignment, Layout.Position + new Vector2(Layout.Width * 0.5f, 0), this.charSize, Depth, this.Color);
                 default:
                     return null;
             }

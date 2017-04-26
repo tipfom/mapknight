@@ -5,8 +5,6 @@ using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public abstract class UIItem : IDisposable {
-        public event Action PositionChanged;
-
         public delegate void HandleItemClick( );
         public event HandleItemClick Click;
         public event HandleItemClick Release;
@@ -15,16 +13,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private bool multiClick;
         private int clickCount;
 
-        private UIRectangle _Bounds;
-        public UIRectangle Bounds { get { return _Bounds; } }
-        protected UIMargin horizontalMargin;
-        protected UIMargin verticalMargin;
-
-        private Vector2 _Position;
-        public Vector2 Position {
-            get { return _Position; }
-        }
-        public readonly IUISize Size;
+        public readonly UILayout Layout;
 
         private bool _Visible = true;
         public bool Visible { get { return Screen.IsActive && _Visible; } set { if(_Visible != value) IsDirty = true; _Visible = value; } }
@@ -36,26 +25,16 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public readonly Screen Screen;
 
-        public UIItem(Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, int depth, bool multiclick = false) {
+        public UIItem(Screen owner, UILayout layout, int depth, bool multiclick = false) {
             Screen = owner;
 
-            this.Size = size;
             this.multiClick = multiclick;
             this._Depth = depth;
+            this.Layout = layout;
             UIRenderer.Add(owner, this);
 
-            verticalMargin = vmargin;
-            verticalMargin.Bind(this);
-            verticalMargin.Changed += ( ) => IsDirty = true;
-
-            horizontalMargin = hmargin;
-            horizontalMargin.Bind(this);
-            horizontalMargin.Changed += ( ) => IsDirty = true;
-
-            Size.Changed += ( ) => IsDirty = true;
-
-            _Position = new Vector2(hmargin.ScreenPosition, vmargin.ScreenPosition);
-            _Bounds = new UIRectangle(_Position, Size.Size);
+            Layout.Initialize(this);
+            Layout.UpdateRequired += ( ) => IsDirty = true;
         }
 
         public virtual bool HandleTouch(UITouchAction action, UITouch touch) {
@@ -86,17 +65,13 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public bool Collides(Vector2 touchPosition) {
-            return Bounds.Collides(touchPosition);
+            return Layout.Rectangle.Collides(touchPosition);
         }
 
         public virtual void Update(DeltaTime dt) {
             if (IsDirty) {
-                if (horizontalMargin.IsDirty || verticalMargin.IsDirty) {
-                    _Position.X = horizontalMargin.ScreenPosition;
-                    _Position.Y = verticalMargin.ScreenPosition;
-                    _Bounds.Position = _Position;
-                    _Bounds.Size = Size.Size;
-                    PositionChanged?.Invoke( );
+                if (Layout.IsDirty) {
+                    Layout.Refresh( );
                 }
                 UIRenderer.Update(this);
                 IsDirty = false;

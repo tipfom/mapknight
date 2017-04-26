@@ -11,10 +11,10 @@ namespace mapKnight.Extended.Graphics.UI {
         UILabel dotsLabel;
         NPCComponent npc;
 
-        public UIDialog (Screen owner, NPCComponent npc) : base(owner, new UIHorizontalCenterMargin(0f), new UIBottomMargin(0.1f), new RelativeSize(0.75f, 0.35f), UIDepths.MIDDLE){
+        public UIDialog (Screen owner, NPCComponent npc) : base(owner, new UILayout(new UIMargin(0.375f, 0.175f), UIMarginType.Relative), UIDepths.MIDDLE) {
             this.npc = npc;
-            currentPopupLabel = new UILabel(owner, new UILeftMargin(0.3f * Window.Ratio), new UITopMargin(1.3f), UIDepths.FOREGROUND, 0.08f, npc.NextMessage( ), UITextAlignment.Left);
-            dotsLabel = new UILabel(owner, new UIHorizontalCenterMargin(0.68f * Window.Ratio), new UIBottomMargin(0.15f),UIDepths.FOREGROUND, 0.1f, "...", UITextAlignment.Center);
+            currentPopupLabel = new UILabel(owner, new UILayout(new UIMargin(.1f, .1f), UIMarginType.Relative, UIPosition.Top | UIPosition.Left, UIPosition.Top | UIPosition.Left, relative: this), UIDepths.FOREGROUND, 0.08f, npc.NextMessage( ), UITextAlignment.Left);
+            dotsLabel = new UILabel(owner, new UILayout(new UIMargin(.05f, .05f), UIMarginType.Relative, UIPosition.Bottom | UIPosition.Right, UIPosition.Bottom | UIPosition.Right, relative: this), UIDepths.FOREGROUND, 0.1f, "...", UITextAlignment.Center);
 
             void HandleClick ( )
             {
@@ -33,9 +33,9 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
-            yield return new DepthVertexData(Bounds.Verticies, "blank", UIDepths.BACKGROUND, Color.Black);
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Bounds.Position + new Vector2(0.0125f, -0.0125f), Bounds.Size - new Vector2(0.025f, 0.025f)), "blank", UIDepths.MIDDLE, Color.White);
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Bounds.Position + new Vector2(0.025f, -0.025f), Bounds.Size - new Vector2(0.05f, 0.05f)), "blank", UIDepths.MIDDLE, Color.Black);
+            yield return new DepthVertexData(Layout, "blank", UIDepths.BACKGROUND, Color.Black);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.Position + new Vector2(0.0125f, -0.0125f), Layout.Size - new Vector2(0.025f, 0.025f)), "blank", UIDepths.MIDDLE, Color.White);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.Position + new Vector2(0.025f, -0.025f), Layout.Size - new Vector2(0.05f, 0.05f)), "blank", UIDepths.MIDDLE, Color.Black);
         }
     }
 }

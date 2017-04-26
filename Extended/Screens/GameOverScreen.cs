@@ -21,7 +21,7 @@ namespace mapKnight.Extended.Screens {
             new UIDim(this, 0.15f, UIDepths.BACKGROUND).Release += ( ) => {
                 Screen.Active = Screen.MainMenu;
             };
-            new UIImage(this, new UIHorizontalCenterMargin(0f), new UIVerticalCenterMargin(0f), new AbsoluteSize(1.2f / 35f * 29f, 1.2f), "skull", "skull", UIDepths.FOREGROUND, Color.White);
+            new UIImage(this, new UILayout(new UIMargin(0.6f, 0.6f * 35f / 29f), UIMarginType.Absolute, UIPosition.Center, UIPosition.Center), "skull", "skull", UIDepths.FOREGROUND, Color.White);
         }
 
         public override void Update (DeltaTime dt) {
