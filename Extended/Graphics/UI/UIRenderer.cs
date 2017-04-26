@@ -108,6 +108,7 @@ namespace mapKnight.Extended.Graphics.UI {
                 }
             } else {
                 uiItems.Add(target, new List<UIItem>( ));
+                uiItemsOffset.Add(target, 0);
             }
         }
 
