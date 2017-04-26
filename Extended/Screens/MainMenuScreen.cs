@@ -33,11 +33,11 @@ namespace mapKnight.Extended.Screens {
             base.Update(dt);
             x--;
             if (x < 0) {
-                UIWindow s = new UIWindow( );
+                UIWindow s = new UIWindow(new Vector2(2f, 1.4f));
                 s.FillUIBuffer( );
                 Screen.Active = s;
             }
         }
 
-   }
+    }
 }
