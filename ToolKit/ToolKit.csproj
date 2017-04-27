@@ -487,6 +487,12 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Entities\npc_lenny.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\group_foreground_selected-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\edit_image-48.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

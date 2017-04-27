@@ -26,6 +26,7 @@ namespace mapKnight.ToolKit.Controls {
         private VertexAnimationFrame currentFrame = null;
         private VertexAnimationFrame featuredFrame = null;
         private EditBonesDialog editBonesDialog;
+        private SelectBonesDialog selectBonesDialog;
         private List<FrameworkElement> menu = new List<FrameworkElement>( );
         private Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>> undoStack = new Dictionary<VertexAnimation, Dictionary<VertexAnimationFrame, Stack<ObservableCollection<VertexBone>>>>( );
         public AnimationMetaData MetaData = new AnimationMetaData( );
@@ -48,6 +49,12 @@ namespace mapKnight.ToolKit.Controls {
             };
             scissorButton.MouseDown += ScissorButton_MouseDown;
             menu.Add(scissorButton);
+            Image selectBonesButton = new Image( ) {
+                Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_selectbones"),
+                Style = imageStyle
+            };
+            selectBonesButton.MouseDown += SelectBonesButton_MouseDown;
+            menu.Add(selectBonesButton);
 
             // init editbonesdialog
             editBonesDialog = new EditBonesDialog(bones);
@@ -55,6 +62,9 @@ namespace mapKnight.ToolKit.Controls {
             editBonesDialog.BoneDeleted += EditBonesDialog_BoneDeleted;
             editBonesDialog.BonePositionChanged += EditBonesDialog_BonePositionChanged;
             editBonesDialog.ScaleChanged += EditBonesDialog_ScaleChanged;
+            editBonesDialog.BoneTextureChanged += EditBonesDialog_BoneTextureChanged;
+
+            selectBonesDialog = new SelectBonesDialog(bones);
 
             BoneImage.BackupChanges += BoneImage_BackupChanges;
             BoneImage.DumpChanges += BoneImage_DumpChanges;
@@ -101,6 +111,10 @@ namespace mapKnight.ToolKit.Controls {
             if (undoStack.ContainsKey(currentAnimation) && undoStack[currentAnimation].ContainsKey(currentFrame)) {
                 undoStack[currentAnimation][currentFrame].Pop( );
             }
+        }
+
+        private void SelectBonesButton_MouseDown (object sender, MouseButtonEventArgs e) {
+            selectBonesDialog.Show( );
         }
 
         private void SettingButton_MouseDown (object sender, MouseButtonEventArgs e) {
@@ -154,7 +168,7 @@ namespace mapKnight.ToolKit.Controls {
             }
             undoStack[currentAnimation][currentFrame].Push(new ObservableCollection<VertexBone>(currentFrame.Bones.Select(bone => bone.Clone( ))));
         }
-        
+
         public List<FrameworkElement> Menu { get { return menu; } }
 
         public override string ToString ( ) {
@@ -170,14 +184,11 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         public void Compile (string animationpath) {
-            SelectBonesDialog selectBonesDialog = new SelectBonesDialog(bones);
-            if(selectBonesDialog.ShowDialog() ?? false) {
-                string basedirectory = Path.Combine(animationpath, MetaData.Entity);
-                if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
+            string basedirectory = Path.Combine(animationpath, MetaData.Entity);
+            if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
 
-                using (Stream stream = File.Open(Path.Combine(basedirectory, "animation.json"), FileMode.Create))
-                    AnimationSerizalizer.Compile(animations.ToArray(), stream, selectBonesDialog.SelectedIndices);
-            }
+            using (Stream stream = File.Open(Path.Combine(basedirectory, "animation.json"), FileMode.Create))
+                AnimationSerizalizer.Compile(animations.ToArray( ), stream, selectBonesDialog.GetSelectedBones( ));
         }
 
         private void CommandEditorDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
@@ -218,11 +229,11 @@ namespace mapKnight.ToolKit.Controls {
 
                 animations.Add(new VertexAnimation( ) {
                     CanRepeat = true,
-                    Frames = new ObservableCollection<VertexAnimationFrame>(new[ ] { new VertexAnimationFrame( ) { Bones = firstFramesBones, Time = 500} }),
+                    Frames = new ObservableCollection<VertexAnimationFrame>(new[ ] { new VertexAnimationFrame( ) { Bones = firstFramesBones, Time = 500 } }),
                     Name = "Default_" + animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( ),
                     IsDefault = animations.Count == 0
                 });
-                if(animations.Count == 1) {
+                if (animations.Count == 1) {
                     featuredFrame = animations[0].Frames[0];
                     featuredFrame.Featured = true;
                 }
@@ -310,6 +321,15 @@ namespace mapKnight.ToolKit.Controls {
 
             BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == -index);
             if (image != null && currentFrame != null) image.Update( );
+        }
+
+        private void EditBonesDialog_BoneTextureChanged (VertexBone arg1, string arg2) {
+            BoneImage.ImageData initial = BoneImage.Data[this][Path.GetFileNameWithoutExtension(arg1.Image)];
+            BitmapImage image = new BitmapImage(new Uri(arg2));
+            BoneImage.Data[this][Path.GetFileNameWithoutExtension(arg1.Image)] = new BoneImage.ImageData( ) { Image = image, TransformOrigin = new Point(Math.Min(initial.TransformOrigin.X, image.PixelWidth), Math.Min(initial.TransformOrigin.Y, image.PixelHeight)) };
+            arg1.SetBitmapImage(this);
+            arg1.OnPropertyChanged("BitmapImage");
+            ResetEditor( );
         }
 
         private void treeview_animations_MouseDown (object sender, MouseButtonEventArgs e) {

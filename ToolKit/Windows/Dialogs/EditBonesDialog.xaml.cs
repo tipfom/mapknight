@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using mapKnight.ToolKit.Data;
 using Microsoft.Win32;
+using mapKnight.ToolKit.Controls.Animation;
 
 namespace mapKnight.ToolKit.Windows.Dialogs {
     public partial class EditBonesDialog : Window {
@@ -19,15 +20,17 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
         public event Action<VertexBone> BoneAdded;
         public event Action<int> BoneDeleted;
         public event Action<int, int> BonePositionChanged;
+        public event Action<VertexBone, string> BoneTextureChanged;
 
         private OpenFileDialog openImageDialog = new OpenFileDialog( ) { Multiselect = true, ValidateNames = true, CheckFileExists = true, Filter = "Images|*.png;*.jpg;*.jpeg" };
 
-        public EditBonesDialog ( ) {
+        private EditBonesDialog ( ) {
             InitializeComponent( );
             App.Current.MainWindow.Closed += (sender, e) => Close( );
             App.Current.MainWindow.Deactivated += (sender, e) => Topmost = false;
             App.Current.MainWindow.Activated += (sender, e) => Topmost = true;
             this.Topmost = true;
+            Owner = App.Current.MainWindow;
         }
 
         public EditBonesDialog (ObservableCollection<VertexBone> bonelist) : this( ) {
@@ -100,6 +103,12 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             if (App.Current.MainWindow != null) {
                 e.Cancel = true;
                 Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void Button_Click (object sender, RoutedEventArgs e) {
+            if (openImageDialog.ShowDialog( ) ?? false) {
+                BoneTextureChanged?.Invoke((VertexBone)listbox_bones.SelectedItem, openImageDialog.FileName);
             }
         }
     }

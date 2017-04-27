@@ -19,6 +19,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
 
         public ResizeEntityDialog ( ) {
             InitializeComponent( );
+            Owner = App.Current.MainWindow;
         }
 
         public ResizeEntityDialog (double ratio, IList<VertexBone> bones, AnimationControl parent) : this( ) {
