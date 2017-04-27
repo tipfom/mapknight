@@ -5,17 +5,22 @@ using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Programs;
 using mapKnight.Extended.Graphics.UI.Layout;
 using OpenTK.Graphics.ES20;
+using mapKnight.Extended.Graphics;
+using mapKnight.Extended.Graphics.UI;
 
-namespace mapKnight.Extended.Graphics.UI {
-    public class UIWindow : Screen {
+namespace mapKnight.Extended.Screens {
+    public class WindowScreen : Screen {
         private Framebuffer uiBuffer;
+        public readonly Screen Parent;
 
-        public UIWindow (Vector2 size) {
+        public WindowScreen (Screen parent, Vector2 size) {
+            Parent = parent;
+
             uiBuffer = new Framebuffer(Window.Size.Width, Window.Size.Height, true);
-            new UIWindowItem(this, size);
+            new UIWindowItem(this, parent, size);
         }
 
-        public void FillUIBuffer ( ) {
+        public void FillUIBuffer (bool blur) {
             Framebuffer cache = new Framebuffer(Window.Size.Width, Window.Size.Height, true);
 
             uiBuffer.Bind( );
@@ -25,9 +30,12 @@ namespace mapKnight.Extended.Graphics.UI {
             UIRenderer.Update(default(DeltaTime));
             UIRenderer.Draw( );
 
-            GaussianBlurProgram.Program.Begin( );
-            GaussianBlurProgram.Program.Draw(uiBuffer, cache, true);
-            GaussianBlurProgram.Program.End( );
+            if (blur) {
+                GaussianBlurProgram.Program.Begin( );
+                GaussianBlurProgram.Program.Draw(uiBuffer, cache, true);
+                GaussianBlurProgram.Program.End( );
+            }
+
             uiBuffer.Unbind( );
 
             cache.Dispose( );
@@ -42,18 +50,18 @@ namespace mapKnight.Extended.Graphics.UI {
 
         private class UIWindowItem : UIItem {
             private Vector2 screenSize;
+            private Screen parent;
 
-            public UIWindowItem (Screen owner, Vector2 screenSize) : base(owner, new UILayout(new UIMargin(0f, 1f, 0f, 1f), UIMarginType.Relative), UIDepths.BACKGROUND, false) {
+            public UIWindowItem (Screen owner, Screen parent, Vector2 screenSize) : base(owner, new UILayout(new UIMargin(0f, 1f, 0f, 1f), UIMarginType.Relative), UIDepths.BACKGROUND, false) {
                 this.screenSize = screenSize;
+                this.parent = parent;
                 IsDirty = true;
             }
 
             public override bool HandleTouch (UITouchAction action, UITouch touch) {
                 if (action == UITouchAction.End) {
-                    if (Math.Abs(touch.RelativePosition.X) <= screenSize.X / 2f && Math.Abs(touch.RelativePosition.Y) <= screenSize.Y / 2f && (touch.RelativePosition - screenSize / 2f).MagnitudeSqr( ) > (6f / 150f * Window.Ratio) * (6f / 150f * Window.Ratio)) {
-                        global::Android.Widget.Toast.MakeText(Assets.Context, "inside", global::Android.Widget.ToastLength.Short).Show( );
-                    } else {
-                        global::Android.Widget.Toast.MakeText(Assets.Context, "outside", global::Android.Widget.ToastLength.Short).Show( );
+                    if (Math.Abs(touch.RelativePosition.X) > screenSize.X / 2f || Math.Abs(touch.RelativePosition.Y) > screenSize.Y / 2f || (touch.RelativePosition - screenSize / 2f).MagnitudeSqr( ) < 0.0016 * Window.Ratio * Window.Ratio) {
+                        Screen.Active = parent;
                     }
                 }
                 return true;

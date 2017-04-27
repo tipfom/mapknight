@@ -105,6 +105,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIGesturePanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItemFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UILabel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIPanel.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITextAlignment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouchAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screens\WindowScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Manager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MobileAndroidSerializer.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameOverScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screens\Windows\WeaponSelectWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeapon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeaponCollection.cs" />
   </ItemGroup>

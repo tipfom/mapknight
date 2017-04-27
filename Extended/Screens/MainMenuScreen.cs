@@ -5,6 +5,7 @@ using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.Buffer;
 using OpenTK.Graphics.ES20;
 using mapKnight.Core;
+using mapKnight.Extended.Screens.Windows;
 
 namespace mapKnight.Extended.Screens {
     public class MainMenuScreen : Screen {
@@ -16,7 +17,7 @@ namespace mapKnight.Extended.Screens {
                 );
             UIMap map = new UIMap(this);
 
-            UIButton playButton = new UIButton(this, new UILayout(new UIMargin(293f / 450f , 102f / 450f , 53f / 450f, 176f / 450f), UIMarginType.Pixel, UIPosition.Bottom | UIPosition.Left, UIPosition.Bottom | UIPosition.Left), "PLAY");
+            UIButton playButton = new UIButton(this, new UILayout(new UIMargin(293f / 450f, 102f / 450f, 53f / 450f, 176f / 450f), UIMarginType.Pixel, UIPosition.Bottom | UIPosition.Left, UIPosition.Bottom | UIPosition.Left), "PLAY");
             playButton.Release += ( ) => {
                 if (map.CurrentSelection != null) {
                     Screen.Gameplay = new GameplayScreen(map.CurrentSelection);
@@ -26,17 +27,19 @@ namespace mapKnight.Extended.Screens {
                 }
             };
 
+            WeaponSelectWindow weaponSelectWindow = new WeaponSelectWindow(this);
+            weaponSelectWindow.Load( );
+            UIButton weaponButton = new UIButton(this, new UILayout(new UIMargin(293f / 450f, 102f / 450f, 53f / 450f, 115f / 450f), UIMarginType.Pixel, UIPosition.Bottom | UIPosition.Left, UIPosition.Bottom | UIPosition.Left), "CUSTOMIZE");
+            weaponButton.Release += ( ) => {
+                weaponSelectWindow.FillUIBuffer(true);
+                Screen.Active = weaponSelectWindow;
+            };
+
             base.Load( );
         }
-        int x = 5;
+
         public override void Update (DeltaTime dt) {
             base.Update(dt);
-            if (false) {
-                UIWindow s = new UIWindow(new Vector2(2f, 1.4f));
-                s.FillUIBuffer( );
-                Screen.Active = s;
-            }
         }
-
     }
 }

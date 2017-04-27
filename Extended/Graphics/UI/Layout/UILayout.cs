@@ -3,6 +3,18 @@ using System;
 
 namespace mapKnight.Extended.Graphics.UI.Layout {
     public class UILayout {
+        private static Vector2 REFERENCE_POSITION;
+        private static Vector2 REFERENCE_SIZE;
+
+        static UILayout ( ) {
+            Window.Changed += ( ) => {
+                REFERENCE_POSITION = new Vector2(-Window.Ratio, 1);
+                REFERENCE_SIZE = new Vector2(2 * Window.Ratio, 2);
+            };
+            REFERENCE_POSITION = new Vector2(-Window.Ratio, 1);
+            REFERENCE_SIZE = new Vector2(2 * Window.Ratio, 2);
+        }
+
         public static implicit operator float[ ] (UILayout layout) {
             return layout.Rectangle.Verticies;
         }
@@ -61,8 +73,8 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
 
         public void Refresh ( ) {
             IsDirty = false;
-            Vector2 relativePosition = _Relative?.Layout.Position ?? item.Screen.Position;
-            Vector2 relativeSize = _Relative?.Layout.Size ?? item.Screen.Size;
+            Vector2 relativePosition = _Relative?.Layout.Position ?? REFERENCE_POSITION;
+            Vector2 relativeSize = _Relative?.Layout.Size ?? REFERENCE_SIZE;
             float marginRight = _Margin.Right, marginLeft = _Margin.Left, marginTop = _Margin.Top, marginBottom = _Margin.Bottom;
             switch (_Type) {
                 case UIMarginType.Relative:
@@ -154,7 +166,7 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
         }
 
         public void AdjustSize (Vector2 target) {
-            Vector2 relativeSize = _Relative?.Layout.Size ?? item.Screen.Size;
+            Vector2 relativeSize = _Relative?.Layout.Size ?? REFERENCE_SIZE;
 
             if (_Type == UIMarginType.Relative) target /= relativeSize;
 
