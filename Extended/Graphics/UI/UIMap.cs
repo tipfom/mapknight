@@ -138,7 +138,7 @@ namespace mapKnight.Extended.Graphics.UI {
             };
         }
 
-        private Station selectedStation;
+        private Station selectedStation = STATIONS[0];
         private UnlockedState unlockedState = new UnlockedState(Line.LightGreen, 0);
         private bool isTrainMoving;
         private Vector2 currentPosition;
