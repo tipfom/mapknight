@@ -96,6 +96,7 @@
     <AndroidAsset Include="Assets\textures\guardian\guardian.json" />
     <AndroidAsset Include="Assets\textures\blackhole.json" />
     <AndroidAsset Include="Assets\maps\Maehhpp.map" />
+    <AndroidAsset Include="Assets\textures\drill.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -203,6 +204,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\fragment\gauss.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\drill.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

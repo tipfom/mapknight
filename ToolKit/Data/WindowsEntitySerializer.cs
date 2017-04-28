@@ -43,6 +43,8 @@ namespace mapKnight.ToolKit.Data {
                     return EntityID.Fir;
                 case "Lenny":
                     return EntityID.Npc_Lenny;
+                case "Drillbomb":
+                    return EntityID.Drillbomb;
                 default:
                     return EntityID.Error;
             }

@@ -26,6 +26,7 @@ namespace mapKnight.ToolKit.Controls {
         private static readonly Vector2 PLATFORM_COPPER_SIZE = new Vector2(1.5f, 1f);
         private static readonly Vector2 FIR_SIZE = new Vector2(5f, 5f * 71f / 54f);
         private static readonly Vector2 NPC_LENNY_SIZE = new Vector2(1.1f, 1.1f);
+        private static readonly Vector2 DRILLBOMB_SIZE = new Vector2 (19f / 29f, 1f);
 
         public static readonly Entity.Configuration[ ] SHADOW_CONFIGURATIONS = new Entity.Configuration[ ] {
             new Entity.Configuration("Canone", CANONE_SIZE) { Components = new ComponentList( ) {
@@ -73,6 +74,10 @@ namespace mapKnight.ToolKit.Controls {
                 }
             },
             new Entity.Configuration("Lenny", NPC_LENNY_SIZE) { Components = new ComponentList( ) {
+                    new ShadowComponent.Configuration( )
+                }
+            },
+            new Entity.Configuration("Drillbomb", DRILLBOMB_SIZE){Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
             }
@@ -129,6 +134,10 @@ namespace mapKnight.ToolKit.Controls {
                     new ActiveComponent.Configuration( ),
                     new NPCDataComponent.Configuration( )
                 }
+            },
+            new Entity.Configuration("Drillbomb", DRILLBOMB_SIZE){Components = new ComponentList( ) {
+                    new ActiveComponent.Configuration( )
+                }
             }
         };
 
@@ -155,6 +164,7 @@ namespace mapKnight.ToolKit.Controls {
             entityCollection.Add(new EntityData("Copper Platform", "platform_copper", g));
             entityCollection.Add(new EntityData("Fir", "fir", g));
             entityCollection.Add(new EntityData("Lenny", "npc_lenny", g));
+            entityCollection.Add(new EntityData("Drillbomb", "drillbomb", g));
 
             listbox_entities.SelectedIndex = 0;
         }

@@ -1440,6 +1440,45 @@ namespace mapKnight.Extended {
                     return _Landmine;
                 }
             }
+
+            private static Entity.Configuration _Drillbomb;
+            public static Entity.Configuration Drillbomb {
+                get {
+                    if(_Drillbomb == null) {
+                        _Drillbomb = new Entity.Configuration("Drillbomb", new Vector2(19f / 29f, 1f)) {
+                            Components = new ComponentList {
+                                new DrillComponent.Configuration( ),
+                                new SpriteComponent.Configuration( ) {
+                                    Texture = "drill",
+                                    Animations = new SpriteAnimation[ ] {
+                                        new SpriteAnimation( ) {
+                                            Name = "idle", CanRepeat = true,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d0" }, Time = 100 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d1" }, Time = 100 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d2" }, Time = 100 },
+                                            }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "explode", CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d2" }, Time=80 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "ex" }, Time=60 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "ex" }, Time=20 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d2" }, Time=20 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "ex" }, Time=20 },
+                                            }
+                                        }
+                                    }
+                                },
+                                new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } },
+                                new TriggerComponent.Configuration( ) { Offset = 0, TriggerZone = new Vector2(3, 3) }
+                            }
+                        };
+                    }
+                    return _Drillbomb;
+                }
+            }
         }
 
         public static class Platforms {
