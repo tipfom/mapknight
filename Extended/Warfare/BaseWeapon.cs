@@ -22,6 +22,8 @@ namespace mapKnight.Extended.Warfare {
         public readonly string Name;
         public readonly int ID;
         public readonly float Damage;
+        public readonly int Cooldown;
+        public readonly int AttackTime;
         public readonly string Texture;
         public readonly VertexAnimationData AnimationData;
 
@@ -30,17 +32,20 @@ namespace mapKnight.Extended.Warfare {
         private Transform hitbox;
         private Entity owner;
         private Timer timer;
+        private int nextHitTime;
 
-        public BaseWeapon (string Name, int ID, float Damage, string Texture, int timeUntillHit, VertexAnimationData AnimationData, Transform hitbox, Entity owner) {
+        public BaseWeapon (string Name, int ID, float Damage, int Cooldown, string Texture, int AttackTime, VertexAnimationData AnimationData, Transform hitbox, Entity owner) {
             this.Name = Name;
             this.ID = ID;
             this.Damage = Damage;
+            this.Cooldown = Cooldown;
+            this.AttackTime = AttackTime;
             this.Texture = Texture;
             this.AnimationData = AnimationData;
             this.hitbox = hitbox;
             this.hitboxOffset = hitbox.Center;
             this.owner = owner;
-            this.timer = new Timer(timeUntillHit);
+            this.timer = new Timer(AttackTime);
             this.timer.Elapsed += Timer_Elapsed;
         }
 
@@ -71,6 +76,7 @@ namespace mapKnight.Extended.Warfare {
 #endif
 
         public bool Update () {
+            if (nextHitTime > Environment.TickCount) return false;
             hitbox.Center = owner.Transform.Center + new Vector2(motionComponent.ScaleX * hitboxOffset.X, hitboxOffset.Y);
             for(int i = 0; i< owner.World.Entities.Count; i++) {
                 Entity entity = owner.World.Entities[i];
@@ -82,6 +88,7 @@ namespace mapKnight.Extended.Warfare {
         }
 
         public void Attack ( ) {
+            nextHitTime = Environment.TickCount + Cooldown + AttackTime;
             timer.Start( );
         }
 

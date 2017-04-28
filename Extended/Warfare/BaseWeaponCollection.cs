@@ -6,7 +6,7 @@ namespace mapKnight.Extended.Warfare {
     public static class BaseWeaponCollection {
         public static BaseWeapon DiamondSword (Entity owner) {
             return new BaseWeapon(
-                "Diamond Sword", 0, 3f, "swords/diamond", 180,
+                "Diamond Sword", 0, 3f, 1000, "swords/diamond", 180,
                 new VertexAnimationData( ) {
                     Offsets = new Vector2[ ] {
                         new Vector2(3, 25),     // sword
