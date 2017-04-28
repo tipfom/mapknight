@@ -45,6 +45,8 @@ namespace mapKnight.ToolKit.Data {
                     return EntityID.Npc_Lenny;
                 case "Drillbomb":
                     return EntityID.Drillbomb;
+                case "Oak":
+                    return EntityID.Oak;
                 default:
                     return EntityID.Error;
             }
@@ -89,6 +91,12 @@ namespace mapKnight.ToolKit.Data {
                     break;
                 case EntityID.Npc_Lenny:
                     entity = EntityListBox.FINAL_CONFIGURATIONS[11].Create(position, world, false);
+                    break;
+                case EntityID.Drillbomb:
+                    entity = EntityListBox.FINAL_CONFIGURATIONS[12].Create(position, world, false);
+                    break;
+                case EntityID.Oak:
+                    entity = EntityListBox.FINAL_CONFIGURATIONS[13].Create(position, world, false);
                     break;
             }
 
