@@ -8,6 +8,9 @@ using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
 using Map = mapKnight.Extended.Graphics.Map;
 using mapKnight.Core.World.Components;
+using System.Collections.Generic;
+using mapKnight.Core.World.Serialization;
+using mapKnight.Extended.Warfare;
 
 namespace mapKnight.Extended.Screens {
 

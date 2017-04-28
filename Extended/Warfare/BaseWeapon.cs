@@ -67,7 +67,7 @@ namespace mapKnight.Extended.Warfare {
 
 #if DEBUG
         private void UpdateSizeVertices ( ) {
-            sizeVertices = (owner.Transform.Size * owner.World.VertexSize).ToQuad( );
+            sizeVertices = (hitbox.Size * owner.World.VertexSize).ToQuad( );
         }
 
         public void Destroy ( ) {

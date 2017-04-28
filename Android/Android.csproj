@@ -81,7 +81,7 @@
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
     <AndroidAsset Include="Assets\gestures\gestures" />
-    <AndroidAsset Include="Assets\textures\swords\diamond.json" />
+    <AndroidAsset Include="Assets\textures\weapons\broadswords\diamond.json" />
     <AndroidAsset Include="Assets\textures\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\shell.json" />
     <AndroidAsset Include="Assets\textures\plugger_bullet.json" />
@@ -97,6 +97,9 @@
     <AndroidAsset Include="Assets\textures\blackhole.json" />
     <AndroidAsset Include="Assets\maps\Maehhpp.map" />
     <AndroidAsset Include="Assets\textures\drill.json" />
+    <AndroidAsset Include="Assets\textures\weapons\dagger\rubidium.json" />
+    <AndroidAsset Include="Assets\textures\weapons\rapier\jade.json" />
+    <AndroidAsset Include="Assets\textures\weapons\broadswords\copper.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -179,7 +182,7 @@
     <AndroidAsset Include="Assets\textures\shark\body.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\swords\diamond.png" />
+    <AndroidAsset Include="Assets\textures\weapons\broadswords\diamond.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\slime.png" />
@@ -207,6 +210,18 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\drill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\weapons\dagger\rubidium.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\weapons\rapier\jade.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\weapons\broadswords\copper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Screens\" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
