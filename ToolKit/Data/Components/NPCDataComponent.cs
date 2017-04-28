@@ -35,7 +35,7 @@ namespace mapKnight.ToolKit.Data.Components {
             yield return Tuple.Create(DataID.NPC_Messages, DataType.StringArray, (object)Dialog);
         }
         
-        public void Render(SpriteBatch spriteBatch, int offsetx, int offsety, int tilesize) {
+        public void Render(SpriteBatch spriteBatch, float offsetx, float offsety, int tilesize) {
         }
 
         public new class Configuration : Component.Configuration {
