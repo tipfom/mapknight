@@ -71,6 +71,7 @@ namespace mapKnight.ToolKit.Editor {
 
         private Entity cachedEntity, currentlySelectingEntity, currentlySelectedEntity;
         private Func<Vector2, bool> currentVectorRequestCallback;
+        private Microsoft.Xna.Framework.Vector2 selectedTile;
 
         public void Load (Project project) {
             xnaTextures.Clear( );
@@ -356,10 +357,6 @@ namespace mapKnight.ToolKit.Editor {
             scrollbar_vertical.Value = currentMap.Height - tilemapview.RenderSize.Height / tilemapview.TileSize + 2;
         }
 
-        private Point GetClickedTile ( ) {
-            return new Point(tilemapview.Offset.X + tilemapview.CurrentSelection.X, currentMap.Height - tilemapview.Offset.Y - tilemapview.CurrentSelection.Y - 1);
-        }
-
         private IEnumerable<Map> GetMaps ( ) {
             foreach (object map in ((ComboBox)_Menu[1]).Items)
                 yield return (Map)map;
@@ -477,7 +474,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewClickTiles (object sender, MouseButtonEventArgs e) {
-            Point clickedTile = GetClickedTile( );
+            Point clickedTile = new Point(Math.Floor(selectedTile.X), currentMap.Height - Math.Floor(selectedTile.Y)-1);
             if (e.RightButton == MouseButtonState.Pressed) {
                 Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     Tuple.Create(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
@@ -666,7 +663,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewMoveTiles (object sender, MouseEventArgs e, bool updated) {
-            Point clickedTile = GetClickedTile( );
+            Point clickedTile = new Point(Math.Floor(selectedTile.X), currentMap.Height - Math.Floor(selectedTile.Y)-1);
             if (e.RightButton == MouseButtonState.Pressed) {
                 Cache[currentMap].Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     Tuple.Create(clickedTile,currentLayer, currentMap.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
@@ -789,7 +786,7 @@ namespace mapKnight.ToolKit.Editor {
 
         private bool UpdateSelectedTile (MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
-            Microsoft.Xna.Framework.Vector2 selectedTile = new Microsoft.Xna.Framework.Vector2(
+            selectedTile = new Microsoft.Xna.Framework.Vector2(
                 (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, currentMap.Width - 1)),
                 (float)Math.Max(0, Math.Min(positionOnControl.Y / tilemapview.TileSize + tilemapview.Offset.Y, currentMap.Height - 1)));
             if (selectedTile.X != tilemapview.CurrentSelection.X || selectedTile.Y != tilemapview.CurrentSelection.Y) {
