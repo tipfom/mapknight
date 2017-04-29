@@ -786,16 +786,16 @@ namespace mapKnight.ToolKit.Editor {
 
         private bool UpdateSelectedTile (MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
-            selectedTile = new Microsoft.Xna.Framework.Vector2(
+            Microsoft.Xna.Framework.Vector2 nextSelectedTile = new Microsoft.Xna.Framework.Vector2(
                 (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, currentMap.Width - 1)),
                 (float)Math.Max(0, Math.Min(positionOnControl.Y / tilemapview.TileSize + tilemapview.Offset.Y, currentMap.Height - 1)));
-            if (selectedTile.X != tilemapview.CurrentSelection.X || selectedTile.Y != tilemapview.CurrentSelection.Y) {
-                text_xpos.Text = Math.Floor(selectedTile.X).ToString( );
-                text_ypos.Text = Math.Floor(currentMap.Height - selectedTile.Y).ToString( );
-                tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2((float)Math.Floor(selectedTile.X), (float)Math.Floor(selectedTile.Y)) + new Microsoft.Xna.Framework.Vector2(-tilemapview.Offset.X, -tilemapview.Offset.Y);
-                return true;
-            } else
-                return false;
+            bool changed = Math.Floor(selectedTile.X) != Math.Floor(nextSelectedTile.X) || Math.Floor(selectedTile.Y) != Math.Floor(nextSelectedTile.Y);
+
+            selectedTile = nextSelectedTile;
+            text_xpos.Text = Math.Floor(selectedTile.X).ToString( );
+            text_ypos.Text = Math.Floor(currentMap.Height - selectedTile.Y).ToString( );
+            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2((float)Math.Floor(selectedTile.X), (float)Math.Floor(selectedTile.Y)) - tilemapview.Offset;
+            return changed;
         }
 
         private void wrappanel_tiles_DragEnter (object sender, DragEventArgs e) {
