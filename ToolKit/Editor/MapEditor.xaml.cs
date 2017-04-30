@@ -845,6 +845,8 @@ namespace mapKnight.ToolKit.Editor {
                     }
                 }
                 SelectTool(Tool.Pen);
+            } else {
+                wrappanel_tiles.SelectedIndex = 0;
             }
         }
 
@@ -876,9 +878,11 @@ namespace mapKnight.ToolKit.Editor {
 
         private void CommandDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
             int index = wrappanel_tiles.SelectedIndex;
-            wrappanel_tiles.Items.RemoveAt(index);
-            currentMap.RemoveTile(index);
-            tilemapview.Update( );
+            if (index > 0) {
+                wrappanel_tiles.Items.RemoveAt(index);
+                currentMap.RemoveTile(index);
+                tilemapview.Update( );
+            }
         }
 
         private void CommandDelete_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
