@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using mapKnight.Extended.Graphics.UI.Layout;
 using mapKnight.Core;
 using System;
@@ -12,7 +13,7 @@ namespace mapKnight.Extended.Graphics.UI {
         static UIMap ( ) {
             STATIONS = new Station[ ] {
                 new Station(0, Line.LightGreen, 0, "Maehhpp"),
-                new Station(1, Line.LightGreen, 3, null),
+                new Station(1, Line.LightGreen, 3, "green-1"),
                 new Station(2, Line.LightGreen, 4, null),
                 new Station(3, Line.LightGreen, 8, null),
                 new Station(4, Line.LightGreen, 10, null),
@@ -138,8 +139,8 @@ namespace mapKnight.Extended.Graphics.UI {
             };
         }
 
-        private Station selectedStation;
-        private UnlockedState unlockedState = new UnlockedState(Line.LightGreen, 0);
+        private Station selectedStation = STATIONS[0];
+        private UnlockedState unlockedState = new UnlockedState(Line.LightGreen, 1);
         private bool isTrainMoving;
         private Vector2 currentPosition;
         private int currentWaypointIndex;
@@ -152,26 +153,15 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public string CurrentSelection { get { return (selectedStation?.IsAvailable(unlockedState) ?? false) ? selectedStation.Map : null; } }
 
-        public UIMap (Screen owner) : base(owner, new UILeftMargin(0f), new UIBottomMargin(0f), new AbsoluteSize(0f, 0f), UIDepths.MIDDLE, false) {
+        public UIMap (Screen owner) : base(owner, new UILayout(new UIMargin(38f / 450f, 229f / 450f, 229f / 450f, 13f / 450f),UIMarginType.Pixel,UIPosition.Bottom | UIPosition.Left, UIPosition.Bottom | UIPosition.Left), UIDepths.MIDDLE, false) {
             IsDirty = true;
             currentPosition = currentWaypoint;
-
-            Window.Changed += ( ) => {
-                UpdateMargins( );
-            };
-            UpdateMargins( );
-        }
-
-        private void UpdateMargins ( ) {
-            horizontalMargin.Margin = 38f / 450f * Window.Ratio * 2f;
-            verticalMargin.Margin = 13f / 450f * Window.Ratio * 2f;
-            ((AbsoluteSize)Size).Size = new Vector2(229f / 450f * Window.Ratio * 2f, 229f / 450f * Window.Ratio * 2f);
         }
 
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
             if (action != UITouchAction.End) return true;
 
-            Vector2 clickedPosition = (touch.RelativePosition - Position).Abs( ) / Size.Size;
+            Vector2 clickedPosition = (touch.RelativePosition - Layout.Position).Abs( ) / Layout.Size;
             if (zoomedQuadrant > 0) clickedPosition /= 2f;
             if (zoomedQuadrant == 1 || zoomedQuadrant == 4) clickedPosition.X += 0.5f;
             if (zoomedQuadrant == 3 || zoomedQuadrant == 4) clickedPosition.Y += 0.5f;
@@ -256,30 +246,30 @@ namespace mapKnight.Extended.Graphics.UI {
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
             float backgroundHeight = 2f / 4f * 3f * Window.Ratio;
             yield return new DepthVertexData(UIRectangle.GetVerticies(-Window.Ratio, -1f + backgroundHeight, 2 * Window.Ratio, backgroundHeight), "mmenu_bckgrnd", UIDepths.BACKGROUND, Color.White);
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Position + new Vector2(-4f / 450f * Window.Ratio * 2f, 4f / 450f * Window.Ratio * 2f), new Vector2(236f / 450f * Window.Ratio * 2f, 238f / 450f * Window.Ratio * 2f)), "map_border", UIDepths.FOREGROUND, Color.White);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.Position + new Vector2(-4f / 450f * Window.Ratio * 2f, 4f / 450f * Window.Ratio * 2f), new Vector2(236f / 450f * Window.Ratio * 2f, 238f / 450f * Window.Ratio * 2f)), "map_border", UIDepths.FOREGROUND, Color.White);
             if (zoomedQuadrant > 0) {
-                yield return new DepthVertexData(Bounds.Verticies, "map_" + zoomedQuadrant, Depth, Color.White);
+                yield return new DepthVertexData(Layout, "map_" + zoomedQuadrant, Depth, Color.White);
                 if (selectedStation != null && IsVisible(WAYPOINTS[selectedStation.Position])) {
                     Vector2 selectedStationPosition = Transform(WAYPOINTS[selectedStation.Position]);
-                    yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + selectedStationPosition.X * Size.Size.X - .1f, Position.Y - selectedStationPosition.Y * Size.Size.Y + .2f * 31f / 19f, .2f, .2f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);
+                    yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + selectedStationPosition.X * Layout.Width - .1f, Layout.Y - selectedStationPosition.Y * Layout.Height + .2f * 31f / 19f, .2f, .2f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);
                 }
                 if (IsVisible(currentPosition)) {
                     Vector2 drawnPosition = Transform(currentPosition);
                     float wobble = isTrainMoving ? 0.01f * (float)Math.Cos(Environment.TickCount * Math.PI / 250d) : 0f;
-                    yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + drawnPosition.X * Size.Size.X - currentDirection * .16f, Position.Y - drawnPosition.Y * Size.Y + .32f * 25f / 32f / 2f + wobble, currentDirection * .32f, .32f * 25f / 32f + wobble), "train_" + currentTextureIndex, Depth + 1, Color.White);
+                    yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + drawnPosition.X * Layout.Width - currentDirection * .16f, Layout.Y - drawnPosition.Y * Layout.Height + .32f * 25f / 32f / 2f + wobble, currentDirection * .32f, .32f * 25f / 32f + wobble), "train_" + currentTextureIndex, Depth + 1, Color.White);
                 }
             } else {
-                Vector2 sizeHalf = Size.Size / 2f;
-                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + sizeHalf.X, Position.Y, sizeHalf.X, sizeHalf.Y), "map_1", Depth, Color.White);
-                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y, sizeHalf.X, sizeHalf.Y), "map_2", Depth, Color.White);
-                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y - sizeHalf.Y, sizeHalf.X, sizeHalf.Y), "map_3", Depth, Color.White);
-                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + sizeHalf.X, Position.Y - sizeHalf.Y, sizeHalf.X, sizeHalf.Y), "map_4", Depth, Color.White);
+                Vector2 sizeHalf = Layout.Size / 2f;
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + sizeHalf.X, Layout.Y, sizeHalf.X, sizeHalf.Y), "map_1", Depth, Color.White);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X, Layout.Y, sizeHalf.X, sizeHalf.Y), "map_2", Depth, Color.White);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X, Layout.Y - sizeHalf.Y, sizeHalf.X, sizeHalf.Y), "map_3", Depth, Color.White);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + sizeHalf.X, Layout.Y - sizeHalf.Y, sizeHalf.X, sizeHalf.Y), "map_4", Depth, Color.White);
                 if (selectedStation != null) {
                     Vector2 selectedStationPosition = WAYPOINTS[selectedStation.Position];
-                    yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + selectedStationPosition.X * Size.Size.X - .05f, Position.Y - selectedStationPosition.Y * Size.Size.Y + .1f * 31f / 19f, .1f, .1f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);
+                    yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + selectedStationPosition.X * Layout.Width - .05f, Layout.Y - selectedStationPosition.Y * Layout.Height + .1f * 31f / 19f, .1f, .1f * 32f / 19f), "marker_" + (selectedStation.IsAvailable(unlockedState) ? "a" : "d"), Depth + 1, Color.White);
                 }
                 float wobble = isTrainMoving ? 0.005f * (float)Math.Cos(Environment.TickCount * Math.PI / 250d) : 0f;
-                yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X + currentPosition.X * Size.Size.X - currentDirection * .08f, Position.Y - currentPosition.Y * Size.Y + .16f * 25f / 32f / 2f + wobble, currentDirection * .16f, .16f * 25f / 32f + wobble), "train_" + currentTextureIndex, Depth + 1, Color.White);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X + currentPosition.X * Layout.Width - currentDirection * .08f, Layout.Y - currentPosition.Y * Layout.Height + .16f * 25f / 32f / 2f + wobble, currentDirection * .16f, .16f * 25f / 32f + wobble), "train_" + currentTextureIndex, Depth + 1, Color.White);
             }
         }
 

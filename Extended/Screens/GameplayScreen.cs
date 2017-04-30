@@ -8,6 +8,9 @@ using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
 using Map = mapKnight.Extended.Graphics.Map;
 using mapKnight.Core.World.Components;
+using System.Collections.Generic;
+using mapKnight.Core.World.Serialization;
+using mapKnight.Extended.Warfare;
 
 namespace mapKnight.Extended.Screens {
 
@@ -44,15 +47,15 @@ namespace mapKnight.Extended.Screens {
             playerComponent = playerEntity.GetComponent<PlayerComponent>( );
             map.Focus(playerEntity.ID);
 
-            debugLabel = new UILabel(this, new UIRightMargin(0.1f), new UITopMargin(0.075f), 0.05f, "", UITextAlignment.Right);
-            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), playerComponent.Health, new UILeftMargin(0), new UITopMargin(0), new RelativeSize(1f, 0.025f), UIDepths.MIDDLE);
+            debugLabel = new UILabel(this, new UILayout(new UIMargin(0.1f, 0.075f), UIMarginType.Absolute, UIPosition.Right | UIPosition.Top, UIPosition.Right | UIPosition.Top), 0.05f, "", UITextAlignment.Right);
+            healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), playerComponent.Health, new UILayout(new UIMargin(0, 1, 0, 0.025f), UIMarginType.Relative, UIPosition.Left | UIPosition.Top), UIDepths.MIDDLE);
 
             SetupControls( );
             base.Load( );
         }
 
         private void SetupControls ( ) {
-            controlPanel = new UIGesturePanel(this, new UILeftMargin(0), new UITopMargin(0), new AbsoluteSize(6f / 5f * Window.Ratio - .15f, 2f), Assets.GetGestureStore("gestures"));
+            controlPanel = new UIGesturePanel(this, new UILayout(new UIMargin(0, 6f / 5f * Window.Ratio - 0.15f, 0f, 2f), UIMarginType.Absolute), Assets.GetGestureStore("gestures"));
             controlPanel.OnGesturePerformed += (string gesture) => {
                 playerEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
 #if DEBUG
@@ -60,12 +63,12 @@ namespace mapKnight.Extended.Screens {
 #endif
             };
 
-            leftButton = new UIControlButton(this, "l", new UIRightMargin(Window.Ratio * 2f / 5f + .1f), new UIBottomMargin(.05f), new AbsoluteSize(Window.Ratio * 2f / 5f, Window.Ratio * 2f / 5f));
+            leftButton = new UIControlButton(this, "l", new UILayout(new UIMargin(Window.Ratio * 2f / 5f, Window.Ratio * 2f / 5f + .1f, Window.Ratio * 2f / 5f, .05f), UIMarginType.Absolute, UIPosition.Right | UIPosition.Bottom, UIPosition.Right | UIPosition.Bottom));
             leftButton.Click += ( ) => playerEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Left);
             leftButton.Release += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
             leftButton.Leave += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Left);
 
-            rightButton = new UIControlButton(this, "r", new UIRightMargin(.05f), new UIBottomMargin(.05f), new AbsoluteSize(Window.Ratio * 2f / 5f, Window.Ratio * 2f / 5f));
+            rightButton = new UIControlButton(this, "r", new UILayout(new UIMargin(Window.Ratio * 2f / 5f, .05f, Window.Ratio * 2f / 5f, .05f), UIMarginType.Absolute, UIPosition.Right | UIPosition.Bottom, UIPosition.Right | UIPosition.Bottom));
             rightButton.Click += ( ) => playerEntity.SetComponentInfo(ComponentData.InputInclude, ActionMask.Right);
             rightButton.Release += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);
             rightButton.Leave += ( ) => playerEntity.SetComponentInfo(ComponentData.InputExclude, ActionMask.Right);

@@ -11,7 +11,7 @@ namespace mapKnight.ToolKit.Data {
         Action<Func<Vector2, bool>> RequestMapVectorList { get; set; }
         event Action RequestRender;
 
-        void Render(SpriteBatch spriteBatch,int offsetx, int offsety, int tilesize);
+        void Render(SpriteBatch spriteBatch,float offsetx, float offsety, int tilesize);
         IEnumerable<Tuple<DataID, DataType, object>> CollectData( );
     }
 }

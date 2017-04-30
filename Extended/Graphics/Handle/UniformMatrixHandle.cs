@@ -3,7 +3,7 @@ using OpenTK;
 
 namespace mapKnight.Extended.Graphics.Handle {
     public class UniformMatrixHandle {
-        public int Location { get; private set; }
+        public readonly int Location;
 
         public UniformMatrixHandle (int program, string name) {
             Location = GL.GetUniformLocation(program, name);

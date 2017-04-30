@@ -26,6 +26,8 @@ namespace mapKnight.ToolKit.Controls {
         private static readonly Vector2 PLATFORM_COPPER_SIZE = new Vector2(1.5f, 1f);
         private static readonly Vector2 FIR_SIZE = new Vector2(5f, 5f * 71f / 54f);
         private static readonly Vector2 NPC_LENNY_SIZE = new Vector2(1.1f, 1.1f);
+        private static readonly Vector2 DRILLBOMB_SIZE = new Vector2(19f / 29f, 1f);
+        private static readonly Vector2 OAK_SIZE = new Vector2(5f * 42f / 54f, 5f * 70f / 54f);
 
         public static readonly Entity.Configuration[ ] SHADOW_CONFIGURATIONS = new Entity.Configuration[ ] {
             new Entity.Configuration("Canone", CANONE_SIZE) { Components = new ComponentList( ) {
@@ -75,7 +77,15 @@ namespace mapKnight.ToolKit.Controls {
             new Entity.Configuration("Lenny", NPC_LENNY_SIZE) { Components = new ComponentList( ) {
                     new ShadowComponent.Configuration( )
                 }
-            }
+            },
+            new Entity.Configuration("Drillbomb", DRILLBOMB_SIZE) { Components = new ComponentList( ) {
+                    new ShadowComponent.Configuration( )
+                }
+            },
+            new Entity.Configuration("Oak", OAK_SIZE) { Components = new ComponentList( ) {
+                    new ShadowComponent.Configuration( )
+                }
+            },
         };
         public static readonly Entity.Configuration[ ] FINAL_CONFIGURATIONS = new Entity.Configuration[ ] {
             new Entity.Configuration("Canone", CANONE_SIZE) { Components = new ComponentList( ) {
@@ -129,20 +139,28 @@ namespace mapKnight.ToolKit.Controls {
                     new ActiveComponent.Configuration( ),
                     new NPCDataComponent.Configuration( )
                 }
-            }
+            },
+            new Entity.Configuration("Drillbomb", DRILLBOMB_SIZE) {Components = new ComponentList( ) {
+                    new ActiveComponent.Configuration( )
+                }
+            },
+            new Entity.Configuration("Oak", OAK_SIZE) { Components = new ComponentList( ) {
+                    new ActiveComponent.Configuration( )
+                }
+            },
         };
 
-        public delegate void OnSelectionChanged(EntityData oldSelection, EntityData newSelection);
+        public delegate void OnSelectionChanged (EntityData oldSelection, EntityData newSelection);
         public event OnSelectionChanged SelectionChanged;
 
         private ObservableCollection<EntityData> entityCollection = new ObservableCollection<EntityData>( );
 
-        public EntityListBox( ) {
+        public EntityListBox ( ) {
             InitializeComponent( );
             listbox_entities.ItemsSource = entityCollection;
         }
 
-        public void Init(GraphicsDevice g) {
+        public void Init (GraphicsDevice g) {
             entityCollection.Add(new EntityData("Canone", "canone", g));
             entityCollection.Add(new EntityData("Guardian", "guardian_tent", g));
             entityCollection.Add(new EntityData("Landmine", "landmine", g));
@@ -155,11 +173,13 @@ namespace mapKnight.ToolKit.Controls {
             entityCollection.Add(new EntityData("Copper Platform", "platform_copper", g));
             entityCollection.Add(new EntityData("Fir", "fir", g));
             entityCollection.Add(new EntityData("Lenny", "npc_lenny", g));
+            entityCollection.Add(new EntityData("Drillbomb", "drillbomb", g));
+            entityCollection.Add(new EntityData("Oak", "oak", g));
 
             listbox_entities.SelectedIndex = 0;
         }
 
-        private void listbox_entities_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void listbox_entities_SelectionChanged (object sender, SelectionChangedEventArgs e) {
             SelectionChanged?.Invoke((EntityData)e.RemovedItems[0], (EntityData)e.AddedItems[0]);
             if (e.AddedItems.Count > 0) {
                 textblock_name.Text = ((EntityData)e.AddedItems[0]).Name;
@@ -168,37 +188,37 @@ namespace mapKnight.ToolKit.Controls {
             }
         }
 
-        public EntityData Find(string name) {
+        public EntityData Find (string name) {
             return entityCollection.FirstOrDefault(entityData => entityData.Name == name);
         }
 
-        public Entity.Configuration GetCurrentShadowConfiguration( ) {
+        public Entity.Configuration GetCurrentShadowConfiguration ( ) {
             return SHADOW_CONFIGURATIONS[listbox_entities.SelectedIndex];
         }
 
-        public Entity.Configuration GetCurrentFinalConfiguration( ) {
+        public Entity.Configuration GetCurrentFinalConfiguration ( ) {
             return FINAL_CONFIGURATIONS[listbox_entities.SelectedIndex];
         }
 
         public class ShadowComponent : Component {
-            public ShadowComponent(Entity owner) : base(owner) {
+            public ShadowComponent (Entity owner) : base(owner) {
                 owner.Domain = EntityDomain.Temporary;
             }
 
             public new class Configuration : Component.Configuration {
-                public override Component Create(Entity owner) {
+                public override Component Create (Entity owner) {
                     return new ShadowComponent(owner);
                 }
             }
         }
 
         public class ActiveComponent : Component {
-            public ActiveComponent(Entity owner) : base(owner) {
+            public ActiveComponent (Entity owner) : base(owner) {
                 owner.Domain = EntityDomain.Enemy;
             }
 
             public new class Configuration : Component.Configuration {
-                public override Component Create(Entity owner) {
+                public override Component Create (Entity owner) {
                     return new ActiveComponent(owner);
                 }
             }

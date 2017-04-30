@@ -40,12 +40,14 @@
     <BitmapImage x:Key="image_animationcomponent_pauseplay" UriSource="../Resources/Images/pause-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_scissors" UriSource="../Resources/Images/scissors-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_star" UriSource="../Resources/Images/starfish-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_selectbones" UriSource="../Resources/Images/group_foreground_selected-48.png"/>
 
     <BitmapImage x:Key="image_editbones_up" UriSource="../Resources/Images/up_arrow-48.png"/>
     <BitmapImage x:Key="image_editbones_down" UriSource="../Resources/Images/down_arrow-48.png"/>
     <BitmapImage x:Key="image_editbones_new" UriSource="../Resources/Images/plus_2_math-48.png"/>
     <BitmapImage x:Key="image_editbones_delete" UriSource="../Resources/Images/minus_2_math-48.png"/>
     <BitmapImage x:Key="image_editbones_resetsize" UriSource="../Resources/Images/original_size-48.png"/>
+    <BitmapImage x:Key="image_editbones_change" UriSource="../Resources/Images/edit_image-48.png"/>
 
     <BitmapImage x:Key="image_resizeentity_check" UriSource="../Resources/Images/checkmark-48.png"/>
 

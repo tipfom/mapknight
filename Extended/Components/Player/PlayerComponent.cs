@@ -11,6 +11,8 @@ using mapKnight.Extended.Screens;
 using mapKnight.Extended.Warfare;
 using mapKnight.Extended.Graphics.Animation;
 using static mapKnight.Extended.Components.Player.PlayerAnimationComponent;
+using mapKnight.Core.World.Serialization;
+using System.Collections.Generic;
 
 namespace mapKnight.Extended.Components.Player {
     [UpdateAfter(typeof(SpeedComponent))]
@@ -28,12 +30,11 @@ namespace mapKnight.Extended.Components.Player {
         private AnimationState weaponAnimationState = AnimationState.None;
         private VertexAnimationData bodyAnimationData; // TEMP, WILL SOON BE PART OF THE ARMOR
 
-        public PlayerComponent (Entity owner, BaseWeapon baseWeapon, float health, VertexAnimationData bodyAnimationData) : base(owner) {
+        public PlayerComponent (Entity owner, float health, VertexAnimationData bodyAnimationData) : base(owner) {
             this.bodyAnimationData = bodyAnimationData;
 
             owner.Domain = EntityDomain.Player;
 
-            BaseWeapon = baseWeapon;
             Health = new HealthTracker(health);
         }
 
@@ -49,8 +50,9 @@ namespace mapKnight.Extended.Components.Player {
         public override void Prepare ( ) {
             speedComponent = Owner.GetComponent<SpeedComponent>( );
             motionComponent = Owner.GetComponent<MotionComponent>( );
-            BaseWeapon.Prepare( );
 
+            BaseWeapon = Screen.MainMenu.SelectedWeapon(Owner);
+            BaseWeapon.Prepare( );
             Owner.GetComponent<PlayerAnimationComponent>( ).LoadAnimations(bodyAnimationData, BaseWeapon.AnimationData, "player", BaseWeapon.Texture);
         }
 
@@ -79,7 +81,7 @@ namespace mapKnight.Extended.Components.Player {
             }
 
             if (nearbyNPC == null && weaponAnimationState != AnimationState.Attack && BaseWeapon.Update( )) {
-                Owner.SetComponentInfo(ComponentData.VertexAnimation, WEAPON_ANIMATION, "attack", (AnimationCallback)AttackAnimationCallback); // TODO
+                Owner.SetComponentInfo(ComponentData.VertexAnimation, WEAPON_ANIMATION, "attack" + Mathi.Random(0, 3), (AnimationCallback)AttackAnimationCallback); // TODO
                 weaponAnimationState = AnimationState.Attack;
                 BaseWeapon.Attack( );
             }
@@ -101,7 +103,9 @@ namespace mapKnight.Extended.Components.Player {
                 }
             }
 
-            if (!currentlyTalking && bodyAnimationState != AnimationState.Jump) {
+            if (!currentlyTalking) {
+                if (bodyAnimationState == AnimationState.Jump) return;
+
                 Vector2 speed = speedComponent.Speed;
                 if (Action.HasFlag(ActionMask.Left)) {
                     motionComponent.AimedVelocity.X = -speed.X;
@@ -113,7 +117,7 @@ namespace mapKnight.Extended.Components.Player {
 
                 if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
                     if (attemptJump) {
-                        SetAnimation("jump", JumpAnimationCallback, null);
+                        SetAnimationIfUnset("jump", AnimationState.Jump, JumpAnimationCallback, null);
                         motionComponent.AimedVelocity.Y = speedComponent.Speed.Y;
                         return;
                     } else {
@@ -194,7 +198,7 @@ namespace mapKnight.Extended.Components.Player {
             public VertexAnimationData BodyAnimationData; // TEMP
 
             public override Component Create (Entity owner) {
-                return new PlayerComponent(owner, BaseWeaponCollection.DiamondSword(owner), Health, BodyAnimationData);
+                return new PlayerComponent(owner, Health, BodyAnimationData);
             }
         }
 

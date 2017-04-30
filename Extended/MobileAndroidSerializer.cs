@@ -20,6 +20,9 @@ namespace mapKnight.Extended {
                 case EntityID.Canone:
                     EntityCollection.Enemys.Turret.Create(position, world, false).Load(data);
                     break;
+                case EntityID.Drillbomb:
+                    EntityCollection.Obstacles.Drillbomb.Create(position, world, false).Load(data);
+                    break;
                 case EntityID.Fir:
                     // not ingame yet
                     break;

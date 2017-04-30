@@ -31,7 +31,7 @@ namespace mapKnight.ToolKit.Data.Components {
             Waypoints.AddRange((Vector2[ ])data[DataID.PLATFORM_Waypoint]);
         }
 
-        public void Render(SpriteBatch spriteBatch, int ox, int oy, int tilesize) {
+        public void Render(SpriteBatch spriteBatch, float ox, float oy, int tilesize) {
             if (emptyTexture == null) {
                 emptyTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
                 emptyTexture.SetData(new Microsoft.Xna.Framework.Color[ ] { new Microsoft.Xna.Framework.Color(Microsoft.Xna.Framework.Color.Lime, 128) });

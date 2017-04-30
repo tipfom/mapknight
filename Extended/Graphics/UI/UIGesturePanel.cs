@@ -19,7 +19,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private GestureStore gestureStore;
 
         public event Action<string> OnGesturePerformed;
-        public UIGesturePanel (Screen owner, UIMargin hmargin, UIMargin vmargin, IUISize size, GestureStore gesturestore) : base(owner, hmargin, vmargin, size, false) {
+        public UIGesturePanel (Screen owner, UILayout layout, GestureStore gesturestore) : base(owner, layout, false) {
             gestureStore = gesturestore;
         }
 

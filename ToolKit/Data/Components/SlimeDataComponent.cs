@@ -36,7 +36,7 @@ namespace mapKnight.ToolKit.Data.Components {
             Control = new SlimeDataControl(this);
         }
 
-        public void Render(SpriteBatch spriteBatch, int offsetx, int offsety, int tilesize) {
+        public void Render(SpriteBatch spriteBatch, float offsetx, float offsety, int tilesize) {
         }
 
         public override void Draw( ) {

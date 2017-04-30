@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\BlackHoleComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\BulletComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\ButtonComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\AI\DrillComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\OfficerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\PrivateComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Guardian\TentComponent.cs" />
@@ -84,23 +85,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\DepthVertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Framebuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\UniformVec2Handle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Emitter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Particle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\GaussianBlurProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ParticleProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\TextureProgram.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\AbsoluteSize.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\IUISize.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\RelativeSize.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIBottomMargin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIPosition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILayout.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIMargin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIMarginType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIControlButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIHealthBar.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIHorizontalCenterMargin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILeftMargin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIMargin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIRightMargin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UITopMargin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIVerticalCenterMargin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIBar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIDepths.cs" />
@@ -109,6 +106,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIGesturePanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIItemFrame.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UILabel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIPanel.cs" />
@@ -116,7 +114,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\AttributeHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\TextureHandle.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\Uniform4Handle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\UniformVec4Handle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\UniformMatrixHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Map.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Matrix.cs" />
@@ -126,6 +124,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITextAlignment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouchAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screens\WindowScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Window.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Manager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MobileAndroidSerializer.cs" />
@@ -133,6 +132,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameOverScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screens\Windows\WeaponSelectWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeapon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeaponCollection.cs" />
   </ItemGroup>

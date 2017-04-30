@@ -2,7 +2,7 @@
 
 namespace mapKnight.Extended.Graphics.Handle {
     public class TextureHandle {
-        public int Location { get; private set; }
+        public readonly int Location;
 
         public TextureHandle (int program) : this(program, "u_texture") {
 

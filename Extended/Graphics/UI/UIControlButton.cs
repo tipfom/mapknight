@@ -8,7 +8,7 @@ namespace mapKnight.Extended.Graphics.UI
     {
         private string direction;
 
-        public UIControlButton(Screen owner, string direction, UIMargin hmargin, UIMargin vmargin, IUISize size) : base(owner, hmargin, vmargin, size, UIDepths.MIDDLE, true) {
+        public UIControlButton(Screen owner, string direction, UILayout layout) : base(owner, layout, UIDepths.MIDDLE, true) {
             this.direction = direction;
             Click += ( ) => IsDirty = true;
             Release += ( ) => IsDirty = true;
@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Graphics.UI
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
-            yield return new DepthVertexData(Bounds.Verticies, "btn_" + direction + "ctl" + (Clicked ? "a" : "i"), Depth, Color.White);
+            yield return new DepthVertexData(Layout, "btn_" + direction + "ctl" + (Clicked ? "a" : "i"), Depth, Color.White);
         }
     }
 }

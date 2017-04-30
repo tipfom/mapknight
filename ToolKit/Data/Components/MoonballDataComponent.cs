@@ -31,7 +31,7 @@ namespace mapKnight.ToolKit.Data.Components {
             Control = new MoonballDataControl(this);
         }
 
-        public void Render(SpriteBatch spriteBatch, int offsetx, int offsety, int tilesize) {
+        public void Render(SpriteBatch spriteBatch, float offsetx, float offsety, int tilesize) {
             if (moonballTexture == null) {
                 moonballTexture = new BitmapImage(new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly( ).GetName( ).Name + ";component/Resources/Images/Entities/moonball.png", UriKind.Absolute)).ToTexture2D(spriteBatch.GraphicsDevice);
             }

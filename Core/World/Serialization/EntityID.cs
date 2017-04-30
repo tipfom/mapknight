@@ -14,5 +14,7 @@
         Platform_Copper = 10,
         Fir = 11,
         Npc_Lenny = 12,
+        Drillbomb = 13,
+        Oak = 14,
     }
 }

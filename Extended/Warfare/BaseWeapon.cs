@@ -22,6 +22,8 @@ namespace mapKnight.Extended.Warfare {
         public readonly string Name;
         public readonly int ID;
         public readonly float Damage;
+        public readonly int Cooldown;
+        public readonly int AttackTime;
         public readonly string Texture;
         public readonly VertexAnimationData AnimationData;
 
@@ -30,17 +32,20 @@ namespace mapKnight.Extended.Warfare {
         private Transform hitbox;
         private Entity owner;
         private Timer timer;
+        private int nextHitTime;
 
-        public BaseWeapon (string Name, int ID, float Damage, string Texture, int timeUntillHit, VertexAnimationData AnimationData, Transform hitbox, Entity owner) {
+        public BaseWeapon (string Name, int ID, float Damage, int Cooldown, string Texture, int AttackTime, VertexAnimationData AnimationData, Transform hitbox, Entity owner) {
             this.Name = Name;
             this.ID = ID;
             this.Damage = Damage;
+            this.Cooldown = Cooldown;
+            this.AttackTime = AttackTime;
             this.Texture = Texture;
             this.AnimationData = AnimationData;
             this.hitbox = hitbox;
             this.hitboxOffset = hitbox.Center;
             this.owner = owner;
-            this.timer = new Timer(timeUntillHit);
+            this.timer = new Timer(AttackTime);
             this.timer.Elapsed += Timer_Elapsed;
         }
 
@@ -49,7 +54,9 @@ namespace mapKnight.Extended.Warfare {
 #if DEBUG
             if (BASE_WEAPON_TEXTURE == null) {
                 BASE_WEAPON_TEXTURE = new Spritebatch2D(new Dictionary<string, int[ ]>( ) { ["0"] = new int[ ] { 0, 0, 1, 1 } }, Texture2D.CreateEmpty( ));
-                owner.World.Renderer.AddTexture(BASE_WEAPON_HITBOX_SPECIES, BASE_WEAPON_TEXTURE);            
+            }
+            if (!owner.World.Renderer.HasTexture(BASE_WEAPON_HITBOX_SPECIES)) {
+                owner.World.Renderer.AddTexture(BASE_WEAPON_HITBOX_SPECIES, BASE_WEAPON_TEXTURE);
             }
 
             UpdateSizeVertices( );
@@ -60,7 +67,7 @@ namespace mapKnight.Extended.Warfare {
 
 #if DEBUG
         private void UpdateSizeVertices ( ) {
-            sizeVertices = (owner.Transform.Size * owner.World.VertexSize).ToQuad( );
+            sizeVertices = (hitbox.Size * owner.World.VertexSize).ToQuad( );
         }
 
         public void Destroy ( ) {
@@ -69,6 +76,7 @@ namespace mapKnight.Extended.Warfare {
 #endif
 
         public bool Update () {
+            if (nextHitTime > Environment.TickCount) return false;
             hitbox.Center = owner.Transform.Center + new Vector2(motionComponent.ScaleX * hitboxOffset.X, hitboxOffset.Y);
             for(int i = 0; i< owner.World.Entities.Count; i++) {
                 Entity entity = owner.World.Entities[i];
@@ -80,6 +88,7 @@ namespace mapKnight.Extended.Warfare {
         }
 
         public void Attack ( ) {
+            nextHitTime = Environment.TickCount + Cooldown + AttackTime;
             timer.Start( );
         }
 

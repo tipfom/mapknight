@@ -18,8 +18,6 @@ namespace mapKnight.ToolKit {
         }
 
         public static void RemoveTile(this Map map, int index) {
-            List<Tile> tiles = map.Tiles.ToList();
-            tiles.RemoveAt(index);
             for (int y = 0; y < map.Height; y++) {
                 for (int x = 0; x < map.Width; x++) {
                     for (int z = 0; z < 3; z++) {
@@ -31,6 +29,8 @@ namespace mapKnight.ToolKit {
                     }
                 }
             }
+            List<Tile> tiles = map.Tiles.ToList();
+            tiles.RemoveAt(index);
             map.Tiles = tiles.ToArray();
         }
 

@@ -1440,6 +1440,45 @@ namespace mapKnight.Extended {
                     return _Landmine;
                 }
             }
+
+            private static Entity.Configuration _Drillbomb;
+            public static Entity.Configuration Drillbomb {
+                get {
+                    if(_Drillbomb == null) {
+                        _Drillbomb = new Entity.Configuration("Drillbomb", new Vector2(19f / 29f, 1f)) {
+                            Components = new ComponentList {
+                                new DrillComponent.Configuration( ),
+                                new SpriteComponent.Configuration( ) {
+                                    Texture = "drill",
+                                    Animations = new SpriteAnimation[ ] {
+                                        new SpriteAnimation( ) {
+                                            Name = "idle", CanRepeat = true,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d0" }, Time = 100 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d1" }, Time = 100 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d2" }, Time = 100 },
+                                            }
+                                        },
+                                        new SpriteAnimation( ) {
+                                            Name = "explode", CanRepeat = false,
+                                            Frames = new SpriteAnimationFrame[ ] {
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d2" }, Time=80 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "ex" }, Time=60 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "ex" }, Time=20 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "d2" }, Time=20 },
+                                                new SpriteAnimationFrame( ) { Bones = new string[ ] { "ex" }, Time=20 },
+                                            }
+                                        }
+                                    }
+                                },
+                                new SkeletComponent.Configuration( ) { Bones = new Rectangle[ ] { new Rectangle(0, 0, 1, 1) } },
+                                new TriggerComponent.Configuration( ) { Offset = 0, TriggerZone = new Vector2(3, 3) }
+                            }
+                        };
+                    }
+                    return _Drillbomb;
+                }
+            }
         }
 
         public static class Platforms {
@@ -1468,7 +1507,7 @@ namespace mapKnight.Extended {
                     if (_Diamond == null) {
                         _Diamond = new Entity.Configuration( );
                         _Diamond.Name = "Player";
-                        _Diamond.Transform = new Transform(Vector2.Zero, new Vector2(1f, 1.32f));
+                        _Diamond.Transform = new Transform(Vector2.Zero, new Vector2(1.32f*0.44750841750841724f, 1.32f));
                         _Diamond.Components = new ComponentList {
                             new MotionComponent.Configuration( ) { PlatformCollider = true },
                             new PlayerComponent.Configuration( ) {
@@ -1484,13 +1523,13 @@ namespace mapKnight.Extended {
                                         new Vector2(2, 1.5f),   // upper_arm1
                                     },
                                     Scales = new float[ ] {
-                                        0.04870608f,
-                                        0.04870608f,
-                                        0.04870608f,
-                                        0.04870608f,
-                                        0.04870608f,
-                                        0.04870608f,
-                                        0.04870608f,
+                                        0.08244598f,
+                                        0.08244598f,
+                                        0.08244598f,
+                                        0.08244598f,
+                                        0.08244598f,
+                                        0.08244598f,
+                                        0.08244598f,
                                     },
                                     Animations = new VertexAnimation[ ] {
                                         new VertexAnimation( ) {
@@ -1501,31 +1540,31 @@ namespace mapKnight.Extended {
                                                     Time = 500,
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Position = new Vector2(0.2558146f, -0.4063475f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.4026417f, -0.2310107f),
+                                                            Position = new Vector2(0.6589333f, -0.2468656f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2621972f, -0.4100688f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Position = new Vector2(0.5711888f, -0.01387457f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Position = new Vector2(-0.09024239f, -0.1668116f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.060812f, 0.3166551f),
+                                                            Position = new Vector2(-0.1580086f, 0.3166551f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Position = new Vector2(-0.7219032f, -0.06217242f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1534,32 +1573,32 @@ namespace mapKnight.Extended {
                                                     Time = 800,
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Position = new Vector2(0.253838f, -0.4105226f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.3904943f, -0.2830519f),
+                                                            Position = new Vector2(0.6572748f, -0.2830519f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2598444f, -0.4100688f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.3794281f, -0.07663018f),
+                                                            Position = new Vector2(0.6385429f, -0.07663018f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.02629337f, -0.2011819f),
+                                                            Position = new Vector2(-0.04823175f, -0.2011819f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -3f,
-                                                            Position = new Vector2(-0.0517186f, 0.2960604f),
+                                                            Position = new Vector2(-0.09126966f, 0.2960604f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.3628451f, -0.08374908f),
+                                                            Position = new Vector2(-0.6179211f, -0.08374908f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1568,32 +1607,32 @@ namespace mapKnight.Extended {
                                                     Time = 600,
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Position = new Vector2(0.253838f, -0.408435f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.3928595f, -0.2580262f),
+                                                            Position = new Vector2(0.6612785f, -0.2580262f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2645577f, -0.4121563f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.3723325f, -0.03372891f),
+                                                            Position = new Vector2(0.6265321f, -0.03372891f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.02629337f, -0.1690388f),
+                                                            Position = new Vector2(-0.04823175f, -0.1690388f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -3f,
-                                                            Position = new Vector2(-0.04908322f, 0.3165276f),
+                                                            Position = new Vector2(-0.08680869f, 0.3165276f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.372968f, -0.03936096f),
+                                                            Position = new Vector2(-0.6350563f, -0.03936096f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1608,31 +1647,31 @@ namespace mapKnight.Extended {
                                                     Time = 100,
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Position = new Vector2(0.253838f, -0.4063475f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.4026417f, -0.2310107f),
+                                                            Position = new Vector2(0.6778371f, -0.2310107f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2645577f, -0.4058937f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Position = new Vector2(0.6556782f, -0.01387457f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Position = new Vector2(-0.02799475f, -0.1668116f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.060812f, 0.3166551f),
+                                                            Position = new Vector2(-0.1066623f, 0.3166551f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Position = new Vector2(-0.6251004f, -0.04631752f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1642,36 +1681,36 @@ namespace mapKnight.Extended {
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
                                                             Rotation = 14f,
-                                                            Position = new Vector2(0.2830611f, -0.3076895f),
+                                                            Position = new Vector2(0.4754202f, -0.3076895f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -17f,
-                                                            Position = new Vector2(0.3305396f, -0.1860928f),
+                                                            Position = new Vector2(0.5557882f, -0.1860928f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2645577f, -0.4058937f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -15f,
-                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Position = new Vector2(0.6556782f, -0.01387457f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 7f,
-                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Position = new Vector2(-0.02799475f, -0.1668116f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -1f,
-                                                            Position = new Vector2(-0.08343226f, 0.3027519f),
+                                                            Position = new Vector2(-0.1449521f, 0.3027519f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 11f,
-                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Position = new Vector2(-0.6251004f, -0.04631752f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1681,36 +1720,36 @@ namespace mapKnight.Extended {
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
                                                             Rotation = -1f,
-                                                            Position = new Vector2(0.265903f, -0.3999031f),
+                                                            Position = new Vector2(0.4463761f, -0.3999031f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -20f,
-                                                            Position = new Vector2(0.3142498f, -0.1860836f),
+                                                            Position = new Vector2(0.528214f, -0.1860836f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2645577f, -0.4058937f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -21f,
-                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Position = new Vector2(0.6556782f, -0.01387457f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 7f,
-                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Position = new Vector2(-0.02799475f, -0.1668116f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -4f,
-                                                            Position = new Vector2(-0.07070836f, 0.3059604f),
+                                                            Position = new Vector2(-0.1234141f, 0.3059604f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 22f,
-                                                            Position = new Vector2(-0.4068969f, -0.05491006f),
+                                                            Position = new Vector2(-0.6924887f, -0.05491006f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1720,36 +1759,36 @@ namespace mapKnight.Extended {
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
                                                             Rotation = -1f,
-                                                            Position = new Vector2(0.0232324f, -0.4084957f),
+                                                            Position = new Vector2(0.03560172f, -0.4084957f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 17f,
-                                                            Position = new Vector2(0.4372475f, -0.2106815f),
+                                                            Position = new Vector2(0.7364151f, -0.2106815f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -39f,
-                                                            Position = new Vector2(-0.008328262f, -0.2891558f),
+                                                            Position = new Vector2(-0.01782178f, -0.2891558f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 2f,
-                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Position = new Vector2(0.6556782f, -0.01387457f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -5f,
-                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Position = new Vector2(-0.02799475f, -0.1668116f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 2f,
-                                                            Position = new Vector2(-0.03395045f, 0.3091688f),
+                                                            Position = new Vector2(-0.06119308f, 0.3091688f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.4068969f, -0.05491006f),
+                                                            Position = new Vector2(-0.6924887f, -0.05491006f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1758,36 +1797,36 @@ namespace mapKnight.Extended {
                                                     Time = 170,
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.1038171f, -0.4084957f),
+                                                            Position = new Vector2(0.1720093f, -0.4084957f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 13f,
-                                                            Position = new Vector2(0.440075f, -0.2106815f),
+                                                            Position = new Vector2(0.7412013f, -0.2106815f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -1f,
-                                                            Position = new Vector2(0.0552912f, -0.4078673f),
+                                                            Position = new Vector2(0.08986843f, -0.4078673f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 9f,
-                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Position = new Vector2(0.6556782f, -0.01387457f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -10f,
-                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Position = new Vector2(-0.02799475f, -0.1668116f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.001393698f, 0.2974046f),
+                                                            Position = new Vector2(-0.001365179f, 0.2974046f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -16f,
-                                                            Position = new Vector2(-0.3871042f, -0.04849323f),
+                                                            Position = new Vector2(-0.6589851f, -0.04849323f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1801,31 +1840,31 @@ namespace mapKnight.Extended {
                                                     Time = 75,
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Position = new Vector2(0.253838f, -0.4063475f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.4026417f, -0.2310107f),
+                                                            Position = new Vector2(0.6778371f, -0.2310107f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2645577f, -0.4058937f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.389551f, -0.01387457f),
+                                                            Position = new Vector2(0.6556782f, -0.01387457f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.01433809f, -0.1668116f),
+                                                            Position = new Vector2(-0.02799475f, -0.1668116f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.060812f, 0.3166551f),
+                                                            Position = new Vector2(-0.1066623f, 0.3166551f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.3670864f, -0.04631752f),
+                                                            Position = new Vector2(-0.6251004f, -0.04631752f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1834,32 +1873,32 @@ namespace mapKnight.Extended {
                                                     Time = 75,
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.1521585f, -0.4063475f),
+                                                            Position = new Vector2(0.253838f, -0.4063475f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.3984004f, -0.2491917f),
+                                                            Position = new Vector2(0.6706578f, -0.2491917f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.1540909f, -0.4058937f),
+                                                            Position = new Vector2(-0.2645577f, -0.4058937f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.3626894f, -0.04168086f),
+                                                            Position = new Vector2(0.6102089f, -0.04168086f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.03837211f, -0.1967569f),
+                                                            Position = new Vector2(-0.06867772f, -0.1967569f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -3f,
-                                                            Position = new Vector2(-0.08060472f, 0.2835014f),
+                                                            Position = new Vector2(-0.1401659f, 0.2835014f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.3868791f, -0.07305434f),
+                                                            Position = new Vector2(-0.658604f, -0.07305434f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1869,34 +1908,34 @@ namespace mapKnight.Extended {
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
                                                             Rotation = -4f,
-                                                            Position = new Vector2(0.1846751f, -0.4052781f),
+                                                            Position = new Vector2(0.3088797f, -0.4052781f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -4f,
-                                                            Position = new Vector2(0.4563648f, -0.1529391f),
+                                                            Position = new Vector2(0.7687755f, -0.1529391f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -17f,
-                                                            Position = new Vector2(-0.1031953f, -0.2711402f),
+                                                            Position = new Vector2(-0.1784055f, -0.2711402f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.455998f, 0.0428075f),
+                                                            Position = new Vector2(0.7681546f, 0.0428075f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.04786761f, -0.07590644f),
+                                                            Position = new Vector2(0.07730235f, -0.07590644f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -3f,
-                                                            Position = new Vector2(0.05653057f, 0.3562256f),
+                                                            Position = new Vector2(0.09196634f, 0.3562256f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.333156f, 0.05635188f),
+                                                            Position = new Vector2(-0.5676656f, 0.05635188f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1912,34 +1951,34 @@ namespace mapKnight.Extended {
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
                                                             Rotation = -4f,
-                                                            Position = new Vector2(0.1846751f, -0.4052781f),
+                                                            Position = new Vector2(0.3088797f, -0.4052781f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -4f,
-                                                            Position = new Vector2(0.4563648f, -0.1529391f),
+                                                            Position = new Vector2(0.7687755f, -0.1529391f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -17f,
-                                                            Position = new Vector2(-0.1031953f, -0.2711402f),
+                                                            Position = new Vector2(-0.1784055f, -0.2711402f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.455998f, 0.0428075f),
+                                                            Position = new Vector2(0.7681546f, 0.0428075f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.04786761f, -0.07590644f),
+                                                            Position = new Vector2(0.07730235f, -0.07590644f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -3f,
-                                                            Position = new Vector2(0.05653057f, 0.3562256f),
+                                                            Position = new Vector2(0.09196634f, 0.3562256f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(-0.333156f, 0.05635188f),
+                                                            Position = new Vector2(-0.5676656f, 0.05635188f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1949,36 +1988,36 @@ namespace mapKnight.Extended {
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
                                                             Rotation = -4f,
-                                                            Position = new Vector2(0.3176892f, -0.4250605f),
+                                                            Position = new Vector2(0.5340359f, -0.4250605f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 16f,
-                                                            Position = new Vector2(0.5604317f, -0.126454f),
+                                                            Position = new Vector2(0.9449321f, -0.126454f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -17f,
-                                                            Position = new Vector2(-0.1757534f, -0.3420686f),
+                                                            Position = new Vector2(-0.3012263f, -0.3420686f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 20f,
-                                                            Position = new Vector2(0.4842733f, 0.05029381f),
+                                                            Position = new Vector2(0.8160169f, 0.05029381f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
-                                                            Position = new Vector2(0.01955226f, -0.1053484f),
+                                                            Position = new Vector2(0.02937227f, -0.1053484f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 10f,
-                                                            Position = new Vector2(0.01270382f, 0.3668803f),
+                                                            Position = new Vector2(0.01777975f, 0.3668803f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -24f,
-                                                            Position = new Vector2(-0.345544f, 0.05367533f),
+                                                            Position = new Vector2(-0.588635f, 0.05367533f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }
@@ -1988,37 +2027,37 @@ namespace mapKnight.Extended {
                                                     State = new VertexBone[ ] {
                                                         new VertexBone( ) {
                                                             Rotation = 23f,
-                                                            Position = new Vector2(0.2483846f, -0.3597768f),
+                                                            Position = new Vector2(0.4167224f, -0.3597768f),
                                                             Texture = "feet2"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 9f,
-                                                            Position = new Vector2(0.5250875f, -0.1692329f),
+                                                            Position = new Vector2(0.8851042f, -0.1692329f),
                                                             Texture = "hand1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 13f,
-                                                            Position = new Vector2(-0.1997874f, -0.3728145f),
+                                                            Position = new Vector2(-0.3419093f, -0.3728145f),
                                                             Texture = "feet1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -1f,
-                                                            Position = new Vector2(0.455998f, 0.0428075f),
+                                                            Position = new Vector2(0.7681546f, 0.0428075f),
                                                             Texture = "upper_arm1"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -8f,
-                                                            Position = new Vector2(0.01955226f, -0.1053484f),
+                                                            Position = new Vector2(0.02937227f, -0.1053484f),
                                                             Texture = "body"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = 6f,
-                                                            Position = new Vector2(0.05653057f, 0.318754f),
+                                                            Position = new Vector2(0.09196634f, 0.318754f),
                                                             Texture = "head"
                                                         },
                                                         new VertexBone( ) {
                                                             Rotation = -5f,
-                                                            Position = new Vector2(-0.345544f, 0.05367533f),
+                                                            Position = new Vector2(-0.588635f, 0.05367533f),
                                                             Texture = "upper_arm1"
                                                         },
                                                     }

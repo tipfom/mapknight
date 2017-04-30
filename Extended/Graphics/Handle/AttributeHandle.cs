@@ -2,7 +2,7 @@
 
 namespace mapKnight.Extended.Graphics.Handle {
     public class AttributeHandle {
-        public int Location { get; private set; }
+        public readonly int Location;
 
         public AttributeHandle (int program, string name) {
             Location = GL.GetAttribLocation(program, name);

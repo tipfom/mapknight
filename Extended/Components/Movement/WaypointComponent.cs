@@ -5,6 +5,7 @@ using mapKnight.Core.World;
 namespace mapKnight.Extended.Components.Movement {
     public abstract class WaypointComponent : Component {
         public Vector2 Velocity;
+        public Action<Vector2> VelocityChanged;
         private Vector2 currentMoveDistance;
         private int currentMoveDuration;
         private Vector2 currentWaypoint;
@@ -19,7 +20,7 @@ namespace mapKnight.Extended.Components.Movement {
 
         protected int waypointCount { get { return waypoints.Length; } }
 
-        protected void SetWaypoints(Vector2[] waypoints) {
+        protected void SetWaypoints (Vector2[ ] waypoints) {
             Array.Copy(waypoints, this.waypoints = new Vector2[waypoints.Length], waypoints.Length);
             for (int i = 0; i < waypoints.Length; i++)
                 this.waypoints[i] += Owner.Transform.Center;
@@ -33,12 +34,11 @@ namespace mapKnight.Extended.Components.Movement {
 
         public override void Update (DeltaTime dt) {
             timeTillNextMove -= (int)dt.Milliseconds;
+
             if (timeTillNextMove < 0)
                 PrepareNextMove( );
 
-            float progressPercent = 1f - (timeTillNextMove) / (float)currentMoveDuration;
-            Vector2 nextPosition = currentWaypoint + currentMoveDistance * GetPositionInterpolationPercent(progressPercent);
-            Owner.Transform.Center = nextPosition;
+            Owner.Transform.Center = Mathf.Interpolate(currentWaypoint, nextWaypoint, GetPositionInterpolationPercent(Mathf.Clamp01(1f - (timeTillNextMove) / (float)currentMoveDuration)));
         }
 
         protected abstract int GetNextWaypoint ( );
@@ -54,8 +54,9 @@ namespace mapKnight.Extended.Components.Movement {
             nextWaypoint = waypoints[GetNextWaypoint( )];
             currentMoveDistance = nextWaypoint - currentWaypoint;
             currentMoveDuration = GetCurrentMoveDuration( );
-            timeTillNextMove = currentMoveDuration;
+            timeTillNextMove += currentMoveDuration;
             Velocity = currentMoveDistance / (currentMoveDuration / 1000f);
+            VelocityChanged?.Invoke(Velocity);
         }
     }
 }

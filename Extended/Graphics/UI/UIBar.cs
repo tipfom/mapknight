@@ -12,7 +12,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private IValueBinder valueBinder;
         private float currentPercent;
 
-        public UIBar (Screen owner, Color foregroundColor, Color backgroundColor, IValueBinder valueBinder, UIMargin hmargin, UIMargin vmargin, IUISize size, int depth) : base(owner, hmargin, vmargin, size, depth, false) {
+        public UIBar (Screen owner, Color foregroundColor, Color backgroundColor, IValueBinder valueBinder, UILayout layout, int depth) : base(owner, layout, depth, false) {
             this.foregroundColor = foregroundColor;
             this.backgroundColor = backgroundColor;
             this.valueBinder = valueBinder;
@@ -28,9 +28,9 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
-            float barwidth = Size.X * currentPercent;
-            yield return new DepthVertexData(Bounds.Verticies, "blank", Depth, backgroundColor);
-            yield return new DepthVertexData(UIRectangle.GetVerticies(Position.X, Position.Y, barwidth, Size.Y), "blank", Depth, foregroundColor);
+            float barwidth = Layout.Width * currentPercent;
+            yield return new DepthVertexData(Layout, "blank", Depth, backgroundColor);
+            yield return new DepthVertexData(UIRectangle.GetVerticies(Layout.X, Layout.Y, barwidth, Layout.Height), "blank", Depth, foregroundColor);
         }
 
         public interface IValueBinder {

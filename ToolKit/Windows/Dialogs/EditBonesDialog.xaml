@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:mapKnight.ToolKit"
         xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
-        Title="Bones" SizeToContent="Width" WindowStyle="ToolWindow" Height="300" Icon="{StaticResource ResourceKey=logo}" ResizeMode="CanResize" MinWidth="361" MaxWidth="361" ShowInTaskbar="False"
-        Topmost="{Binding Source={x:Static Application.Current},Path=MainWindow.IsActive,Mode=OneWay}">
+        Title="Bones" SizeToContent="Width" WindowStyle="ToolWindow" Height="400" Icon="{StaticResource ResourceKey=logo}" ResizeMode="CanResize" MinWidth="361" MaxWidth="361" ShowInTaskbar="False"
+        Topmost="{Binding Source={x:Static Application.Current},Path=MainWindow.IsActive,Mode=OneWay}" WindowStartupLocation="CenterOwner">
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="CommandNew_CanExecute" Executed="CommandNew_Executed"/>
         <CommandBinding Command="Delete" CanExecute="CommandDelete_CanExecute" Executed="CommandDelete_Executed"/>
@@ -22,7 +22,7 @@
         </Style>
     </Window.Resources>
     <DockPanel>
-        <StackPanel DockPanel.Dock="Right" Width="40" Margin="5,0,0,0">
+        <StackPanel DockPanel.Dock="Right" Width="40" Margin="5">
             <Button Height="40" Background="Transparent" Command="New" BorderThickness="0">
                 <Image Source="{StaticResource ResourceKey=image_editbones_new}" Margin="-7" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
             </Button>
@@ -38,8 +38,11 @@
             <Button Height="40" Background="Transparent" Margin="0,5,0,0" Command="l:CustomCommands.EditorR" BorderThickness="0">
                 <Image Source="{StaticResource ResourceKey=image_editbones_resetsize}" Margin="-4" RenderOptions.BitmapScalingMode="Linear"/>
             </Button>
+            <Button Height="40" Background="Transparent" Margin="0,5,0,0" Padding="0" Click="Button_Click" IsEnabled="{Binding ElementName=listbox_bones, Path=HasItems}" BorderThickness="0">
+                <Image Source="{StaticResource ResourceKey=image_editbones_change}" Margin="-4" RenderOptions.BitmapScalingMode="Linear"/>
+            </Button>
         </StackPanel>
-        <ListBox DockPanel.Dock="Left" Width="300" x:Name="listbox_bones" BorderThickness="0">
+        <ListBox DockPanel.Dock="Left" Width="300" x:Name="listbox_bones" BorderThickness="0" SelectedIndex="0">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Style.Resources>

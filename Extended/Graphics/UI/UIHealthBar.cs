@@ -18,7 +18,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private float[ ][ ] transformedVerticies;
         private Shaker shaker = new Shaker( ) { Amplitude = 10, Length = 500, Frequency = 1 / 50f };
 
-        public UIHealthBar(Screen owner, HealthComponent healthComponent) : base(owner, new UIHorizontalCenterMargin(0), new UIVerticalCenterMargin(0), new AbsoluteSize(healthComponent.Initial * 0.05f, HEIGHT_HALF * 2), UIDepths.BACKGROUND, false) {
+        public UIHealthBar (Screen owner, HealthComponent healthComponent) : base(owner, new UILayout(new UIMargin(healthComponent.Initial * 0.0125f, healthComponent.Initial * 0.025f, -HEIGHT_HALF, HEIGHT_HALF), UIMarginType.Absolute, UIPosition.Center, UIPosition.Left), UIDepths.BACKGROUND, false) {
             this.healthComponent = healthComponent;
             healthComponent.Changed += ( ) => {
                 UpdateIndicator( );
@@ -26,7 +26,7 @@ namespace mapKnight.Extended.Graphics.UI {
             };
             healthComponent.Owner.Destroyed += Dispose;
 
-            float halfWidth = Size.X / 2f;
+            float halfWidth = Layout.Width / 2f;
             baseVerticies = new float[4][ ];
             baseVerticies[0] = new float[ ] {
                 -halfWidth,               HEIGHT_HALF,
@@ -56,7 +56,7 @@ namespace mapKnight.Extended.Graphics.UI {
             Visible = false;
         }
 
-        public override void Update(DeltaTime dt) {
+        public override void Update (DeltaTime dt) {
             if (healthComponent.Owner.IsOnScreen) {
                 IsDirty = true;
                 Visible = true;
@@ -66,9 +66,9 @@ namespace mapKnight.Extended.Graphics.UI {
             base.Update(dt);
         }
 
-        private void UpdateIndicator( ) {
-            float indicatorWidth = healthComponent.Current / healthComponent.Initial * (Size.X - 2 * EDGE_OFFSET);
-            baseVerticies[3][0] = -Size.X / 2f + EDGE_OFFSET;
+        private void UpdateIndicator ( ) {
+            float indicatorWidth = healthComponent.Current / healthComponent.Initial * (Layout.Width- 2 * EDGE_OFFSET);
+            baseVerticies[3][0] = -Layout.Width / 2f + EDGE_OFFSET;
             baseVerticies[3][1] = BAR_HEIGHT_HALF;
             baseVerticies[3][2] = baseVerticies[3][0];
             baseVerticies[3][3] = -BAR_HEIGHT_HALF;
@@ -78,7 +78,7 @@ namespace mapKnight.Extended.Graphics.UI {
             baseVerticies[3][7] = BAR_HEIGHT_HALF;
         }
 
-        public override IEnumerable<DepthVertexData> ConstructVertexData( ) {
+        public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
             float yOffset = healthComponent.Owner.PositionOnScreen.Y + (healthComponent.Owner.Transform.HalfSize.Y + 0.25f) * healthComponent.Owner.World.VertexSize;
             float rotation = shaker.Rotation;
             Mathf.TransformAtOrigin(baseVerticies[0], ref transformedVerticies[0], healthComponent.Owner.PositionOnScreen.X, yOffset, rotation, false);
@@ -110,7 +110,7 @@ namespace mapKnight.Extended.Graphics.UI {
             private int finishTime;
             private int startTime;
 
-            public void Reset( ) {
+            public void Reset ( ) {
                 startTime = Environment.TickCount;
                 finishTime = startTime + Length;
             }

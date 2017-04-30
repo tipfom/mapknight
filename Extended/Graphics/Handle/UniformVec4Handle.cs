@@ -1,15 +1,15 @@
 ﻿using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Handle {
-    public class Uniform4Handle {
-        public int Location { get; private set; }
+    public class UniformVec2Handle {
+        public readonly int Location;
 
-        public Uniform4Handle (int program, string name) {
+        public UniformVec2Handle (int program, string name) {
             Location = GL.GetUniformLocation(program, name);
         }
 
         public void Set (float[ ] vec4) {
-            GL.Uniform4(Location, 1, vec4);
+            GL.Uniform2(Location, 1, vec4);
         }
     }
 }
