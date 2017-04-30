@@ -60,7 +60,7 @@ namespace mapKnight.Extended.Screens {
 
             public override bool HandleTouch (UITouchAction action, UITouch touch) {
                 if (action == UITouchAction.End) {
-                    if (Math.Abs(touch.RelativePosition.X) > screenSize.X / 2f || Math.Abs(touch.RelativePosition.Y) > screenSize.Y / 2f || (touch.RelativePosition - screenSize / 2f).MagnitudeSqr( ) < 0.0016 * Window.Ratio * Window.Ratio) {
+                    if (Math.Abs(touch.RelativePosition.X) > screenSize.X / 2f || Math.Abs(touch.RelativePosition.Y) > screenSize.Y / 2f || (touch.RelativePosition - screenSize / 2f).MagnitudeSqr( ) < .4f / 34f * .4f / 34f * 136f) {
                         Screen.Active = parent;
                     }
                 }
@@ -68,8 +68,8 @@ namespace mapKnight.Extended.Screens {
             }
 
             public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {
-                float pixelWidth = 2f / 150f * Window.Ratio;
-                float borderSize = 2 * pixelWidth;
+                float pixelWidth = .4f / 34f;
+                float borderSize = 5 * pixelWidth;
                 float cornerX = screenSize.X / 2f, cornerY = screenSize.Y / 2f;
                 float edgeX = cornerX - borderSize, edgeY = cornerY - borderSize;
                 float edgeWidth = edgeX * 2, edgeHeight = edgeY * 2;
@@ -80,7 +80,7 @@ namespace mapKnight.Extended.Screens {
                 yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - borderSize, edgeY, borderSize, edgeHeight), "window_r", Depth);
                 yield return new DepthVertexData(UIRectangle.GetVerticies(-cornerX, cornerY, borderSize, borderSize), "window_tl", Depth);
                 yield return new DepthVertexData(UIRectangle.GetVerticies(-cornerX, -cornerY + borderSize, borderSize, borderSize), "window_bl", Depth);
-                yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - 3f * pixelWidth, cornerY + borderSize, 5f * pixelWidth, 5f * pixelWidth), "window_tr", Depth);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - 10f * pixelWidth, cornerY + 4f*pixelWidth, 14f * pixelWidth, 10f * pixelWidth), "window_tr", Depth);
                 yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - borderSize, -cornerY + borderSize, borderSize, borderSize), "window_br", Depth);
             }
         }
