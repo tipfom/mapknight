@@ -6,6 +6,16 @@ using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Programs {
     public class ColorProgram : TextureProgram {
+        public static ColorProgram Program;
+
+        public static void Init ( ) {
+            Program = new ColorProgram( );
+        }
+
+        public static void Destroy ( ) {
+            Program.Dispose( );
+        }
+
         private UniformMatrixHandle mvpMatrixHandle;
         private AttributeHandle colorHandle;
 
@@ -39,8 +49,6 @@ namespace mapKnight.Extended.Graphics.Programs {
 
             GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, new IntPtr(offset));
         }
-
-        public static ColorProgram Program;
 
         public class BufferBatch : IDisposable {
             public IndexBuffer IndexBuffer;

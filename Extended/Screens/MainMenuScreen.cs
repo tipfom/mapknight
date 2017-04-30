@@ -54,6 +54,11 @@ namespace mapKnight.Extended.Screens {
             base.Load( );
         }
 
+        public override void Dispose ( ) {
+            weaponSelectWindow.Dispose( );
+            base.Dispose( );
+        }
+
         public override void Update (DeltaTime dt) {
             base.Update(dt);
         }

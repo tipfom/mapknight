@@ -5,6 +5,16 @@ using OpenTK.Graphics.ES20;
 
 namespace mapKnight.Extended.Graphics.Programs {
     public class FBOProgram : TextureProgram {
+        public static FBOProgram Program;
+
+        public static void Init ( ) {
+            Program = new FBOProgram( );
+        }
+
+        public static void Destroy ( ) {
+            Program.Dispose( );
+        }
+
         public FBOProgram ( ) : base(Assets.GetVertexShader("normal"), Assets.GetFragmentShader("normal")) {
         }
 
@@ -20,7 +30,5 @@ namespace mapKnight.Extended.Graphics.Programs {
             Apply(texture.ID, indexbuffer, vertexbuffer, texturebuffer, alphablending);
             GL.DrawElements(BeginMode.Triangles, count, DrawElementsType.UnsignedShort, IntPtr.Zero);
         }
-
-        public static FBOProgram Program;
     }
 }

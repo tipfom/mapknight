@@ -14,11 +14,11 @@ namespace mapKnight.Extended {
         public static void Initialize ( ) {
             int begin = Environment.TickCount;
 
-            ColorProgram.Program = new ColorProgram( );
-            MatrixProgram.Program = new MatrixProgram( );
-            FBOProgram.Program = new FBOProgram( );
-            ParticleProgram.Program = new ParticleProgram( );
-            GaussianBlurProgram.Program = new GaussianBlurProgram( );
+            ColorProgram.Init( );
+            MatrixProgram.Init( );
+            FBOProgram.Init( );
+            ParticleProgram.Init( );
+            GaussianBlurProgram.Init( );
 
             UIRenderer.Init( );
             UIRenderer.Texture = Assets.Load<Spritebatch2D>("interface");
@@ -56,6 +56,12 @@ namespace mapKnight.Extended {
             Screen.MainMenu.Dispose( );
             Screen.Gameplay?.Dispose( );
             UIRenderer.Dispose( );
+
+            ColorProgram.Destroy( );
+            MatrixProgram.Destroy( );
+            FBOProgram.Destroy( );
+            ParticleProgram.Destroy( );
+            GaussianBlurProgram.Destroy( );
         }
 
         private static int lastUpdate = Environment.TickCount;

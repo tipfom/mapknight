@@ -61,11 +61,6 @@ namespace mapKnight.Extended {
                 sprite.Dispose( );
             spriteCache.Clear( );
 
-            ColorProgram.Program.Dispose( );
-            MatrixProgram.Program.Dispose( );
-            FBOProgram.Program.Dispose( );
-            ParticleProgram.Program.Dispose( );
-
             foreach (int shader in loadedVertexShader.Values)
                 GL.DeleteShader(shader);
             loadedVertexShader.Clear();

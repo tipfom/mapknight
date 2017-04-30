@@ -7,6 +7,16 @@ using OpenTK.Graphics.ES20;
 namespace mapKnight.Extended.Graphics.Programs
 {
     public class ParticleProgram : Program {
+        public static ParticleProgram Program;
+
+        public static void Init ( ) {
+            Program = new ParticleProgram( );
+        }
+
+        public static void Destroy ( ) {
+            Program.Dispose( );
+        }
+
         private AttributeHandle sizeHandle;
         private AttributeHandle colorHandle;
         private UniformMatrixHandle matrixHandle;
@@ -45,8 +55,6 @@ namespace mapKnight.Extended.Graphics.Programs
 
             GL.DrawArrays(BeginMode.Points, 0, count);
         }
-
-        public static ParticleProgram Program;
 
         public class BufferBatch : IDisposable {
             public IAttributeBuffer VertexBuffer;

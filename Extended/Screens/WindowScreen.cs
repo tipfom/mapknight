@@ -48,6 +48,11 @@ namespace mapKnight.Extended.Screens {
             base.Draw( );
         }
 
+        public override void Dispose ( ) {
+            uiBuffer.Dispose( );
+            base.Dispose( );
+        }
+
         private class UIWindowItem : UIItem {
             private Vector2 screenSize;
             private Screen parent;

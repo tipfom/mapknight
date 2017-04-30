@@ -10,6 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Broadswords\Copper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Broadswords\Diamond.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Dagger\Rubidium.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Rapier\Jade.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\FragileHeadComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\WallWalkerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\TriggerComponent.cs">
@@ -133,7 +137,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\Windows\WeaponSelectWindow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Combat\BaseWeapon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Combat\BaseWeaponCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\PrimaryWeapon.cs" />
   </ItemGroup>
 </Project>
