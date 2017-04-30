@@ -100,6 +100,7 @@
     <AndroidAsset Include="Assets\textures\weapons\dagger\rubidium.json" />
     <AndroidAsset Include="Assets\textures\weapons\rapier\jade.json" />
     <AndroidAsset Include="Assets\textures\weapons\broadswords\copper.json" />
+    <AndroidAsset Include="Assets\maps\green-1.map" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -222,6 +223,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Screens\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\green-1.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

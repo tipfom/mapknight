@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using mapKnight.Extended.Graphics.UI.Layout;
 using mapKnight.Core;
 using System;
@@ -12,7 +13,7 @@ namespace mapKnight.Extended.Graphics.UI {
         static UIMap ( ) {
             STATIONS = new Station[ ] {
                 new Station(0, Line.LightGreen, 0, "Maehhpp"),
-                new Station(1, Line.LightGreen, 3, null),
+                new Station(1, Line.LightGreen, 3, "green-1"),
                 new Station(2, Line.LightGreen, 4, null),
                 new Station(3, Line.LightGreen, 8, null),
                 new Station(4, Line.LightGreen, 10, null),
@@ -139,7 +140,7 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         private Station selectedStation = STATIONS[0];
-        private UnlockedState unlockedState = new UnlockedState(Line.LightGreen, 0);
+        private UnlockedState unlockedState = new UnlockedState(Line.LightGreen, 1);
         private bool isTrainMoving;
         private Vector2 currentPosition;
         private int currentWaypointIndex;
