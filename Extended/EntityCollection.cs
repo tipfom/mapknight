@@ -1511,7 +1511,7 @@ namespace mapKnight.Extended {
                         _Diamond.Components = new ComponentList {
                             new MotionComponent.Configuration( ) { PlatformCollider = true },
                             new PlayerComponent.Configuration( ) {
-                                Health = 10,
+                                Health = 10, JumpHeight = 4.5f,
                                 BodyAnimationData = new VertexAnimationData( ) {
                                     Offsets = new Vector2[ ] {
                                         new Vector2(3, 2.5f),   // feet2

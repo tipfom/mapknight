@@ -23,6 +23,7 @@ namespace mapKnight.Extended.Components.Player {
         public HealthTracker Health;
 
         private bool currentlyTalking;
+        private float jumpHeight;
         private Entity nearbyNPC;
         private MotionComponent motionComponent;
         private SpeedComponent speedComponent;
@@ -30,8 +31,9 @@ namespace mapKnight.Extended.Components.Player {
         private AnimationState weaponAnimationState = AnimationState.None;
         private VertexAnimationData bodyAnimationData; // TEMP, WILL SOON BE PART OF THE ARMOR
 
-        public PlayerComponent (Entity owner, float health, VertexAnimationData bodyAnimationData) : base(owner) {
+        public PlayerComponent (Entity owner, float health, float jumpHeight, VertexAnimationData bodyAnimationData) : base(owner) {
             this.bodyAnimationData = bodyAnimationData;
+            this.jumpHeight = jumpHeight;
 
             owner.Domain = EntityDomain.Player;
 
@@ -50,6 +52,7 @@ namespace mapKnight.Extended.Components.Player {
         public override void Prepare ( ) {
             speedComponent = Owner.GetComponent<SpeedComponent>( );
             motionComponent = Owner.GetComponent<MotionComponent>( );
+            speedComponent.Default.Y = Mathf.Sqrt(2 * jumpHeight * -Owner.World.Gravity.Y);
 
             BaseWeapon = Screen.MainMenu.SelectedWeapon(Owner);
             BaseWeapon.Prepare( );
@@ -195,10 +198,11 @@ namespace mapKnight.Extended.Components.Player {
 
         public new class Configuration : Component.Configuration {
             public float Health;
+            public float JumpHeight;
             public VertexAnimationData BodyAnimationData; // TEMP
 
             public override Component Create (Entity owner) {
-                return new PlayerComponent(owner, Health, BodyAnimationData);
+                return new PlayerComponent(owner, Health,JumpHeight, BodyAnimationData);
             }
         }
 
