@@ -18,7 +18,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private float[ ][ ] transformedVerticies;
         private Shaker shaker = new Shaker( ) { Amplitude = 10, Length = 500, Frequency = 1 / 50f };
 
-        public UIHealthBar (Screen owner, HealthComponent healthComponent) : base(owner, new UILayout(new UIMargin(healthComponent.Initial * 0.0125f, healthComponent.Initial * 0.025f, -HEIGHT_HALF, HEIGHT_HALF), UIMarginType.Absolute, UIPosition.Center, UIPosition.Left), UIDepths.BACKGROUND, false) {
+        public UIHealthBar (Screen owner, HealthComponent healthComponent) : base(owner, new UILayout(new UIMargin(healthComponent.Initial * 0.025f, healthComponent.Initial * 0.05f, -HEIGHT_HALF, HEIGHT_HALF), UIMarginType.Absolute, UIPosition.Center, UIPosition.Left), UIDepths.BACKGROUND, false) {
             this.healthComponent = healthComponent;
             healthComponent.Changed += ( ) => {
                 UpdateIndicator( );
