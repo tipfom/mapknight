@@ -1415,7 +1415,7 @@ namespace mapKnight.Extended.Warfare {
                                 },
                             },
                             new VertexAnimation( ) {
-                                Name = "run",
+                                Name = "walk",
                                 CanRepeat = true,
                                 Frames = new VertexAnimationFrame[ ] {
                                     new VertexAnimationFrame( ) {
