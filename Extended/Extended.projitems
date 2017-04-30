@@ -133,7 +133,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\Windows\WeaponSelectWindow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeapon.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Warfare\BaseWeaponCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\BaseWeapon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\BaseWeaponCollection.cs" />
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Screens;
-using mapKnight.Extended.Warfare;
+using mapKnight.Extended.Combat;
 using mapKnight.Extended.Graphics.Animation;
 using static mapKnight.Extended.Components.Player.PlayerAnimationComponent;
 using mapKnight.Core.World.Serialization;
@@ -19,7 +19,7 @@ namespace mapKnight.Extended.Components.Player {
     [UpdateBefore(typeof(MotionComponent))]
     public class PlayerComponent : Component {
         public ActionMask Action;
-        public BaseWeapon BaseWeapon;
+        public PrimaryWeapon BaseWeapon;
         public HealthTracker Health;
 
         private bool currentlyTalking;
