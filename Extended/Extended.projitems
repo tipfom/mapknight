@@ -14,6 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Broadswords\Diamond.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Dagger\Rubidium.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Rapier\Jade.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Secondaries\Shield.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\SecondaryWeapon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\FragileHeadComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\WallWalkerComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\AI\Basics\TriggerComponent.cs">

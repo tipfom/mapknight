@@ -19,7 +19,8 @@ namespace mapKnight.Extended.Components.Player {
     [UpdateBefore(typeof(MotionComponent))]
     public class PlayerComponent : Component {
         public ActionMask Action;
-        public PrimaryWeapon BaseWeapon;
+        public PrimaryWeapon PrimaryWeapon;
+        public SecondaryWeapon SecondaryWeapon;
         public HealthTracker Health;
 
         private bool currentlyTalking;
@@ -45,7 +46,7 @@ namespace mapKnight.Extended.Components.Player {
             gameOverScreen.Load( );
             Screen.Active = gameOverScreen;
 #if DEBUG
-            BaseWeapon.Destroy( );
+            PrimaryWeapon.Destroy( );
 #endif
         }
 
@@ -54,9 +55,12 @@ namespace mapKnight.Extended.Components.Player {
             motionComponent = Owner.GetComponent<MotionComponent>( );
             speedComponent.Default.Y = Mathf.Sqrt(2 * jumpHeight * -Owner.World.Gravity.Y);
 
-            BaseWeapon = Screen.MainMenu.SelectedWeapon(Owner);
-            BaseWeapon.Prepare( );
-            Owner.GetComponent<PlayerAnimationComponent>( ).LoadAnimations(bodyAnimationData, BaseWeapon.AnimationData, "player", BaseWeapon.Texture);
+            SecondaryWeapon = new Combat.Collections.Secondaries.Shield(Owner);
+            SecondaryWeapon.Prepare( );
+
+            PrimaryWeapon = Screen.MainMenu.SelectedWeapon(Owner);
+            PrimaryWeapon.Prepare( );
+            Owner.GetComponent<PlayerAnimationComponent>( ).LoadAnimations(bodyAnimationData, PrimaryWeapon.AnimationData, "player", PrimaryWeapon.Texture);
         }
 
         public override void Collision (Entity collidingEntity) {
@@ -66,6 +70,8 @@ namespace mapKnight.Extended.Components.Player {
         }
 
         public override void Update (DeltaTime dt) {
+            SecondaryWeapon.Update(dt);
+
             bool attemptJump = false;
 
             while (Owner.HasComponentInfo(ComponentData.InputInclude))
@@ -83,10 +89,10 @@ namespace mapKnight.Extended.Components.Player {
                 }
             }
 
-            if (nearbyNPC == null && weaponAnimationState != AnimationState.Attack && BaseWeapon.Update( )) {
+            if (nearbyNPC == null && weaponAnimationState != AnimationState.Attack && PrimaryWeapon.Update( )) {
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, WEAPON_ANIMATION, "attack" + Mathi.Random(0, 3), (AnimationCallback)AttackAnimationCallback); // TODO
                 weaponAnimationState = AnimationState.Attack;
-                BaseWeapon.Attack( );
+                PrimaryWeapon.Attack( );
             }
 
             while (Owner.HasComponentInfo(ComponentData.InputGesture)) {
@@ -102,9 +108,12 @@ namespace mapKnight.Extended.Components.Player {
                         }
                     }
                 } else {
-                    // SPECIAL ATTACK, TODO
+                    SecondaryWeapon.OnGesture(data);
                 }
             }
+
+            motionComponent.Lock = SecondaryWeapon.Lock;
+            if (SecondaryWeapon.Lock) return;
 
             if (!currentlyTalking) {
                 if (bodyAnimationState == AnimationState.Jump) return;
@@ -171,7 +180,7 @@ namespace mapKnight.Extended.Components.Player {
         }
 
         private string AttackAnimationCallback (bool completed) {
-            if (!completed) BaseWeapon.Abort( );
+            if (!completed) PrimaryWeapon.Abort( );
 
             switch (bodyAnimationState) {
                 case AnimationState.Fall:
@@ -192,7 +201,7 @@ namespace mapKnight.Extended.Components.Player {
 
 #if DEBUG
         public override void Draw ( ) {
-            BaseWeapon.Draw( );
+            PrimaryWeapon.Draw( );
         }
 #endif  
 
