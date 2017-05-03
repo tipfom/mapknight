@@ -227,6 +227,9 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\green-1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\lightmap.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
   <ProjectExtensions />
