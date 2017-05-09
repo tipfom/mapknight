@@ -6,6 +6,7 @@ using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Particles;
 using static mapKnight.Extended.Graphics.Programs.MatrixProgram;
 using mapKnight.Core.World;
+using mapKnight.Extended.Graphics.Lightning;
 
 namespace mapKnight.Extended.Graphics {
     public class Map : Core.Map, IEntityWorld {
@@ -31,6 +32,7 @@ namespace mapKnight.Extended.Graphics {
         private Vector2 focusCenter;
         private Vector2 drawThreshold;
         private Vector2 updateTile = new Vector2(-1, -1);
+        private LightManager lightManager;
 
         private CachedGPUBuffer mainTextureBuffer;
         private CachedGPUBuffer foregroundTextureBuffer;
@@ -40,17 +42,26 @@ namespace mapKnight.Extended.Graphics {
 
         public IEntityRenderer Renderer { get; } = new EntityRenderer( );
 
-        public Map(Stream input) : base(input, new MobileAndroidSerializer()) {
+        public Map (Stream input) : base(input, new MobileAndroidSerializer( )) {
             Emitter.Matrix = new Matrix(new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
+
             Window_Changed( );
             InitTextureCoords( );
-
             texture = Assets.Load<Texture2D>(Texture);
 
             Window.Changed += Window_Changed;
+
+
+
+            lightManager = new LightManager(.9f, DrawSize);
+            lightManager.RenderTilemap(this);
+            lightManager.UpdateTilemapMatrix(this, new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
+            lightManager.Add(new Light(1f, new Vector2(5, 7) - new Vector2(Width, Height) / 2f, Color.Red, 6f));
+            lightManager.Add(new Light(1f, new Vector2(5, 15) - new Vector2(Width, Height) / 2f, Color.Red, 5f));
+            lightManager.Add(new Light(1f, new Vector2(SpawnPoint.X, SpawnPoint.Y) - new Vector2(Width, Height) / 2f, Color.Yellow, 7f));
         }
 
-        private void Window_Changed( ) {
+        private void Window_Changed ( ) {
             matrix.UpdateProjection(Window.ProjectionSize);
             matrix.CalculateMVP( );
 
@@ -72,7 +83,7 @@ namespace mapKnight.Extended.Graphics {
             Emitter.Matrix.CalculateMVP( );
         }
 
-        private float[ ] GenerateMainVerticies( ) {
+        private float[ ] GenerateMainVerticies ( ) {
             int tileCount = DrawSize.Area;
 
             float ystart = -(DrawSize.Height / 2f * VertexSize);
@@ -109,7 +120,7 @@ namespace mapKnight.Extended.Graphics {
             return verticies;
         }
 
-        private float[ ] GenerateForegroundVerticies( ) {
+        private float[ ] GenerateForegroundVerticies ( ) {
             int tileCount = DrawSize.Area;
 
             float[ ] verticies = new float[tileCount * 1 * 2 * 4];
@@ -128,7 +139,7 @@ namespace mapKnight.Extended.Graphics {
             return verticies;
         }
 
-        private void InitTextureCoords( ) {
+        private void InitTextureCoords ( ) {
             // buffer tile coords
             layerBuffer = new float[3][ ][ ];
             for (int layer = 0; layer < 3; layer++) {
@@ -149,7 +160,7 @@ namespace mapKnight.Extended.Graphics {
             }
         }
 
-        private void UpdateTextureBuffer( ) {
+        private void UpdateTextureBuffer ( ) {
             int sourceIndex = (int)updateTile.X * 8;
 
             for (int ly = 0; ly < DrawSize.Height; ly++) {
@@ -165,12 +176,11 @@ namespace mapKnight.Extended.Graphics {
                     Array.Clear(foregroundTextureBuffer.Cache, baseDestinationIndex, textureBufferLength);
                 }
             }
-
             mainTextureBuffer.Apply( );
             foregroundTextureBuffer.Apply( );
         }
 
-        public new void Draw( ) {
+        public new void Draw ( ) {
             base.Draw( );
             Program.Begin( );
             Program.Draw(mainBuffer, texture, matrix, true);
@@ -179,9 +189,11 @@ namespace mapKnight.Extended.Graphics {
             Program.Begin( );
             Program.Draw(foregroundBuffer, texture, matrix, true);
             Program.End( );
+
+            lightManager.Draw( );
         }
 
-        public new void Update(DeltaTime dt) {
+        public new void Update (DeltaTime dt) {
             base.Update(dt);
             UpdateFocus( );
             for (int i = 0; i < Entities.Count; i++) {
@@ -191,14 +203,17 @@ namespace mapKnight.Extended.Graphics {
                     entity.PositionOnScreen = (entity.Transform.Center - focusCenter) * VertexSize;
                 }
             }
+
+            lightManager.Brightness = (Environment.TickCount % 10000) / 5000f;
+            lightManager.Brightness = lightManager.Brightness > 1 ? 2 - lightManager.Brightness : lightManager.Brightness;
         }
 
-        public void Focus(int entityID) {
+        public void Focus (int entityID) {
             focusEntity = Entities.Find(entity => entity.ID == entityID);
             focusEntity.Destroyed += ( ) => { focusEntity = null; };
         }
 
-        private void UpdateFocus( ) {
+        private void UpdateFocus ( ) {
             if (focusEntity != null) {
                 Vector2 focusPoint = focusEntity.Transform.Center;
                 focusCenter = new Vector2(Mathf.Clamp(focusPoint.X, xFocusCenterMinClamp, xFocusCenterMaxClamp), Mathf.Clamp(focusPoint.Y, yFocusCenterMinClamp, yFocusCenterMaxClamp));
@@ -225,10 +240,11 @@ namespace mapKnight.Extended.Graphics {
                     updateTile = intNextTile;
                     UpdateTextureBuffer( );
                 }
+                lightManager.Position = (focusCenter);
             }
         }
 
-        public bool HasCollider(int x, int y) {
+        public bool HasCollider (int x, int y) {
             return GetTile(x, y).HasFlag(TileAttribute.Collision);
         }
     }

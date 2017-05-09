@@ -20,6 +20,7 @@ namespace mapKnight.Extended {
             FBOProgram.Init( );
             ParticleProgram.Init( );
             GaussianBlurProgram.Init( );
+            DarkenProgram.Init( );
 
             LightManager.Init( );
             UIRenderer.Init( );
@@ -29,11 +30,6 @@ namespace mapKnight.Extended {
             Screen.Active = Screen.MainMenu;
 
             Window.Background = new Color(25, 25, 50, 255);
-
-            lm = new LightManager(.5f);
-            lm.Add(new Light( ) { Intensity = .5f, Position = new Vector2(-.1f, .1f), Radius = .6f, Color = new Color(255, 0, 0, 128) });
-            lm.Add(new Light( ) { Intensity = .5f, Position = new Vector2(.0f, -.1f), Radius = .6f, Color = new Color(0, 0, 255, 128) });
-            lm.Add(new Light( ) { Intensity = .5f, Position = new Vector2(.1f, .1f), Radius = .6f, Color = new Color(0,255, 0, 255) });
 #if DEBUG
             Debug.Print(typeof(Manager), $"Loading took {Environment.TickCount - begin} ms");
 #endif
@@ -44,8 +40,6 @@ namespace mapKnight.Extended {
         public static DeltaTime DrawTime { get; private set; }
         public static DeltaTime UpdateTime { get; private set; }
 
-        static LightManager lm;
-
         public static void Update ( ) {
             stopWatch.Restart( );
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -55,10 +49,6 @@ namespace mapKnight.Extended {
             UpdateTime = new DeltaTime((float)stopWatch.Elapsed.TotalMilliseconds); stopWatch.Restart( );
 
             Screen.Active.Draw( );
-            lm.Draw( );
-            lm.Brightness = (Environment.TickCount % 10000) / 5000f;
-            lm.Brightness = lm.Brightness > 1 ? 2 - lm.Brightness : lm.Brightness;
-
 
             DrawTime = new DeltaTime((float)stopWatch.Elapsed.TotalMilliseconds);
         }
@@ -75,6 +65,7 @@ namespace mapKnight.Extended {
             FBOProgram.Destroy( );
             ParticleProgram.Destroy( );
             GaussianBlurProgram.Destroy( );
+            DarkenProgram.Destroy( );
         }
 
         private static int lastUpdate = Environment.TickCount;

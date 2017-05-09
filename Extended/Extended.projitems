@@ -91,11 +91,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\DepthVertexData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\EntityRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Framebuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\UniformVec1Handle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Handle\UniformVec2Handle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Lightning\Light.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Lightning\LightManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Emitter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Particle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\DarkenProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\GaussianBlurProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ParticleProgram.cs" />
