@@ -140,7 +140,7 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
             } else if ((_Dock & UIPosition.Bottom) == UIPosition.Bottom) {
                 if ((_Anchor & UIPosition.Top) == UIPosition.Top) {
                     Size.Y = marginBottom;
-                    Position.Y = relativePosition.Y - relativeSize.Y + marginTop;
+                    Position.Y = relativePosition.Y - relativeSize.Y - marginTop;
                 } else if ((_Anchor & UIPosition.Bottom) == UIPosition.Bottom) {
                     Size.Y = marginTop;
                     Position.Y = relativePosition.Y - relativeSize.Y + marginBottom + Size.Y;
@@ -182,7 +182,7 @@ namespace mapKnight.Extended.Graphics.UI.Layout {
             }
 
             if ((_Anchor & UIPosition.Top) == UIPosition.Top) {
-                Margin.Bottom = target.X;
+                Margin.Bottom = target.Y;
             } else if ((_Anchor & UIPosition.Bottom) == UIPosition.Bottom) {
                 Margin.Top = target.Y;
             } else {
