@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="584" android:versionName="2.4.584 prev2" package="com.tipfom.mapknight" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="600" android:versionName="2.4.600 prev3" package="com.tipfom.mapknight" android:installLocation="auto">
 	<uses-feature android:glEsVersion="0x00020000" />
 	<uses-sdk android:minSdkVersion="16" />
 	<application android:label="mapKnight" android:icon="@drawable/icon" android:hardwareAccelerated="true" android:allowBackup="true"></application>
