@@ -221,15 +221,14 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\weapons\broadswords\copper.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\alpha_gauss.txt" />
+  </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\green-1.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\lightning\point.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\lightning\tiles.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\fragment\darken.txt" />

@@ -28,6 +28,7 @@ namespace mapKnight.Extended.Graphics {
         private int textureBufferL1baseOffset;
         private int textureBufferLength;
 
+        private Light focusLight;
         private Entity focusEntity;
         private Vector2 focusCenter;
         private Vector2 drawThreshold;
@@ -51,14 +52,11 @@ namespace mapKnight.Extended.Graphics {
 
             Window.Changed += Window_Changed;
 
-
-
             lightManager = new LightManager(.9f, DrawSize);
             lightManager.RenderTilemap(this);
             lightManager.UpdateTilemapMatrix(this, new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
-            lightManager.Add(new Light(1f, new Vector2(5, 7) - new Vector2(Width, Height) / 2f, Color.Red, 6f));
-            lightManager.Add(new Light(1f, new Vector2(5, 15) - new Vector2(Width, Height) / 2f, Color.Red, 5f));
-            lightManager.Add(new Light(1f, new Vector2(SpawnPoint.X, SpawnPoint.Y) - new Vector2(Width, Height) / 2f, Color.Yellow, 7f));
+            focusLight = new Light(3f, new Vector2(SpawnPoint.X, SpawnPoint.Y) - new Vector2(Width, Height) / 2f, new Color(0, 0, 128), .3f);
+            lightManager.Add(focusLight);
         }
 
         private void Window_Changed ( ) {
@@ -240,7 +238,9 @@ namespace mapKnight.Extended.Graphics {
                     updateTile = intNextTile;
                     UpdateTextureBuffer( );
                 }
-                lightManager.Position = (focusCenter);
+
+                focusLight.Position = focusPoint;
+                lightManager.Position = focusCenter;
             }
         }
 

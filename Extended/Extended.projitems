@@ -97,6 +97,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Lightning\LightManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Emitter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Particle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\AlphaGaussianBlurProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\DarkenProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\GaussianBlurProgram.cs" />
@@ -144,5 +145,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\MainMenuScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\Windows\WeaponSelectWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\PrimaryWeapon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
   </ItemGroup>
 </Project>

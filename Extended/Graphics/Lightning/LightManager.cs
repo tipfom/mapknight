@@ -87,7 +87,7 @@ namespace mapKnight.Extended.Graphics.Lightning {
             for (int i = 0; i < lights.Count; i++) {
                 Light light = lights[i];
                 int posVertex = vertexBufferSize * 8, posColor = posVertex * 2;
-                Vector2 transformedPosition = light.Position;
+                Vector2 transformedPosition = light.Position - tilemapPositionOffset;
 
                 float top = transformedPosition.Y + light.Radius;
                 float bottom = transformedPosition.Y - light.Radius;
@@ -117,6 +117,13 @@ namespace mapKnight.Extended.Graphics.Lightning {
             DarkenProgram.Program.Begin( );
             DarkenProgram.Program.Draw(indexBuffer, tilemapVertexBuffer, textureBuffer, Brightness, tilemapBuffer.Texture, tilemapMatrix, 6, 0, true);
             DarkenProgram.Program.End( );
+
+            if (Settings.Singleton.UseAdvancedLightning) {
+                AlphaGaussianBlurProgram.Program.Begin( );
+                AlphaGaussianBlurProgram.Program.Draw(lightBuffer, cacheBuffer, true);
+                AlphaGaussianBlurProgram.Program.End( );
+                lightBuffer.Bind( );
+            }
 
             GL.BlendEquationSeparate(All.Max, All.FuncAdd);
             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
