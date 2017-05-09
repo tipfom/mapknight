@@ -9,11 +9,11 @@ using mapKnight.Extended.Graphics.Animation;
 using System;
 using System.Timers;
 
-namespace mapKnight.Extended.Warfare {
-    public class BaseWeapon {
+namespace mapKnight.Extended.Combat {
+    public class PrimaryWeapon {
 #if DEBUG
-        private const int BASE_WEAPON_HITBOX_SPECIES = -3;
-        private static Spritebatch2D BASE_WEAPON_TEXTURE;
+        private const int PRIMARY_WEAPON_HITBOX_SPECIES = -3;
+        private static Spritebatch2D PRIMARY_WEAPON_TEXTURE;
 
         private float[ ] sizeVertices;
         private float[ ] transformedVertices;
@@ -34,7 +34,7 @@ namespace mapKnight.Extended.Warfare {
         private Timer timer;
         private int nextHitTime;
 
-        public BaseWeapon (string Name, int ID, float Damage, int Cooldown, string Texture, int AttackTime, VertexAnimationData AnimationData, Transform hitbox, Entity owner) {
+        public PrimaryWeapon (string Name, int ID, float Damage, int Cooldown, string Texture, int AttackTime, VertexAnimationData AnimationData, Transform hitbox, Entity owner) {
             this.Name = Name;
             this.ID = ID;
             this.Damage = Damage;
@@ -52,11 +52,11 @@ namespace mapKnight.Extended.Warfare {
         public void Prepare ( ) {
             motionComponent = owner.GetComponent<MotionComponent>( );
 #if DEBUG
-            if (BASE_WEAPON_TEXTURE == null) {
-                BASE_WEAPON_TEXTURE = new Spritebatch2D(new Dictionary<string, int[ ]>( ) { ["0"] = new int[ ] { 0, 0, 1, 1 } }, Texture2D.CreateEmpty( ));
+            if (PRIMARY_WEAPON_TEXTURE == null) {
+                PRIMARY_WEAPON_TEXTURE = new Spritebatch2D(new Dictionary<string, int[ ]>( ) { ["0"] = new int[ ] { 0, 0, 1, 1 } }, Texture2D.CreateEmpty( ));
             }
-            if (!owner.World.Renderer.HasTexture(BASE_WEAPON_HITBOX_SPECIES)) {
-                owner.World.Renderer.AddTexture(BASE_WEAPON_HITBOX_SPECIES, BASE_WEAPON_TEXTURE);
+            if (!owner.World.Renderer.HasTexture(PRIMARY_WEAPON_HITBOX_SPECIES)) {
+                owner.World.Renderer.AddTexture(PRIMARY_WEAPON_HITBOX_SPECIES, PRIMARY_WEAPON_TEXTURE);
             }
 
             UpdateSizeVertices( );
@@ -108,7 +108,7 @@ namespace mapKnight.Extended.Warfare {
 
 #if DEBUG
         public void Draw ( ) {
-            owner.World.Renderer.QueueVertexData(BASE_WEAPON_HITBOX_SPECIES, ConstructVertexData( ));
+            owner.World.Renderer.QueueVertexData(PRIMARY_WEAPON_HITBOX_SPECIES, ConstructVertexData( ));
         }
 
         private IEnumerable<VertexData> ConstructVertexData ( ) {

@@ -8,6 +8,7 @@ namespace mapKnight.Extended.Components.Movement {
     public class MotionComponent : Component {
         public Vector2 AimedVelocity;
         public float ScaleX = 1f;
+        public bool Lock = false;
 
         public readonly bool HasMapCollider;
         public readonly bool HasPlatformCollider;
@@ -54,7 +55,7 @@ namespace mapKnight.Extended.Components.Movement {
             if (IsOnPlatform) {
                 platformStandingOn.VelocityChanged = null;
                 platformStandingOn = null;
-            } else {
+            } else if (!Lock) {
                 enforcedVelocity += Owner.World.Gravity * GravityInfluence * dt.TotalSeconds;
             }
 
@@ -84,6 +85,7 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         private void PlatformVelocityChanged (Vector2 newVelocity) {
+            if (Lock) return;
             enforcedVelocity = newVelocity;
             Owner.Transform.Center = new Vector2(Owner.Transform.Center.X, platformStandingOn.Owner.Transform.TR.Y + Owner.Transform.HalfSize.Y);
         }

@@ -4,20 +4,21 @@ using mapKnight.Core.World;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
 using mapKnight.Extended.Screens.Windows;
-using mapKnight.Extended.Warfare;
+using mapKnight.Extended.Combat;
+using mapKnight.Extended.Combat.Collections;
 
 namespace mapKnight.Extended.Screens {
     public class MainMenuScreen : Screen {
-        public BaseWeapon SelectedWeapon (Entity owner) { 
+        public PrimaryWeapon SelectedWeapon (Entity owner) { 
             switch (weaponSelectWindow.SelectedWeapon) {
                 case 0:
-                    return BaseWeaponCollection.Broadswords.Diamond(owner);
+                    return Broadswords.Diamond(owner);
                 case 1:
-                    return BaseWeaponCollection.Broadswords.Copper(owner);
+                    return Broadswords.Copper(owner);
                 case 2:
-                    return BaseWeaponCollection.Rapier.Jade(owner);
+                    return Rapier.Jade(owner);
                 case 3:
-                    return BaseWeaponCollection.Dagger.Rubidium(owner);
+                    return Dagger.Rubidium(owner);
             }
             return null;
         }
@@ -51,6 +52,11 @@ namespace mapKnight.Extended.Screens {
             };
 
             base.Load( );
+        }
+
+        public override void Dispose ( ) {
+            weaponSelectWindow.Dispose( );
+            base.Dispose( );
         }
 
         public override void Update (DeltaTime dt) {

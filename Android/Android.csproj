@@ -222,10 +222,16 @@
     <AndroidAsset Include="Assets\textures\weapons\broadswords\copper.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Screens\" />
+    <AndroidAsset Include="Assets\shader\fragment\alpha_gauss.txt" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\green-1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\lightning\point.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\darken.txt" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

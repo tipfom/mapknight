@@ -6,6 +6,7 @@ using mapKnight.Extended.Graphics.Programs;
 using mapKnight.Extended.Graphics.UI;
 using OpenTK.Graphics.ES20;
 using mapKnight.Core.Graphics;
+using mapKnight.Extended.Graphics.Lightning;
 
 namespace mapKnight.Extended {
     public static class Manager {
@@ -14,12 +15,15 @@ namespace mapKnight.Extended {
         public static void Initialize ( ) {
             int begin = Environment.TickCount;
 
-            ColorProgram.Program = new ColorProgram( );
-            MatrixProgram.Program = new MatrixProgram( );
-            FBOProgram.Program = new FBOProgram( );
-            ParticleProgram.Program = new ParticleProgram( );
-            GaussianBlurProgram.Program = new GaussianBlurProgram( );
+            ColorProgram.Init( );
+            MatrixProgram.Init( );
+            FBOProgram.Init( );
+            ParticleProgram.Init( );
+            GaussianBlurProgram.Init( );
+            DarkenProgram.Init( );
+            AlphaGaussianBlurProgram.Init( );
 
+            LightManager.Init( );
             UIRenderer.Init( );
             UIRenderer.Texture = Assets.Load<Spritebatch2D>("interface");
 
@@ -27,7 +31,6 @@ namespace mapKnight.Extended {
             Screen.Active = Screen.MainMenu;
 
             Window.Background = new Color(25, 25, 50, 255);
-
 #if DEBUG
             Debug.Print(typeof(Manager), $"Loading took {Environment.TickCount - begin} ms");
 #endif
@@ -56,6 +59,15 @@ namespace mapKnight.Extended {
             Screen.MainMenu.Dispose( );
             Screen.Gameplay?.Dispose( );
             UIRenderer.Dispose( );
+            LightManager.Destroy( );
+
+            ColorProgram.Destroy( );
+            MatrixProgram.Destroy( );
+            FBOProgram.Destroy( );
+            ParticleProgram.Destroy( );
+            GaussianBlurProgram.Destroy( );
+            DarkenProgram.Destroy( );
+            AlphaGaussianBlurProgram.Destroy( );
         }
 
         private static int lastUpdate = Environment.TickCount;

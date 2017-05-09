@@ -10,7 +10,7 @@ using Map = mapKnight.Extended.Graphics.Map;
 using mapKnight.Core.World.Components;
 using System.Collections.Generic;
 using mapKnight.Core.World.Serialization;
-using mapKnight.Extended.Warfare;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Screens {
 

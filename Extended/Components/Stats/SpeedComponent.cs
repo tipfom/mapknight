@@ -7,19 +7,19 @@ namespace mapKnight.Extended.Components.Stats {
     [UpdateBefore(typeof(MotionComponent), false)]
     public class SpeedComponent : Component {
         public Vector2 Speed;
-        private Vector2 defaultSpeed;
+        public Vector2 Default;
 
         public SpeedComponent (Entity owner, Vector2 defaultspeed) : base(owner) {
-            defaultSpeed = defaultspeed;
+            Default = defaultspeed;
             Speed = defaultspeed;
         }
 
         public override void Update (DeltaTime dt) {
             if (Owner.HasComponentInfo(ComponentData.SlowDown)) {
                 Vector2 slowDown = (Vector2)Owner.GetComponentInfo(ComponentData.SlowDown)[0];
-                Speed = defaultSpeed * slowDown;
+                Speed = Default * slowDown;
             } else {
-                Speed = defaultSpeed;
+                Speed = Default;
             }
         }
 

@@ -7,7 +7,7 @@ using mapKnight.Extended.Graphics.UI.Layout;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIGesturePanel : UIPanel {
-        public const string SWIPE_LEFT = "SL", SWIPE_RIGHT = "SR", SWIPE_UP = "SU", SWIPE_DOWN = "SD";
+        public const string SWIPE_LEFT = "l", SWIPE_RIGHT = "r", SWIPE_UP = "u", SWIPE_DOWN = "d";
 
         const double SCORE_THRESHOLD = 1.0;
         const int SWIPE_TIME = 400;

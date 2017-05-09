@@ -11,7 +11,7 @@ namespace mapKnight.Extended.Graphics.UI {
         UILabel dotsLabel;
         NPCComponent npc;
 
-        public UIDialog (Screen owner, NPCComponent npc) : base(owner, new UILayout(new UIMargin(0.375f, 0.175f), UIMarginType.Relative), UIDepths.MIDDLE) {
+        public UIDialog (Screen owner, NPCComponent npc) : base(owner, new UILayout(new UIMargin(0.375f, 0.375f, 0.35f, .1f), UIMarginType.Relative, UIPosition.Center | UIPosition.Bottom, UIPosition.Center | UIPosition.Bottom), UIDepths.MIDDLE) {
             this.npc = npc;
             currentPopupLabel = new UILabel(owner, new UILayout(new UIMargin(.1f, .1f), UIMarginType.Relative, UIPosition.Top | UIPosition.Left, UIPosition.Top | UIPosition.Left, relative: this), UIDepths.FOREGROUND, 0.08f, npc.NextMessage( ), UITextAlignment.Left);
             dotsLabel = new UILabel(owner, new UILayout(new UIMargin(.05f, .05f), UIMarginType.Relative, UIPosition.Bottom | UIPosition.Right, UIPosition.Bottom | UIPosition.Right, relative: this), UIDepths.FOREGROUND, 0.1f, "...", UITextAlignment.Center);

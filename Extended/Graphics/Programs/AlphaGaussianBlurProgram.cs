@@ -1,40 +1,29 @@
-﻿using mapKnight.Extended.Graphics.Buffer;
-using mapKnight.Extended.Graphics.Handle;
+﻿using mapKnight.Extended.Graphics.Handle;
 using OpenTK.Graphics.ES20;
 using System;
+using static mapKnight.Extended.Graphics.Programs.GaussianBlurProgram;
 
 namespace mapKnight.Extended.Graphics.Programs {
-    public class GaussianBlurProgram : TextureProgram {
-        public static GaussianBlurProgram Program;
+    class AlphaGaussianBlurProgram : TextureProgram {
+        public static AlphaGaussianBlurProgram Program;
 
-        public static GPUBuffer VERTEX_BUFFER;
-        public static GPUBuffer TEXTURE_BUFFER;
-        public static IndexBuffer INDEX_BUFFER;
-
-        public static void Init( ) {
-            VERTEX_BUFFER = new GPUBuffer(2, 4, PrimitiveType.Quad, new float[ ] { -1f, 1f, -1f, -1f, 1f, -1f, 1f, 1f }, BufferUsage.StaticDraw);
-            TEXTURE_BUFFER = new GPUBuffer(2, 4, PrimitiveType.Quad, new float[ ] { 0, 1, 0, 0, 1, 0, 1, 1 }, BufferUsage.StaticDraw);
-            INDEX_BUFFER = new IndexBuffer(1);
-            Program = new GaussianBlurProgram( );
+        public static void Init ( ) {
+            Program = new AlphaGaussianBlurProgram( );
         }
 
         public static void Destroy ( ) {
             Program.Dispose( );
-            VERTEX_BUFFER.Dispose( );
-            TEXTURE_BUFFER.Dispose( );
-            INDEX_BUFFER.Dispose( );
         }
 
         private UniformVec2Handle pixelOffsetHandle;
-
-        public GaussianBlurProgram ( ) : base(Assets.GetVertexShader("normal"), Assets.GetFragmentShader("gauss")) {
+        public AlphaGaussianBlurProgram ( ) : base(Assets.GetVertexShader("normal"), Assets.GetFragmentShader("alpha_gauss")) {
             pixelOffsetHandle = new UniformVec2Handle(glProgram, "u_pixel_offset");
         }
 
         public void Draw (Framebuffer original, Framebuffer cache, bool alphaBlending) {
-            GL.ClearColor(0f, 0f, 0f, 0f);
 
             cache.Bind( );
+            GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             Apply(original.Texture.ID, INDEX_BUFFER, VERTEX_BUFFER, TEXTURE_BUFFER, alphaBlending);
@@ -42,6 +31,7 @@ namespace mapKnight.Extended.Graphics.Programs {
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, IntPtr.Zero);
 
             original.Bind( );
+            GL.ClearColor(0f, 0f, 0f, 0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             Apply(cache.Texture.ID, INDEX_BUFFER, VERTEX_BUFFER, TEXTURE_BUFFER, alphaBlending);
