@@ -18,10 +18,17 @@ namespace mapKnight.Extended.Screens {
         }
 
         public override void Load ( ) {
-            new UIDim(this, 0.15f, UIDepths.BACKGROUND).Release += ( ) => {
-                Screen.Active = Screen.MainMenu;
-            };
-            new UIImage(this, new UILayout(new UIMargin(0.6f, 0.6f * 35f / 29f), UIMarginType.Absolute, UIPosition.Center, UIPosition.Center), "skull", "skull", UIDepths.FOREGROUND, Color.White);
+            UIDim dim = new UIDim(this, 0.15f, UIDepths.BACKGROUND);
+            UIImage skull = new UIImage(this, new UILayout(new UIMargin(0.4f, 0.4f * 35f / 29f), UIMarginType.Absolute, UIPosition.Center, UIPosition.Center), "skull", "skull", UIDepths.FOREGROUND, Color.White);
+            UILabel continueLabel = new UILabel(this, new UILayout(new UIMargin(0, 0, .3f, 0), UIMarginType.Absolute, UIPosition.Top | UIPosition.Center, UIPosition.Bottom | UIPosition.Center, skull), .1f, "Click to continue...", UITextAlignment.Center);
+
+            dim.Release += OnScreenClicked;
+            skull.Release += OnScreenClicked;
+            continueLabel.Release += OnScreenClicked;
+        }
+
+        private void OnScreenClicked ( ) {
+            Screen.Active = Screen.MainMenu;
         }
 
         public override void Update (DeltaTime dt) {
