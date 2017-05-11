@@ -52,7 +52,7 @@ namespace mapKnight.Extended.Graphics {
 
             Window.Changed += Window_Changed;
 
-            lightManager = new LightManager(.9f, DrawSize);
+            lightManager = new LightManager(.9f, Size);
             lightManager.RenderTilemap(this);
             lightManager.UpdateTilemapMatrix(this, new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             focusLight = new Light(3f, new Vector2(SpawnPoint.X, SpawnPoint.Y) - new Vector2(Width, Height) / 2f, new Color(0, 0, 128), .3f);

@@ -12,7 +12,7 @@ namespace mapKnight.Extended.Graphics {
         private int framebuffer;
         private readonly bool disposeTexture;
 
-        public Framebuffer (int width, int height, bool disposetexture) {
+        public Framebuffer (int width, int height, bool disposetexture, int interpolationMode = (int)All.Nearest) {
             Size = new Size(width, height);
             PixelSize = new Vector2(1f / width, 1f / height);
 
@@ -23,8 +23,8 @@ namespace mapKnight.Extended.Graphics {
 
             GL.BindTexture(TextureTarget.Texture2D, Texture.ID);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, interpolationMode);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, interpolationMode);
 
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, FramebufferSlot.ColorAttachment0, TextureTarget.Texture2D, Texture.ID, 0);

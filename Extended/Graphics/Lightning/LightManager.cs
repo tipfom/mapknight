@@ -44,10 +44,21 @@ namespace mapKnight.Extended.Graphics.Lightning {
         public Vector2 Position {
             get { return _Position; }
             set {
-                if (true) {
+                if (_Position != value) {
                     tilemapMatrix.ResetView( );
-                    tilemapMatrix.TranslateView(-value.X + tilemapPositionOffset.X, -value.Y + tilemapPositionOffset.Y, 0);
+                    tilemapMatrix.TranslateView(-value.X, -value.Y, 0);
                     tilemapMatrix.CalculateMVP( );
+
+                    Vector2 bufferPosition = value - tilemapPresentedSize / 2f;
+                    tilemapTextureBuffer.Cache[0] = bufferPosition.X / tilemapSize.X;
+                    tilemapTextureBuffer.Cache[1] = (bufferPosition.Y + tilemapPresentedSize.Y) / tilemapSize.Y;
+                    tilemapTextureBuffer.Cache[2] = tilemapTextureBuffer.Cache[0];
+                    tilemapTextureBuffer.Cache[3] = bufferPosition.Y / tilemapSize.Y;
+                    tilemapTextureBuffer.Cache[4] = (bufferPosition.X + tilemapPresentedSize.X) / tilemapSize.X;
+                    tilemapTextureBuffer.Cache[5] = tilemapTextureBuffer.Cache[3];
+                    tilemapTextureBuffer.Cache[6] = tilemapTextureBuffer.Cache[4];
+                    tilemapTextureBuffer.Cache[7] = tilemapTextureBuffer.Cache[1];
+                    tilemapTextureBuffer.Apply( );
                 }
                 _Position = value;
             }
@@ -55,26 +66,24 @@ namespace mapKnight.Extended.Graphics.Lightning {
 
         private List<Light> lights;
 
-        private Vector2 tilemapPositionOffset;
+        private Vector2 tilemapPresentedSize, tilemapSize;
         private Matrix tilemapMatrix;
         private Framebuffer tilemapBuffer;
         private Framebuffer lightBuffer;
-        private Framebuffer cacheBuffer;
         private Texture2D pointLightMap;
 
-        private GPUBuffer tilemapVertexBuffer;
+        private CachedGPUBuffer tilemapTextureBuffer;
         private ClientBuffer vertexBuffer;
         private CachedGPUBuffer colorBuffer;
         private GPUBuffer textureBuffer;
         private IndexBuffer indexBuffer;
 
-        public LightManager (float Brightness, Size drawSize) {
+        public LightManager (float Brightness, Size mapSize) {
             this.Brightness = Brightness;
 
             lights = new List<Light>(MAXIMUM_LIGHT_COUNT);
-            lightBuffer = new Framebuffer(Window.Size.Width, Window.Size.Height, true);
-            cacheBuffer = new Framebuffer(Window.Size.Width, Window.Size.Height, true);
-            tilemapBuffer = new Framebuffer(drawSize.Width * 128, drawSize.Height * 128, true);
+            lightBuffer = new Framebuffer(Window.Size.Width / 2, Window.Size.Height / 2, true, (int)All.Linear);
+            tilemapBuffer = new Framebuffer(mapSize.Width * TILE_LIGHT_RESOLUTION, mapSize.Height * TILE_LIGHT_RESOLUTION, true, (int)All.Linear);
             pointLightMap = Assets.Load<Texture2D>("lightning/point");
             indexBuffer = new IndexBuffer(MAXIMUM_LIGHT_COUNT);
             vertexBuffer = new ClientBuffer(2, MAXIMUM_LIGHT_COUNT, PrimitiveType.Quad);
@@ -87,7 +96,7 @@ namespace mapKnight.Extended.Graphics.Lightning {
             for (int i = 0; i < lights.Count; i++) {
                 Light light = lights[i];
                 int posVertex = vertexBufferSize * 8, posColor = posVertex * 2;
-                Vector2 transformedPosition = light.Position - tilemapPositionOffset;
+                Vector2 transformedPosition = light.Position;
 
                 float top = transformedPosition.Y + light.Radius;
                 float bottom = transformedPosition.Y - light.Radius;
@@ -115,22 +124,14 @@ namespace mapKnight.Extended.Graphics.Lightning {
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             DarkenProgram.Program.Begin( );
-            DarkenProgram.Program.Draw(indexBuffer, tilemapVertexBuffer, textureBuffer, Brightness, tilemapBuffer.Texture, tilemapMatrix, 6, 0, true);
+            DarkenProgram.Program.Draw(indexBuffer, DRAW_VERTEX_BUFFER, tilemapTextureBuffer, 1f, tilemapBuffer.Texture, 6, 0, true);
             DarkenProgram.Program.End( );
-
-            if (Settings.Singleton.UseAdvancedLightning) {
-                AlphaGaussianBlurProgram.Program.Begin( );
-                AlphaGaussianBlurProgram.Program.Draw(lightBuffer, cacheBuffer, true);
-                AlphaGaussianBlurProgram.Program.End( );
-                lightBuffer.Bind( );
-            }
 
             GL.BlendEquationSeparate(All.Max, All.FuncAdd);
             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
             ColorProgram.Program.Begin( );
             ColorProgram.Program.Draw(indexBuffer, vertexBuffer, textureBuffer, colorBuffer, pointLightMap, tilemapMatrix, 6 * vertexBufferSize, 0, true);
             ColorProgram.Program.End( );
-
             lightBuffer.Unbind( );
 
             GL.BlendEquation(BlendEquationMode.FuncAdd);
@@ -147,18 +148,12 @@ namespace mapKnight.Extended.Graphics.Lightning {
 
         public void UpdateTilemapMatrix (Map map, Vector2 realDrawSize) {
             tilemapMatrix = new Matrix(realDrawSize);
-            tilemapPositionOffset = new Vector2(map.Width, map.Height) / 2f;
+            tilemapPresentedSize = realDrawSize * 2f;
+            tilemapSize = (Vector2)map.Size;
         }
 
         public void RenderTilemap (Map map) {
-            tilemapVertexBuffer = new GPUBuffer(2, 1, PrimitiveType.Quad,
-                new float[ ] {
-                    -map.Width / 2f,  map.Height / 2f,
-                    -map.Width / 2f, -map.Height / 2f,
-                     map.Width / 2f, -map.Height / 2f,
-                     map.Width / 2f,  map.Height / 2f,
-                },
-                BufferUsage.StaticDraw);
+            tilemapTextureBuffer = new CachedGPUBuffer(2, 1, PrimitiveType.Quad);
 
             float width = 2f / map.Width / TILE_LIGHT_RESOLUTION, height = 2f / map.Height / TILE_LIGHT_RESOLUTION;
             ClientBuffer vertexBuffer = new ClientBuffer(2, map.Width * TILE_LIGHT_RESOLUTION * TILE_LIGHT_RESOLUTION, PrimitiveType.Quad);
