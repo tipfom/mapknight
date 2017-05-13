@@ -132,6 +132,7 @@ namespace mapKnight.Extended.Graphics.Lightning {
             ColorProgram.Program.Draw(indexBuffer, vertexBuffer, textureBuffer, colorBuffer, pointLightMap, tilemapMatrix, 6 * vertexBufferSize, 0, true);
             ColorProgram.Program.End( );
             lightBuffer.Unbind( );
+            GL.Clear(0);
 
             GL.BlendEquation(BlendEquationMode.FuncAdd);
             GL.BlendFunc(BlendingFactorSrc.SrcColor, BlendingFactorDest.SrcColor);
