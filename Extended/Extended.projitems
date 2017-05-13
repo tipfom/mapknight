@@ -97,7 +97,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Lightning\LightManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Emitter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Particle.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\AlphaGaussianBlurProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\DarkenProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\GaussianBlurProgram.cs" />

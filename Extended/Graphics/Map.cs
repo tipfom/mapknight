@@ -48,12 +48,11 @@ namespace mapKnight.Extended.Graphics {
 
             Window_Changed( );
             InitTextureCoords( );
-            texture = Assets.Load<Texture2D>(Texture);
+            texture = Assets.Load<Texture2D>("maps/tiles/" + Texture);
 
             Window.Changed += Window_Changed;
 
-            lightManager = new LightManager(.9f, Size);
-            lightManager.RenderTilemap(this);
+            lightManager = new LightManager(.9f, this);
             lightManager.UpdateTilemapMatrix(this, new Vector2(DRAW_WIDTH / 2f, DRAW_WIDTH / Window.Ratio / 2f));
             focusLight = new Light(3f, new Vector2(SpawnPoint.X, SpawnPoint.Y) - new Vector2(Width, Height) / 2f, new Color(0, 0, 128), .3f);
             lightManager.Add(focusLight);

@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MapLoadException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\MissingMapIdentifierException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\InterpolationMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Spritebatch2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Texture2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\VertexData.cs" />

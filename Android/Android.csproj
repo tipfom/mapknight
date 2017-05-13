@@ -204,7 +204,7 @@
     <AndroidAsset Include="Assets\textures\blackhole.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\textures\Maehhpp.png" />
+    <AndroidAsset Include="Assets\textures\maps\tiles\Maehhpp.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\fragment\gauss.txt" />
@@ -222,16 +222,19 @@
     <AndroidAsset Include="Assets\textures\weapons\broadswords\copper.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\alpha_gauss.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\textures\green-1.png" />
+    <AndroidAsset Include="Assets\textures\maps\tiles\green-1.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\lightning\point.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\fragment\darken.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\maps\shadows\green-1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\maps\shadows\Maehhpp.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

@@ -106,6 +106,9 @@ namespace mapKnight.ToolKit.Editor {
                 map.Texture = Path.GetFileNameWithoutExtension(map.Name + ".png");
                 using (Stream stream = File.Open(Path.Combine(basedirectory, map.Name + ".map"), FileMode.Create))
                     map.MergeRotations(mapRotations[map]).Serialize(stream, new WindowsEntitySerializer( ));
+
+                using (Stream stream = File.Open(Path.Combine(basedirectory, map.Name + "_shadow.png"), FileMode.Create))
+                    map.PrerenderShadowMap(stream);
             }
         }
 

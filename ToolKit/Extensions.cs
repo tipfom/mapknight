@@ -11,13 +11,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace mapKnight.ToolKit {
     public static class Extensions {
+        private const int TILE_LIGHT_RESOLUTION = 10;
+        private const float TILE_LIGHT_DISTANCE = 2 * TILE_LIGHT_RESOLUTION - .5f;
+
         public static void AddTile (this Map map, Tile tile) {
             List<Tile> tiles = map.Tiles.ToList( );
             tiles.Add(tile);
             map.Tiles = tiles.ToArray( );
         }
 
-        public static void RemoveTile(this Map map, int index) {
+        public static void RemoveTile (this Map map, int index) {
             for (int y = 0; y < map.Height; y++) {
                 for (int x = 0; x < map.Width; x++) {
                     for (int z = 0; z < 3; z++) {
@@ -29,9 +32,94 @@ namespace mapKnight.ToolKit {
                     }
                 }
             }
-            List<Tile> tiles = map.Tiles.ToList();
+            List<Tile> tiles = map.Tiles.ToList( );
             tiles.RemoveAt(index);
-            map.Tiles = tiles.ToArray();
+            map.Tiles = tiles.ToArray( );
+        }
+
+        public static unsafe void PrerenderShadowMap (this Map map, Stream stream) {
+            WriteableBitmap bitmap = new WriteableBitmap(map.Width * 10, map.Height * 10, 30, 30, System.Windows.Media.PixelFormats.Bgra32, null);
+
+            bitmap.Lock( );
+            for (int y = 0; y < map.Height; y++) {
+                for (int x = 0; x < map.Width; x++) {
+
+                    for (int ty = 0; ty < TILE_LIGHT_RESOLUTION; ty++) {
+                        for (int tx = 0; tx < TILE_LIGHT_RESOLUTION; tx++) {
+
+                            float lightLvl = 1f;
+                            if (map.GetTile(x, y).HasFlag(TileAttribute.Collision)) {
+
+                                for (int cy = 1; cy <= 2; cy++) {
+                                    for (int cx = 1; cx <= 2; cx++) {
+                                        int px = x + cx, py = y + cy;
+                                        if (px >= 0 && px < map.Width && py >= 0 && py < map.Height && !map.GetTile(px, py).HasFlag(TileAttribute.Collision)) {
+                                            float dx = cx * TILE_LIGHT_RESOLUTION - tx - .5f;
+                                            float dy = cy * TILE_LIGHT_RESOLUTION - ty - .5f;
+                                            lightLvl = Math.Min(lightLvl, (float)Math.Sqrt(dx * dx + dy * dy) / TILE_LIGHT_DISTANCE);
+                                        }
+
+                                        py = y - cy;
+                                        if (px >= 0 && px < map.Width && py >= 0 && py < map.Height && !map.GetTile(px, py).HasFlag(TileAttribute.Collision)) {
+                                            float dx = cx * TILE_LIGHT_RESOLUTION - tx - .5f;
+                                            float dy = (cy - 1) * TILE_LIGHT_RESOLUTION + ty + .5f;
+                                            lightLvl = Math.Min(lightLvl, (float)Math.Sqrt(dx * dx + dy * dy) / TILE_LIGHT_DISTANCE);
+                                        }
+
+                                        px = x - cx;
+                                        if (px >= 0 && px < map.Width && py >= 0 && py < map.Height && !map.GetTile(px, py).HasFlag(TileAttribute.Collision)) {
+                                            float dx = (cx - 1) * TILE_LIGHT_RESOLUTION + tx + .5f;
+                                            float dy = (cy - 1) * TILE_LIGHT_RESOLUTION + ty + .5f;
+                                            lightLvl = Math.Min(lightLvl, (float)Math.Sqrt(dx * dx + dy * dy) / TILE_LIGHT_DISTANCE);
+                                        }
+
+                                        py = y + cy;
+                                        if (px >= 0 && px < map.Width && py >= 0 && py < map.Height && !map.GetTile(px, py).HasFlag(TileAttribute.Collision)) {
+                                            float dx = (cx - 1) * TILE_LIGHT_RESOLUTION + tx + .5f;
+                                            float dy = cy * TILE_LIGHT_RESOLUTION - ty - .5f;
+                                            lightLvl = Math.Min(lightLvl, (float)Math.Sqrt(dx * dx + dy * dy) / TILE_LIGHT_DISTANCE);
+                                        }
+                                    }
+                                }
+
+                                for (int d = 1; d <= 2; d++) {
+                                    int temp = x + d;
+                                    if (temp < map.Width && !map.GetTile(temp, y).HasFlag(TileAttribute.Collision)) {
+                                        lightLvl = Math.Min(lightLvl, (d * TILE_LIGHT_RESOLUTION - tx - .5f) / TILE_LIGHT_DISTANCE);
+                                    }
+
+                                    temp = x - d;
+                                    if (temp > 0 && !map.GetTile(temp, y).HasFlag(TileAttribute.Collision)) {
+                                        lightLvl = Math.Min(lightLvl, ((d - 1) * TILE_LIGHT_RESOLUTION + tx + .5f) / TILE_LIGHT_DISTANCE);
+                                    }
+
+                                    temp = y + d;
+                                    if (temp < map.Height && !map.GetTile(x, temp).HasFlag(TileAttribute.Collision)) {
+                                        lightLvl = Math.Min(lightLvl, (d * TILE_LIGHT_RESOLUTION - ty - .5f) / TILE_LIGHT_DISTANCE);
+                                    }
+
+                                    temp = y - d;
+                                    if (temp > 0 && !map.GetTile(x, temp).HasFlag(TileAttribute.Collision)) {
+                                        lightLvl = Math.Min(lightLvl, ((d - 1) * TILE_LIGHT_RESOLUTION + ty + .5f) / TILE_LIGHT_DISTANCE);
+                                    }
+                                }
+
+                                lightLvl = 1f - lightLvl;
+                            }
+
+                            int backBuffer = (int)bitmap.BackBuffer + (TILE_LIGHT_RESOLUTION * y + ty) * bitmap.BackBufferStride + (TILE_LIGHT_RESOLUTION * x + tx) * 4;
+                            *((uint*)backBuffer) = (uint)((byte)(lightLvl * 255)  << 24);
+                        }
+                    }
+                }
+            }
+
+            bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
+            bitmap.Unlock( );
+
+            PngBitmapEncoder encoder = new PngBitmapEncoder( );
+            encoder.Frames.Add(BitmapFrame.Create(bitmap));
+            encoder.Save(stream);
         }
 
         public static BitmapImage ToBitmapImage (this Texture2D texture) {
@@ -47,7 +135,7 @@ namespace mapKnight.ToolKit {
             }
         }
 
-        public static void SaveToStream(this BitmapImage image, Stream stream) {
+        public static void SaveToStream (this BitmapImage image, Stream stream) {
             PngBitmapEncoder encoder = new PngBitmapEncoder( );
             encoder.Frames.Add(BitmapFrame.Create(image));
             encoder.Save(stream);
@@ -192,11 +280,11 @@ namespace mapKnight.ToolKit {
             return null;
         }
 
-        public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items) {
+        public static void AddRange<T> (this ObservableCollection<T> collection, IEnumerable<T> items) {
             foreach (T item in items) collection.Add(item);
         }
 
-        public static Point ToPoint(this Vector vector) {
+        public static Point ToPoint (this Vector vector) {
             return new Point(vector.X, vector.Y);
         }
     }

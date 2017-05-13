@@ -69,8 +69,12 @@ namespace mapKnight.Extended {
             loadedFragmentShader.Clear();
         }
 
+        public static Texture2D GetTexture(params string[] path) {
+            return GetTexture(InterpolationMode.PixelPerfect, path);
+        }
+
         static Dictionary<int, Texture2D> textureCache = new Dictionary<int, Texture2D>( );
-        public static Texture2D GetTexture (params string[ ] path) {
+        public static Texture2D GetTexture (InterpolationMode interpolation, params string[ ] path) {
             int pathhash = path.GetHashCode( );
             if (!textureCache.ContainsKey(pathhash) || textureCache[pathhash].Disposed) {
                 int width, height, id = GL.GenTexture( );
@@ -85,8 +89,8 @@ namespace mapKnight.Extended {
                 }
 #endif
 
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)All.Nearest);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)All.Nearest);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)interpolation);
+                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)interpolation);
 
                 if (!textureCache.ContainsKey(pathhash)) {
                     textureCache.Add(pathhash, new Texture2D(id, new Size(width, height), path[path.Length - 1]));
@@ -102,6 +106,8 @@ namespace mapKnight.Extended {
             }
             return textureCache[pathhash];
         }
+
+
 
         static Dictionary<int, Spritebatch2D> spriteCache = new Dictionary<int, Spritebatch2D>( );
         public static Spritebatch2D GetSprite (string name) {
