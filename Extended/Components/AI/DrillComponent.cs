@@ -69,23 +69,23 @@ namespace mapKnight.Extended.Components.AI {
 
         private void UpdateCurrentTarget ( ) {
             List<Vector2> possibleTargetPoint = new List<Vector2>( );
-            if (currentTarget.X > 0.5f && currentTarget.Y < Owner.World.Size.Height - 0.5f && Owner.World.HasCollider((int)currentTarget.X - 1, (int)currentTarget.Y + 1))
+            if (currentTarget.X > 0.5f && currentTarget.Y < Owner.World.Size.Height - 1 && Owner.World.HasCollider((int)currentTarget.X - 1, (int)currentTarget.Y + 1))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X - 1, currentTarget.Y + 1));
-            if (currentTarget.X > 0.5f && Owner.World.HasCollider((int)currentTarget.X - 1, (int)currentTarget.Y))
+            if (currentTarget.X > 1 && Owner.World.HasCollider((int)currentTarget.X - 1, (int)currentTarget.Y))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X - 1, currentTarget.Y));
-            if (currentTarget.X > 0.5f && currentTarget.Y > 0.5f && Owner.World.HasCollider((int)currentTarget.X - 1, (int)currentTarget.Y - 1))
+            if (currentTarget.X > 1 && currentTarget.Y > 1 && Owner.World.HasCollider((int)currentTarget.X - 1, (int)currentTarget.Y - 1))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X - 1, currentTarget.Y - 1));
 
-            if (currentTarget.Y < Owner.World.Size.Height - 0.5f && Owner.World.HasCollider((int)currentTarget.X, (int)currentTarget.Y + 1))
+            if (currentTarget.Y < Owner.World.Size.Height - 1 && Owner.World.HasCollider((int)currentTarget.X, (int)currentTarget.Y + 1))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X, currentTarget.Y + 1));
-            if (currentTarget.Y > 0.5f && Owner.World.HasCollider((int)currentTarget.X, (int)currentTarget.Y - 1))
+            if (currentTarget.Y > 1 && Owner.World.HasCollider((int)currentTarget.X, (int)currentTarget.Y - 1))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X, currentTarget.Y - 1));
 
-            if (currentTarget.X < Owner.World.Size.Width - 0.5f && currentTarget.Y < Owner.World.Size.Height - 0.5f && Owner.World.HasCollider((int)currentTarget.X + 1, (int)currentTarget.Y + 1))
+            if (currentTarget.X < Owner.World.Size.Width - 1 && currentTarget.Y < Owner.World.Size.Height - 1 && Owner.World.HasCollider((int)currentTarget.X + 1, (int)currentTarget.Y + 1))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X + 1, currentTarget.Y + 1));
-            if (currentTarget.X < Owner.World.Size.Width - 0.5f && Owner.World.HasCollider((int)currentTarget.X + 1, (int)currentTarget.Y))
+            if (currentTarget.X < Owner.World.Size.Width - 1 && Owner.World.HasCollider((int)currentTarget.X + 1, (int)currentTarget.Y))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X + 1, currentTarget.Y));
-            if (currentTarget.X < Owner.World.Size.Width - 0.5f && currentTarget.Y > 0.5f && Owner.World.HasCollider((int)currentTarget.X + 1, (int)currentTarget.Y - 1))
+            if (currentTarget.X < Owner.World.Size.Width - 1 && currentTarget.Y > 1 && Owner.World.HasCollider((int)currentTarget.X + 1, (int)currentTarget.Y - 1))
                 possibleTargetPoint.Add(new Vector2(currentTarget.X + 1, currentTarget.Y - 1));
 
             lastTarget = currentTarget;

@@ -5,7 +5,7 @@ using mapKnight.Core.World.Serialization;
 
 namespace mapKnight.Extended.Components.AI {
     public class NPCComponent : Component {
-        private bool _Available = true;
+        private bool _Available = false;
         public bool Available {
             get {
                 if (!_Available) {
@@ -25,6 +25,7 @@ namespace mapKnight.Extended.Components.AI {
 
         public override void Load(Dictionary<DataID, object> data) {
             messages = (string[ ])data[DataID.NPC_Messages];
+            _Available = messages.Length > 0;
         }
 
         public override void Collision (Entity collidingEntity) {
