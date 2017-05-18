@@ -24,6 +24,8 @@ namespace mapKnight.Extended.Screens {
         }
 
         WeaponSelectWindow weaponSelectWindow;
+        UIAbilityPanel testPanel;
+        Ability abs = new Ability( );
 
         public override void Load ( ) {
             new UILabel(this, new UILayout(new UIMargin(0.05f, 0.05f), UIMarginType.Absolute, UIPosition.Bottom | UIPosition.Right, UIPosition.Bottom | UIPosition.Right), UIDepths.FOREGROUND, 0.07f, "VERSION: " + Assembly.GetExecutingAssembly( ).GetName( ).Version.ToString(3)
@@ -51,6 +53,9 @@ namespace mapKnight.Extended.Screens {
                 Screen.Active = weaponSelectWindow;
             };
 
+            testPanel = new UIAbilityPanel(this, new UILayout(new UIMargin(.5f, .05f, .1f, .1f), UIMarginType.Relative));
+            testPanel.Add(abs);
+
             base.Load( );
         }
 
@@ -61,6 +66,13 @@ namespace mapKnight.Extended.Screens {
 
         public override void Update (DeltaTime dt) {
             base.Update(dt);
+            abs.CooldownLeft = abs.Cooldown - (System.Environment.TickCount / 10) % 100;
+            abs.WontBeHereLong( );
+        }
+
+        public override void Draw ( ) {
+            base.Draw( );
+            testPanel.Draw( );
         }
     }
 }

@@ -33,6 +33,8 @@ namespace mapKnight.Extended.Combat.Collections.Secondaries {
                 case UIGesturePanel.SWIPE_RIGHT:
                     Charge(1);
                     break;
+                case UIGesturePanel.SWIPE_DOWN:
+                    break;
             }
         }
 

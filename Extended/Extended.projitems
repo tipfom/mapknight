@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Ability.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Broadswords\Copper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Broadswords\Diamond.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Dagger\Rubidium.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\GaussianBlurProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ParticleProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\TextureProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\UIAbilityIconProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIPosition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UILayout.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\Layout\UIMargin.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ColorProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\MatrixProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\Program.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UIAbilityPanel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITextAlignment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouch.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\UI\UITouchAction.cs" />

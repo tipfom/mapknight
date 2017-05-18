@@ -21,6 +21,7 @@ namespace mapKnight.Extended {
             ParticleProgram.Init( );
             GaussianBlurProgram.Init( );
             DarkenProgram.Init( );
+            UIAbilityIconProgram.Init( );
 
             LightManager.Init( );
             UIRenderer.Init( );
@@ -66,6 +67,7 @@ namespace mapKnight.Extended {
             ParticleProgram.Destroy( );
             GaussianBlurProgram.Destroy( );
             DarkenProgram.Destroy( );
+            UIAbilityIconProgram.Destroy( );
         }
 
         private static int lastUpdate = Environment.TickCount;

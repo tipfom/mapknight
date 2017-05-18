@@ -236,6 +236,15 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\maps\shadows\Maehhpp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\ui_abilityicon.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\ui_abilityicon.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\interface_ability_amp.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
   <ProjectExtensions />

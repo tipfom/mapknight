@@ -17,7 +17,6 @@ namespace mapKnight.Extended.Graphics.Buffer {
 
         public CachedGPUBuffer (int dimensions, int count, PrimitiveType type, BufferUsage usage = BufferUsage.DynamicDraw) :
             this(dimensions, count, type, new float[count * dimensions * (int)type], usage) {
-
         }
 
         public CachedGPUBuffer (int dimensions, int count, PrimitiveType type, float[ ] initialData, BufferUsage usage = BufferUsage.DynamicDraw) {
@@ -36,6 +35,15 @@ namespace mapKnight.Extended.Graphics.Buffer {
 
         ~CachedGPUBuffer ( ) {
             Dispose( );
+        }
+
+        public float this[int index] {
+            get {
+                return Cache[index];
+            }
+            set {
+                Cache[index] = value;
+            }
         }
 
         public void Apply ( ) {
