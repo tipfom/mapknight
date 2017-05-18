@@ -85,7 +85,7 @@ namespace mapKnight.Extended.Screens {
                 yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - borderSize, edgeY, borderSize, edgeHeight), "window_r", Depth);
                 yield return new DepthVertexData(UIRectangle.GetVerticies(-cornerX, cornerY, borderSize, borderSize), "window_tl", Depth);
                 yield return new DepthVertexData(UIRectangle.GetVerticies(-cornerX, -cornerY + borderSize, borderSize, borderSize), "window_bl", Depth);
-                yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - 10f * pixelWidth, cornerY + 4f*pixelWidth, 14f * pixelWidth, 10f * pixelWidth), "window_tr", Depth);
+                yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - 10f * pixelWidth, cornerY + 6f * pixelWidth, 16f * pixelWidth, 16f * pixelWidth), "window_tr", Depth);
                 yield return new DepthVertexData(UIRectangle.GetVerticies(cornerX - borderSize, -cornerY + borderSize, borderSize, borderSize), "window_br", Depth);
             }
         }
