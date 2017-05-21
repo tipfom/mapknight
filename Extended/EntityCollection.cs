@@ -2067,7 +2067,7 @@ namespace mapKnight.Extended {
                                     }
                                 }
                             },
-                            new SpeedComponent.Configuration( ) { X = 3.5f, Y = 20 },
+                            new SpeedComponent.Configuration( ) { X = 4f, Y = 20 },
                             new PlayerAnimationComponent.Configuration( ) { }
                         };
                     }
