@@ -25,7 +25,7 @@ namespace mapKnight.Extended.Graphics.Particles {
         public bool Update (DeltaTime dt, Vector2 gravity) {
             Velocity += gravity * dt.TotalSeconds;
             Position += Velocity * dt.TotalSeconds;
-            return (Lifetime -= (int)dt.Milliseconds) < 0;
+            return (Lifetime -= (int)dt.TotalMilliseconds) < 0;
         }
     }
 }

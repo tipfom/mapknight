@@ -33,7 +33,7 @@ namespace mapKnight.Extended.Components.Movement {
         }
 
         public override void Update (DeltaTime dt) {
-            timeTillNextMove -= (int)dt.Milliseconds;
+            timeTillNextMove -= (int)dt.TotalMilliseconds;
 
             if (timeTillNextMove < 0)
                 PrepareNextMove( );

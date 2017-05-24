@@ -6,7 +6,7 @@ namespace mapKnight.Extended.Combat {
         public readonly string Gestures;
 
         public bool Lock;
-        protected Entity Owner;
+        public Entity Owner;
 
         public SecondaryWeapon(Entity Owner, string Gestures) {
             this.Gestures = Gestures;

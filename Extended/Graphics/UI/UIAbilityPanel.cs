@@ -10,6 +10,7 @@ namespace mapKnight.Extended.Graphics.UI {
     public class UIAbilityPanel : UIItem {
         private const int MAX_ABILITY_COUNT = 3;
 
+        private float totalIconHeight;
         private CachedGPUBuffer vertexBuffer;
         private CachedGPUBuffer baseTextureBuffer;
         private CachedGPUBuffer ampTextureBuffer;
@@ -29,9 +30,10 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         private void ResetVertexBuffer ( ) {
+            totalIconHeight = 1.1f * Layout.Width;
             for (int i = 0; i < MAX_ABILITY_COUNT; i++) {
                 int bPosition = i * 8;
-                float top = Layout.Y - 1.1f * i * Layout.Width;
+                float top = Layout.Y - i * totalIconHeight;
 
                 vertexBuffer[bPosition + 00] = Layout.X;
                 vertexBuffer[bPosition + 01] = top;
@@ -64,7 +66,7 @@ namespace mapKnight.Extended.Graphics.UI {
 
         private void UpdateAbility (int index) {
             int bPosition = index * 8;
-            float offset = .5f * (float)abilities[index].CooldownLeft / abilities[index].Cooldown;
+            float offset = .5f - .5f * abilities[index].Availability;
 
             ampTextureBuffer[bPosition + 0] = 0f;
             ampTextureBuffer[bPosition + 1] = offset;
@@ -81,14 +83,14 @@ namespace mapKnight.Extended.Graphics.UI {
             if (abilities.Count < MAX_ABILITY_COUNT) {
                 abilities.Add(ability);
                 PrepareAbility(abilities.Count - 1);
-                ability.CooldownChanged += Ability_CooldownChanged;
+                ability.AvailabilityChanged += Ability_CooldownChanged;
                 return true;
             }
             return false;
         }
 
         private void Ability_CooldownChanged (Ability ability) {
-            for(int i = 0; i < abilities.Count; i++) {
+            for (int i = 0; i < abilities.Count; i++) {
                 if (abilities[i] == ability) {
                     UpdateAbility(i);
                     return;
@@ -100,6 +102,19 @@ namespace mapKnight.Extended.Graphics.UI {
             Program.Begin( );
             Program.Draw(indexBuffer, vertexBuffer, baseTextureBuffer, ampTextureBuffer, UIRenderer.Texture, ampTexture, Matrix.Default, indexBuffer.Length, 0, true);
             Program.End( );
+        }
+
+        public override bool HandleTouch (UITouchAction action, UITouch touch) {
+            float relativeY = 2 * (Layout.Y - touch.RelativePosition.Y) / Layout.Height;
+
+            int index = (int)(relativeY / totalIconHeight);
+            if (index < abilities.Count) {
+                if (abilities[index].Available)
+                    abilities[index].OnCast( );
+                return true;
+            }
+
+            return false;
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {

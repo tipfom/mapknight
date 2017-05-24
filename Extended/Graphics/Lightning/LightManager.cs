@@ -126,6 +126,7 @@ namespace mapKnight.Extended.Graphics.Lightning {
             DarkenProgram.Program.Draw(indexBuffer, DRAW_VERTEX_BUFFER, tilemapTextureBuffer, Brightness, tilemapLightMap, 6, 0, true);
             DarkenProgram.Program.End( );
 
+#pragma warning disable CS0168
             GL.BlendEquationSeparate(All.Max, All.FuncAdd);
             GL.BlendFunc(BlendingFactorSrc.One, BlendingFactorDest.One);
             ColorProgram.Program.Begin( );
