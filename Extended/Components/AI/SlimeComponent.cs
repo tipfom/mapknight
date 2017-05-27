@@ -81,23 +81,20 @@ namespace mapKnight.Extended.Components.AI {
                     break;
             }
 
-            if (!Owner.World.HasCollider(Mathi.Floor(groundVec.X), Mathi.Floor(groundVec.Y))) {
-                switch (CurrentMoveDir) {
-                    case Direction.Left:
-                        groundVec.X = Math.Max(targetLoc, groundVec.X - 1);
-                        break;
-                    case Direction.Right:
-                        groundVec.X = Math.Min(targetLoc, groundVec.X + 1);
-                        break;
-                    case Direction.Up:
-                        groundVec.Y = Math.Min(targetLoc, groundVec.Y + 1);
-                        break;
-                    case Direction.Down:
-                        groundVec.Y = Math.Max(targetLoc, groundVec.Y - 1);
-                        break;
-                }
+            switch (CurrentMoveDir) {
+                case Direction.Left:
+                    groundVec.X = Math.Max(targetLoc + .1f, groundVec.X - 1);
+                    break;
+                case Direction.Right:
+                    groundVec.X = Math.Min(targetLoc - .1f, groundVec.X + 1);
+                    break;
+                case Direction.Up:
+                    groundVec.Y = Math.Min(targetLoc - .1f, groundVec.Y + 1);
+                    break;
+                case Direction.Down:
+                    groundVec.Y = Math.Max(targetLoc + .1f, groundVec.Y - 1);
+                    break;
             }
-
 
             switch (CurrentMoveDir) {
                 case Direction.Up:
