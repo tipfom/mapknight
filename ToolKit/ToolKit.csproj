@@ -92,6 +92,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\Animation\MLGCanvas.cs" />
+    <Compile Include="Controls\ClosableTabItem.cs" />
     <Compile Include="Controls\Components\MoonballDataControl.xaml.cs">
       <DependentUpon>MoonballDataControl.xaml</DependentUpon>
     </Compile>

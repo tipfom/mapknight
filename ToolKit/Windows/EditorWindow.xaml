@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:mapKnight.ToolKit"
         xmlns:editor="clr-namespace:mapKnight.ToolKit.Editor"
+        xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
         Title="Pluto Alpha" Height="300" Width="300"
         Closing="Window_Closing" Loaded="Window_Loaded"
@@ -25,15 +25,17 @@
             <MenuItem Header="_ABOUT" Click="About_Click"/>
         </Menu>
         <TabControl Name="tabcontrol_editor">
-           <TabItem Header="MAP" Selector.Selected="Map_Selected">
-                <editor:MapEditor x:Name="mapeditor"/>
-            </TabItem>
-            <TabItem Header="ANIMATION" Selector.Selected="TabAnimation_Selected">
+           <controls:ClosableTabItem Header="MAP" Selector.Selected="Map_Selected" Margin="-2,0,-2,-2">
+                <controls:ClosableTabItem.Content>
+                    <editor:MapEditor x:Name="mapeditor"/>
+                </controls:ClosableTabItem.Content>
+            </controls:ClosableTabItem>
+            <controls:ClosableTabItem Header="ANIMATION" Selector.Selected="TabAnimation_Selected">
                 <editor:AnimationEditor x:Name="animationeditor"/>
-            </TabItem>
-            <TabItem Header="TEXTURE" Selector.Selected="TabItemTexture_Selected">
+            </controls:ClosableTabItem>
+            <controls:ClosableTabItem Header="TEXTURE" Selector.Selected="TabItemTexture_Selected">
                 <editor:TextureEditor x:Name="textureeditor"/>
-            </TabItem>
+            </controls:ClosableTabItem>
         </TabControl>
     </DockPanel>
 </Window>

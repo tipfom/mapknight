@@ -119,6 +119,8 @@ namespace mapKnight.ToolKit.Editor {
 
         public MapEditor ( ) {
             InitializeComponent( );
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) return;
+
             defaultAttributes = JsonConvert.DeserializeObject<Dictionary<TileAttribute, string>>(Properties.Settings.Default.DefaultTileAttributes);
 
             for (int i = 1; i < _Menu.Count; i++) {
