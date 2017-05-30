@@ -8,6 +8,7 @@ using System;
 using Microsoft.Xna.Framework.Graphics;
 using mapKnight.ToolKit.Data.Components;
 using mapKnight.Core;
+using System.Collections.Generic;
 
 namespace mapKnight.ToolKit.Controls {
     /// <summary>
@@ -198,6 +199,10 @@ namespace mapKnight.ToolKit.Controls {
 
         public Entity.Configuration GetCurrentFinalConfiguration ( ) {
             return FINAL_CONFIGURATIONS[listbox_entities.SelectedIndex];
+        }
+
+        public Dictionary<string, Texture2D> GetEntityData ( ) {
+            return entityCollection.ToDictionary(v => v.Name, v => v.Texture);
         }
 
         public class ShadowComponent : Component {

@@ -1,9 +1,15 @@
-﻿using System;
+﻿using mapKnight.ToolKit.Controls.Xna;
+using mapKnight.ToolKit.Data;
+using mapKnight.ToolKit.Serializer;
+using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace mapKnight.ToolKit {
     public class Project {
@@ -28,12 +34,29 @@ namespace mapKnight.ToolKit {
         }
         public bool Updated { get; private set; }
 
+        public GraphicsDevice GraphicsDevice;
+        public ObservableCollection<EditorMap> Maps = new ObservableCollection<EditorMap>( );
+        public ObservableCollection<VertexAnimationData> Animations = new ObservableCollection<VertexAnimationData>( );
+
         private ZipArchive archive;
         private string _Path;
 
         public Project (string path) {
             Path = path;
             archive = new ZipArchive(File.Open(path, FileMode.Open), ZipArchiveMode.Update, false);
+
+            App.Current.MainWindow.IsVisibleChanged += MainWindow_IsVisibleChanged;
+        }
+
+        private void MainWindow_IsVisibleChanged (object sender, System.Windows.DependencyPropertyChangedEventArgs e) {
+            if (GraphicsDevice != null)
+                return;
+            if (App.Current.MainWindow.IsVisible) {
+                HwndSource source = PresentationSource.FromVisual(App.Current.MainWindow) as HwndSource;
+                if (source == null)
+                    return;
+                GraphicsDevice = GraphicsDeviceService.AddRef(source.Handle).GraphicsDevice;
+            }
         }
 
         public Project ( ) : this(System.IO.Path.GetTempFileName( )) {
@@ -42,8 +65,21 @@ namespace mapKnight.ToolKit {
 
         public void Save ( ) {
             archive.Dispose( );
+
+            foreach (EditorMap map in Maps) {
+                map.SaveTo(this);
+            }
+
+            foreach (VertexAnimationData animation in Animations) {
+                animation.SaveTo(this);
+            }
+
             archive = new ZipArchive(File.Open(Path, FileMode.Open), ZipArchiveMode.Update, false);
             Updated = false;
+        }
+
+        public void Compile (string path) {
+
         }
 
         public bool Contains (params string[ ] path) {

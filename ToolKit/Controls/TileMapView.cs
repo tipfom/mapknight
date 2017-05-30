@@ -19,12 +19,6 @@ namespace mapKnight.ToolKit.Controls {
         const int TILESIZE_MAX = 100;
         const int ZOOM_LEVELS = 30;
 
-        private Map _CurrentMap;
-        public Map CurrentMap {
-            get { return _CurrentMap; }
-            set { _CurrentMap = value; Update( ); }
-        }
-
         private Vector2 _Offset;
         public Vector2 Offset {
             get { return _Offset; }
@@ -73,33 +67,26 @@ namespace mapKnight.ToolKit.Controls {
             set { Layer[1] = value; Update( ); }
         }
         public int Mode { get; set; }
+        public EditorMap Map;
 
         public Action<SpriteBatch, float, float, int> AdditionalRenderCall { get; set; }
 
         private Texture2D selectionTexture;
         private Texture2D spawnpointTexture;
         private Texture2D emptyTexture;
-        private Func<Map, Dictionary<string, Texture2D>> GetXNATextures;
-        private Func<string, Texture2D> GetEntityTexture;
-        private Func<Map, int, int, int, float> GetRotation;
+        public Dictionary<string, Texture2D> EntityData;
 
         public TileMapView ( ) {
-            base.DeviceInitialized += ( ) => {
+            DeviceInitialized += ( ) => {
                 CreateEmptyTexture( );
             };
             Loaded += (sender, e) => {
-                this.Focus( );
+                Focus( );
             };
         }
-
-        public void SetReceiveFuncs (Func<Map, Dictionary<string, Texture2D>> texfunc, Func<Map, int, int, int, float> rotfunc, Func<string, Texture2D> entitytexfunc) {
-            GetXNATextures = texfunc;
-            GetRotation = rotfunc;
-            GetEntityTexture = entitytexfunc;
-        }
-
+        
         public bool IsLayerActive (int id) {
-            return id < 0 || id > 3 || Layer[id];
+            return !(id < 0) || !(id > 3) || Layer[id];
         }
 
         private void CreateEmptyTexture ( ) {
@@ -117,17 +104,17 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         protected override void Render (SpriteBatch spriteBatch) {
-            if (CurrentMap == null)
+            if (Map == null)
                 return;
 
             int columns = (int)(RenderSize.Width / TileSize + 2);
             int rows = (int)(RenderSize.Height / TileSize + 2);
             DrawLayer(0, columns, rows, Offset.X, Offset.Y, spriteBatch);
             DrawLayer(1, columns, rows, Offset.X, Offset.Y, spriteBatch);
-            foreach (Entity e in _CurrentMap.Entities) {
-                Texture2D texture = GetEntityTexture(e.Name);
+            foreach (Entity e in Map.Entities) {
+                Texture2D texture = EntityData[e.Name];
                 Color color = e.Domain == EntityDomain.Temporary ? new Color(64, 64, 64, 128) : Color.White;
-                Rectangle entityRectangle = new Rectangle((int)((e.Transform.X - Offset.X) * TileSize), (int)((_CurrentMap.Height - e.Transform.Y - Offset.Y) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize));
+                Rectangle entityRectangle = new Rectangle((int)((e.Transform.X - Offset.X) * TileSize), (int)((Map.Height - e.Transform.Y - Offset.Y) * TileSize), (int)(e.Transform.Size.X * TileSize), (int)(e.Transform.Size.Y * TileSize));
                 SpriteEffects effect = SpriteEffects.None;
                 float rotation = 0f;
                 e.Draw( );
@@ -158,7 +145,7 @@ namespace mapKnight.ToolKit.Controls {
             }
 
             // draw spawnpoint tile
-            spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((CurrentMap.SpawnPoint.X - Offset.X) * TileSize), (int)((CurrentMap.Height - CurrentMap.SpawnPoint.Y - 1 - Offset.Y) * TileSize), TileSize, TileSize), Color.White);
+            spriteBatch.Draw(spawnpointTexture, new Rectangle((int)((Map.SpawnPoint.X - Offset.X) * TileSize), (int)((Map.Height - Map.SpawnPoint.Y - 1 - Offset.Y) * TileSize), TileSize, TileSize), Color.White);
 
             AdditionalRenderCall?.Invoke(spriteBatch, Offset.X, Offset.Y, TileSize);
         }
@@ -168,35 +155,16 @@ namespace mapKnight.ToolKit.Controls {
                 return;
             for (int x = -1; x < columns; x++) {
                 int tx = x + (int)Math.Floor(offsetx);
-                if (tx < 0 || tx >= CurrentMap.Width)
+                if (tx < 0 || tx >= Map.Width)
                     continue;
                 for (int y = 0; y < rows; y++) {
-                    int ty = CurrentMap.Height - y - 1 - (int)Math.Floor(offsety);
-                    if (ty < 0 || ty >= CurrentMap.Height)
+                    int ty = Map.Height - y - 1 - (int)Math.Floor(offsety);
+                    if (ty < 0 || ty >= Map.Height)
                         continue;
                     Rectangle drawingRectangle = new Rectangle((int)((-offsetx + Math.Floor(offsetx) + x + .5f) * TileSize), (int)((-offsety + Math.Floor(offsety) + y + .5f) * TileSize), TileSize, TileSize);
-                    float rotation = GetRotation(CurrentMap, tx, ty, layer) * (float)Math.PI;
-                    spriteBatch.Draw(GetXNATextures(CurrentMap)[CurrentMap.GetTile(tx, ty, layer).Name], drawingRectangle, null, Color.White, rotation, new Vector2(Map.TILE_PXL_SIZE / 2f, Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);
+                    float rotation = Map.Rotations[tx, ty, layer] * (float)Math.PI;
+                    spriteBatch.Draw(Map.XnaTextures[Map.GetTile(tx, ty, layer).Name], drawingRectangle, null, Color.White, rotation, new Vector2(Core.Map.TILE_PXL_SIZE / 2f, Core.Map.TILE_PXL_SIZE / 2f), SpriteEffects.None, 0);
                 }
-            }
-        }
-
-        public class EditorMap : Map, IEntityWorld {
-
-            public EditorMap (Size size, string creator, string name) :
-                base(size, creator, name) {
-            }
-
-            public EditorMap (Stream input) :
-                base(input, new WindowsEntitySerializer( )) {
-            }
-
-            public IEntityRenderer Renderer => null;
-
-            public float VertexSize => 0;
-
-            public bool HasCollider (int x, int y) {
-                return false;
             }
         }
     }

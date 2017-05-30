@@ -21,7 +21,6 @@ namespace mapKnight.ToolKit.Controls.Animation {
             Hit,
         }
 
-        public static Dictionary<AnimationControl, Dictionary<string, ImageData>> Data = new Dictionary<AnimationControl, Dictionary<string, ImageData>>( );
         public static event Action BackupChanges;
         public static event Action DumpChanges;
 
@@ -38,7 +37,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
 
         public Rectangle RefRectangle { get; set; }
 
-        private AnimationControl animControl;
+        private VertexAnimationData data;
         private VertexBone dataContextBone;
 
         private BoneImage ( ) {
@@ -62,9 +61,8 @@ namespace mapKnight.ToolKit.Controls.Animation {
             BackupChanges?.Invoke( );
         }
 
-        public BoneImage (AnimationControl animationcontrol) : this( ) {
-            if (!Data.ContainsKey(animationcontrol)) Data.Add(animationcontrol, new Dictionary<string, ImageData>( ));
-            animControl = animationcontrol;
+        public BoneImage (VertexAnimationData data) : this( ) {
+            this.data = data;
         }
 
         private void BoneImage_DataContextChanged (object sender, DependencyPropertyChangedEventArgs e) {
@@ -99,34 +97,11 @@ namespace mapKnight.ToolKit.Controls.Animation {
             dataContextBone.Rotation = (float)rotation;
         }
 
-        public static void LoadImage (string name, Stream imageStream, Stream dataStream, AnimationControl animationControl, bool leaveOpen) {
-            BitmapImage image = new BitmapImage( );
-            image.BeginInit( );
-            image.StreamSource = imageStream;
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.EndInit( );
-
-            Point transformOrigin = JsonConvert.DeserializeObject<Point>(new StreamReader(dataStream).ReadToEnd( ));
-
-            if (!Data.ContainsKey(animationControl)) Data.Add(animationControl, new Dictionary<string, ImageData>( ));
-
-            if (Data[animationControl].ContainsKey(name)) {
-                Data[animationControl][name] = new ImageData( ) { Image = image, TransformOrigin = transformOrigin };
-            } else {
-                Data[animationControl].Add(name, new ImageData( ) { Image = image, TransformOrigin = transformOrigin });
-            }
-
-            if (!leaveOpen) {
-                imageStream.Close( );
-                dataStream.Close( );
-            }
-        }
-
         public void Update ( ) {
             ApplyImage(dataContextBone.Image);
             if (RefRectangle.Width == 0 || RefRectangle.Height == 0) return;
 
-            Image = Data[animControl][dataContextBone.Image];
+            Image = data.Images[dataContextBone.Image];
             Width = RefRectangle.Width * dataContextBone.Scale * Image.Image.PixelWidth;
             Height = RefRectangle.Width * dataContextBone.Scale * Image.Image.PixelHeight;
             IsFlipped = dataContextBone.Mirrored;
@@ -157,27 +132,11 @@ namespace mapKnight.ToolKit.Controls.Animation {
         }
 
         private void ApplyImage (string path) {
-            LoadImage(path, animControl);
-
             string name = Path.GetFileNameWithoutExtension(path);
-            Image = Data[animControl][name];
+            Image = data.Images[name];
             dataContextBone.Image = name;
             image.Source = Image.Image;
             RenderTransformOrigin = Image.TransformOrigin;
-        }
-
-        public static void LoadImage (string path, AnimationControl animControl) {
-            string name = Path.GetFileNameWithoutExtension(path);
-            if (!Data.ContainsKey(animControl)) Data.Add(animControl, new Dictionary<string, ImageData>( ));
-            if (!Data[animControl].ContainsKey(name)) {
-                BitmapImage loadedImage = new BitmapImage( );
-                loadedImage.BeginInit( );
-                loadedImage.UriSource = new Uri(path);
-                loadedImage.CacheOption = BitmapCacheOption.OnLoad;
-                loadedImage.EndInit( );
-
-                Data[animControl].Add(name, new ImageData( ) { TransformOrigin = new Point(0.5, 0.5), Image = loadedImage });
-            }
         }
 
         public void SetMoveEffect ( ) {
@@ -190,11 +149,6 @@ namespace mapKnight.ToolKit.Controls.Animation {
 
         public void SetNoEffect ( ) {
             image.Effect = NONE_EFFECT;
-        }
-
-        public class ImageData {
-            public BitmapImage Image;
-            public Point TransformOrigin;
         }
 
         public HitResult EvaluateHit (Point position) {

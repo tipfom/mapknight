@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using System.IO;
+using mapKnight.ToolKit.Data;
+using mapKnight.ToolKit.Controls;
+using mapKnight.ToolKit.Editor;
+using System.Windows.Data;
+using System.Collections.ObjectModel;
 
 namespace mapKnight.ToolKit.Windows {
     /// <summary>
@@ -17,15 +21,19 @@ namespace mapKnight.ToolKit.Windows {
         private Project project;
         private SaveFileDialog saveDialog = new SaveFileDialog( ) { Filter = PROJECT_FILTER, OverwritePrompt = true, AddExtension = false };
         private OpenFileDialog openDialog = new OpenFileDialog( ) { Filter = PROJECT_FILTER, Multiselect = false, AddExtension = false, ReadOnlyChecked = false };
-        private FolderBrowserDialog compileDialog = new FolderBrowserDialog( ) { ShowNewFolderButton = true };
+        private System.Windows.Forms.FolderBrowserDialog compileDialog = new System.Windows.Forms.FolderBrowserDialog( ) { ShowNewFolderButton = true };
+        private ObservableCollection<object> menuItems = new ObservableCollection<object>( );
 
         public EditorWindow ( ) {
             InitializeComponent( );
             LoadConfig( );
             App.Current.MainWindow = this;
-            animationeditor.MenuChanged += ( ) => {
-                if ((string)((TabItem)tabcontrol_editor.SelectedItem).Header == "ANIMATION") SetTabPageMenu(animationeditor.Menu);
-            };
+
+            foreach (var item in menu_editor.Items) {
+                menuItems.Add(item);
+            }
+            menu_editor.Items.Clear( );
+            menu_editor.ItemsSource = menuItems;
         }
 
         private void LoadConfig ( ) {
@@ -41,10 +49,10 @@ namespace mapKnight.ToolKit.Windows {
 
         private void SetTabPageMenu (List<FrameworkElement> items) {
             while (menu_editor.Items.Count > 2)
-                menu_editor.Items.RemoveAt(2);
+                menuItems.RemoveAt(2);
 
             foreach (FrameworkElement item in items)
-                menu_editor.Items.Add(item);
+                menuItems.Add(item);
         }
 
         private void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e) {
@@ -66,18 +74,13 @@ namespace mapKnight.ToolKit.Windows {
             Properties.Settings.Default.Save( );
         }
 
-        private void Map_Selected (object sender, RoutedEventArgs e) {
-            SetTabPageMenu(mapeditor.Menu);
-        }
-
         private void NewCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }
 
         private void NewCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
             project = new Project( );
-            animationeditor.Clear( );
-            mapeditor.Reset( );
+            tabcontrol_editor.Items.Clear( );
         }
 
         private void OpenCommand_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -89,9 +92,6 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void SaveCommand_Executed (object sender, ExecutedRoutedEventArgs e) {
-            mapeditor.Save(project);
-            animationeditor.Save(project);
-
             if (!project.HasPath) {
                 if (saveDialog.ShowDialog( ) ?? false) {
                     project.Path = saveDialog.FileName;
@@ -105,8 +105,9 @@ namespace mapKnight.ToolKit.Windows {
         private void Window_Loaded (object sender, RoutedEventArgs e) {
             if (App.StartupFile != null && Path.GetExtension(App.StartupFile) == ".mkproj" && File.Exists(App.StartupFile)) {
                 project = new Project(App.StartupFile);
-                mapeditor.Load(project);
-                animationeditor.Load(project);
+                // TODO
+                //mapeditor.Load(project);
+                //animationeditor.Load(project);
             } else {
                 project = new Project( );
             }
@@ -116,14 +117,6 @@ namespace mapKnight.ToolKit.Windows {
             new AboutWindow( ).ShowDialog( );
         }
 
-        private void TabAnimation_Selected (object sender, RoutedEventArgs e) {
-            SetTabPageMenu(animationeditor.Menu);
-        }
-
-        private void TabItemTexture_Selected (object sender, RoutedEventArgs e) {
-            SetTabPageMenu(textureeditor.Menu);
-        }
-
         private void CommandOpen_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
         }
@@ -131,31 +124,69 @@ namespace mapKnight.ToolKit.Windows {
         private void CommandOpen_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (openDialog.ShowDialog( ) ?? false) {
                 project = new Project(openDialog.FileName);
-                mapeditor.Load(project);
-                animationeditor.Load(project);
+                //TODO
+                //mapeditor.Load(project);
+                //animationeditor.Load(project);
             }
         }
 
         private void MenuItemCompile_Click (object sender, RoutedEventArgs e) {
             if (compileDialog.ShowDialog( ) == System.Windows.Forms.DialogResult.OK) {
-                string mappath = Path.Combine(compileDialog.SelectedPath, "maps");
-                string animationpath = Path.Combine(compileDialog.SelectedPath, "animations");
-                if (!Directory.Exists(mappath)) Directory.CreateDirectory(mappath);
-                if (!Directory.Exists(animationpath)) Directory.CreateDirectory(animationpath);
-
-                mapeditor.Compile(mappath);
-                animationeditor.Compile(animationpath);
-                System.Windows.MessageBox.Show("Finished!", "Success!", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
+                project.Compile(compileDialog.SelectedPath);
+                MessageBox.Show("Finished!", "Success!", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
             }
+        }
+
+        private void MenuItemAddMap_Click (object sender, RoutedEventArgs e) {
+            AddMapDialog addMapDialog = new AddMapDialog(project.GraphicsDevice);
+            if (addMapDialog.ShowDialog( ) ?? false) {
+                project.Maps.Add(addMapDialog.DialogResultMap);
+                MapEditor mapEditor = new MapEditor(addMapDialog.DialogResultMap);
+                if (addMapDialog.DialogResultTextures != null) {
+                    mapEditor.LoadTextures(addMapDialog.DialogResultTextures);
+                }
+
+                ToolTip toolTip = new ToolTip( );
+                toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = mapEditor });
+                ClosableTabItem tabItem = new ClosableTabItem( ) { Content = mapEditor, Header = "MAP", ToolTip = ToolTip };
+                tabcontrol_editor.Items.Add(tabItem);
+                tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
+                tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+            }
+        }
+
+        private void MenuItemAddAnimation_Click (object sender, RoutedEventArgs e) {
+            VertexAnimationData data = new VertexAnimationData( );
+            project.Animations.Add(data);
+            AnimationControl animationControl = new AnimationControl(data);
+
+            ToolTip toolTip = new ToolTip( );
+            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = animationControl });
+            ClosableTabItem tabItem = new ClosableTabItem( ) { Content = animationControl, Header = "ANIMATION", ToolTip = toolTip };
+            tabcontrol_editor.Items.Add(tabItem);
+            tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
+            tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
         }
 
         public void CRASH_SAVE (string path) {
             // experimental
-            mapeditor.Save(project);
-            animationeditor.Save(project);
-
             project.Path = path;
             project.Save( );
+        }
+
+        private void tabcontrol_editor_SelectionChanged (object sender, SelectionChangedEventArgs e) {
+            if (e.AddedItems.Count > 0) {
+                if (e.AddedItems[0] is TabItem) {
+                    TabItem selectedItem = (TabItem)e.AddedItems[0];
+                    switch (selectedItem.Content) {
+                        case MapEditor mapEditor:
+                            SetTabPageMenu(mapEditor.Menu);
+                            break;
+                    }
+                }
+            } else {
+                SetTabPageMenu(new List<FrameworkElement>( ));
+            }
         }
     }
 }

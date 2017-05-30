@@ -18,24 +18,17 @@
         <Menu Name="menu_editor" IsMainMenu="True" DockPanel.Dock="Top" Height="24" Background="White">
             <MenuItem Header="_PROJECT" Height="24">
                 <MenuItem Header="NEW" Height="22" Command="New" Icon="{StaticResource ResourceKey=image_project_new }"/>
-                <MenuItem Header="LOAD" Height="22" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
+                <MenuItem Header="OPEN" Height="22" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
+                <MenuItem Header="ADD" Height="22">
+                    <MenuItem Header="MAP" Height="22" Click="MenuItemAddMap_Click"/>
+                    <MenuItem Header="ANIMATION" Height="22" Click="MenuItemAddAnimation_Click"/>
+                </MenuItem>
                 <MenuItem Header="SAVE" Height="22" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
                 <MenuItem Header="COMPILE" Height="22" Click="MenuItemCompile_Click" Icon="{StaticResource ResourceKey=image_project_compile}"/>
             </MenuItem>
             <MenuItem Header="_ABOUT" Click="About_Click"/>
         </Menu>
-        <TabControl Name="tabcontrol_editor">
-           <controls:ClosableTabItem Header="MAP" Selector.Selected="Map_Selected" Margin="-2,0,-2,-2">
-                <controls:ClosableTabItem.Content>
-                    <editor:MapEditor x:Name="mapeditor"/>
-                </controls:ClosableTabItem.Content>
-            </controls:ClosableTabItem>
-            <controls:ClosableTabItem Header="ANIMATION" Selector.Selected="TabAnimation_Selected">
-                <editor:AnimationEditor x:Name="animationeditor"/>
-            </controls:ClosableTabItem>
-            <controls:ClosableTabItem Header="TEXTURE" Selector.Selected="TabItemTexture_Selected">
-                <editor:TextureEditor x:Name="textureeditor"/>
-            </controls:ClosableTabItem>
+        <TabControl Name="tabcontrol_editor" SelectionChanged="tabcontrol_editor_SelectionChanged">
         </TabControl>
     </DockPanel>
 </Window>

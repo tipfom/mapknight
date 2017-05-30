@@ -9,29 +9,30 @@ using mapKnight.Core;
 using mapKnight.ToolKit.Serializer;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Graphics;
+using mapKnight.ToolKit.Data;
+using System.Windows.Media.Imaging;
 
 namespace mapKnight.ToolKit.Windows {
     /// <summary>
     /// Interaktionslogik für CreateMapWindow.xaml
     /// </summary>
-    public partial class CreateMapWindow : Window {
+    public partial class AddMapDialog : Window {
         const string WARN_MESSAGE =
             "The size of the map you are trying to create is very large.\n" +
             "This might cause extremly large files. Do you want to continue?";
 
+        public EditorMap DialogResultMap;
+        public Dictionary<string, BitmapImage> DialogResultTextures;
+
         private Tuple<Tile[ ], Dictionary<string, Texture2D>> template;
         private GraphicsDevice graphicsDevice;
-        private Action<Controls.TileMapView.EditorMap> AddMap;
-        private Action<Controls.TileMapView.EditorMap, string, Texture2D> AddTexture;
 
-        public CreateMapWindow (GraphicsDevice g, Action<Controls.TileMapView.EditorMap> addmap, Action<Map, string, Texture2D> addtexture) {
+        public AddMapDialog (GraphicsDevice g) {
             InitializeComponent( );
             graphicsDevice = g;
-            AddMap = addmap;
-            AddTexture = addtexture;
             this.Owner = App.Current.MainWindow;
         }
-        
+
         private void button_import_Click (object sender, RoutedEventArgs e) {
             OpenFileDialog importDialog = new OpenFileDialog( );
             importDialog.DefaultExt = "TileTemplates|*.mkttemplate";
@@ -52,14 +53,13 @@ namespace mapKnight.ToolKit.Windows {
             Core.Size mapSize = new Core.Size(0, 0);
             Core.Vector2 gravity = new Vector2(0, 0);
             if (ValidName( ) && ValidCreator( ) && ValidSize(ref mapSize) && ValidGravity(ref gravity)) {
-                Controls.TileMapView.EditorMap createdMap = new Controls.TileMapView.EditorMap(mapSize, textbox_creator.Text, textbox_name.Text) { Gravity = gravity };
-                AddMap(createdMap);
+                DialogResultMap = new EditorMap(mapSize, textbox_creator.Text, textbox_name.Text) { Gravity = gravity };
                 if (template != null) {
                     foreach (Tile tile in template.Item1) {
                         if (tile.Name == "None")
                             continue;
-                        AddTexture(createdMap, tile.Name, template.Item2[tile.Name]);
-                        createdMap.AddTile(tile);
+                        DialogResultTextures.Add(tile.Name, template.Item2[tile.Name].ToBitmapImage( ));
+                        DialogResultMap.AddTile(tile);
                     }
                 }
                 DialogResult = true;

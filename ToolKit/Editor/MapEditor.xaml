@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit"
              xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="600" IsEnabled="False">
+             d:DesignHeight="300" d:DesignWidth="600" IsEnabled="True">
     <UserControl.CommandBindings>
         <CommandBinding Command="local:CustomCommands.EditorUndo" Executed="CommandBinding_Undo_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
         <CommandBinding Command="local:CustomCommands.EditorAltA" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>

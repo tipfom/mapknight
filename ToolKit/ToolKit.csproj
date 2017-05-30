@@ -114,8 +114,11 @@
     <Compile Include="Data\Components\NPCDataComponent.cs" />
     <Compile Include="Data\Components\PlatformDataComponent.cs" />
     <Compile Include="Data\Components\SlimeDataComponent.cs" />
+    <Compile Include="Data\EditorMap.cs" />
     <Compile Include="Data\EntityData.cs" />
+    <Compile Include="Data\ImageData.cs" />
     <Compile Include="Data\IUserControlComponent.cs" />
+    <Compile Include="Data\VertexAnimationData.cs" />
     <Compile Include="Data\WindowsEntitySerializer.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Controls\AnimationControl.xaml.cs">
@@ -128,9 +131,6 @@
     <Compile Include="Data\VertexBone.cs" />
     <Compile Include="Controls\TextureCreationControl.xaml.cs">
       <DependentUpon>TextureCreationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Editor\AnimationEditor.xaml.cs">
-      <DependentUpon>AnimationEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Editor\TextureEditor.xaml.cs">
       <DependentUpon>TextureEditor.xaml</DependentUpon>
@@ -246,10 +246,6 @@
     <Page Include="Controls\TextureCreationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Editor\AnimationEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Editor\TextureEditor.xaml">
       <SubType>Designer</SubType>

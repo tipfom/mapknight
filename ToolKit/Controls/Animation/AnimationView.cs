@@ -46,7 +46,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
             groundTexture.SetData(new Color[ ] { new Color(0, 153, 51, 255) });
         }
 
-        public void Play (VertexAnimation animation, float entityratio, Dictionary<string, BoneImage.ImageData> imagedata) {
+        public void Play (VertexAnimation animation, float entityratio, Dictionary<string, ImageData> imagedata) {
             paused = false;
             textures = imagedata.ToDictionary(entry => entry.Key, entry => entry.Value.Image.ToTexture2D(GraphicsDevice));
             transformOrigins = imagedata.ToDictionary(entry => entry.Key, entry => new Microsoft.Xna.Framework.Vector2((float)entry.Value.TransformOrigin.X, (float)entry.Value.TransformOrigin.Y));

@@ -21,8 +21,8 @@ namespace mapKnight.ToolKit.Data {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void SetBitmapImage(AnimationControl control) {
-            BitmapImage = BoneImage.Data[control][Path.GetFileNameWithoutExtension(Image)].Image;
+        public void SetBitmapImage(VertexAnimationData data) {
+            BitmapImage = data.Images[Path.GetFileNameWithoutExtension(Image)].Image;
         }
 
         public VertexBone Clone ( ) {

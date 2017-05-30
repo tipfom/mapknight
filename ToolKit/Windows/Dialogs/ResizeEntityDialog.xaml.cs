@@ -22,7 +22,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             Owner = App.Current.MainWindow;
         }
 
-        public ResizeEntityDialog (double ratio, IList<VertexBone> bones, AnimationControl parent) : this( ) {
+        public ResizeEntityDialog (double ratio, IList<VertexBone> bones, VertexAnimationData animationData) : this( ) {
             if (ratio < 1) {
                 // height > width
                 rectangle_entity.Height = canvas.Height / 2d;
@@ -37,7 +37,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             for (int i = 0; i < bones.Count; i++) {
                 VertexBone bone = bones[i];
                 Image image = new Image( );
-                ImageData data = BoneImage.Data[parent][Path.GetFileNameWithoutExtension(bone.Image)];
+                ImageData data = animationData.Images[Path.GetFileNameWithoutExtension(bone.Image)];
                 image.Source = data.Image;
                 image.Width = data.Image.PixelWidth * bone.Scale * rectangle_entity.Width;
                 image.Height = data.Image.PixelHeight * bone.Scale * rectangle_entity.Width;
