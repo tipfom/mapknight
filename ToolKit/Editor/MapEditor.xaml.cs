@@ -481,22 +481,29 @@ namespace mapKnight.ToolKit.Editor {
         private void HandleTilemapViewMoveTiles (object sender, MouseEventArgs e, bool updated) {
             Point clickedTile = new Point(Math.Floor(selectedTile.X), map.Height - Math.Floor(selectedTile.Y) - 1);
             if (e.RightButton == MouseButtonState.Pressed) {
-                Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                Tuple<Point, int, int, bool> delta = Tuple.Create(clickedTile, currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false);
+                if (Cache.Count > 0) {
+                    Tuple<Point, int, int, bool> last = Cache.Peek( ).Last( );
+                    if (map.Data[(int)last.Item1.X, (int)last.Item1.Y, last.Item2] == 0) {
+                        Cache.Peek( ).Add(delta);
+                    } else {
+                        Cache.Push(new List<Tuple<Point, int, int, bool>>( ) { delta });
+                    }
+                } else {
+                    Cache.Push(new List<Tuple<Point, int, int, bool>>( ) { delta });
+                }
                 map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                 updated = true;
             } else if (e.LeftButton == MouseButtonState.Pressed) {
                 switch (currentTool) {
                     case Tool.Eraser:
-                        Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
                         map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
 
                     case Tool.Pen:
-                        Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
                         map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
                         map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
