@@ -11,6 +11,7 @@ using mapKnight.ToolKit.Editor;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace mapKnight.ToolKit.Windows {
     /// <summary>
@@ -105,10 +106,13 @@ namespace mapKnight.ToolKit.Windows {
 
         private void Window_Loaded (object sender, RoutedEventArgs e) {
             if (App.StartupFile != null && Path.GetExtension(App.StartupFile) == ".mkproj" && File.Exists(App.StartupFile)) {
-                project = new Project(App.StartupFile);
-                // TODO
-                //mapeditor.Load(project);
-                //animationeditor.Load(project);
+                project = new Project(App.StartupFile, this);
+                foreach (EditorMap map in project.Maps) {
+                    CreateMapEditor(map, null);
+                }
+                foreach (VertexAnimationData data in project.Animations) {
+                    CreateAnimationControl(data);
+                }
             } else {
                 project = new Project( );
             }
@@ -124,10 +128,14 @@ namespace mapKnight.ToolKit.Windows {
 
         private void CommandOpen_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (openDialog.ShowDialog( ) ?? false) {
-                project = new Project(openDialog.FileName);
-                //TODO
-                //mapeditor.Load(project);
-                //animationeditor.Load(project);
+                project = new Project(openDialog.FileName, this);
+
+                foreach(EditorMap map in project.Maps) {
+                    CreateMapEditor(map, null);
+                }
+                foreach(VertexAnimationData data in project.Animations) {
+                    CreateAnimationControl(data);
+                }
             }
         }
 
@@ -142,17 +150,7 @@ namespace mapKnight.ToolKit.Windows {
             AddMapDialog addMapDialog = new AddMapDialog(project.GraphicsDevice);
             if (addMapDialog.ShowDialog( ) ?? false) {
                 project.Maps.Add(addMapDialog.DialogResultMap);
-                MapEditor mapEditor = new MapEditor(addMapDialog.DialogResultMap);
-                if (addMapDialog.DialogResultTextures != null) {
-                    mapEditor.LoadTextures(addMapDialog.DialogResultTextures);
-                }
-
-                ToolTip toolTip = new ToolTip( );
-                toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = mapEditor });
-                ClosableTabItem tabItem = new ClosableTabItem( ) { Content = mapEditor, Header = "MAP", ToolTip = ToolTip };
-                tabcontrol_editor.Items.Add(tabItem);
-                tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
-                tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+                CreateMapEditor(addMapDialog.DialogResultMap, addMapDialog.DialogResultTextures);
             }
         }
 
@@ -162,18 +160,37 @@ namespace mapKnight.ToolKit.Windows {
                 if (!project.Animations.Any(item => item.Meta.Entity == dialog.textbox_name.Text)) {
                     VertexAnimationData data = new VertexAnimationData( ) { Meta = new AnimationMetaData( ) { Entity = dialog.textbox_name.Text, Ratio = dialog.Ratio } };
                     project.Animations.Add(data);
-                    AnimationControl animationControl = new AnimationControl(data);
-
-                    ToolTip toolTip = new ToolTip( );
-                    toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = animationControl });
-                    ClosableTabItem tabItem = new ClosableTabItem( ) { Content = animationControl, Header = "ANIMATION", ToolTip = toolTip };
-                    tabcontrol_editor.Items.Add(tabItem);
-                    tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
-                    tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+                    CreateAnimationControl(data);
                 } else {
                     MessageBox.Show("please dont add entities with the same name");
                 }
             }
+        }
+
+        private void CreateMapEditor(EditorMap map, Dictionary<string, BitmapImage> template) {
+            MapEditor mapEditor = new MapEditor(map);
+            if (template != null) {
+                mapEditor.LoadTextures(template);
+            }
+
+            ToolTip toolTip = new ToolTip( );
+            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = mapEditor });
+            ClosableTabItem tabItem = new ClosableTabItem( ) { Content = mapEditor, Header = "MAP", ToolTip = ToolTip };
+            tabcontrol_editor.Items.Add(tabItem);
+            tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
+            tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+
+        }
+
+        private void CreateAnimationControl(VertexAnimationData data) {
+            AnimationControl animationControl = new AnimationControl(data);
+
+            ToolTip toolTip = new ToolTip( );
+            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = animationControl });
+            ClosableTabItem tabItem = new ClosableTabItem( ) { Content = animationControl, Header = "ANIMATION", ToolTip = toolTip };
+            tabcontrol_editor.Items.Add(tabItem);
+            tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
+            tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
         }
 
         public void CRASH_SAVE (string path) {

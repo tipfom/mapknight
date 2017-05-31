@@ -18,6 +18,7 @@ namespace mapKnight.ToolKit.Data {
         private const float TILE_LIGHT_DISTANCE = 2 * TILE_LIGHT_RESOLUTION - .5f;
 
         public float[ , , ] Rotations;
+        public byte[ ] ImageData;
         public Dictionary<string, Texture2D> XnaTextures = new Dictionary<string, Texture2D>( );
         public Dictionary<string, BitmapImage> WpfTextures = new Dictionary<string, BitmapImage>( );
         
@@ -36,24 +37,24 @@ namespace mapKnight.ToolKit.Data {
         public float VertexSize => 0;
 
         public void Init (GraphicsDevice g) {
-            if (Tiles != null) return;
+            if (ImageData != null) {
+                using (Stream imageStream = new MemoryStream(ImageData))
+                    XnaTextures = TileSerializer.ExtractTextures(Texture2D.FromStream(g, imageStream), Tiles, g);
+                ImageData = null;
+                foreach (var entry in XnaTextures)
+                    WpfTextures.Add(entry.Key, entry.Value.ToBitmapImage( ));
+            } else if (Tiles == null) {
+                MemoryStream memoryStream = new MemoryStream( );
+                memoryStream.Position = 0;
+                new Bitmap(1, 1).Save(memoryStream, ImageFormat.Png);
+                BitmapImage emptyImage = new BitmapImage( );
+                emptyImage.BeginInit( );
+                emptyImage.StreamSource = memoryStream;
+                emptyImage.EndInit( );
 
-            MemoryStream memoryStream = new MemoryStream( );
-            memoryStream.Position = 0;
-            new Bitmap(1, 1).Save(memoryStream, ImageFormat.Png);
-            BitmapImage emptyImage = new BitmapImage( );
-            emptyImage.BeginInit( );
-            emptyImage.StreamSource = memoryStream;
-            emptyImage.EndInit( );
-
-            LoadTexture("None", emptyImage, g);
-            Tiles = new Tile[ ] { new Tile( ) { Name = "None", Attributes = new Dictionary<TileAttribute, string>( ) } };
-        }
-
-        public void Init (GraphicsDevice g, Stream imageStream) {
-            XnaTextures = TileSerializer.ExtractTextures(Texture2D.FromStream(g, imageStream), Tiles, g);
-            foreach (var entry in XnaTextures)
-                WpfTextures.Add(entry.Key, entry.Value.ToBitmapImage( ));
+                LoadTexture("None", emptyImage, g);
+                Tiles = new Tile[ ] { new Tile( ) { Name = "None", Attributes = new Dictionary<TileAttribute, string>( ) } };
+            }
         }
 
         public void Init (GraphicsDevice g, Dictionary<string, BitmapImage> wpfTextures) {

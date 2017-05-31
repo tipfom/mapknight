@@ -61,13 +61,13 @@ namespace mapKnight.ToolKit.Editor {
 
         private int currentLayer = 1;
         private Tool currentTool = Tool.Pen;
-        private GraphicsDevice GraphicsDevice;
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
         private Entity cachedEntity, currentlySelectingEntity, currentlySelectedEntity;
         private Func<Vector2, bool> currentVectorRequestCallback;
         private Microsoft.Xna.Framework.Vector2 selectedTile;
         private EditorMap map;
 
+        public GraphicsDevice GraphicsDevice;
         public string Description { get { return ToString( ); } }
 
         public MapEditor (EditorMap map) {
