@@ -87,6 +87,8 @@ namespace mapKnight.ToolKit.Editor {
 
             tilemapview.DeviceInitialized += ( ) => {
                 map.Init(GraphicsDevice);
+                UpdateListbox( );
+
                 entitylistbox.Init(tilemapview.GraphicsDevice);
                 tilemapview.EntityData = entitylistbox.GetEntityData( );
             };

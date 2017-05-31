@@ -10,6 +10,7 @@ using mapKnight.ToolKit.Controls;
 using mapKnight.ToolKit.Editor;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace mapKnight.ToolKit.Windows {
     /// <summary>
@@ -156,16 +157,23 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void MenuItemAddAnimation_Click (object sender, RoutedEventArgs e) {
-            VertexAnimationData data = new VertexAnimationData( );
-            project.Animations.Add(data);
-            AnimationControl animationControl = new AnimationControl(data);
+            AddAnimationWindow dialog = new AddAnimationWindow( );
+            if (dialog.ShowDialog( ) ?? false) {
+                if (!project.Animations.Any(item => item.Meta.Entity == dialog.textbox_name.Text)) {
+                    VertexAnimationData data = new VertexAnimationData( ) { Meta = new AnimationMetaData( ) { Entity = dialog.textbox_name.Text, Ratio = dialog.Ratio } };
+                    project.Animations.Add(data);
+                    AnimationControl animationControl = new AnimationControl(data);
 
-            ToolTip toolTip = new ToolTip( );
-            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = animationControl });
-            ClosableTabItem tabItem = new ClosableTabItem( ) { Content = animationControl, Header = "ANIMATION", ToolTip = toolTip };
-            tabcontrol_editor.Items.Add(tabItem);
-            tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
-            tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+                    ToolTip toolTip = new ToolTip( );
+                    toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = animationControl });
+                    ClosableTabItem tabItem = new ClosableTabItem( ) { Content = animationControl, Header = "ANIMATION", ToolTip = toolTip };
+                    tabcontrol_editor.Items.Add(tabItem);
+                    tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
+                    tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+                } else {
+                    MessageBox.Show("please dont add entities with the same name");
+                }
+            }
         }
 
         public void CRASH_SAVE (string path) {
@@ -181,6 +189,9 @@ namespace mapKnight.ToolKit.Windows {
                     switch (selectedItem.Content) {
                         case MapEditor mapEditor:
                             SetTabPageMenu(mapEditor.Menu);
+                            break;
+                        case AnimationControl animationControl:
+                            SetTabPageMenu(animationControl.Menu);
                             break;
                     }
                 }
