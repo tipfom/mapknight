@@ -201,6 +201,7 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
 
         private void CommandBinding_Finish_Executed (object sender, ExecutedRoutedEventArgs e) {
             DialogResult = true;
+            DialogResultBrush.GeneratePreviewImages(map);
             Close( );
         }
     }
