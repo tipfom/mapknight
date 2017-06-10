@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:mapKnight.ToolKit"
+             xmlns:editor="clr-namespace:mapKnight.ToolKit.Editor"
              xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="600" IsEnabled="True">
@@ -15,6 +16,8 @@
         <CommandBinding Command="local:CustomCommands.EditorAltF" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
         <CommandBinding Command="local:CustomCommands.EditorDelete" Executed="CommandDelete_Executed" CanExecute="CommandDelete_CanExecute"/>
         <CommandBinding Command="local:CustomCommands.EditorReplace" Executed="CommandReplace_Executed" CanExecute="CommandReplace_CanExecute" />
+        <CommandBinding Command="editor:MapEditor.CreateBrush" Executed="CommandBinding_CreateBrush_Executed" CanExecute="CommandBinding_CreateBrush_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.RemoveBrush" Executed="CommandBinding_RemoveBrush_Executed" CanExecute="CommandBinding_RemoveBrush_CanExecute"/>
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <Style TargetType="ListBox">
@@ -143,6 +146,29 @@
                     <ContentPresenter x:Name="contentpresenter_entitydata" DockPanel.Dock="Bottom" MaxHeight="250"/>
                     <controls:EntityListBox x:Name="entitylistbox"/>
                 </DockPanel>
+            </TabItem>
+            <TabItem Header="BRUSHES">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <Button Command="editor:MapEditor.CreateBrush"
+                                ToolTip="Create New Brush">
+                            <Image Source="{StaticResource ResourceKey=image_map_add}"/>
+                        </Button>
+                        <Button Command="editor:MapEditor.RemoveBrush" 
+                                Margin="5,0,0,0" 
+                                ToolTip="Remove Selected Brush">
+                            <Image Source="{StaticResource ResourceKey=image_map_remove}"/>
+                        </Button>
+                    </StackPanel>
+                    <ListView x:Name="listview_brushes"
+                              Grid.Row="1">
+                        
+                    </ListView>
+                </Grid>
             </TabItem>
         </TabControl>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False" Background="White" />

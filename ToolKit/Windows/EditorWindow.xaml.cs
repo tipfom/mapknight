@@ -200,6 +200,7 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void tabcontrol_editor_SelectionChanged (object sender, SelectionChangedEventArgs e) {
+            if (e.Source != tabcontrol_editor) return;
             if (e.AddedItems.Count > 0) {
                 if (e.AddedItems[0] is TabItem) {
                     TabItem selectedItem = (TabItem)e.AddedItems[0];

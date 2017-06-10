@@ -118,6 +118,7 @@
     <Compile Include="Data\EntityData.cs" />
     <Compile Include="Data\ImageData.cs" />
     <Compile Include="Data\IUserControlComponent.cs" />
+    <Compile Include="Data\TileBrush.cs" />
     <Compile Include="Data\VertexAnimationData.cs" />
     <Compile Include="Data\WindowsEntitySerializer.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
@@ -140,6 +141,9 @@
     </Compile>
     <Compile Include="Windows\Dialogs\AddAnimationDialog.xaml.cs">
       <DependentUpon>AddAnimationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Dialogs\AddBrushDialog.xaml.cs">
+      <DependentUpon>AddBrushDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Dialogs\AddTileDialog.xaml.cs">
       <DependentUpon>AddTileDialog.xaml</DependentUpon>
@@ -256,6 +260,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Dialogs\AddAnimationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Dialogs\AddBrushDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -496,6 +504,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Entities\oak.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\autotile_d.png" />
+    <Resource Include="Resources\Images\autotile_I.png" />
+    <Resource Include="Resources\Images\autotile_L.png" />
+    <Resource Include="Resources\Images\autotile_O.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\paint_brush-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

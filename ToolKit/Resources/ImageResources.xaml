@@ -22,7 +22,13 @@
     <BitmapImage x:Key="image_map_selectentity" UriSource="../Resources/Images/hand_cursor-48.png"/>
     <BitmapImage x:Key="image_map_killentity" UriSource="../Resources/Images/empty_trash-48.png"/>
     <BitmapImage x:Key="image_map_finishvectorrequest" UriSource="../Resources/Images/checkmark-48.png"/>
+    <BitmapImage x:Key="image_map_tilebrush" UriSource="../Resources/Images/paint_brush-48.png"/>
     <Image x:Key="image_map_new" Source="../Resources/Images/create_new-48.png"/>
+    <BitmapImage x:Key="image_map_autotile_L" UriSource="../Resources/Images/autotile_L.png"/>
+    <BitmapImage x:Key="image_map_autotile_I" UriSource="../Resources/Images/autotile_I.png"/>
+    <BitmapImage x:Key="image_map_autotile_d" UriSource="../Resources/Images/autotile_d.png"/>
+    <BitmapImage x:Key="image_map_autotile_O" UriSource="../Resources/Images/autotile_O.png"/>
+
 
     <Image x:Key="image_animation_new" Source="../Resources/Images/create_new-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_settings" UriSource="../Resources/Images/vertical_settings_mixer-48.png"/>
