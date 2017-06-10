@@ -599,7 +599,7 @@ namespace mapKnight.ToolKit.Editor {
             if (e.LeftButton == MouseButtonState.Pressed) {
                 int px0 = (int)selectedTile.X;
                 int py0 = map.Height - (int)selectedTile.Y - 1;
-                map.Data[px0, py0, currentLayer] = Array.FindIndex(map.Tiles, tile => tile.Name == currentBrush.Centre.tile.Name);
+                map.Data[px0, py0, currentLayer] = Array.FindIndex(map.Tiles, tile => tile.Name == currentBrush.Centre[0].tile.Name);
 
                 for (int x = -1; x <= 1; x++) {
                     for (int y = -1; y <= 1; y++) {

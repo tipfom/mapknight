@@ -3,10 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:mapKnight.ToolKit.Windows.Dialogs"
         mc:Ignorable="d"
         Title="Create an Brush" 
-        Height="300" Width="500"
-        Closing="Window_Closing">
+        Height="300" Width="500">
+    <Window.CommandBindings>
+        <CommandBinding Command="local:AddBrushDialog.FinishCommand" CanExecute="CommandBinding_Finish_CanExecute" Executed="CommandBinding_Finish_Executed"/>
+    </Window.CommandBindings>
     <Window.Resources>
         <DataTemplate x:Key="TileItemTemplate">
             <Image 
@@ -16,193 +19,237 @@
                 RenderOptions.BitmapScalingMode="NearestNeighbor" />
         </DataTemplate>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid Height="{Binding Width}"
-                  VerticalAlignment="Center"
-                  HorizontalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+    <DockPanel Margin="5">
+        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Command="local:AddBrushDialog.FinishCommand" Margin="0,5,0,0" Content="Finish" Padding="7,2"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid Height="{Binding Width}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="58*"/>
+                        <RowDefinition Height="58*"/>
+                        <RowDefinition Height="58*"/>
+                        <RowDefinition Height="49*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- corners -->
-                <Image x:Name="image_cornertl"
+                    <!-- corners -->
+                    <Image x:Name="image_cornertl"
                        Grid.Column="0" Grid.Row="0" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerTL_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="90"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_cornertr"
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="90"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="0" Grid.Row="0" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCTL_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_cornertr"
                        Grid.Column="2" Grid.Row="0" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerTR_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="180"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_cornerbr"
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="180"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="2" Grid.Row="0" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCTR_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_cornerbr"
                        Grid.Column="2" Grid.Row="2" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerBR_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="270"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_cornerbl"
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="270"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="2" Grid.Row="2" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCBR_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_cornerbl"
                        Grid.Column="0" Grid.Row="2" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerBL_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="0"/>
-                    </Image.RenderTransform>
-                </Image>
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="0"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="0" Grid.Row="2" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCBL_Click">
+                        ..
+                    </Button>
 
-                <!-- centre -->
-                <Image x:Name="image_centre"
+                    <!-- centre -->
+                    <Image x:Name="image_centre"
                        Grid.Column="1" Grid.Row="1" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_O}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_Centre_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform/>
-                    </Image.RenderTransform>
-                </Image>
+                        <Image.RenderTransform>
+                            <RotateTransform/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="1" Grid.Row="1" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCentre_Click">
+                        ..
+                    </Button>
 
-                <!-- I shapes -->
-                <Image x:Name="image_Il"
+                    <!-- I shapes -->
+                    <Image x:Name="image_Il"
                        Grid.Column="0" Grid.Row="1" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IL_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="90"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_It"
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="90"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="0" Grid.Row="1" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIL_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_It"
                        Grid.Column="1" Grid.Row="0" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IT_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="180"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_Ir"
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="180"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="1" Grid.Row="0" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIT_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_Ir"
                        Grid.Column="2" Grid.Row="1" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IR_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="270"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_Ib"
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="270"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="2" Grid.Row="1" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIR_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_Ib"
                        Grid.Column="1" Grid.Row="2" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IB_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="0"/>
-                    </Image.RenderTransform>
-                </Image>
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="0"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="1" Grid.Row="2" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIB_Click">
+                        ..
+                    </Button>
 
-                <!-- L shapes -->
-                <Image x:Name="image_Lbl"
+                    <!-- L shapes -->
+                    <Image x:Name="image_Lbl"
                        Grid.Column="0" Grid.Row="3" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LBL_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="0"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_Lbr"
+                       MouseDown="Image_LBL_MouseDown" Grid.RowSpan="2">
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="0"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="0" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLBL_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_Lbr"
                        Grid.Column="1" Grid.Row="3" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LBR_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="270"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_Ltl"
+                       MouseDown="Image_LBR_MouseDown" Grid.RowSpan="2">
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="270"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="1" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLBR_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_Ltl"
                        Grid.Column="2" Grid.Row="3" 
                        Margin="0"
                        Source="{StaticResource ResourceKey=image_map_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LTL_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="90"/>
-                    </Image.RenderTransform>
-                </Image>
-                <Image x:Name="image_Ltr"
+                       MouseDown="Image_LTL_MouseDown" Grid.RowSpan="2">
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="90"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="2" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLTL_Click">
+                        ..
+                    </Button>
+                    <Image x:Name="image_Ltr"
                        Grid.Column="3" Grid.Row="3" 
-                       Margin="0"
+                       Margin="0,0,-9,0"
                        Source="{StaticResource ResourceKey=image_map_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LTR_MouseDown">
-                    <Image.RenderTransform>
-                        <RotateTransform Angle="180"/>
-                    </Image.RenderTransform>
-                </Image>
+                       MouseDown="Image_LTR_MouseDown" Grid.RowSpan="2">
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="180"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="3" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLTR_Click">
+                        ..
+                    </Button>
+                </Grid>
             </Grid>
-        </Grid>
-        <GridSplitter Grid.Column="1" 
+            <GridSplitter Grid.Column="1" 
                       HorizontalAlignment="Stretch"
                       Background="White"/>
-        <ListView x:Name="listview_tiles" 
+            <ListView x:Name="listview_tiles" 
                   Grid.Column="2"
                   ItemTemplate="{StaticResource TileItemTemplate}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>
-            </ListView.ItemsPanel>
-        </ListView>
-    </Grid>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
+    </DockPanel>
+
 </Window>
