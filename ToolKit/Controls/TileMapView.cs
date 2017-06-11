@@ -137,7 +137,7 @@ namespace mapKnight.ToolKit.Controls {
 
             // draw selected tile
             if (CurrentSelection.X > -1 && CurrentSelection.Y > -1) {
-                if (Mode == 0) {
+                if (Mode == 0 || Mode == 2) {
                     spriteBatch.Draw(selectionTexture, new Rectangle((int)((CurrentSelection.X + 0.5f) * TileSize), (int)((CurrentSelection.Y + 0.5f) * TileSize), TileSize, TileSize), null, Color.White, 0f, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
                 } else if (Mode == 1) {
                     spriteBatch.Draw(emptyTexture, new Rectangle((int)((CurrentSelection.X) * TileSize), (int)((CurrentSelection.Y) * TileSize), TileSize / 5, TileSize / 5), null, new Color(255, 0, 0, 63), Mathf.PI / 4f, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);

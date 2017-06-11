@@ -22,19 +22,45 @@ namespace mapKnight.ToolKit.Controls {
         private List<FrameworkElement> menu = new List<FrameworkElement>( );
         public List<FrameworkElement> Menu { get { return menu; } }
 
-        private VertexAnimationData data;
+        private VertexAnimationData _Data;
+        public VertexAnimationData Data {
+            get { return _Data; }
+            set {
+                if (_Data != null) {
+                    _Data.BoneCountChanged -= BonesChanged;
+                    _Data.BoneZIndexChanged -= BonesZIndexChanged;
+                    _Data.BoneScaleChanged -= BonesScaleChanged;
+                    _Data.BoneImageChanged -= ResetEditor;
+                }
+
+                _Data = value;
+                if (_Data != null) {
+                    _Data.BoneCountChanged += BonesChanged;
+                    _Data.BoneZIndexChanged += BonesZIndexChanged;
+                    _Data.BoneScaleChanged += BonesScaleChanged;
+                    _Data.BoneImageChanged += ResetEditor;
+                    treeview_animations.DataContext = _Data.Animations;
+
+                    try {
+                        object animationView = contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
+                        (animationView as AnimationView)?.Pause( );
+                        (animationView as AnimationView)?.Update( );
+                    } catch {
+                    }
+
+                    BonesChanged( );
+                    ResetEditor( );
+                }
+            }
+        }
+
         private List<BoneImage> boneImages = new List<BoneImage>( );
         private VertexAnimation currentAnimation = null;
         private VertexAnimationFrame currentFrame = null;
         private VertexAnimationFrame featuredFrame = null;
 
-        public string Description { get { return ToString( ); } }
-
-        public AnimationControl (VertexAnimationData data) {
+        public AnimationControl ( ) {
             InitializeComponent( );
-
-            this.data = data;
-            treeview_animations.DataContext = data.Animations;
 
             // init menu
             Style imageStyle = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Property = Button.IsEnabledProperty, Value = false, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } };
@@ -42,7 +68,7 @@ namespace mapKnight.ToolKit.Controls {
                 Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_settings"),
                 Style = imageStyle
             };
-            settingButton.MouseDown += (sender, e) => data.ShowEditBonesDialog( );
+            settingButton.MouseDown += (sender, e) => Data?.ShowEditBonesDialog( );
             menu.Add(settingButton);
 
             Image scissorButton = new Image( ) {
@@ -50,7 +76,7 @@ namespace mapKnight.ToolKit.Controls {
                 Style = imageStyle
             };
             scissorButton.MouseDown += (sender, e) => {
-                if (data.ShowEntityResizeDialog(currentFrame ?? featuredFrame)) {
+                if (Data?.ShowEntityResizeDialog(currentFrame ?? featuredFrame) ?? false) {
                     ResetEditor( );
                 }
             };
@@ -60,31 +86,18 @@ namespace mapKnight.ToolKit.Controls {
                 Source = (BitmapImage)App.Current.FindResource("image_animationcomponent_selectbones"),
                 Style = imageStyle
             };
-            selectBonesButton.MouseDown += (sender, e) => data.ShowSelectBonesDialog( );
+            selectBonesButton.MouseDown += (sender, e) => Data?.ShowSelectBonesDialog( );
             menu.Add(selectBonesButton);
 
-            BoneImage.BackupChanges += ( ) => data.BackupChanges(currentAnimation, currentFrame);
-            BoneImage.DumpChanges += ( ) => data.DumpChanges(currentAnimation, currentFrame);
-
-            data.BoneCountChanged += ( ) => BonesChanged( );
-            data.BoneZIndexChanged += (newz, oldz) => {
-                BoneImage imageAtNewZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -newz);
-                BoneImage imageAtOldZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -oldz);
-                if (imageAtOldZ != null) Canvas.SetZIndex(imageAtOldZ, -newz);
-                if (imageAtNewZ != null) Canvas.SetZIndex(imageAtNewZ, -oldz);
-            };
-            data.BoneScaleChanged += (index) => {
-                BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == -index);
-                if (image != null && currentFrame != null) image.Update( );
-            };
-            data.BoneImageChanged += ( ) => ResetEditor( );
+            BoneImage.BackupChanges += ( ) => Data?.BackupChanges(currentAnimation, currentFrame);
+            BoneImage.DumpChanges += ( ) => Data?.DumpChanges(currentAnimation, currentFrame);
 
             MLGCanvas.SelectedBoneImageChanged += MLGCanvas_SelectedBoneImageChanged;
         }
 
         private void MLGCanvas_SelectedBoneImageChanged (BoneImage obj) {
-            if (boneImages.Contains(obj)) {
-                data.EditBonesDialog.listbox_bones.SelectedIndex = currentFrame.Bones.IndexOf((VertexBone)obj.DataContext);
+            if (boneImages.Contains(obj) && Data != null) {
+                Data.EditBonesDialog.listbox_bones.SelectedIndex = currentFrame.Bones.IndexOf((VertexBone)obj.DataContext);
             }
         }
 
@@ -92,7 +105,7 @@ namespace mapKnight.ToolKit.Controls {
             if (currentFrame != null) {
                 e.CanExecute = currentAnimation != null && currentAnimation.Frames.Count > 1;
             } else if (currentAnimation != null) {
-                e.CanExecute = data.Animations.Count > 1;
+                e.CanExecute = Data.Animations.Count > 1;
             }
         }
 
@@ -104,7 +117,7 @@ namespace mapKnight.ToolKit.Controls {
 
                 currentFrame = null;
             } else if (currentAnimation != null) {
-                data.Animations.Remove(currentAnimation);
+                Data.Animations.Remove(currentAnimation);
                 currentAnimation = null;
                 currentFrame = null;
             }
@@ -128,18 +141,18 @@ namespace mapKnight.ToolKit.Controls {
         private void CommandEditorNew_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (currentAnimation == null) {
                 // add new animation
-                ObservableCollection<VertexBone> firstFramesBones = (data.Animations.Count == 0) ?
-                    new ObservableCollection<VertexBone>(data.Bones.Select(item => item.Clone( ))) : // set reference to the default bones
-                    new ObservableCollection<VertexBone>(featuredFrame?.Bones ?? data.Animations[0].Frames[0].Bones.Select(item => item.Clone( ))); // cheap clone :D
+                ObservableCollection<VertexBone> firstFramesBones = (Data.Animations.Count == 0) ?
+                    new ObservableCollection<VertexBone>(Data.Bones.Select(item => item.Clone( ))) : // set reference to the default bones
+                    new ObservableCollection<VertexBone>(featuredFrame?.Bones ?? Data.Animations[0].Frames[0].Bones.Select(item => item.Clone( ))); // cheap clone :D
 
-                data.Animations.Add(new VertexAnimation( ) {
+                Data.Animations.Add(new VertexAnimation( ) {
                     CanRepeat = true,
                     Frames = new ObservableCollection<VertexAnimationFrame>(new[ ] { new VertexAnimationFrame( ) { Bones = firstFramesBones, Time = 500 } }),
-                    Name = "Default_" + data.Animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( ),
-                    IsDefault = data.Animations.Count == 0
+                    Name = "Default_" + Data.Animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( ),
+                    IsDefault = Data.Animations.Count == 0
                 });
-                if (data.Animations.Count == 1) {
-                    featuredFrame = data.Animations[0].Frames[0];
+                if (Data.Animations.Count == 1) {
+                    featuredFrame = Data.Animations[0].Frames[0];
                     featuredFrame.Featured = true;
                 }
             } else if (currentFrame == null) {
@@ -194,7 +207,7 @@ namespace mapKnight.ToolKit.Controls {
                 treeview_animations.ContextMenu = (ContextMenu)treeview_animations.Resources["contextmenu_frame"];
 
                 currentFrame = (VertexAnimationFrame)treeview_animations.SelectedItem;
-                currentAnimation = data.Animations.First(anim => anim.Frames.Contains(currentFrame));
+                currentAnimation = Data.Animations.First(anim => anim.Frames.Contains(currentFrame));
 
                 bool addBoneImagesToCanvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter) == null;
                 contentpresenter.ContentTemplate = (DataTemplate)FindResource("edit");
@@ -219,6 +232,18 @@ namespace mapKnight.ToolKit.Controls {
             }
         }
 
+        private void BonesZIndexChanged (int newz, int oldz) {
+            BoneImage imageAtNewZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -newz);
+            BoneImage imageAtOldZ = boneImages.FirstOrDefault(image => Canvas.GetZIndex(image) == -oldz);
+            if (imageAtOldZ != null) Canvas.SetZIndex(imageAtOldZ, -newz);
+            if (imageAtNewZ != null) Canvas.SetZIndex(imageAtNewZ, -oldz);
+        }
+
+        private void BonesScaleChanged (int index) {
+            BoneImage image = boneImages.FirstOrDefault(item => Canvas.GetZIndex(item) == -index);
+            if (image != null && currentFrame != null) image.Update( );
+        }
+
         private void BonesChanged ( ) {
             // to prevent crashing
             try {
@@ -228,14 +253,14 @@ namespace mapKnight.ToolKit.Controls {
 
             }
 
-            if (data.Bones.Count > boneImages.Count) {
-                int bonesToAdd = data.Bones.Count - boneImages.Count;
+            if (Data.Bones.Count > boneImages.Count) {
+                int bonesToAdd = Data.Bones.Count - boneImages.Count;
                 for (int i = 0; i < bonesToAdd; i++) {
-                    boneImages.Add(new BoneImage(data) { });
+                    boneImages.Add(new BoneImage(Data) { });
                 }
             } else {
-                for (int i = 0; i < boneImages.Count - data.Bones.Count; i++) {
-                    boneImages.RemoveAt(i);
+                while(boneImages.Count > Data.Bones.Count) { 
+                    boneImages.RemoveAt(0);
                 }
             }
 
@@ -246,7 +271,7 @@ namespace mapKnight.ToolKit.Controls {
 
         private void ButtonStartPlay_Click (object sender, RoutedEventArgs e) {
             AnimationView animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            animationView.Play(currentAnimation, (float)data.Meta.Ratio, data.Images);
+            animationView.Play(currentAnimation, (float)Data.Meta.Ratio, Data.Images);
         }
 
         private void ButtonStopPlay_Click (object sender, RoutedEventArgs e) {
@@ -278,12 +303,12 @@ namespace mapKnight.ToolKit.Controls {
             Canvas canvas = (Canvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
 
             double ultrascale = scales[(int)((Slider)contentpresenter.ContentTemplate.FindName("slider_zoom", contentpresenter)).Value];
-            if (canvas.RenderSize.Width / canvas.RenderSize.Height > data.Meta.Ratio) {
-                rect.Width = canvas.RenderSize.Height * data.Meta.Ratio * ultrascale;
+            if (canvas.RenderSize.Width / canvas.RenderSize.Height > Data.Meta.Ratio) {
+                rect.Width = canvas.RenderSize.Height * Data.Meta.Ratio * ultrascale;
                 rect.Height = canvas.RenderSize.Height * ultrascale;
             } else {
                 rect.Width = canvas.RenderSize.Width * ultrascale;
-                rect.Height = canvas.RenderSize.Width / data.Meta.Ratio * ultrascale;
+                rect.Height = canvas.RenderSize.Width / Data.Meta.Ratio * ultrascale;
             }
             rect.Height -= rect.StrokeThickness * 2;
             rect.Width -= rect.StrokeThickness * 2;
@@ -300,7 +325,7 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void CommandEditorUndo_Executed (object sender, ExecutedRoutedEventArgs e) {
-            currentFrame.Bones = data.Undo(currentAnimation, currentFrame);
+            currentFrame.Bones = Data.Undo(currentAnimation, currentFrame);
 
             for (int i = 0; i < boneImages.Count; i++) {
                 Canvas.SetZIndex(boneImages[i], -i);
@@ -309,7 +334,7 @@ namespace mapKnight.ToolKit.Controls {
         }
 
         private void CommandEditorUndo_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = currentAnimation != null && data.CanUndo(currentAnimation, currentFrame);
+            e.CanExecute = currentAnimation != null && Data.CanUndo(currentAnimation, currentFrame);
         }
 
         private void MenuItemStarFrame_Click (object sender, RoutedEventArgs e) {
@@ -320,10 +345,6 @@ namespace mapKnight.ToolKit.Controls {
             currentFrame.Featured = true;
             currentFrame.OnPropertyChanged("Featured");
             featuredFrame = currentFrame;
-        }
-
-        public override string ToString ( ) {
-            return data.Meta.Entity;
         }
     }
 }

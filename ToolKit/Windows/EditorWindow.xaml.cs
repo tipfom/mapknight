@@ -26,6 +26,9 @@ namespace mapKnight.ToolKit.Windows {
         private System.Windows.Forms.FolderBrowserDialog compileDialog = new System.Windows.Forms.FolderBrowserDialog( ) { ShowNewFolderButton = true };
         private ObservableCollection<object> menuItems = new ObservableCollection<object>( );
 
+        private MapEditor mapEditorInstance;
+        private AnimationControl animationEditorInstance;
+
         public EditorWindow ( ) {
             InitializeComponent( );
             LoadConfig( );
@@ -36,6 +39,9 @@ namespace mapKnight.ToolKit.Windows {
             }
             menu_editor.Items.Clear( );
             menu_editor.ItemsSource = menuItems;
+
+            mapEditorInstance = new MapEditor( );
+            animationEditorInstance = new AnimationControl( );
         }
 
         private void LoadConfig ( ) {
@@ -168,26 +174,22 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void CreateMapEditor(EditorMap map, Dictionary<string, BitmapImage> template) {
-            MapEditor mapEditor = new MapEditor(map);
             if (template != null) {
-                mapEditor.LoadTextures(template);
+                map.WpfTextures = template;
             }
 
             ToolTip toolTip = new ToolTip( );
-            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = mapEditor });
-            ClosableTabItem tabItem = new ClosableTabItem( ) { Content = mapEditor, Header = "MAP", ToolTip = ToolTip };
+            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = map });
+            ClosableTabItem tabItem = new ClosableTabItem( ) { Header = "MAP", DataContext = map, ToolTip = ToolTip };
             tabcontrol_editor.Items.Add(tabItem);
             tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
             tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
-
         }
 
         private void CreateAnimationControl(VertexAnimationData data) {
-            AnimationControl animationControl = new AnimationControl(data);
-
             ToolTip toolTip = new ToolTip( );
-            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = animationControl });
-            ClosableTabItem tabItem = new ClosableTabItem( ) { Content = animationControl, Header = "ANIMATION", ToolTip = toolTip };
+            toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = data });
+            ClosableTabItem tabItem = new ClosableTabItem( ) { Header = "ANIMATION", DataContext = data, ToolTip = toolTip };
             tabcontrol_editor.Items.Add(tabItem);
             tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
             tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
@@ -202,14 +204,21 @@ namespace mapKnight.ToolKit.Windows {
         private void tabcontrol_editor_SelectionChanged (object sender, SelectionChangedEventArgs e) {
             if (e.Source != tabcontrol_editor) return;
             if (e.AddedItems.Count > 0) {
-                if (e.AddedItems[0] is TabItem) {
-                    TabItem selectedItem = (TabItem)e.AddedItems[0];
-                    switch (selectedItem.Content) {
-                        case MapEditor mapEditor:
-                            SetTabPageMenu(mapEditor.Menu);
+                if (e.AddedItems[0] is ClosableTabItem) {
+                    if(e.RemovedItems.Count > 0 && e.RemovedItems[0] is ClosableTabItem) {
+                        ((ClosableTabItem)e.RemovedItems[0]).Content = null;
+                    }
+                    ClosableTabItem selectedItem = (ClosableTabItem)e.AddedItems[0];
+                    switch (selectedItem.DataContext) {
+                        case EditorMap map:
+                            mapEditorInstance.Map = map;
+                            selectedItem.Content = mapEditorInstance;
+                            SetTabPageMenu(mapEditorInstance.Menu);
                             break;
-                        case AnimationControl animationControl:
-                            SetTabPageMenu(animationControl.Menu);
+                        case VertexAnimationData animationData:
+                            animationEditorInstance.Data = animationData;
+                            selectedItem.Content = animationEditorInstance;
+                            SetTabPageMenu(animationEditorInstance.Menu);
                             break;
                     }
                 }

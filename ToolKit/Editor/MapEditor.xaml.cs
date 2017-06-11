@@ -76,6 +76,42 @@ namespace mapKnight.ToolKit.Editor {
         };
         public List<FrameworkElement> Menu { get { return _Menu; } }
 
+        private EditorMap _Map;
+        public EditorMap Map {
+            get { return _Map; }
+            set {
+                _Map = value;
+
+                scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
+                scrollbar_horizontal.Maximum = _Map.Width;
+                scrollbar_horizontal.Value = 0;
+                scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
+                scrollbar_vertical.Maximum = _Map.Height;
+                scrollbar_vertical.Value = _Map.Height - tilemapview.RenderSize.Height / tilemapview.TileSize + 2;
+
+
+                if (GraphicsDevice != null) {
+                    _Map.Init(GraphicsDevice);
+                    UpdateListbox( );
+                    tilemapview.Map = _Map;
+                    tilemapview.Update( );
+                } else {
+                    tilemapview.DeviceInitialized += ( ) => {
+                        _Map.Init(GraphicsDevice);
+                        UpdateListbox( );
+                        tilemapview.Map = _Map;
+                        tilemapview.Update( );
+                    };
+                }
+
+                listview_brushes.Items.Clear( );
+                foreach (TileBrush brush in _Map.Brushes)
+                    listview_brushes.Items.Add(brush);
+            }
+        }
+
+        public GraphicsDevice GraphicsDevice;
+
         // Map Cache List von Koord Layer alter Wert IsRotation
         private Stack<List<Tuple<Point, int, int, bool>>> Cache = new Stack<List<Tuple<Point, int, int, bool>>>( );
 
@@ -85,18 +121,13 @@ namespace mapKnight.ToolKit.Editor {
         private Entity cachedEntity, currentlySelectingEntity, currentlySelectedEntity;
         private Func<Vector2, bool> currentVectorRequestCallback;
         private Microsoft.Xna.Framework.Vector2 selectedTile;
-        private EditorMap map;
-        private GraphicsDevice GraphicsDevice;
 
-        private Tile currentTile { get { return (wrappanel_tiles.SelectedIndex != -1) ? map.Tiles[wrappanel_tiles.SelectedIndex] : map.Tiles[0]; } }
+        private Tile currentTile { get { return (wrappanel_tiles.SelectedIndex != -1) ? Map.Tiles[wrappanel_tiles.SelectedIndex] : Map.Tiles[0]; } }
         private int currentTileIndex { get { return wrappanel_tiles.SelectedIndex; } }
         private TileBrush currentBrush { get { return (TileBrush)listview_brushes.SelectedItem; } }
 
-        public string Description { get { return ToString( ); } }
-
-        public MapEditor (EditorMap map) {
+        public MapEditor ( ) {
             InitializeComponent( );
-            this.map = map;
 
             IsVisibleChanged += (sender, e) => {
                 if (GraphicsDevice != null)
@@ -110,15 +141,12 @@ namespace mapKnight.ToolKit.Editor {
             };
 
             tilemapview.DeviceInitialized += ( ) => {
-                map.Init(GraphicsDevice);
-                UpdateListbox( );
-
                 entitylistbox.Init(tilemapview.GraphicsDevice);
                 tilemapview.EntityData = entitylistbox.GetEntityData( );
             };
 
             ((Image)_Menu[0]).MouseDown += (sender, e) => {
-                new ModifyMapWindow(map).ShowDialog( );
+                new ModifyMapWindow(Map).ShowDialog( );
             };
 
             ((CheckBox)_Menu[2]).Checked += (sender, e) => { tilemapview.ShowBackground = true; };
@@ -150,43 +178,22 @@ namespace mapKnight.ToolKit.Editor {
             App.Current.MainWindow.Closing += (sender, e) => {
                 Properties.Settings.Default.DefaultTileAttributes = JsonConvert.SerializeObject(defaultAttributes);
             };
-
-            Loaded += (sender, e) => {
-                scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
-                scrollbar_horizontal.Maximum = map.Width;
-                scrollbar_horizontal.Value = 0;
-                scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
-                scrollbar_vertical.Maximum = map.Height;
-                scrollbar_vertical.Value = map.Height - tilemapview.RenderSize.Height / tilemapview.TileSize + 2;
-            };
-
-            tilemapview.Map = map;
-        }
-
-        public void LoadTextures (Dictionary<string, BitmapImage> bitmapImages) {
-            if (GraphicsDevice != null) {
-                map.Init(GraphicsDevice, bitmapImages);
-            } else {
-                tilemapview.DeviceInitialized += ( ) => {
-                    map.Init(GraphicsDevice, bitmapImages);
-                };
-            }
         }
 
         public void ChangeTextureName (string oldname, string newname) {
-            Texture2D texture = map.XnaTextures[oldname];
-            map.XnaTextures.Remove(oldname);
-            map.XnaTextures.Add(newname, texture);
+            Texture2D texture = _Map.XnaTextures[oldname];
+            Map.XnaTextures.Remove(oldname);
+            Map.XnaTextures.Add(newname, texture);
 
-            BitmapImage image = map.WpfTextures[oldname];
-            map.WpfTextures.Remove(oldname);
-            map.WpfTextures.Add(newname, image);
+            BitmapImage image = Map.WpfTextures[oldname];
+            Map.WpfTextures.Remove(oldname);
+            Map.WpfTextures.Add(newname, image);
         }
 
         public void UpdateListbox ( ) {
             wrappanel_tiles.Items.Clear( );
-            foreach (Tile tile in map.Tiles) {
-                wrappanel_tiles.Items.Add(new ListViewEntry(map.WpfTextures[tile.Name]));
+            foreach (Tile tile in Map.Tiles) {
+                wrappanel_tiles.Items.Add(new ListViewEntry(Map.WpfTextures[tile.Name]));
             }
             if (wrappanel_tiles.HasItems)
                 wrappanel_tiles.SelectedIndex = 0;
@@ -198,7 +205,7 @@ namespace mapKnight.ToolKit.Editor {
             exportDialog.Filter = "TileTemplate|*.mkttemplate";
             if (exportDialog.ShowDialog( ) ?? false) {
                 using (Stream stream = File.OpenWrite(exportDialog.FileName))
-                    TileSerializer.Serialize(stream, map.Tiles, map.XnaTextures, tilemapview.GraphicsDevice);
+                    TileSerializer.Serialize(stream, Map.Tiles, Map.XnaTextures, tilemapview.GraphicsDevice);
             }
         }
 
@@ -272,7 +279,7 @@ namespace mapKnight.ToolKit.Editor {
             }
 
             if (cachedEntity != null) {
-                map.Entities.Remove(cachedEntity);
+                Map.Entities.Remove(cachedEntity);
                 cachedEntity = null;
             }
 
@@ -302,35 +309,35 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewClickTiles (object sender, MouseButtonEventArgs e) {
-            Point clickedTile = new Point(Math.Floor(selectedTile.X), map.Height - Math.Floor(selectedTile.Y) - 1);
+            Point clickedTile = new Point(Math.Floor(selectedTile.X), Map.Height - Math.Floor(selectedTile.Y) - 1);
             if (e.RightButton == MouseButtonState.Pressed) {
                 Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
-                map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                                    Tuple.Create(clickedTile,currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
             } else if (e.LeftButton == MouseButtonState.Pressed) {
                 switch (currentTool) {
                     case Tool.Eraser:
                         Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    new Tuple<Point, int, int,bool>(clickedTile,currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
-                        map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
-                        map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                                    new Tuple<Point, int, int,bool>(clickedTile,currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                        Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                        Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
 
                     case Tool.Filler:
-                        if (map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] == currentTileIndex)
+                        if (Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] == currentTileIndex)
                             break;
-                        int searching = map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
+                        int searching = Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
                         int replacing = currentTileIndex;
                         Queue<Point> pointQueue = new Queue<Point>( );
                         pointQueue.Enqueue(clickedTile);
                         List<Tuple<Point, int, int, bool>> changesForCache = new List<Tuple<Point, int, int, bool>>( );
                         while (pointQueue.Count > 0) {
                             Point current = pointQueue.Dequeue( );
-                            if (current.X < 0 || current.X >= map.Width || current.Y < 0 || current.Y >= map.Height)
+                            if (current.X < 0 || current.X >= Map.Width || current.Y < 0 || current.Y >= Map.Height)
                                 continue;
-                            if (map.Data[(int)current.X, (int)current.Y, currentLayer] == searching) {
-                                map.Data[(int)current.X, (int)current.Y, currentLayer] = replacing;
-                                map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                            if (Map.Data[(int)current.X, (int)current.Y, currentLayer] == searching) {
+                                Map.Data[(int)current.X, (int)current.Y, currentLayer] = replacing;
+                                Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                                 changesForCache.Add(Tuple.Create(current, currentLayer, searching, false));
 
                                 pointQueue.Enqueue(new Point(current.X - 1, current.Y));
@@ -344,30 +351,30 @@ namespace mapKnight.ToolKit.Editor {
 
                     case Tool.Pen:
                         Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
-                        map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
-                        map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                                    Tuple.Create(clickedTile,currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                        Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
+                        Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
 
                     case Tool.Pointer:
-                        map.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
+                        Map.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
                         break;
 
                     case Tool.Rotater:
-                        if (map.Tiles[map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer]].Name == "None") {
+                        if (Map.Tiles[Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer]].Name == "None") {
                             for (int i = 2; i > -1; i--) {
-                                if (map.Tiles[map.Data[(int)clickedTile.X, (int)clickedTile.Y, i]].Name != "None") {
+                                if (Map.Tiles[Map.Data[(int)clickedTile.X, (int)clickedTile.Y, i]].Name != "None") {
                                     ((RadioButton)_Menu[9 + i]).IsChecked = true;
                                 }
                             }
                         }
-                        float tileRotation = map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
+                        float tileRotation = Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
                         Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
                                     Tuple.Create(clickedTile,currentLayer, (int)(tileRotation * 2), true)});
                         tileRotation += 0.5f;
                         tileRotation %= 2f;
-                        if (map.GetTile((int)clickedTile.X, (int)clickedTile.Y, currentLayer).Name != "None")
-                            map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = tileRotation;
+                        if (Map.GetTile((int)clickedTile.X, (int)clickedTile.Y, currentLayer).Name != "None")
+                            Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = tileRotation;
                         break;
                 }
                 tilemapview.Update( );
@@ -377,8 +384,8 @@ namespace mapKnight.ToolKit.Editor {
         private Vector2 GetEntityCenterRaw (MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Vector2 selectedTile = new Vector2(
-                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, map.Width)),
-                (float)Math.Max(0, Math.Min(map.Size.Height - positionOnControl.Y / tilemapview.TileSize - tilemapview.Offset.Y, map.Height)));
+                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, Map.Width)),
+                (float)Math.Max(0, Math.Min(Map.Size.Height - positionOnControl.Y / tilemapview.TileSize - tilemapview.Offset.Y, Map.Height)));
             return selectedTile;
         }
 
@@ -397,9 +404,9 @@ namespace mapKnight.ToolKit.Editor {
             switch (currentTool) {
                 case Tool.God:
                     Vector2 clickedPosition = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
-                    entitylistbox.GetCurrentFinalConfiguration( ).Create(clickedPosition, map, Keyboard.IsKeyDown(Key.LeftShift));
+                    entitylistbox.GetCurrentFinalConfiguration( ).Create(clickedPosition, Map, Keyboard.IsKeyDown(Key.LeftShift));
                     if (cachedEntity != null) {
-                        map.Entities.Remove(cachedEntity);
+                        Map.Entities.Remove(cachedEntity);
                         cachedEntity = null;
                     }
                     tilemapview.Update( );
@@ -427,7 +434,7 @@ namespace mapKnight.ToolKit.Editor {
                 case Tool.Trashcan:
                     clickedEntity = GetClickedEntity(e);
                     if (clickedEntity != null) {
-                        map.Entities.Remove(clickedEntity);
+                        Map.Entities.Remove(clickedEntity);
                         tilemapview.Update( );
                         currentlySelectingEntity = null;
                     }
@@ -452,9 +459,9 @@ namespace mapKnight.ToolKit.Editor {
 
         private Entity GetClickedEntity (MouseEventArgs e) {
             Vector2 clickedPosition = GetEntityCenterRaw(e);
-            for (int i = map.Entities.Count - 1; i >= 0; i--) {
-                if (map.Entities[i].Transform.Intersects(clickedPosition)) {
-                    return map.Entities[i];
+            for (int i = Map.Entities.Count - 1; i >= 0; i--) {
+                if (Map.Entities[i].Transform.Intersects(clickedPosition)) {
+                    return Map.Entities[i];
                 }
             }
             return null;
@@ -468,7 +475,7 @@ namespace mapKnight.ToolKit.Editor {
         private void tilemapview_MouseLeave (object sender, MouseEventArgs e) {
             tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(-1, -1);
             if (cachedEntity != null) {
-                map.Entities.Remove(cachedEntity);
+                Map.Entities.Remove(cachedEntity);
                 cachedEntity = null;
             }
             tilemapview.Update( );
@@ -491,12 +498,12 @@ namespace mapKnight.ToolKit.Editor {
         private void HandleTilemapViewMoveTiles (object sender, MouseEventArgs e, bool updated) {
             if (!updated) return;
 
-            Point clickedTile = new Point(Math.Floor(selectedTile.X), map.Height - Math.Floor(selectedTile.Y) - 1);
+            Point clickedTile = new Point(Math.Floor(selectedTile.X), Map.Height - Math.Floor(selectedTile.Y) - 1);
             if (e.RightButton == MouseButtonState.Pressed) {
-                Tuple<Point, int, int, bool> delta = Tuple.Create(clickedTile, currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false);
+                Tuple<Point, int, int, bool> delta = Tuple.Create(clickedTile, currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false);
                 if (Cache.Count > 0) {
                     Tuple<Point, int, int, bool> last = Cache.Peek( ).Last( );
-                    if (map.Data[(int)last.Item1.X, (int)last.Item1.Y, last.Item2] == 0) {
+                    if (Map.Data[(int)last.Item1.X, (int)last.Item1.Y, last.Item2] == 0) {
                         Cache.Peek( ).Add(delta);
                     } else {
                         Cache.Push(new List<Tuple<Point, int, int, bool>>( ) { delta });
@@ -504,24 +511,24 @@ namespace mapKnight.ToolKit.Editor {
                 } else {
                     Cache.Push(new List<Tuple<Point, int, int, bool>>( ) { delta });
                 }
-                map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                 updated = true;
             } else if (e.LeftButton == MouseButtonState.Pressed) {
                 switch (currentTool) {
                     case Tool.Eraser:
-                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
-                        map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
-                        map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
+                        Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                        Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
 
                     case Tool.Pen:
-                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
-                        map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
-                        map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
+                        Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
+                        Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
 
                     case Tool.Pointer:
-                        map.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
+                        Map.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
                         break;
                 }
                 updated = updated || (currentTool != Tool.Filler && currentTool != Tool.Rotater);
@@ -534,9 +541,9 @@ namespace mapKnight.ToolKit.Editor {
             Vector2 entityLocation = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
             switch (currentTool) {
                 case Tool.God:
-                    tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(entityLocation.X - tilemapview.Offset.X, map.Height - entityLocation.Y - tilemapview.Offset.Y);
+                    tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(entityLocation.X - tilemapview.Offset.X, Map.Height - entityLocation.Y - tilemapview.Offset.Y);
                     if (cachedEntity == null) {
-                        cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, map, Keyboard.IsKeyDown(Key.LeftShift));
+                        cachedEntity = entitylistbox.GetCurrentShadowConfiguration( ).Create(entityLocation, Map, Keyboard.IsKeyDown(Key.LeftShift));
                     } else {
                         if (Keyboard.IsKeyDown(Key.LeftShift))
                             entityLocation.Y += cachedEntity.Transform.Height / 2;
@@ -584,7 +591,7 @@ namespace mapKnight.ToolKit.Editor {
                         clickedPosition.X = (float)Math.Floor(clickedPosition.X) + 0.5f;
                         clickedPosition.Y = (float)Math.Floor(clickedPosition.Y) + 0.5f;
                     }
-                    float rx = clickedPosition.X - tilemapview.Offset.X, ry = map.Height - clickedPosition.Y - tilemapview.Offset.Y;
+                    float rx = clickedPosition.X - tilemapview.Offset.X, ry = Map.Height - clickedPosition.Y - tilemapview.Offset.Y;
                     if (rx != tilemapview.CurrentSelection.X || ry != tilemapview.CurrentSelection.Y) {
                         tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(rx, ry);
                         tilemapview.Update( );
@@ -598,18 +605,18 @@ namespace mapKnight.ToolKit.Editor {
 
             if (e.LeftButton == MouseButtonState.Pressed) {
                 int px0 = (int)selectedTile.X;
-                int py0 = map.Height - (int)selectedTile.Y - 1;
-                map.Data[px0, py0, currentLayer] = Array.FindIndex(map.Tiles, tile => tile.Name == currentBrush.Centre[0].tile.Name);
+                int py0 = Map.Height - (int)selectedTile.Y - 1;
+                Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].tile.Name);
 
                 for (int x = -1; x <= 1; x++) {
                     for (int y = -1; y <= 1; y++) {
                         int px = px0 + x;
                         int py = py0 + y;
 
-                        if (px >= 0 && px < map.Width && py >= 0 && py < map.Height && currentBrush.Contains(map.Tiles[map.Data[px, py, currentLayer]].Name)) {
+                        if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
                             (Tile tile, float rotation) replacement = currentBrush.Get(GetBrushData(px, py));
-                            map.Data[px, py, currentLayer] = Array.FindIndex(map.Tiles, tile => tile.Name == replacement.tile.Name);
-                            map.Rotations[px, py, currentLayer] = replacement.rotation;
+                            Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
+                            Map.Rotations[px, py, currentLayer] = replacement.rotation;
                         }
                     }
                 }
@@ -624,16 +631,16 @@ namespace mapKnight.ToolKit.Editor {
              * 5 6 7
              */
             return new[ ] {
-                ((x - 1 >= 0 && y + 1 < map.Height) ? currentBrush.Contains(map.Tiles[map.Data[x - 1, y + 1, currentLayer]].Name): true),
-                ((y + 1 < map.Height) ? currentBrush.Contains(map.Tiles[map.Data[x, y + 1, currentLayer]].Name): true),
-                ((x + 1 < map.Width && y + 1 < map.Height) ? currentBrush.Contains(map.Tiles[map.Data[x + 1, y + 1, currentLayer]].Name): true),
+                ((x - 1 >= 0 && y + 1 < Map.Height) ? currentBrush.Contains(Map.Tiles[Map.Data[x - 1, y + 1, currentLayer]].Name): true),
+                ((y + 1 < Map.Height) ? currentBrush.Contains(Map.Tiles[Map.Data[x, y + 1, currentLayer]].Name): true),
+                ((x + 1 < Map.Width && y + 1 < Map.Height) ? currentBrush.Contains(Map.Tiles[Map.Data[x + 1, y + 1, currentLayer]].Name): true),
 
-                ((x - 1 >= 0) ? currentBrush.Contains(map.Tiles[map.Data[x - 1, y, currentLayer]].Name): true),
-                ((x + 1 < map.Width) ? currentBrush.Contains(map.Tiles[map.Data[x + 1, y, currentLayer]].Name): true),
+                ((x - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x - 1, y, currentLayer]].Name): true),
+                ((x + 1 < Map.Width) ? currentBrush.Contains(Map.Tiles[Map.Data[x + 1, y, currentLayer]].Name): true),
 
-                ((x - 1 >= 0 && y - 1 >= 0) ? currentBrush.Contains(map.Tiles[map.Data[x - 1, y - 1, currentLayer]].Name): true),
-                ((y - 1 >= 0) ? currentBrush.Contains(map.Tiles[map.Data[x, y - 1, currentLayer]].Name): true),
-                ((x + 1 < map.Width && y - 1 >= 0) ? currentBrush.Contains(map.Tiles[map.Data[x + 1, y - 1, currentLayer]].Name): true),
+                ((x - 1 >= 0 && y - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x - 1, y - 1, currentLayer]].Name): true),
+                ((y - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x, y - 1, currentLayer]].Name): true),
+                ((x + 1 < Map.Width && y - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x + 1, y - 1, currentLayer]].Name): true),
             };
         }
 
@@ -654,10 +661,10 @@ namespace mapKnight.ToolKit.Editor {
             foreach (Tuple<Point, int, int, bool> undoData in Cache.Pop( )) {
                 if (undoData.Item4) {
                     // tile got rotated
-                    map.Rotations[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3 / 2f;
+                    Map.Rotations[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3 / 2f;
                 } else {
                     // tile got changed
-                    map.Data[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3;
+                    Map.Data[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3;
                 }
             }
             tilemapview.Update( );
@@ -666,13 +673,13 @@ namespace mapKnight.ToolKit.Editor {
         private bool UpdateSelectedTile (MouseEventArgs e) {
             Point positionOnControl = e.GetPosition(tilemapview);
             Microsoft.Xna.Framework.Vector2 nextSelectedTile = new Microsoft.Xna.Framework.Vector2(
-                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, map.Width - 1)),
-                (float)Math.Max(0, Math.Min(positionOnControl.Y / tilemapview.TileSize + tilemapview.Offset.Y, map.Height - 1)));
+                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, Map.Width - 1)),
+                (float)Math.Max(0, Math.Min(positionOnControl.Y / tilemapview.TileSize + tilemapview.Offset.Y, Map.Height - 1)));
             bool changed = Math.Floor(selectedTile.X) != Math.Floor(nextSelectedTile.X) || Math.Floor(selectedTile.Y) != Math.Floor(nextSelectedTile.Y);
 
             selectedTile = nextSelectedTile;
             text_xpos.Text = Math.Floor(selectedTile.X).ToString( );
-            text_ypos.Text = Math.Floor(map.Height - selectedTile.Y).ToString( );
+            text_ypos.Text = Math.Floor(Map.Height - selectedTile.Y).ToString( );
             tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2((float)Math.Floor(selectedTile.X), (float)Math.Floor(selectedTile.Y)) - tilemapview.Offset;
             return changed;
         }
@@ -683,7 +690,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void wrappanel_tiles_Drop (object sender, DragEventArgs e) {
-            if (map == null)
+            if (Map == null)
                 return;
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
@@ -699,14 +706,14 @@ namespace mapKnight.ToolKit.Editor {
         private void wrappanel_tiles_SelectionChanged (object sender, SelectionChangedEventArgs e) {
             int oldSelection = (e.RemovedItems.Count > 0) ? wrappanel_tiles.Items.IndexOf(e.RemovedItems[0]) : -1;
             if (oldSelection > -1) {
-                if (!map.Tiles.Any(t => t.Name == textbox_tile_name.Text)) {
-                    ChangeTextureName(map.Tiles[oldSelection].Name, textbox_tile_name.Text);
-                    map.Tiles[oldSelection].Name = textbox_tile_name.Text;
+                if (!Map.Tiles.Any(t => t.Name == textbox_tile_name.Text)) {
+                    ChangeTextureName(Map.Tiles[oldSelection].Name, textbox_tile_name.Text);
+                    Map.Tiles[oldSelection].Name = textbox_tile_name.Text;
                 }
-                map.Tiles[oldSelection].Attributes.Clear( );
+                Map.Tiles[oldSelection].Attributes.Clear( );
                 foreach (AttributeListViewEntry entry in listview_tile_attributes.Items) {
                     if (entry.Active)
-                        map.Tiles[oldSelection].Attributes.Add((TileAttribute)Enum.Parse(typeof(TileAttribute), entry.Attribute), entry.Value);
+                        Map.Tiles[oldSelection].Attributes.Add((TileAttribute)Enum.Parse(typeof(TileAttribute), entry.Attribute), entry.Value);
                 }
             }
 
@@ -756,7 +763,7 @@ namespace mapKnight.ToolKit.Editor {
             int index = wrappanel_tiles.SelectedIndex;
             if (index > 0) {
                 wrappanel_tiles.Items.RemoveAt(index);
-                map.RemoveTile(index);
+                Map.RemoveTile(index);
                 tilemapview.Update( );
             }
         }
@@ -774,12 +781,12 @@ namespace mapKnight.ToolKit.Editor {
                 BitmapImage tileImage = LoadTileImage(opendialog.FileName);
 
                 int index = wrappanel_tiles.SelectedIndex;
-                Tile prevTile = map.Tiles[index];
-                map.WpfTextures.Remove(prevTile.Name);
-                map.XnaTextures.Remove(prevTile.Name);
+                Tile prevTile = Map.Tiles[index];
+                Map.WpfTextures.Remove(prevTile.Name);
+                Map.XnaTextures.Remove(prevTile.Name);
 
-                map.LoadTexture(tileName, tileImage, GraphicsDevice);
-                map.Tiles[index].Name = tileName;
+                Map.LoadTexture(tileName, tileImage, GraphicsDevice);
+                Map.Tiles[index].Name = tileName;
                 wrappanel_tiles.Items[wrappanel_tiles.SelectedIndex] = new ListViewEntry(tileImage);
 
                 tilemapview.Update( );
@@ -803,20 +810,20 @@ namespace mapKnight.ToolKit.Editor {
 
         private void AddTile (string imagefile) {
             string tileName = Path.GetFileNameWithoutExtension(imagefile);
-            if (checkbox_auto.IsChecked ?? false && !map.Tiles.Any(t => t.Name == tileName)) {
+            if (checkbox_auto.IsChecked ?? false && !Map.Tiles.Any(t => t.Name == tileName)) {
                 // add tile
                 BitmapImage tileImage = LoadTileImage(imagefile);
 
-                map.LoadTexture(tileName, tileImage, GraphicsDevice);
-                map.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes), Name = tileName });
+                Map.LoadTexture(tileName, tileImage, GraphicsDevice);
+                Map.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes), Name = tileName });
                 wrappanel_tiles.Items.Add(new ListViewEntry(tileImage));
             } else {
                 // open add tile window
-                AddTileWindow addTileDialog = new AddTileWindow(imagefile, map.Tiles.Select(t => t.Name), defaultAttributes);
+                AddTileWindow addTileDialog = new AddTileWindow(imagefile, Map.Tiles.Select(t => t.Name), defaultAttributes);
                 if (addTileDialog.ShowDialog( ) ?? false) {
-                    if (map.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
-                        map.LoadTexture(addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2, GraphicsDevice);
-                        map.AddTile(addTileDialog.Created.Item1);
+                    if (Map.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
+                        Map.LoadTexture(addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2, GraphicsDevice);
+                        Map.AddTile(addTileDialog.Created.Item1);
                         wrappanel_tiles.Items.Add(new ListViewEntry(addTileDialog.Created.Item2));
                     } else {
                         MessageBox.Show("Please don't add tiles with the same name twice!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -835,17 +842,18 @@ namespace mapKnight.ToolKit.Editor {
             image.BeginInit( );
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.CreateOptions = BitmapCreateOptions.None;
-            image.DecodePixelWidth = Map.TILE_PXL_SIZE;
-            image.DecodePixelHeight = Map.TILE_PXL_SIZE;
+            image.DecodePixelWidth = Core.Map.TILE_PXL_SIZE;
+            image.DecodePixelHeight = Core.Map.TILE_PXL_SIZE;
             image.UriSource = new Uri(file);
             image.EndInit( );
             return image;
         }
 
         private void CommandBinding_CreateBrush_Executed (object sender, ExecutedRoutedEventArgs e) {
-            AddBrushDialog addBrushDialog = new AddBrushDialog(map);
+            AddBrushDialog addBrushDialog = new AddBrushDialog(Map);
             if (addBrushDialog.ShowDialog( ) ?? false) {
                 listview_brushes.Items.Add(addBrushDialog.DialogResultBrush);
+                Map.Brushes.Add(addBrushDialog.DialogResultBrush);
             }
         }
 
@@ -855,6 +863,7 @@ namespace mapKnight.ToolKit.Editor {
 
         private void CommandBinding_RemoveBrush_Executed (object sender, ExecutedRoutedEventArgs e) {
             listview_brushes.Items.RemoveAt(listview_brushes.SelectedIndex);
+            Map.Brushes.RemoveAt(listview_brushes.SelectedIndex);
         }
 
         private void CommandBinding_RemoveBrush_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
@@ -870,10 +879,6 @@ namespace mapKnight.ToolKit.Editor {
             } else {
                 SelectTool(Tool.Brush);
             }
-        }
-
-        public override string ToString ( ) {
-            return $"{map.Name}, Width: {map.Width}, Height: {map.Height}";
         }
     }
 }

@@ -71,7 +71,6 @@ namespace mapKnight.ToolKit.Controls.Xna {
         private void DoStartUp ( ) {
             if (DesignerProperties.GetIsInDesignMode(this) == false) {
                 if (InitializeGraphicsDevice( )) {
-                    SpriteBatch = new SpriteBatch(GraphicsDevice);
                     LoadContent( );
                 }
             }
@@ -93,13 +92,15 @@ namespace mapKnight.ToolKit.Controls.Xna {
                 GraphicsService = GraphicsDeviceService.AddRef(((HwndSource)presentationSource).Handle);
 
                 // create the image source
-                if(RenderSize.Height == 0 || RenderSize.Width == 0) {
+                if (RenderSize.Height == 0 || RenderSize.Width == 0) {
                     GraphicsService = null;
                     return false;
                 }
                 imageSource = new ImageSource(
                     GraphicsDevice, (int)RenderSize.Width, (int)RenderSize.Height);
                 rootImage.Source = imageSource.WriteableBitmap;
+
+                SpriteBatch = new SpriteBatch(GraphicsDevice);
 
                 // hook the rendering event
                 // CompositionTarget.Rendering += CompositionTarget_Rendering;

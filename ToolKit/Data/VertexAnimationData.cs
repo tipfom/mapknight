@@ -12,6 +12,8 @@ using Point = System.Windows.Point;
 
 namespace mapKnight.ToolKit.Data {
     public class VertexAnimationData {
+        public string Description { get { return Meta.Entity; } }
+
         public ObservableCollection<VertexAnimation> Animations = new ObservableCollection<VertexAnimation>( );
         public ObservableCollection<VertexBone> Bones = new ObservableCollection<VertexBone>( );
         public AnimationMetaData Meta;

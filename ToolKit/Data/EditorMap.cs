@@ -17,11 +17,18 @@ namespace mapKnight.ToolKit.Data {
         private const int TILE_LIGHT_RESOLUTION = 10;
         private const float TILE_LIGHT_DISTANCE = 2 * TILE_LIGHT_RESOLUTION - .5f;
 
+        public string Description {
+            get {
+                return $"{Name}, Width: {Width}, Height: {Height}";
+            }
+        }
+
         public float[ , , ] Rotations;
         public byte[ ] ImageData;
         public Dictionary<string, Texture2D> XnaTextures = new Dictionary<string, Texture2D>( );
         public Dictionary<string, BitmapImage> WpfTextures = new Dictionary<string, BitmapImage>( );
-        
+        public List<TileBrush> Brushes = new List<TileBrush>( );
+
         public EditorMap (Size size, string creator, string name) :
                 base(size, creator, name) {
             Rotations = new float[Width, Height, 3];
@@ -54,13 +61,10 @@ namespace mapKnight.ToolKit.Data {
 
                 LoadTexture("None", emptyImage, g);
                 Tiles = new Tile[ ] { new Tile( ) { Name = "None", Attributes = new Dictionary<TileAttribute, string>( ) } };
-            }
-        }
-
-        public void Init (GraphicsDevice g, Dictionary<string, BitmapImage> wpfTextures) {
-            WpfTextures = wpfTextures;
-            foreach (var entry in WpfTextures) {
-                XnaTextures.Add(entry.Key, entry.Value.ToTexture2D(g));
+            } else if (WpfTextures.Count > 0 && XnaTextures.Count == 0) {
+                foreach (var entry in WpfTextures) {
+                    XnaTextures.Add(entry.Key, entry.Value.ToTexture2D(g));
+                }
             }
         }
 
