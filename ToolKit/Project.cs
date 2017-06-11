@@ -75,11 +75,18 @@ namespace mapKnight.ToolKit {
                         using (Stream imageStream = GetOrCreateStream(false, dir, name + ".png")) {
                             imageStream.Read(loadedMap.ImageData = new byte[(int)imageStream.Length], 0, (int)imageStream.Length);
                         }
+
+                        if (Contains(dir, name + ".brushes")) {
+                            using (Stream brushStream = GetOrCreateStream(false, dir, name + ".brushes"))
+                            using (StreamReader reader = new StreamReader(brushStream))
+                                loadedMap.Brushes.AddRange(JsonConvert.DeserializeObject<List<TileBrush>>(reader.ReadToEnd( )));
+                        }
+
                         Maps.Add(loadedMap);
                     }
                 }
             }
-
+            
             // Load Animations
             foreach (string file in GetAllEntries("animations")) {
                 if (System.IO.Path.GetFileName(file) == ".meta") {

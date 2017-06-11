@@ -2,6 +2,7 @@
 using mapKnight.Core.World;
 using mapKnight.ToolKit.Serializer;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -66,6 +67,10 @@ namespace mapKnight.ToolKit.Data {
                     XnaTextures.Add(entry.Key, entry.Value.ToTexture2D(g));
                 }
             }
+
+            foreach (TileBrush brush in Brushes)
+            foreach (TileBrushStroke stroke in brush.All( ))
+                    stroke.GeneratePreviewImage(this);
         }
 
         public bool HasCollider (int x, int y) {
@@ -81,6 +86,10 @@ namespace mapKnight.ToolKit.Data {
             Texture = Path.GetFileNameWithoutExtension(Name + ".png");
             using (Stream stream = project.GetOrCreateStream(false, "maps", Name, Name + ".map"))
                 CreateCompileVersion( ).Serialize(stream, new WindowsEntitySerializer( ));
+
+            using (Stream stream = project.GetOrCreateStream(false, "maps", Name, Name + ".brushes"))
+            using (StreamWriter writer = new StreamWriter(stream))
+                writer.WriteLine(JsonConvert.SerializeObject(Brushes));
         }
 
         public void LoadTexture (string name, BitmapImage image, GraphicsDevice g) {

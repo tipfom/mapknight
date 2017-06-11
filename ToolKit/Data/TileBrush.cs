@@ -53,19 +53,19 @@ namespace mapKnight.ToolKit.Data {
 
         public bool IsValid (EditorMap map) {
             return
-                Centre.Length > 0 &&
-                CTR.Length > 0 &&
-                CTL.Length > 0 &&
-                CBR.Length > 0 &&
-                CBL.Length > 0 &&
-                IT.Length > 0 &&
-                IB.Length > 0 &&
-                IR.Length > 0 &&
-                IL.Length > 0 &&
-                LTR.Length > 0 &&
-                LTL.Length > 0 &&
-                LBR.Length > 0 &&
-                LBL.Length > 0;
+                Centre.Count > 0 &&
+                CTR.Count > 0 &&
+                CTL.Count > 0 &&
+                CBR.Count > 0 &&
+                CBL.Count > 0 &&
+                IT.Count > 0 &&
+                IB.Count > 0 &&
+                IR.Count > 0 &&
+                IL.Count > 0 &&
+                LTR.Count > 0 &&
+                LTL.Count > 0 &&
+                LBR.Count > 0 &&
+                LBL.Count > 0;
         }
 
         public (Tile tile, float rotation) Get (params bool[ ] data) {
@@ -106,7 +106,7 @@ namespace mapKnight.ToolKit.Data {
             float targetPossibility = (float)random.NextDouble( );
             int currentIndex = 0;
 
-            while (currentPossibility < targetPossibility && currentIndex < array.Length) {
+            while (currentPossibility < targetPossibility && currentIndex < array.Count) {
                 currentPossibility += array[currentIndex].Possibility / summedPossibility;
                 currentIndex++;
             }
@@ -114,7 +114,7 @@ namespace mapKnight.ToolKit.Data {
             return (array[currentIndex - 1].Tile, array[currentIndex - 1].Rotation);
         }
 
-        private IEnumerable<TileBrushStroke> All ( ) {
+        public IEnumerable<TileBrushStroke> All ( ) {
             foreach (TileBrushStroke item in Centre) yield return item;
             foreach (TileBrushStroke item in CTR) yield return item;
             foreach (TileBrushStroke item in CTL) yield return item;

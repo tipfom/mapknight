@@ -53,67 +53,67 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
 
         private void Image_CornerTL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CTL, ref indexCTL, image_cornertl);
-            ImageClick(image_cornertl, image_d, (DialogResultBrush.CTL.Length > indexCTL) ? DialogResultBrush.CTL[indexCTL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornertl, image_d, (DialogResultBrush.CTL.Count > indexCTL) ? DialogResultBrush.CTL[indexCTL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
         }
         
         private void Image_CornerTR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CTR, ref indexCTR, image_cornertr);
-            ImageClick(image_cornertr, image_d, (DialogResultBrush.CTR.Length > indexCTR) ? DialogResultBrush.CTR[indexCTR].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornertr, image_d, (DialogResultBrush.CTR.Count > indexCTR) ? DialogResultBrush.CTR[indexCTR].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_CornerBR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CBR, ref indexCBR, image_cornerbr);
-            ImageClick(image_cornerbr, image_d, (DialogResultBrush.CBR.Length > indexCBR) ? DialogResultBrush.CBR[indexCBR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornerbr, image_d, (DialogResultBrush.CBR.Count > indexCBR) ? DialogResultBrush.CBR[indexCBR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_CornerBL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CBL, ref indexCBL, image_cornerbl);
-            ImageClick(image_cornerbl, image_d, (DialogResultBrush.CBL.Length > indexCBL) ? DialogResultBrush.CBL[indexCBL].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornerbl, image_d, (DialogResultBrush.CBL.Count > indexCBL) ? DialogResultBrush.CBL[indexCBL].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_Centre_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.Centre, ref indexCentre, image_centre);
-            ImageClick(image_centre, image_O, (DialogResultBrush.Centre.Length > indexCentre) ? DialogResultBrush.Centre[indexCentre].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_centre, image_O, (DialogResultBrush.Centre.Count > indexCentre) ? DialogResultBrush.Centre[indexCentre].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IL, ref indexIL, image_Il);
-            ImageClick(image_Il, image_I, (DialogResultBrush.IL.Length > indexIL) ? DialogResultBrush.IL[indexIL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Il, image_I, (DialogResultBrush.IL.Count > indexIL) ? DialogResultBrush.IL[indexIL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IT_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IT, ref indexIT, image_It);
-            ImageClick(image_It, image_I, (DialogResultBrush.IT.Length > indexIT) ? DialogResultBrush.IT[indexIT].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_It, image_I, (DialogResultBrush.IT.Count > indexIT) ? DialogResultBrush.IT[indexIT].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IR, ref indexIR, image_Ir);
-            ImageClick(image_Ir, image_I, (DialogResultBrush.IR.Length > indexIR) ? DialogResultBrush.IR[indexIR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ir, image_I, (DialogResultBrush.IR.Count > indexIR) ? DialogResultBrush.IR[indexIR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IB_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IB, ref indexIB, image_Ib);
-            ImageClick(image_Ib, image_I, (DialogResultBrush.IB.Length > indexIB) ? DialogResultBrush.IB[indexIB].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ib, image_I, (DialogResultBrush.IB.Count > indexIB) ? DialogResultBrush.IB[indexIB].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LBL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LBL, ref indexLBL, image_Lbl);
-            ImageClick(image_Lbl, image_L, (DialogResultBrush.LBL.Length > indexLBL) ? DialogResultBrush.LBL[indexLBL].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Lbl, image_L, (DialogResultBrush.LBL.Count > indexLBL) ? DialogResultBrush.LBL[indexLBL].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LBR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LBR, ref indexLBR, image_Lbr);
-            ImageClick(image_Lbr, image_L, (DialogResultBrush.LBR.Length > indexLBR) ? DialogResultBrush.LBR[indexLBR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Lbr, image_L, (DialogResultBrush.LBR.Count > indexLBR) ? DialogResultBrush.LBR[indexLBR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LTL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LTL, ref indexLTL, image_Ltl);
-            ImageClick(image_Ltl, image_L, (DialogResultBrush.LTL.Length > indexLTL) ? DialogResultBrush.LTL[indexLTL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ltl, image_L, (DialogResultBrush.LTL.Count > indexLTL) ? DialogResultBrush.LTL[indexLTL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LTR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LTR, ref indexLTR, image_Ltr);
-            ImageClick(image_Ltr, image_L, (DialogResultBrush.LTR.Length > indexLTR) ? DialogResultBrush.LTR[indexLTR].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ltr, image_L, (DialogResultBrush.LTR.Count > indexLTR) ? DialogResultBrush.LTR[indexLTR].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Button_NextCentre_Click (object sender, RoutedEventArgs e) {
@@ -170,16 +170,17 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
 
         private void ButtonNextClick (ref int index, ref TileBrushStrokeCollection brushRef, Image image, BitmapImage defaultImage, float initialRotation) {
             index++;
-            if (index > brushRef.Length) index = 0;
-            ImageClick(image, defaultImage, (brushRef.Length > index) ? brushRef[index].Tile : (Tile?)null, initialRotation, false);
+            if (index > brushRef.Count) index = 0;
+            ImageClick(image, defaultImage, (brushRef.Count > index) ? brushRef[index].Tile : (Tile?)null, initialRotation, false);
         }
 
         private void SetTile (ref TileBrushStrokeCollection brushRef, ref int index, Image image) {
             if (listview_tiles.SelectedItem != null) {
-                if (brushRef.Length <= index) {
-                    Array.Resize(ref brushRef.Strokes, index + 1);
+                if (brushRef.Count <= index) {
+                    brushRef.Add(new TileBrushStroke(map.Tiles[listview_tiles.SelectedIndex], (float)(((RotateTransform)image.RenderTransform).Angle / 180), 1));
+                } else {
+                    brushRef[index] = new TileBrushStroke(map.Tiles[listview_tiles.SelectedIndex], (float)(((RotateTransform)image.RenderTransform).Angle / 180), 1);
                 }
-                brushRef[index] = new TileBrushStroke(map.Tiles[listview_tiles.SelectedIndex], (float)(((RotateTransform)image.RenderTransform).Angle / 180), 1);
             }
         }
 
