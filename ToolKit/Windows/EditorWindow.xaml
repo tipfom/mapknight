@@ -26,6 +26,9 @@
                 <MenuItem Header="SAVE" Height="22" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
                 <MenuItem Header="COMPILE" Height="22" Click="MenuItemCompile_Click" Icon="{StaticResource ResourceKey=image_project_compile}"/>
             </MenuItem>
+            <MenuItem Header="_TOOLS">
+                <MenuItem Header="PACK TEXTURE" Click="MenuItem_PackTexture_Click"/>
+            </MenuItem>
             <MenuItem Header="_ABOUT" Click="About_Click"/>
         </Menu>
         <TabControl Name="tabcontrol_editor" SelectionChanged="tabcontrol_editor_SelectionChanged">

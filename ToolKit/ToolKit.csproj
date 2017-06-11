@@ -188,6 +188,9 @@
     <Compile Include="Windows\Dialogs\EditBonesDialog.xaml.cs">
       <DependentUpon>EditBonesDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\Dialogs\PackTextureDialog.xaml.cs">
+      <DependentUpon>PackTextureDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Dialogs\ResizeEntityDialog.xaml.cs">
       <DependentUpon>ResizeEntityDialog.xaml</DependentUpon>
     </Compile>
@@ -293,6 +296,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Dialogs\EditBonesDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Dialogs\PackTextureDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

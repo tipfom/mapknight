@@ -15,6 +15,7 @@ using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Point = System.Drawing.Point;
 using Rectangle = System.Drawing.Rectangle;
 using Size = System.Drawing.Size;
+using System.IO.Compression;
 
 namespace mapKnight.ToolKit.Controls {
 
@@ -42,19 +43,28 @@ namespace mapKnight.ToolKit.Controls {
 
         public TextureCreationControl ( ) {
             InitializeComponent( );
-            listbox_textures.ItemsSource = new ObservableCollection<TextureItem>();
+            listbox_textures.ItemsSource = new ObservableCollection<TextureItem>( );
         }
 
-        public void Build (string texturePath) {
+        public void Build (string path) {
             Bitmap image;
             Dictionary<string, Rectangle> dictionary;
-            ImagePacker.PackImage(listbox_textures.ItemsSource.Cast<TextureItem>().Select(item => item.FullFileName), false, false, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, 1, true, out image, out dictionary);
-            image.Save(texturePath + ".png", ImageFormat.Png);
-            // parse dictionary
-            Dictionary<string, int[ ]> dictionaryToSerialize = dictionary.ToDictionary(key => Path.GetFileNameWithoutExtension(key.Key), value => new int[ ] { value.Value.X, value.Value.Y, value.Value.Width, value.Value.Height });
-            string dictionarySerialized = JsonConvert.SerializeObject(dictionaryToSerialize);
-            File.WriteAllText(texturePath + ".json", dictionarySerialized);
-            MessageBox.Show("finished");
+            ImagePacker.PackImage(listbox_textures.ItemsSource.Cast<TextureItem>( ).Select(item => item.FullFileName), false, false, MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, 1, true, out image, out dictionary);
+
+            string name = Path.GetFileNameWithoutExtension(path);
+            using (ZipArchive archive = new ZipArchive(File.Create(path), ZipArchiveMode.Create, false)) {
+                using (Stream imageStream = archive.CreateEntry($"{name}.png").Open( )) {
+                    image.Save(imageStream, ImageFormat.Png);
+                }
+
+                using (Stream contentStream = archive.CreateEntry($"{name}.json").Open( ))
+                using (StreamWriter contentWriter = new StreamWriter(contentStream)) {
+                    contentWriter.Write(JsonConvert.SerializeObject(dictionary.ToDictionary(
+                        key => Path.GetFileNameWithoutExtension(key.Key),
+                        value => new int[ ] { value.Value.X, value.Value.Y, value.Value.Width, value.Value.Height })
+                        ));
+                }
+            }
         }
 
         private void button_discard_Click (object sender, RoutedEventArgs e) {

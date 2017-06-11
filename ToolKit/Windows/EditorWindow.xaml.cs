@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using mapKnight.ToolKit.Windows.Dialogs;
 
 namespace mapKnight.ToolKit.Windows {
     /// <summary>
@@ -56,8 +57,8 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void SetTabPageMenu (List<FrameworkElement> items) {
-            while (menu_editor.Items.Count > 2)
-                menuItems.RemoveAt(2);
+            while (menu_editor.Items.Count > 3)
+                menuItems.RemoveAt(3);
 
             foreach (FrameworkElement item in items)
                 menuItems.Add(item);
@@ -171,6 +172,10 @@ namespace mapKnight.ToolKit.Windows {
                     MessageBox.Show("please dont add entities with the same name");
                 }
             }
+        }
+
+        private void MenuItem_PackTexture_Click (object sender, RoutedEventArgs e) {
+            new PackTextureDialog( ).ShowDialog( );
         }
 
         private void CreateMapEditor(EditorMap map, Dictionary<string, BitmapImage> template) {
