@@ -47,16 +47,23 @@ namespace mapKnight.ToolKit {
         private ZipArchive archive;
 
         public Project ( ) {
+            if (App.Current.MainWindow.IsVisible) {
+                HwndSource source = PresentationSource.FromVisual(App.Current.MainWindow) as HwndSource;
+                if (source == null)
+                    return;
+                GraphicsDevice = GraphicsDeviceService.AddRef(source.Handle).GraphicsDevice;
+            } else {
+                App.Current.MainWindow.IsVisibleChanged += MainWindow_IsVisibleChanged; ;
+            }
         }
 
-        public Project (string path, EditorWindow window) {
+        public Project (string path, EditorWindow window) : this( ) {
             Path = path;
-            window.IsVisibleChanged += MainWindow_IsVisibleChanged;
             if (!HasPath) return;
 
             window.tabcontrol_editor.Items.Clear( );
             archive = new ZipArchive(File.Open(path, FileMode.Open), ZipArchiveMode.Update, false);
-    
+
             // Load Maps
             foreach (string file in GetAllEntries("maps")) {
                 if (System.IO.Path.GetExtension(file) == ".map") {
@@ -66,7 +73,7 @@ namespace mapKnight.ToolKit {
                     using (Stream mapStream = GetOrCreateStream(false, file)) {
                         EditorMap loadedMap = new EditorMap(mapStream);
                         using (Stream imageStream = GetOrCreateStream(false, dir, name + ".png")) {
-                            imageStream.Read(loadedMap.ImageData = new byte[(int)imageStream.Length], 0, (int)imageStream.Length); 
+                            imageStream.Read(loadedMap.ImageData = new byte[(int)imageStream.Length], 0, (int)imageStream.Length);
                         }
                         Maps.Add(loadedMap);
                     }
@@ -85,13 +92,15 @@ namespace mapKnight.ToolKit {
                             data.LoadImage(name, GetOrCreateStream(false, texturedir), GetOrCreateStream(false, System.IO.Path.ChangeExtension(texturedir, ".data")), false);
                         }
                     }
-                     
+
                     using (Stream stream = GetOrCreateStream(false, dir, ".meta"))
                         data.Meta = JsonConvert.DeserializeObject<AnimationMetaData>(new StreamReader(stream).ReadToEnd( ));
                     using (Stream stream = GetOrCreateStream(false, dir, "bones.json"))
-                        data.Bones = new ObservableCollection<VertexBone>(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
+                        data.Bones.AddRange(JsonConvert.DeserializeObject<VertexBone[ ]>(new StreamReader(stream).ReadToEnd( )));
+                    foreach (VertexBone bone in data.Bones)
+                        bone.SetBitmapImage(data);
                     using (Stream stream = GetOrCreateStream(false, dir, "animations.json"))
-                        data.Animations = new ObservableCollection<VertexAnimation>(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
+                        data.Animations.AddRange(JsonConvert.DeserializeObject<VertexAnimation[ ]>(new StreamReader(stream).ReadToEnd( )));
 
                     Animations.Add(data);
                 }
@@ -100,7 +109,7 @@ namespace mapKnight.ToolKit {
             archive.Dispose( );
         }
 
-        private void MainWindow_IsVisibleChanged (object sender, System.Windows.DependencyPropertyChangedEventArgs e) {
+        private void MainWindow_IsVisibleChanged (object sender, DependencyPropertyChangedEventArgs e) {
             if (GraphicsDevice != null)
                 return;
             if (App.Current.MainWindow.IsVisible) {
@@ -127,7 +136,32 @@ namespace mapKnight.ToolKit {
         }
 
         public void Compile (string path) {
+            string mappath = System.IO.Path.Combine(path, "maps");
+            foreach (EditorMap map in Maps) {
+                string basedirectory = System.IO.Path.Combine(mappath, map.Name);
+                if (!Directory.Exists(basedirectory))
+                    Directory.CreateDirectory(basedirectory);
+                // build texture
+                Texture2D packedTexture = TileSerializer.BuildTexture(map.Tiles, map.XnaTextures, GraphicsDevice);
+                using (Stream stream = File.Open(System.IO.Path.Combine(basedirectory, map.Name + ".png"), FileMode.Create))
+                    packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
 
+                map.Texture = System.IO.Path.GetFileNameWithoutExtension(map.Name + ".png");
+                using (Stream stream = File.Open(System.IO.Path.Combine(basedirectory, map.Name + ".map"), FileMode.Create))
+                    map.CreateCompileVersion( ).Serialize(stream, new WindowsEntitySerializer( ));
+
+                using (Stream stream = File.Open(System.IO.Path.Combine(basedirectory, map.Name + "_shadow.png"), FileMode.Create))
+                    map.PrerenderShadowMap(stream);
+            }
+
+            string animationpath = System.IO.Path.Combine(path, "animations");
+            foreach (VertexAnimationData animation in Animations) {
+                string basedirectory = System.IO.Path.Combine(animationpath, animation.Meta.Entity);
+                if (!Directory.Exists(basedirectory)) Directory.CreateDirectory(basedirectory);
+
+                using (Stream stream = File.Open(System.IO.Path.Combine(basedirectory, "animation.json"), FileMode.Create))
+                    AnimationSerizalizer.Compile(animation.Animations.ToArray( ), stream, animation.SelectBonesDialog.GetSelectedBones( ));
+            }
         }
 
         public bool Contains (params string[ ] path) {
