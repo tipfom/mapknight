@@ -87,8 +87,7 @@ namespace mapKnight.ToolKit.Editor {
                 scrollbar_horizontal.Value = 0;
                 scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
                 scrollbar_vertical.Maximum = _Map.Height;
-                scrollbar_vertical.Value = _Map.Height - tilemapview.RenderSize.Height / tilemapview.TileSize + 2;
-
+                scrollbar_vertical.Value = 0;
 
                 if (GraphicsDevice != null) {
                     _Map.Init(GraphicsDevice);
@@ -172,6 +171,8 @@ namespace mapKnight.ToolKit.Editor {
             _Menu[19].MouseDown += (sender, e) => SelectTool(Tool.Hand);
             _Menu[20].MouseDown += (sender, e) => SelectTool(Tool.Trashcan);
             _Menu[21].MouseDown += (sender, e) => SelectTool(Tool.Hand);
+
+            _Menu[23].MouseDown += (sender, e) => SelectTool(Tool.Brush);
 
             defaultAttributes = JsonConvert.DeserializeObject<Dictionary<TileAttribute, string>>(Properties.Settings.Default.DefaultTileAttributes);
 
@@ -296,15 +297,17 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void tilemapview_MouseDown (object sender, MouseButtonEventArgs e) {
-            if (currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer))
-                return;
-
-            if (tabcontrol_toolselect.SelectedIndex == 0) {
-                // tiles
-                HandleTilemapViewClickTiles(sender, e);
-            } else {
-                // entities
-                HandleTilemapViewClickEntities(sender, e);
+            switch (tabcontrol_toolselect.SelectedIndex) {
+                case 0:
+                    if (currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer))
+                        HandleTilemapViewClickTiles(sender, e);
+                    break;
+                case 1:
+                    HandleTilemapViewClickEntities(sender, e);
+                    break;
+                case 2:
+                    HandleTilemapViewClickBrush(sender, e);
+                    break;
             }
         }
 
@@ -448,6 +451,31 @@ namespace mapKnight.ToolKit.Editor {
                     if (!currentVectorRequestCallback(clickedPosition))
                         SelectTool(Tool.Hand);
                     break;
+            }
+        }
+
+        private void HandleTilemapViewClickBrush (object sender, MouseButtonEventArgs e) {
+            if (currentBrush == null) return;
+
+            if (e.LeftButton == MouseButtonState.Pressed) {
+                int px0 = (int)selectedTile.X;
+                int py0 = Map.Height - (int)selectedTile.Y - 1;
+                Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].tile.Name);
+
+                for (int x = -1; x <= 1; x++) {
+                    for (int y = -1; y <= 1; y++) {
+                        int px = px0 + x;
+                        int py = py0 + y;
+
+                        if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
+                            (Tile tile, float rotation) replacement = currentBrush.Get(GetBrushData(px, py));
+                            Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
+                            Map.Rotations[px, py, currentLayer] = replacement.rotation;
+                        }
+                    }
+                }
+
+                tilemapview.Update( );
             }
         }
 
@@ -601,9 +629,9 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void HandleTilemapViewMoveBrush (object sender, MouseEventArgs e, bool updated) {
-            if (!updated || currentBrush == null) return;
+            if (!updated) return;
 
-            if (e.LeftButton == MouseButtonState.Pressed) {
+            if (e.LeftButton == MouseButtonState.Pressed && currentBrush != null) {
                 int px0 = (int)selectedTile.X;
                 int py0 = Map.Height - (int)selectedTile.Y - 1;
                 Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].tile.Name);
@@ -621,6 +649,8 @@ namespace mapKnight.ToolKit.Editor {
                     }
                 }
 
+                tilemapview.Update( );
+            } else if (updated) {
                 tilemapview.Update( );
             }
         }

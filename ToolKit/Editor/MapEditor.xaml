@@ -167,7 +167,8 @@
                     </StackPanel>
                     <ListView x:Name="listview_brushes"
                               Grid.Row="1"
-                              Margin="0,5,0,0">
+                              Margin="0,5,0,0"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <DataTemplate.Resources>
