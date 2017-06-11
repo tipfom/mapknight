@@ -135,9 +135,6 @@
     <Compile Include="Controls\TextureCreationControl.xaml.cs">
       <DependentUpon>TextureCreationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Editor\TextureEditor.xaml.cs">
-      <DependentUpon>TextureEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -258,10 +255,6 @@
     <Page Include="Controls\TextureCreationControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Editor\TextureEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AboutWindow.xaml">
       <SubType>Designer</SubType>
@@ -529,6 +522,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\paint_brush-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\paste-48.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

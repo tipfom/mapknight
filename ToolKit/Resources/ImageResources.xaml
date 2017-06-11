@@ -46,6 +46,7 @@
     <BitmapImage x:Key="image_animationcomponent_pauseplay" UriSource="../Resources/Images/pause-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_scissors" UriSource="../Resources/Images/scissors-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_star" UriSource="../Resources/Images/starfish-48.png"/>
+    <BitmapImage x:Key="image_animationcomponent_paste" UriSource="../Resources/Images/paste-48.png"/>
     <BitmapImage x:Key="image_animationcomponent_selectbones" UriSource="../Resources/Images/group_foreground_selected-48.png"/>
 
     <BitmapImage x:Key="image_editbones_up" UriSource="../Resources/Images/up_arrow-48.png"/>

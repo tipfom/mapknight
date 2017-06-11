@@ -10,7 +10,6 @@ namespace mapKnight.ToolKit.Data {
     public class VertexAnimationFrame : INotifyPropertyChanged {
         public ObservableCollection<VertexBone> Bones { get; set; }
         public int Time { get; set; }
-        public bool Featured { get; set; }
        
         // boiler-plate
         public event PropertyChangedEventHandler PropertyChanged;

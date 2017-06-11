@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,15 +8,18 @@ using System.Windows.Input;
 using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using mapKnight.ToolKit.Data;
-using mapKnight.ToolKit.Windows.Dialogs;
-using Newtonsoft.Json;
-using Path = System.IO.Path;
-using mapKnight.ToolKit.Serializer;
 using mapKnight.ToolKit.Controls.Animation;
 
 namespace mapKnight.ToolKit.Controls {
     public partial class AnimationControl : UserControl {
         private static readonly double[ ] scales = { 1d, 0.9d, 0.8d, 0.7d, 0.6d, 0.5d, 0.4d };
+
+        public static readonly RoutedUICommand CopyFrameCommand = new RoutedUICommand(
+            "Copy Frame", "CopyFrameCommand", typeof(AnimationControl),
+            new InputGestureCollection( ) { new KeyGesture(Key.C, ModifierKeys.Control) });
+        public static readonly RoutedUICommand PasteFrameCommand = new RoutedUICommand(
+            "Paste Frame", "PasteFrameCommand", typeof(AnimationControl),
+            new InputGestureCollection( ) { new KeyGesture(Key.V, ModifierKeys.Control) });
 
         private List<FrameworkElement> menu = new List<FrameworkElement>( );
         public List<FrameworkElement> Menu { get { return menu; } }
@@ -57,7 +59,7 @@ namespace mapKnight.ToolKit.Controls {
         private List<BoneImage> boneImages = new List<BoneImage>( );
         private VertexAnimation currentAnimation = null;
         private VertexAnimationFrame currentFrame = null;
-        private VertexAnimationFrame featuredFrame = null;
+        private VertexAnimationFrame copiedFrame = null;
 
         public AnimationControl ( ) {
             InitializeComponent( );
@@ -76,7 +78,7 @@ namespace mapKnight.ToolKit.Controls {
                 Style = imageStyle
             };
             scissorButton.MouseDown += (sender, e) => {
-                if (Data?.ShowEntityResizeDialog(currentFrame ?? featuredFrame) ?? false) {
+                if (Data?.ShowEntityResizeDialog(currentFrame ?? Data.Animations[0].Frames[0]) ?? false) {
                     ResetEditor( );
                 }
             };
@@ -143,7 +145,7 @@ namespace mapKnight.ToolKit.Controls {
                 // add new animation
                 ObservableCollection<VertexBone> firstFramesBones = (Data.Animations.Count == 0) ?
                     new ObservableCollection<VertexBone>(Data.Bones.Select(item => item.Clone( ))) : // set reference to the default bones
-                    new ObservableCollection<VertexBone>(featuredFrame?.Bones ?? Data.Animations[0].Frames[0].Bones.Select(item => item.Clone( ))); // cheap clone :D
+                    new ObservableCollection<VertexBone>(copiedFrame?.Bones ?? Data.Animations[0].Frames[0].Bones.Select(item => item.Clone( ))); // cheap clone :D
 
                 Data.Animations.Add(new VertexAnimation( ) {
                     CanRepeat = true,
@@ -151,16 +153,8 @@ namespace mapKnight.ToolKit.Controls {
                     Name = "Default_" + Data.Animations.Where(anim => anim.Name.StartsWith("Default_")).Count( ).ToString( ),
                     IsDefault = Data.Animations.Count == 0
                 });
-                if (Data.Animations.Count == 1) {
-                    featuredFrame = Data.Animations[0].Frames[0];
-                    featuredFrame.Featured = true;
-                }
-            } else if (currentFrame == null) {
-                // add new frame
-                currentAnimation.Frames.Add(featuredFrame.Clone( ));
             } else {
-                // copy frame
-                currentAnimation.Frames.Add(currentFrame.Clone( ));
+                currentAnimation.Frames.Add(Data.Animations[0].Frames[0].Clone( ));
             }
         }
 
@@ -249,9 +243,9 @@ namespace mapKnight.ToolKit.Controls {
             try {
                 object animationView = contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
                 (animationView as AnimationView)?.Stop( );
-            } catch {
+            } catch { }
 
-            }
+            if (Data.Bones.Count != (copiedFrame?.Bones.Count ?? -1)) copiedFrame = null;
 
             if (Data.Bones.Count > boneImages.Count) {
                 int bonesToAdd = Data.Bones.Count - boneImages.Count;
@@ -259,7 +253,7 @@ namespace mapKnight.ToolKit.Controls {
                     boneImages.Add(new BoneImage(Data) { });
                 }
             } else {
-                while(boneImages.Count > Data.Bones.Count) { 
+                while (boneImages.Count > Data.Bones.Count) {
                     boneImages.RemoveAt(0);
                 }
             }
@@ -337,14 +331,24 @@ namespace mapKnight.ToolKit.Controls {
             e.CanExecute = currentAnimation != null && Data.CanUndo(currentAnimation, currentFrame);
         }
 
-        private void MenuItemStarFrame_Click (object sender, RoutedEventArgs e) {
-            if (featuredFrame != null) {
-                featuredFrame.Featured = false;
-                featuredFrame.OnPropertyChanged("Featured");
+        private void CommandBinding_CopyFrame_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = currentFrame != null;
+        }
+
+        private void CommandBinding_CopyFrame_Executed (object sender, ExecutedRoutedEventArgs e) {
+            copiedFrame = currentFrame.Clone( );
+        }
+
+        private void CommandBinding_PasteFrame_Executed (object sender, ExecutedRoutedEventArgs e) {
+            if (currentFrame != null) {
+                currentAnimation.Frames.Insert(currentAnimation.Frames.IndexOf(currentFrame) + 1, copiedFrame.Clone( ));
+            } else {
+                currentAnimation.Frames.Add(copiedFrame.Clone( ));
             }
-            currentFrame.Featured = true;
-            currentFrame.OnPropertyChanged("Featured");
-            featuredFrame = currentFrame;
+        }
+
+        private void CommandBinding_PasteFrame_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = copiedFrame != null;
         }
     }
 }

@@ -15,6 +15,8 @@
         <CommandBinding Command="toolkit:CustomCommands.EditorDelete" Executed="CommandEditorDelete_Executed" CanExecute="CommandEditorDelete_CanExecute"/>
         <CommandBinding Command="toolkit:CustomCommands.EditorUp" Executed="CommandEditorUp_Executed" CanExecute="CommandEditorUp_CanExecute"/>
         <CommandBinding Command="toolkit:CustomCommands.EditorDown" Executed="CommandEditorDown_Executed" CanExecute="CommandEditorDown_CanExecute"/>
+        <CommandBinding Command="controls:AnimationControl.CopyFrameCommand" Executed="CommandBinding_CopyFrame_Executed" CanExecute="CommandBinding_CopyFrame_CanExecute"/>
+        <CommandBinding Command="controls:AnimationControl.PasteFrameCommand" Executed="CommandBinding_PasteFrame_Executed" CanExecute="CommandBinding_PasteFrame_CanExecute"/>
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <DataTemplate x:Key="preview">
@@ -80,6 +82,11 @@
                             <Image Source="{StaticResource ResourceKey=image_animationcomponent_frame}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Command="controls:AnimationControl.PasteFrameCommand" Header="Paste Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_paste}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Command="toolkit:CustomCommands.EditorDelete" Header="Delete Animation">
                         <MenuItem.Icon>
                             <Image  Source="{StaticResource ResourceKey=image_animationcomponent_delete}"/>
@@ -87,9 +94,14 @@
                     </MenuItem>
                 </ContextMenu>
                 <ContextMenu x:Key="contextmenu_frame">
-                    <MenuItem Command="toolkit:CustomCommands.EditorNew" Header="Copy Frame">
+                    <MenuItem Command="controls:AnimationControl.CopyFrameCommand" Header="Copy Frame">
                         <MenuItem.Icon>
                             <Image Source="{StaticResource ResourceKey=image_animationcomponent_frame}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="controls:AnimationControl.PasteFrameCommand" Header="Paste Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_paste}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="toolkit:CustomCommands.EditorUp" Header="Move Frame Up">
@@ -110,11 +122,6 @@
                     <MenuItem Command="toolkit:CustomCommands.EditorDelete" Header="Delete Frame">
                         <MenuItem.Icon>
                             <Image  Source="{StaticResource ResourceKey=image_animationcomponent_delete}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Patrick Frame" Click="MenuItemStarFrame_Click">
-                        <MenuItem.Icon>
-                            <Image Source="{StaticResource ResourceKey=image_animationcomponent_star}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
@@ -156,20 +163,6 @@
                                 <TextBlock Text="{Binding Index, StringFormat={}Frame {0}}" Margin="3,0"/>
                                 <controls:IntegerTextBox Width="72" TextAlignment="Right" Text="{Binding Time}"/>
                                 <TextBlock>ms</TextBlock>
-                                <Image x:Name="image_featured" Margin="6,0,0,0" Width="15" Height="15" Source="{StaticResource ResourceKey=image_animationcomponent_star}">
-                                    <Image.Style>
-                                        <Style TargetType="Image">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Featured}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Featured}" Value="False">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Image.Style>
-                                </Image>
                             </StackPanel>
                         </HierarchicalDataTemplate>
                     </HierarchicalDataTemplate.ItemTemplate>
