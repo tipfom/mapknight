@@ -219,11 +219,13 @@ namespace mapKnight.ToolKit.Windows {
                             mapEditorInstance.Map = map;
                             selectedItem.Content = mapEditorInstance;
                             SetTabPageMenu(mapEditorInstance.Menu);
+                            mapEditorInstance.Focus( );
                             break;
                         case VertexAnimationData animationData:
                             animationEditorInstance.Data = animationData;
                             selectedItem.Content = animationEditorInstance;
                             SetTabPageMenu(animationEditorInstance.Menu);
+                            animationEditorInstance.Focus( );
                             break;
                     }
                 }

@@ -111,9 +111,6 @@ namespace mapKnight.ToolKit.Editor {
 
         public GraphicsDevice GraphicsDevice;
 
-        // Map Cache List von Koord Layer alter Wert IsRotation
-        private Stack<List<Tuple<Point, int, int, bool>>> Cache = new Stack<List<Tuple<Point, int, int, bool>>>( );
-
         private int currentLayer = 1;
         private Tool currentTool = Tool.Pen;
         private Dictionary<TileAttribute, string> defaultAttributes = new Dictionary<TileAttribute, string>( );
@@ -299,14 +296,15 @@ namespace mapKnight.ToolKit.Editor {
         private void tilemapview_MouseDown (object sender, MouseButtonEventArgs e) {
             switch (tabcontrol_toolselect.SelectedIndex) {
                 case 0:
-                    if (currentTileIndex == -1 || !tilemapview.IsLayerActive(currentLayer))
+                    if (tilemapview.IsLayerActive(currentLayer))
                         HandleTilemapViewClickTiles(sender, e);
                     break;
                 case 1:
                     HandleTilemapViewClickEntities(sender, e);
                     break;
                 case 2:
-                    HandleTilemapViewClickBrush(sender, e);
+                    if (tilemapview.IsLayerActive(currentLayer))
+                        HandleTilemapViewClickBrush(sender, e);
                     break;
             }
         }
@@ -314,34 +312,34 @@ namespace mapKnight.ToolKit.Editor {
         private void HandleTilemapViewClickTiles (object sender, MouseButtonEventArgs e) {
             Point clickedTile = new Point(Math.Floor(selectedTile.X), Map.Height - Math.Floor(selectedTile.Y) - 1);
             if (e.RightButton == MouseButtonState.Pressed) {
-                Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, false);
                 Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
             } else if (e.LeftButton == MouseButtonState.Pressed) {
                 switch (currentTool) {
                     case Tool.Eraser:
-                        Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    new Tuple<Point, int, int,bool>(clickedTile,currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                        Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, false);
                         Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
 
                     case Tool.Filler:
-                        if (Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] == currentTileIndex)
+                        if (currentTileIndex == -1 || Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] == currentTileIndex)
                             break;
                         int searching = Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
                         int replacing = currentTileIndex;
                         Queue<Point> pointQueue = new Queue<Point>( );
                         pointQueue.Enqueue(clickedTile);
-                        List<Tuple<Point, int, int, bool>> changesForCache = new List<Tuple<Point, int, int, bool>>( );
+                        bool append = false;
                         while (pointQueue.Count > 0) {
                             Point current = pointQueue.Dequeue( );
                             if (current.X < 0 || current.X >= Map.Width || current.Y < 0 || current.Y >= Map.Height)
                                 continue;
                             if (Map.Data[(int)current.X, (int)current.Y, currentLayer] == searching) {
+                                Map.Preserve((int)current.X, (int)current.Y, currentLayer, append);
+                                append = true;
+
                                 Map.Data[(int)current.X, (int)current.Y, currentLayer] = replacing;
                                 Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
-                                changesForCache.Add(Tuple.Create(current, currentLayer, searching, false));
 
                                 pointQueue.Enqueue(new Point(current.X - 1, current.Y));
                                 pointQueue.Enqueue(new Point(current.X + 1, current.Y));
@@ -349,12 +347,11 @@ namespace mapKnight.ToolKit.Editor {
                                 pointQueue.Enqueue(new Point(current.X, current.Y + 1));
                             }
                         }
-                        Cache.Push(changesForCache);
                         break;
 
                     case Tool.Pen:
-                        Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false)});
+                        if (currentTileIndex == -1) break;
+                        Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, false);
                         Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
                         Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
@@ -372,8 +369,7 @@ namespace mapKnight.ToolKit.Editor {
                             }
                         }
                         float tileRotation = Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer];
-                        Cache.Push(new List<Tuple<Point, int, int, bool>>( ) {
-                                    Tuple.Create(clickedTile,currentLayer, (int)(tileRotation * 2), true)});
+                        Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, false);
                         tileRotation += 0.5f;
                         tileRotation %= 2f;
                         if (Map.GetTile((int)clickedTile.X, (int)clickedTile.Y, currentLayer).Name != "None")
@@ -460,6 +456,7 @@ namespace mapKnight.ToolKit.Editor {
             if (e.LeftButton == MouseButtonState.Pressed) {
                 int px0 = (int)selectedTile.X;
                 int py0 = Map.Height - (int)selectedTile.Y - 1;
+                Map.Preserve(px0, py0, currentLayer, false);
                 Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].Tile.Name);
 
                 for (int x = -1; x <= 1; x++) {
@@ -469,6 +466,7 @@ namespace mapKnight.ToolKit.Editor {
 
                         if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
                             (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], GetBrushData(px, py));
+                            Map.Preserve(px0, py0, currentLayer, true);
                             Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
                             Map.Rotations[px, py, currentLayer] = replacement.rotation;
                         }
@@ -512,13 +510,15 @@ namespace mapKnight.ToolKit.Editor {
         private void tilemapview_MouseMove (object sender, MouseEventArgs e) {
             switch (tabcontrol_toolselect.SelectedIndex) {
                 case 0:
-                    HandleTilemapViewMoveTiles(sender, e, UpdateSelectedTile(e));
+                    if (tilemapview.IsLayerActive(currentLayer))
+                        HandleTilemapViewMoveTiles(sender, e, UpdateSelectedTile(e));
                     break;
                 case 1:
                     HandleTilemapViewMoveEntities(sender, e);
                     break;
                 case 2:
-                    HandleTilemapViewMoveBrush(sender, e, UpdateSelectedTile(e));
+                    if (tilemapview.IsLayerActive(currentLayer))
+                        HandleTilemapViewMoveBrush(sender, e, UpdateSelectedTile(e));
                     break;
             }
         }
@@ -527,30 +527,17 @@ namespace mapKnight.ToolKit.Editor {
             if (!updated) return;
 
             Point clickedTile = new Point(Math.Floor(selectedTile.X), Map.Height - Math.Floor(selectedTile.Y) - 1);
-            if (e.RightButton == MouseButtonState.Pressed) {
-                Tuple<Point, int, int, bool> delta = Tuple.Create(clickedTile, currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false);
-                if (Cache.Count > 0) {
-                    Tuple<Point, int, int, bool> last = Cache.Peek( ).Last( );
-                    if (Map.Data[(int)last.Item1.X, (int)last.Item1.Y, last.Item2] == 0) {
-                        Cache.Peek( ).Add(delta);
-                    } else {
-                        Cache.Push(new List<Tuple<Point, int, int, bool>>( ) { delta });
-                    }
-                } else {
-                    Cache.Push(new List<Tuple<Point, int, int, bool>>( ) { delta });
-                }
-                Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
-                updated = true;
-            } else if (e.LeftButton == MouseButtonState.Pressed) {
+            if (e.LeftButton == MouseButtonState.Pressed){
                 switch (currentTool) {
                     case Tool.Eraser:
-                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
+                        Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, true);
                         Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
 
                     case Tool.Pen:
-                        Cache.Peek( ).Add(Tuple.Create(clickedTile, currentLayer, Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer], false));
+                        if (currentTileIndex == -1) break;
+                        Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, true);
                         Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = currentTileIndex;
                         Map.Rotations[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
                         break;
@@ -560,6 +547,10 @@ namespace mapKnight.ToolKit.Editor {
                         break;
                 }
                 updated = updated || (currentTool != Tool.Filler && currentTool != Tool.Rotater);
+            } else if (e.RightButton == MouseButtonState.Pressed) {
+                Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, true);
+                Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
+                updated = true;
             }
             if (updated)
                 tilemapview.Update( );
@@ -634,6 +625,7 @@ namespace mapKnight.ToolKit.Editor {
             if (e.LeftButton == MouseButtonState.Pressed && currentBrush != null) {
                 int px0 = (int)selectedTile.X;
                 int py0 = Map.Height - (int)selectedTile.Y - 1;
+                Map.Preserve(px0, py0, currentLayer, true);
                 Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].Tile.Name);
 
                 for (int x = -1; x <= 1; x++) {
@@ -643,6 +635,7 @@ namespace mapKnight.ToolKit.Editor {
 
                         if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
                             (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], GetBrushData(px, py));
+                            Map.Preserve(px, py, currentLayer, true);
                             Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
                             Map.Rotations[px, py, currentLayer] = replacement.rotation;
                         }
@@ -685,18 +678,7 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void UndoLast ( ) {
-            if (Cache.Count == 0)
-                return;
-
-            foreach (Tuple<Point, int, int, bool> undoData in Cache.Pop( )) {
-                if (undoData.Item4) {
-                    // tile got rotated
-                    Map.Rotations[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3 / 2f;
-                } else {
-                    // tile got changed
-                    Map.Data[(int)undoData.Item1.X, (int)undoData.Item1.Y, undoData.Item2] = undoData.Item3;
-                }
-            }
+            Map.Undo( );
             tilemapview.Update( );
         }
 

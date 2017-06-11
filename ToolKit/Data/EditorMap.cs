@@ -4,6 +4,7 @@ using mapKnight.ToolKit.Serializer;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -29,6 +30,7 @@ namespace mapKnight.ToolKit.Data {
         public Dictionary<string, Texture2D> XnaTextures = new Dictionary<string, Texture2D>( );
         public Dictionary<string, BitmapImage> WpfTextures = new Dictionary<string, BitmapImage>( );
         public List<TileBrush> Brushes = new List<TileBrush>( );
+        public Stack<List<(int x, int y, int l, int tile, float rotation)>> Cache = new Stack<List<(int x, int y, int l, int tile, float rotation)>>( );
 
         public EditorMap (Size size, string creator, string name) :
                 base(size, creator, name) {
@@ -69,8 +71,26 @@ namespace mapKnight.ToolKit.Data {
             }
 
             foreach (TileBrush brush in Brushes)
-            foreach (TileBrushStroke stroke in brush.All( ))
+                foreach (TileBrushStroke stroke in brush.All( ))
                     stroke.GeneratePreviewImage(this);
+        }
+
+        public void Preserve (int x, int y, int l, bool append) {
+            (int x, int y, int l, int tile, float rotation) entry = (x, y, l, Data[x, y, l], Rotations[x, y, l]);
+            if (append) {
+                Cache.Peek( ).Add(entry);
+            } else {
+                Cache.Push(new List<(int x, int y, int l, int tile, float rotation)>( ) { entry });
+            }
+        }
+
+        public void Undo ( ) {
+            if (Cache.Count == 0) return;
+
+            foreach ((int x, int y, int l, int tile, float rotation) entry in ((IEnumerable< (int x, int y, int l, int tile, float rotation)>)Cache.Pop( )).Reverse( )) {
+                Data[entry.x, entry.y, entry.l] = entry.tile;
+                Rotations[entry.x, entry.y, entry.l] = entry.rotation;
+            }
         }
 
         public bool HasCollider (int x, int y) {

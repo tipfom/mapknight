@@ -213,7 +213,7 @@
                        ValueChanged="scrollbar_vertical_ValueChanged"
                        DockPanel.Dock="Right">
             </ScrollBar>
-            <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" SizeChanged="tilemapview_SizeChanged" BorderThickness="1" BorderBrush="White"/>
+            <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" SizeChanged="tilemapview_SizeChanged" BorderThickness="1" BorderBrush="White" Focusable="True"/>
         </DockPanel>
     </Grid>
 </UserControl>
