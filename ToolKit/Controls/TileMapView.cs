@@ -30,14 +30,22 @@ namespace mapKnight.ToolKit.Controls {
             get { return _ZoomLevel; }
             set {
                 _ZoomLevel = (int)Mathf.Clamp(value, 0, ZOOM_LEVELS);
-                float tileSizeDelta = _TileSize;
-                Vector2 prevOffset = _Offset;
-                _TileSize = (int)Mathf.Interpolate(TILESIZE_MIN, TILESIZE_MAX, (float)_ZoomLevel / ZOOM_LEVELS);
-                tileSizeDelta -= _TileSize;
-                _Offset.X -= tileSizeDelta * CurrentSelection.X / _TileSize;
-                _Offset.Y -= tileSizeDelta * CurrentSelection.Y / _TileSize;
-                _CurrentSelection.X += prevOffset.X - _Offset.X;
-                _CurrentSelection.Y += prevOffset.Y - _Offset.Y;
+                if (ZoomLevel == 0) {
+                    _TileSize = (int)Math.Min(RenderSize.Width / Map.Width, RenderSize.Height / Map.Height);
+                    float columns = (float)(RenderSize.Width / TileSize);
+                    float rows = (float)(RenderSize.Height / TileSize);
+                    _Offset.X = Map.Width / 2f - columns / 2f;
+                    _Offset.Y = Map.Height / 2f - rows / 2f;
+                } else {
+                    float tileSizeDelta = _TileSize;
+                    Vector2 prevOffset = _Offset;
+                    _TileSize = (int)Mathf.Interpolate(TILESIZE_MIN, TILESIZE_MAX, (float)_ZoomLevel / ZOOM_LEVELS);
+                    tileSizeDelta -= _TileSize;
+                    _Offset.X -= tileSizeDelta * CurrentSelection.X / _TileSize;
+                    _Offset.Y -= tileSizeDelta * CurrentSelection.Y / _TileSize;
+                    _CurrentSelection.X += prevOffset.X - _Offset.X;
+                    _CurrentSelection.Y += prevOffset.Y - _Offset.Y;
+                }
                 Update( );
             }
         }
@@ -83,8 +91,17 @@ namespace mapKnight.ToolKit.Controls {
             Loaded += (sender, e) => {
                 Focus( );
             };
+            SizeChanged += (sender, e) => {
+                if (ZoomLevel == 0) {
+                    _TileSize = (int)Math.Min(RenderSize.Width / Map.Width, RenderSize.Height / Map.Height);
+                    float columns = (float)(RenderSize.Width / TileSize);
+                    float rows = (float)(RenderSize.Height / TileSize);
+                    _Offset.X = Map.Width / 2f - columns / 2f;
+                    _Offset.Y = Map.Height / 2f - rows / 2f;
+                }
+            };
         }
-        
+
         public bool IsLayerActive (int id) {
             return !(id < 0) || !(id > 3) || Layer[id];
         }
