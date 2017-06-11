@@ -19,9 +19,10 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
     /// Interaktionslogik für AddBrushWindow.xaml
     /// </summary>
     public partial class AddBrushDialog : Window {
-        public Data.TileBrush DialogResultBrush = new Data.TileBrush( );
+        public static readonly RoutedUICommand FinishCommand = new RoutedUICommand("Finish", "FinishCommand", typeof(AddBrushDialog));
+        public static readonly RoutedUICommand EditPossibilitiesCommand = new RoutedUICommand("Edit Possibilities", "EditPossibilitiesCommand", typeof(AddBrushDialog));
 
-        public static readonly RoutedUICommand FinishCommand = new RoutedUICommand("Finish", "Finish", typeof(AddBrushDialog));
+        public Data.TileBrush DialogResultBrush = new Data.TileBrush( );
 
         private EditorMap map;
         private int indexCTL, indexCTR, indexCBR, indexCBL, indexCentre, indexIL, indexIT, indexIR, indexIB, indexLBL, indexLBR, indexLTL, indexLTR;
@@ -52,67 +53,67 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
 
         private void Image_CornerTL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CTL, ref indexCTL, image_cornertl);
-            ImageClick(image_cornertl, image_d, (DialogResultBrush.CTL.Length > indexCTL) ? DialogResultBrush.CTL[indexCTL].tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornertl, image_d, (DialogResultBrush.CTL.Length > indexCTL) ? DialogResultBrush.CTL[indexCTL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
         }
         
         private void Image_CornerTR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CTR, ref indexCTR, image_cornertr);
-            ImageClick(image_cornertr, image_d, (DialogResultBrush.CTR.Length > indexCTR) ? DialogResultBrush.CTR[indexCTR].tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornertr, image_d, (DialogResultBrush.CTR.Length > indexCTR) ? DialogResultBrush.CTR[indexCTR].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_CornerBR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CBR, ref indexCBR, image_cornerbr);
-            ImageClick(image_cornerbr, image_d, (DialogResultBrush.CBR.Length > indexCBR) ? DialogResultBrush.CBR[indexCBR].tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornerbr, image_d, (DialogResultBrush.CBR.Length > indexCBR) ? DialogResultBrush.CBR[indexCBR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_CornerBL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.CBL, ref indexCBL, image_cornerbl);
-            ImageClick(image_cornerbl, image_d, (DialogResultBrush.CBL.Length > indexCBL) ? DialogResultBrush.CBL[indexCBL].tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_cornerbl, image_d, (DialogResultBrush.CBL.Length > indexCBL) ? DialogResultBrush.CBL[indexCBL].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_Centre_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.Centre, ref indexCentre, image_centre);
-            ImageClick(image_centre, image_O, (DialogResultBrush.Centre.Length > indexCentre) ? DialogResultBrush.Centre[indexCentre].tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_centre, image_O, (DialogResultBrush.Centre.Length > indexCentre) ? DialogResultBrush.Centre[indexCentre].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IL, ref indexIL, image_Il);
-            ImageClick(image_Il, image_I, (DialogResultBrush.IL.Length > indexIL) ? DialogResultBrush.IL[indexIL].tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Il, image_I, (DialogResultBrush.IL.Length > indexIL) ? DialogResultBrush.IL[indexIL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IT_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IT, ref indexIT, image_It);
-            ImageClick(image_It, image_I, (DialogResultBrush.IT.Length > indexIT) ? DialogResultBrush.IT[indexIT].tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_It, image_I, (DialogResultBrush.IT.Length > indexIT) ? DialogResultBrush.IT[indexIT].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IR, ref indexIR, image_Ir);
-            ImageClick(image_Ir, image_I, (DialogResultBrush.IR.Length > indexIR) ? DialogResultBrush.IR[indexIR].tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ir, image_I, (DialogResultBrush.IR.Length > indexIR) ? DialogResultBrush.IR[indexIR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_IB_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.IB, ref indexIB, image_Ib);
-            ImageClick(image_Ib, image_I, (DialogResultBrush.IB.Length > indexIB) ? DialogResultBrush.IB[indexIB].tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ib, image_I, (DialogResultBrush.IB.Length > indexIB) ? DialogResultBrush.IB[indexIB].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LBL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LBL, ref indexLBL, image_Lbl);
-            ImageClick(image_Lbl, image_L, (DialogResultBrush.LBL.Length > indexLBL) ? DialogResultBrush.LBL[indexLBL].tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Lbl, image_L, (DialogResultBrush.LBL.Length > indexLBL) ? DialogResultBrush.LBL[indexLBL].Tile : (Tile?)null, 0, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LBR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LBR, ref indexLBR, image_Lbr);
-            ImageClick(image_Lbr, image_L, (DialogResultBrush.LBR.Length > indexLBR) ? DialogResultBrush.LBR[indexLBR].tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Lbr, image_L, (DialogResultBrush.LBR.Length > indexLBR) ? DialogResultBrush.LBR[indexLBR].Tile : (Tile?)null, 270, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LTL_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LTL, ref indexLTL, image_Ltl);
-            ImageClick(image_Ltl, image_L, (DialogResultBrush.LTL.Length > indexLTL) ? DialogResultBrush.LTL[indexLTL].tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ltl, image_L, (DialogResultBrush.LTL.Length > indexLTL) ? DialogResultBrush.LTL[indexLTL].Tile : (Tile?)null, 90, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Image_LTR_MouseDown (object sender, MouseButtonEventArgs e) {
             SetTile(ref DialogResultBrush.LTR, ref indexLTR, image_Ltr);
-            ImageClick(image_Ltr, image_L, (DialogResultBrush.LTR.Length > indexLTR) ? DialogResultBrush.LTR[indexLTR].tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
+            ImageClick(image_Ltr, image_L, (DialogResultBrush.LTR.Length > indexLTR) ? DialogResultBrush.LTR[indexLTR].Tile : (Tile?)null, 180, e.RightButton == MouseButtonState.Pressed);
         }
 
         private void Button_NextCentre_Click (object sender, RoutedEventArgs e) {
@@ -167,18 +168,18 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             ButtonNextClick(ref indexLTR, ref DialogResultBrush.LTR, image_Ltr, image_L, 180f);
         }
 
-        private void ButtonNextClick (ref int index, ref (Tile tile, float rotation, int possibility)[ ] brushRef, Image image, BitmapImage defaultImage, float initialRotation) {
+        private void ButtonNextClick (ref int index, ref TileBrushStrokeCollection brushRef, Image image, BitmapImage defaultImage, float initialRotation) {
             index++;
             if (index > brushRef.Length) index = 0;
-            ImageClick(image, defaultImage, (brushRef.Length > index) ? brushRef[index].tile : (Tile?)null, initialRotation, false);
+            ImageClick(image, defaultImage, (brushRef.Length > index) ? brushRef[index].Tile : (Tile?)null, initialRotation, false);
         }
 
-        private void SetTile (ref (Tile tile, float rotation, int possibility)[ ] brushRef, ref int index, Image image) {
+        private void SetTile (ref TileBrushStrokeCollection brushRef, ref int index, Image image) {
             if (listview_tiles.SelectedItem != null) {
                 if (brushRef.Length <= index) {
-                    Array.Resize(ref brushRef, index + 1);
+                    Array.Resize(ref brushRef.Strokes, index + 1);
                 }
-                brushRef[index] = (map.Tiles[listview_tiles.SelectedIndex], (float)(((RotateTransform)image.RenderTransform).Angle / 180), 1);
+                brushRef[index] = new TileBrushStroke(map.Tiles[listview_tiles.SelectedIndex], (float)(((RotateTransform)image.RenderTransform).Angle / 180), 1);
             }
         }
 
@@ -203,6 +204,15 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             DialogResult = true;
             DialogResultBrush.GeneratePreviewImages(map);
             Close( );
+        }
+
+        private void CommandBinding_EditPossibilities_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = DialogResultBrush.IsValid(map);
+        }
+
+        private void CommandBinding_EditPossibilities_Executed (object sender, ExecutedRoutedEventArgs e) {
+            DialogResultBrush.GeneratePreviewImages(map);
+            new EditBrushPossibilitiesDialog(DialogResultBrush).ShowDialog( );
         }
     }
 }

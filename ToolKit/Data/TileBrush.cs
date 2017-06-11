@@ -6,47 +6,47 @@ using System.Windows.Media.Imaging;
 
 namespace mapKnight.ToolKit.Data {
     public class TileBrush {
-        public (Tile tile, float rotation, int possibility)[ ] Centre;
-        public (Tile tile, float rotation, int possibility)[ ] CTR, CTL, CBR, CBL;
-        public (Tile tile, float rotation, int possibility)[ ] IT, IB, IR, IL;
-        public (Tile tile, float rotation, int possibility)[ ] LTR, LTL, LBR, LBL;
+        public TileBrushStrokeCollection Centre;
+        public TileBrushStrokeCollection CTR, CTL, CBR, CBL;
+        public TileBrushStrokeCollection IT, IB, IR, IL;
+        public TileBrushStrokeCollection LTR, LTL, LBR, LBL;
 
-        public BitmapImage PrevCentre { get; set; }
-        public BitmapImage PrevCTR { get; set; }
-        public BitmapImage PrevCTL { get; set; }
-        public BitmapImage PrevCBR { get; set; }
-        public BitmapImage PrevCBL { get; set; }
-        public BitmapImage PrevIT { get; set; }
-        public BitmapImage PrevIB { get; set; }
-        public BitmapImage PrevIR { get; set; }
-        public BitmapImage PrevIL { get; set; }
-        public BitmapImage PrevLTR { get; set; }
-        public BitmapImage PrevLTL { get; set; }
-        public BitmapImage PrevLBR { get; set; }
-        public BitmapImage PrevLBL { get; set; }
+        public BitmapImage PrevCentre { get { return Centre[0].Preview; } }
+        public BitmapImage PrevCTR { get { return CTR[0].Preview; } }
+        public BitmapImage PrevCTL { get { return CTL[0].Preview; } }
+        public BitmapImage PrevCBR { get { return CBR[0].Preview; } }
+        public BitmapImage PrevCBL { get { return CBL[0].Preview; } }
+        public BitmapImage PrevIT { get { return IT[0].Preview; } }
+        public BitmapImage PrevIB { get { return IB[0].Preview; } }
+        public BitmapImage PrevIR { get { return IR[0].Preview; } }
+        public BitmapImage PrevIL { get { return IL[0].Preview; } }
+        public BitmapImage PrevLTR { get { return LTR[0].Preview; } }
+        public BitmapImage PrevLTL { get { return LTL[0].Preview; } }
+        public BitmapImage PrevLBR { get { return LBR[0].Preview; } }
+        public BitmapImage PrevLBL { get { return LBL[0].Preview; } }
 
         private Random random = new Random( );
 
         public TileBrush ( ) {
-            Centre = new(Tile tile, float rotation, int possibility)[0];
-            CTR = new(Tile tile, float rotation, int possibility)[0];
-            CTL = new(Tile tile, float rotation, int possibility)[0];
-            CBR = new(Tile tile, float rotation, int possibility)[0];
-            CBL = new(Tile tile, float rotation, int possibility)[0];
-            IT = new(Tile tile, float rotation, int possibility)[0];
-            IB = new(Tile tile, float rotation, int possibility)[0];
-            IR = new(Tile tile, float rotation, int possibility)[0];
-            IL = new(Tile tile, float rotation, int possibility)[0];
-            LTR = new(Tile tile, float rotation, int possibility)[0];
-            LTL = new(Tile tile, float rotation, int possibility)[0];
-            LTL = new(Tile tile, float rotation, int possibility)[0];
-            LBR = new(Tile tile, float rotation, int possibility)[0];
-            LBL = new(Tile tile, float rotation, int possibility)[0];
+            Centre = new TileBrushStrokeCollection( );
+            CTR = new TileBrushStrokeCollection( );
+            CTL = new TileBrushStrokeCollection( );
+            CBR = new TileBrushStrokeCollection( );
+            CBL = new TileBrushStrokeCollection( );
+            IT = new TileBrushStrokeCollection( );
+            IB = new TileBrushStrokeCollection( );
+            IR = new TileBrushStrokeCollection( );
+            IL = new TileBrushStrokeCollection( );
+            LTR = new TileBrushStrokeCollection( );
+            LTL = new TileBrushStrokeCollection( );
+            LTL = new TileBrushStrokeCollection( );
+            LBR = new TileBrushStrokeCollection( );
+            LBL = new TileBrushStrokeCollection( );
         }
 
         public bool Contains (string tileName) {
-            foreach (Tile tile in All( )) {
-                if (tile.Name == tileName) return true;
+            foreach (TileBrushStroke brushStroke in All( )) {
+                if (brushStroke.Tile.Name == tileName) return true;
             }
             return false;
         }
@@ -94,50 +94,40 @@ namespace mapKnight.ToolKit.Data {
             return GetRandom(Centre);
         }
 
-        public void GeneratePreviewImages(EditorMap map) {
-            PrevCentre = map.WpfTextures[Centre[0].tile.Name];
-            PrevCTR = map.WpfTextures[CTR[0].tile.Name];
-            PrevCTL = map.WpfTextures[CTL[0].tile.Name];
-            PrevCBR = map.WpfTextures[CBR[0].tile.Name];
-            PrevCBL = map.WpfTextures[CBL[0].tile.Name];
-            PrevIT = map.WpfTextures[IT[0].tile.Name];
-            PrevIB = map.WpfTextures[IB[0].tile.Name];
-            PrevIR = map.WpfTextures[IR[0].tile.Name];
-            PrevIL = map.WpfTextures[IL[0].tile.Name];
-            PrevLTR = map.WpfTextures[LTR[0].tile.Name];
-            PrevLTL = map.WpfTextures[LTL[0].tile.Name];
-            PrevLBR = map.WpfTextures[LBR[0].tile.Name];
-            PrevLBL = map.WpfTextures[LBL[0].tile.Name];
+        public void GeneratePreviewImages (EditorMap map) {
+            foreach (TileBrushStroke stroke in All( )) {
+                stroke.GeneratePreviewImage(map);
+            }
         }
 
-        private (Tile tile, float rotation) GetRandom ((Tile tile, float rotation, int possibility)[ ] array) {
-            float summedPossibility = array.Sum(item => item.possibility);
+        private (Tile tile, float rotation) GetRandom (TileBrushStrokeCollection array) {
+            float summedPossibility = array.SummedPossibility;
             float currentPossibility = 0;
             float targetPossibility = (float)random.NextDouble( );
             int currentIndex = 0;
 
             while (currentPossibility < targetPossibility && currentIndex < array.Length) {
-                currentPossibility += array[currentIndex].possibility / summedPossibility;
+                currentPossibility += array[currentIndex].Possibility / summedPossibility;
                 currentIndex++;
             }
 
-            return (array[currentIndex - 1].tile, array[currentIndex - 1].rotation);
+            return (array[currentIndex - 1].Tile, array[currentIndex - 1].Rotation);
         }
 
-        private IEnumerable<Tile> All ( ) {
-            foreach ((Tile tile, float rotation, int possibility) item in Centre) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in CTR) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in CTL) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in CBR) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in CBL) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in IT) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in IB) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in IL) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in IR) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in LTR) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in LBR) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in LTL) yield return item.tile;
-            foreach ((Tile tile, float rotation, int possibility) item in LBL) yield return item.tile;
+        private IEnumerable<TileBrushStroke> All ( ) {
+            foreach (TileBrushStroke item in Centre) yield return item;
+            foreach (TileBrushStroke item in CTR) yield return item;
+            foreach (TileBrushStroke item in CTL) yield return item;
+            foreach (TileBrushStroke item in CBR) yield return item;
+            foreach (TileBrushStroke item in CBL) yield return item;
+            foreach (TileBrushStroke item in IT) yield return item;
+            foreach (TileBrushStroke item in IB) yield return item;
+            foreach (TileBrushStroke item in IL) yield return item;
+            foreach (TileBrushStroke item in IR) yield return item;
+            foreach (TileBrushStroke item in LTR) yield return item;
+            foreach (TileBrushStroke item in LBR) yield return item;
+            foreach (TileBrushStroke item in LTL) yield return item;
+            foreach (TileBrushStroke item in LBL) yield return item;
         }
     }
 }

@@ -1,0 +1,97 @@
+﻿<Window x:Class="mapKnight.ToolKit.Windows.Dialogs.EditBrushPossibilitiesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
+        xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
+        mc:Ignorable="d"
+        Title="Edit Possibilities" Height="300" Width="300">
+    <Window.Resources>
+        <DataTemplate x:Key="expander_template" DataType="{x:Type data:TileBrushStrokeCollection}">
+            <ListView Height="Auto" Width="Auto" ItemsSource="{Binding}">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type data:TileBrushStroke}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="30" Height="30" 
+                                Source="{Binding Preview}"
+                                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                RenderTransformOrigin="0.5,0.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform Angle="{Binding RotationInDegree}"/>
+                                </Image.RenderTransform>
+                            </Image>
+                            <controls:IntegerTextBox Text="{Binding Possibility}" 
+                                                         Margin="5,0,0,0" 
+                                                         Width="100"
+                                                         VerticalAlignment="Center" 
+                                                         TextAlignment="Left"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DataTemplate>
+    </Window.Resources>
+    <ListView Margin="5,0,5,5">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="Height" Value="Auto"/>
+            </Style>
+        </ListView.ItemContainerStyle>
+        <Expander 
+            x:Name="expander_centre"
+            Header="Centre"
+            ContentTemplate="{StaticResource expander_template}"/>
+
+        <Expander 
+            x:Name="expander_ctr"
+            Header="Outer Corner Top-Right"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_ctl"
+            Header="Outer Corner Top-Left"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_cbr"
+            Header="Outer Corner Bottom-Right"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_cbl"
+            Header="Outer Corner Bottom-Left"
+            ContentTemplate="{StaticResource expander_template}"/>
+
+        <Expander 
+            x:Name="expander_It"
+            Header="Edge Top"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_Ib"
+            Header="Edge Bottom"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_Ir"
+            Header="Edge Right"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_Il"
+            Header="Edge Left"
+            ContentTemplate="{StaticResource expander_template}"/>
+
+        <Expander 
+            x:Name="expander_Ltr"
+            Header="Inner Corner Top-Right"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_Ltl"
+            Header="Inner Corner Top-Left"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_Lbr"
+            Header="Inner Corner Bottom-Right"
+            ContentTemplate="{StaticResource expander_template}"/>
+        <Expander 
+            x:Name="expander_Lbl"
+            Header="Inner Corner Bottom-Left"
+            ContentTemplate="{StaticResource expander_template}"/>
+    </ListView>
+</Window>

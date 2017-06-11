@@ -460,7 +460,7 @@ namespace mapKnight.ToolKit.Editor {
             if (e.LeftButton == MouseButtonState.Pressed) {
                 int px0 = (int)selectedTile.X;
                 int py0 = Map.Height - (int)selectedTile.Y - 1;
-                Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].tile.Name);
+                Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].Tile.Name);
 
                 for (int x = -1; x <= 1; x++) {
                     for (int y = -1; y <= 1; y++) {
@@ -634,7 +634,7 @@ namespace mapKnight.ToolKit.Editor {
             if (e.LeftButton == MouseButtonState.Pressed && currentBrush != null) {
                 int px0 = (int)selectedTile.X;
                 int py0 = Map.Height - (int)selectedTile.Y - 1;
-                Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].tile.Name);
+                Map.Data[px0, py0, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == currentBrush.Centre[0].Tile.Name);
 
                 for (int x = -1; x <= 1; x++) {
                     for (int y = -1; y <= 1; y++) {

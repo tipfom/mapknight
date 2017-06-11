@@ -119,6 +119,8 @@
     <Compile Include="Data\ImageData.cs" />
     <Compile Include="Data\IUserControlComponent.cs" />
     <Compile Include="Data\TileBrush.cs" />
+    <Compile Include="Data\TileBrushStroke.cs" />
+    <Compile Include="Data\TileBrushStrokeCollection.cs" />
     <Compile Include="Data\VertexAnimationData.cs" />
     <Compile Include="Data\WindowsEntitySerializer.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
@@ -171,6 +173,9 @@
     <Compile Include="Controls\Xna\ImageSource.cs" />
     <Compile Include="Controls\Xna\XnaControl.xaml.cs">
       <DependentUpon>XnaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Dialogs\EditBrushPossibilitiesDialog.xaml.cs">
+      <DependentUpon>EditBrushPossibilitiesDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Dialogs\EditMapDialog.xaml.cs">
       <DependentUpon>EditMapDialog.xaml</DependentUpon>
@@ -276,6 +281,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Dialogs\AddMapDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Dialogs\EditBrushPossibilitiesDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

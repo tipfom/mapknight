@@ -9,6 +9,7 @@
         Height="300" Width="500">
     <Window.CommandBindings>
         <CommandBinding Command="local:AddBrushDialog.FinishCommand" CanExecute="CommandBinding_Finish_CanExecute" Executed="CommandBinding_Finish_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.EditPossibilitiesCommand" CanExecute="CommandBinding_EditPossibilities_CanExecute" Executed="CommandBinding_EditPossibilities_Executed"/>
     </Window.CommandBindings>
     <Window.Resources>
         <DataTemplate x:Key="TileItemTemplate">
@@ -20,7 +21,10 @@
         </DataTemplate>
     </Window.Resources>
     <DockPanel Margin="5">
-        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Command="local:AddBrushDialog.FinishCommand" Margin="0,5,0,0" Content="Finish" Padding="7,2"/>
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,5,0,0">
+            <Button DockPanel.Dock="Right" Command="local:AddBrushDialog.FinishCommand" Content="Finish" Padding="7,2" HorizontalAlignment="Right"/>
+            <Button DockPanel.Dock="Left" Command="local:AddBrushDialog.EditPossibilitiesCommand" Content="Edit Possibilities" Padding="7,2" HorizontalAlignment="Left"/>
+        </DockPanel>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
