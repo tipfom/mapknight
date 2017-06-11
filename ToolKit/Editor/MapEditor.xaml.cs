@@ -468,7 +468,7 @@ namespace mapKnight.ToolKit.Editor {
                         int py = py0 + y;
 
                         if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
-                            (Tile tile, float rotation) replacement = currentBrush.Get(GetBrushData(px, py));
+                            (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], GetBrushData(px, py));
                             Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
                             Map.Rotations[px, py, currentLayer] = replacement.rotation;
                         }
@@ -642,7 +642,7 @@ namespace mapKnight.ToolKit.Editor {
                         int py = py0 + y;
 
                         if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
-                            (Tile tile, float rotation) replacement = currentBrush.Get(GetBrushData(px, py));
+                            (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], GetBrushData(px, py));
                             Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
                             Map.Rotations[px, py, currentLayer] = replacement.rotation;
                         }

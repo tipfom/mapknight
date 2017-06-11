@@ -68,30 +68,30 @@ namespace mapKnight.ToolKit.Data {
                 LBL.Count > 0;
         }
 
-        public (Tile tile, float rotation) Get (params bool[ ] data) {
+        public (Tile tile, float rotation) Get (Tile currentTile, float currentRotation, params bool[ ] data) {
             /* 0 1 2
              * 3 - 4 
              * 5 6 7
              */
 
-            if (data[3] && data[6] && !data[4] && !data[1]) return GetRandom(CTR);
-            if (data[4] && data[6] && !data[3] && !data[1]) return GetRandom(CTL);
-            if (data[3] && data[1] && !data[4] && !data[6]) return GetRandom(CBR);
-            if (data[4] && data[1] && !data[3] && !data[6]) return GetRandom(CBL);
+            if (data[3] && data[6] && !data[4] && !data[1]) return GetRandom(currentTile, currentRotation, CTR);
+            if (data[4] && data[6] && !data[3] && !data[1]) return GetRandom(currentTile, currentRotation, CTL);
+            if (data[3] && data[1] && !data[4] && !data[6]) return GetRandom(currentTile, currentRotation, CBR);
+            if (data[4] && data[1] && !data[3] && !data[6]) return GetRandom(currentTile, currentRotation, CBL);
 
-            if (!data[1] && data[4] && data[6] && data[3]) return GetRandom(IT);
-            if (data[1] && data[4] && !data[6] && data[3]) return GetRandom(IB);
-            if (data[1] && !data[4] && data[6] && data[3]) return GetRandom(IR);
-            if (data[1] && data[4] && data[6] && !data[3]) return GetRandom(IL);
+            if (!data[1] && data[4] && data[6] && data[3]) return GetRandom(currentTile, currentRotation, IT);
+            if (data[1] && data[4] && !data[6] && data[3]) return GetRandom(currentTile, currentRotation, IB);
+            if (data[1] && !data[4] && data[6] && data[3]) return GetRandom(currentTile, currentRotation, IR);
+            if (data[1] && data[4] && data[6] && !data[3]) return GetRandom(currentTile, currentRotation, IL);
 
             if (data[1] && data[4] && data[6] && data[3]) {
-                if (!data[2]) return GetRandom(LTR);
-                if (!data[0]) return GetRandom(LTL);
-                if (!data[7]) return GetRandom(LBR);
-                if (!data[5]) return GetRandom(LBL);
+                if (!data[2]) return GetRandom(currentTile, currentRotation, LTR);
+                if (!data[0]) return GetRandom(currentTile, currentRotation, LTL);
+                if (!data[7]) return GetRandom(currentTile, currentRotation, LBR);
+                if (!data[5]) return GetRandom(currentTile, currentRotation, LBL);
             }
 
-            return GetRandom(Centre);
+            return GetRandom(currentTile, currentRotation, Centre);
         }
 
         public void GeneratePreviewImages (EditorMap map) {
@@ -100,7 +100,13 @@ namespace mapKnight.ToolKit.Data {
             }
         }
 
-        private (Tile tile, float rotation) GetRandom (TileBrushStrokeCollection array) {
+        private (Tile tile, float rotation) GetRandom (Tile currentTile, float currentRotation, TileBrushStrokeCollection array) {
+            foreach(TileBrushStroke stroke in array) {
+                if(stroke.Tile.Name == currentTile.Name) {
+                    return (stroke.Tile, stroke.Rotation);
+                }
+            }
+
             float summedPossibility = array.SummedPossibility;
             float currentPossibility = 0;
             float targetPossibility = (float)random.NextDouble( );

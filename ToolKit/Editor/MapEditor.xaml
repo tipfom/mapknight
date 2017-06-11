@@ -178,19 +178,19 @@
                                     </Style>
                                 </DataTemplate.Resources>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="{Binding PrevCentre}"/>
-                                    <Image Source="{Binding PrevCTR}"/>
-                                    <Image Source="{Binding PrevCTL}"/>
-                                    <Image Source="{Binding PrevCBR}"/>
-                                    <Image Source="{Binding PrevCBL}"/>
-                                    <Image Source="{Binding PrevIT}"/>
-                                    <Image Source="{Binding PrevIB}"/>
-                                    <Image Source="{Binding PrevIR}"/>
-                                    <Image Source="{Binding PrevIL}"/>
-                                    <Image Source="{Binding PrevLTR}"/>
-                                    <Image Source="{Binding PrevLTL}"/>
-                                    <Image Source="{Binding PrevLBR}"/>
-                                    <Image Source="{Binding PrevLBL}"/>
+                                    <Image Source="{Binding PrevCentre}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCTR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCTL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCBR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCBL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIT}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIB}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLTR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLTL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLBR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLBL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
