@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Microsoft.Xna.Framework.Graphics;
+using System.IO.Compression;
 
 namespace mapKnight.ToolKit {
     public static class Extensions {
@@ -84,6 +85,35 @@ namespace mapKnight.ToolKit {
 
         public static Point ToPoint (this Vector vector) {
             return new Point(vector.X, vector.Y);
+        }
+
+        public static bool Contains (this ZipArchive archive, params string[ ] path) {
+            return archive.Contains(Path.Combine(path));
+        }
+
+        public static bool Contains (this ZipArchive archive, string path) {
+            return archive.Entries.Any(entry => entry.FullName == path);
+        }
+
+        public static IEnumerable<string> GetAllEntries (this ZipArchive archive, params string[ ] path) {
+            string internalpath = Path.Combine(path);
+            foreach (ZipArchiveEntry entry in archive.Entries) {
+                if (entry.FullName.StartsWith(internalpath)) yield return entry.FullName;
+            }
+        }
+
+        public static Stream GetOrCreateStream (this ZipArchive archive, bool forcenew, params string[ ] path) {
+            string internalpath = Path.Combine(path);
+            if (archive.Contains(internalpath)) {
+                if (forcenew) {
+                    archive.GetEntry(internalpath)?.Delete( );
+                    return archive.CreateEntry(internalpath, CompressionLevel.Optimal).Open( );
+                } else {
+                    return archive.GetEntry(internalpath).Open( );
+                }
+            } else {
+                return archive.CreateEntry(internalpath, CompressionLevel.Optimal).Open( );
+            }
         }
     }
 }

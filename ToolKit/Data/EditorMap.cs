@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -97,17 +98,17 @@ namespace mapKnight.ToolKit.Data {
             return GetTile(x, y).HasFlag(TileAttribute.Collision);
         }
 
-        public void SaveTo (Project project) {
+        public void SaveTo (Project project, ZipArchive archive) {
             // build texture
             Texture2D packedTexture = TileSerializer.BuildTexture(Tiles, XnaTextures, project.GraphicsDevice);
-            using (Stream stream = project.GetOrCreateStream(false, "maps", Name, Name + ".png"))
+            using (Stream stream = archive.GetOrCreateStream(false, "maps", Name, Name + ".png"))
                 packedTexture.SaveAsPng(stream, packedTexture.Width, packedTexture.Height);
 
             Texture = Path.GetFileNameWithoutExtension(Name + ".png");
-            using (Stream stream = project.GetOrCreateStream(false, "maps", Name, Name + ".map"))
+            using (Stream stream = archive.GetOrCreateStream(false, "maps", Name, Name + ".map"))
                 CreateCompileVersion( ).Serialize(stream, new WindowsEntitySerializer( ));
 
-            using (Stream stream = project.GetOrCreateStream(false, "maps", Name, Name + ".brushes"))
+            using (Stream stream = archive.GetOrCreateStream(false, "maps", Name, Name + ".brushes"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(Brushes));
         }

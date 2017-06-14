@@ -9,6 +9,7 @@ using mapKnight.ToolKit.Windows.Dialogs;
 using System.Windows.Media.Imaging;
 using Microsoft.Xna.Framework;
 using Point = System.Windows.Point;
+using System.IO.Compression;
 
 namespace mapKnight.ToolKit.Data {
     public class VertexAnimationData {
@@ -210,23 +211,23 @@ namespace mapKnight.ToolKit.Data {
             }
         }
 
-        public void SaveTo (Project project) {
-            using (Stream stream = project.GetOrCreateStream(true, "animations", Meta.Entity, ".meta"))
+        public void SaveTo (Project project, ZipArchive archive) {
+            using (Stream stream = archive.GetOrCreateStream(true, "animations", Meta.Entity, ".meta"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(Meta));
 
-            using (Stream stream = project.GetOrCreateStream(true, "animations", Meta.Entity, "animations.json"))
+            using (Stream stream = archive.GetOrCreateStream(true, "animations", Meta.Entity, "animations.json"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(Animations.ToArray( )));
 
-            using (Stream stream = project.GetOrCreateStream(true, "animations", Meta.Entity, "bones.json"))
+            using (Stream stream = archive.GetOrCreateStream(true, "animations", Meta.Entity, "bones.json"))
             using (StreamWriter writer = new StreamWriter(stream))
                 writer.WriteLine(JsonConvert.SerializeObject(Bones.ToArray( )));
 
             foreach (KeyValuePair<string, ImageData> image in Images) {
-                using (Stream stream = project.GetOrCreateStream(true, "animations", Meta.Entity, "textures", image.Key, ".png"))
+                using (Stream stream = archive.GetOrCreateStream(true, "animations", Meta.Entity, "textures", image.Key, ".png"))
                     image.Value.Image.SaveToStream(stream);
-                using (Stream stream = project.GetOrCreateStream(true, "animations", Meta.Entity, "textures", image.Key, ".data"))
+                using (Stream stream = archive.GetOrCreateStream(true, "animations", Meta.Entity, "textures", image.Key, ".data"))
                 using (StreamWriter writer = new StreamWriter(stream))
                     writer.WriteLine(JsonConvert.SerializeObject(image.Value.TransformOrigin));
             }

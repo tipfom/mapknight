@@ -46,7 +46,7 @@ namespace mapKnight.ToolKit {
             File.Create(projectfile).Close( );
             Project project = ((EditorWindow)App.Current.MainWindow).CurrentProject;
 
-            project.Path = projectfile;
+            project.Location = projectfile;
             project.Save( );
             RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)App.Current.MainWindow.Width, (int)App.Current.MainWindow.Height, 96, 96, System.Windows.Media.PixelFormats.Pbgra32);
             renderTargetBitmap.Render(App.Current.MainWindow);

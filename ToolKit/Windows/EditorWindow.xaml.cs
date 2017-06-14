@@ -22,12 +22,20 @@ namespace mapKnight.ToolKit.Windows {
     /// Interaktionslogik für EditorWindow.xaml
     /// </summary>
     public partial class EditorWindow : Window {
-        public const string PROJECT_FILTER = "PROJECT-Files|*" + Project.EXTENSION;
+        public const string PROJECT_FILTER = "PROJECT-Files|*.mkproj";
         private static readonly SaveFileDialog saveDialog = new SaveFileDialog( ) { Filter = PROJECT_FILTER, OverwritePrompt = true, AddExtension = false };
         private static readonly OpenFileDialog openDialog = new OpenFileDialog( ) { Filter = PROJECT_FILTER, Multiselect = false, AddExtension = false, ReadOnlyChecked = false };
         private static readonly FolderBrowserDialog compileDialog = new FolderBrowserDialog( ) { ShowNewFolderButton = true };
 
-        public Project CurrentProject;
+        private Project _CurrentProject;
+        public Project CurrentProject {
+            get { return _CurrentProject; }
+            set {
+                _CurrentProject = value;
+                _CurrentProject.LocationChanged += ( ) => Title = GetTitle( );
+                Title = GetTitle( );
+            }
+        }
 
         private ObservableCollection<object> menuItems = new ObservableCollection<object>( );
         private MapEditor mapEditorInstance;
@@ -93,7 +101,7 @@ namespace mapKnight.ToolKit.Windows {
                 SetTabPageMenu(new List<FrameworkElement>( ));
             }
         }
-        
+
         private void LoadWindowProperties ( ) {
             Top = Properties.Settings.Default.Top;
             Left = Properties.Settings.Default.Left;
@@ -176,6 +184,13 @@ namespace mapKnight.ToolKit.Windows {
             } catch { }
         }
 
+        private string GetTitle ( ) {
+            if (CurrentProject.HasLocation) {
+                return "Pluto Alpha - " + CurrentProject.Location;
+            }
+            return "Pluto Alpha";
+        }
+
         #region CommandBindings
         private void CommandBinding_New_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
@@ -191,9 +206,9 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         private void CommandBinding_Save_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (!CurrentProject.HasPath) {
+            if (!CurrentProject.HasLocation) {
                 if (saveDialog.ShowDialog( ) ?? false) {
-                    CurrentProject.Path = saveDialog.FileName;
+                    CurrentProject.Location = saveDialog.FileName;
                     CurrentProject.Save( );
                 }
             } else {
@@ -224,7 +239,7 @@ namespace mapKnight.ToolKit.Windows {
 
         private void CommandBinding_SaveAs_Executed (object sender, ExecutedRoutedEventArgs e) {
             if (saveDialog.ShowDialog( ) ?? false) {
-                CurrentProject.Path = saveDialog.FileName;
+                CurrentProject.Location = saveDialog.FileName;
                 CurrentProject.Save( );
             }
         }
