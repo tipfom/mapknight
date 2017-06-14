@@ -10,28 +10,64 @@
         Closing="Window_Closing" Loaded="Window_Loaded"
         Icon="{StaticResource ResourceKey=logo}">
     <Window.CommandBindings>
-        <CommandBinding Command="New" CanExecute="NewCommand_CanExecute" Executed="NewCommand_Executed" />
-        <CommandBinding Command="Save" CanExecute="SaveCommand_CanExecute" Executed="SaveCommand_Executed"/>
-        <CommandBinding Command="Open" CanExecute="CommandOpen_CanExecute" Executed="CommandOpen_Executed"/>
+        <CommandBinding Command="New" CanExecute="CommandBinding_New_CanExecute" Executed="CommandBinding_New_Executed" />
+        <CommandBinding Command="Save" CanExecute="CommandBinding_Save_CanExecute" Executed="CommandBinding_Save_Executed"/>
+        <CommandBinding Command="SaveAs" CanExecute="CommandBinding_SaveAs_CanExecute" Executed="CommandBinding_SaveAs_Executed"/>
+        <CommandBinding Command="Open" CanExecute="CommandBinding_Open_CanExecute" Executed="CommandBinding_Open_Executed"/>
     </Window.CommandBindings>
     <DockPanel>
         <Menu Name="menu_editor" IsMainMenu="True" DockPanel.Dock="Top" Height="24" Background="White">
             <MenuItem Header="_PROJECT" Height="24">
-                <MenuItem Header="NEW" Height="22" Command="New" Icon="{StaticResource ResourceKey=image_project_new }"/>
-                <MenuItem Header="OPEN" Height="22" Command="Open" Icon="{StaticResource ResourceKey=image_project_load}"/>
-                <MenuItem Header="ADD" Height="22">
-                    <MenuItem Header="MAP" Height="22" Click="MenuItemAddMap_Click"/>
-                    <MenuItem Header="ANIMATION" Height="22" Click="MenuItemAddAnimation_Click"/>
+                <MenuItem Header="NEW" Command="New">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_file_new}"/>
+                    </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="SAVE" Height="22" Command="Save" Icon="{StaticResource ResourceKey=image_project_save}"/>
-                <MenuItem Header="COMPILE" Height="22" Click="MenuItemCompile_Click" Icon="{StaticResource ResourceKey=image_project_compile}"/>
+                <MenuItem Header="OPEN" Command="Open">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_file_open}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="ADD">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_add}"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="MAP" Height="22" Click="MenuItem_Project_Add_Map_Click">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_map}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="ANIMATION" Height="22" Click="MenuItem_Project_Add_Animation_Click">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_animation}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="SAVE" Command="Save">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_file_save}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="SAVE AS" Command="SaveAs">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_file_save_as}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="COMPILE" Click="MenuItem_Project_Compile_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_file_compile}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_TOOLS">
-                <MenuItem Header="PACK TEXTURE" Click="MenuItem_PackTexture_Click"/>
+                <MenuItem Header="PACK TEXTURE" Click="MenuItem_Tools_PackTexture_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_image}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
-            <MenuItem Header="_ABOUT" Click="About_Click"/>
+            <MenuItem Header="_ABOUT" Click="MenuItem_About_Click"/>
         </Menu>
-        <TabControl Name="tabcontrol_editor" SelectionChanged="tabcontrol_editor_SelectionChanged">
-        </TabControl>
+        <TabControl Name="tabcontrol_editor" SelectionChanged="TabControl_Editor_SelectionChanged"/>
     </DockPanel>
 </Window>

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using mapKnight.ToolKit.Windows;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 
 namespace mapKnight.ToolKit {
@@ -39,8 +41,21 @@ namespace mapKnight.ToolKit {
                 writer.WriteLine(e.ExceptionObject.ToString( ));
             }
 
-            ((Windows.EditorWindow)App.Current.MainWindow).CRASH_SAVE(folder);
 
+            string projectfile = folder + @"\project.mkproj";
+            File.Create(projectfile).Close( );
+            Project project = ((EditorWindow)App.Current.MainWindow).CurrentProject;
+
+            project.Path = projectfile;
+            project.Save( );
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)App.Current.MainWindow.Width, (int)App.Current.MainWindow.Height, 96, 96, System.Windows.Media.PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(App.Current.MainWindow);
+            PngBitmapEncoder pngImage = new PngBitmapEncoder( );
+            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+            using (Stream fileStream = File.Create(folder + @"\screenshot.png")) {
+                pngImage.Save(fileStream);
+            }
+            
             string text =
                 "Hmm... It seems like we made an mistake!\n" +
                 "Some application-thread threw an error we didnt think about. :(\n" +
