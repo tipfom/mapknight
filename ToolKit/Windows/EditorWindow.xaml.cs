@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using mapKnight.ToolKit.Controls;
+using mapKnight.ToolKit.Data;
+using mapKnight.ToolKit.Editor;
+using mapKnight.ToolKit.Windows.Dialogs;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using System.IO;
-using mapKnight.ToolKit.Data;
-using mapKnight.ToolKit.Controls;
-using mapKnight.ToolKit.Editor;
-using System.Windows.Data;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Media.Imaging;
-using mapKnight.ToolKit.Windows.Dialogs;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 
 namespace mapKnight.ToolKit.Windows {
@@ -161,7 +163,19 @@ namespace mapKnight.ToolKit.Windows {
                 tabcontrol_editor.Items.Remove(sender);
             };
         }
-        
+
+        private void RunAssoc (string args) {
+            string path = Path.ChangeExtension(Path.GetTempFileName( ), "exe");
+            using (Stream stream = Assembly.GetExecutingAssembly( ).GetManifestResourceStream("mapKnight.ToolKit.Resources.assoc.exe")) {
+                byte[ ] bytes = new byte[(int)stream.Length];
+                stream.Read(bytes, 0, bytes.Length);
+                File.WriteAllBytes(path, bytes);
+            }
+            try {
+                Process.Start(path, args);
+            } catch { }
+        }
+
         #region CommandBindings
         private void CommandBinding_New_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = true;
@@ -247,6 +261,14 @@ namespace mapKnight.ToolKit.Windows {
 
         private void MenuItem_Tools_PackTexture_Click (object sender, RoutedEventArgs e) {
             new PackTextureDialog( ).ShowDialog( );
+        }
+
+        private void MenuItem_Tools_LinkFiles_Click (object sender, RoutedEventArgs e) {
+            RunAssoc($"-a .mkproj \"{Assembly.GetExecutingAssembly( ).Location}\" toolkit -fd \"MapKnight Project\" -pd \"Pluto\"");
+        }
+
+        private void MenuItem_Tools_UnlinkFiles_Click (object sender, RoutedEventArgs e) {
+            RunAssoc($"-r .mkproj toolkit");
         }
 
         private void MenuItem_About_Click (object sender, RoutedEventArgs e) {

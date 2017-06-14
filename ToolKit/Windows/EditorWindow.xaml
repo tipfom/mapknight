@@ -65,6 +65,16 @@
                         <Image Source="{StaticResource ResourceKey=img_image}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="LINK FILES" Click="MenuItem_Tools_LinkFiles_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_link}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="UNLINK FILES" Click="MenuItem_Tools_UnlinkFiles_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ResourceKey=img_unlink}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_ABOUT" Click="MenuItem_About_Click"/>
         </Menu>

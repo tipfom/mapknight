@@ -3,21 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:mapKnight.ToolKit"
         mc:Ignorable="d"
-        Title="About" WindowStartupLocation="CenterOwner" SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" Icon="{StaticResource ResourceKey=logo}" ShowInTaskbar="False" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="About" 
+        WindowStartupLocation="CenterOwner" 
+        SizeToContent="WidthAndHeight" 
+        ShowInTaskbar="False" 
+        ResizeMode="NoResize" 
+        Icon="{StaticResource ResourceKey=img_about}" 
+        Loaded="Window_Loaded">
     <StackPanel Margin="10">
-        <TextBlock Margin="0,0,0,5" Text="Pluto Alpha made by Central Potato Unit Studios"/>
-        <TextBlock Margin="0" x:Name="label_version" Text="Version"/>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Margin="5" Content="Link"
-                    Click="ButtonLink_Click"/>
-            <Button Grid.Column="1" Margin="5" Content="Unlink"
-                    Click="ButtonUnlink_Click"/>
-        </Grid>
+        <TextBlock Margin="0,0,0,5">
+            Pluto Alpha made by Central Potato Unit Studios
+        </TextBlock>
+        <TextBlock Margin="0,0,0,5">
+            <Run>Icons by</Run>
+            <Hyperlink NavigateUri="https://icons8.com" RequestNavigate="Hyperlink_RequestNavigate">Icons8</Hyperlink>
+        </TextBlock>
+        <TextBlock x:Name="label_version">
+            Version
+        </TextBlock>
     </StackPanel>
 </Window>

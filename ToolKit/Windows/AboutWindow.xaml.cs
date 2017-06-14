@@ -25,22 +25,9 @@ namespace mapKnight.ToolKit.Windows {
                 ;
         }
 
-        private void ButtonLink_Click (object sender, RoutedEventArgs e) {
-            RunAssoc($"-a .mkproj \"{Assembly.GetExecutingAssembly( ).Location}\" toolkit -fd \"MapKnight Project\" -pd \"Pluto\"");
-        }
-
-        private void ButtonUnlink_Click (object sender, RoutedEventArgs e) {
-            RunAssoc($"-r .mkproj toolkit");
-        }
-
-        private void RunAssoc (string args) {
-            string path = Path.ChangeExtension(Path.GetTempFileName( ), "exe");
-            using (Stream stream = Assembly.GetExecutingAssembly( ).GetManifestResourceStream("mapKnight.ToolKit.Resources.assoc.exe")) {
-                byte[ ] bytes = new byte[(int)stream.Length];
-                stream.Read(bytes, 0, bytes.Length);
-                File.WriteAllBytes(path, bytes);
-            }
-            Process.Start(path, args);
+        private void Hyperlink_RequestNavigate (object sender, System.Windows.Navigation.RequestNavigateEventArgs e) {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }
