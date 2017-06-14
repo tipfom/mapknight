@@ -350,5 +350,19 @@ namespace mapKnight.ToolKit.Controls {
         private void CommandBinding_PasteFrame_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = copiedFrame != null;
         }
+
+        private void checkbox_unlockrotation_Checked (object sender, RoutedEventArgs e) {
+            try {
+                MLGCanvas canvas = (MLGCanvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
+                canvas.UnlockRotation = true;
+            } catch { }
+        }
+
+        private void checkbox_unlockrotation_Unchecked (object sender, RoutedEventArgs e) {
+            try {
+                MLGCanvas canvas = (MLGCanvas)contentpresenter.ContentTemplate.FindName("canvas_frame", contentpresenter);
+                canvas.UnlockRotation = false;
+            } catch { }
+        }
     }
 }

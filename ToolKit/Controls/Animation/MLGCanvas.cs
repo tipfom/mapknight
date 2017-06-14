@@ -18,6 +18,9 @@ namespace mapKnight.ToolKit.Controls.Animation {
         }
 
         public static event Action<BoneImage> SelectedBoneImageChanged;
+
+        public bool UnlockRotation = false;
+        
         // to remember the clicked image
         private BoneImage clickedBoneImage;
         private RotateTransform clickedTransform;
@@ -27,8 +30,9 @@ namespace mapKnight.ToolKit.Controls.Animation {
         // rotation stuff
         private Point centerPoint;
         private Vector startVector;
+        private Vector currentVector;
         private double initialAngle;
-
+        
         public MLGCanvas ( ) : base( ) {
             PreviewMouseDown += MLGCanvas_PreviewMouseDown;
             PreviewMouseMove += MLGCanvas_PreviewMouseMove;
@@ -75,12 +79,23 @@ namespace mapKnight.ToolKit.Controls.Animation {
                     case ClickedMouseButton.Right:
                         // rotate
                         Vector deltaVector = Point.Subtract(newPosition, centerPoint);
-                        double angle = Vector.AngleBetween(startVector, deltaVector);
-                        if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
-                            double step = Math.Round((initialAngle + angle) / 20d, 0);
-                            clickedTransform.Angle = step * 18d;
+                        if (UnlockRotation) {
+                            double angle = Vector.AngleBetween(currentVector, deltaVector);
+                            clickedTransform.Angle += Math.Round(angle, 0);
+                            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+                                clickedTransform.Angle = initialAngle + Math.Round((clickedTransform.Angle - initialAngle) / 20d, 0) * 20d;
+                            }
+                            Matrix m = Matrix.Identity;
+                            m.Rotate(clickedTransform.Angle - initialAngle);
+                            currentVector = m.Transform(startVector);
                         } else {
-                            clickedTransform.Angle = initialAngle + Math.Round(angle, 0);
+                            double angle = Vector.AngleBetween(startVector, deltaVector);
+                            if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+                                double step = Math.Round((initialAngle + angle) / 20d, 0);
+                                clickedTransform.Angle = step * 18d;
+                            } else {
+                                clickedTransform.Angle = initialAngle + Math.Round(angle, 0);
+                            }
                         }
                         clickedBoneImage.InvalidateMeasure( );
                         break;
@@ -117,6 +132,10 @@ namespace mapKnight.ToolKit.Controls.Animation {
                         initialAngle = clickedTransform.Angle;
                         clickedBoneImage.SetRotateEffect( );
                         clickedBoneImage.PositionOrRotationChangeBegan( );
+                        if (Keyboard.IsKeyDown(Key.I)) {
+                            while (clickedTransform.Angle < 0) clickedTransform.Angle += 360;
+                            clickedTransform.Angle %= 360;
+                        }
                     } else if(e.MiddleButton == MouseButtonState.Pressed) {
                         // FLIPP
                     }

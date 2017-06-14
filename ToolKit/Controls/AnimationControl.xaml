@@ -39,7 +39,8 @@
             </DockPanel>
         </DataTemplate>
         <DataTemplate x:Key="edit">
-            <DockPanel>
+            <DockPanel> 
+                <CheckBox x:Name="checkbox_unlockrotation" DockPanel.Dock="Top" HorizontalAlignment="Left" Content="Unlock Rotation" ToolTip="Hold I and right click the any bone to reset its rotation" Checked="checkbox_unlockrotation_Checked" Unchecked="checkbox_unlockrotation_Unchecked" IsChecked="False"/>
                 <DockPanel DockPanel.Dock="Bottom" Margin="0,5,0,0">
                     <TextBlock Text="Zoom" DockPanel.Dock="Left" Margin="0,0,5,0" Foreground="Gray"/>
                     <Slider x:Name="slider_zoom" DockPanel.Dock="Right" Orientation="Horizontal" Minimum="0" Maximum="6" Value="0" IsSnapToTickEnabled="True"

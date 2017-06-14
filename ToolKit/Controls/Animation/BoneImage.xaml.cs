@@ -23,6 +23,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
 
         public static event Action BackupChanges;
         public static event Action DumpChanges;
+        public static bool UnlockRotation;
 
         private static readonly Effect MOVE_EFFECT = new DropShadowEffect( ) { Color = Colors.Cyan, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
         private static readonly Effect ROTATE_EFFECT = new DropShadowEffect( ) { Color = Colors.Red, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
