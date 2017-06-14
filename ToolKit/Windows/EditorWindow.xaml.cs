@@ -201,9 +201,19 @@ namespace mapKnight.ToolKit.Windows {
         }
 
         public void CRASH_SAVE (string path) {
+            string projectfile = path + @"\project.mkproj";
+            File.Create(projectfile).Close( );
+
             // experimental
-            project.Path = path;
+            project.Path = projectfile;
             project.Save( );
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap((int)Width, (int)Height, 96, 96, System.Windows.Media.PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(this);
+            PngBitmapEncoder pngImage = new PngBitmapEncoder( );
+            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));
+            using (Stream fileStream = File.Create(path + @"screenshot.png")) {
+                pngImage.Save(fileStream);
+            }
         }
 
         private void tabcontrol_editor_SelectionChanged (object sender, SelectionChangedEventArgs e) {

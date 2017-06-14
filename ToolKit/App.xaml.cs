@@ -39,9 +39,7 @@ namespace mapKnight.ToolKit {
                 writer.WriteLine(e.ExceptionObject.ToString( ));
             }
 
-            string projectfile = folder + @"\project.mkproj";
-            File.Create(projectfile).Close( );
-            ((Windows.EditorWindow)App.Current.MainWindow).CRASH_SAVE(projectfile);
+            ((Windows.EditorWindow)App.Current.MainWindow).CRASH_SAVE(folder);
 
             string text =
                 "Hmm... It seems like we made an mistake!\n" +
