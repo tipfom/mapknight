@@ -188,7 +188,17 @@ namespace mapKnight.ToolKit.Windows {
             ClosableTabItem tabItem = new ClosableTabItem( ) { Header = "MAP", DataContext = map, ToolTip = ToolTip };
             tabcontrol_editor.Items.Add(tabItem);
             tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
-            tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+            tabItem.CloseRequested += (sender) => {
+                MessageBoxResult msgBoxResult = MessageBox.Show("Do you want to remove the associated map files from the project as well?", "Remove Animation", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                switch (msgBoxResult) {
+                    case MessageBoxResult.Cancel:
+                        return;
+                    case MessageBoxResult.Yes:
+                        project.Maps.Remove(map);
+                        break;
+                }
+                tabcontrol_editor.Items.Remove(sender);
+            };
         }
 
         private void CreateAnimationControl(VertexAnimationData data) {
@@ -197,7 +207,17 @@ namespace mapKnight.ToolKit.Windows {
             ClosableTabItem tabItem = new ClosableTabItem( ) { Header = "ANIMATION", DataContext = data, ToolTip = toolTip };
             tabcontrol_editor.Items.Add(tabItem);
             tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
-            tabItem.CloseRequested += (item) => tabcontrol_editor.Items.Remove(item);
+            tabItem.CloseRequested += (sender) => {
+                MessageBoxResult msgBoxResult = MessageBox.Show("Do you want to remove the associated animation files from the project as well?", "Remove Animation", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                switch (msgBoxResult) {
+                    case MessageBoxResult.Cancel:
+                        return;
+                    case MessageBoxResult.Yes:
+                        project.Animations.Remove(data);
+                        break;
+                }
+                tabcontrol_editor.Items.Remove(sender);
+            };
         }
 
         public void CRASH_SAVE (string path) {
