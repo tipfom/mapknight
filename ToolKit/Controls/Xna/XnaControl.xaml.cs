@@ -36,7 +36,7 @@ namespace mapKnight.ToolKit.Controls.Xna {
 
             // hook up an event to fire when the control has finished loading
             Loaded += new RoutedEventHandler(XnaControl_Loaded);
-            this.IsVisibleChanged += (sender, e) => { if ((bool)e.NewValue && Visibility == Visibility.Visible) DoStartUp( ); };
+            IsVisibleChanged += (sender, e) => { if ((bool)e.NewValue && Visibility == Visibility.Visible) DoStartUp( ); };
             resizeTimer.Tick += ResizeTimer_Tick;
         }
 
@@ -141,5 +141,12 @@ namespace mapKnight.ToolKit.Controls.Xna {
             imageSource.Commit( );
         }
 
+        public void Clear ( ) {
+            if (GraphicsDevice == null) return;
+            GraphicsDevice.SetRenderTarget(imageSource.RenderTarget);
+            GraphicsDevice.Clear(Background);
+            GraphicsDevice.SetRenderTarget(null);
+            imageSource.Commit( );
+        }
     }
 }

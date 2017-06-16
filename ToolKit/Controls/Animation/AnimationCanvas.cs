@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace mapKnight.ToolKit.Controls.Animation {
-    public class MLGCanvas : Canvas {
+    public class AnimationCanvas : Canvas {
         private enum ClickedMouseButton {
             None,
             Left,
@@ -20,7 +16,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
         public static event Action<BoneImage> SelectedBoneImageChanged;
 
         public bool UnlockRotation = false;
-        
+
         // to remember the clicked image
         private BoneImage clickedBoneImage;
         private RotateTransform clickedTransform;
@@ -32,20 +28,12 @@ namespace mapKnight.ToolKit.Controls.Animation {
         private Vector startVector;
         private Vector currentVector;
         private double initialAngle;
-        
-        public MLGCanvas ( ) : base( ) {
-            PreviewMouseDown += MLGCanvas_PreviewMouseDown;
-            PreviewMouseMove += MLGCanvas_PreviewMouseMove;
-            PreviewMouseUp += MLGCanvas_PreviewMouseUp;
-            MouseLeave += MLGCanvas_MouseLeave;
-        }
 
-        private void MLGCanvas_MouseLeave (object sender, MouseEventArgs e) {
-            ChangesCompleted( );
-        }
-
-        private void MLGCanvas_PreviewMouseUp (object sender, MouseButtonEventArgs e) {
-            ChangesCompleted( );
+        public AnimationCanvas ( ) : base( ) {
+            PreviewMouseDown += AnimationCanvas_PreviewMouseDown;
+            PreviewMouseMove += AnimationCanvas_PreviewMouseMove;
+            PreviewMouseUp += (sender, e) => ChangesCompleted( );
+            MouseLeave += (sender, e) => ChangesCompleted( );
         }
 
         private void ChangesCompleted ( ) {
@@ -64,7 +52,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
             clickState = ClickedMouseButton.None;
         }
 
-        private void MLGCanvas_PreviewMouseMove (object sender, MouseEventArgs e) {
+        private void AnimationCanvas_PreviewMouseMove (object sender, MouseEventArgs e) {
             if (clickedBoneImage != null) {
                 Point newPosition = e.GetPosition(this);
                 Point delta = new Point(newPosition.X - lastPosition.X, newPosition.Y - lastPosition.Y);
@@ -103,7 +91,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
             }
         }
 
-        private void MLGCanvas_PreviewMouseDown (object sender, MouseButtonEventArgs e) {
+        private void AnimationCanvas_PreviewMouseDown (object sender, MouseButtonEventArgs e) {
             foreach (UIElement element in Children) {
                 BoneImage image = element as BoneImage;
                 if (image != null) {
@@ -136,10 +124,9 @@ namespace mapKnight.ToolKit.Controls.Animation {
                             while (clickedTransform.Angle < 0) clickedTransform.Angle += 360;
                             clickedTransform.Angle %= 360;
                         }
-                    } else if(e.MiddleButton == MouseButtonState.Pressed) {
+                    } else if (e.MiddleButton == MouseButtonState.Pressed) {
                         // FLIPP
-                    }
-                    else {
+                    } else {
                         clickState = ClickedMouseButton.None;
                     }
                     return;

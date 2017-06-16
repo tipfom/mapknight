@@ -9,16 +9,20 @@ using Microsoft.Xna.Framework;
 using Vector2 = mapKnight.Core.Vector2;
 using Microsoft.Xna.Framework.Graphics;
 using mapKnight.ToolKit.Data;
+using System.Windows.Input;
 
 namespace mapKnight.ToolKit.Controls.Animation {
     public class AnimationView : XnaControl {
-        private DispatcherTimer renderTimer = new DispatcherTimer( ) { Interval = new TimeSpan(0,0,0,0,15), IsEnabled = false };
+        public bool Running { get { return renderTimer.IsEnabled; } }
+
+        private DispatcherTimer renderTimer = new DispatcherTimer( ) { Interval = new TimeSpan(0, 0, 0, 0, 15), IsEnabled = false };
         private VertexAnimation currentAnimation;
-        private bool paused = false;
         private Dictionary<string, Texture2D> textures;
         private Dictionary<string, Microsoft.Xna.Framework.Vector2> transformOrigins;
         private Texture2D entityTexture;
         private Texture2D groundTexture;
+        private bool paused = false;
+        private bool dontResume = false;
         private float entityRatio;
         private int nextFrame;
         private int nextFrameTime;
@@ -27,8 +31,8 @@ namespace mapKnight.ToolKit.Controls.Animation {
 
         public AnimationView ( ) {
             renderTimer.Tick += (sender, e) => Update( );
-            base.DeviceInitialized += ( ) => CreateEmptyTexture( );
-            this.IsVisibleChanged += AnimationView_IsVisibleChanged;
+            DeviceInitialized += ( ) => CreateEmptyTexture( );
+            IsVisibleChanged += AnimationView_IsVisibleChanged;
         }
 
         private void AnimationView_IsVisibleChanged (object sender, System.Windows.DependencyPropertyChangedEventArgs e) {
@@ -36,9 +40,6 @@ namespace mapKnight.ToolKit.Controls.Animation {
         }
 
         private void CreateEmptyTexture ( ) {
-            if (DesignerProperties.GetIsInDesignMode(this))
-                return;
-
             entityTexture = new Texture2D(GraphicsDevice, 1, 1);
             entityTexture.SetData(new Color[ ] { new Color(51, 153, 255, 255) });
 
@@ -47,20 +48,19 @@ namespace mapKnight.ToolKit.Controls.Animation {
         }
 
         public void Play (VertexAnimation animation, float entityratio, Dictionary<string, ImageData> imagedata) {
-            paused = false;
+            if (animation != currentAnimation) paused = false;
+
             textures = imagedata.ToDictionary(entry => entry.Key, entry => entry.Value.Image.ToTexture2D(GraphicsDevice));
             transformOrigins = imagedata.ToDictionary(entry => entry.Key, entry => new Microsoft.Xna.Framework.Vector2((float)entry.Value.TransformOrigin.X, (float)entry.Value.TransformOrigin.Y));
             currentAnimation = animation;
             entityRatio = entityratio;
-            Reset( );
+            if (paused) {
+                nextFrameTime += Environment.TickCount - pauseBegin;
+            } else {
+                Reset( );
+            }
             renderTimer.Start( );
-        }
-
-        public void Reset ( ) {
-            if (currentAnimation == null) return;
-            currentFrame = 0;
-            nextFrame = Math.Min(1, currentAnimation.Frames.Count - 1);
-            nextFrameTime = Environment.TickCount + currentAnimation.Frames[currentFrame].Time;
+            paused = false;
         }
 
         public void Stop ( ) {
@@ -68,14 +68,16 @@ namespace mapKnight.ToolKit.Controls.Animation {
         }
 
         public void Pause ( ) {
-            paused = !paused;
-            if (paused) {
-                renderTimer.Stop( );
-                pauseBegin = Environment.TickCount;
-            } else {
-                renderTimer.Start( );
-                nextFrameTime += Environment.TickCount - pauseBegin;
-            }
+            paused = true;
+            renderTimer.Stop( );
+            pauseBegin = Environment.TickCount;
+        }
+
+        private void Reset ( ) {
+            if (currentAnimation == null) return;
+            currentFrame = 0;
+            nextFrame = Math.Min(1, currentAnimation.Frames.Count - 1);
+            nextFrameTime = Environment.TickCount + currentAnimation.Frames[currentFrame].Time;
         }
 
         protected override void Render (SpriteBatch spriteBatch) {
@@ -107,7 +109,11 @@ namespace mapKnight.ToolKit.Controls.Animation {
 
                 spriteBatch.Draw(texture, new Rectangle(x, y, width, height), null, Color.White, (float)(entry.Rotation * Math.PI / 180f), texture.Bounds.Size.ToVector2( ) * transformOrigins[entry.Image], entry.Mirrored ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
             }
-            renderTimer.Start( );
+            if (dontResume) {
+                dontResume = false;
+            } else {
+                renderTimer.Start( );
+            }
         }
 
         private IEnumerable<VertexBone> InterpolateAnimation ( ) {
@@ -121,11 +127,14 @@ namespace mapKnight.ToolKit.Controls.Animation {
                     currentFrame = nextFrame;
                     nextFrame = 0;
                     nextFrameTime += currentAnimation.Frames[currentFrame].Time;
+                } else {
+                    dontResume = true;
+                    CommandManager.InvalidateRequerySuggested( );
                 }
             }
             float progress = Core.Mathf.Clamp01((nextFrameTime - Environment.TickCount) / (float)currentAnimation.Frames[currentFrame].Time);
 
-            for (int i = currentAnimation.Frames[0].Bones.Count-1; i > -1; i--) {
+            for (int i = currentAnimation.Frames[0].Bones.Count - 1; i > -1; i--) {
                 Vector2 interpolatedPosition = Interpolate(currentAnimation.Frames[nextFrame].Bones[i].Position, currentAnimation.Frames[currentFrame].Bones[i].Position, progress);
                 float interpolatedRotation = Interpolate(currentAnimation.Frames[nextFrame].Bones[i].Rotation, currentAnimation.Frames[currentFrame].Bones[i].Rotation, progress);
                 yield return new VertexBone( ) { Position = interpolatedPosition, Rotation = interpolatedRotation, Mirrored = currentAnimation.Frames[nextFrame].Bones[i].Mirrored, Image = currentAnimation.Frames[nextFrame].Bones[i].Image, Scale = currentAnimation.Frames[nextFrame].Bones[i].Scale };

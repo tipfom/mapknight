@@ -31,17 +31,17 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
             return result;
         }
 
-        private void ButtonInvert_Click (object sender, RoutedEventArgs e) {
-            foreach (VertexBone bone in listview_bones.ItemsSource) {
-                bone.Export = !bone.Export;
-                bone.OnPropertyChanged("Export");
-            }
-        }
-
         protected override void OnClosing (CancelEventArgs e) {
             if (App.Current.MainWindow != null) {
                 e.Cancel = true;
                 Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void MenuItem_Invert_Click (object sender, RoutedEventArgs e) {
+            foreach (VertexBone bone in listview_bones.ItemsSource) {
+                bone.Export = !bone.Export;
+                bone.OnPropertyChanged("Export");
             }
         }
     }

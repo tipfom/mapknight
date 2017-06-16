@@ -5,12 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
         mc:Ignorable="d"
-        Title="Select Bones to Export" SizeToContent="Height" Width="300" WindowStyle="ToolWindow" MaxHeight="1000"
+        Title="Select Bones to Export" 
+        SizeToContent="Height" 
+        Width="300" MaxHeight="1000"
+        Icon="{StaticResource ResourceKey=img_filter}"
         Topmost="{Binding Source={x:Static Application.Current},Path=MainWindow.IsActive,Mode=OneWay}" WindowStartupLocation="CenterOwner">
     <DockPanel Margin="5">
-        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,5">
-            <Button DockPanel.Dock="Right" Content="Invert" HorizontalAlignment="Right" Padding="5,0" Click="ButtonInvert_Click"/>
-        </DockPanel>
+        <Menu DockPanel.Dock="Top" Background="White" Margin="0,0,0,5">
+            <MenuItem Click="MenuItem_Invert_Click">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">
+                        INVERT
+                    </TextBlock>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="{StaticResource ResourceKey=img_invert}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
         <ListView x:Name="listview_bones">
             <ListView.ItemTemplate>
                 <DataTemplate DataType="{x:Type data:VertexBone}">

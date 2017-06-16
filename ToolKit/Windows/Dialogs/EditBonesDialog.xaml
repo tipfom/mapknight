@@ -1,48 +1,89 @@
 ﻿<Window x:Class="mapKnight.ToolKit.Windows.Dialogs.EditBonesDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:l="clr-namespace:mapKnight.ToolKit"
+        xmlns:dialogs="clr-namespace:mapKnight.ToolKit.Windows.Dialogs"
         xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
-        Title="Bones" SizeToContent="Width" WindowStyle="ToolWindow" Height="400" Icon="{StaticResource ResourceKey=logo}" ResizeMode="CanResize" MinWidth="361" MaxWidth="361" ShowInTaskbar="False"
-        Topmost="{Binding Source={x:Static Application.Current},Path=MainWindow.IsActive,Mode=OneWay}" WindowStartupLocation="CenterOwner">
+        Title="Bones" 
+        Height="400" Width="300" 
+        Icon="{StaticResource ResourceKey=img_settings}" 
+        ShowInTaskbar="False"
+        Topmost="{Binding Source={x:Static Application.Current}, Path=MainWindow.IsActive, Mode=OneWay}"
+        WindowStartupLocation="CenterOwner">
     <Window.CommandBindings>
-        <CommandBinding Command="New" CanExecute="CommandNew_CanExecute" Executed="CommandNew_Executed"/>
-        <CommandBinding Command="Delete" CanExecute="CommandDelete_CanExecute" Executed="CommandDelete_Executed"/>
-        <CommandBinding x:Name="up_command" Command="l:CustomCommands.Up" CanExecute="CommandUp_CanExecute" Executed="CommandUp_Executed"/>
-        <CommandBinding Command="l:CustomCommands.Down" CanExecute="CommandDown_CanExecute" Executed="CommandDown_Executed"/>
-        <CommandBinding Command="l:CustomCommands.EditorR" CanExecute="CommandEditorR_CanExecute" Executed="CommandEditorR_Executed"/>
+        <CommandBinding Command="New" CanExecute="CommandBinding_New_CanExecute" Executed="CommandBinding_New_Executed"/>
+        <CommandBinding Command="Delete" CanExecute="CommandBinding_Delete_CanExecute" Executed="CommandBinding_Delete_Executed"/>
+        <CommandBinding Command="dialogs:EditBonesDialog.UpCommand" CanExecute="CommandBinding_Up_CanExecute" Executed="CommandBinding_Up_Executed"/>
+        <CommandBinding Command="dialogs:EditBonesDialog.DownCommand" CanExecute="CommandBinding_Down_CanExecute" Executed="CommandBinding_Down_Executed"/>
+        <CommandBinding Command="dialogs:EditBonesDialog.AdoptScaleCommand" CanExecute="CommandBinding_AdoptScale_CanExecute" Executed="CommandBinding_AdoptScale_Executed"/>
+        <CommandBinding Command="dialogs:EditBonesDialog.ChangeTextureCommand" CanExecute="CommandBinding_ChangeTexture_CanExecute" Executed="CommandBinding_ChangeTexture_Executed"/>
     </Window.CommandBindings>
     <Window.Resources>
-        <Style TargetType="{x:Type Button}">
+        <Style TargetType="{x:Type MenuItem}">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.1"/>
+                    <Setter Property="Opacity" Value="0.4"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
     </Window.Resources>
     <DockPanel>
-        <StackPanel DockPanel.Dock="Right" Width="40" Margin="5">
-            <Button Height="40" Background="Transparent" Command="New" BorderThickness="0">
-                <Image Source="{StaticResource ResourceKey=image_editbones_new}" Margin="-7" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-            </Button>
-            <Button Height="40" Background="Transparent" Margin="0,5,0,0" Command="Delete" BorderThickness="0">
-                <Image Source="{StaticResource ResourceKey=image_editbones_delete}" Margin="-7" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-            </Button>
-            <Button Height="40" Background="Transparent" Margin="0,5,0,0" Command="l:CustomCommands.Up" BorderThickness="0">
-                <Image Source="{StaticResource ResourceKey=image_editbones_up}" Margin="-7" RenderOptions.BitmapScalingMode="Linear"/>
-            </Button>
-            <Button Height="40" Background="Transparent" Margin="0,5,0,0" Command="l:CustomCommands.Down" BorderThickness="0">
-                <Image Source="{StaticResource ResourceKey=image_editbones_down}" Margin="-7" RenderOptions.BitmapScalingMode="Linear"/>
-            </Button>
-            <Button Height="40" Background="Transparent" Margin="0,5,0,0" Command="l:CustomCommands.EditorR" BorderThickness="0">
-                <Image Source="{StaticResource ResourceKey=image_editbones_resetsize}" Margin="-4" RenderOptions.BitmapScalingMode="Linear"/>
-            </Button>
-            <Button Height="40" Background="Transparent" Margin="0,5,0,0" Padding="0" Click="Button_Click" IsEnabled="{Binding ElementName=listbox_bones, Path=HasItems}" BorderThickness="0">
-                <Image Source="{StaticResource ResourceKey=image_editbones_change}" Margin="-4" RenderOptions.BitmapScalingMode="Linear"/>
-            </Button>
-        </StackPanel>
-        <ListBox DockPanel.Dock="Left" Width="300" x:Name="listbox_bones" BorderThickness="0" SelectedIndex="0">
+        <Menu Background="White" DockPanel.Dock="Top">
+            <MenuItem Command="New" Height="24" VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">ADD</TextBlock>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="{StaticResource ResourceKey=img_add}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Command="Delete" Height="24" VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">DELETE</TextBlock>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="{StaticResource ResourceKey=img_delete}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Command="dialogs:EditBonesDialog.UpCommand" 
+                      ToolTip="{Binding InputGestureText, RelativeSource={RelativeSource Self}}"
+                      Height="24" 
+                      VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">UP</TextBlock>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="{StaticResource ResourceKey=img_sort_up}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Command="dialogs:EditBonesDialog.DownCommand" 
+                      ToolTip="{Binding Path=InputGestureText, RelativeSource={RelativeSource Self}}"
+                      Height="24" 
+                      VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">DOWN</TextBlock>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="{StaticResource ResourceKey=img_sort_down}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Command="dialogs:EditBonesDialog.AdoptScaleCommand" Height="24" VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">ADOPT SCALE</TextBlock>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="{StaticResource ResourceKey=img_original_size}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Command="dialogs:EditBonesDialog.ChangeTextureCommand" Height="24" VerticalAlignment="Center">
+                <MenuItem.Header>
+                    <TextBlock VerticalAlignment="Center">CHANGE TEXTURE</TextBlock>
+                </MenuItem.Header>
+                <MenuItem.Icon>
+                    <Image Source="{StaticResource ResourceKey=img_image_edit}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
+        <ListBox x:Name="listbox_bones" BorderThickness="0" SelectedIndex="0" Focusable="False">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Style.Resources>

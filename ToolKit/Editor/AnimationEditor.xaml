@@ -1,0 +1,221 @@
+﻿<UserControl x:Class="mapKnight.ToolKit.Editor.AnimationEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:toolkit="clr-namespace:mapKnight.ToolKit"
+             xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
+             xmlns:content ="clr-namespace:mapKnight.ToolKit.Controls.Animation"
+             xmlns:editor="clr-namespace:mapKnight.ToolKit.Editor"
+             xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="800">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="editor:AnimationEditor.UndoCommand" Executed="CommandBinding_Undo_Executed" CanExecute="CommandBinding_Undo_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.NewCommand" Executed="CommandBinding_New_Executed" CanExecute="CommandBinding_New_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.DeleteCommand" Executed="CommandBinding_Delete_Executed" CanExecute="CommandBinding_Delete_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.UpCommand" Executed="CommandBinding_Up_Executed" CanExecute="CommandBinding_Up_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.DownCommand" Executed="CommandBinding_Down_Executed" CanExecute="CommandBinding_Down_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.CopyFrameCommand" Executed="CommandBinding_CopyFrame_Executed" CanExecute="CommandBinding_CopyFrame_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.PasteFrameCommand" Executed="CommandBinding_PasteFrame_Executed" CanExecute="CommandBinding_PasteFrame_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.ResetFrameCommand" Executed="CommandBinding_ResetFrame_Executed" CanExecute="CommandBinding_ResetFrame_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.PlayAnimationCommand" Executed="CommandBinding_PlayAnimation_Executed" CanExecute="CommandBinding_PlayAnimation_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.PauseAnimationCommand" Executed="CommandBinding_PauseAnimation_Executed" CanExecute="CommandBinding_PauseAnimation_CanExecute"/>
+        <CommandBinding Command="editor:AnimationEditor.StopAnimationCommand" Executed="CommandBinding_StopAnimation_Executed" CanExecute="CommandBinding_StopAnimation_CanExecture"/>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <DataTemplate x:Key="preview">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
+                    <Button Command="editor:AnimationEditor.PlayAnimationCommand"
+                            Background="Transparent" BorderBrush="Transparent"
+                            ToolTip="Play">
+                        <Image Height="48" Width="48" Source="{StaticResource ResourceKey=img_play}"/>
+                    </Button>
+                    <Button Command="editor:AnimationEditor.PauseAnimationCommand"
+                            Background="Transparent" BorderBrush="Transparent"
+                            ToolTip="Pause">
+                        <Image Height="48" Width="48" Source="{StaticResource ResourceKey=img_pause}"/>
+                    </Button>
+                    <Button Command="editor:AnimationEditor.StopAnimationCommand"
+                            Background="Transparent" BorderBrush="Transparent"
+                            ToolTip="Stop">
+                        <Image Height="48" Width="48" Source="{StaticResource ResourceKey=img_stop}"/>
+                    </Button>
+                </StackPanel>
+                <content:AnimationView x:Name="animationview" Margin="5"/>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="edit">
+            <DockPanel> 
+                <CheckBox x:Name="checkbox_unlockrotation" 
+                          DockPanel.Dock="Top" HorizontalAlignment="Left" 
+                          Content="Unlock Rotation" 
+                          ToolTip="Hold I and right click the any bone to reset its rotation" 
+                          Checked="checkbox_unlockrotation_Checked" Unchecked="checkbox_unlockrotation_Unchecked" IsChecked="False"/>
+                <DockPanel DockPanel.Dock="Bottom" Margin="0,5,0,0">
+                    <TextBlock Text="Zoom" 
+                               DockPanel.Dock="Left" 
+                               Margin="0,0,5,0" 
+                               Foreground="Gray"/>
+                    <Slider x:Name="slider_zoom" 
+                            DockPanel.Dock="Right" Orientation="Horizontal" 
+                            Minimum="0" Maximum="6" Value="0" 
+                            IsSnapToTickEnabled="True"
+                            ValueChanged="slider_zoom_ValueChanged"/>
+                </DockPanel>
+                <content:AnimationCanvas x:Name="canvas_frame" 
+                                         DockPanel.Dock="Top"  
+                                         Margin="3,0,0,3"
+                                         ClipToBounds="True" 
+                                         SizeChanged="canvas_frame_SizeChanged">
+                    <Rectangle x:Name="rectangle_entity" 
+                               Canvas.ZIndex ="-100" 
+                               Stroke="Black" StrokeThickness="2" 
+                               Opacity="0.5"/>
+                </content:AnimationCanvas>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="none">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" 
+                       Text="Nothing Selected" 
+                       Foreground="Gray"/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="200"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="2*" MinWidth="200"/>
+        </Grid.ColumnDefinitions>
+        <TreeView x:Name="treeview_animations" 
+                  Grid.Column="0" 
+                  ItemsSource="{Binding}" 
+                  ContextMenu="{DynamicResource contextmenu_default}"
+                  SelectedItemChanged="treeview_animations_SelectedItemChanged" MouseDown="treeview_animations_MouseDown">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <EventSetter Event="TreeViewItem.MouseRightButtonDown" Handler="treeview_animations_TreeViewItemRightMouseButtonDown"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <ContextMenu x:Key="contextmenu_default">
+                    <MenuItem Command="editor:AnimationEditor.NewCommand" Header="Add Animation">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_add}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+                <ContextMenu x:Key="contextmenu_animation">
+                    <MenuItem Command="editor:AnimationEditor.NewCommand" Header="Add Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_add}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="editor:AnimationEditor.PasteFrameCommand" Header="Paste Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_paste}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="toolkit:CustomCommands.EditorDelete" Header="Delete Animation">
+                        <MenuItem.Icon>
+                            <Image  Source="{StaticResource ResourceKey=img_delete}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+                <ContextMenu x:Key="contextmenu_frame">
+                    <MenuItem Command="editor:AnimationEditor.CopyFrameCommand" Header="Copy Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_copy}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="editor:AnimationEditor.PasteFrameCommand" Header="Paste Frame">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_paste}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="editor:AnimationEditor.UpCommand" Header="Move Frame Up">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_sort_up}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="editor:AnimationEditor.DownCommand" Header="Move Frame Down">
+                        <MenuItem.Icon>
+                            <Image Source="{StaticResource ResourceKey=img_sort_down}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="editor:AnimationEditor.ResetFrameCommand" Header="Reset Frame">
+                        <MenuItem.Icon>
+                            <Image  Source="{StaticResource ResourceKey=img_reset}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="editor:AnimationEditor.DeleteCommand" Header="Delete Frame">
+                        <MenuItem.Icon>
+                            <Image  Source="{StaticResource ResourceKey=img_delete}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                </Style>
+            </TreeView.Resources>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type data:VertexAnimation}" ItemsSource="{Binding Frames}">
+                    <StackPanel Orientation="Horizontal" 
+                                Margin="0,1,0,1">
+                        <RadioButton GroupName="radiobutton_animationdefault" 
+                                     VerticalAlignment="Center"
+                                     IsChecked="{Binding IsDefault}"/>
+                        <Image Width="20" Height="20" 
+                               VerticalAlignment="Center" 
+                               Source="{StaticResource ResourceKey=img_animation}" />
+                        <CheckBox Margin="7,1,7,1" Height="18" Width="18"
+                                  VerticalAlignment="Center" 
+                                  IsChecked="{Binding CanRepeat}">
+                            <CheckBox.Template>
+                                <ControlTemplate TargetType="CheckBox">
+                                    <Grid>
+                                        <Border BorderBrush="Gray" BorderThickness="1">
+                                            <Image Name="image" Source="{StaticResource ResourceKey=img_repeat}"/>
+                                        </Border>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="true">
+                                            <Setter TargetName="image" Property="Opacity" Value="1" />
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="false">
+                                            <Setter TargetName="image" Property="Opacity" Value="0.1" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </CheckBox.Template>
+                        </CheckBox>
+                        <TextBox  Text="{Binding Name}" MinWidth="100" MaxWidth="160" />
+                    </StackPanel>
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type data:VertexAnimationFrame}">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
+                                <Image Margin="0,0,3,0" Width="15" Height="15" 
+                                       VerticalAlignment="Center" 
+                                       Source="{StaticResource ResourceKey=img_animation_frame}"/>
+                                <TextBlock Margin="3,0"
+                                           Text="{Binding Index, StringFormat={}Frame {0}}"/>
+                                <controls:IntegerTextBox Width="72" 
+                                                         TextAlignment="Right" 
+                                                         Text="{Binding Time}"/>
+                                <TextBlock Margin="3,0"
+                                           Text="ms"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <GridSplitter Grid.Column="1" 
+                      HorizontalAlignment="Stretch" 
+                      Background="White"/>
+        <ContentPresenter x:Name="contentpresenter" 
+                          Grid.Column="2"
+                          ContentTemplate="{StaticResource none}" />
+    </Grid>
+</UserControl>

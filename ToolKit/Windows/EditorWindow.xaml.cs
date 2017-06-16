@@ -39,7 +39,7 @@ namespace mapKnight.ToolKit.Windows {
 
         private ObservableCollection<object> menuItems = new ObservableCollection<object>( );
         private MapEditor mapEditorInstance;
-        private AnimationControl animationEditorInstance;
+        private AnimationEditor animationEditorInstance;
 
         public EditorWindow ( ) {
             InitializeComponent( );
@@ -53,7 +53,7 @@ namespace mapKnight.ToolKit.Windows {
             menu_editor.ItemsSource = menuItems;
 
             mapEditorInstance = new MapEditor( );
-            animationEditorInstance = new AnimationControl( );
+            animationEditorInstance = new AnimationEditor( );
         }
 
         private void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e) {
@@ -137,7 +137,7 @@ namespace mapKnight.ToolKit.Windows {
 
             ToolTip toolTip = new ToolTip( );
             toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = map });
-            ClosableTabItem tabItem = new ClosableTabItem( ) { Header = "MAP", DataContext = map, ToolTip = ToolTip };
+            ClosableTabItem tabItem = new ClosableTabItem( ) { Header = new TextBlock( ) { Text = "MAP", ToolTip = toolTip }, DataContext = map };
             tabcontrol_editor.Items.Add(tabItem);
             tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
             tabItem.CloseRequested += (sender) => {
@@ -156,7 +156,7 @@ namespace mapKnight.ToolKit.Windows {
         private void CreateAnimationControl (VertexAnimationData data) {
             ToolTip toolTip = new ToolTip( );
             toolTip.SetBinding(ContentProperty, new Binding("Description") { Source = data });
-            ClosableTabItem tabItem = new ClosableTabItem( ) { Header = "ANIMATION", DataContext = data, ToolTip = toolTip };
+            ClosableTabItem tabItem = new ClosableTabItem( ) { Header = new TextBlock( ) { Text = "ANIMATION", ToolTip = toolTip }, DataContext = data };
             tabcontrol_editor.Items.Add(tabItem);
             tabcontrol_editor.SelectedIndex = tabcontrol_editor.Items.Count - 1;
             tabItem.CloseRequested += (sender) => {

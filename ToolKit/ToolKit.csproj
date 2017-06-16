@@ -92,7 +92,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\Animation\MLGCanvas.cs" />
+    <Compile Include="Controls\Animation\AnimationCanvas.cs" />
     <Compile Include="Controls\ClosableTabItem.cs" />
     <Compile Include="Controls\Components\MoonballDataControl.xaml.cs">
       <DependentUpon>MoonballDataControl.xaml</DependentUpon>
@@ -125,8 +125,8 @@
     <Compile Include="Data\VertexAnimationData.cs" />
     <Compile Include="Data\WindowsEntitySerializer.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
-    <Compile Include="Controls\AnimationControl.xaml.cs">
-      <DependentUpon>AnimationControl.xaml</DependentUpon>
+    <Compile Include="Editor\AnimationEditor.xaml.cs">
+      <DependentUpon>AnimationEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Animation\MoveableRenderTransformOrigin.cs" />
     <Compile Include="Data\AnimationMetaData.cs" />
@@ -229,7 +229,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\AnimationControl.xaml">
+    <Page Include="Editor\AnimationEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -562,6 +562,55 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\link.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\copy.png" />
+    <Resource Include="Resources\Images\Icons\paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\sort_up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\sort_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\repeat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\animation_frame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\filter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\original_size.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\image_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\invert.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

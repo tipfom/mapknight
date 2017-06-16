@@ -3,16 +3,35 @@
     <BitmapImage x:Key="img_about" UriSource="../Resources/Images/Icons/about.png"/>
     <BitmapImage x:Key="img_add" UriSource="../Resources/Images/Icons/add.png"/>
     <BitmapImage x:Key="img_animation" UriSource="../Resources/Images/Icons/animation.png"/>
+    <BitmapImage x:Key="img_animation_frame" UriSource="../Resources/Images/Icons/animation_frame.png"/>
+    <BitmapImage x:Key="img_copy" UriSource="../Resources/Images/Icons/copy.png"/>
+    <BitmapImage x:Key="img_cut" UriSource="../Resources/Images/Icons/cut.png"/>
+    <BitmapImage x:Key="img_delete" UriSource="../Resources/Images/Icons/delete.png"/>
     <BitmapImage x:Key="img_file_compile" UriSource="../Resources/Images/Icons/file_compile.png"/>
     <BitmapImage x:Key="img_file_new" UriSource="../Resources/Images/Icons/file_new.png"/>
     <BitmapImage x:Key="img_file_open" UriSource="../Resources/Images/Icons/file_open.png"/>
     <BitmapImage x:Key="img_file_save" UriSource="../Resources/Images/Icons/file_save.png"/>
     <BitmapImage x:Key="img_file_save_as" UriSource="../Resources/Images/Icons/file_save_as.png"/>
     <BitmapImage x:Key="img_image" UriSource="../Resources/Images/Icons/image.png"/>
+    <BitmapImage x:Key="img_image_edit" UriSource="../Resources/Images/Icons/image_edit.png"/>
+    <BitmapImage x:Key="img_invert" UriSource="../Resources/Images/Icons/invert.png"/>
+    <BitmapImage x:Key="img_filter" UriSource="../Resources/Images/Icons/filter.png"/>
     <BitmapImage x:Key="img_link" UriSource="../Resources/Images/Icons/link.png"/>
+    <BitmapImage x:Key="img_original_size" UriSource="../Resources/Images/Icons/original_size.png"/>
     <BitmapImage x:Key="img_map" UriSource="../Resources/Images/Icons/map.png"/>
+    <BitmapImage x:Key="img_pause" UriSource="../Resources/Images/Icons/pause.png"/>
+    <BitmapImage x:Key="img_play" UriSource="../Resources/Images/Icons/play.png"/>
+    <BitmapImage x:Key="img_repeat" UriSource="../Resources/Images/Icons/repeat.png"/>
+    <BitmapImage x:Key="img_reset" UriSource="../Resources/Images/Icons/reset.png"/>
+    <BitmapImage x:Key="img_paste" UriSource="../Resources/Images/Icons/paste.png"/>
+    <BitmapImage x:Key="img_settings" UriSource="../Resources/Images/Icons/settings.png"/>
+    <BitmapImage x:Key="img_sort_down" UriSource="../Resources/Images/Icons/sort_down.png"/>
+    <BitmapImage x:Key="img_sort_up" UriSource="../Resources/Images/Icons/sort_up.png"/>
+    <BitmapImage x:Key="img_stop" UriSource="../Resources/Images/Icons/stop.png"/>
     <BitmapImage x:Key="img_unlink" UriSource="../Resources/Images/Icons/unlink.png"/>
-
+    
+    
+    
     <BitmapImage x:Key="logo" UriSource="../Resources/Images/icon.png"/>
 
     <Image x:Key="image_project_new" Source="../Resources/Images/folder-48.png"/>

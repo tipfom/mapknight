@@ -21,20 +21,16 @@ namespace mapKnight.ToolKit.Controls.Animation {
             Hit,
         }
 
-        public static event Action BackupChanges;
-        public static event Action DumpChanges;
-        public static bool UnlockRotation;
-
         private static readonly Effect MOVE_EFFECT = new DropShadowEffect( ) { Color = Colors.Cyan, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
         private static readonly Effect ROTATE_EFFECT = new DropShadowEffect( ) { Color = Colors.Red, ShadowDepth = 0, Opacity = 1, BlurRadius = 100, RenderingBias = RenderingBias.Performance };
-        private static readonly Effect NONE_EFFECT = new DropShadowEffect( ) { Color = Colors.White, ShadowDepth = 0, Opacity = 0, BlurRadius = 0, RenderingBias = RenderingBias.Performance };
+        private static readonly Effect NO_EFFECT = new DropShadowEffect( ) { Color = Colors.White, ShadowDepth = 0, Opacity = 0, BlurRadius = 0, RenderingBias = RenderingBias.Performance };
 
-        public Visibility ResizerVisibility { get; set; } = Visibility.Visible;
+        public static event Action BackupChanges;
+        public static event Action DumpChanges;
+        
         public ImageData Image { get; set; }
         public bool IsFlipped { set { if (value) image.RenderTransform = new ScaleTransform( ) { ScaleX = -1 }; else image.RenderTransform = new ScaleTransform( ) { ScaleX = 1 }; } }
         public float Rotation { get { return (float)((RotateTransform)RenderTransform).Angle; } set { ((RotateTransform)RenderTransform).Angle = value; } }
-        public bool CanChangeRenderTransformOrigin { get { return rendertransformoriginthumb.Visibility == Visibility.Visible; } set { rendertransformoriginthumb.Visibility = value ? Visibility.Visible : Visibility.Hidden; } }
-        public bool AllowInput = false;
 
         public Rectangle RefRectangle { get; set; }
 
@@ -44,22 +40,18 @@ namespace mapKnight.ToolKit.Controls.Animation {
         private BoneImage ( ) {
             InitializeComponent( );
 
-            image.Effect = NONE_EFFECT;
+            image.Effect = NO_EFFECT;
 
             // set references
             rendertransformoriginthumb.DataContext = this;
             image.DataContext = Image;
 
             // hook up events
-            rendertransformoriginthumb.RenderTransformOriginChanged += BoneImage_RenderTransformOriginChanged;
+            rendertransformoriginthumb.RenderTransformOriginChanged += (origin) => Image.TransformOrigin = origin;
 
-            rendertransformoriginthumb.DragStarted += Rendertransformoriginthumb_DragStarted;
+            rendertransformoriginthumb.DragStarted += (sender, e) => BackupChanges?.Invoke( ); ;
 
             DataContextChanged += BoneImage_DataContextChanged;
-        }
-
-        private void Rendertransformoriginthumb_DragStarted (object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e) {
-            BackupChanges?.Invoke( );
         }
 
         public BoneImage (VertexAnimationData data) : this( ) {
@@ -69,10 +61,6 @@ namespace mapKnight.ToolKit.Controls.Animation {
         private void BoneImage_DataContextChanged (object sender, DependencyPropertyChangedEventArgs e) {
             dataContextBone = (VertexBone)DataContext;
             Update( );
-        }
-
-        private void BoneImage_RenderTransformOriginChanged (Point origin) {
-            Image.TransformOrigin = origin;
         }
 
         public void PositionOrRotationChangeBegan ( ) {
@@ -149,7 +137,7 @@ namespace mapKnight.ToolKit.Controls.Animation {
         }
 
         public void SetNoEffect ( ) {
-            image.Effect = NONE_EFFECT;
+            image.Effect = NO_EFFECT;
         }
 
         public HitResult EvaluateHit (Point position) {

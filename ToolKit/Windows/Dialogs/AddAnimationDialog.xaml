@@ -3,9 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:mapKnight.ToolKit.Windows"
+        xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
-        Title="Create Animation" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ResizeMode="NoResize" Icon="{StaticResource ResourceKey=logo}" ShowInTaskbar="False">
+        Title="Add Animation" 
+        SizeToContent="WidthAndHeight" 
+        WindowStartupLocation="CenterOwner" 
+        ResizeMode="NoResize" 
+        Icon="{StaticResource ResourceKey=img_animation}" 
+        ShowInTaskbar="False">
     <DockPanel Margin="5,5,5,5">
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
@@ -15,15 +20,37 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="25"/>
-                <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Name" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Height="16" Margin="0,4,0,5"/>
-            <TextBlock Text="Entity Width" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Height="16" Margin="0,5,0,4"/>
-            <TextBlock Text="Entity Height" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Height="16" Margin="0,4,0,5"/>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" MinWidth="150" Name="textbox_name" Height="18" Margin="0,4,0,3"/>
-            <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_width" Height="18" Margin="0,3,0,4"/>
-            <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" PreviewTextInput="TextBoxFloat_PreviewTextInput" Name="textbox_height" Height="18" Margin="0,4,0,3"/>
+            <TextBlock Text="Name" 
+                       Grid.Column="0" Grid.Row="0" 
+                       VerticalAlignment="Center"/>
+            <TextBox x:Name="textbox_name" 
+                     Grid.Column="1" Grid.Row="0"
+                     MinWidth="150" 
+                     VerticalAlignment="Center"/>
+            <TextBlock Text="Ratio" 
+                       Grid.Column="0" Grid.Row="1" 
+                       VerticalAlignment="Center" 
+                       ToolTip="Width / Height"/>
+            <Grid Grid.Column="1" Grid.Row="1" Margin="0,4,0,3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <controls:FloatTextBox x:Name="textbox_width" 
+                                       Grid.Column="0" 
+                                       VerticalAlignment="Center" 
+                                       ToolTip="Width"/>
+                <TextBlock Grid.Column="1" 
+                           VerticalAlignment="Center" HorizontalAlignment="Center" 
+                           Text="/"/>
+                <controls:FloatTextBox x:Name="textbox_height" 
+                                       Grid.Column="2" 
+                                       VerticalAlignment="Center" 
+                                       ToolTip="Height"/>
+            </Grid>
         </Grid>
-        <Button Click="Button_Click" Content="OK"/>
+        <Button Click="Button_Create_Click" Content="CREATE"/>
     </DockPanel>
 </Window>
