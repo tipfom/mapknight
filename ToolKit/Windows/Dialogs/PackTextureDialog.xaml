@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
-        Title="Pack Texture" Height="300" Width="300">
+        Title="Pack Texture" 
+        Icon="{StaticResource ResourceKey=img_image}"
+        Height="300" Width="300">
     <DockPanel Margin="5">
         <Grid DockPanel.Dock="Bottom" Margin="0,5,0,0">
             <Grid.ColumnDefinitions>

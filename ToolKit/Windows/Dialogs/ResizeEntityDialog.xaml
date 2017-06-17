@@ -13,7 +13,7 @@
             RenderOptions.EdgeMode="Aliased" UseLayoutRounding="True"
             Width="600" Height="600">
         <Image 
-            Source="{StaticResource ResourceKey=image_resizeentity_check}"
+            Source="{StaticResource ResourceKey=img_tool_finish}"
             Width="48" Height="48"
             Canvas.Left="0" Canvas.Top="0" Canvas.ZIndex="100"
             MouseDown="Image_MouseDown">
@@ -37,17 +37,12 @@
                DragDelta="thumb_left_DragDelta">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Line 
-                        X1="-5" X2="-5" Y1="0" Y2="10000" 
-                        StrokeThickness="10" Opacity="1"
-                        SnapsToDevicePixels="True">
-                        <Shape.Stroke>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="Black" Offset="1"></GradientStop>
-                                <GradientStop Color="Transparent" Offset="0.4"></GradientStop>
-                            </LinearGradientBrush>
-                        </Shape.Stroke>
-                    </Line>
+                    <Grid Margin="-5,0,0,0" Width="5" Background="LightGray" Opacity=".8" SnapsToDevicePixels="True">
+                        <Line
+                            HorizontalAlignment="Right"
+                            X1="0" X2="0" Y1="0" Y2="10000" 
+                            StrokeThickness="2" Stroke="Black" Opacity="1"/>
+                    </Grid>
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
@@ -57,17 +52,13 @@
                DragDelta="thumb_top_DragDelta">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Line 
-                        X1="0" X2="10000" Y1="-5" Y2="-5"
-                        StrokeThickness="10" Opacity="1"
-                        SnapsToDevicePixels="True">
-                        <Shape.Stroke>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="Black" Offset="1"></GradientStop>
-                                <GradientStop Color="Transparent" Offset="0.4"></GradientStop>
-                            </LinearGradientBrush>
-                        </Shape.Stroke>
-                    </Line>
+                    <Grid Margin="0,-5,0,0" Height="5" Background="LightGray" Opacity=".8" SnapsToDevicePixels="True">
+                        <Line 
+                            VerticalAlignment="Bottom"
+                            X1="0" X2="10000" Y1="0" Y2="0"
+                            StrokeThickness="2" Stroke="Black" Opacity="1">
+                        </Line>
+                    </Grid>
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
@@ -77,17 +68,12 @@
                DragDelta="thumb_right_DragDelta">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Line 
-                        X1="5" X2="5" Y1="0" Y2="10000"
-                        StrokeThickness="10" Opacity="1"
-                        SnapsToDevicePixels="True">
-                        <Shape.Stroke>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                <GradientStop Color="Black" Offset="0"></GradientStop>
-                                <GradientStop Color="Transparent" Offset="0.6"></GradientStop>
-                            </LinearGradientBrush>
-                        </Shape.Stroke>
-                    </Line>
+                    <Grid Margin="0,0,-5,0" Background="LightGray" Width="5" Opacity=".8" SnapsToDevicePixels="True">
+                        <Line 
+                            HorizontalAlignment="Left"
+                            X1="0" X2="0" Y1="0" Y2="10000"
+                            StrokeThickness="2" Stroke="Black" Opacity="1"/>
+                    </Grid>
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>
@@ -97,17 +83,12 @@
                DragDelta="thumb_bottom_DragDelta">
             <Thumb.Template>
                 <ControlTemplate>
-                    <Line 
-                        X1="0" X2="100000" Y1="5" Y2="5" 
-                        StrokeThickness="10" Opacity="1"
-                        SnapsToDevicePixels="True">
-                        <Shape.Stroke>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                <GradientStop Color="Black" Offset="0"></GradientStop>
-                                <GradientStop Color="Transparent" Offset="0.6"></GradientStop>
-                            </LinearGradientBrush>
-                        </Shape.Stroke>
-                    </Line>
+                    <Grid Margin="0,0,0,-5" Background="LightGray" Height="5" Opacity=".8">
+                        <Line 
+                            VerticalAlignment="Top"
+                            X1="0" X2="100000" Y1="0" Y2="0" 
+                            StrokeThickness="2" Stroke="Black" Opacity="1"/>
+                    </Grid>
                 </ControlTemplate>
             </Thumb.Template>
         </Thumb>

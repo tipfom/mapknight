@@ -217,12 +217,20 @@ namespace mapKnight.ToolKit.Editor {
                 cachedEntity = null;
             }
 
-            if ((int)tool < 5) {
-                tabcontrol_toolselect.SelectedIndex = 0;
-            } else if ((int)tool < 10) {
-                tabcontrol_toolselect.SelectedIndex = 1;
-            } else {
-                tabcontrol_toolselect.SelectedIndex = 2;
+            switch (tool) {
+                case Tool.Pen:
+                case Tool.Eraser:
+                case Tool.Filler:
+                case Tool.Pointer:
+                case Tool.Rotator:
+                    tabcontrol_toolselect.SelectedIndex = 0;
+                    break;
+                case Tool.Brush:
+                    tabcontrol_toolselect.SelectedIndex = 1;
+                    break;
+                default:
+                    tabcontrol_toolselect.SelectedIndex = 2;
+                    break;
             }
             currentTool = tool;
 
@@ -235,6 +243,7 @@ namespace mapKnight.ToolKit.Editor {
             ((Border)_Menu[19]).BorderThickness = new Thickness(0);
             ((Border)_Menu[20]).BorderThickness = new Thickness(0);
             ((Border)_Menu[21]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[23]).BorderThickness = new Thickness(0);
 
             ((Border)_Menu[12 + (int)tool]).BorderThickness = new Thickness(1);
         }

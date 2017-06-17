@@ -72,61 +72,6 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="ENTITIES">
-                <DockPanel>
-                    <ContentPresenter x:Name="contentpresenter_entitydata" DockPanel.Dock="Bottom" MaxHeight="250"/>
-                    <controls:EntityListBox x:Name="entitylistbox"/>
-                </DockPanel>
-            </TabItem>
-            <TabItem Header="BRUSHES">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <Button Command="editor:MapEditor.CreateBrushCommand"
-                                ToolTip="Create New Brush">
-                            <Image Source="{StaticResource ResourceKey=img_add}"/>
-                        </Button>
-                        <Button Command="editor:MapEditor.RemoveBrushCommand" 
-                                Margin="5,0,0,0" 
-                                ToolTip="Remove Selected Brush">
-                            <Image Source="{StaticResource ResourceKey=img_delete}"/>
-                        </Button>
-                    </StackPanel>
-                    <ListView x:Name="listview_brushes"
-                              Grid.Row="1"
-                              Margin="0,5,0,0"
-                              ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <DataTemplate.Resources>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Width" Value="25"/>
-                                        <Setter Property="Height" Value="25"/>
-                                    </Style>
-                                </DataTemplate.Resources>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="{Binding PrevCentre}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevCTR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevCTL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevCBR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevCBL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevIT}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevIB}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevIR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevIL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevLTR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevLTL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevLBR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                    <Image Source="{Binding PrevLBL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </Grid>
-            </TabItem>
             <TabItem Header="TILES">
                 <Grid Grid.Column="0">
                     <Grid.RowDefinitions>
@@ -198,6 +143,61 @@
                         </ListView>
                     </DockPanel>
                 </Grid>
+            </TabItem>
+            <TabItem Header="BRUSHES">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                        <Button Command="editor:MapEditor.CreateBrushCommand"
+                                ToolTip="Create New Brush">
+                            <Image Source="{StaticResource ResourceKey=img_add}"/>
+                        </Button>
+                        <Button Command="editor:MapEditor.RemoveBrushCommand" 
+                                Margin="5,0,0,0" 
+                                ToolTip="Remove Selected Brush">
+                            <Image Source="{StaticResource ResourceKey=img_delete}"/>
+                        </Button>
+                    </StackPanel>
+                    <ListView x:Name="listview_brushes"
+                              Grid.Row="1"
+                              Margin="0,5,0,0"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <DataTemplate.Resources>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Width" Value="25"/>
+                                        <Setter Property="Height" Value="25"/>
+                                    </Style>
+                                </DataTemplate.Resources>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding PrevCentre}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCTR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCTL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCBR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevCBL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIT}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIB}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevIL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLTR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLTL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLBR}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                    <Image Source="{Binding PrevLBL}" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="ENTITIES">
+                <DockPanel>
+                    <ContentPresenter x:Name="contentpresenter_entitydata" DockPanel.Dock="Bottom" MaxHeight="250"/>
+                    <controls:EntityListBox x:Name="entitylistbox"/>
+                </DockPanel>
             </TabItem>
         </TabControl>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False" Background="White" />

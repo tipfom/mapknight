@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <BitmapImage x:Key="logo" UriSource="../Resources/Images/icon.png"/>
+
     <BitmapImage x:Key="img_about" UriSource="../Resources/Images/Icons/about.png"/>
     <BitmapImage x:Key="img_add" UriSource="../Resources/Images/Icons/add.png"/>
     <BitmapImage x:Key="img_animation" UriSource="../Resources/Images/Icons/animation.png"/>
@@ -42,65 +44,4 @@
     <BitmapImage x:Key="img_tool_trash" UriSource="../Resources/Images/Icons/tool_trash.png"/>
     <BitmapImage x:Key="img_undo" UriSource="../Resources/Images/Icons/undo.png"/>
     <BitmapImage x:Key="img_unlink" UriSource="../Resources/Images/Icons/unlink.png"/>
-
-
-    <BitmapImage x:Key="logo" UriSource="../Resources/Images/icon.png"/>
-
-    <Image x:Key="image_project_new" Source="../Resources/Images/folder-48.png"/>
-    <Image x:Key="image_project_load" Source="../Resources/Images/opened_folder-48.png"/>
-    <Image x:Key="image_project_save" Source="../Resources/Images/save-48.png"/>
-    <Image x:Key="image_project_compile" Source="../Resources/Images/settings-48.png"/>
-
-    <BitmapImage x:Key="image_map_settings" UriSource="../Resources/Images/whale-48.png"/>
-    <BitmapImage x:Key="image_map_mapsettings" UriSource="../Resources/Images/vertical_settings_mixer-48.png"/>
-    <BitmapImage x:Key="image_map_pen" UriSource="../Resources/Images/edit-48.png"/>
-    <BitmapImage x:Key="image_map_fill" UriSource="../Resources/Images/fill_color-48.png"/>
-    <BitmapImage x:Key="image_map_eraser" UriSource="../Resources/Images/eraser-48.png"/>
-    <BitmapImage x:Key="image_map_pointer" UriSource="../Resources/Images/collapse-48.png"/>
-    <BitmapImage x:Key="image_map_rotate" UriSource="../Resources/Images/rotate_left-48.png"/>
-    <BitmapImage x:Key="image_map_undo" UriSource="../Resources/Images/undo-48.png"/>
-    <BitmapImage x:Key="image_map_add" UriSource="../Resources/Images/plus_math-48.png"/>
-    <BitmapImage x:Key="image_map_remove" UriSource="../Resources/Images/minus_math-48.png"/>
-    <BitmapImage x:Key="image_map_replace" UriSource="../Resources/Images/replace-48.png"/>
-    <BitmapImage x:Key="image_map_placeentity" UriSource="../Resources/Images/octopus-48.png"/>
-    <BitmapImage x:Key="image_map_selectentity" UriSource="../Resources/Images/hand_cursor-48.png"/>
-    <BitmapImage x:Key="image_map_killentity" UriSource="../Resources/Images/empty_trash-48.png"/>
-    <BitmapImage x:Key="image_map_finishvectorrequest" UriSource="../Resources/Images/checkmark-48.png"/>
-    <BitmapImage x:Key="image_map_tilebrush" UriSource="../Resources/Images/paint_brush-48.png"/>
-    <Image x:Key="image_map_new" Source="../Resources/Images/create_new-48.png"/>
-    <BitmapImage x:Key="image_map_autotile_L" UriSource="../Resources/Images/autotile_L.png"/>
-    <BitmapImage x:Key="image_map_autotile_I" UriSource="../Resources/Images/autotile_I.png"/>
-    <BitmapImage x:Key="image_map_autotile_d" UriSource="../Resources/Images/autotile_d.png"/>
-    <BitmapImage x:Key="image_map_autotile_O" UriSource="../Resources/Images/autotile_O.png"/>
-
-
-    <Image x:Key="image_animation_new" Source="../Resources/Images/create_new-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_settings" UriSource="../Resources/Images/vertical_settings_mixer-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_frame" UriSource="../Resources/Images/frame-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_bone" UriSource="../Resources/Images/dog_bone-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_animation" UriSource="../Resources/Images/video_playlist-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_repeat" UriSource="../Resources/Images/repeat-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_down" UriSource="../Resources/Images/down_arrow-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_up" UriSource="../Resources/Images/up_arrow-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_delete" UriSource="../Resources/Images/delete-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_reset" UriSource="../Resources/Images/recycling-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_startplay" UriSource="../Resources/Images/play-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_resetplay" UriSource="../Resources/Images/rotate_left-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_stopplay" UriSource="../Resources/Images/stop-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_pauseplay" UriSource="../Resources/Images/pause-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_scissors" UriSource="../Resources/Images/scissors-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_star" UriSource="../Resources/Images/starfish-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_paste" UriSource="../Resources/Images/paste-48.png"/>
-    <BitmapImage x:Key="image_animationcomponent_selectbones" UriSource="../Resources/Images/group_foreground_selected-48.png"/>
-
-    <BitmapImage x:Key="image_editbones_up" UriSource="../Resources/Images/up_arrow-48.png"/>
-    <BitmapImage x:Key="image_editbones_down" UriSource="../Resources/Images/down_arrow-48.png"/>
-    <BitmapImage x:Key="image_editbones_new" UriSource="../Resources/Images/plus_2_math-48.png"/>
-    <BitmapImage x:Key="image_editbones_delete" UriSource="../Resources/Images/minus_2_math-48.png"/>
-    <BitmapImage x:Key="image_editbones_resetsize" UriSource="../Resources/Images/original_size-48.png"/>
-    <BitmapImage x:Key="image_editbones_change" UriSource="../Resources/Images/edit_image-48.png"/>
-
-    <BitmapImage x:Key="image_resizeentity_check" UriSource="../Resources/Images/checkmark-48.png"/>
-
-    <BitmapImage x:Key="image_resizableimage_error" UriSource="../Resources/Images/error-48.png"/>
 </ResourceDictionary>

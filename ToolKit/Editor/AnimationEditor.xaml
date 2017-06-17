@@ -117,7 +117,7 @@
                             <Image Source="{StaticResource ResourceKey=img_paste}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="toolkit:CustomCommands.EditorDelete" Header="Delete Animation">
+                    <MenuItem Command="editor:AnimationEditor.DeleteCommand" Header="Delete Animation">
                         <MenuItem.Icon>
                             <Image  Source="{StaticResource ResourceKey=img_delete}"/>
                         </MenuItem.Icon>

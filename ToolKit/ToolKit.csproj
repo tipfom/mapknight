@@ -50,7 +50,8 @@
     <DefineConstants>TRACE;__WINDOWS__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
@@ -159,7 +160,6 @@
     <Compile Include="Windows\Dialogs\AddMapDialog.xaml.cs">
       <DependentUpon>AddMapDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomCommands.cs" />
     <Compile Include="EmbeddedAssemblies.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Libraries\ObservableDictionary.cs" />
@@ -327,30 +327,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\fill_color-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\edit-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\eraser-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\collapse-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\create_new-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\save-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\opened_folder-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\folder-48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Libraries\MonoGame.Framework.dll" />
     <EmbeddedResource Include="Libraries\Newtonsoft.Json.dll" />
     <EmbeddedResource Include="Libraries\SharpDX.Direct2D1.dll" />
@@ -362,69 +338,6 @@
     <EmbeddedResource Include="Libraries\SharpDX.RawInput.dll" />
     <EmbeddedResource Include="Libraries\SharpDX.XAudio2.dll" />
     <EmbeddedResource Include="Libraries\SharpDX.XInput.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\rotate_left-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\undo-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\video_playlist-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\frame-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\dog_bone-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\repeat-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\up_arrow-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\down_arrow-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\error-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\recycling-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\play-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\pause-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\stop-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\whale-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\vertical_settings_mixer-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\delete-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\minus_2_math-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\plus_2_math-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\settings-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\original_size-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -439,25 +352,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\scissors-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\checkmark-48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\assoc.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\plus_math-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\minus_math-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\replace-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\starfish-48.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Entities\slime.png" />
@@ -487,11 +382,6 @@
     <Resource Include="Resources\Images\Entities\guardian_tent.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\empty_trash-48.png" />
-    <Resource Include="Resources\Images\hand_cursor-48.png" />
-    <Resource Include="Resources\Images\octopus-48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Entities\platform_copper.png" />
   </ItemGroup>
   <ItemGroup>
@@ -504,12 +394,6 @@
     <Resource Include="Resources\Images\Entities\npc_lenny.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\group_foreground_selected-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\edit_image-48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Entities\drillbomb.png" />
   </ItemGroup>
   <ItemGroup>
@@ -520,12 +404,6 @@
     <Resource Include="Resources\Images\autotile_I.png" />
     <Resource Include="Resources\Images\autotile_L.png" />
     <Resource Include="Resources\Images\autotile_O.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\paint_brush-48.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\paste-48.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\file_new.png" />
@@ -648,6 +526,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\icon.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
