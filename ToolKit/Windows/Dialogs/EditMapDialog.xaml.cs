@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using mapKnight.Core;
 
 namespace mapKnight.ToolKit.Windows {
@@ -34,7 +22,7 @@ namespace mapKnight.ToolKit.Windows {
             textbox_gravityx.Text = map.Gravity.X.ToString( );
         }
 
-        private void button_create_Click (object sender, RoutedEventArgs e) {
+        private void Button_Apply_Click (object sender, RoutedEventArgs e) {
             Vector2 gravity = new Vector2(0, 0);
             if (ValidName( ) && ValidCreator( ) && ValidGravity(ref gravity)) {
                 modifyingMap.Name = textbox_name.Text;

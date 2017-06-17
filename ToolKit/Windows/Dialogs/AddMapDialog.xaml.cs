@@ -17,7 +17,7 @@ namespace mapKnight.ToolKit.Windows {
     /// Interaktionslogik für CreateMapWindow.xaml
     /// </summary>
     public partial class AddMapDialog : Window {
-        const string WARN_MESSAGE =
+        private const string WARN_MESSAGE =
             "The size of the map you are trying to create is very large.\n" +
             "This might cause extremly large files. Do you want to continue?";
 
@@ -33,7 +33,7 @@ namespace mapKnight.ToolKit.Windows {
             this.Owner = App.Current.MainWindow;
         }
 
-        private void button_import_Click (object sender, RoutedEventArgs e) {
+        private void Button_Import_Click (object sender, RoutedEventArgs e) {
             OpenFileDialog importDialog = new OpenFileDialog( );
             importDialog.DefaultExt = "TileTemplates|*.mkttemplate";
             importDialog.Multiselect = false;
@@ -49,7 +49,7 @@ namespace mapKnight.ToolKit.Windows {
             }
         }
 
-        private void button_create_Click (object sender, RoutedEventArgs e) {
+        private void Button_Create_Click (object sender, RoutedEventArgs e) {
             Core.Size mapSize = new Core.Size(0, 0);
             Core.Vector2 gravity = new Vector2(0, 0);
             if (ValidName( ) && ValidCreator( ) && ValidSize(ref mapSize) && ValidGravity(ref gravity)) {

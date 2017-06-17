@@ -6,7 +6,11 @@
         xmlns:local="clr-namespace:mapKnight.ToolKit"
         xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
-        Title="Create Map" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Icon="{StaticResource ResourceKey=logo}" ResizeMode="NoResize" ShowInTaskbar="False">
+        Title="Create Map" 
+        SizeToContent="WidthAndHeight" ResizeMode="NoResize"  
+        WindowStartupLocation="CenterOwner" 
+        Icon="{StaticResource ResourceKey=img_map}" 
+        ShowInTaskbar="False">
     <StackPanel>
         <Grid Margin="5,5,5,5">
             <Label Content="Name" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
@@ -28,15 +32,15 @@
             <Label Content="Gravity" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
             <StackPanel Width="189" HorizontalAlignment="Right" Orientation="Horizontal">
                 <Label Content="X" Margin="0" VerticalAlignment="Center"/>
-                <controls:FloatTextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" VerticalContentAlignment="Center"/>
+                <controls:FloatTextBox x:Name="textbox_gravityx" Height="23" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" Text="0" VerticalContentAlignment="Center"/>
                 <Label Content="Y" Margin="0" VerticalAlignment="Center"/>
-                <controls:FloatTextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" VerticalContentAlignment="Center"/>
+                <controls:FloatTextBox x:Name="textbox_gravityy" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="70" Text="-60" VerticalContentAlignment="Center"/>
             </StackPanel>
         </Grid>
 
-        <Button x:Name="button_import" Content="Import Template" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Top" Width="250" Click="button_import_Click"/>
+        <Button x:Name="button_import" Content="Import Template" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Top" Width="250" Click="Button_Import_Click"/>
 
         <Label x:Name="label_template" Content="No Template selected" HorizontalAlignment="Left" Margin="0,-5,5,0" VerticalAlignment="Top" FontSize="9"/>
-        <Button x:Name="button_create" Content="Create" HorizontalAlignment="Stretch" Margin="5,0,5,5" VerticalAlignment="Top"  Height="32" Click="button_create_Click"/>
+        <Button x:Name="button_create" Content="Create" HorizontalAlignment="Stretch" Margin="5,0,5,5" VerticalAlignment="Top"  Height="32" Click="Button_Create_Click"/>
     </StackPanel>
 </Window>

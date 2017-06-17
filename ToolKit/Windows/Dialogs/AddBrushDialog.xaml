@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:mapKnight.ToolKit.Windows.Dialogs"
         mc:Ignorable="d"
         Title="Create an Brush" 
+        Icon="{StaticResource ResourceKey=img_tool_brush}"
         Height="300" Width="500">
     <Window.CommandBindings>
         <CommandBinding Command="local:AddBrushDialog.FinishCommand" CanExecute="CommandBinding_Finish_CanExecute" Executed="CommandBinding_Finish_Executed"/>

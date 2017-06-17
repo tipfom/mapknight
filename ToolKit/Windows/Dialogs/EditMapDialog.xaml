@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:mapKnight.ToolKit.Windows"
         xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
-        Title="Modify Map" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
+        Title="Modify Map" 
+        Icon="{StaticResource ResourceKey=img_map}"
+        SizeToContent="WidthAndHeight" 
+        ResizeMode="NoResize">
     <StackPanel>
         <Grid Margin="5,5,5,5">
             <Label Content="Name" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Center"/>
@@ -26,6 +29,10 @@
             </StackPanel>
         </Grid>
 
-        <Button x:Name="button_create" Content="Create" HorizontalAlignment="Stretch" Margin="5,0,5,5" VerticalAlignment="Top"  Height="32" Width="250" Click="button_create_Click"/>
+        <Button Content="APPLY" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                Margin="5,0,5,5"
+                Height="32" Width="250" 
+                Click="Button_Apply_Click"/>
     </StackPanel>
 </Window>

@@ -22,16 +22,28 @@
     <BitmapImage x:Key="img_pause" UriSource="../Resources/Images/Icons/pause.png"/>
     <BitmapImage x:Key="img_play" UriSource="../Resources/Images/Icons/play.png"/>
     <BitmapImage x:Key="img_repeat" UriSource="../Resources/Images/Icons/repeat.png"/>
+    <BitmapImage x:Key="img_replace" UriSource="../Resources/Images/Icons/replace.png"/>
     <BitmapImage x:Key="img_reset" UriSource="../Resources/Images/Icons/reset.png"/>
     <BitmapImage x:Key="img_paste" UriSource="../Resources/Images/Icons/paste.png"/>
     <BitmapImage x:Key="img_settings" UriSource="../Resources/Images/Icons/settings.png"/>
     <BitmapImage x:Key="img_sort_down" UriSource="../Resources/Images/Icons/sort_down.png"/>
     <BitmapImage x:Key="img_sort_up" UriSource="../Resources/Images/Icons/sort_up.png"/>
     <BitmapImage x:Key="img_stop" UriSource="../Resources/Images/Icons/stop.png"/>
+    <BitmapImage x:Key="img_template" UriSource="../Resources/Images/Icons/template.png"/>
+    <BitmapImage x:Key="img_tool_brush" UriSource="../Resources/Images/Icons/tool_brush.png"/>
+    <BitmapImage x:Key="img_tool_cursor" UriSource="../Resources/Images/Icons/tool_cursor.png"/>
+    <BitmapImage x:Key="img_tool_eraser" UriSource="../Resources/Images/Icons/tool_eraser.png"/>
+    <BitmapImage x:Key="img_tool_fill" UriSource="../Resources/Images/Icons/tool_fill.png"/>
+    <BitmapImage x:Key="img_tool_finish" UriSource="../Resources/Images/Icons/tool_finish.png"/>
+    <BitmapImage x:Key="img_tool_marker" UriSource="../Resources/Images/Icons/tool_marker.png"/>
+    <BitmapImage x:Key="img_tool_pencil" UriSource="../Resources/Images/Icons/tool_pencil.png"/>
+    <BitmapImage x:Key="img_tool_rotate" UriSource="../Resources/Images/Icons/tool_rotate.png"/>
+    <BitmapImage x:Key="img_tool_summon" UriSource="../Resources/Images/Icons/tool_summon.png"/>
+    <BitmapImage x:Key="img_tool_trash" UriSource="../Resources/Images/Icons/tool_trash.png"/>
+    <BitmapImage x:Key="img_undo" UriSource="../Resources/Images/Icons/undo.png"/>
     <BitmapImage x:Key="img_unlink" UriSource="../Resources/Images/Icons/unlink.png"/>
-    
-    
-    
+
+
     <BitmapImage x:Key="logo" UriSource="../Resources/Images/icon.png"/>
 
     <Image x:Key="image_project_new" Source="../Resources/Images/folder-48.png"/>

@@ -6,19 +6,17 @@
              xmlns:local="clr-namespace:mapKnight.ToolKit"
              xmlns:editor="clr-namespace:mapKnight.ToolKit.Editor"
              xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
-             xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="600" IsEnabled="True">
     <UserControl.CommandBindings>
-        <CommandBinding Command="local:CustomCommands.EditorUndo" Executed="CommandBinding_Undo_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
-        <CommandBinding Command="local:CustomCommands.EditorAltA" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
-        <CommandBinding Command="local:CustomCommands.EditorAltS" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
-        <CommandBinding Command="local:CustomCommands.EditorAltD" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
-        <CommandBinding Command="local:CustomCommands.EditorAltF" Executed="CommandBinding_ToolSelection_Executed" CanExecute="CommandBinding_CanExecuteAlways"/>
-        <CommandBinding Command="local:CustomCommands.EditorDelete" Executed="CommandDelete_Executed" CanExecute="CommandDelete_CanExecute"/>
-        <CommandBinding Command="local:CustomCommands.EditorReplace" Executed="CommandReplace_Executed" CanExecute="CommandReplace_CanExecute" />
-        <CommandBinding Command="editor:MapEditor.CreateBrush" Executed="CommandBinding_CreateBrush_Executed" CanExecute="CommandBinding_CreateBrush_CanExecute"/>
-        <CommandBinding Command="editor:MapEditor.RemoveBrush" Executed="CommandBinding_RemoveBrush_Executed" CanExecute="CommandBinding_RemoveBrush_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.UndoCommand" Executed="CommandBinding_Undo_Executed" CanExecute="CommandBinding_Undo_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.SelectPenCommand" Executed="CommandBinding_SelectPen_Executed" CanExecute="CommandBinding_SelectPen_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.SelectEraserCommand" Executed="CommandBinding_SelectEraser_Executed" CanExecute="CommandBinding_SelectEraser_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.SelectRotatorCommand" Executed="CommandBinding_SelectRotator_Executed" CanExecute="CommandBinding_SelectRotator_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.DeleteTileCommand" Executed="CommandBinding_DeleteTile_Executed" CanExecute="CommandBinding_DeleteTile_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.ReplaceTileCommand" Executed="CommandBinding_ReplaceTile_Executed" CanExecute="CommandBinding_ReplaceTile_CanExecute" />
+        <CommandBinding Command="editor:MapEditor.CreateBrushCommand" Executed="CommandBinding_CreateBrush_Executed" CanExecute="CommandBinding_CreateBrush_CanExecute"/>
+        <CommandBinding Command="editor:MapEditor.RemoveBrushCommand" Executed="CommandBinding_RemoveBrush_Executed" CanExecute="CommandBinding_RemoveBrush_CanExecute"/>
     </UserControl.CommandBindings>
     <UserControl.Resources>
         <Style TargetType="ListBox">
@@ -57,7 +55,7 @@
             <ColumnDefinition Width="6" />
             <ColumnDefinition MinWidth="300" Width="2*" />
         </Grid.ColumnDefinitions>
-        <TabControl x:Name="tabcontrol_toolselect" TabStripPlacement="Left" Margin="2,0,0,0" SelectionChanged="tabcontrol_toolselect_SelectionChanged">
+        <TabControl x:Name="tabcontrol_toolselect" TabStripPlacement="Left" Margin="2,0,0,0" SelectionChanged="TabControl_ToolSelect_SelectionChanged">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="HeaderTemplate">
@@ -74,74 +72,6 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="TILES">
-                <Grid Grid.Column="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="2*" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <DockPanel>
-                        <CheckBox x:Name="checkbox_auto" DockPanel.Dock="Left" Content="AUTO" VerticalAlignment="Center" Margin="4,0,4,0" />
-                        <Button Click="ButtonSettings_Click" Margin="0,0,4,0">
-                            <Button.ToolTip>
-                                Change the Default Tile Settings
-                            </Button.ToolTip>
-                            <Image Name="image_settings" Source="{StaticResource ResourceKey=image_map_settings}"/>
-                        </Button>
-                        <Button Margin="0,0,4,0" Click="ButtonAdd_Click">
-                            <Button.ToolTip>
-                                Add a New Tile
-                            </Button.ToolTip>
-                            <Image Name="image_add" Source="{StaticResource ResourceKey=image_map_add}"/>
-                        </Button>
-                        <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorDelete">
-                            <Button.ToolTip>
-                                Remove the Selected Tile
-                            </Button.ToolTip>
-                            <Image Name="image_remove" Source="{StaticResource ResourceKey=image_map_remove}"/>
-                        </Button>
-                        <Button Margin="0,0,4,0" Command="local:CustomCommands.EditorReplace">
-                            <Button.ToolTip>
-                                Replace the Selected Tile
-                            </Button.ToolTip>
-                            <Image Name="image_replace" Source="{StaticResource ResourceKey=image_map_replace}"/>
-                        </Button>
-                        <Button Content="EXPORT TEMPLATE" Click="buttonexport_Click" />
-                    </DockPanel>
-                    <ListBox Grid.Row="1"
-                         x:Name="wrappanel_tiles"
-                         ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,2,0,0"
-                         AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_SelectionChanged" >
-                    </ListBox>
-                    <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
-                    <DockPanel Grid.Row="3">
-                        <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2" />
-                        <ListView x:Name="listview_tile_attributes">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn  Header="Active">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <CheckBox IsChecked="{ Binding Active }" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Width="100" Header="Attribute" DisplayMemberBinding="{ Binding Attribute }" />
-                                    <GridViewColumn Width="140" Header="Value">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBox Text="{Binding Value}" MinWidth="50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </DockPanel>
-                </Grid>
-            </TabItem>
             <TabItem Header="ENTITIES">
                 <DockPanel>
                     <ContentPresenter x:Name="contentpresenter_entitydata" DockPanel.Dock="Bottom" MaxHeight="250"/>
@@ -155,14 +85,14 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
-                        <Button Command="editor:MapEditor.CreateBrush"
+                        <Button Command="editor:MapEditor.CreateBrushCommand"
                                 ToolTip="Create New Brush">
-                            <Image Source="{StaticResource ResourceKey=image_map_add}"/>
+                            <Image Source="{StaticResource ResourceKey=img_add}"/>
                         </Button>
-                        <Button Command="editor:MapEditor.RemoveBrush" 
+                        <Button Command="editor:MapEditor.RemoveBrushCommand" 
                                 Margin="5,0,0,0" 
                                 ToolTip="Remove Selected Brush">
-                            <Image Source="{StaticResource ResourceKey=image_map_remove}"/>
+                            <Image Source="{StaticResource ResourceKey=img_delete}"/>
                         </Button>
                     </StackPanel>
                     <ListView x:Name="listview_brushes"
@@ -197,6 +127,78 @@
                     </ListView>
                 </Grid>
             </TabItem>
+            <TabItem Header="TILES">
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <DockPanel>
+                        <CheckBox x:Name="checkbox_auto" 
+                                  Content="AUTO" 
+                                  DockPanel.Dock="Left" 
+                                  VerticalAlignment="Center" 
+                                  Margin="4,0,4,0" />
+                        <Button Margin="0,0,4,0" Click="Button_AddTile_Click">
+                            <Button.ToolTip>
+                                Add a New Tile
+                            </Button.ToolTip>
+                            <Image Name="image_add" Source="{StaticResource ResourceKey=img_add}"/>
+                        </Button>
+                        <Button Margin="0,0,4,0" Command="editor:MapEditor.DeleteTileCommand">
+                            <Button.ToolTip>
+                                Remove the Selected Tile
+                            </Button.ToolTip>
+                            <Image Name="image_remove" Source="{StaticResource ResourceKey=img_delete}"/>
+                        </Button>
+                        <Button Margin="0,0,4,0" Command="editor:MapEditor.ReplaceTileCommand">
+                            <Button.ToolTip>
+                                Replace the Selected Tile
+                            </Button.ToolTip>
+                            <Image Name="image_replace" Source="{StaticResource ResourceKey=img_replace}"/>
+                        </Button>
+                        <Button x:Name="button_export" Click="Button_ExportTileTemplate_Click" >
+                            <DockPanel Width="{Binding ActualWidth, ElementName=button_export}" HorizontalAlignment="Stretch">
+                                <Image Source="{StaticResource ResourceKey=img_template}"
+                                       DockPanel.Dock="Left"/>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="EXPORT TEMPLATE"/>
+                            </DockPanel>
+                        </Button>
+                    </DockPanel>
+                    <ListBox Grid.Row="1"
+                         x:Name="wrappanel_tiles"
+                         ItemTemplate="{StaticResource TileItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,2,0,0"
+                         AllowDrop="True" DragEnter="wrappanel_tiles_DragEnter" Drop="wrappanel_tiles_Drop" SelectionChanged="wrappanel_tiles_SelectionChanged" >
+                    </ListBox>
+                    <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
+                    <DockPanel Grid.Row="3">
+                        <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2" />
+                        <ListView x:Name="listview_tile_attributes">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn  Header="Active">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{ Binding Active }" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Width="100" Header="Attribute" DisplayMemberBinding="{ Binding Attribute }" />
+                                    <GridViewColumn Width="140" Header="Value">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Value}" MinWidth="50" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False" Background="White" />
         <DockPanel Grid.Column="2">
@@ -206,11 +208,11 @@
                 <Rectangle DockPanel.Dock="Right" Width="17" Height="17"/>
                 <ScrollBar x:Name="scrollbar_horizontal"
                        Orientation="Horizontal"
-                       ValueChanged="scrollbar_horizontal_ValueChanged" LargeChange="100"/>
+                       ValueChanged="Scrollbar_Horizontal_ValueChanged" LargeChange="100"/>
             </DockPanel>
             <ScrollBar x:Name="scrollbar_vertical"
                        Orientation="Vertical" HorizontalAlignment="Right"
-                       ValueChanged="scrollbar_vertical_ValueChanged"
+                       ValueChanged="Scrollbar_Vertical_ValueChanged"
                        DockPanel.Dock="Right">
             </ScrollBar>
             <controls:TileMapView x:Name="tilemapview" PreviewMouseWheel="tilemapview_PreviewMouseWheel" MouseDown="tilemapview_MouseDown" MouseMove="tilemapview_MouseMove" MouseLeave="tilemapview_MouseLeave" MouseEnter="tilemapview_MouseEnter" SizeChanged="tilemapview_SizeChanged" BorderThickness="1" BorderBrush="White" Focusable="True"/>

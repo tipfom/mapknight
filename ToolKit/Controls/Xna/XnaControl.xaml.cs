@@ -19,7 +19,7 @@ namespace mapKnight.ToolKit.Controls.Xna {
         /// Gets the GraphicsDevice behind the control.
         /// </summary>
         public GraphicsDevice GraphicsDevice {
-            get { return GraphicsService.GraphicsDevice; }
+            get { return GraphicsService?.GraphicsDevice ?? null; }
         }
 
         public SpriteBatch SpriteBatch {

@@ -141,6 +141,35 @@ namespace mapKnight.ToolKit.Data {
             Tiles = tiles.ToArray( );
         }
 
+        public void ChangeTextureName (string oldname, string newname) {
+            Texture2D texture = XnaTextures[oldname];
+            XnaTextures.Remove(oldname);
+            XnaTextures.Add(newname, texture);
+
+            BitmapImage image = WpfTextures[oldname];
+            WpfTextures.Remove(oldname);
+            WpfTextures.Add(newname, image);
+        }
+
+        public bool[ ] GetBrushData (int x, int y, int currentLayer, TileBrush currentBrush) {
+            /* 0 1 2
+             * 3 - 4 
+             * 5 6 7
+             */
+            return new[ ] {
+                ((x - 1 >= 0 && y + 1 < Height) ? currentBrush.Contains(Tiles[Data[x - 1, y + 1, currentLayer]].Name): true),
+                ((y + 1 < Height) ? currentBrush.Contains(Tiles[Data[x, y + 1, currentLayer]].Name): true),
+                ((x + 1 < Width && y + 1 < Height) ? currentBrush.Contains(Tiles[Data[x + 1, y + 1, currentLayer]].Name): true),
+
+                ((x - 1 >= 0) ? currentBrush.Contains(Tiles[Data[x - 1, y, currentLayer]].Name): true),
+                ((x + 1 < Width) ? currentBrush.Contains(Tiles[Data[x + 1, y, currentLayer]].Name): true),
+
+                ((x - 1 >= 0 && y - 1 >= 0) ? currentBrush.Contains(Tiles[Data[x - 1, y - 1, currentLayer]].Name): true),
+                ((y - 1 >= 0) ? currentBrush.Contains(Tiles[Data[x, y - 1, currentLayer]].Name): true),
+                ((x + 1 < Width && y - 1 >= 0) ? currentBrush.Contains(Tiles[Data[x + 1, y - 1, currentLayer]].Name): true),
+            };
+        }
+
         public Map CreateCompileVersion ( ) {
             Map result = new Map(Size, Creator, Name) { Texture = Texture, SpawnPoint = SpawnPoint, Gravity = Gravity, Entities = Entities };
             Dictionary<int, bool[ ]> hasRotation = new Dictionary<int, bool[ ]>( );

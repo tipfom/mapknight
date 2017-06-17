@@ -35,7 +35,7 @@ namespace mapKnight.ToolKit.Editor {
             Eraser = 1,
             Filler = 2,
             Pointer = 3,
-            Rotater = 4,
+            Rotator = 4,
             God = 6,
             Hand = 7,
             Trashcan = 8,
@@ -43,36 +43,54 @@ namespace mapKnight.ToolKit.Editor {
             Brush = 11,
         }
 
-        public static readonly RoutedUICommand CreateBrush = new RoutedUICommand("CreateBrush", "CreateBrush", typeof(MapEditor));
-        public static readonly RoutedUICommand RemoveBrush = new RoutedUICommand("RemoveBrush", "RemoveBrush", typeof(MapEditor));
+        private static readonly Style MENU_IMAGE_STYLE = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Value = false, Property = IsEnabledProperty, Setters = { new Setter(Image.OpacityProperty, 0.3) } } } };
 
-        private static Style imageStyle = new Style(typeof(Image)) { Triggers = { new Trigger( ) { Value = false, Property = IsEnabledProperty, Setters = { new Setter(Image.OpacityProperty, 0.5) } } } };
+        public static readonly RoutedUICommand UndoCommand = new RoutedUICommand(
+            "Undo", "UndoCommand", typeof(MapEditor),
+            new InputGestureCollection( ) { new KeyGesture(Key.Z, ModifierKeys.Control) });
+        public static readonly RoutedUICommand SelectPenCommand = new RoutedUICommand(
+            "Select Pen", "SelectPenCommand", typeof(MapEditor),
+            new InputGestureCollection( ) { new KeyGesture(Key.D1, ModifierKeys.Control) });
+        public static readonly RoutedUICommand SelectEraserCommand = new RoutedUICommand(
+            "Select Eraser", "SelectEraserCommand", typeof(MapEditor),
+            new InputGestureCollection( ) { new KeyGesture(Key.D2, ModifierKeys.Control) });
+        public static readonly RoutedUICommand SelectRotatorCommand = new RoutedUICommand(
+            "Select Rotator", "SelectRotatorCommand", typeof(MapEditor),
+            new InputGestureCollection( ) { new KeyGesture(Key.D3, ModifierKeys.Control) });
+        public static readonly RoutedUICommand DeleteTileCommand = new RoutedUICommand(
+            "Delete Tile", "DeleteTileCommand", typeof(MapEditor));
+        public static readonly RoutedUICommand ReplaceTileCommand = new RoutedUICommand(
+            "Replace Tile", "ReplaceTileCommand", typeof(MapEditor));
+        public static readonly RoutedUICommand CreateBrushCommand = new RoutedUICommand(
+            "Create Brush", "CreateBrushCommand", typeof(MapEditor));
+        public static readonly RoutedUICommand RemoveBrushCommand = new RoutedUICommand(
+            "Remove Brush", "RemoveBrushCommand", typeof(MapEditor));
 
         private List<FrameworkElement> _Menu = new List<FrameworkElement>( ) {
-            new Image() { Source= (BitmapImage)App.Current.FindResource("image_map_mapsettings"), Style = imageStyle },
-            new MenuItem() { Header = "SHOW", IsEnabled = false },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Background" }, Focusable = false },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Middle" }, Focusable = false },
-            new CheckBox() { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Show/Hide Foreground" }, Focusable = false },
-            new Separator() { Width = 10 },
-            new MenuItem() { Header = "LAYER", IsEnabled = false },
-            new RadioButton() { IsChecked = false, GroupName = "modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Background" }, Focusable = false },
-            new RadioButton() { IsChecked = true, GroupName = "modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Middle" }, Focusable = false },
-            new RadioButton() { IsChecked = false, GroupName = "modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip() { Content = "Select Foreground" }, Focusable = false },
-            new Separator() { Width = 10 },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_undo"), Style = imageStyle }, Background = Brushes.White, Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Undo [Ctrl + Z]" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pen"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Use the Tile Pen [Alt + A]" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_eraser"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Use the Tile Eraser [Alt + S]" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_fill"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Use the Tile Filltool [Ctrl + D]" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_pointer"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Set the Player Spawnpoint" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_rotate"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Rotate a Tile [Ctrl + F]" } },
-            new Separator() { Width = 5 },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_placeentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Place an Entity" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_selectentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Select and Move an Entity" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_killentity"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Kill an Entity" } },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_finishvectorrequest"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), IsEnabled = false, ToolTip = new ToolTip() { Content = "Finish Vector Request" } },
-            new Separator() { Width = 5 },
-            new Border() { Child = new Image() { Source = (BitmapImage)App.Current.FindResource("image_map_tilebrush"), Style = imageStyle }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip() { Content = "Use the Tile Brush" } },
+            new Image( ) { Source= (BitmapImage)App.Current.FindResource("img_settings"), Style = MENU_IMAGE_STYLE },
+            new MenuItem( ) { Header = "SHOW", IsEnabled = false },
+            new CheckBox( ) { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip( ) { Content = "Show/Hide Background" }, Focusable = false },
+            new CheckBox( ) { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip( ) { Content = "Show/Hide Middle" }, Focusable = false },
+            new CheckBox( ) { IsChecked = true, Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip( ) { Content = "Show/Hide Foreground" }, Focusable = false },
+            new Separator( ) { Width = 10 },
+            new MenuItem( ) { Header = "LAYER", IsEnabled = false },
+            new RadioButton( ) { IsChecked = false, GroupName = "modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip( ) { Content = "Select Background" }, Focusable = false },
+            new RadioButton( ) { IsChecked = true, GroupName = "modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip( ) { Content = "Select Middle" }, Focusable = false },
+            new RadioButton( ) { IsChecked = false, GroupName = "modifylayer", Margin = new Thickness(-2, 0, -2, 0), VerticalAlignment = VerticalAlignment.Center, ToolTip = new ToolTip( ) { Content = "Select Foreground" }, Focusable = false },
+            new Separator( ) { Width = 15 },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_undo"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Undo [Ctrl + Z]" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_pencil"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(1), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Use the Tile Pen [Ctrl + 1]" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_eraser"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Use the Tile Eraser [Ctrl + 2]" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_fill"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness=  new Thickness(0), Margin = new Thickness(-6, 0, -6 ,0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Use the Tile Filltool" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_marker"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Set the Player Spawnpoint" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_rotate"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Rotate a Tile [Ctrl + 3]" } },
+            new Separator( ) { Width = 8 },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_summon"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Place an Entity" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_cursor"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Select and Move an Entity" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_trash"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Kill an Entity" } },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_finish"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), IsEnabled = false, ToolTip = new ToolTip( ) { Content = "Finish Vector Request" } },
+            new Separator( ) { Width = 8 },
+            new Border( ) { Child = new Image( ) { Source = (BitmapImage)App.Current.FindResource("img_tool_brush"), Style = MENU_IMAGE_STYLE }, Background = Brushes.White, BorderBrush = Brushes.DodgerBlue, BorderThickness = new Thickness(0), Margin = new Thickness(-6, 0, -6, 0), Padding = new Thickness(6, 0, 6, 0), ToolTip = new ToolTip( ) { Content = "Use the Tile Brush" } },
         };
         public List<FrameworkElement> Menu { get { return _Menu; } }
 
@@ -90,16 +108,10 @@ namespace mapKnight.ToolKit.Editor {
                 scrollbar_vertical.Value = 0;
 
                 if (GraphicsDevice != null) {
-                    _Map.Init(GraphicsDevice);
-                    UpdateListbox( );
-                    tilemapview.Map = _Map;
-                    tilemapview.Update( );
+                    InitMap( );
                 } else {
                     tilemapview.DeviceInitialized += ( ) => {
-                        _Map.Init(GraphicsDevice);
-                        UpdateListbox( );
-                        tilemapview.Map = _Map;
-                        tilemapview.Update( );
+                        InitMap( );
                     };
                 }
 
@@ -109,7 +121,9 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        public GraphicsDevice GraphicsDevice;
+        public GraphicsDevice GraphicsDevice {
+            get { return tilemapview.GraphicsDevice; }
+        }
 
         private int currentLayer = 1;
         private Tool currentTool = Tool.Pen;
@@ -124,17 +138,6 @@ namespace mapKnight.ToolKit.Editor {
 
         public MapEditor ( ) {
             InitializeComponent( );
-
-            IsVisibleChanged += (sender, e) => {
-                if (GraphicsDevice != null)
-                    return;
-                if (IsVisible) {
-                    HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
-                    if (source == null)
-                        return;
-                    GraphicsDevice = GraphicsDeviceService.AddRef(source.Handle).GraphicsDevice;
-                }
-            };
 
             tilemapview.DeviceInitialized += ( ) => {
                 entitylistbox.Init(tilemapview.GraphicsDevice);
@@ -162,7 +165,7 @@ namespace mapKnight.ToolKit.Editor {
             _Menu[13].MouseDown += (sender, e) => SelectTool(Tool.Eraser);
             _Menu[14].MouseDown += (sender, e) => SelectTool(Tool.Filler);
             _Menu[15].MouseDown += (sender, e) => SelectTool(Tool.Pointer);
-            _Menu[16].MouseDown += (sender, e) => SelectTool(Tool.Rotater);
+            _Menu[16].MouseDown += (sender, e) => SelectTool(Tool.Rotator);
 
             _Menu[18].MouseDown += (sender, e) => SelectTool(Tool.God);
             _Menu[19].MouseDown += (sender, e) => SelectTool(Tool.Hand);
@@ -178,85 +181,18 @@ namespace mapKnight.ToolKit.Editor {
             };
         }
 
-        public void ChangeTextureName (string oldname, string newname) {
-            Texture2D texture = _Map.XnaTextures[oldname];
-            Map.XnaTextures.Remove(oldname);
-            Map.XnaTextures.Add(newname, texture);
+        private void InitMap ( ) {
+            _Map.Init(GraphicsDevice);
 
-            BitmapImage image = Map.WpfTextures[oldname];
-            Map.WpfTextures.Remove(oldname);
-            Map.WpfTextures.Add(newname, image);
-        }
-
-        public void UpdateListbox ( ) {
             wrappanel_tiles.Items.Clear( );
             foreach (Tile tile in Map.Tiles) {
                 wrappanel_tiles.Items.Add(new ListViewEntry(Map.WpfTextures[tile.Name]));
             }
             if (wrappanel_tiles.HasItems)
                 wrappanel_tiles.SelectedIndex = 0;
-        }
 
-        private void buttonexport_Click (object sender, RoutedEventArgs e) {
-            // export current maps tileset
-            SaveFileDialog exportDialog = new SaveFileDialog( );
-            exportDialog.Filter = "TileTemplate|*.mkttemplate";
-            if (exportDialog.ShowDialog( ) ?? false) {
-                using (Stream stream = File.OpenWrite(exportDialog.FileName))
-                    TileSerializer.Serialize(stream, Map.Tiles, Map.XnaTextures, tilemapview.GraphicsDevice);
-            }
-        }
-
-        private void ButtonSettings_Click (object sender, RoutedEventArgs e) {
-            EditDefaultTileAttributesWindow dialog = new EditDefaultTileAttributesWindow(defaultAttributes);
-            if (dialog.ShowDialog( ) ?? false) {
-                defaultAttributes = dialog.NewDefault;
-            }
-        }
-
-        private void CommandBinding_CanExecuteAlways (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = true;
-        }
-
-        private void CommandBinding_ToolSelection_Executed (object sender, ExecutedRoutedEventArgs e) {
-            switch (((RoutedUICommand)e.Command).Name.Last( )) {
-                case 'A':
-                    SelectTool(Tool.Pen);
-                    break;
-                case 'S':
-                    SelectTool(Tool.Eraser);
-                    break;
-                case 'D':
-                    SelectTool(Tool.Filler);
-                    break;
-                case 'F':
-                    SelectTool(Tool.Rotater);
-                    break;
-            }
-        }
-
-        private void CommandBinding_Undo_Executed (object sender, ExecutedRoutedEventArgs e) {
-            UndoLast( );
-        }
-
-        private void ResetToolBorders ( ) {
-            ((Border)_Menu[12]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[13]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[14]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[15]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[16]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[18]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[19]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[20]).BorderThickness = new Thickness(0);
-            ((Border)_Menu[21]).BorderThickness = new Thickness(0);
-        }
-
-        private void scrollbar_horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
-            tilemapview.Offset = new Microsoft.Xna.Framework.Vector2((float)scrollbar_horizontal.Value, tilemapview.Offset.Y);
-        }
-
-        private void scrollbar_vertical_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
-            tilemapview.Offset = new Microsoft.Xna.Framework.Vector2(tilemapview.Offset.X, (float)scrollbar_vertical.Value);
+            tilemapview.Map = _Map;
+            tilemapview.Update( );
         }
 
         private void SelectTool (Tool tool) {
@@ -289,27 +225,215 @@ namespace mapKnight.ToolKit.Editor {
                 tabcontrol_toolselect.SelectedIndex = 2;
             }
             currentTool = tool;
-            ResetToolBorders( );
+
+            ((Border)_Menu[12]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[13]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[14]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[15]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[16]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[18]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[19]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[20]).BorderThickness = new Thickness(0);
+            ((Border)_Menu[21]).BorderThickness = new Thickness(0);
+
             ((Border)_Menu[12 + (int)tool]).BorderThickness = new Thickness(1);
         }
 
+        private Vector2 GetEntityCenterRaw (MouseEventArgs e) {
+            Point positionOnControl = e.GetPosition(tilemapview);
+            Vector2 selectedTile = new Vector2(
+                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, Map.Width)),
+                (float)Math.Max(0, Math.Min(Map.Size.Height - positionOnControl.Y / tilemapview.TileSize - tilemapview.Offset.Y, Map.Height)));
+            return selectedTile;
+        }
+
+        private Vector2 GetEntityCenter (MouseEventArgs e) {
+            Vector2 selectedTile = GetEntityCenterRaw(e);
+            selectedTile.Y = (float)Math.Floor(selectedTile.Y);
+            return selectedTile;
+        }
+
+        private Entity GetClickedEntity (MouseEventArgs e) {
+            Vector2 clickedPosition = GetEntityCenterRaw(e);
+            for (int i = Map.Entities.Count - 1; i >= 0; i--) {
+                if (Map.Entities[i].Transform.Intersects(clickedPosition)) {
+                    return Map.Entities[i];
+                }
+            }
+            return null;
+        }
+
+        private bool UpdateSelectedTile (MouseEventArgs e) {
+            Point positionOnControl = e.GetPosition(tilemapview);
+            Microsoft.Xna.Framework.Vector2 nextSelectedTile = new Microsoft.Xna.Framework.Vector2(
+                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, Map.Width - 1)),
+                (float)Math.Max(0, Math.Min(positionOnControl.Y / tilemapview.TileSize + tilemapview.Offset.Y, Map.Height - 1)));
+            bool changed = Math.Floor(selectedTile.X) != Math.Floor(nextSelectedTile.X) || Math.Floor(selectedTile.Y) != Math.Floor(nextSelectedTile.Y);
+
+            selectedTile = nextSelectedTile;
+            text_xpos.Text = Math.Floor(selectedTile.X).ToString( );
+            text_ypos.Text = Math.Floor(Map.Height - selectedTile.Y).ToString( );
+            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2((float)Math.Floor(selectedTile.X), (float)Math.Floor(selectedTile.Y)) - tilemapview.Offset;
+            return changed;
+        }
+
+        private void UndoLast ( ) {
+            Map.Undo( );
+            tilemapview.Update( );
+        }
+
+        private void AddTile (string imagefile) {
+            string tileName = Path.GetFileNameWithoutExtension(imagefile);
+            if (checkbox_auto.IsChecked ?? false && !Map.Tiles.Any(t => t.Name == tileName)) {
+                // add tile
+                BitmapImage tileImage = LoadTileImage(imagefile);
+
+                Map.LoadTexture(tileName, tileImage, GraphicsDevice);
+                Map.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes), Name = tileName });
+                wrappanel_tiles.Items.Add(new ListViewEntry(tileImage));
+            } else {
+                // open add tile window
+                AddTileWindow addTileDialog = new AddTileWindow(imagefile, Map.Tiles.Select(t => t.Name), defaultAttributes);
+                if (addTileDialog.ShowDialog( ) ?? false) {
+                    if (Map.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
+                        Map.LoadTexture(addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2, GraphicsDevice);
+                        Map.AddTile(addTileDialog.Created.Item1);
+                        wrappanel_tiles.Items.Add(new ListViewEntry(addTileDialog.Created.Item2));
+                    } else {
+                        MessageBox.Show("Please don't add tiles with the same name twice!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+
+        private BitmapImage LoadTileImage (string file) {
+            BitmapImage image = new BitmapImage( );
+            image.BeginInit( );
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.CreateOptions = BitmapCreateOptions.None;
+            image.DecodePixelWidth = Core.Map.TILE_PXL_SIZE;
+            image.DecodePixelHeight = Core.Map.TILE_PXL_SIZE;
+            image.UriSource = new Uri(file);
+            image.EndInit( );
+            return image;
+        }
+
+        private void HandleMapVectorListRequest (Func<Vector2, bool> callback) {
+            _Menu[23].IsEnabled = true;
+            currentVectorRequestCallback = callback;
+            SelectTool(Tool.VectorGrabber);
+        }
+     
+        private void Button_ExportTileTemplate_Click (object sender, RoutedEventArgs e) {
+            // export current maps tileset
+            SaveFileDialog exportDialog = new SaveFileDialog( );
+            exportDialog.Filter = "TileTemplate|*.mkttemplate";
+            if (exportDialog.ShowDialog( ) ?? false) {
+                using (Stream stream = File.OpenWrite(exportDialog.FileName))
+                    TileSerializer.Serialize(stream, Map.Tiles, Map.XnaTextures, tilemapview.GraphicsDevice);
+            }
+        }
+
+        private void Button_Settings_Click (object sender, RoutedEventArgs e) {
+            EditDefaultTileAttributesWindow dialog = new EditDefaultTileAttributesWindow(defaultAttributes);
+            if (dialog.ShowDialog( ) ?? false) {
+                defaultAttributes = dialog.NewDefault;
+            }
+        }
+
+        private void Button_AddTile_Click (object sender, RoutedEventArgs e) {
+            OpenFileDialog opendialog = new OpenFileDialog( );
+            opendialog.Filter = "Images|*.png;*.jpg;*.jpeg";
+            opendialog.Multiselect = true;
+            if (opendialog.ShowDialog( ) ?? false) {
+                foreach (string file in opendialog.FileNames) {
+                    AddTile(file);
+                }
+            }
+        }
+        
+        private void Scrollbar_Horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
+            tilemapview.Offset = new Microsoft.Xna.Framework.Vector2((float)scrollbar_horizontal.Value, tilemapview.Offset.Y);
+        }
+
+        private void Scrollbar_Vertical_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
+            tilemapview.Offset = new Microsoft.Xna.Framework.Vector2(tilemapview.Offset.X, (float)scrollbar_vertical.Value);
+        }
+
+        private void TabControl_ToolSelect_SelectionChanged (object sender, SelectionChangedEventArgs e) {
+            tilemapview.Mode = tabcontrol_toolselect.SelectedIndex;
+            if (tabcontrol_toolselect.SelectedIndex == 0) {
+                SelectTool(Tool.Pen);
+            } else if (tabcontrol_toolselect.SelectedIndex == 1) {
+                SelectTool(Tool.Brush);
+            } else {
+                SelectTool(Tool.God);
+            }
+        }
+        
+        #region tilemapview
         private void tilemapview_MouseDown (object sender, MouseButtonEventArgs e) {
             switch (tabcontrol_toolselect.SelectedIndex) {
                 case 0:
                     if (tilemapview.IsLayerActive(currentLayer))
-                        HandleTilemapViewClickTiles(sender, e);
+                        HandleMouseDown_Tiles(sender, e);
                     break;
                 case 1:
-                    HandleTilemapViewClickEntities(sender, e);
+                    HandleMouseDown_Entities(sender, e);
                     break;
                 case 2:
                     if (tilemapview.IsLayerActive(currentLayer))
-                        HandleTilemapViewClickBrush(sender, e);
+                        HandleMouseDown_Brushes(sender, e);
                     break;
             }
         }
 
-        private void HandleTilemapViewClickTiles (object sender, MouseButtonEventArgs e) {
+        private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {
+            if (tabcontrol_toolselect.SelectedIndex == 0)
+                UpdateSelectedTile(e);
+        }
+
+        private void tilemapview_MouseLeave (object sender, MouseEventArgs e) {
+            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(-1, -1);
+            if (cachedEntity != null) {
+                Map.Entities.Remove(cachedEntity);
+                cachedEntity = null;
+            }
+            tilemapview.Update( );
+        }
+
+        private void tilemapview_MouseMove (object sender, MouseEventArgs e) {
+            switch (tabcontrol_toolselect.SelectedIndex) {
+                case 0:
+                    if (tilemapview.IsLayerActive(currentLayer))
+                        HandleMouseMove_Tiles(sender, e, UpdateSelectedTile(e));
+                    break;
+                case 1:
+                    HandleMouseMove_Entities(sender, e);
+                    break;
+                case 2:
+                    if (tilemapview.IsLayerActive(currentLayer))
+                        HandleMouseMove_Brushes(sender, e, UpdateSelectedTile(e));
+                    break;
+            }
+        }
+
+        private void tilemapview_PreviewMouseWheel (object sender, MouseWheelEventArgs e) {
+            scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
+            scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
+            if (e.Delta > 0) {
+                tilemapview.ZoomLevel++;
+            } else {
+                tilemapview.ZoomLevel--;
+            }
+        }
+
+        private void tilemapview_SizeChanged (object sender, SizeChangedEventArgs e) {
+            scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
+            scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
+        }
+
+        private void HandleMouseDown_Tiles (object sender, MouseButtonEventArgs e) {
             Point clickedTile = new Point(Math.Floor(selectedTile.X), Map.Height - Math.Floor(selectedTile.Y) - 1);
             if (e.RightButton == MouseButtonState.Pressed) {
                 Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, false);
@@ -360,7 +484,7 @@ namespace mapKnight.ToolKit.Editor {
                         Map.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
                         break;
 
-                    case Tool.Rotater:
+                    case Tool.Rotator:
                         if (Map.Tiles[Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer]].Name == "None") {
                             for (int i = 2; i > -1; i--) {
                                 if (Map.Tiles[Map.Data[(int)clickedTile.X, (int)clickedTile.Y, i]].Name != "None") {
@@ -380,22 +504,7 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private Vector2 GetEntityCenterRaw (MouseEventArgs e) {
-            Point positionOnControl = e.GetPosition(tilemapview);
-            Vector2 selectedTile = new Vector2(
-                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, Map.Width)),
-                (float)Math.Max(0, Math.Min(Map.Size.Height - positionOnControl.Y / tilemapview.TileSize - tilemapview.Offset.Y, Map.Height)));
-            return selectedTile;
-        }
-
-
-        private Vector2 GetEntityCenter (MouseEventArgs e) {
-            Vector2 selectedTile = GetEntityCenterRaw(e);
-            selectedTile.Y = (float)Math.Floor(selectedTile.Y);
-            return selectedTile;
-        }
-
-        private void HandleTilemapViewClickEntities (object sender, MouseButtonEventArgs e) {
+        private void HandleMouseDown_Entities (object sender, MouseButtonEventArgs e) {
             if (currentTool == Tool.God || currentTool == Tool.Hand) {
                 contentpresenter_entitydata.Content = null;
                 tilemapview.AdditionalRenderCall = null;
@@ -450,7 +559,7 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private void HandleTilemapViewClickBrush (object sender, MouseButtonEventArgs e) {
+        private void HandleMouseDown_Brushes (object sender, MouseButtonEventArgs e) {
             if (currentBrush == null) return;
 
             if (e.LeftButton == MouseButtonState.Pressed) {
@@ -465,7 +574,7 @@ namespace mapKnight.ToolKit.Editor {
                         int py = py0 + y;
 
                         if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
-                            (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], GetBrushData(px, py));
+                            (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], Map.GetBrushData(px, py, currentLayer, currentBrush));
                             Map.Preserve(px0, py0, currentLayer, true);
                             Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
                             Map.Rotations[px, py, currentLayer] = replacement.rotation;
@@ -476,58 +585,12 @@ namespace mapKnight.ToolKit.Editor {
                 tilemapview.Update( );
             }
         }
-
-        private void HandleMapVectorListRequest (Func<Vector2, bool> callback) {
-            _Menu[23].IsEnabled = true;
-            currentVectorRequestCallback = callback;
-            SelectTool(Tool.VectorGrabber);
-        }
-
-        private Entity GetClickedEntity (MouseEventArgs e) {
-            Vector2 clickedPosition = GetEntityCenterRaw(e);
-            for (int i = Map.Entities.Count - 1; i >= 0; i--) {
-                if (Map.Entities[i].Transform.Intersects(clickedPosition)) {
-                    return Map.Entities[i];
-                }
-            }
-            return null;
-        }
-
-        private void tilemapview_MouseEnter (object sender, MouseEventArgs e) {
-            if (tabcontrol_toolselect.SelectedIndex == 0)
-                UpdateSelectedTile(e);
-        }
-
-        private void tilemapview_MouseLeave (object sender, MouseEventArgs e) {
-            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2(-1, -1);
-            if (cachedEntity != null) {
-                Map.Entities.Remove(cachedEntity);
-                cachedEntity = null;
-            }
-            tilemapview.Update( );
-        }
-
-        private void tilemapview_MouseMove (object sender, MouseEventArgs e) {
-            switch (tabcontrol_toolselect.SelectedIndex) {
-                case 0:
-                    if (tilemapview.IsLayerActive(currentLayer))
-                        HandleTilemapViewMoveTiles(sender, e, UpdateSelectedTile(e));
-                    break;
-                case 1:
-                    HandleTilemapViewMoveEntities(sender, e);
-                    break;
-                case 2:
-                    if (tilemapview.IsLayerActive(currentLayer))
-                        HandleTilemapViewMoveBrush(sender, e, UpdateSelectedTile(e));
-                    break;
-            }
-        }
-
-        private void HandleTilemapViewMoveTiles (object sender, MouseEventArgs e, bool updated) {
+        
+        private void HandleMouseMove_Tiles (object sender, MouseEventArgs e, bool updated) {
             if (!updated) return;
 
             Point clickedTile = new Point(Math.Floor(selectedTile.X), Map.Height - Math.Floor(selectedTile.Y) - 1);
-            if (e.LeftButton == MouseButtonState.Pressed){
+            if (e.LeftButton == MouseButtonState.Pressed) {
                 switch (currentTool) {
                     case Tool.Eraser:
                         Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, true);
@@ -546,7 +609,7 @@ namespace mapKnight.ToolKit.Editor {
                         Map.SpawnPoint = new Vector2((int)clickedTile.X, (int)clickedTile.Y);
                         break;
                 }
-                updated = updated || (currentTool != Tool.Filler && currentTool != Tool.Rotater);
+                updated = updated || (currentTool != Tool.Filler && currentTool != Tool.Rotator);
             } else if (e.RightButton == MouseButtonState.Pressed) {
                 Map.Preserve((int)clickedTile.X, (int)clickedTile.Y, currentLayer, true);
                 Map.Data[(int)clickedTile.X, (int)clickedTile.Y, currentLayer] = 0;
@@ -556,7 +619,7 @@ namespace mapKnight.ToolKit.Editor {
                 tilemapview.Update( );
         }
 
-        private void HandleTilemapViewMoveEntities (object sender, MouseEventArgs e) {
+        private void HandleMouseMove_Entities (object sender, MouseEventArgs e) {
             Vector2 entityLocation = Keyboard.IsKeyDown(Key.LeftShift) ? GetEntityCenter(e) : GetEntityCenterRaw(e);
             switch (currentTool) {
                 case Tool.God:
@@ -619,7 +682,7 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private void HandleTilemapViewMoveBrush (object sender, MouseEventArgs e, bool updated) {
+        private void HandleMouseMove_Brushes (object sender, MouseEventArgs e, bool updated) {
             if (!updated) return;
 
             if (e.LeftButton == MouseButtonState.Pressed && currentBrush != null) {
@@ -634,7 +697,7 @@ namespace mapKnight.ToolKit.Editor {
                         int py = py0 + y;
 
                         if (px >= 0 && px < Map.Width && py >= 0 && py < Map.Height && currentBrush.Contains(Map.Tiles[Map.Data[px, py, currentLayer]].Name)) {
-                            (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], GetBrushData(px, py));
+                            (Tile tile, float rotation) replacement = currentBrush.Get(Map.GetTile(px, py, currentLayer), Map.Rotations[px, py, currentLayer], Map.GetBrushData(px, py, currentLayer, currentBrush));
                             Map.Preserve(px, py, currentLayer, true);
                             Map.Data[px, py, currentLayer] = Array.FindIndex(Map.Tiles, tile => tile.Name == replacement.tile.Name);
                             Map.Rotations[px, py, currentLayer] = replacement.rotation;
@@ -647,55 +710,9 @@ namespace mapKnight.ToolKit.Editor {
                 tilemapview.Update( );
             }
         }
+        #endregion
 
-        private bool[ ] GetBrushData (int x, int y) {
-            /* 0 1 2
-             * 3 - 4 
-             * 5 6 7
-             */
-            return new[ ] {
-                ((x - 1 >= 0 && y + 1 < Map.Height) ? currentBrush.Contains(Map.Tiles[Map.Data[x - 1, y + 1, currentLayer]].Name): true),
-                ((y + 1 < Map.Height) ? currentBrush.Contains(Map.Tiles[Map.Data[x, y + 1, currentLayer]].Name): true),
-                ((x + 1 < Map.Width && y + 1 < Map.Height) ? currentBrush.Contains(Map.Tiles[Map.Data[x + 1, y + 1, currentLayer]].Name): true),
-
-                ((x - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x - 1, y, currentLayer]].Name): true),
-                ((x + 1 < Map.Width) ? currentBrush.Contains(Map.Tiles[Map.Data[x + 1, y, currentLayer]].Name): true),
-
-                ((x - 1 >= 0 && y - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x - 1, y - 1, currentLayer]].Name): true),
-                ((y - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x, y - 1, currentLayer]].Name): true),
-                ((x + 1 < Map.Width && y - 1 >= 0) ? currentBrush.Contains(Map.Tiles[Map.Data[x + 1, y - 1, currentLayer]].Name): true),
-            };
-        }
-
-        private void tilemapview_PreviewMouseWheel (object sender, MouseWheelEventArgs e) {
-            scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
-            scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
-            if (e.Delta > 0) {
-                tilemapview.ZoomLevel++;
-            } else {
-                tilemapview.ZoomLevel--;
-            }
-        }
-
-        private void UndoLast ( ) {
-            Map.Undo( );
-            tilemapview.Update( );
-        }
-
-        private bool UpdateSelectedTile (MouseEventArgs e) {
-            Point positionOnControl = e.GetPosition(tilemapview);
-            Microsoft.Xna.Framework.Vector2 nextSelectedTile = new Microsoft.Xna.Framework.Vector2(
-                (float)Math.Max(0, Math.Min(positionOnControl.X / tilemapview.TileSize + tilemapview.Offset.X, Map.Width - 1)),
-                (float)Math.Max(0, Math.Min(positionOnControl.Y / tilemapview.TileSize + tilemapview.Offset.Y, Map.Height - 1)));
-            bool changed = Math.Floor(selectedTile.X) != Math.Floor(nextSelectedTile.X) || Math.Floor(selectedTile.Y) != Math.Floor(nextSelectedTile.Y);
-
-            selectedTile = nextSelectedTile;
-            text_xpos.Text = Math.Floor(selectedTile.X).ToString( );
-            text_ypos.Text = Math.Floor(Map.Height - selectedTile.Y).ToString( );
-            tilemapview.CurrentSelection = new Microsoft.Xna.Framework.Vector2((float)Math.Floor(selectedTile.X), (float)Math.Floor(selectedTile.Y)) - tilemapview.Offset;
-            return changed;
-        }
-
+        #region wrappanel_tiles
         private void wrappanel_tiles_DragEnter (object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effects = DragDropEffects.Copy;
@@ -719,7 +736,7 @@ namespace mapKnight.ToolKit.Editor {
             int oldSelection = (e.RemovedItems.Count > 0) ? wrappanel_tiles.Items.IndexOf(e.RemovedItems[0]) : -1;
             if (oldSelection > -1) {
                 if (!Map.Tiles.Any(t => t.Name == textbox_tile_name.Text)) {
-                    ChangeTextureName(Map.Tiles[oldSelection].Name, textbox_tile_name.Text);
+                    Map.ChangeTextureName(Map.Tiles[oldSelection].Name, textbox_tile_name.Text);
                     Map.Tiles[oldSelection].Name = textbox_tile_name.Text;
                 }
                 Map.Tiles[oldSelection].Attributes.Clear( );
@@ -744,34 +761,14 @@ namespace mapKnight.ToolKit.Editor {
                 wrappanel_tiles.SelectedIndex = 0;
             }
         }
+        #endregion
 
-        #region templates
-
-        private struct ListViewEntry {
-
-            public ListViewEntry (BitmapImage image) {
-                Image = image;
-            }
-
-            public BitmapImage Image { get; private set; }
+        #region CommandBindings
+        private void CommandBinding_DeleteTile_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = wrappanel_tiles?.SelectedItem != null;
         }
 
-        private class AttributeListViewEntry {
-
-            public AttributeListViewEntry (bool active, string attribute, string value) {
-                Active = active;
-                Attribute = attribute;
-                Value = value;
-            }
-
-            public bool Active { get; set; }
-            public string Attribute { get; set; }
-            public string Value { get; set; }
-        }
-
-        #endregion templates
-
-        private void CommandDelete_Executed (object sender, ExecutedRoutedEventArgs e) {
+        private void CommandBinding_DeleteTile_Executed (object sender, ExecutedRoutedEventArgs e) {
             int index = wrappanel_tiles.SelectedIndex;
             if (index > 0) {
                 wrappanel_tiles.Items.RemoveAt(index);
@@ -780,11 +777,11 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private void CommandDelete_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+        private void CommandBinding_ReplaceTile_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = wrappanel_tiles?.SelectedItem != null;
         }
 
-        private void CommandReplace_Executed (object sender, ExecutedRoutedEventArgs e) {
+        private void CommandBinding_ReplaceTile_Executed (object sender, ExecutedRoutedEventArgs e) {
             OpenFileDialog opendialog = new OpenFileDialog( );
             opendialog.Filter = "Images|*.png;*.jpg;*.jpeg";
             opendialog.Multiselect = false;
@@ -805,60 +802,8 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private void CommandReplace_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = wrappanel_tiles?.SelectedItem != null;
-        }
-
-        private void ButtonAdd_Click (object sender, RoutedEventArgs e) {
-            OpenFileDialog opendialog = new OpenFileDialog( );
-            opendialog.Filter = "Images|*.png;*.jpg;*.jpeg";
-            opendialog.Multiselect = true;
-            if (opendialog.ShowDialog( ) ?? false) {
-                foreach (string file in opendialog.FileNames) {
-                    AddTile(file);
-                }
-            }
-        }
-
-        private void AddTile (string imagefile) {
-            string tileName = Path.GetFileNameWithoutExtension(imagefile);
-            if (checkbox_auto.IsChecked ?? false && !Map.Tiles.Any(t => t.Name == tileName)) {
-                // add tile
-                BitmapImage tileImage = LoadTileImage(imagefile);
-
-                Map.LoadTexture(tileName, tileImage, GraphicsDevice);
-                Map.AddTile(new Tile( ) { Attributes = new Dictionary<TileAttribute, string>(defaultAttributes), Name = tileName });
-                wrappanel_tiles.Items.Add(new ListViewEntry(tileImage));
-            } else {
-                // open add tile window
-                AddTileWindow addTileDialog = new AddTileWindow(imagefile, Map.Tiles.Select(t => t.Name), defaultAttributes);
-                if (addTileDialog.ShowDialog( ) ?? false) {
-                    if (Map.Tiles.Where(t => t.Name == addTileDialog.Created.Item1.Name) != null) {
-                        Map.LoadTexture(addTileDialog.Created.Item1.Name, addTileDialog.Created.Item2, GraphicsDevice);
-                        Map.AddTile(addTileDialog.Created.Item1);
-                        wrappanel_tiles.Items.Add(new ListViewEntry(addTileDialog.Created.Item2));
-                    } else {
-                        MessageBox.Show("Please don't add tiles with the same name twice!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-        }
-
-        private void tilemapview_SizeChanged (object sender, SizeChangedEventArgs e) {
-            scrollbar_horizontal.Minimum = -tilemapview.ActualWidth / tilemapview.TileSize;
-            scrollbar_vertical.Minimum = -tilemapview.ActualHeight / tilemapview.TileSize;
-        }
-
-        private BitmapImage LoadTileImage (string file) {
-            BitmapImage image = new BitmapImage( );
-            image.BeginInit( );
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.CreateOptions = BitmapCreateOptions.None;
-            image.DecodePixelWidth = Core.Map.TILE_PXL_SIZE;
-            image.DecodePixelHeight = Core.Map.TILE_PXL_SIZE;
-            image.UriSource = new Uri(file);
-            image.EndInit( );
-            return image;
+        private void CommandBinding_CreateBrush_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = true;
         }
 
         private void CommandBinding_CreateBrush_Executed (object sender, ExecutedRoutedEventArgs e) {
@@ -869,27 +814,65 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private void CommandBinding_CreateBrush_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = true;
+        private void CommandBinding_RemoveBrush_Executed (object sender, ExecutedRoutedEventArgs e) {
+            Map.Brushes.RemoveAt(listview_brushes.SelectedIndex);
+            listview_brushes.Items.RemoveAt(listview_brushes.SelectedIndex);
         }
 
-        private void CommandBinding_RemoveBrush_Executed (object sender, ExecutedRoutedEventArgs e) {
-            listview_brushes.Items.RemoveAt(listview_brushes.SelectedIndex);
-            Map.Brushes.RemoveAt(listview_brushes.SelectedIndex);
+        private void CommandBinding_Undo_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = (Map?.Cache.Count ?? 0) > 0;
+        }
+
+        private void CommandBinding_Undo_Executed (object sender, ExecutedRoutedEventArgs e) {
+            UndoLast( );
+        }
+
+        private void CommandBinding_SelectPen_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = currentTool != Tool.Pen;
+        }
+
+        private void CommandBinding_SelectPen_Executed (object sender, ExecutedRoutedEventArgs e) {
+            SelectTool(Tool.Pen);
+        }
+
+        private void CommandBinding_SelectEraser_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = currentTool != Tool.Eraser;
+        }
+
+        private void CommandBinding_SelectEraser_Executed (object sender, ExecutedRoutedEventArgs e) {
+            SelectTool(Tool.Eraser);
+        }
+
+        private void CommandBinding_SelectRotator_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = currentTool != Tool.Rotator;
+        }
+
+        private void CommandBinding_SelectRotator_Executed (object sender, ExecutedRoutedEventArgs e) {
+            SelectTool(Tool.Rotator);
         }
 
         private void CommandBinding_RemoveBrush_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = listview_brushes?.SelectedItem != null;
         }
+        #endregion
 
-        private void tabcontrol_toolselect_SelectionChanged (object sender, SelectionChangedEventArgs e) {
-            tilemapview.Mode = tabcontrol_toolselect.SelectedIndex;
-            if (tabcontrol_toolselect.SelectedIndex == 0) {
-                SelectTool(Tool.Pen);
-            } else if (tabcontrol_toolselect.SelectedIndex == 1) {
-                SelectTool(Tool.God);
-            } else {
-                SelectTool(Tool.Brush);
+        private struct ListViewEntry {
+            public BitmapImage Image { get; private set; }
+
+            public ListViewEntry (BitmapImage image) {
+                Image = image;
+            }
+        }
+
+        private struct AttributeListViewEntry {
+            public bool Active { get; set; }
+            public string Attribute { get; set; }
+            public string Value { get; set; }
+
+            public AttributeListViewEntry (bool active, string attribute, string value) {
+                Active = active;
+                Attribute = attribute;
+                Value = value;
             }
         }
     }

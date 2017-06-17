@@ -15,12 +15,6 @@ namespace mapKnight.ToolKit.Windows {
         private IEnumerable<string> forbiddenNames;
         private Dictionary<TileAttribute, string> defaultAttributes;
 
-#if log
-        public AddTileWindow ( ) {
-            InitializeComponent( );
-        }
-#endif
-
         public AddTileWindow (string path, IEnumerable<string> forbiddennames, Dictionary<TileAttribute, string> defaultattributes) {
             Path = path;
             forbiddenNames = forbiddennames;
@@ -41,7 +35,7 @@ namespace mapKnight.ToolKit.Windows {
             textbox_name.Text = System.IO.Path.GetFileNameWithoutExtension(path);
         }
 
-        private void button_submit_Click (object sender, RoutedEventArgs e) {
+        private void Button_Submit_Click (object sender, RoutedEventArgs e) {
             if (forbiddenNames.Contains(textbox_name.Text)) {
                 MessageBox.Show("name is allready present", "invalid name", MessageBoxButton.OK, MessageBoxImage.Error);
             } else {
