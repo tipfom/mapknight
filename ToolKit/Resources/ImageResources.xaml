@@ -9,6 +9,7 @@
     <BitmapImage x:Key="img_copy" UriSource="../Resources/Images/Icons/copy.png"/>
     <BitmapImage x:Key="img_cut" UriSource="../Resources/Images/Icons/cut.png"/>
     <BitmapImage x:Key="img_delete" UriSource="../Resources/Images/Icons/delete.png"/>
+    <BitmapImage x:Key="img_dice" UriSource="../Resources/Images/Icons/dice.png"/>
     <BitmapImage x:Key="img_file_compile" UriSource="../Resources/Images/Icons/file_compile.png"/>
     <BitmapImage x:Key="img_file_new" UriSource="../Resources/Images/Icons/file_new.png"/>
     <BitmapImage x:Key="img_file_open" UriSource="../Resources/Images/Icons/file_open.png"/>
@@ -44,4 +45,9 @@
     <BitmapImage x:Key="img_tool_trash" UriSource="../Resources/Images/Icons/tool_trash.png"/>
     <BitmapImage x:Key="img_undo" UriSource="../Resources/Images/Icons/undo.png"/>
     <BitmapImage x:Key="img_unlink" UriSource="../Resources/Images/Icons/unlink.png"/>
+
+    <BitmapImage x:Key="img_autotile_d" UriSource="../Resources/Images/autotile_d.png"/>
+    <BitmapImage x:Key="img_autotile_I" UriSource="../Resources/Images/autotile_I.png"/>
+    <BitmapImage x:Key="img_autotile_L" UriSource="../Resources/Images/autotile_L.png"/>
+    <BitmapImage x:Key="img_autotile_O" UriSource="../Resources/Images/autotile_O.png"/>
 </ResourceDictionary>

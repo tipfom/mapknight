@@ -388,11 +388,11 @@ namespace mapKnight.ToolKit.Editor {
                         HandleMouseDown_Tiles(sender, e);
                     break;
                 case 1:
-                    HandleMouseDown_Entities(sender, e);
-                    break;
-                case 2:
                     if (tilemapview.IsLayerActive(currentLayer))
                         HandleMouseDown_Brushes(sender, e);
+                    break;
+                case 2:
+                    HandleMouseDown_Entities(sender, e);
                     break;
             }
         }
@@ -418,11 +418,11 @@ namespace mapKnight.ToolKit.Editor {
                         HandleMouseMove_Tiles(sender, e, UpdateSelectedTile(e));
                     break;
                 case 1:
-                    HandleMouseMove_Entities(sender, e);
-                    break;
-                case 2:
                     if (tilemapview.IsLayerActive(currentLayer))
                         HandleMouseMove_Brushes(sender, e, UpdateSelectedTile(e));
+                    break;
+                case 2:
+                    HandleMouseMove_Entities(sender, e);
                     break;
             }
         }

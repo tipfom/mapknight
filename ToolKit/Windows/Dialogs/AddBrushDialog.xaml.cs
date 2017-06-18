@@ -27,10 +27,10 @@ namespace mapKnight.ToolKit.Windows.Dialogs {
         private EditorMap map;
         private int indexCTL, indexCTR, indexCBR, indexCBL, indexCentre, indexIL, indexIT, indexIR, indexIB, indexLBL, indexLBR, indexLTL, indexLTR;
 
-        private BitmapImage image_d = (BitmapImage)App.Current.FindResource("image_map_autotile_d");
-        private BitmapImage image_I = (BitmapImage)App.Current.FindResource("image_map_autotile_I");
-        private BitmapImage image_O = (BitmapImage)App.Current.FindResource("image_map_autotile_O");
-        private BitmapImage image_L = (BitmapImage)App.Current.FindResource("image_map_autotile_L");
+        private BitmapImage image_d = (BitmapImage)App.Current.FindResource("img_autotile_d");
+        private BitmapImage image_I = (BitmapImage)App.Current.FindResource("img_autotile_I");
+        private BitmapImage image_O = (BitmapImage)App.Current.FindResource("img_autotile_O");
+        private BitmapImage image_L = (BitmapImage)App.Current.FindResource("img_autotile_L");
 
         private AddBrushDialog ( ) {
             InitializeComponent( );

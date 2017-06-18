@@ -27,6 +27,22 @@
             <Button DockPanel.Dock="Left" Command="local:AddBrushDialog.EditPossibilitiesCommand" Content="Edit Possibilities" Padding="7,2" HorizontalAlignment="Left"/>
         </DockPanel>
         <Grid>
+            <Grid.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Opacity" Value=".7"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Canvas VerticalAlignment="Center" Margin="0">
+                                    <Ellipse Canvas.Left="0" Height="6" Width="6" Fill="Black" StrokeThickness="1" Stroke="White"/>
+                                    <Ellipse Canvas.Left="7" Height="6" Width="6" Fill="Black" StrokeThickness="1" Stroke="White"/>
+                                </Canvas>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="5"/>
@@ -54,7 +70,7 @@
                     <Image x:Name="image_cornertl"
                        Grid.Column="0" Grid.Row="0" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_d}" 
+                       Source="{StaticResource ResourceKey=img_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerTL_MouseDown">
@@ -68,7 +84,7 @@
                     <Image x:Name="image_cornertr"
                        Grid.Column="2" Grid.Row="0" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_d}" 
+                       Source="{StaticResource ResourceKey=img_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerTR_MouseDown">
@@ -82,7 +98,7 @@
                     <Image x:Name="image_cornerbr"
                        Grid.Column="2" Grid.Row="2" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_d}" 
+                       Source="{StaticResource ResourceKey=img_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerBR_MouseDown">
@@ -96,7 +112,7 @@
                     <Image x:Name="image_cornerbl"
                        Grid.Column="0" Grid.Row="2" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_d}" 
+                       Source="{StaticResource ResourceKey=img_autotile_d}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerBL_MouseDown">
@@ -112,7 +128,7 @@
                     <Image x:Name="image_centre"
                        Grid.Column="1" Grid.Row="1" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_O}" 
+                       Source="{StaticResource ResourceKey=img_autotile_O}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_Centre_MouseDown">
@@ -128,7 +144,7 @@
                     <Image x:Name="image_Il"
                        Grid.Column="0" Grid.Row="1" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_I}" 
+                       Source="{StaticResource ResourceKey=img_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IL_MouseDown">
@@ -142,7 +158,7 @@
                     <Image x:Name="image_It"
                        Grid.Column="1" Grid.Row="0" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_I}" 
+                       Source="{StaticResource ResourceKey=img_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IT_MouseDown">
@@ -156,7 +172,7 @@
                     <Image x:Name="image_Ir"
                        Grid.Column="2" Grid.Row="1" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_I}" 
+                       Source="{StaticResource ResourceKey=img_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IR_MouseDown">
@@ -170,7 +186,7 @@
                     <Image x:Name="image_Ib"
                        Grid.Column="1" Grid.Row="2" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_I}" 
+                       Source="{StaticResource ResourceKey=img_autotile_I}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IB_MouseDown">
@@ -186,7 +202,7 @@
                     <Image x:Name="image_Lbl"
                        Grid.Column="0" Grid.Row="3" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_L}" 
+                       Source="{StaticResource ResourceKey=img_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_LBL_MouseDown" Grid.RowSpan="2">
@@ -200,7 +216,7 @@
                     <Image x:Name="image_Lbr"
                        Grid.Column="1" Grid.Row="3" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_L}" 
+                       Source="{StaticResource ResourceKey=img_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_LBR_MouseDown" Grid.RowSpan="2">
@@ -214,7 +230,7 @@
                     <Image x:Name="image_Ltl"
                        Grid.Column="2" Grid.Row="3" 
                        Margin="0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_L}" 
+                       Source="{StaticResource ResourceKey=img_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_LTL_MouseDown" Grid.RowSpan="2">
@@ -228,7 +244,7 @@
                     <Image x:Name="image_Ltr"
                        Grid.Column="3" Grid.Row="3" 
                        Margin="0,0,-9,0"
-                       Source="{StaticResource ResourceKey=image_map_autotile_L}" 
+                       Source="{StaticResource ResourceKey=img_autotile_L}" 
                        RenderOptions.BitmapScalingMode="NearestNeighbor"
                        RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_LTR_MouseDown" Grid.RowSpan="2">

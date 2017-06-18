@@ -6,7 +6,9 @@
         xmlns:data="clr-namespace:mapKnight.ToolKit.Data"
         xmlns:controls="clr-namespace:mapKnight.ToolKit.Controls"
         mc:Ignorable="d"
-        Title="Edit Possibilities" Height="300" Width="300">
+        Title="Edit Possibilities" 
+        Icon="{StaticResource ResourceKey=img_dice}"
+        Height="300" Width="300">
     <Window.Resources>
         <DataTemplate x:Key="expander_template" DataType="{x:Type data:TileBrushStrokeCollection}">
             <ListView Height="Auto" Width="Auto" ItemsSource="{Binding}">
