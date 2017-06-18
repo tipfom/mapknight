@@ -343,13 +343,6 @@ namespace mapKnight.ToolKit.Editor {
             }
         }
 
-        private void Button_Settings_Click (object sender, RoutedEventArgs e) {
-            EditDefaultTileAttributesWindow dialog = new EditDefaultTileAttributesWindow(defaultAttributes);
-            if (dialog.ShowDialog( ) ?? false) {
-                defaultAttributes = dialog.NewDefault;
-            }
-        }
-
         private void Button_AddTile_Click (object sender, RoutedEventArgs e) {
             OpenFileDialog opendialog = new OpenFileDialog( );
             opendialog.Filter = "Images|*.png;*.jpg;*.jpeg";
@@ -360,7 +353,14 @@ namespace mapKnight.ToolKit.Editor {
                 }
             }
         }
-        
+
+        private void Button_DefaultTileAttribute_Settings_Click (object sender, RoutedEventArgs e) {
+            EditDefaultTileAttributesWindow dialog = new EditDefaultTileAttributesWindow(defaultAttributes);
+            if (dialog.ShowDialog( ) ?? false) {
+                defaultAttributes = dialog.NewDefault;
+            }
+        }
+
         private void Scrollbar_Horizontal_ValueChanged (object sender, RoutedPropertyChangedEventArgs<double> e) {
             tilemapview.Offset = new Microsoft.Xna.Framework.Vector2((float)scrollbar_horizontal.Value, tilemapview.Offset.Y);
         }
@@ -864,7 +864,7 @@ namespace mapKnight.ToolKit.Editor {
             e.CanExecute = listview_brushes?.SelectedItem != null;
         }
         #endregion
-
+        
         private struct ListViewEntry {
             public BitmapImage Image { get; private set; }
 

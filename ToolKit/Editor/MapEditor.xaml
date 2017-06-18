@@ -119,7 +119,12 @@
                     </ListBox>
                     <GridSplitter Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White" />
                     <DockPanel Grid.Row="3">
-                        <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Top" Margin="0,0,0,2" />
+                        <DockPanel DockPanel.Dock="Top" Height="22" Margin="0,0,0,2" >
+                            <Button DockPanel.Dock="Right" Margin="2,0,0,0" Click="Button_DefaultTileAttribute_Settings_Click">
+                                <Image Source="{StaticResource ResourceKey=img_settings}"/>
+                            </Button>
+                            <TextBox x:Name="textbox_tile_name" DockPanel.Dock="Left"/>
+                        </DockPanel>
                         <ListView x:Name="listview_tile_attributes">
                             <ListView.View>
                                 <GridView>
