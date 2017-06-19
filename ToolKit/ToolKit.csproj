@@ -533,6 +533,9 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\dice.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Libraries\System.ValueTuple.dll" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
