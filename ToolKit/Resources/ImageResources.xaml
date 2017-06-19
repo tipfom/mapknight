@@ -30,6 +30,7 @@
     <BitmapImage x:Key="img_paste" UriSource="../Resources/Images/Icons/paste.png"/>
     <BitmapImage x:Key="img_settings" UriSource="../Resources/Images/Icons/settings.png"/>
     <BitmapImage x:Key="img_sort_down" UriSource="../Resources/Images/Icons/sort_down.png"/>
+    <BitmapImage x:Key="img_sort_right" UriSource="../Resources/Images/Icons/sort_right.png"/>
     <BitmapImage x:Key="img_sort_up" UriSource="../Resources/Images/Icons/sort_up.png"/>
     <BitmapImage x:Key="img_stop" UriSource="../Resources/Images/Icons/stop.png"/>
     <BitmapImage x:Key="img_template" UriSource="../Resources/Images/Icons/template.png"/>

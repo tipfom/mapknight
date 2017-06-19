@@ -7,11 +7,24 @@
         mc:Ignorable="d"
         Title="Create an Brush" 
         Icon="{StaticResource ResourceKey=img_tool_brush}"
-        Height="300" Width="500">
+        Height="300" Width="400">
     <Window.CommandBindings>
         <CommandBinding Command="local:AddBrushDialog.FinishCommand" CanExecute="CommandBinding_Finish_CanExecute" Executed="CommandBinding_Finish_Executed"/>
         <CommandBinding Command="local:AddBrushDialog.EditPossibilitiesCommand" CanExecute="CommandBinding_EditPossibilities_CanExecute" Executed="CommandBinding_EditPossibilities_Executed"/>
-    </Window.CommandBindings>
+        <CommandBinding Command="local:AddBrushDialog.NextCornerTLCommand" CanExecute="CommandBinding_NextCornerTL_CanExecute" Executed="CommandBinding_NextCornerTL_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextCornerTRCommand" CanExecute="CommandBinding_NextCornerTR_CanExecute" Executed="CommandBinding_NextCornerTR_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextCornerBLCommand" CanExecute="CommandBinding_NextCornerBL_CanExecute" Executed="CommandBinding_NextCornerBL_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextCornerBRCommand" CanExecute="CommandBinding_NextCornerBR_CanExecute" Executed="CommandBinding_NextCornerBR_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextCentreCommand" CanExecute="CommandBinding_NextCentre_CanExecute" Executed="CommandBinding_NextCentre_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextILCommand" CanExecute="CommandBinding_NextIL_CanExecute" Executed="CommandBinding_NextIL_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextITCommand" CanExecute="CommandBinding_NextIT_CanExecute" Executed="CommandBinding_NextIT_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextIRCommand" CanExecute="CommandBinding_NextIR_CanExecute" Executed="CommandBinding_NextIR_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextIBCommand" CanExecute="CommandBinding_NextIB_CanExecute" Executed="CommandBinding_NextIB_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextLTLCommand" CanExecute="CommandBinding_NextLTL_CanExecute" Executed="CommandBinding_NextLTL_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextLTRCommand" CanExecute="CommandBinding_NextLTR_CanExecute" Executed="CommandBinding_NextLTR_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextLBLCommand" CanExecute="CommandBinding_NextLBL_CanExecute" Executed="CommandBinding_NextLBL_Executed"/>
+        <CommandBinding Command="local:AddBrushDialog.NextLBRCommand" CanExecute="CommandBinding_NextLBR_CanExecute" Executed="CommandBinding_NextLBR_Executed"/>
+    </Window.CommandBindings>  
     <Window.Resources>
         <DataTemplate x:Key="TileItemTemplate">
             <Image 
@@ -23,21 +36,51 @@
     </Window.Resources>
     <DockPanel Margin="5">
         <DockPanel DockPanel.Dock="Bottom" Margin="0,5,0,0">
-            <Button DockPanel.Dock="Right" Command="local:AddBrushDialog.FinishCommand" Content="Finish" Padding="7,2" HorizontalAlignment="Right"/>
-            <Button DockPanel.Dock="Left" Command="local:AddBrushDialog.EditPossibilitiesCommand" Content="Edit Possibilities" Padding="7,2" HorizontalAlignment="Left"/>
+            <DockPanel.Resources>
+                <Style TargetType="{x:Type StackPanel}">
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Trigger.Setters>
+                                <Setter Property="Opacity" Value=".7"/>
+                            </Trigger.Setters>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Resources>
+            <Button DockPanel.Dock="Right" Command="local:AddBrushDialog.FinishCommand" Padding="7,2" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" Height="20">
+                    <Image Source="{StaticResource ResourceKey=img_tool_finish}" Margin="0,0,7,0"/>
+                    <TextBlock Text="CREATE" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button DockPanel.Dock="Left" Command="local:AddBrushDialog.EditPossibilitiesCommand" Padding="7,2" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" Height="20">
+                    <Image Source="{StaticResource ResourceKey=img_dice}" Margin="0,0,7,0"/> 
+                    <TextBlock Text="EDIT POSSIBILITIES" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </DockPanel>
-        <Grid>
+        <Grid SnapsToDevicePixels="True">
             <Grid.Resources>
                 <Style TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="Opacity" Value=".7"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Trigger.Setters>
+                                <Setter Property="Opacity" Value=".2"/>
+                            </Trigger.Setters>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Width" Value="20"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="Margin" Value="2"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Canvas VerticalAlignment="Center" Margin="0">
-                                    <Ellipse Canvas.Left="0" Height="6" Width="6" Fill="Black" StrokeThickness="1" Stroke="White"/>
-                                    <Ellipse Canvas.Left="7" Height="6" Width="6" Fill="Black" StrokeThickness="1" Stroke="White"/>
-                                </Canvas>
+                                <Image Name="image" 
+                                       Source="{StaticResource ResourceKey=img_sort_right}" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -51,13 +94,21 @@
             <Grid Grid.Column="0">
                 <Grid Height="{Binding Width}"
                       VerticalAlignment="Center"
-                      HorizontalAlignment="Center">
+                      HorizontalAlignment="Center"
+                      SnapsToDevicePixels="True">
+                    <Grid.Resources>
+                        <Style TargetType="Image">
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor"/>
+                            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                            <Setter Property="Margin" Value="-1"/>
+                        </Style>
+                    </Grid.Resources>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="58*"/>
-                        <RowDefinition Height="58*"/>
-                        <RowDefinition Height="58*"/>
-                        <RowDefinition Height="49*"/>
-                        <RowDefinition Height="9*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -69,192 +120,149 @@
                     <!-- corners -->
                     <Image x:Name="image_cornertl"
                        Grid.Column="0" Grid.Row="0" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_d}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerTL_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="90"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="0" Grid.Row="0" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCTL_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="0" Grid.Row="0" 
+                            Command="local:AddBrushDialog.NextCornerTLCommand"/>
+                    
                     <Image x:Name="image_cornertr"
                        Grid.Column="2" Grid.Row="0" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_d}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerTR_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="180"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="2" Grid.Row="0" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCTR_Click">
-                        ..
-                    </Button>
-                    <Image x:Name="image_cornerbr"
-                       Grid.Column="2" Grid.Row="2" 
-                       Margin="0"
-                       Source="{StaticResource ResourceKey=img_autotile_d}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_CornerBR_MouseDown">
-                        <Image.RenderTransform>
-                            <RotateTransform Angle="270"/>
-                        </Image.RenderTransform>
-                    </Image>
-                    <Button Grid.Column="2" Grid.Row="2" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCBR_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="2" Grid.Row="0" 
+                            Command="local:AddBrushDialog.NextCornerTRCommand"/>
+                    
                     <Image x:Name="image_cornerbl"
                        Grid.Column="0" Grid.Row="2" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_d}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_CornerBL_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="0"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="0" Grid.Row="2" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCBL_Click">
-                        ..
-                    </Button>
-
+                    <Button Grid.Column="0" Grid.Row="2" 
+                            Command="local:AddBrushDialog.NextCornerBLCommand"/>
+                    
+                    <Image x:Name="image_cornerbr"
+                       Grid.Column="2" Grid.Row="2" 
+                       Source="{StaticResource ResourceKey=img_autotile_d}" 
+                       MouseDown="Image_CornerBR_MouseDown">
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="270"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <Button Grid.Column="2" Grid.Row="2" 
+                            Command="local:AddBrushDialog.NextCornerBRCommand"/>
+                    
                     <!-- centre -->
                     <Image x:Name="image_centre"
                        Grid.Column="1" Grid.Row="1" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_O}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_Centre_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="1" Grid.Row="1" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextCentre_Click">
-                        ..
-                    </Button>
-
+                    <Button Grid.Column="1" Grid.Row="1" 
+                            Command="local:AddBrushDialog.NextCentreCommand"/>
+                    
                     <!-- I shapes -->
                     <Image x:Name="image_Il"
                        Grid.Column="0" Grid.Row="1" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_I}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IL_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="90"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="0" Grid.Row="1" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIL_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="0" Grid.Row="1" 
+                            Command="local:AddBrushDialog.NextILCommand"/>
+                    
                     <Image x:Name="image_It"
                        Grid.Column="1" Grid.Row="0" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_I}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IT_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="180"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="1" Grid.Row="0" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIT_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="1" Grid.Row="0" 
+                            Command="local:AddBrushDialog.NextITCommand"/>
+                    
                     <Image x:Name="image_Ir"
                        Grid.Column="2" Grid.Row="1" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_I}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IR_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="270"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="2" Grid.Row="1" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIR_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="2" Grid.Row="1" 
+                            Command="local:AddBrushDialog.NextIRCommand"/>
+                    
                     <Image x:Name="image_Ib"
                        Grid.Column="1" Grid.Row="2" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_I}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
                        MouseDown="Image_IB_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="0"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="1" Grid.Row="2" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextIB_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="1" Grid.Row="2" 
+                            Command="local:AddBrushDialog.NextIBCommand"/>
 
                     <!-- L shapes -->
                     <Image x:Name="image_Lbl"
                        Grid.Column="0" Grid.Row="3" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_L}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LBL_MouseDown" Grid.RowSpan="2">
+                       MouseDown="Image_LBL_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="0"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="0" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLBL_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="0" Grid.Row="3" 
+                            Command="local:AddBrushDialog.NextLBLCommand"/>
+                    
                     <Image x:Name="image_Lbr"
                        Grid.Column="1" Grid.Row="3" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_L}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LBR_MouseDown" Grid.RowSpan="2">
+                       MouseDown="Image_LBR_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="270"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="1" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLBR_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="1" Grid.Row="3" 
+                            Command="local:AddBrushDialog.NextLBRCommand"/>
+                    
                     <Image x:Name="image_Ltl"
                        Grid.Column="2" Grid.Row="3" 
-                       Margin="0"
                        Source="{StaticResource ResourceKey=img_autotile_L}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LTL_MouseDown" Grid.RowSpan="2">
+                       MouseDown="Image_LTL_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="90"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="2" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLTL_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="2" Grid.Row="3" 
+                            Command="local:AddBrushDialog.NextLTLCommand"/>
+
                     <Image x:Name="image_Ltr"
                        Grid.Column="3" Grid.Row="3" 
-                       Margin="0,0,-9,0"
                        Source="{StaticResource ResourceKey=img_autotile_L}" 
-                       RenderOptions.BitmapScalingMode="NearestNeighbor"
-                       RenderTransformOrigin="0.5,0.5"
-                       MouseDown="Image_LTR_MouseDown" Grid.RowSpan="2">
+                       MouseDown="Image_LTR_MouseDown">
                         <Image.RenderTransform>
                             <RotateTransform Angle="180"/>
                         </Image.RenderTransform>
                     </Image>
-                    <Button Grid.Column="3" Grid.Row="3" Width="19" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Click="Button_NextLTR_Click">
-                        ..
-                    </Button>
+                    <Button Grid.Column="3" Grid.Row="3" 
+                            Command="local:AddBrushDialog.NextLTRCommand"/>
                 </Grid>
             </Grid>
             <GridSplitter Grid.Column="1" 

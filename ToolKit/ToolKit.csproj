@@ -534,6 +534,9 @@
     <Resource Include="Resources\Images\Entities\tree_cherry.png" />
     <Resource Include="Resources\Images\Entities\tree_maple.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\sort_right.png" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
