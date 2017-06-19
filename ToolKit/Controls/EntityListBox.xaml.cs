@@ -47,11 +47,6 @@ namespace mapKnight.ToolKit.Controls {
 
         private void listbox_entities_SelectionChanged (object sender, SelectionChangedEventArgs e) {
             SelectionChanged?.Invoke((EntityData)e.RemovedItems[0], (EntityData)e.AddedItems[0]);
-            if (e.AddedItems.Count > 0) {
-                textblock_name.Text = ((EntityData)e.AddedItems[0]).Name;
-            } else {
-                textblock_name.Text = "";
-            }
         }
 
         public EntityData Find (string name) {
