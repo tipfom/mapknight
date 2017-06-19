@@ -12,9 +12,13 @@
         Shell = 8,
         Slime = 9,
         Platform_Copper = 10,
-        Fir = 11,
         Npc_Lenny = 12,
         Drillbomb = 13,
-        Oak = 14,
+        Tree_Maple = 15,
+        Tree_Cherry = 16,
+
+        // obsolete
+        _Oak = 14,
+        _Fir = 11,
     }
 }

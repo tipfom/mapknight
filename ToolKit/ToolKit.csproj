@@ -124,7 +124,7 @@
     <Compile Include="Data\TileBrushStroke.cs" />
     <Compile Include="Data\TileBrushStrokeCollection.cs" />
     <Compile Include="Data\VertexAnimationData.cs" />
-    <Compile Include="Data\WindowsEntitySerializer.cs" />
+    <Compile Include="Serializer\WindowsEntitySerializer.cs" />
     <Compile Include="Serializer\AnimationSerizalizer.cs" />
     <Compile Include="Editor\AnimationEditor.xaml.cs">
       <DependentUpon>AnimationEditor.xaml</DependentUpon>
@@ -385,9 +385,6 @@
     <Resource Include="Resources\Images\Entities\platform_copper.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Entities\fir.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Entities\button.png" />
   </ItemGroup>
   <ItemGroup>
@@ -395,9 +392,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Entities\drillbomb.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Entities\oak.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\autotile_d.png" />
@@ -535,6 +529,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Libraries\System.ValueTuple.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Entities\tree_cherry.png" />
+    <Resource Include="Resources\Images\Entities\tree_maple.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

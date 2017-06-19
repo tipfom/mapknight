@@ -23,7 +23,7 @@ namespace mapKnight.Extended {
                 case EntityID.Drillbomb:
                     EntityCollection.Obstacles.Drillbomb.Create(position, world, false).Load(data);
                     break;
-                case EntityID.Fir:
+                case EntityID._Fir:
                     // not ingame yet
                     break;
                 case EntityID.Guardian:
