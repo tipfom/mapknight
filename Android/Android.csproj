@@ -245,6 +245,12 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface_ability_amp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\fragment\line.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\shader\vertex\line.txt" />
+  </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
   <ProjectExtensions />

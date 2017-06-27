@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Timers;
 using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.UI.Layout;
 using mapKnight.Extended.Combat;
@@ -9,7 +11,11 @@ using static mapKnight.Extended.Graphics.Programs.UIAbilityIconProgram;
 namespace mapKnight.Extended.Graphics.UI {
     public class UIAbilityPanel : UIItem {
         private const int MAX_ABILITY_COUNT = 3;
+        private const double LONG_PRESS_TIME = 200d;
 
+        public event Action<Ability> OnLongAbilityPress;
+
+        private int lastIndex = -1;
         private float totalIconHeight;
         private CachedGPUBuffer vertexBuffer;
         private CachedGPUBuffer baseTextureBuffer;
@@ -17,6 +23,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private IndexBuffer indexBuffer;
         private Texture2D ampTexture;
         private List<Ability> abilities = new List<Ability>( );
+        private Timer longPressTimer = new Timer(LONG_PRESS_TIME) { AutoReset = false };
 
         public UIAbilityPanel (Screen owner, UILayout layout) : base(owner, layout, UIDepths.FOREGROUND, false) {
             ampTexture = Assets.Load<Texture2D>("interface_ability_amp");
@@ -27,6 +34,14 @@ namespace mapKnight.Extended.Graphics.UI {
 
             ResetVertexBuffer( );
             layout.Changed += ( ) => ResetVertexBuffer( );
+
+            longPressTimer.Elapsed += LongPressTimer_Elapsed;
+        }
+
+        private void LongPressTimer_Elapsed (object sender, ElapsedEventArgs e) {
+            if (lastIndex < 0) return;
+
+            OnLongAbilityPress?.Invoke(abilities[lastIndex]);
         }
 
         private void ResetVertexBuffer ( ) {
@@ -105,16 +120,43 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
+            int index = GetClickedAbilityIndex(touch);
+            if (index < 0) return false;
+
+            switch (action) {
+                case UITouchAction.Begin:
+                    lastIndex = index;
+                    longPressTimer.Start( );
+                    return true;
+                case UITouchAction.Move:
+                    if (lastIndex != index && lastIndex > -1 && longPressTimer.Enabled) {
+                        longPressTimer.Stop( );
+                        longPressTimer.Start( );
+                    }
+                    return true;
+                case UITouchAction.End:
+                case UITouchAction.Leave:
+                    if (longPressTimer.Enabled) {
+                        longPressTimer.Stop( );
+                        if (abilities[index].Available)
+                            abilities[index].OnCast( );
+                    }
+                    lastIndex = -1;
+                    return true;
+            }
+
+            return false;
+        }
+
+        private int GetClickedAbilityIndex (UITouch touch) {
             float relativeY = 2 * (Layout.Y - touch.RelativePosition.Y) / Layout.Height;
 
             int index = (int)(relativeY / totalIconHeight);
             if (index < abilities.Count) {
-                if (abilities[index].Available)
-                    abilities[index].OnCast( );
-                return true;
+                return index;
             }
 
-            return false;
+            return -1;
         }
 
         public override IEnumerable<DepthVertexData> ConstructVertexData ( ) {

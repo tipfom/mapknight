@@ -102,6 +102,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\DarkenProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\GaussianBlurProgram.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\LineProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\ParticleProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\TextureProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\UIAbilityIconProgram.cs" />

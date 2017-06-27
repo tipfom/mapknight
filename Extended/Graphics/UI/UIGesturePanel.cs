@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Android.Gestures;
-using mapKnight.Core;
 using mapKnight.Extended.Graphics.UI.Layout;
+using mapKnight.Extended.Graphics.Buffer;
+using static mapKnight.Extended.Graphics.Programs.LineProgram;
+using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIGesturePanel : UIPanel {
@@ -13,41 +14,65 @@ namespace mapKnight.Extended.Graphics.UI {
         const int SWIPE_TIME = 400;
         const int SWIPE_MIN_DIST = 100;
 
+        public bool AcceptingGestures = true;
+        public event Action<string> OnGesturePerformed;
+
         // CURRENTLY ONLY WITH SUPPORT FOR ANDROID
         private int currentTouchID = -1;
         private IList<GesturePoint> trackedStrokeBuffer = new List<GesturePoint>(100);
         private GestureStore gestureStore;
+        private int currentVertexIndex = -1;
+        private ClientBuffer vertexBuffer;
 
-        public event Action<string> OnGesturePerformed;
         public UIGesturePanel (Screen owner, UILayout layout, GestureStore gesturestore) : base(owner, layout, false) {
             gestureStore = gesturestore;
+
+            vertexBuffer = new ClientBuffer(2, 1000, PrimitiveType.Point);
         }
 
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
-            switch (action) {
-                case UITouchAction.Move:
-                    if (touch.ID == currentTouchID) {
-                        trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
-                    }
-                    break;
-                case UITouchAction.Begin:
-                case UITouchAction.Enter:
-                    if (currentTouchID == -1) {
-                        currentTouchID = touch.ID;
-                        trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
-                    }
-                    break;
-                case UITouchAction.End:
-                case UITouchAction.Leave:
-                    if (touch.ID == currentTouchID) {
-                        trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
-                        OnGesturePerformed?.Invoke(ComputeGesture( ));
-                        trackedStrokeBuffer.Clear( );
-                        currentTouchID = -1;
-                    }
-                    break;
+            if (AcceptingGestures) {
+                switch (action) {
+                    case UITouchAction.Move:
+                        if (touch.ID == currentTouchID) {
+                            trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                            PushCurrentTouch(touch);
+                        }
+                        break;
+                    case UITouchAction.Begin:
+                    case UITouchAction.Enter:
+                        if (currentTouchID == -1) {
+                            currentTouchID = touch.ID;
+                            trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                            currentVertexIndex = 0;
+                            PushCurrentTouch(touch);
+                        }
+                        break;
+                    case UITouchAction.End:
+                    case UITouchAction.Leave:
+                        if (touch.ID == currentTouchID) {
+                            trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                            OnGesturePerformed?.Invoke(ComputeGesture( ));
+                            trackedStrokeBuffer.Clear( );
+                            currentTouchID = -1;
+                            currentVertexIndex = -1;
+                        }
+                        break;
+                }
+            } else {
+                OnGesturePerformed?.Invoke(string.Empty);
             }
+
             return base.HandleTouch(action, touch);
+        }
+
+        private void PushCurrentTouch (UITouch touch) {
+            int p = currentVertexIndex * 2;
+
+            vertexBuffer.Data[p] = touch.RelativePosition.X / Window.Ratio;
+            vertexBuffer.Data[p + 1] = touch.RelativePosition.Y;
+
+            currentVertexIndex++;
         }
 
         private string ComputeGesture ( ) {
@@ -80,6 +105,14 @@ namespace mapKnight.Extended.Graphics.UI {
                 }
             }
             return string.Empty;
+        }
+
+        public void DrawGestures (Color color) {
+            if (currentVertexIndex >= 0) {
+                Program.Begin( );
+                Program.Draw(vertexBuffer, color, 10f, currentVertexIndex, true);
+                Program.End( );
+            }
         }
     }
 }
