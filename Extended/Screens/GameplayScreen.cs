@@ -7,6 +7,7 @@ using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
 using Map = mapKnight.Extended.Graphics.Map;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Screens {
     public class GameplayScreen : Screen {
@@ -31,7 +32,7 @@ namespace mapKnight.Extended.Screens {
             map.Draw( );
             base.Draw( );
             abilityPanel.Draw( );
-            controlPanel.DrawGestures(Color.Red);
+            controlPanel.Draw(Color.Black, Color.Red);
         }
 
         public override void Load ( ) {
@@ -45,23 +46,29 @@ namespace mapKnight.Extended.Screens {
             playerComponent = playerEntity.GetComponent<PlayerComponent>( );
             map.Focus(playerEntity.ID);
 
+            SetupControls( );
+
             debugLabel = new UILabel(this, new UILayout(new UIMargin(0.1f, 0.075f), UIMarginType.Absolute, UIPosition.Right | UIPosition.Top, UIPosition.Right | UIPosition.Top), 0.05f, "", UITextAlignment.Right);
             healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), playerComponent.Health, new UILayout(new UIMargin(0, 1, 0, 0.025f), UIMarginType.Relative, UIPosition.Left | UIPosition.Top), UIDepths.MIDDLE);
             abilityPanel = new UIAbilityPanel(this, new UILayout(new UIMargin(0.02f, .3f, 0.02f, 1.7f), UIMarginType.Absolute, UIPosition.Left | UIPosition.Top, UIPosition.Left | UIPosition.Bottom, healthBar));
-            abilityPanel.Add(((Combat.Collections.Secondaries.Shield)playerComponent.SecondaryWeapon).testChargeAbility);
+            foreach (Ability ability in playerComponent.SecondaryWeapon.Abilities( )) {
+                abilityPanel.Add(ability);
+                controlPanel.Add(ability.Name, ability.Gesture);
+            }
             abilityPanel.OnLongAbilityPress += AbilityPanel_OnLongAbilityPress;
 
-            SetupControls( );
             base.Load( );
         }
 
         private void AbilityPanel_OnLongAbilityPress (Combat.Ability obj) {
             controlPanel.AcceptingGestures = true;
+            controlPanel.Preview = obj.Preview;
         }
 
         private void SetupControls ( ) {
-            controlPanel = new UIGesturePanel(this, new UILayout(new UIMargin(0, 6f / 5f * Window.Ratio - 0.15f, 0f, 2f), UIMarginType.Absolute), Assets.GetGestureStore("gestures")) { AcceptingGestures = false };
+            controlPanel = new UIGesturePanel(this, new UILayout(new UIMargin(0, 6f / 5f * Window.Ratio - 0.15f, 0f, 2f), UIMarginType.Absolute)) { AcceptingGestures = false };
             controlPanel.OnGesturePerformed += (string gesture) => {
+                controlPanel.Preview = null;
                 if (controlPanel.AcceptingGestures && gesture == "") return;
                 playerEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
 #if DEBUG

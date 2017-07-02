@@ -146,7 +146,7 @@ namespace mapKnight.Extended.Graphics.UI {
                         DepthVertexData vertexData = queue.Dequeue( );
                         Array.Copy(vertexData.Verticies, 0, vertexBuffer.Cache, position, 8);
                         Array.Copy(Texture[vertexData.Texture], 0, textureBuffer.Cache, position, 8);
-                        Array.Copy(vertexData.Color.ToOpenGL( ), 0, colorBuffer.Cache, position * 2, 16);
+                        Array.Copy(vertexData.Color.ToOpenGL4( ), 0, colorBuffer.Cache, position * 2, 16);
                         position += 8;
                     }
                     for (int di = d; di < 3; di++) startPositions[di] += delta;

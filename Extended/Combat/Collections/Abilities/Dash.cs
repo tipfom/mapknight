@@ -2,15 +2,19 @@
 using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Combat.Collections.Abilities {
-    public class ChargeAbility : Ability {
-        const float CHARGE_DURATION = 125;
-        const float CHARGE_SPEED = 20f;
+    public class Dash : Ability {
+        private const float CHARGE_DURATION = 125;
+        private const float CHARGE_SPEED = 20f;
+        private static readonly Vector2[ ] PREVIEW = new Vector2[ ] {
+            new Vector2(0.0f, 0.5f),
+            new Vector2(1.0f, 0.5f),
+        };
 
         private bool charging = false;
         private float chargeLeft;
         private MotionComponent motionComponent;
 
-        public ChargeAbility (SecondaryWeapon Weapon) : base(Weapon, "Charge", 400, "abil_1") {
+        public Dash (SecondaryWeapon Weapon) : base(Weapon, "Dash", 400, "abil_dash", PREVIEW) {
         }
 
         public override void Prepare ( ) {

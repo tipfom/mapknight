@@ -48,7 +48,12 @@ namespace mapKnight.Core {
             return ToRGB( );
         }
 
-        public float[ ] ToOpenGL ( ) {
+        public float[] ToOpenGL ( ) {
+            float a = A / 255f, b = B / 255f, g = G / 255f, r = R / 255f;
+            return new float[ ] { r, g, b, a };
+        }
+
+        public float[ ] ToOpenGL4 ( ) {
             float a = A / 255f, b = B / 255f, g = G / 255f, r = R / 255f;
             return new float[ ] {
                 r, g, b, a,

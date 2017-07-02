@@ -111,7 +111,7 @@ namespace mapKnight.Extended.Graphics.Lightning {
                 vertexBuffer.Data[posVertex + 6] = right;
                 vertexBuffer.Data[posVertex + 7] = top;
 
-                Array.Copy(light.Color.ToOpenGL( ), 0, colorBuffer.Cache, posColor, 16);
+                Array.Copy(light.Color.ToOpenGL4( ), 0, colorBuffer.Cache, posColor, 16);
 
                 vertexBufferSize++;
             }

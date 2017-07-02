@@ -80,7 +80,6 @@
     <AndroidAsset Include="Assets\textures\turret.json" />
     <AndroidAsset Include="Assets\textures\turret_bullet.json" />
     <AndroidAsset Include="Assets\textures\player.json" />
-    <AndroidAsset Include="Assets\gestures\gestures" />
     <AndroidAsset Include="Assets\textures\weapons\broadswords\diamond.json" />
     <AndroidAsset Include="Assets\textures\platforms\copper.json" />
     <AndroidAsset Include="Assets\textures\shell.json" />

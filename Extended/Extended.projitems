@@ -11,7 +11,10 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Ability.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\ChargeAbility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Buff.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Dash.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Heal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Lightning.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Broadswords\Copper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Broadswords\Diamond.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Dagger\Rubidium.cs" />

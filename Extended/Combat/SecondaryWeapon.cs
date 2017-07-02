@@ -1,19 +1,19 @@
 ﻿using mapKnight.Core;
 using mapKnight.Core.World;
+using System.Collections.Generic;
 
 namespace mapKnight.Extended.Combat {
     public abstract class SecondaryWeapon {
-        public readonly string Gestures;
-
         public bool Lock;
         public Entity Owner;
 
-        public SecondaryWeapon(Entity Owner, string Gestures) {
-            this.Gestures = Gestures;
+        public SecondaryWeapon(Entity Owner) {
             this.Owner = Owner;
         }
 
         public abstract void OnGesture (string gesture);
+
+        public abstract IEnumerable<Ability> Abilities ( );
 
         public virtual void Prepare ( ) {
         }
