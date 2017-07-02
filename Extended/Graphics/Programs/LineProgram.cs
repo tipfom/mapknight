@@ -17,7 +17,7 @@ namespace mapKnight.Extended.Graphics.Programs {
 
         private UniformVec4Handle colorHandle;
 
-        public LineProgram ( ) : base(Assets.GetVertexShader("line"), Assets.GetFragmentShader("line")) {
+        public LineProgram ( ) : base("line.vert", "line.frag") {
             colorHandle = new UniformVec4Handle(glProgram, "u_color");
         }
 

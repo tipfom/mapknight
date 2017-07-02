@@ -27,7 +27,7 @@ namespace mapKnight.Extended.Graphics.Programs {
 
         private UniformVec2Handle pixelOffsetHandle;
 
-        public GaussianBlurProgram ( ) : base(Assets.GetVertexShader("normal"), Assets.GetFragmentShader("gauss")) {
+        public GaussianBlurProgram ( ) : base("normal.vert", "gauss.frag") {
             pixelOffsetHandle = new UniformVec2Handle(glProgram, "u_pixel_offset");
         }
 

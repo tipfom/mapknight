@@ -133,12 +133,12 @@ namespace mapKnight.Extended {
                 return loadedVertexShader[name];
             int shader = GL.CreateShader(ShaderType.VertexShader);
 
-            GL.ShaderSource(shader, GetText("shader", "vertex", name + ".txt"));
+            GL.ShaderSource(shader, GetText("shader", "vertex", name));
             GL.CompileShader(shader);
 
 #if DEBUG
             string log = GL.GetShaderInfoLog(shader);
-            Debug.Print(typeof(Assets), $"vertexshader {shader} loaded");
+            Debug.Print(typeof(Assets), $"vertexshader {shader} loaded from {name}");
             if (!string.IsNullOrWhiteSpace(log))
                 Debug.Print(typeof(Assets), "log: " + log);
             Debug.CheckGL(typeof(Assets));
@@ -153,12 +153,12 @@ namespace mapKnight.Extended {
                 return loadedFragmentShader[name];
             int shader = GL.CreateShader(ShaderType.FragmentShader);
 
-            GL.ShaderSource(shader, GetText("shader", "fragment", name + ".txt"));
+            GL.ShaderSource(shader, GetText("shader", "fragment", name));
             GL.CompileShader(shader);
 
 #if DEBUG
             string log = GL.GetShaderInfoLog(shader);
-            Debug.Print(typeof(Assets), $"fragmentshader {shader} loaded");
+            Debug.Print(typeof(Assets), $"fragmentshader {shader} loaded from {name}");
             if (!string.IsNullOrWhiteSpace(log))
                 Debug.Print(typeof(Assets), "log: " + log);
             Debug.CheckGL(typeof(Assets));

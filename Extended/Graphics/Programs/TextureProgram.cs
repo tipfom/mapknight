@@ -10,7 +10,7 @@ namespace mapKnight.Extended.Graphics.Programs
         private TextureHandle textureHandle;
         private AttributeHandle textureCoordsHandle;
 
-        public TextureProgram (int vertexBuffer, int fragmentBuffer) : base(vertexBuffer, fragmentBuffer) {
+        public TextureProgram (string vertexShader, string fragmentShader) : base(vertexShader, fragmentShader) {
             textureCoordsHandle = new AttributeHandle(glProgram, "a_texcoord");
             textureHandle = new TextureHandle(glProgram);
         }

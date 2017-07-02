@@ -18,7 +18,7 @@ namespace mapKnight.Extended.Graphics.Programs {
 
         private UniformMatrixHandle mvpMatrixHandle;
 
-        public MatrixProgram ( ) : base(Assets.GetVertexShader("matrix"), Assets.GetFragmentShader("normal")) {
+        public MatrixProgram ( ) : base("matrix.vert", "normal.frag") {
             mvpMatrixHandle = new UniformMatrixHandle(glProgram, "u_mvpmatrix");
         }
 

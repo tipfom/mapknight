@@ -113,13 +113,13 @@
     <AndroidAsset Include="Assets\textures\interface.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\vertex\matrix.txt" />
+    <AndroidAsset Include="Assets\shader\vertex\matrix.vert" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\normal.txt" />
+    <AndroidAsset Include="Assets\shader\fragment\normal.frag" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\vertex\normal.txt" />
+    <AndroidAsset Include="Assets\shader\vertex\normal.vert" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\icon.png" />
@@ -128,10 +128,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\color.txt" />
+    <AndroidAsset Include="Assets\shader\fragment\color.frag" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\vertex\color.txt" />
+    <AndroidAsset Include="Assets\shader\vertex\color.vert" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values-v21\styles.xml" />
@@ -158,10 +158,10 @@
     <AndroidAsset Include="Assets\textures\platforms\copper.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\particle.txt" />
+    <AndroidAsset Include="Assets\shader\fragment\particle.frag" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\vertex\particle.txt" />
+    <AndroidAsset Include="Assets\shader\vertex\particle.vert" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\shell.png" />
@@ -206,7 +206,7 @@
     <AndroidAsset Include="Assets\textures\maps\tiles\Maehhpp.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\gauss.txt" />
+    <AndroidAsset Include="Assets\shader\fragment\gauss.frag" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\drill.png" />
@@ -227,7 +227,7 @@
     <AndroidAsset Include="Assets\textures\lightning\point.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\darken.txt" />
+    <AndroidAsset Include="Assets\shader\fragment\darken.frag" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\maps\shadows\green-1.png" />
@@ -236,19 +236,19 @@
     <AndroidAsset Include="Assets\textures\maps\shadows\Maehhpp.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\ui_abilityicon.txt" />
+    <AndroidAsset Include="Assets\shader\fragment\ui_abilityicon.frag" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\vertex\ui_abilityicon.txt" />
+    <AndroidAsset Include="Assets\shader\vertex\ui_abilityicon.vert" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\textures\interface_ability_amp.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\fragment\line.txt" />
+    <AndroidAsset Include="Assets\shader\fragment\line.frag" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\shader\vertex\line.txt" />
+    <AndroidAsset Include="Assets\shader\vertex\line.vert" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />

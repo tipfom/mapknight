@@ -15,7 +15,7 @@ namespace mapKnight.Extended.Graphics.Programs {
             Program.Dispose( );
         }
 
-        public FBOProgram ( ) : base(Assets.GetVertexShader("normal"), Assets.GetFragmentShader("normal")) {
+        public FBOProgram ( ) : base("normal.vert", "normal.frag") {
         }
 
         public void Draw (MatrixProgram.BufferBatch batch, Texture2D texture, bool alphablending = true) {

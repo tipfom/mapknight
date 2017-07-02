@@ -3,8 +3,6 @@ using mapKnight.Extended.Graphics.Buffer;
 using mapKnight.Extended.Graphics.Handle;
 using OpenTK.Graphics.ES20;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace mapKnight.Extended.Graphics.Programs {
     public class UIAbilityIconProgram : Program {
@@ -24,7 +22,7 @@ namespace mapKnight.Extended.Graphics.Programs {
         private TextureHandle ampTextureHandle;
         private AttributeHandle ampTextureCoordsHandle;
 
-        public UIAbilityIconProgram ( ) : base(Assets.GetVertexShader("ui_abilityicon"), Assets.GetFragmentShader("ui_abilityicon")) {
+        public UIAbilityIconProgram ( ) : base("ui_abilityicon.vert", "ui_abilityicon.frag") {
             mvpMatrixHandle = new UniformMatrixHandle(glProgram, "u_mvpMatrix");
             baseTextureCoordsHandle = new AttributeHandle(glProgram, "a_baseTexcoord");
             ampTextureCoordsHandle = new AttributeHandle(glProgram, "a_ampTexcoord");

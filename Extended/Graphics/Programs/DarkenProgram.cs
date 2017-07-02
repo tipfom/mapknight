@@ -18,7 +18,7 @@ namespace mapKnight.Extended.Graphics.Programs {
         
         private UniformVec1Handle brightnessHandle;
 
-        public DarkenProgram ( ) : base(Assets.GetVertexShader("normal"), Assets.GetFragmentShader("darken")) {
+        public DarkenProgram ( ) : base("normal.vert", "darken.frag") {
             brightnessHandle = new UniformVec1Handle(glProgram, "u_brightness");
         }
 

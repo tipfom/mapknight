@@ -21,7 +21,7 @@ namespace mapKnight.Extended.Graphics.Programs
         private AttributeHandle colorHandle;
         private UniformMatrixHandle matrixHandle;
 
-        public ParticleProgram () : base(Assets.GetVertexShader("particle"), Assets.GetFragmentShader("particle")) {
+        public ParticleProgram () : base("particle.vert", "particle.frag") {
             sizeHandle = new AttributeHandle(glProgram, "a_size");
             colorHandle = new AttributeHandle(glProgram, "a_color");
             matrixHandle = new UniformMatrixHandle(glProgram, "u_mvpmatrix");

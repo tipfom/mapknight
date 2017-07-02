@@ -10,8 +10,8 @@ namespace mapKnight.Extended.Graphics.Programs {
 
         private AttributeHandle positionHandle;
 
-        public Program (int vertexBuffer, int fragmentBuffer) {
-            glProgram = CompileProgram(vertexBuffer, fragmentBuffer);
+        public Program (string vertexShader, string fragmentShader) {
+            glProgram = CompileProgram(vertexShader, fragmentShader);
 
             positionHandle = new AttributeHandle(glProgram, "a_position");
         }
@@ -42,11 +42,11 @@ namespace mapKnight.Extended.Graphics.Programs {
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
         }
 
-        private static int CompileProgram (int vertexBuffer, int fragmentBuffer) {
+        private static int CompileProgram (string vertexShader, string fragmentShader) {
             int program = GL.CreateProgram( );
 
-            GL.AttachShader(program, vertexBuffer);
-            GL.AttachShader(program, fragmentBuffer);
+            GL.AttachShader(program, Assets.GetVertexShader(vertexShader));
+            GL.AttachShader(program, Assets.GetFragmentShader(fragmentShader));
 
             GL.LinkProgram(program);
 

@@ -19,7 +19,7 @@ namespace mapKnight.Extended.Graphics.Programs {
         private UniformMatrixHandle mvpMatrixHandle;
         private AttributeHandle colorHandle;
 
-        public ColorProgram ( ) : base(Assets.GetVertexShader("color"), Assets.GetFragmentShader("color")) {
+        public ColorProgram ( ) : base("color.vert", "color.frag") {
             mvpMatrixHandle = new UniformMatrixHandle(glProgram, "u_mvpmatrix");
             colorHandle = new AttributeHandle(glProgram, "a_color");
         }
