@@ -23,7 +23,7 @@ namespace mapKnight.Extended.Graphics.Programs {
 
         public void Draw (IAttributeBuffer vertexBuffer, Color color, float width, int count, bool alphaBlending = true) {
             Apply(vertexBuffer, alphaBlending);
-            colorHandle.Set(color.ToOpenGL());
+            colorHandle.Set(color.ToArray());
             GL.LineWidth(width);
             GL.DrawArrays(BeginMode.LineStrip, 0, count);
         }

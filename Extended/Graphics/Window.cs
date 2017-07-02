@@ -26,7 +26,7 @@ namespace mapKnight.Extended.Graphics {
         }
 
         public static void UpdateBackgroundColor ( ) {
-            GL.ClearColor(_Background.R / 255f, _Background.G / 255f, _Background.B / 255f, _Background.A / 255f);
+            GL.ClearColor(_Background.R, _Background.G, _Background.B, _Background.A);
         }
     }
 }

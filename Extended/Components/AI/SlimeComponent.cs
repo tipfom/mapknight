@@ -219,9 +219,9 @@ namespace mapKnight.Extended.Components.AI {
                     }
                 }
 
-                Color.R = (byte)r;
-                Color.G = (byte)g;
-                Color.B = (byte)b;
+                Color.R = r / 255f;
+                Color.G = g / 255f;
+                Color.B = b / 255f;
             }
 
             public void Rage ( ) {

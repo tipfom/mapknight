@@ -16,7 +16,7 @@ namespace mapKnight.Extended.Graphics.Lightning {
             this.Radius = Radius;
             this.Position = Position;
             this.Color = Color;
-            this.Color.A = (byte)(255 * Mathf.Clamp01(Intensity));
+            this.Color.A = Mathf.Clamp01(Intensity);
         }
     }
 }

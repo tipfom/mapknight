@@ -94,7 +94,7 @@ namespace mapKnight.Core.Graphics {
             }
             FBOProgram.Program.End( );
             buffer.Unbind( );
-            GL.ClearColor(Window.Background.R / 255f, Window.Background.G / 255f, Window.Background.B / 255f, Window.Background.A / 255f);
+            Window.UpdateBackgroundColor( );
 
             if (diposeChildren) {
                 for (int i = 0; i < children.Count; i++)

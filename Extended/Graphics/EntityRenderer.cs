@@ -42,7 +42,7 @@ namespace mapKnight.Extended.Graphics {
                 while (frameVertexData[sprite].Count > 0) {
                     VertexData vertexData = frameVertexData[sprite].Dequeue( );
                     Array.Copy(vertexData.Verticies, 0, vertexBuffer.Data, currentIndex * 8, 8);
-                    Array.Copy(vertexData.Color.ToOpenGL4( ), 0, colorBuffer.Data, currentIndex * 16, 16);
+                    Array.Copy(vertexData.Color.ToArray4( ), 0, colorBuffer.Data, currentIndex * 16, 16);
                     Array.Copy(sprite[vertexData.Texture], 0, textureBuffer.Data, currentIndex * 8, 8);
                     currentIndex++;
                 }

@@ -2,64 +2,56 @@
 
 namespace mapKnight.Core {
     public struct Color {
-        public byte R;
-        public byte G;
-        public byte B;
-        public byte A;
+        public float R;
+        public float G;
+        public float B;
+        public float A;
 
-        public Color (byte red, byte green, byte blue, byte alpha) : this( ) {
+        public Color (float red, float green, float blue, float alpha) : this( ) {
             R = red;
             G = green;
             B = blue;
             A = alpha;
         }
 
-        public Color (byte red, byte green, byte blue) : this(red, green, blue, 255) {
+        public Color (byte red, byte green, byte blue, byte alpha) : this(red / 255f, green / 255f, blue / 255f, alpha / 255f) {
+        }
 
+        public Color (byte red, byte green, byte blue) : this(red, green, blue, 255) {
+        }
+
+        public Color (int rgba) : this((byte)(rgba >> 24) / 255f, (byte)(rgba >> 16) / 255f, (byte)(rgba >> 8) / 255f, (byte)(rgba) / 255f) {
         }
 
         public Color (string rgb) : this( ) {
             int startIndex = rgb.Contains("#") ? 1 : 0;
-            R = byte.Parse(rgb.Substring(startIndex + 0, 2), NumberStyles.HexNumber);
-            G = byte.Parse(rgb.Substring(startIndex + 2, 2), NumberStyles.HexNumber);
-            B = byte.Parse(rgb.Substring(startIndex + 4, 2), NumberStyles.HexNumber);
-            A = 255;
+            R = byte.Parse(rgb.Substring(startIndex + 0, 2), NumberStyles.HexNumber) / 255f;
+            G = byte.Parse(rgb.Substring(startIndex + 2, 2), NumberStyles.HexNumber) / 255f;
+            B = byte.Parse(rgb.Substring(startIndex + 4, 2), NumberStyles.HexNumber) / 255f;
+            A = 1.0f;
         }
 
         public Color (Range<Color> color) : this( ) {
-            R = (byte)Mathi.Random(color.Min.R, color.Max.R);
-            G = (byte)Mathi.Random(color.Min.G, color.Max.G);
-            B = (byte)Mathi.Random(color.Min.B, color.Max.B);
-            A = (byte)Mathi.Random(color.Min.A, color.Max.A);
-        }
-
-        public Color(int rgba) {
-            R = (byte)(rgba >> 24);
-            G = (byte)(rgba >> 16);
-            B = (byte)(rgba >> 8);
-            A = (byte)(rgba);
-        }
-
-        public string ToRGB ( ) {
-            return string.Format("#{0}{1}{2} {3}", R.ToString("X2"), G.ToString("X2"), B.ToString("X2"), A.ToString("X2"));
+            R = Mathf.Random(color.Min.R, color.Max.R);
+            G = Mathf.Random(color.Min.G, color.Max.G);
+            B = Mathf.Random(color.Min.B, color.Max.B);
+            A = Mathf.Random(color.Min.A, color.Max.A);
         }
 
         public override string ToString ( ) {
-            return ToRGB( );
+            return string.Format("#{0}{1}{2} {3}", ((int)(R * 255)).ToString("X2"), ((int)(G * 255)).ToString("X2"), ((int)(B * 255)).ToString("X2"), ((int)(A * 255)).ToString("X2"));
         }
 
-        public float[] ToOpenGL ( ) {
-            float a = A / 255f, b = B / 255f, g = G / 255f, r = R / 255f;
-            return new float[ ] { r, g, b, a };
+        public float[ ] ToArray ( ) {
+            return new float[ ] { R, G, B, A };
         }
 
-        public float[ ] ToOpenGL4 ( ) {
-            float a = A / 255f, b = B / 255f, g = G / 255f, r = R / 255f;
+        public float[ ] ToArray4 ( ) {
             return new float[ ] {
-                r, g, b, a,
-                r, g, b, a,
-                r, g, b, a,
-                r, g, b, a
+                R, G, B, A,
+                R, G, B, A,
+                R, G, B, A,
+                R, G, B, A
             };
         }
 

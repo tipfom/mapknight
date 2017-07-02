@@ -43,10 +43,10 @@ namespace mapKnight.Extended.Graphics.Particles {
 
         private void UpdateParticle(int index) {
             sizebuffer.Data[index] = particles[index].Size;
-            colorbuffer.Data[index * 4] = particles[index].Color.R / 255f;
-            colorbuffer.Data[index * 4 + 1] = particles[index].Color.G / 255f;
-            colorbuffer.Data[index * 4 + 2] = particles[index].Color.B / 255f;
-            colorbuffer.Data[index * 4 + 3] = particles[index].Color.A / 255f;
+            colorbuffer.Data[index * 4] = particles[index].Color.R;
+            colorbuffer.Data[index * 4 + 1] = particles[index].Color.G;
+            colorbuffer.Data[index * 4 + 2] = particles[index].Color.B;
+            colorbuffer.Data[index * 4 + 3] = particles[index].Color.A;
         }
 
         public void Setup ( ) {
