@@ -14,10 +14,7 @@ namespace mapKnight.Extended.Combat.Collections.Secondaries {
             dashAbility = new Dash(this);
             healAbility = new Heal(this);
         }
-
-        public override void OnGesture (string gesture) {
-        }
-
+        
         public override IEnumerable<Ability> Abilities ( ) {
             //yield return buffAbility;
             yield return dashAbility;

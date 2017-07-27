@@ -8,8 +8,6 @@ using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIGesturePanel : UIPanel {
- 
-        const double SCORE_THRESHOLD = 1.0;
         const int SWIPE_TIME = 400;
         const int SWIPE_MIN_DIST = 100;
 
@@ -30,7 +28,7 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public bool AcceptingGestures = true;
-        public event Action<string> OnGesturePerformed;
+        public event Action<IEnumerable<(string name, float accuracy)>> OnGesturePerformed;
 
         // CURRENTLY ONLY WITH SUPPORT FOR ANDROID
         private int currentTouchID = -1;
@@ -84,7 +82,7 @@ namespace mapKnight.Extended.Graphics.UI {
                         break;
                 }
             } else {
-                OnGesturePerformed?.Invoke(string.Empty);
+                OnGesturePerformed?.Invoke(null);
             }
 
             return base.HandleTouch(action, touch);
@@ -99,36 +97,16 @@ namespace mapKnight.Extended.Graphics.UI {
             currentVertexIndex++;
         }
 
-        private string ComputeGesture ( ) {
-            // check if its a complex gesture or a swipe
-            //if (trackedStrokeBuffer[trackedStrokeBuffer.Count - 1].Timestamp - trackedStrokeBuffer[0].Timestamp < SWIPE_TIME) {
-            //    GesturePoint first = trackedStrokeBuffer[0], last = trackedStrokeBuffer[trackedStrokeBuffer.Count - 1];
-            //    float dx = Math.Abs(first.X - last.X), dy = Math.Abs(first.Y - last.Y);
-            //    if (dx > dy && dx > SWIPE_MIN_DIST) {
-            //        if (first.X < last.X) {
-            //            return SWIPE_RIGHT;
-            //        } else {
-            //            return SWIPE_LEFT;
-            //        }
-            //    } else if (dy > dx && dy > SWIPE_MIN_DIST) {
-            //        if (first.Y < last.Y) {
-            //            return SWIPE_DOWN;
-            //        } else {
-            //            return SWIPE_UP;
-            //        }
-            //    }
-            //} else {
-                // construct gesture
-                Gesture gesture = new Gesture( );
-                gesture.AddStroke(new GestureStroke(trackedStrokeBuffer));
+        private IEnumerable<(string name, float accuracy)> ComputeGesture ( ) {
+            // construct gesture
+            Gesture gesture = new Gesture( );
+            gesture.AddStroke(new GestureStroke(trackedStrokeBuffer));
 
-                // compute gesture
-                IList<Prediction> predictions = gestureStore.Recognize(gesture);
-                if (predictions.Count > 0 && predictions[0].Score > SCORE_THRESHOLD) {
-                    return predictions[0].Name;
-                }
-            //}
-            return string.Empty;
+            // compute gesture
+            IList<Prediction> predictions = gestureStore.Recognize(gesture);
+            foreach(Prediction p in predictions) {
+                yield return (p.Name, (float)p.Score);
+            }
         }
 
         public void Draw (Color previewColor, Color activeColor) {

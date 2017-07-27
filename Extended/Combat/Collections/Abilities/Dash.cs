@@ -21,7 +21,7 @@ namespace mapKnight.Extended.Combat.Collections.Abilities {
             motionComponent = Weapon.Owner.GetComponent<MotionComponent>( );
         }
 
-        public override void OnCast ( ) {
+        protected override void OnCast (float gestureSuccess) {
             charging = true;
             Weapon.Lock = true;
             chargeLeft = CHARGE_DURATION;
@@ -35,13 +35,13 @@ namespace mapKnight.Extended.Combat.Collections.Abilities {
                 else
                     motionComponent.AimedVelocity.Y = 0;
 
-                Availability = 0f;
+                Stride = 0f;
                 chargeLeft -= dt.TotalMilliseconds;
                 if (chargeLeft < 0f || motionComponent.IsAtWall) {
                     charging = false;
                     Weapon.Lock = false;
                     motionComponent.AimedVelocity.X = 0;
-                    Availability = 0f;
+                    EndCast( );
                 }
             }
             base.Update(dt);

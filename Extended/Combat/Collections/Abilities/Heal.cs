@@ -5,7 +5,8 @@ namespace mapKnight.Extended.Combat.Collections.Abilities {
         public Heal (SecondaryWeapon Weapon) : base(Weapon, "Heal", 5000, "abil_heal", new Vector2[0]) {
         }
 
-        public override void OnCast ( ) {
+        protected override void OnCast (float gestureSuccess) {
+            EndCast( );
         }
     }
 }

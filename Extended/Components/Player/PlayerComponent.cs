@@ -24,6 +24,7 @@ namespace mapKnight.Extended.Components.Player {
         public HealthTracker Health;
 
         private bool currentlyTalking;
+        private bool attemptJump = false;
         private float jumpHeight;
         private Entity nearbyNPC;
         private MotionComponent motionComponent;
@@ -69,10 +70,20 @@ namespace mapKnight.Extended.Components.Player {
             }
         }
 
+        public void ActionRequested ( ) {
+            if (nearbyNPC == null) {
+                attemptJump = true;
+            } else if (!currentlyTalking) {
+                NPCComponent npccomponent = nearbyNPC.GetComponent<NPCComponent>( );
+                if (npccomponent.Available) {
+                    currentlyTalking = true;
+                    new UIDialog(Screen.Gameplay, npccomponent).DialogFinished += ( ) => currentlyTalking = false;
+                }
+            }
+        }
+
         public override void Update (DeltaTime dt) {
             SecondaryWeapon.Update(dt);
-
-            bool attemptJump = false;
 
             while (Owner.HasComponentInfo(ComponentData.InputInclude))
                 Action |= (ActionMask)Owner.GetComponentInfo(ComponentData.InputInclude)[0];
@@ -93,23 +104,6 @@ namespace mapKnight.Extended.Components.Player {
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, WEAPON_ANIMATION, "attack" + Mathi.Random(0, 3), (AnimationCallback)AttackAnimationCallback); // TODO
                 weaponAnimationState = AnimationState.Attack;
                 PrimaryWeapon.Attack( );
-            }
-
-            while (Owner.HasComponentInfo(ComponentData.InputGesture)) {
-                string data = (string)Owner.GetComponentInfo(ComponentData.InputGesture)[0];
-                if (data == string.Empty) {
-                    if (nearbyNPC == null) {
-                        attemptJump = true;
-                    } else if (!currentlyTalking) {
-                        NPCComponent npccomponent = nearbyNPC.GetComponent<NPCComponent>( );
-                        if (npccomponent.Available) {
-                            currentlyTalking = true;
-                            new UIDialog(Screen.Gameplay, npccomponent).DialogFinished += ( ) => currentlyTalking = false;
-                        }
-                    }
-                } else {
-                    SecondaryWeapon.OnGesture(data);
-                }
             }
 
             motionComponent.Lock = SecondaryWeapon.Lock;
@@ -147,7 +141,9 @@ namespace mapKnight.Extended.Components.Player {
             } else if (motionComponent.IsOnGround || motionComponent.IsOnPlatform) {
                 motionComponent.AimedVelocity.Y = 0;
             }
+
             nearbyNPC = null;
+            attemptJump = false;
         }
 
         private void SetAnimationIfUnset (string name, AnimationState state, AnimationCallback bodyCallback, AnimationCallback weaponCallback) {
@@ -211,7 +207,7 @@ namespace mapKnight.Extended.Components.Player {
             public VertexAnimationData BodyAnimationData; // TEMP
 
             public override Component Create (Entity owner) {
-                return new PlayerComponent(owner, Health,JumpHeight, BodyAnimationData);
+                return new PlayerComponent(owner, Health, JumpHeight, BodyAnimationData);
             }
         }
 

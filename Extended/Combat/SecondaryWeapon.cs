@@ -11,8 +11,6 @@ namespace mapKnight.Extended.Combat {
             this.Owner = Owner;
         }
 
-        public abstract void OnGesture (string gesture);
-
         public abstract IEnumerable<Ability> Abilities ( );
 
         public virtual void Prepare ( ) {

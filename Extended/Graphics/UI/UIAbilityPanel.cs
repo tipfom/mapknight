@@ -6,60 +6,73 @@ using mapKnight.Extended.Graphics.UI.Layout;
 using mapKnight.Extended.Combat;
 using mapKnight.Extended.Graphics.Buffer;
 using OpenTK.Graphics.ES20;
-using static mapKnight.Extended.Graphics.Programs.UIAbilityIconProgram;
+using mapKnight.Core;
+using mapKnight.Extended.Graphics.Programs;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIAbilityPanel : UIItem {
         private const int MAX_ABILITY_COUNT = 3;
-        private const double LONG_PRESS_TIME = 200d;
-
-        public event Action<Ability> OnLongAbilityPress;
+        private const int RENDER_COUNT = MAX_ABILITY_COUNT * 3;
+        private const int BORDER_COUNT = 17;
+        private const int BORDER_LOOP_INTERVAL = 600 / BORDER_COUNT;
 
         private int lastIndex = -1;
         private float totalIconHeight;
-        private CachedGPUBuffer vertexBuffer;
+        private CachedGPUBuffer borderVertexBuffer;
+        private CachedGPUBuffer borderTextureBuffer;
+        private CachedGPUBuffer baseVertexBuffer;
         private CachedGPUBuffer baseTextureBuffer;
         private CachedGPUBuffer ampTextureBuffer;
         private IndexBuffer indexBuffer;
         private Texture2D ampTexture;
         private List<Ability> abilities = new List<Ability>( );
-        private Timer longPressTimer = new Timer(LONG_PRESS_TIME) { AutoReset = false };
+        private int currentBorderIndex = 0;
+        private int nextBorderIndexIncrease = Environment.TickCount;
 
         public UIAbilityPanel (Screen owner, UILayout layout) : base(owner, layout, UIDepths.FOREGROUND, false) {
-            ampTexture = Assets.Load<Texture2D>("interface_ability_amp");
-            vertexBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.StaticDraw);
+            ampTexture = Assets.GetTexture(InterpolationMode.Linear, "textures/interface_ability_amp.png");
+            borderVertexBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT * 2, PrimitiveType.Quad, BufferUsage.StaticDraw);
+            borderTextureBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT * 2, PrimitiveType.Quad, BufferUsage.DynamicDraw);
+            baseVertexBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.StaticDraw);
             baseTextureBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.StaticDraw);
-            ampTextureBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.StaticDraw);
-            indexBuffer = new IndexBuffer(MAX_ABILITY_COUNT);
+            ampTextureBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.DynamicDraw);
+            indexBuffer = new IndexBuffer(MAX_ABILITY_COUNT * 2);
 
             ResetVertexBuffer( );
             layout.Changed += ( ) => ResetVertexBuffer( );
-
-            longPressTimer.Elapsed += LongPressTimer_Elapsed;
-        }
-
-        private void LongPressTimer_Elapsed (object sender, ElapsedEventArgs e) {
-            if (lastIndex < 0) return;
-
-            OnLongAbilityPress?.Invoke(abilities[lastIndex]);
         }
 
         private void ResetVertexBuffer ( ) {
             totalIconHeight = 1.1f * Layout.Width;
+            for (int i = 0; i < MAX_ABILITY_COUNT * 2; i++) {
+                int bPosition = i * 8;
+                float top = Layout.Y - (i % MAX_ABILITY_COUNT) * totalIconHeight;
+
+                borderVertexBuffer[bPosition + 00] = Layout.X;
+                borderVertexBuffer[bPosition + 01] = top;
+                borderVertexBuffer[bPosition + 02] = Layout.X;
+                borderVertexBuffer[bPosition + 03] = top - Layout.Width;
+                borderVertexBuffer[bPosition + 04] = Layout.X + Layout.Width;
+                borderVertexBuffer[bPosition + 05] = top - Layout.Width;
+                borderVertexBuffer[bPosition + 06] = Layout.X + Layout.Width;
+                borderVertexBuffer[bPosition + 07] = top;
+            }
             for (int i = 0; i < MAX_ABILITY_COUNT; i++) {
                 int bPosition = i * 8;
                 float top = Layout.Y - i * totalIconHeight;
+                float offset = Layout.Width / 16f;
 
-                vertexBuffer[bPosition + 00] = Layout.X;
-                vertexBuffer[bPosition + 01] = top;
-                vertexBuffer[bPosition + 02] = Layout.X;
-                vertexBuffer[bPosition + 03] = top - Layout.Width;
-                vertexBuffer[bPosition + 04] = Layout.X + Layout.Width;
-                vertexBuffer[bPosition + 05] = top - Layout.Width;
-                vertexBuffer[bPosition + 06] = Layout.X + Layout.Width;
-                vertexBuffer[bPosition + 07] = top;
+                baseVertexBuffer[bPosition + 00] = Layout.X + offset;
+                baseVertexBuffer[bPosition + 01] = top - offset;
+                baseVertexBuffer[bPosition + 02] = Layout.X + offset;
+                baseVertexBuffer[bPosition + 03] = top - Layout.Width + offset;
+                baseVertexBuffer[bPosition + 04] = Layout.X + Layout.Width - offset;
+                baseVertexBuffer[bPosition + 05] = top - Layout.Width + offset;
+                baseVertexBuffer[bPosition + 06] = Layout.X + Layout.Width - offset;
+                baseVertexBuffer[bPosition + 07] = top - offset;
             }
-            vertexBuffer.Apply( );
+            borderVertexBuffer.Apply( );
+            baseVertexBuffer.Apply( );
         }
 
         private void PrepareAbility (int index) {
@@ -76,14 +89,37 @@ namespace mapKnight.Extended.Graphics.UI {
             baseTextureBuffer[bPosition + 7] = textureData[7];
             baseTextureBuffer.Apply( );
 
+            float[ ] data = UIRenderer.Texture["bdloop"];
+            borderTextureBuffer[bPosition] = data[0];
+            borderTextureBuffer[bPosition + 1] = data[1];
+            borderTextureBuffer[bPosition + 2] = data[2];
+            borderTextureBuffer[bPosition + 3] = data[3];
+            borderTextureBuffer[bPosition + 4] = data[4];
+            borderTextureBuffer[bPosition + 5] = data[5];
+            borderTextureBuffer[bPosition + 6] = data[6];
+            borderTextureBuffer[bPosition + 7] = data[7];
+
             UpdateAbility(index);
         }
 
         private void UpdateAbility (int index) {
-            int bPosition = index * 8;
-            float offset = .5f - .5f * abilities[index].Availability;
+            Ability ability = abilities[index];
+            float offset = 0f;
+            string borderTex = "transparent";
+            switch (ability.Mode) {
+                case AbilityMode.Ready:
+                case AbilityMode.Recharging:
+                case AbilityMode.Casting:
+                    offset = .5f - .5f * abilities[index].Stride;
+                    break;
+                case AbilityMode.Active:
+                case AbilityMode.Boosting:
+                    borderTex = "bdloop_" + currentBorderIndex;
+                    break;
+            }
 
-            ampTextureBuffer[bPosition + 0] = 0f;
+            int bPosition = index * 8;
+            ampTextureBuffer[bPosition] = 0f;
             ampTextureBuffer[bPosition + 1] = offset;
             ampTextureBuffer[bPosition + 2] = 0f;
             ampTextureBuffer[bPosition + 3] = .5f + offset;
@@ -92,19 +128,31 @@ namespace mapKnight.Extended.Graphics.UI {
             ampTextureBuffer[bPosition + 6] = 1f;
             ampTextureBuffer[bPosition + 7] = offset;
             ampTextureBuffer.Apply( );
+
+            bPosition += MAX_ABILITY_COUNT * 8;
+            float[ ] data = UIRenderer.Texture[borderTex];
+            borderTextureBuffer[bPosition] = data[0];
+            borderTextureBuffer[bPosition + 1] = data[1];
+            borderTextureBuffer[bPosition + 2] = data[2];
+            borderTextureBuffer[bPosition + 3] = data[3];
+            borderTextureBuffer[bPosition + 4] = data[4];
+            borderTextureBuffer[bPosition + 5] = data[5];
+            borderTextureBuffer[bPosition + 6] = data[6];
+            borderTextureBuffer[bPosition + 7] = data[7];
+            borderTextureBuffer.Apply( );
         }
 
         public bool Add (Ability ability) {
             if (abilities.Count < MAX_ABILITY_COUNT) {
                 abilities.Add(ability);
                 PrepareAbility(abilities.Count - 1);
-                ability.AvailabilityChanged += Ability_CooldownChanged;
+                ability.UpdateRequired += Ability_UpdateRequired;
                 return true;
             }
             return false;
         }
 
-        private void Ability_CooldownChanged (Ability ability) {
+        private void Ability_UpdateRequired (Ability ability) {
             for (int i = 0; i < abilities.Count; i++) {
                 if (abilities[i] == ability) {
                     UpdateAbility(i);
@@ -114,9 +162,21 @@ namespace mapKnight.Extended.Graphics.UI {
         }
 
         public void Draw ( ) {
-            Program.Begin( );
-            Program.Draw(indexBuffer, vertexBuffer, baseTextureBuffer, ampTextureBuffer, UIRenderer.Texture, ampTexture, Matrix.Default, indexBuffer.Length, 0, true);
-            Program.End( );
+            UIAbilityIconProgram.Program.Begin( );
+            UIAbilityIconProgram.Program.Draw(indexBuffer, baseVertexBuffer, baseTextureBuffer, ampTextureBuffer, UIRenderer.Texture, ampTexture, Matrix.Default, RENDER_COUNT, 0, true);
+            UIAbilityIconProgram.Program.End( );
+            MatrixProgram.Program.Begin( );
+            MatrixProgram.Program.Draw(indexBuffer, borderVertexBuffer, borderTextureBuffer, UIRenderer.Texture, Matrix.Default, indexBuffer.Length, true);
+            MatrixProgram.Program.End( );
+        }
+
+        public override void Update (DeltaTime dt) {
+            if (Environment.TickCount > nextBorderIndexIncrease) {
+                currentBorderIndex++;
+                currentBorderIndex %= BORDER_COUNT;
+                nextBorderIndexIncrease = Environment.TickCount + BORDER_LOOP_INTERVAL;
+            }
+            base.Update(dt);
         }
 
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
@@ -126,20 +186,18 @@ namespace mapKnight.Extended.Graphics.UI {
             switch (action) {
                 case UITouchAction.Begin:
                     lastIndex = index;
-                    longPressTimer.Start( );
+                    abilities[index].Mode = AbilityMode.Casting;
                     return true;
                 case UITouchAction.Move:
-                    if (lastIndex != index && lastIndex > -1 && longPressTimer.Enabled) {
-                        longPressTimer.Stop( );
-                        longPressTimer.Start( );
+                    if (lastIndex != index && lastIndex > -1 && abilities[lastIndex].Mode == AbilityMode.Casting) {
+                        abilities[lastIndex].AbortCasting( );
+                        abilities[index].Mode = AbilityMode.Casting;
+                        lastIndex = index;
                     }
                     return true;
                 case UITouchAction.End:
-                case UITouchAction.Leave:
-                    if (longPressTimer.Enabled) {
-                        longPressTimer.Stop( );
-                        if (abilities[index].Available)
-                            abilities[index].OnCast( );
+                    if (lastIndex > -1 && abilities[lastIndex].Mode == AbilityMode.Casting) {
+                        abilities[lastIndex].Cast(0f);
                     }
                     lastIndex = -1;
                     return true;

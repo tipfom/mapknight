@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Ability.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\AbilityMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Buff.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Dash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Heal.cs" />

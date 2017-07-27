@@ -8,6 +8,7 @@ using mapKnight.Extended.Graphics.UI;
 using mapKnight.Extended.Graphics.UI.Layout;
 using Map = mapKnight.Extended.Graphics.Map;
 using mapKnight.Extended.Combat;
+using System.Collections.Generic;
 
 namespace mapKnight.Extended.Screens {
     public class GameplayScreen : Screen {
@@ -23,6 +24,7 @@ namespace mapKnight.Extended.Screens {
         private Entity playerEntity;
         private PlayerComponent playerComponent;
         private string mapName;
+        private Ability currentGestureAbility;
 
         public GameplayScreen (string mapName) {
             this.mapName = mapName;
@@ -52,28 +54,35 @@ namespace mapKnight.Extended.Screens {
             healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), playerComponent.Health, new UILayout(new UIMargin(0, 1, 0, 0.025f), UIMarginType.Relative, UIPosition.Left | UIPosition.Top), UIDepths.MIDDLE);
             abilityPanel = new UIAbilityPanel(this, new UILayout(new UIMargin(0.02f, .3f, 0.02f, 1.7f), UIMarginType.Absolute, UIPosition.Left | UIPosition.Top, UIPosition.Left | UIPosition.Bottom, healthBar));
             foreach (Ability ability in playerComponent.SecondaryWeapon.Abilities( )) {
+                ability.GestureInputRequested += Ability_GestureInputRequested;
                 abilityPanel.Add(ability);
                 controlPanel.Add(ability.Name, ability.Gesture);
             }
-            abilityPanel.OnLongAbilityPress += AbilityPanel_OnLongAbilityPress;
 
             base.Load( );
         }
 
-        private void AbilityPanel_OnLongAbilityPress (Combat.Ability obj) {
+        private void Ability_GestureInputRequested (Ability ability, Ability.GestureCompletedDelegate callback) {
             controlPanel.AcceptingGestures = true;
-            controlPanel.Preview = obj.Preview;
+            controlPanel.Preview = ability.Preview;
+            currentGestureAbility = ability;
         }
 
         private void SetupControls ( ) {
             controlPanel = new UIGesturePanel(this, new UILayout(new UIMargin(0, 6f / 5f * Window.Ratio - 0.15f, 0f, 2f), UIMarginType.Absolute)) { AcceptingGestures = false };
-            controlPanel.OnGesturePerformed += (string gesture) => {
+            controlPanel.OnGesturePerformed += (IEnumerable<(string name, float accuracy)> result) => {
                 controlPanel.Preview = null;
-                if (controlPanel.AcceptingGestures && gesture == "") return;
-                playerEntity.SetComponentInfo(ComponentData.InputGesture, gesture);
-#if DEBUG
-                global::Android.Widget.Toast.MakeText(Assets.Context, gesture, global::Android.Widget.ToastLength.Short).Show( );
-#endif
+                if (controlPanel.AcceptingGestures) {
+                    float gestureAccuracy = 0f;
+                    foreach ((string name, float accuracy) pair in result) {
+                        if (pair.name == currentGestureAbility.Name) {
+                            gestureAccuracy = pair.accuracy;
+                        }
+                    }
+                    currentGestureAbility.Cast(gestureAccuracy);
+                } else {
+                    playerComponent.ActionRequested( );
+                }
                 controlPanel.AcceptingGestures = false;
             };
 
