@@ -8,8 +8,10 @@ using mapKnight.Core;
 
 namespace mapKnight.Extended.Graphics.UI {
     public class UIGesturePanel : UIPanel {
-        const int SWIPE_TIME = 400;
-        const int SWIPE_MIN_DIST = 100;
+        private const int SWIPE_TIME = 400;
+        private const int SWIPE_MIN_DIST = 100;
+        private const float BORDER_SIZE_PERCENT = 0.1f;
+        private const float SIZE_PERCENT_WITHOUT_BORDER = 1f - 2 * BORDER_SIZE_PERCENT;
 
         private Vector2[ ] _Preview;
         public Vector2[ ] Preview {
@@ -18,16 +20,22 @@ namespace mapKnight.Extended.Graphics.UI {
                 _Preview = value;
                 previewLength = _Preview?.Length ?? -1;
                 if (_Preview != null) {
+                    float width = Layout.Width * SIZE_PERCENT_WITHOUT_BORDER;
+                    float height = width;
+                    float offsetx = Layout.Width * BORDER_SIZE_PERCENT;
+                    float offsety = (height - Layout.Height * SIZE_PERCENT_WITHOUT_BORDER) / 2f + Layout.Height * BORDER_SIZE_PERCENT;
+
                     for (int i = 0; i < _Preview.Length; i++) {
                         int p = i << 1;
-                        previewBuffer.Data[p] = Layout.X + _Preview[i].X * Layout.Width;
-                        previewBuffer.Data[p + 1] = Layout.Y - _Preview[i].Y * Layout.Height;
+                        previewBuffer.Data[p] = Layout.X + _Preview[i].X * width + offsetx;
+                        previewBuffer.Data[p + 1] = Layout.Y - _Preview[i].Y * height - offsety;
                     }
                 }
             }
         }
 
         public bool AcceptingGestures = true;
+        public bool TrackTime = false;
         public event Action<IEnumerable<(string name, float accuracy)>> OnGesturePerformed;
 
         // CURRENTLY ONLY WITH SUPPORT FOR ANDROID
@@ -45,7 +53,7 @@ namespace mapKnight.Extended.Graphics.UI {
         public UIGesturePanel (Screen owner, UILayout layout, GestureStore gesturestore) : base(owner, layout, false) {
             gestureStore = gesturestore;
             activeBuffer = new ClientBuffer(2, 1000, PrimitiveType.Point);
-            previewBuffer = new ClientBuffer(2, 10, PrimitiveType.Point);
+            previewBuffer = new ClientBuffer(2, 20, PrimitiveType.Point);
         }
 
         public void Add (string name, Gesture gesture) {
@@ -54,10 +62,11 @@ namespace mapKnight.Extended.Graphics.UI {
 
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
             if (AcceptingGestures) {
+                float relTouchX = (touch.Position.X - Layout.X) / Layout.Width, relTouchY = (touch.Position.Y - Layout.Y) / Layout.Y; 
                 switch (action) {
                     case UITouchAction.Move:
                         if (touch.ID == currentTouchID) {
-                            trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                            trackedStrokeBuffer.Add(new GesturePoint(relTouchX, relTouchY, TrackTime ? Environment.TickCount : 0));
                             PushCurrentTouch(touch);
                         }
                         break;
@@ -65,7 +74,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     case UITouchAction.Enter:
                         if (currentTouchID == -1) {
                             currentTouchID = touch.ID;
-                            trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                            trackedStrokeBuffer.Add(new GesturePoint(relTouchX, relTouchY, TrackTime ? Environment.TickCount : 0));
                             currentVertexIndex = 0;
                             PushCurrentTouch(touch);
                         }
@@ -73,7 +82,7 @@ namespace mapKnight.Extended.Graphics.UI {
                     case UITouchAction.End:
                     case UITouchAction.Leave:
                         if (touch.ID == currentTouchID) {
-                            trackedStrokeBuffer.Add(new GesturePoint(touch.Position.X, touch.Position.Y, Environment.TickCount));
+                            trackedStrokeBuffer.Add(new GesturePoint(relTouchX, relTouchY, TrackTime ? Environment.TickCount : 0));
                             OnGesturePerformed?.Invoke(ComputeGesture( ));
                             trackedStrokeBuffer.Clear( );
                             currentTouchID = -1;
@@ -91,7 +100,7 @@ namespace mapKnight.Extended.Graphics.UI {
         private void PushCurrentTouch (UITouch touch) {
             int p = currentVertexIndex << 1;
 
-            activeBuffer.Data[p] = touch.RelativePosition.X / Window.Ratio;
+            activeBuffer.Data[p] = touch.RelativePosition.X;
             activeBuffer.Data[p + 1] = touch.RelativePosition.Y;
 
             currentVertexIndex++;
@@ -112,12 +121,12 @@ namespace mapKnight.Extended.Graphics.UI {
         public void Draw (Color previewColor, Color activeColor) {
             if (previewLength >= 0) {
                 Program.Begin( );
-                Program.Draw(previewBuffer, previewColor, 8f, previewLength, true);
+                Program.Draw(previewBuffer, previewColor, Matrix.Default, 8f, previewLength, true);
                 Program.End( );
             }
             if (currentVertexIndex >= 0) {
                 Program.Begin( );
-                Program.Draw(activeBuffer, activeColor, 20f, currentVertexIndex, true);
+                Program.Draw(activeBuffer, activeColor, Matrix.Default, 20f, currentVertexIndex, true);
                 Program.End( );
             }
         }

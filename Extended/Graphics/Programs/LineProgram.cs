@@ -16,14 +16,17 @@ namespace mapKnight.Extended.Graphics.Programs {
         }
 
         private UniformVec4Handle colorHandle;
+        private UniformMatrixHandle mvpmatrixHandle;
 
         public LineProgram ( ) : base("line.vert", "line.frag") {
             colorHandle = new UniformVec4Handle(glProgram, "u_color");
+            mvpmatrixHandle = new UniformMatrixHandle(glProgram, "u_mvpmatrix");
         }
 
-        public void Draw (IAttributeBuffer vertexBuffer, Color color, float width, int count, bool alphaBlending = true) {
+        public void Draw (IAttributeBuffer vertexBuffer, Color color, Matrix matrix, float width, int count, bool alphaBlending = true) {
             Apply(vertexBuffer, alphaBlending);
             colorHandle.Set(color.ToArray());
+            mvpmatrixHandle.Set(matrix.MVP);
             GL.LineWidth(width);
             GL.DrawArrays(BeginMode.LineStrip, 0, count);
         }

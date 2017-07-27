@@ -12,7 +12,7 @@ using mapKnight.Extended.Graphics.Programs;
 namespace mapKnight.Extended.Graphics.UI {
     public class UIAbilityPanel : UIItem {
         private const int MAX_ABILITY_COUNT = 3;
-        private const int RENDER_COUNT = MAX_ABILITY_COUNT * 3;
+        private const int RENDER_COUNT = MAX_ABILITY_COUNT * 6;
         private const int BORDER_COUNT = 17;
         private const int BORDER_LOOP_INTERVAL = 600 / BORDER_COUNT;
 
@@ -182,6 +182,8 @@ namespace mapKnight.Extended.Graphics.UI {
         public override bool HandleTouch (UITouchAction action, UITouch touch) {
             int index = GetClickedAbilityIndex(touch);
             if (index < 0) return false;
+
+            if (abilities[index].Mode != AbilityMode.Ready && abilities[index].Mode != AbilityMode.Casting) return false;
 
             switch (action) {
                 case UITouchAction.Begin:

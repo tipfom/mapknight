@@ -48,16 +48,16 @@ namespace mapKnight.Extended.Screens {
             playerComponent = playerEntity.GetComponent<PlayerComponent>( );
             map.Focus(playerEntity.ID);
 
-            SetupControls( );
-
             debugLabel = new UILabel(this, new UILayout(new UIMargin(0.1f, 0.075f), UIMarginType.Absolute, UIPosition.Right | UIPosition.Top, UIPosition.Right | UIPosition.Top), 0.05f, "", UITextAlignment.Right);
             healthBar = new UIBar(this, new Color(255, 0, 0, 127), new Color(255, 255, 255, 63), playerComponent.Health, new UILayout(new UIMargin(0, 1, 0, 0.025f), UIMarginType.Relative, UIPosition.Left | UIPosition.Top), UIDepths.MIDDLE);
             abilityPanel = new UIAbilityPanel(this, new UILayout(new UIMargin(0.02f, .3f, 0.02f, 1.7f), UIMarginType.Absolute, UIPosition.Left | UIPosition.Top, UIPosition.Left | UIPosition.Bottom, healthBar));
+            SetupControls( );
             foreach (Ability ability in playerComponent.SecondaryWeapon.Abilities( )) {
                 ability.GestureInputRequested += Ability_GestureInputRequested;
                 abilityPanel.Add(ability);
                 controlPanel.Add(ability.Name, ability.Gesture);
             }
+
 
             base.Load( );
         }
@@ -69,7 +69,7 @@ namespace mapKnight.Extended.Screens {
         }
 
         private void SetupControls ( ) {
-            controlPanel = new UIGesturePanel(this, new UILayout(new UIMargin(0, 6f / 5f * Window.Ratio - 0.15f, 0f, 2f), UIMarginType.Absolute)) { AcceptingGestures = false };
+            controlPanel = new UIGesturePanel(this, new UILayout(new UIMargin(abilityPanel.Layout.Width, 6f / 5f * Window.Ratio - 0.15f, healthBar.Layout.Height, 2f), UIMarginType.Absolute)) { AcceptingGestures = false };
             controlPanel.OnGesturePerformed += (IEnumerable<(string name, float accuracy)> result) => {
                 controlPanel.Preview = null;
                 if (controlPanel.AcceptingGestures) {
