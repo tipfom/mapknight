@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Timers;
 using mapKnight.Core.Graphics;
 using mapKnight.Extended.Graphics.UI.Layout;
 using mapKnight.Extended.Combat;
@@ -16,10 +15,15 @@ namespace mapKnight.Extended.Graphics.UI {
         private const int BORDER_COUNT = 17;
         private const int BORDER_LOOP_INTERVAL = 600 / BORDER_COUNT;
 
+        private static readonly float[ ] COLOR_ACTIVE = new Color("40b7ee").ToArray4( );
+        private static readonly float[ ] COLOR_BOOSTING = new Color("de2853").ToArray4( );
+        private static readonly float[ ] COLOR_DEFAULT = Color.White.ToArray4( );
+
         private int lastIndex = -1;
         private float totalIconHeight;
         private CachedGPUBuffer borderVertexBuffer;
         private CachedGPUBuffer borderTextureBuffer;
+        private CachedGPUBuffer borderColorBuffer;
         private CachedGPUBuffer baseVertexBuffer;
         private CachedGPUBuffer baseTextureBuffer;
         private CachedGPUBuffer ampTextureBuffer;
@@ -33,6 +37,7 @@ namespace mapKnight.Extended.Graphics.UI {
             ampTexture = Assets.GetTexture(InterpolationMode.Linear, "textures/interface_ability_amp.png");
             borderVertexBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT * 2, PrimitiveType.Quad, BufferUsage.StaticDraw);
             borderTextureBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT * 2, PrimitiveType.Quad, BufferUsage.DynamicDraw);
+            borderColorBuffer = new CachedGPUBuffer(4, MAX_ABILITY_COUNT * 2, PrimitiveType.Quad, BufferUsage.DynamicDraw);
             baseVertexBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.StaticDraw);
             baseTextureBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.StaticDraw);
             ampTextureBuffer = new CachedGPUBuffer(2, MAX_ABILITY_COUNT, PrimitiveType.Quad, BufferUsage.DynamicDraw);
@@ -72,6 +77,7 @@ namespace mapKnight.Extended.Graphics.UI {
                 baseVertexBuffer[bPosition + 07] = top - offset;
             }
             borderVertexBuffer.Apply( );
+            borderColorBuffer.Apply( );
             baseVertexBuffer.Apply( );
         }
 
@@ -79,42 +85,44 @@ namespace mapKnight.Extended.Graphics.UI {
             int bPosition = 8 * index;
 
             float[ ] textureData = UIRenderer.Texture[abilities[index].Texture];
-            baseTextureBuffer[bPosition + 0] = textureData[0];
-            baseTextureBuffer[bPosition + 1] = textureData[1];
-            baseTextureBuffer[bPosition + 2] = textureData[2];
-            baseTextureBuffer[bPosition + 3] = textureData[3];
-            baseTextureBuffer[bPosition + 4] = textureData[4];
-            baseTextureBuffer[bPosition + 5] = textureData[5];
-            baseTextureBuffer[bPosition + 6] = textureData[6];
-            baseTextureBuffer[bPosition + 7] = textureData[7];
+            for (int i = 0; i < 8; i++)
+                baseTextureBuffer[bPosition + i] = textureData[i];
             baseTextureBuffer.Apply( );
 
             float[ ] data = UIRenderer.Texture["bdloop"];
-            borderTextureBuffer[bPosition] = data[0];
-            borderTextureBuffer[bPosition + 1] = data[1];
-            borderTextureBuffer[bPosition + 2] = data[2];
-            borderTextureBuffer[bPosition + 3] = data[3];
-            borderTextureBuffer[bPosition + 4] = data[4];
-            borderTextureBuffer[bPosition + 5] = data[5];
-            borderTextureBuffer[bPosition + 6] = data[6];
-            borderTextureBuffer[bPosition + 7] = data[7];
+            for (int i = 0; i < 8; i++)
+                borderTextureBuffer[bPosition + i] = data[i];
+            borderTextureBuffer.Apply( );
+
+            bPosition *= 2;
+            for (int i = 0; i < 16; i++)
+                borderColorBuffer[bPosition + i] = 1f;
 
             UpdateAbility(index);
         }
 
         private void UpdateAbility (int index) {
             Ability ability = abilities[index];
+
             float offset = 0f;
-            string borderTex = "transparent";
+            float[ ] data;
+            float[ ] color;
             switch (ability.Mode) {
+                case AbilityMode.Active:
+                    data = UIRenderer.Texture["bdloop_" + currentBorderIndex];
+                    color = COLOR_ACTIVE;
+                    break;
+                case AbilityMode.Boosting:
+                    data = UIRenderer.Texture["bdloop_" + currentBorderIndex];
+                    color = COLOR_BOOSTING;
+                    break;
                 case AbilityMode.Ready:
                 case AbilityMode.Recharging:
                 case AbilityMode.Casting:
+                default:
                     offset = .5f - .5f * abilities[index].Stride;
-                    break;
-                case AbilityMode.Active:
-                case AbilityMode.Boosting:
-                    borderTex = "bdloop_" + currentBorderIndex;
+                    data = new float[ ] { 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f };
+                    color = COLOR_DEFAULT;
                     break;
             }
 
@@ -130,16 +138,15 @@ namespace mapKnight.Extended.Graphics.UI {
             ampTextureBuffer.Apply( );
 
             bPosition += MAX_ABILITY_COUNT * 8;
-            float[ ] data = UIRenderer.Texture[borderTex];
-            borderTextureBuffer[bPosition] = data[0];
-            borderTextureBuffer[bPosition + 1] = data[1];
-            borderTextureBuffer[bPosition + 2] = data[2];
-            borderTextureBuffer[bPosition + 3] = data[3];
-            borderTextureBuffer[bPosition + 4] = data[4];
-            borderTextureBuffer[bPosition + 5] = data[5];
-            borderTextureBuffer[bPosition + 6] = data[6];
-            borderTextureBuffer[bPosition + 7] = data[7];
+            for (int i = 0; i < 8; i++)
+                borderTextureBuffer[bPosition + i] = data[i];
+
+            bPosition *= 2;
+            for (int i = 0; i < color.Length; i++)
+                borderColorBuffer[bPosition + i] = color[i];
+            
             borderTextureBuffer.Apply( );
+            borderColorBuffer.Apply( );
         }
 
         public bool Add (Ability ability) {
@@ -165,9 +172,9 @@ namespace mapKnight.Extended.Graphics.UI {
             UIAbilityIconProgram.Program.Begin( );
             UIAbilityIconProgram.Program.Draw(indexBuffer, baseVertexBuffer, baseTextureBuffer, ampTextureBuffer, UIRenderer.Texture, ampTexture, Matrix.Default, RENDER_COUNT, 0, true);
             UIAbilityIconProgram.Program.End( );
-            MatrixProgram.Program.Begin( );
-            MatrixProgram.Program.Draw(indexBuffer, borderVertexBuffer, borderTextureBuffer, UIRenderer.Texture, Matrix.Default, indexBuffer.Length, true);
-            MatrixProgram.Program.End( );
+            ColorProgram.Program.Begin( );
+            ColorProgram.Program.Draw(indexBuffer, borderVertexBuffer, borderTextureBuffer, borderColorBuffer, UIRenderer.Texture, Matrix.Default, indexBuffer.Length, 0, true);
+            ColorProgram.Program.End( );
         }
 
         public override void Update (DeltaTime dt) {
