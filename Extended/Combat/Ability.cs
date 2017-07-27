@@ -37,12 +37,11 @@ namespace mapKnight.Extended.Combat {
 
         private IList<GesturePoint> GetGesturePoints (int offset) {
             List<GesturePoint> result = new List<GesturePoint>( );
-
-            int i = offset;
-            do {
-                foreach (Vector2 vector in BuildDirectLine(Preview[i % Preview.Length], Preview[(i + 1) % Preview.Length], .05f))
+            
+            for(int i = 0; i < Preview.Length; i++) { 
+                foreach (Vector2 vector in BuildDirectLine(Preview[(i + offset) % Preview.Length], Preview[(i + 1 + offset) % Preview.Length], .05f)) 
                     result.Add(new GesturePoint(vector.X, vector.Y, 0));
-            } while ((i++) % Preview.Length != (offset - 1 + Preview.Length) % Preview.Length);
+            }
 
             return result;
         }
@@ -62,10 +61,13 @@ namespace mapKnight.Extended.Combat {
         }
 
         public void Cast (float gestureSuccess) {
+#if DEBUG
+            global::Android.Widget.Toast.MakeText(Assets.Context, "gesture_casted@" + gestureSuccess, global::Android.Widget.ToastLength.Short).Show( );
+#endif
             Mode = AbilityMode.Active;
             Stride = 1f;
             OnCast(gestureSuccess);
-            UpdateRequired?.Invoke(this);
+            RequestUpdate( );
         }
 
         protected abstract void OnCast (float gestureSuccess);
@@ -73,6 +75,10 @@ namespace mapKnight.Extended.Combat {
         protected void EndCast ( ) {
             Mode = AbilityMode.Recharging;
             Stride = 0f;
+            RequestUpdate();
+        }
+
+        protected void RequestUpdate ( ) {
             UpdateRequired?.Invoke(this);
         }
 
@@ -80,23 +86,23 @@ namespace mapKnight.Extended.Combat {
             if (Mode == AbilityMode.Recharging) {
                 Stride = Mathf.Clamp01(Stride + dt.TotalMilliseconds / Cooldown);
                 if (Stride == 1f) Mode = AbilityMode.Ready;
-                UpdateRequired?.Invoke(this);
+                RequestUpdate( );
             } else if (Mode == AbilityMode.Casting) {
                 Stride = Mathf.Clamp01(Stride - dt.TotalMilliseconds / LONG_PRESS_TIME);
                 if (Stride == 0f) {
                     Mode = AbilityMode.Boosting;
                     GestureInputRequested?.Invoke(this, null);
                 }
-                UpdateRequired?.Invoke(this);
+                RequestUpdate( );
             } else if (Mode == AbilityMode.Boosting) {
-                UpdateRequired?.Invoke(this);
+                RequestUpdate( );
             }
         }
 
         public void AbortCasting ( ) {
             Mode = AbilityMode.Active;
             Stride = 1f;
-            UpdateRequired?.Invoke(this);
+            RequestUpdate( );
         }
     }
 }

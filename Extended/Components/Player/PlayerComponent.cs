@@ -100,6 +100,11 @@ namespace mapKnight.Extended.Components.Player {
                 }
             }
 
+            while (Owner.HasComponentInfo(ComponentData.Heal)) {
+                float value = (float)Owner.GetComponentInfo(ComponentData.Heal)[0];
+                Health.Value += value;
+            }
+
             if (nearbyNPC == null && weaponAnimationState != AnimationState.Attack && PrimaryWeapon.Update( )) {
                 Owner.SetComponentInfo(ComponentData.VertexAnimation, WEAPON_ANIMATION, "attack" + Mathi.Random(0, 3), (AnimationCallback)AttackAnimationCallback); // TODO
                 weaponAnimationState = AnimationState.Attack;

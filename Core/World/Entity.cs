@@ -24,7 +24,7 @@ namespace mapKnight.Core.World {
         public string Name { get { return entityNames[Species]; } }
 
         private Component[ ] components;
-        private Queue<object[ ]>[ ] pendingComponentInfos = new Queue<object[ ]>[13];
+        private Queue<object[ ]>[ ] pendingComponentInfos = new Queue<object[ ]>[14];
 
         public Entity(ComponentList Components, Transform Transform, IEntityWorld World, int Species) {
             this.World = World;

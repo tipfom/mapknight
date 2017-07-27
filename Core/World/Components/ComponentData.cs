@@ -16,6 +16,7 @@
 
         // stats
         Damage,
+        Heal,
 
         // physics
         Velocity,

@@ -18,7 +18,7 @@ namespace mapKnight.Extended.Combat.Collections.Secondaries {
         public override IEnumerable<Ability> Abilities ( ) {
             //yield return buffAbility;
             yield return dashAbility;
-            //yield return healAbility;
+            yield return healAbility;
         }
 
         public override void Prepare ( ) {
