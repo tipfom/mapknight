@@ -154,5 +154,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Screens\Windows\WeaponSelectWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\PrimaryWeapon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Time.cs" />
   </ItemGroup>
 </Project>

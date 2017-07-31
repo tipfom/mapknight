@@ -68,6 +68,7 @@ namespace mapKnight.Extended.Combat {
             Stride = 1f;
             OnCast(gestureSuccess);
             RequestUpdate( );
+            Time.Scale = 1f;
         }
 
         protected abstract void OnCast (float gestureSuccess);
@@ -92,6 +93,7 @@ namespace mapKnight.Extended.Combat {
                 if (Stride == 0f) {
                     Mode = AbilityMode.Boosting;
                     GestureInputRequested?.Invoke(this, null);
+                    Time.Scale = 0.1f;
                 }
                 RequestUpdate( );
             } else if (Mode == AbilityMode.Boosting) {

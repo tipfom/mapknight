@@ -10,7 +10,7 @@ namespace mapKnight.Extended.Graphics.Animation {
 
         private int currentFrame = 0;
         private int nextFrame = 0;
-        private int nextFrameTime = 0;
+        private float frameTimeLeft = 0;
         [JsonIgnore]
         public bool IsRunning;
 
@@ -20,7 +20,7 @@ namespace mapKnight.Extended.Graphics.Animation {
         public string[ ] Textures;
 
         public void Reset ( ) {
-            nextFrameTime = Environment.TickCount + Frames[0].Time;
+            frameTimeLeft = Frames[0].Time;
             currentFrame = 0;
             nextFrame = Math.Min(1, Frames.Length - 1);
             IsRunning = true;
@@ -36,17 +36,19 @@ namespace mapKnight.Extended.Graphics.Animation {
         }
 
         public void Update (float dt, Transform ownerTransform, float vsize, float[ ][ ] verticies, int offset = 0) {
-            if (IsRunning && Environment.TickCount > nextFrameTime) {
+            frameTimeLeft -= dt;
+
+            if (IsRunning && frameTimeLeft <= 0) {
                 currentFrame = nextFrame;
                 nextFrame++;
-                nextFrameTime += Frames[currentFrame].Time;
+                frameTimeLeft += Frames[currentFrame].Time;
                 if (nextFrame >= Frames.Length) {
                     IsRunning = false;
                     if (CanRepeat) nextFrame = 0;
                     else nextFrame = currentFrame;
                 }
             }
-            float progress = Mathf.Clamp01((nextFrameTime - Environment.TickCount) / (float)Frames[currentFrame].Time);
+            float progress = Mathf.Clamp01(frameTimeLeft / Frames[currentFrame].Time);
 
             for (int i = 0; i < Verticies.Length; i++) {
                 Vector2 interpolatedPosition = Mathf.Interpolate(Frames[nextFrame].State[i].Position, Frames[currentFrame].State[i].Position, progress) * ownerTransform.Size * vsize;

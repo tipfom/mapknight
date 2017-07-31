@@ -2,6 +2,10 @@
 
 namespace mapKnight.Core {
     public struct DeltaTime {
+        public static DeltaTime operator * (DeltaTime dt, float scale) {
+            return new DeltaTime(dt.TotalMilliseconds * scale);
+        }
+
         public float TotalSeconds;
         public float TotalMilliseconds;
 

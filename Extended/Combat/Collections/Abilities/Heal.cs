@@ -44,7 +44,7 @@ namespace mapKnight.Extended.Combat.Collections.Abilities {
 
         public override void Update (DeltaTime dt) {
             if (healEndTime > Environment.TickCount) {
-                Weapon.Owner.SetComponentInfo(ComponentData.Heal, HEAL_PER_SECOND * Manager.FrameTime.TotalSeconds);
+                Weapon.Owner.SetComponentInfo(ComponentData.Heal, HEAL_PER_SECOND * dt.TotalSeconds);
                 RequestUpdate( );
             } else if (wasHealing) {
                 wasHealing = false;
