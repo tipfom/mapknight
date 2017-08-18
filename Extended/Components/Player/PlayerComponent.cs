@@ -61,7 +61,7 @@ namespace mapKnight.Extended.Components.Player {
 
             PrimaryWeapon = Screen.MainMenu.SelectedWeapon(Owner);
             PrimaryWeapon.Prepare( );
-            Owner.GetComponent<PlayerAnimationComponent>( ).LoadAnimations(bodyAnimationData, PrimaryWeapon.AnimationData, "player", PrimaryWeapon.Texture);
+            Owner.GetComponent<PlayerAnimationComponent>( ).LoadAnimations(bodyAnimationData, PrimaryWeapon.AnimationData, SecondaryWeapon.AnimationData, "player", PrimaryWeapon.Texture, SecondaryWeapon.Texture);
         }
 
         public override void Collision (Entity collidingEntity) {

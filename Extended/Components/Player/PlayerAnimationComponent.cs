@@ -14,25 +14,29 @@ namespace mapKnight.Extended.Components.Player {
         public delegate string AnimationCallback (bool completed);
 
         private VertexAnimation[ ] bodyAnimations;
-        private VertexAnimation[ ] weaponAnimations;
+        private VertexAnimation[ ] primaryWeaponAnimations;
+        private VertexAnimation[ ] secondaryWeaponAnimations;
+
         private float[ ][ ] baseVertices;
         private float[ ][ ] joinedVertices;
         private string[ ] joinedTextures;
-        private int currentBodyAnimationIndex;
+
         private AnimationCallback currentBodyAnimationCallback;
-        private VertexAnimation currentBodyAnimation { get { return bodyAnimations[currentBodyAnimationIndex]; } }
-        private int currentWeaponAnimationIndex;
-        private AnimationCallback currentWeaponAnimationCallback;
-        private VertexAnimation currentWeaponAnimation { get { return weaponAnimations[currentWeaponAnimationIndex]; } }
+        private VertexAnimation currentBodyAnimation;
+        private VertexAnimation currentSecondaryWeaponAnimation;
+
+        private AnimationCallback currentPrimaryWeaponAnimationCallback;
+        private VertexAnimation currentPrimaryWeaponAnimation;
 
         public PlayerAnimationComponent (Entity owner) : base(owner) {
         }
 
-        public void LoadAnimations (VertexAnimationData bodyData, VertexAnimationData weaponData, params string[ ] textures) {
+        public void LoadAnimations (VertexAnimationData bodyData, VertexAnimationData primaryWeaponData, VertexAnimationData secondaryWeaponData, params string[ ] textures) {
             bodyAnimations = bodyData.Animations;
-            weaponAnimations = weaponData.Animations;
+            primaryWeaponAnimations = primaryWeaponData.Animations;
+            secondaryWeaponAnimations = secondaryWeaponData.Animations;
 
-            int joinedLength = bodyData.Scales.Length + weaponData.Scales.Length;
+            int joinedLength = bodyData.Scales.Length + primaryWeaponData.Scales.Length + secondaryWeaponData.Scales.Length;
             joinedVertices = new float[joinedLength][ ];
             joinedTextures = new string[joinedLength];
 
@@ -40,23 +44,31 @@ namespace mapKnight.Extended.Components.Player {
             string[ ] joinedInitialTextures = new string[joinedLength];
             Vector2[ ] joinedOffsets = new Vector2[joinedLength];
 
-            for (int i = 0; i < bodyData.Scales.Length; i++) {
-                joinedScales[i] = bodyData.Scales[i];
-                joinedInitialTextures[i] = bodyData.Animations[0].Frames[0].State[i].Texture;
-                joinedOffsets[i] = bodyData.Offsets[i];
+            for (int i = 0; i < secondaryWeaponData.Scales.Length; i++) {
+                joinedScales[i] = secondaryWeaponData.Scales[i];
+                joinedInitialTextures[i] = secondaryWeaponData.Animations[0].Frames[0].State[i].Texture;
+                joinedOffsets[i] = secondaryWeaponData.Offsets[i];
             }
-            for (int i = 0; i < weaponData.Scales.Length; i++) {
-                joinedScales[i + bodyData.Scales.Length] = weaponData.Scales[i];
-                joinedInitialTextures[i + bodyData.Scales.Length] = weaponData.Animations[0].Frames[0].State[i].Texture;
-                joinedOffsets[i + bodyData.Scales.Length] = weaponData.Offsets[i];
+            int offset = secondaryWeaponData.Scales.Length;
+            for (int i = 0; i < bodyData.Scales.Length; i++) {
+                joinedScales[i + offset] = bodyData.Scales[i];
+                joinedInitialTextures[i + offset] = bodyData.Animations[0].Frames[0].State[i].Texture;
+                joinedOffsets[i + offset] = bodyData.Offsets[i];
+            }
+            offset += bodyData.Scales.Length;
+            for (int i = 0; i < primaryWeaponData.Scales.Length; i++) {
+                joinedScales[i + offset] = primaryWeaponData.Scales[i];
+                joinedInitialTextures[i + offset] = primaryWeaponData.Animations[0].Frames[0].State[i].Texture;
+                joinedOffsets[i + offset] = primaryWeaponData.Offsets[i];
             }
 
             Spritebatch2D sprite;
             Compiler.Compile(joinedInitialTextures, joinedScales, joinedOffsets, textures, Owner, out baseVertices, out sprite);
             Owner.World.Renderer.AddTexture(Owner.Species, sprite);
 
-            currentBodyAnimation.Reset( );
-            currentWeaponAnimation.Reset( );
+            (currentBodyAnimation = bodyData.Animations[0]).Reset( );
+            (currentPrimaryWeaponAnimation = primaryWeaponData.Animations[0]).Reset( );
+            (currentSecondaryWeaponAnimation = secondaryWeaponData.Animations[0]).Reset( );
         }
 
         public override void Update (DeltaTime dt) {
@@ -68,23 +80,23 @@ namespace mapKnight.Extended.Components.Player {
                     SetBodyAnimation(callbackResult);
                 } else if (currentBodyAnimation.CanRepeat) {
                     currentBodyAnimation.IsRunning = true;
+                    currentSecondaryWeaponAnimation.IsRunning = true;
                 } else {
-                    currentBodyAnimationIndex = 0;
-                    currentBodyAnimation.Reset( );
+                    (currentBodyAnimation = bodyAnimations[0]).Reset( );
+                    (currentSecondaryWeaponAnimation = secondaryWeaponAnimations[0]).Reset( );
                 }
             }
 
-            if (!currentWeaponAnimation.IsRunning) {
-                string callbackResult = currentWeaponAnimationCallback?.Invoke(true);
+            if (!currentPrimaryWeaponAnimation.IsRunning) {
+                string callbackResult = currentPrimaryWeaponAnimationCallback?.Invoke(true);
                 if (callbackResult != null) {
                     SetWeaponAnimation(callbackResult);
-                    currentWeaponAnimationCallback = null;
-                } else if (currentWeaponAnimation.CanRepeat) {
-                    currentWeaponAnimation.IsRunning = true;
+                    currentPrimaryWeaponAnimationCallback = null;
+                } else if (currentPrimaryWeaponAnimation.CanRepeat) {
+                    currentPrimaryWeaponAnimation.IsRunning = true;
                 } else {
-                    currentWeaponAnimationCallback = null;
-                    currentWeaponAnimationIndex = 0;
-                    currentWeaponAnimation.Reset( );
+                    currentPrimaryWeaponAnimationCallback = null;
+                    (currentPrimaryWeaponAnimation = primaryWeaponAnimations[0]).Reset( );
                 }
             }
 
@@ -98,26 +110,33 @@ namespace mapKnight.Extended.Components.Player {
                         currentBodyAnimationCallback = callback;
                         break;
                     case WEAPON_ANIMATION:
-                        currentWeaponAnimationCallback?.Invoke(false);
+                        currentPrimaryWeaponAnimationCallback?.Invoke(false);
                         SetWeaponAnimation((string)data[1]);
-                        currentWeaponAnimationCallback = callback;
+                        currentPrimaryWeaponAnimationCallback = callback;
                         break;
                 }
             }
 
-            currentBodyAnimation.Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, baseVertices, 0);
-            currentWeaponAnimation.Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, baseVertices, currentBodyAnimation.Verticies.Length);
+            currentSecondaryWeaponAnimation.Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, baseVertices, 0);
+            currentBodyAnimation.Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, baseVertices, currentSecondaryWeaponAnimation.Verticies.Length);
+            currentPrimaryWeaponAnimation.Update(dt.TotalMilliseconds, Owner.Transform, Owner.World.VertexSize, baseVertices, currentBodyAnimation.Verticies.Length + currentSecondaryWeaponAnimation.Verticies.Length);
         }
 
         public override void Draw ( ) {
             if (!Owner.IsOnScreen) return;
-            for (int i = 0; i < currentBodyAnimation.Verticies.Length; i++) {
-                joinedVertices[i] = currentBodyAnimation.Verticies[i];
-                joinedTextures[i] = currentBodyAnimation.Textures[i];
+            for (int i = 0; i < currentSecondaryWeaponAnimation.Verticies.Length; i++) {
+                joinedVertices[i] = currentSecondaryWeaponAnimation.Verticies[i];
+                joinedTextures[i] = currentSecondaryWeaponAnimation.Textures[i];
             }
-            for (int i = 0; i < currentWeaponAnimation.Verticies.Length; i++) {
-                joinedVertices[i + currentBodyAnimation.Verticies.Length] = currentWeaponAnimation.Verticies[i];
-                joinedTextures[i + currentBodyAnimation.Verticies.Length] = currentWeaponAnimation.Textures[i];
+            int offset = currentSecondaryWeaponAnimation.Verticies.Length;
+            for (int i = 0; i < currentBodyAnimation.Verticies.Length; i++) {
+                joinedVertices[i + offset] = currentBodyAnimation.Verticies[i];
+                joinedTextures[i + offset] = currentBodyAnimation.Textures[i];
+            }
+            offset += currentBodyAnimation.Verticies.Length;
+            for (int i = 0; i < currentPrimaryWeaponAnimation.Verticies.Length; i++) {
+                joinedVertices[i + offset] = currentPrimaryWeaponAnimation.Verticies[i];
+                joinedTextures[i + offset] = currentPrimaryWeaponAnimation.Textures[i];
             }
 
             Owner.SetComponentInfo(ComponentData.Verticies, joinedVertices);
@@ -132,20 +151,19 @@ namespace mapKnight.Extended.Components.Player {
                     break;
                 }
             }
-            currentBodyAnimationIndex = index;
-            currentBodyAnimation.Reset( );
+            (currentBodyAnimation = bodyAnimations[index]).Reset( );
+            (currentSecondaryWeaponAnimation = secondaryWeaponAnimations[index]).Reset( );
         }
 
         private void SetWeaponAnimation (string name) {
             int index = 0;
-            for (int i = 0; i < weaponAnimations.Length; i++) {
-                if (weaponAnimations[i].Name == name) {
+            for (int i = 0; i < primaryWeaponAnimations.Length; i++) {
+                if (primaryWeaponAnimations[i].Name == name) {
                     index = i;
                     break;
                 }
             }
-            currentWeaponAnimationIndex = index;
-            currentWeaponAnimation.Reset( );
+            (currentPrimaryWeaponAnimation = primaryWeaponAnimations[index]).Reset( );
         }
 
         public new class Configuration : Component.Configuration {

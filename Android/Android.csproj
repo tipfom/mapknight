@@ -100,6 +100,7 @@
     <AndroidAsset Include="Assets\textures\weapons\rapier\jade.json" />
     <AndroidAsset Include="Assets\textures\weapons\broadswords\copper.json" />
     <AndroidAsset Include="Assets\maps\green-1.map" />
+    <AndroidAsset Include="Assets\textures\secondary_weapons\shield.json" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -249,6 +250,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\shader\vertex\line.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\textures\secondary_weapons\shield.png" />
   </ItemGroup>
   <Import Project="..\Core\Core.projitems" Label="Shared" />
   <Import Project="..\Extended\Extended.projitems" Label="Shared" />
