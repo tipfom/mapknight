@@ -271,7 +271,15 @@ namespace mapKnight.ToolKit.Editor {
                 boneImages[i].Update( );
             }
         }
-        
+
+        private bool RefreshAnimationView ( ) {
+            try {
+                animationView = contentpresenter.ContentTemplate.FindName("animationview", contentpresenter) as AnimationView;
+            } catch { }
+
+            return animationView != null;
+        }
+
         #region CommandBindings
         private void CommandBinding_Up_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = currentAnimation.Frames.IndexOf(currentFrame) > 0;
@@ -385,39 +393,27 @@ namespace mapKnight.ToolKit.Editor {
         }
 
         private void CommandBinding_PlayAnimation_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (animationView == null) animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            if (animationView == null) return;
-            animationView.Play(currentAnimation, (float)Data.Meta.Ratio, Data.Images);
+            if (RefreshAnimationView( )) animationView.Play(currentAnimation, (float)Data.Meta.Ratio, Data.Images);
         }
 
         private void CommandBinding_PlayAnimation_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            if (animationView == null) animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            if (animationView == null) return;
-            e.CanExecute = !animationView.Running;
+            if (RefreshAnimationView( )) e.CanExecute = !animationView.Running;
         }
 
         private void CommandBinding_PauseAnimation_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (animationView == null) animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            if (animationView == null) return;
-            animationView.Pause();
+            if (RefreshAnimationView( )) animationView.Pause( );
         }
 
         private void CommandBinding_PauseAnimation_CanExecute (object sender, CanExecuteRoutedEventArgs e) {
-            if (animationView == null) animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            if (animationView == null) return;
-            e.CanExecute = animationView.Running;
+            if (RefreshAnimationView( )) e.CanExecute = animationView.Running;
         }
 
         private void CommandBinding_StopAnimation_Executed (object sender, ExecutedRoutedEventArgs e) {
-            if (animationView == null) animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            if (animationView == null) return;
-            animationView.Stop( );
+            if (RefreshAnimationView( )) animationView.Stop( );
         }
 
         private void CommandBinding_StopAnimation_CanExecture (object sender, CanExecuteRoutedEventArgs e) {
-            if (animationView == null) animationView = (AnimationView)contentpresenter.ContentTemplate.FindName("animationview", contentpresenter);
-            if (animationView == null) return;
-            e.CanExecute = animationView.Running;
+            if (RefreshAnimationView( )) e.CanExecute = animationView.Running;
         }
         #endregion
     }
