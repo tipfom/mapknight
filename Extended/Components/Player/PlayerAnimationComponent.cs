@@ -1,8 +1,11 @@
-﻿using mapKnight.Core;
+﻿using System.Collections.Generic;
+using mapKnight.Core;
 using mapKnight.Core.Graphics;
 using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
+using mapKnight.Core.World.Serialization;
 using mapKnight.Extended.Components.Graphics;
+using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Graphics.Animation;
 
 namespace mapKnight.Extended.Components.Player {
@@ -12,6 +15,9 @@ namespace mapKnight.Extended.Components.Player {
         public const int WEAPON_ANIMATION = 1;
 
         public delegate string AnimationCallback (bool completed);
+
+        private MotionComponent motionComponent;
+        private bool reversed { get { return motionComponent.ScaleX < 0; } }
 
         private VertexAnimation[ ] bodyAnimations;
         private VertexAnimation[ ] primaryWeaponAnimations;
@@ -29,6 +35,10 @@ namespace mapKnight.Extended.Components.Player {
         private VertexAnimation currentPrimaryWeaponAnimation;
 
         public PlayerAnimationComponent (Entity owner) : base(owner) {
+        }
+
+        public override void Prepare ( ) {
+            motionComponent = Owner.GetComponent<MotionComponent>( );
         }
 
         public void LoadAnimations (VertexAnimationData bodyData, VertexAnimationData primaryWeaponData, VertexAnimationData secondaryWeaponData, params string[ ] textures) {
@@ -124,19 +134,36 @@ namespace mapKnight.Extended.Components.Player {
 
         public override void Draw ( ) {
             if (!Owner.IsOnScreen) return;
-            for (int i = 0; i < currentSecondaryWeaponAnimation.Verticies.Length; i++) {
-                joinedVertices[i] = currentSecondaryWeaponAnimation.Verticies[i];
-                joinedTextures[i] = currentSecondaryWeaponAnimation.Textures[i];
-            }
-            int offset = currentSecondaryWeaponAnimation.Verticies.Length;
-            for (int i = 0; i < currentBodyAnimation.Verticies.Length; i++) {
-                joinedVertices[i + offset] = currentBodyAnimation.Verticies[i];
-                joinedTextures[i + offset] = currentBodyAnimation.Textures[i];
-            }
-            offset += currentBodyAnimation.Verticies.Length;
-            for (int i = 0; i < currentPrimaryWeaponAnimation.Verticies.Length; i++) {
-                joinedVertices[i + offset] = currentPrimaryWeaponAnimation.Verticies[i];
-                joinedTextures[i + offset] = currentPrimaryWeaponAnimation.Textures[i];
+            if (reversed) {
+                for (int i = 0; i < currentPrimaryWeaponAnimation.Verticies.Length; i++) {
+                    joinedVertices[i] = currentPrimaryWeaponAnimation.Verticies[i];
+                    joinedTextures[i] = currentPrimaryWeaponAnimation.Textures[i];
+                }
+                int offset = currentPrimaryWeaponAnimation.Verticies.Length;
+                for (int i = 0; i < currentBodyAnimation.Verticies.Length; i++) {
+                    joinedVertices[i + offset] = currentBodyAnimation.Verticies[i];
+                    joinedTextures[i + offset] = currentBodyAnimation.Textures[i];
+                }
+                offset += currentBodyAnimation.Verticies.Length;
+                for (int i = 0; i < currentSecondaryWeaponAnimation.Verticies.Length; i++) {
+                    joinedVertices[i + offset] = currentSecondaryWeaponAnimation.Verticies[i];
+                    joinedTextures[i + offset] = currentSecondaryWeaponAnimation.Textures[i];
+                }
+            } else {
+                for (int i = 0; i < currentSecondaryWeaponAnimation.Verticies.Length; i++) {
+                    joinedVertices[i] = currentSecondaryWeaponAnimation.Verticies[i];
+                    joinedTextures[i] = currentSecondaryWeaponAnimation.Textures[i];
+                }
+                int offset = currentSecondaryWeaponAnimation.Verticies.Length;
+                for (int i = 0; i < currentBodyAnimation.Verticies.Length; i++) {
+                    joinedVertices[i + offset] = currentBodyAnimation.Verticies[i];
+                    joinedTextures[i + offset] = currentBodyAnimation.Textures[i];
+                }
+                offset += currentBodyAnimation.Verticies.Length;
+                for (int i = 0; i < currentPrimaryWeaponAnimation.Verticies.Length; i++) {
+                    joinedVertices[i + offset] = currentPrimaryWeaponAnimation.Verticies[i];
+                    joinedTextures[i + offset] = currentPrimaryWeaponAnimation.Textures[i];
+                }
             }
 
             Owner.SetComponentInfo(ComponentData.Verticies, joinedVertices);
