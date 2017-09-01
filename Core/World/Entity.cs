@@ -20,10 +20,10 @@ namespace mapKnight.Core.World {
         public event Action Destroyed;
         public bool IsOnScreen;
         public Vector2 PositionOnScreen;
+        public Component[ ] Components;
 
         public string Name { get { return entityNames[Species]; } }
 
-        private Component[ ] components;
         private Queue<object[ ]>[ ] pendingComponentInfos = new Queue<object[ ]>[14];
 
         public Entity(ComponentList Components, Transform Transform, IEntityWorld World, int Species) {
@@ -36,9 +36,9 @@ namespace mapKnight.Core.World {
                 pendingComponentInfos[i] = new Queue<object[ ]>( );
             }
 
-            components = new Component[Components.Count];
-            for (int i = 0; i < components.Length; i++) {
-                components[i] = Components[i].Create(this);
+            this.Components = new Component[Components.Count];
+            for (int i = 0; i < this.Components.Length; i++) {
+                this.Components[i] = Components[i].Create(this);
             }
 
             World.Add(this);
@@ -62,8 +62,8 @@ namespace mapKnight.Core.World {
         }
 
         public bool HasComponent<T>( ) {
-            for (int i = 0; i < components.Length; i++) {
-                if (components[i].GetType( ) == typeof(T)) {
+            for (int i = 0; i < Components.Length; i++) {
+                if (Components[i].GetType( ) == typeof(T)) {
                     return true;
                 }
             }
@@ -71,22 +71,22 @@ namespace mapKnight.Core.World {
         }
 
         public T GetComponent<T>( ) where T : Component {
-            for (int i = 0; i < components.Length; i++) {
-                if (components[i].GetType( ) == typeof(T)) {
-                    return (T)components[i];
+            for (int i = 0; i < Components.Length; i++) {
+                if (Components[i].GetType( ) == typeof(T)) {
+                    return (T)Components[i];
                 }
             }
             return null;
         }
 
         public IEnumerable<Component> GetComponents( ) {
-            for (int i = 0; i < components.Length; i++)
-                yield return components[i];
+            for (int i = 0; i < Components.Length; i++)
+                yield return Components[i];
         }
 
         public void Collision(Entity collidingEntity) {
-            for (int i = 0; i < components.Length; i++)
-                components[i].Collision(collidingEntity);
+            for (int i = 0; i < Components.Length; i++)
+                Components[i].Collision(collidingEntity);
         }
 
         public void Destroy( ) {
@@ -94,35 +94,35 @@ namespace mapKnight.Core.World {
                 return;
 
             IsDestroyed = true;
-            for (int i = 0; i < components.Length; i++)
-                components[i].Destroy( );
+            for (int i = 0; i < Components.Length; i++)
+                Components[i].Destroy( );
             Destroyed?.Invoke( );
             World.Destroy(this);
         }
 
         public void Load(Dictionary<DataID,object> data) {
-            for (int i = 0; i < components.Length; i++)
-                components[i].Load(data);
+            for (int i = 0; i < Components.Length; i++)
+                Components[i].Load(data);
         }
 
         public void Prepare( ) {
-            for (int i = 0; i < components.Length; i++)
-                components[i].Prepare( );
+            for (int i = 0; i < Components.Length; i++)
+                Components[i].Prepare( );
         }
 
         public void Tick( ) {
-            for (int i = 0; i < components.Length; i++)
-                components[i].Tick( );
+            for (int i = 0; i < Components.Length; i++)
+                Components[i].Tick( );
         }
 
         public void Update(DeltaTime dt) {
-            for (int i = 0; i < components.Length; i++)
-                components[i].Update(dt);
+            for (int i = 0; i < Components.Length; i++)
+                Components[i].Update(dt);
         }
 
         public void Draw( ) {
-            for (int i = 0; i < components.Length; i++)
-                components[i].Draw( );
+            for (int i = 0; i < Components.Length; i++)
+                Components[i].Draw( );
         }
 
         public override string ToString( ) {

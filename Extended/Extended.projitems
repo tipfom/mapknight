@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Combat\AbilityMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Buff.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Dash.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Doom.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Heal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Lightning.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Combat\Collections\Abilities\Terrorfield.cs" />
