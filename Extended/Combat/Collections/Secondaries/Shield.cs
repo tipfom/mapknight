@@ -292,17 +292,20 @@ namespace mapKnight.Extended.Combat.Collections.Secondaries {
         private Buff buffAbility;
         private Dash dashAbility;
         private Heal healAbility;
+        private Terrorfield terrorFieldAbility;
 
         public Shield (Entity Owner) : base(Owner, "secondary_weapons/shield", ANIMATION_DATA) {
             buffAbility = new Buff(this);
             dashAbility = new Dash(this);
             healAbility = new Heal(this);
+            terrorFieldAbility = new Terrorfield(this);
         }
 
         public override IEnumerable<Ability> Abilities ( ) {
             //yield return buffAbility;
             yield return dashAbility;
             yield return healAbility;
+            yield return terrorFieldAbility;
         }
 
         public override void Prepare ( ) {
@@ -314,6 +317,7 @@ namespace mapKnight.Extended.Combat.Collections.Secondaries {
             buffAbility.Update(dt);
             dashAbility.Update(dt);
             healAbility.Update(dt);
+            terrorFieldAbility.Update(dt);
         }
     }
 }

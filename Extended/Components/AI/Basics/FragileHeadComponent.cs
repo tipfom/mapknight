@@ -1,5 +1,6 @@
 using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI.Basics {
     public class FragileHeadComponent: Component {
@@ -14,7 +15,7 @@ namespace mapKnight.Extended.Components.AI.Basics {
                 if (collidingEntity.Transform.BL.Y > Owner.Transform.Center.Y) {
                     Owner.Destroy( );
                 } else {
-                    collidingEntity.SetComponentInfo(ComponentData.Damage, damage);
+                    collidingEntity.SetComponentInfo(ComponentData.Damage, Owner, damage, DamageType.Physical);
                 }
             }
         }

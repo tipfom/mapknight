@@ -1,6 +1,7 @@
 ﻿using mapKnight.Core;
 using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
+using mapKnight.Extended.Combat;
 using mapKnight.Extended.Components.Movement;
 
 namespace mapKnight.Extended.Components.AI {
@@ -32,7 +33,7 @@ namespace mapKnight.Extended.Components.AI {
                 Owner.Destroy( );
 
             if(damagingEntity != null) {
-                damagingEntity.SetComponentInfo(ComponentData.Damage, damagePerSecond * dt.TotalSeconds);
+                damagingEntity.SetComponentInfo(ComponentData.Damage, Owner, damagePerSecond * dt.TotalSeconds, DamageType.Magical);
                 damagingEntity = null;
             }
         }

@@ -5,6 +5,7 @@ using mapKnight.Core.World;
 using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI.Guardian {
     [UpdateBefore(typeof(HealthComponent))]
@@ -78,7 +79,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
 
         private void AttackAnimationCallback (bool success) {
             if (success) {
-                attackingEntity.SetComponentInfo(ComponentData.Damage, damage);
+                attackingEntity.SetComponentInfo(ComponentData.Damage, Owner, damage, DamageType.Physical);
                 nextAttackTime = Environment.TickCount + attackCooldown;
             }
             Owner.SetComponentInfo(ComponentData.SpriteAnimation, "walk", false);

@@ -3,6 +3,7 @@ using mapKnight.Core;
 using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Movement;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI {
     public class CircularSawComponent : WaypointComponent {
@@ -20,7 +21,7 @@ namespace mapKnight.Extended.Components.AI {
             if (collidingEntity.Domain == EntityDomain.Player) {
                 Vector2 closestPointToPlayer = Owner.Transform.Center + (Owner.Transform.Center - collidingEntity.Transform.Center) * sawRadius;
                 if (Owner.Transform.Intersects(closestPointToPlayer)) {
-                    collidingEntity.SetComponentInfo(ComponentData.Damage, float.PositiveInfinity);
+                    collidingEntity.SetComponentInfo(ComponentData.Damage, Owner, float.PositiveInfinity, DamageType.Pure);
                 }
             }
         }

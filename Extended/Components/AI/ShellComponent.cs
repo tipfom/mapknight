@@ -6,6 +6,7 @@ using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Core.World.Components;
 using mapKnight.Core.World;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI {
     [ComponentRequirement(typeof(SpeedComponent))]
@@ -49,7 +50,7 @@ namespace mapKnight.Extended.Components.AI {
             if (Owner.HasComponentInfo(ComponentData.Damage) && healthComponent.Current > healthComponent.Initial * .75f) {
                 object[ ] data = Owner.GetComponentInfo(ComponentData.Damage);
                 float initialDamage = (float)data[1];
-                Owner.SetComponentInfo(ComponentData.Damage, data[0], Math.Min(healthComponent.Current - healthComponent.Initial * .7f, initialDamage));
+                Owner.SetComponentInfo(ComponentData.Damage, data[0], Math.Min(healthComponent.Current - healthComponent.Initial * .7f, initialDamage), DamageType.Physical);
             }
         }
 

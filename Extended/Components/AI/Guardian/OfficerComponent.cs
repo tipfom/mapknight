@@ -5,6 +5,7 @@ using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
 using mapKnight.Extended.Components.Graphics;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI.Guardian {
     [ComponentRequirement(typeof(MotionComponent))]
@@ -23,7 +24,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
         private bool walking;
         private bool attacking;
 
-        public OfficerComponent(Entity owner, TentComponent tent, int turnTime, int attackCooldown, float damage) : base(owner) {
+        public OfficerComponent (Entity owner, TentComponent tent, int turnTime, int attackCooldown, float damage) : base(owner) {
             owner.Domain = EntityDomain.Enemy;
 
             this.tent = tent;
@@ -32,7 +33,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             this.damage = damage;
         }
 
-        public override void Prepare( ) {
+        public override void Prepare ( ) {
             motionComponent = Owner.GetComponent<MotionComponent>( );
             speedComponent = Owner.GetComponent<SpeedComponent>( );
             Owner.GetComponent<HealthComponent>( ).IsHit = (entity) => {
@@ -47,7 +48,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             walking = false;
         }
 
-        public override void Collision(Entity collidingEntity) {
+        public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Domain == EntityDomain.Player && Environment.TickCount > nextAttackTime && !attacking) {
                 attacking = true;
                 motionComponent.AimedVelocity.X = 0;
@@ -55,7 +56,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             }
         }
 
-        public override void Update(DeltaTime dt) {
+        public override void Update (DeltaTime dt) {
             if (motionComponent.IsOnGround) {
                 motionComponent.AimedVelocity.Y = 0;
             }
@@ -114,19 +115,19 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             }
         }
 
-        public void ReturnHome( ) {
+        public void ReturnHome ( ) {
             Target = tent.Owner;
         }
 
-        public override void Destroy( ) {
+        public override void Destroy ( ) {
             tent.OfficerDied( );
         }
 
-        private void AttackAnimationCallback(bool success) {
+        private void AttackAnimationCallback (bool success) {
             if (success) {
                 attacking = false;
                 if (Math.Sign(Target.Transform.Center.X - Owner.Transform.Center.X) == motionComponent.ScaleX && Math.Abs(Owner.Transform.Center.X - Target.Transform.Center.X) < Owner.Transform.Width) {
-                    Target.SetComponentInfo(ComponentData.Damage, damage);
+                    Target.SetComponentInfo(ComponentData.Damage, Owner, damage, DamageType.Physical);
                 }
             }
             nextAttackTime = Environment.TickCount + attackCooldown;
@@ -142,7 +143,7 @@ namespace mapKnight.Extended.Components.AI.Guardian {
             public int AttackTime;
             public float Damage;
 
-            public override Component Create(Entity owner) {
+            public override Component Create (Entity owner) {
                 return new OfficerComponent(owner, Tent, TurnTime, AttackTime, Damage);
             }
         }

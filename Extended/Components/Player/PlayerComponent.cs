@@ -22,6 +22,7 @@ namespace mapKnight.Extended.Components.Player {
         public PrimaryWeapon PrimaryWeapon;
         public SecondaryWeapon SecondaryWeapon;
         public HealthTracker Health;
+        public DamageType Immunity;
 
         private bool currentlyTalking;
         private bool attemptJump = false;
@@ -91,8 +92,10 @@ namespace mapKnight.Extended.Components.Player {
                 Action &= ~(ActionMask)Owner.GetComponentInfo(ComponentData.InputExclude)[0];
 
             while (Owner.HasComponentInfo(ComponentData.Damage)) {
-                float value = (float)Owner.GetComponentInfo(ComponentData.Damage)[0];
-                if (nearbyNPC == null) { // npcs are an safezone
+                object[ ] data = Owner.GetComponentInfo(ComponentData.Damage);
+                float value = (float)data[1];
+                DamageType type = (DamageType)data[2];
+                if (nearbyNPC == null && (type & Immunity) != type) { // npcs are an safezone
                     Health.Value -= value;
                     if (Health.Value < 0) {
                         Owner.Destroy( );

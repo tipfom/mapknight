@@ -8,6 +8,7 @@ using mapKnight.Extended.Components.Graphics;
 using static mapKnight.Extended.Components.Graphics.SpriteComponent;
 using mapKnight.Extended.Graphics.Particles;
 using mapKnight.Extended.Graphics;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI {
     [ComponentRequirement(typeof(TriggerComponent))]
@@ -50,7 +51,7 @@ namespace mapKnight.Extended.Components.AI {
         private void ExplodeAnimationFinished(bool completed) {
             if (completed) {
                 if ((target.Transform.Center - Owner.Transform.Center).MagnitudeSqr( ) <= explosionRadiusSqr) {
-                    target.SetComponentInfo(ComponentData.Damage, damage);
+                    target.SetComponentInfo(ComponentData.Damage, Owner, damage, DamageType.Magical);
                 }
             }
             Owner.Destroy( );

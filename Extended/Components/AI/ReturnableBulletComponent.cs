@@ -5,6 +5,7 @@ using mapKnight.Core;
 using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
 using mapKnight.Extended.Components.Movement;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI {
     class ReturnableBulletComponent : Component {
@@ -27,7 +28,7 @@ namespace mapKnight.Extended.Components.AI {
 
         public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Domain == EntityDomain.Player) {
-                if (counter == 0) collidingEntity.SetComponentInfo(ComponentData.Damage, damage);
+                if (counter == 0) collidingEntity.SetComponentInfo(ComponentData.Damage, Owner, damage, DamageType.Magical);
                 counter = 2;
                 Returned = true;
                 Vector2 dir = (Owner.Transform.Center - collidingEntity.Transform.Center).Normalize( );

@@ -6,6 +6,7 @@ using mapKnight.Extended.Components.AI.Basics;
 using mapKnight.Extended.Components.Graphics;
 using mapKnight.Extended.Components.Movement;
 using mapKnight.Extended.Components.Stats;
+using mapKnight.Extended.Combat;
 
 namespace mapKnight.Extended.Components.AI {
     [ComponentRequirement(typeof(MotionComponent))]
@@ -29,7 +30,7 @@ namespace mapKnight.Extended.Components.AI {
         public override void Collision (Entity collidingEntity) {
             if (collidingEntity.Species == bulletEntityConfiguration.Species) {
                 if (collidingEntity.GetComponent<ReturnableBulletComponent>( ).Returned)
-                    Owner.SetComponentInfo(ComponentData.Damage, collidingEntity, 3f);
+                    Owner.SetComponentInfo(ComponentData.Damage, collidingEntity, 3f, DamageType.Pure);
                 collidingEntity.Destroy( );
             }
         }

@@ -100,7 +100,7 @@ namespace mapKnight.Extended.Combat {
             for (int i = 0; i < owner.World.Entities.Count; i++) {
                 Entity entity = owner.World.Entities[i];
                 if (entity.Domain == EntityDomain.Enemy && entity.Transform.Touches(hitbox)) {
-                    entity.SetComponentInfo(ComponentData.Damage, owner, Damage);
+                    entity.SetComponentInfo(ComponentData.Damage, owner, Damage, DamageType.Physical);
                 }
             }
             timer.Stop( );

@@ -1,6 +1,7 @@
 using mapKnight.Core;
 using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
+using mapKnight.Extended.Combat;
 using mapKnight.Extended.Components.Graphics;
 
 namespace mapKnight.Extended.Components.AI {
@@ -31,7 +32,7 @@ namespace mapKnight.Extended.Components.AI {
             if (distpercent <= 1) {
                 float influence = GetInfluence(distpercent);
                 entity.SetComponentInfo(ComponentData.Velocity, closestDist.Normalize() * influence * throwBackSpeed);
-                entity.SetComponentInfo(ComponentData.Damage, damage * influence);
+                entity.SetComponentInfo(ComponentData.Damage, Owner, damage * influence, DamageType.Magical);
             }
             Owner.Destroy( );
         }
