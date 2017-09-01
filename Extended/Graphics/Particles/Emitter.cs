@@ -1,9 +1,10 @@
 ﻿using mapKnight.Core;
 using mapKnight.Extended.Graphics.Buffer;
+using System;
 using static mapKnight.Extended.Graphics.Programs.ParticleProgram;
 
 namespace mapKnight.Extended.Graphics.Particles {
-    public class Emitter {
+    public class Emitter : IDisposable {
         public static Matrix Matrix;
 
         private Particle[ ] particles;
@@ -17,22 +18,29 @@ namespace mapKnight.Extended.Graphics.Particles {
         public Range<int> Lifetime;
         public Range<float> Size;
         public Range<Color> Color;
-        public Range<Vector2> Velocity;
+        public IVelocityProvider VelocityProvider;
         public Vector2 Gravity;
         public int Count;
-
+        public int ParticlesLeft;
+        public bool RespawnParticles;
+        
         public Emitter ( ) {
         }
 
-        public void Update (DeltaTime dt) {
+        public bool Update (DeltaTime dt) {
             for (int i = 0; i < Count; i++) {
                 if (particles[i].Update(dt, Gravity)) {
-                    particles[i].Setup(this);
-                    UpdateParticle(i);
+                    if (RespawnParticles) {
+                        particles[i].Setup(this);
+                        UpdateParticle(i);
+                    } else {
+                        ParticlesLeft--;
+                    }
                 }
                 vertexbuffer.Data[i * 2] = particles[i].Position.X;
                 vertexbuffer.Data[i * 2 + 1] = particles[i].Position.Y;
             }
+            return ParticlesLeft > 0;
         }
 
         public void Draw ( ) {
@@ -41,7 +49,7 @@ namespace mapKnight.Extended.Graphics.Particles {
             Program.End( );
         }
 
-        private void UpdateParticle(int index) {
+        private void UpdateParticle (int index) {
             sizebuffer.Data[index] = particles[index].Size;
             colorbuffer.Data[index * 4] = particles[index].Color.R;
             colorbuffer.Data[index * 4 + 1] = particles[index].Color.G;
@@ -62,6 +70,11 @@ namespace mapKnight.Extended.Graphics.Particles {
                 particles[i] = new Particle(this);
                 UpdateParticle(i);
             }
+            ParticlesLeft = Count;
+        }
+
+        public void Dispose ( ) {
+            ((IDisposable)batch).Dispose( );
         }
     }
 }

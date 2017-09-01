@@ -9,6 +9,7 @@ using static mapKnight.Extended.Components.Graphics.SpriteComponent;
 using mapKnight.Extended.Graphics.Particles;
 using mapKnight.Extended.Graphics;
 using mapKnight.Extended.Combat;
+using mapKnight.Extended.Graphics.Particles.VelocityProvider;
 
 namespace mapKnight.Extended.Components.AI {
     [ComponentRequirement(typeof(TriggerComponent))]
@@ -48,11 +49,24 @@ namespace mapKnight.Extended.Components.AI {
             }
         }
 
-        private void ExplodeAnimationFinished(bool completed) {
+        private void ExplodeAnimationFinished (bool completed) {
             if (completed) {
                 if ((target.Transform.Center - Owner.Transform.Center).MagnitudeSqr( ) <= explosionRadiusSqr) {
                     target.SetComponentInfo(ComponentData.Damage, Owner, damage, DamageType.Magical);
                 }
+
+                Emitter explosionParticles = new Emitter( ) {
+                    Color = new Range<Color>(Color.Yellow, Color.Red),
+                    Count = 200,
+                    Gravity = Vector2.Zero,
+                    Lifetime = new Range<int>(300, 500),
+                    RespawnParticles = true,
+                    Size = new Range<float>(15f, 30f),
+                    VelocityProvider = new PolarVelocityProvider(4f, 10f, 0f, 360f),
+                    Position = Owner.Transform.Center
+                };
+                explosionParticles.Setup( );
+                Owner.World.Renderer.AddParticles(explosionParticles);
             }
             Owner.Destroy( );
         }

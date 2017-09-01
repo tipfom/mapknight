@@ -4,6 +4,7 @@ using mapKnight.Core;
 using mapKnight.Core.Graphics;
 using mapKnight.Core.World;
 using mapKnight.Extended.Graphics.Buffer;
+using mapKnight.Extended.Graphics.Particles;
 using static mapKnight.Extended.Graphics.Programs.ColorProgram;
 
 namespace mapKnight.Extended.Graphics {
@@ -18,6 +19,8 @@ namespace mapKnight.Extended.Graphics {
         private ClientBuffer textureBuffer { get { return (ClientBuffer)buffer.TextureBuffer; } }
         private ClientBuffer colorBuffer { get { return (ClientBuffer)buffer.ColorBuffer; } }
 
+        private List<Emitter> particleEmitter = new List<Emitter>( );
+
         public EntityRenderer ( ) {
             buffer = new BufferBatch(new IndexBuffer(MAX_QUAD_COUNT), new ClientBuffer(2, MAX_QUAD_COUNT, PrimitiveType.Quad), new ClientBuffer(4, MAX_QUAD_COUNT, PrimitiveType.Quad), new ClientBuffer(2, MAX_QUAD_COUNT, PrimitiveType.Quad));
         }
@@ -28,7 +31,7 @@ namespace mapKnight.Extended.Graphics {
                 frameVertexData.Add(entityTexture, new Queue<VertexData>( ));
         }
 
-        public bool HasTexture(int species) {
+        public bool HasTexture (int species) {
             return entityTextures.ContainsKey(species);
         }
 
@@ -49,6 +52,26 @@ namespace mapKnight.Extended.Graphics {
                 Program.Begin( );
                 Program.Draw(buffer, sprite, Matrix.Default, currentIndex * 6, 0, true);
                 Program.End( );
+            }
+
+            for (int i = 0; i < particleEmitter.Count; i++) {
+                if (particleEmitter[i].Update(Time.FrameTime)) {
+                    particleEmitter[i].Draw( );
+                } else {
+                    particleEmitter[i].Dispose( );
+                    particleEmitter.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        public void AddParticles (Emitter emitter) {
+            particleEmitter.Add(emitter);
+        }
+
+        public void RemoveParticles (Emitter emitter) {
+            if (particleEmitter.Contains(emitter)) {
+                particleEmitter.Remove(emitter);
             }
         }
     }

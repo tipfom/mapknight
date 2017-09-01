@@ -3,6 +3,8 @@ using mapKnight.Core.World;
 using mapKnight.Core.World.Components;
 using mapKnight.Extended.Combat;
 using mapKnight.Extended.Components.Graphics;
+using mapKnight.Extended.Graphics.Particles;
+using mapKnight.Extended.Graphics.Particles.VelocityProvider;
 
 namespace mapKnight.Extended.Components.AI {
     public class LandMineComponent : Component {
@@ -34,6 +36,20 @@ namespace mapKnight.Extended.Components.AI {
                 entity.SetComponentInfo(ComponentData.Velocity, closestDist.Normalize() * influence * throwBackSpeed);
                 entity.SetComponentInfo(ComponentData.Damage, Owner, damage * influence, DamageType.Magical);
             }
+
+            Emitter explosionParticles = new Emitter( ) {
+                Color = new Range<Color>(Color.Yellow, Color.Red),
+                Count = 100,
+                Gravity = Vector2.Zero,
+                Lifetime = new Range<int>(300, 500),
+                RespawnParticles = false,
+                Size = new Range<float>(15f, 30f),
+                VelocityProvider = new PolarVelocityProvider(6f, 16f, -320f, -220f),
+                Position = Owner.Transform.Center
+            };
+            explosionParticles.Setup( );
+            Owner.World.Renderer.AddParticles(explosionParticles);
+
             Owner.Destroy( );
         }
 

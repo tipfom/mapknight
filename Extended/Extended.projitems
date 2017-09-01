@@ -104,7 +104,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Lightning\Light.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Lightning\LightManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Emitter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\IVelocityProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\Particle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\VelocityProvider\CartesianVelocityProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\VelocityProvider\ConstantVelocityProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Graphics\Particles\VelocityProvider\PolarVelocityProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\DarkenProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\FBOProgram.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Graphics\Programs\GaussianBlurProgram.cs" />

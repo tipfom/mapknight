@@ -15,7 +15,7 @@ namespace mapKnight.Extended.Graphics.Particles {
 
         public void Setup (Emitter emitter) {
             Position = emitter.Position;
-            Velocity = new Vector2(emitter.Velocity);
+            Velocity = emitter.VelocityProvider.GetVelocity( );
             float lifetimernd = Mathf.Random( );
             Lifetime = emitter.Lifetime.Min + (int)(lifetimernd * lifetimernd * (emitter.Lifetime.Max - emitter.Lifetime.Min));
             Size = (int)Mathf.Random(emitter.Size.Min, emitter.Size.Max);
